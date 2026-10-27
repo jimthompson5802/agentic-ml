@@ -1,12 +1,14 @@
 # Agentic ML Development Harness — Architecture Proposal
 
-**Version:** 0.5
+**Version:** 0.6
 **Status:** Proposed specification; ADR-001 accepted  
 **Date:** 2026-10-27
 
 ## 1. Executive Summary
 
 Build an agent-independent machine learning development harness for tabular ML and deep learning. A separate workflow orchestrator coordinates AI coding assistants and specialized ML agents; the harness independently executes, validates, and tracks experiments. Development is supervised: agents may iterate within approved phases and budgets, while developers approve phase transitions and expanded data-access scope.
+
+The harness is a versioned Python dependency installed into a separate user experiment repository. That repository is the unit users own, review, version, and share: it contains experiment briefs, configuration, agent-generated notebooks and Python code, and data-versioning metadata. Notebooks are the primary user interface for inspecting, running, and refining experiments; the harness provides reusable capabilities and independent execution and evaluation controls.
 
 A central design principle is **hierarchical closed-loop ML development**:
 
@@ -21,7 +23,8 @@ A central design principle is **hierarchical closed-loop ML development**:
 | Agent integrations | Standardized adapters for coding assistants and specialized agents |
 | ML frameworks | Initial scikit-learn, LightGBM, and PyTorch; extensible |
 | Package management | Use `uv` for Python dependency management, lockfiles, and virtual environments |
-| Jupyter notebooks | Support interactive exploration and automatic notebook execution by the harness |
+| Repository boundary | Separate harness product repository and user experiment repositories; consume the harness as a versioned Python dependency through its public API and CLI |
+| Jupyter notebooks | Agent-generated notebooks in the user experiment repository are the primary experiment interface; support interactive use and automatic harness-managed execution |
 | Model types | Tabular classification/regression and deep learning |
 | Autonomy | Supervised with developer approvals at phase boundaries |
 | Data | Extraction, EDA, feature engineering, and iterative acquisition are first-class |
@@ -86,6 +89,14 @@ flowchart TB
 | Data versioning and pipelines | DVC tracks source and derived datasets, dependencies, stage outputs, and reproducible pipeline definitions; integrates with harness execution |
 | Approval service | Phase and acquisition approvals, authorization scope, audit records |
 
+### Harness and experiment project boundary
+
+The harness repository contains reusable execution, evaluation, tracking, agent integration, orchestration, templates, and default runtime guidance. Each user experiment repository contains objectives, notebooks, generated code, configuration, and versioning metadata. One experiment repository may contain multiple related experiments sharing project code and dependencies.
+
+Experiment agents operate within the experiment repository and use the installed harness through its public Python API and CLI. Routine experiment work does not modify the harness installation or source repository and must not require a neighboring harness checkout. Changes to shared harness capabilities follow a separate software-development review process.
+
+The orchestrator operates on an explicitly selected experiment project and environment. Durable workflow state and run artifacts are stored in configured locations associated with that project, independently of the harness source tree.
+
 ## 4. Hierarchical Closed-Loop Workflow
 
 ```mermaid
@@ -115,6 +126,18 @@ flowchart TD
 **Outer loop:** diagnose data limitations → propose acquisition → approve where required → acquire/validate/version → retrain and compare.
 
 Both loops must terminate on success, budget exhaustion, lack of improvement, unrecoverable failure, policy violation, or developer cancellation. Budget exhaustion preserves evidence and produces a reviewable status.
+
+### Notebook-centered user workflow
+
+1. Initialize a separate experiment repository from a harness-provided template and install its locked environment.
+2. Configure local data access, tracking, storage, and an agent adapter; write the experiment brief and search-space configuration.
+3. Ask the agent to generate readable notebooks and any experiment-specific helper code in that repository.
+4. Inspect the notebooks and approve the resolved task contract, evaluation protocol, access scope, and budgets through the applicable gates before dependent execution.
+5. Open the notebooks in JupyterLab, execute approved work, and inspect results. The agent may also execute and revise notebooks automatically within approved phase scope and budgets.
+6. Record experiments through harness-managed execution of saved notebook and code snapshots, followed by independent evaluation. Interactive exploration alone does not establish acceptance.
+7. Review phase evidence and approve advancement, request changes, or approve/reject the final model. Preserved state supports interruption and resumption.
+
+Reviewing every notebook edit is optional unless configured as an additional gate; phase approvals and scope controls remain mandatory.
 
 ## 5. Standard Development Phases and Gates
 
@@ -188,6 +211,8 @@ The feature engineering engine must:
 - Support deep-learning preprocessing, image augmentation, tokenization, and PyTorch datasets where relevant.
 - Make transformations reusable for inference without requiring model deployment in the initial release.
 
+Experiment-specific transformations belong in the experiment repository's notebooks or helper modules. Code shared across experiments in that repository belongs in its own Python package. Generic feature-engineering capabilities belong in the harness package; promoting project code into the harness is a separate development change.
+
 ## 8. Interfaces and Contracts
 
 All contracts should have versioned JSON Schemas and typed Python models. These conceptual interfaces require further design for asynchronous operations, idempotency, error handling, and authorization.
@@ -241,6 +266,8 @@ class ApprovalService(Protocol):
 | Contract | Key fields |
 |---|---|
 | `MLTaskSpec` | Objective, target, task type, data, feature guidance, delegated decisions, algorithm mode, metrics, budgets, policies, source brief reference |
+| `ExperimentProjectConfig` | Schema version, project root and environment reference, tracking/storage/state locations, access policy references, agent adapter, explicit project guidance mapping |
+| `ExperimentConfig` | Schema version, experiment identifier, brief/search-space references, notebook entrypoints, data references, working directory, execution settings; resolved into the approved `ExperimentSpec` |
 | `RuntimeInstructionBundle` | Shared/task-specific guidance snapshots, audience, task mapping, ordered source paths, versions/checksums |
 | `SearchSpaceSpec` | Schema version, registered algorithm identifiers, fixed parameters, typed choices/ranges, scales, configuration checksum |
 | `WorkflowPlan` | Phases, dependencies, gates, iteration limits |
@@ -248,13 +275,29 @@ class ApprovalService(Protocol):
 | `ExtractionSpec` / `DatasetRef` | Source, query, snapshot, checksum, schema, lineage |
 | `DataGapReport` / `DataAcquisitionProposal` | Evidence, acquisition hypothesis, scope, cost, approval |
 | `FeaturePlan` / `FeatureSetRef` | Transformations, fitted state, versions, provenance |
-| `ExperimentSpec` / `ExperimentResult` | Model, data, code, effective parameters, source brief/search-space references, runtime instruction bundle reference, resolved decisions, resources, metrics, artifacts |
+| `ExperimentSpec` / `ExperimentResult` | Project/experiment identity, model, data, notebook/code snapshots, experiment Git revision, harness version/build identity, environment/lockfile identity, effective parameters, source configuration references, runtime instruction bundle reference, resolved decisions, resources, metrics, artifacts |
 | `EvaluationReport` | Metrics, validity checks, baseline comparison, evidence |
 | `ApprovalRecord` | Reviewer, scope, decision, timestamp, audit trail |
+
+### Project initialization and installation
+
+Provide a documented bootstrap path starting with a vanilla Python interpreter and local raw data. Identify how to install `uv` and Git and obtain the harness distribution; downloads require network access or separately supplied installation artifacts. Users must be able to initialize and run an experiment project without cloning the harness source repository. The distribution mechanism and exact commands remain implementation decisions.
+
+Project initialization must:
+
+1. Create a separate Git repository from a harness-provided template, including project configuration, ignore rules, experiment brief, search space, and notebook templates.
+2. Declare the versioned harness dependency and required ML, notebook-execution, and interactive JupyterLab dependencies in the project's `pyproject.toml`; create its `uv` environment and commit its own `uv.lock`.
+3. Initialize project-local DVC metadata and configure DVC storage, MLflow tracking/artifact storage, and durable workflow-state storage. Support a single-machine local configuration; remote backend choices remain configurable.
+4. Register existing raw data through explicit paths and permissions, including sources outside the repository; snapshot and version approved inputs without requiring external acquisition.
+5. Configure a supported agent adapter and any required authentication, plus the mechanism for presenting and recording phase approvals. Keep credentials outside committed configuration.
+
+The project lockfile records the resolved harness and library versions. Harness upgrades are explicit project dependency changes with a new lockfile/environment identity; resumed runs use the preserved compatible configuration and instruction bundle. The harness repository's own lockfile is for product development and does not replace the experiment project's environment record.
 
 ### Developer experiment inputs
 
 Developers provide two complementary inputs: a Markdown experiment brief describing intent and constraints, and a YAML configuration defining the allowed algorithms and hyperparameter search spaces. These inputs are distinct from the resolved `ExperimentSpec` submitted for execution.
+
+Store these as `experiments/<name>/experiment.md` and `search-space.yaml` in the user repository. An adjacent `experiment.yaml` identifies notebook entrypoints, data references, and execution settings; it does not replace the brief or expand the search space. A project-root `project.yaml` holds project-wide environment, tracking, storage, agent, and guidance settings. Relative paths in these declarative inputs resolve against the experiment repository root; notebook working directories are explicitly recorded. The schemas and concrete CLI/API commands require further design.
 
 The Markdown brief uses recognizable sections with natural-language guidance for:
 
@@ -285,7 +328,7 @@ Propose a metric appropriate for an imbalanced target and its direction.
 Use a time-based split on signup_date.
 
 ## Algorithms
-Compare all classification algorithms declared in ./search-space.yaml.
+Compare all classification algorithms declared in ./experiments/churn/search-space.yaml.
 
 ## Budget
 Run at most 50 hyperparameter trials per algorithm.
@@ -295,20 +338,22 @@ Before execution, the agent resolves delegated choices into a structured plan, r
 
 ### Development and runtime agent instructions
 
-Use `AGENTS.md` for both coding agents developing the harness and ML agents conducting experiments, with separate directory trees and an explicit audience in each file.
+Use `AGENTS.md` for coding agents and ML experiment agents, with separate repository ownership and an explicit audience in each file. Ship default runtime guidance as resources in the installable harness distribution; the paths below identify their locations in the harness source repository.
 
 | Instruction location | Audience and scope |
 |---|---|
-| Repository-root `AGENTS.md` | Repository-wide development conventions |
-| `src/agentic_ml/AGENTS.md` and targeted component files | Coding agents implementing and maintaining the harness; component responsibilities, invariants, relevant contracts, and verification guidance |
-| `runtime_guidance/AGENTS.md` | Shared scientific and operational practices for experiment agents |
-| `runtime_guidance/{data,features,modeling}/AGENTS.md` | Task-specific practices for data assessment, feature engineering, and training/tuning |
+| Harness repository `AGENTS.md` | Harness development conventions |
+| Harness `src/agentic_ml/AGENTS.md` and targeted component files | Coding agents implementing and maintaining the harness; component responsibilities, invariants, relevant contracts, and verification guidance |
+| Harness `runtime_guidance/AGENTS.md` | Packaged shared scientific and operational practices for experiment agents |
+| Harness `runtime_guidance/{data,features,modeling}/AGENTS.md` | Packaged task-specific practices for data assessment, feature engineering, and training/tuning |
+| Experiment repository `AGENTS.md` | Project development conventions; not automatically loaded as runtime experiment guidance |
+| Experiment repository `runtime_guidance/` (optional) | Project-authored runtime practices, selected only through an explicit configured mapping |
 
 Add deeper development files only where a component needs distinct instructions. Keep shared rules in their common parent and load task-specific runtime guidance only when relevant.
 
 The runtime instruction loader must:
 
-1. Select the shared runtime file and task-specific files through an explicit task-to-guidance mapping. Record the mapping and load order; the filename alone does not activate instructions. Development files are not automatically included in experiment-agent context.
+1. Select packaged shared/task-specific guidance and any configured project guidance through an explicit task-to-guidance mapping. Record source ownership, package version or project path, and load order; the filename alone does not activate instructions. Neither repository's development files are automatically included in experiment-agent runtime context.
 2. Assemble shared guidance before task-specific guidance. Task-specific instructions may specialize shared practices within the experiment's constraints; incompatible requirements require clarification before affected work begins rather than silent override.
 3. Keep input authority explicit: runtime guidance describes how to work, the resolved experiment brief defines objectives and experiment-specific constraints, and YAML defines allowed algorithms and hyperparameter boundaries. Guidance cannot broaden data access, bypass approval gates, change evaluation criteria, or expand the search boundary. Harness-enforced policies apply to every task.
 4. Snapshot the exact contents, paths, versions/checksums, and loading order of all applicable runtime guidance when the experiment plan is resolved. Preserve the instruction bundle with run lineage and use it for subsequent tasks and resumed execution in that experiment.
@@ -381,7 +426,7 @@ dataset:
   split_manifest: splits/v1.json
 model:
   framework: pytorch
-  entrypoint: src/train.py
+  entrypoint: experiments/image-classification/notebooks/03_model_development.ipynb
   parameters:
     hidden_layers: [128, 64]
     learning_rate: 0.001
@@ -401,6 +446,12 @@ resources:
 reproducibility:
   seed: 42
   repetitions: 3
+  experiment_git_revision: "<experiment-repository-commit>"
+  source_snapshot: "sha256:<notebook-and-code-snapshot>"
+  harness_version: "<installed-version>"
+  harness_build_identity: "sha256:<distribution-hash>"
+  project_lockfile: uv.lock
+  project_lockfile_checksum: "sha256:<lockfile-hash>"
 governance:
   phase: model_development
   approval_required_to_advance: true
@@ -410,16 +461,17 @@ governance:
 
 ### Execution
 
-- Declare Python dependencies in `pyproject.toml` and commit `uv.lock`; use `uv` to manage environments and run project commands in development, CI, and local harness execution.
+- Declare dependencies separately in the harness and experiment repositories' `pyproject.toml` files and commit their respective `uv.lock` files. Execute user experiments in the selected experiment project's environment, including its installed harness version and project package.
 - Support local Python subprocesses, followed by containerized and GPU execution.
 - Support automatic execution of Jupyter notebooks as experiment entrypoints using `nbclient` and an `ipykernel` kernel in the experiment's `uv`-managed environment; provide JupyterLab for interactive development.
 - Execute notebooks from a fresh kernel, in cell order, with explicit input parameters and a recorded working directory. Apply experiment timeouts, cancellation, resource budgets, and filesystem/network restrictions to notebook execution.
 - Preserve the source notebook, supplied parameters, executed notebook with cell outputs, execution errors, and generated artifacts in the run record. Cell errors fail execution; successful notebooks remain subject to independent evaluation and protected-data rules.
-- Keep reusable preprocessing and training logic in `src/agentic_ml/` so notebooks can import the same tested implementations as Python entrypoints.
+- Keep experiment-specific preprocessing, models, and training logic in the experiment repository's notebooks, helpers, or project package. Both notebook and Python entrypoints import generic capabilities from the installed harness public API; they must not import through paths into the harness source checkout.
 - Enforce timeouts, cancellation, experiment counts, memory/GPU quotas where supported.
-- Capture logs, exit status, environment, source revision, datasets, checkpoints, and artifacts.
+- Capture logs, exit status, project environment/lockfile identity, experiment Git revision, exact executed notebook/code snapshots including uncommitted changes, harness version/build identity, datasets, checkpoints, and artifacts.
 - Treat unsuccessful model performance as a valid experiment result, distinct from execution failure.
 - Restrict filesystem, network, and credential access for agent-generated code.
+- Resolve paths against the selected experiment project and record the working directory. Explicitly authorize writable project paths, storage locations, and access to external raw data. Routine experiment execution must not modify the harness installation or source repository.
 
 ### Execution backend evolution
 
@@ -433,19 +485,25 @@ Ray dependencies, integration, cluster provisioning, distributed scheduling, and
 
 - Use **MLflow** as the experiment tracking system for Python and notebook runs. Record effective parameters, metrics, execution status, model artifacts, and references to dataset, feature, environment, and instruction provenance.
 - Use **DVC** to version raw datasets, extracted snapshots, split manifests, and derived feature datasets. Use `dvc.yaml` to declare pipeline stages and their dependencies, parameters, and outputs; preserve resolved dependency/output hashes in `dvc.lock`.
-- Track DVC metadata, pipeline definitions, and lockfiles in Git. Configure DVC remote storage for sharing and restoring versioned data; choose the remote backend and access configuration during implementation.
+- Track DVC metadata, pipeline definitions, and lockfiles in the experiment repository's Git history. Exclude dataset contents and large generated artifacts from Git. Configure DVC storage for sharing and restoring versioned data; support local storage initially and choose remote backends/access configuration during implementation.
 - The workflow orchestrator retains responsibility for agent delegation, approvals, budgets, and recovery. DVC executes reproducible data and training stages under harness control; it does not replace workflow governance or independent evaluation.
-- Link each MLflow run to the Git revision, DVC data/output hashes, applicable stage definitions and lockfile snapshot, and harness run identifier. Preserve resolved manifests when execution produces metadata not yet committed to Git. Record the MLflow run identifier in the harness result for bidirectional lookup.
+- Link each MLflow run to the experiment Git revision, exact executed notebook/helper/project-code snapshots, harness version and build/source identity, project lockfile/environment identity, DVC data/output hashes, applicable stage definitions and lockfile snapshot, and harness run identifier. Preserve uncommitted source and resolved metadata in immutable run snapshots. Record the MLflow run identifier in the harness result for bidirectional lookup.
 - Keep ownership explicit: DVC manages versioned data and pipeline outputs, MLflow manages experiment records and model artifacts, and harness manifests connect both to approvals and runtime instruction bundles.
+- Store executed notebook snapshots and model artifacts in configured MLflow artifact storage, versioned datasets in DVC storage, and durable workflow state in configured project-associated state storage. These locations may be local or external; preserve references and nonsecret configuration in the experiment repository and exclude generated stores from Git.
 - DVC stage reuse must preserve producer provenance and remain subject to current evaluation and authorization checks. A cached stage does not establish that an experiment meets acceptance criteria.
 
-### Notebook development
+### Notebook development and execution contract
 
-- Use `notebooks/` for interactive exploration, EDA, and experiment analysis; organize notebooks into `eda/`, `experiments/`, and `analysis/`.
-- Declare JupyterLab and `ipykernel` in a development dependency group managed by `uv`; include `nbclient` and `ipykernel` in the harness's notebook execution dependencies.
-- Record notebook experiments in MLflow with the same parameters, metrics, dataset versions, feature lineage, source revision, and environment provenance as Python entrypoints.
-- Apply the same training/validation/test split rules and protected-test restrictions to interactive and automated notebook work. Notebook execution does not bypass phase approvals or data-acquisition authorization.
-- Keep reusable preprocessing and training implementations in `src/agentic_ml/`; use notebooks to compose those implementations and explain results.
+- Use `experiments/<name>/notebooks/` in the user repository as the primary interface for data assessment, feature/baseline work, model development, and results analysis. Agents generate and revise these notebooks; users inspect, edit, and run them in JupyterLab. Python entrypoints remain available for advanced use.
+- Provide numbered notebook templates for these activities; allow fewer or additional notebooks as appropriate. Include explanatory Markdown describing objectives, assumptions, generated code, results, and proposed next steps.
+- Declare JupyterLab and `ipykernel` in the experiment project's dependencies or an explicitly installed interactive dependency group managed by `uv`. Include `nbclient` and `ipykernel` in the installed harness notebook-execution dependencies. Users do not need the harness development environment.
+- Use an explicit parameter cell for dataset/configuration references and run identifiers. Require saved notebooks to execute from a fresh kernel in cell order with a defined working directory and locked environment; do not depend on hidden interactive state.
+- Exchange artifacts across notebooks through recorded versioned references rather than variables in another notebook's kernel. Snapshot imported experiment helpers and project code with each recorded run.
+- Import project-specific shared logic from the experiment repository's own Python package and generic capabilities from the installed harness. Promoting project code into the harness requires a separate development review.
+- Users may execute cells interactively for exploration. Recorded experiment results require harness-managed execution of saved source snapshots and independent evaluation; successful interactive execution alone does not establish acceptance.
+- Training cells submit work through harness APIs so candidate validation, budgets, approvals, and tracking apply. Interactive and automated work follow the same split, protected-test, and acquisition rules.
+- Define the interactive-kernel isolation and protected-data boundary under ADR-006. API checks alone cannot constrain arbitrary Python in an unrestricted kernel. Protected test data must remain inaccessible to experiment-agent and exploratory kernels; approved final evaluation occurs through the independent evaluator.
+- Record notebook runs in MLflow with the same configuration, source snapshots, dual harness/experiment identities, dataset versions, feature lineage, and environment provenance as Python entrypoints.
 
 ### Independent evaluation
 
@@ -510,9 +568,15 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 | AC-36 | Run lineage preserves source inputs, resolved decisions, effective defaults, and configuration versions/checksums |
 | AC-37 | Runtime explicitly loads shared and relevant task-specific guidance, records the mapping and load order, and excludes development instructions from automatic runtime loading |
 | AC-38 | Resumed experiments use the preserved runtime instruction bundle; conflicting guidance or attempted expansion of experiment constraints blocks affected execution |
-
 | AC-39 | DVC reproduces declared pipeline stages with recorded dependencies and outputs; reused stages retain producer provenance and respect harness governance |
-| AC-40 | MLflow run records link to the exact DVC dataset/pipeline state and Git revision used by the experiment |
+| AC-40 | MLflow run records link to the exact DVC dataset/pipeline state, experiment Git revision and source snapshot, harness version/build identity, and project lockfile/environment identity |
+| AC-41 | Starting with Python and local raw data, documented bootstrap steps initialize a separate experiment Git repository, locked environment, notebook templates, configuration, and local tracking/DVC/state storage without cloning the harness source |
+| AC-42 | Agent-generated notebooks import the installed harness and project package and support interactive use and fresh-kernel automated execution without hidden state or paths into a harness checkout |
+| AC-43 | Routine experiment generation and execution modify only the experiment repository and authorized storage; the harness installation/source remain unchanged |
+| AC-44 | Each recorded run preserves exact notebook, helper, project-code, configuration, and runtime-guidance snapshots, including uncommitted source changes |
+| AC-45 | On a second machine, the experiment checkout and recorded snapshots/environment/data restore a run within declared reproducibility tolerances without a harness source checkout |
+| AC-46 | Interactive kernels cannot access protected test data; interactive success does not bypass phase approval or independent evaluation, and managed training enforces candidate boundaries and budgets |
+| AC-47 | Installed harness guidance and explicitly configured project guidance load with recorded ownership/order; neither repository's development instructions load automatically into runtime experiment tasks |
 
 ### Reference acceptance-test datasets
 
@@ -523,15 +587,16 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 - Negative fixtures for leakage, schema errors, missing artifacts, unauthorized access, and skipped approval gates.
 - Runtime-guidance fixtures covering task selection, conflicting instructions, development/runtime separation, and resumption after source guidance changes.
 - Experiment-input fixtures covering delegated decisions, all three algorithm modes, numeric/categorical search spaces, and rejected boundary violations.
+- Separate experiment-project fixtures covering bootstrap from an installed harness, generated notebooks, project-package imports, uncommitted source snapshots, interactive access boundaries, and restoration in a clean environment.
 
 ## 11. Phased Implementation Plan
 
 | Implementation phase | Deliverables | Exit criteria |
 |---|---|---|
-| 1. Data and harness foundation | Markdown brief resolution, YAML search-space validation, schemas, local Python and notebook execution, extraction, dataset snapshots, validation, MLflow tracking, DVC data versioning and local storage configuration, CLI | Repeatable extraction and execution without agents |
+| 1. Data and harness foundation | Installable versioned harness, separate-project initialization/templates, bootstrap documentation, project configuration and locked environment, Markdown brief resolution, YAML search-space validation, schemas, local Python/notebook execution, extraction, snapshots, validation, MLflow tracking, local DVC/state storage, public API/CLI | Repeatable extraction and notebook execution in a separate project without agents or a harness source checkout |
 | 2. EDA and feature pipelines | Profiling, split manifests, transformations, DVC pipeline stages and lockfiles, lineage, feature comparison | Validated, reproducible feature artifacts |
 | 3. Model experimentation | scikit-learn, LightGBM, basic PyTorch, bounded hyperparameter evaluation, algorithm use/select/compare modes, evaluation, baseline comparisons | Tabular and basic deep-learning runs tracked and assessed |
-| 4. Agent integration | First coding-assistant adapter, runtime instruction loading and snapshots, structured feedback, inner-loop iteration | Agent improves a model within an approved budget |
+| 4. Agent integration | First coding-assistant adapter, project-local notebook/code generation, packaged/project runtime instruction loading and snapshots, structured feedback, inner-loop iteration | Agent improves a model through user-reviewable notebooks within an approved budget without modifying the harness |
 | 5. Orchestration and approvals | Durable workflow, gates, recovery, second adapter | Supervised multi-phase workflow with enforced approvals |
 | 6. Iterative data acquisition | Gap diagnosis, proposals, approved extraction, retraining comparisons | Outer-loop improvement with lineage and budgets |
 | 7. Advanced capabilities (after proof of concept) | Ray-backed runner for parallel experiments and hyperparameter trials, followed by distributed training as needed; Optuna, active learning, labeling, augmentation, specialized agents, containers | Ray execution preserves harness governance and lineage; extensible multi-agent workflow with advanced compute/data strategies |
@@ -540,27 +605,20 @@ The phase order is an implementation sequence, not a restriction on the final de
 
 ## 12. Proposed Repository Layout
 
+### Harness product repository
+
+This repository contains the installable product, templates, examples, and product tests. Example projects and fixtures demonstrate usage; user experiment repositories are created separately.
+
 ```text
-agentic-ml/
+agent-ml-harness/
 ├── AGENTS.md
 ├── README.md
 ├── pyproject.toml
 ├── uv.lock
-├── .dvc/
-├── dvc.yaml
-├── dvc.lock
-├── data/                     # DVC-managed content; metadata tracked in Git
-├── notebooks/
-│   ├── eda/
-│   ├── experiments/
-│   └── analysis/
-├── specs/
-│   ├── architecture.md
-│   ├── requirements.md
-│   ├── interfaces.md
-│   ├── adr/
-│   └── acceptance/
-├── runtime_guidance/
+├── docs/
+│   └── specs/
+├── templates/                # Separate-project and notebook scaffolding
+├── runtime_guidance/         # Included as resources in the distribution
 │   ├── AGENTS.md
 │   ├── data/AGENTS.md
 │   ├── features/AGENTS.md
@@ -591,7 +649,9 @@ agentic-ml/
 ├── examples/
 │   ├── tabular-classification/
 │   │   ├── experiment.md
-│   │   └── search-space.yaml
+│   │   ├── search-space.yaml
+│   │   ├── experiment.yaml
+│   │   └── notebooks/
 │   ├── tabular-regression/
 │   └── image-classification/
 └── tests/
@@ -600,6 +660,42 @@ agentic-ml/
     ├── acceptance/
     └── fixtures/
 ```
+
+### Separate user experiment repository
+
+The following is an illustrative initialized project, not a directory inside the harness repository. Its project package name and experiment names are user-selected.
+
+```text
+customer-churn/
+├── README.md
+├── AGENTS.md                 # Project development conventions
+├── pyproject.toml            # Project package and versioned harness dependency
+├── uv.lock                   # Resolved experiment environment
+├── project.yaml              # Storage, tracking, state, agent, guidance settings
+├── .gitignore
+├── .dvc/
+├── data/                     # DVC-managed content; excluded from Git
+├── data.dvc                  # Illustrative data-version metadata tracked in Git
+├── runtime_guidance/         # Optional explicitly mapped project practices
+├── src/churn_experiments/    # Python shared across this project's experiments
+└── experiments/
+    └── baseline-comparison/
+        ├── experiment.md
+        ├── search-space.yaml
+        ├── experiment.yaml   # Entrypoints, data references, execution settings
+        ├── dvc.yaml
+        ├── dvc.lock
+        ├── notebooks/
+        │   ├── 01_data_assessment.ipynb
+        │   ├── 02_features_and_baseline.ipynb
+        │   ├── 03_model_development.ipynb
+        │   └── 04_results.ipynb
+        └── helpers/          # Optional experiment-specific Python
+```
+
+Project configuration and experiment-input paths resolve against the user repository root. DVC stage paths follow DVC's declared stage working-directory semantics; pipeline templates must make those paths explicit and consistent with harness execution. Raw sources may remain outside the repository under approved access rules; `data/` represents versioned project snapshots.
+
+Executed notebook snapshots, model artifacts, DVC content/cache, and durable workflow state live in configured project-associated storage and are excluded from Git when stored beneath the project root. Track source notebooks, generated Python, briefs, configuration, project dependency lockfiles, DVC metadata/pipeline definitions, and artifact references in the experiment repository. Preserve immutable source snapshots for runs even when the working tree has uncommitted changes.
 
 ## 13. Risks and Mitigations
 
@@ -613,6 +709,8 @@ agentic-ml/
 | Data acquisition drift or cost | Scoped approval, source allowlists, acquisition budgets, controlled before/after comparisons |
 | Workflow inconsistency | Durable state, idempotent jobs, audit trail, recovery tests |
 | Restrictive framework abstraction | Standard operations plus custom training entrypoints |
+| Hidden dependency on harness checkout | Installed public API, separate-project acceptance fixtures, project lockfile, explicit harness build identity |
+| Notebook state or source drift | Fresh-kernel execution, explicit artifact references, immutable notebook/helper snapshots including uncommitted changes |
 
 ## 14. Architecture Decision Records
 
@@ -631,15 +729,16 @@ agentic-ml/
 - **ADR-002:** Expose harness through Python API and CLI initially; consider MCP server later.
 - **ADR-003:** Start with a lightweight durable state-machine orchestrator; evaluate agent orchestration frameworks if complexity requires.
 - **ADR-004:** Hybrid ML operations: standardized capabilities plus sandboxed custom Python code.
-- **ADR-005:** Choose DVC remote storage and MLflow backend/artifact storage configuration; DVC data versioning/pipelines and MLflow experiment tracking are selected stack components.
-- **ADR-006:** Define the authorization and isolation model for data connectors and generated code.
+- **ADR-005:** Choose configurable project-associated DVC storage, MLflow backend/artifact storage, and durable workflow-state configuration, including single-machine local defaults; DVC data versioning/pipelines and MLflow experiment tracking are selected stack components.
+- **ADR-006:** Define the authorization and isolation model for data connectors, generated code, and interactive notebook kernels, including protected-test isolation and project/harness filesystem boundaries.
+- **ADR-007:** Choose harness package distribution, bootstrap commands, public API compatibility/versioning, and project/experiment configuration schemas for independent experiment repositories.
 
 ## 15. Next Steps
 
 1. Ratify pending architectural decisions and clarify nonfunctional targets.
 2. Convert requirements and acceptance criteria into independently testable user stories.
 3. Define JSON Schemas and Python models for core contracts.
-4. Build the Phase 1 vertical slice: extract → validate → snapshot → run → evaluate → track.
+4. Build the Phase 1 vertical slice in a separate user project: initialize/install → extract → validate → snapshot → run notebook → evaluate → track, recording both experiment and harness identities.
 5. Add inner-loop agent iteration, supervised orchestration, and then outer-loop acquisition.
 
 **Guiding principle:** Build an ML experimentation and data-development harness that agents can use, rather than a framework that hardcodes one particular agent's reasoning or workflow.
