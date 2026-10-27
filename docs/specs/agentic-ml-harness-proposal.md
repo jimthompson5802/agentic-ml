@@ -1,6 +1,6 @@
 # Agentic ML Development Harness — Architecture Proposal
 
-**Version:** 0.2
+**Version:** 0.3
 **Status:** Proposed specification; ADR-001 accepted  
 **Date:** 2026-10-27
 
@@ -27,6 +27,7 @@ A central design principle is **hierarchical closed-loop ML development**:
 | Data | Extraction, EDA, feature engineering, and iterative acquisition are first-class |
 | Execution | Local first; container/GPU and distributed backends incrementally |
 | Tracking | MLflow initially; portable versioned manifests and artifact lineage |
+| Agent instructions | Targeted `AGENTS.md` files in separate development and runtime guidance trees; runtime loading is explicit and versioned |
 | Experiment guidance | Developer-authored Markdown brief plus versioned YAML algorithm and hyperparameter boundaries |
 | Search autonomy | Agent searches only within declared boundaries; expansions are recommendations for subsequent experiments |
 | Deployment | Outside initial scope |
@@ -238,13 +239,14 @@ class ApprovalService(Protocol):
 | Contract | Key fields |
 |---|---|
 | `MLTaskSpec` | Objective, target, task type, data, feature guidance, delegated decisions, algorithm mode, metrics, budgets, policies, source brief reference |
+| `RuntimeInstructionBundle` | Shared/task-specific guidance snapshots, audience, task mapping, ordered source paths, versions/checksums |
 | `SearchSpaceSpec` | Schema version, registered algorithm identifiers, fixed parameters, typed choices/ranges, scales, configuration checksum |
 | `WorkflowPlan` | Phases, dependencies, gates, iteration limits |
 | `AgentTask` / `AgentResult` | Task scope, context, tools, proposed changes, outputs |
 | `ExtractionSpec` / `DatasetRef` | Source, query, snapshot, checksum, schema, lineage |
 | `DataGapReport` / `DataAcquisitionProposal` | Evidence, acquisition hypothesis, scope, cost, approval |
 | `FeaturePlan` / `FeatureSetRef` | Transformations, fitted state, versions, provenance |
-| `ExperimentSpec` / `ExperimentResult` | Model, data, code, effective parameters, source brief/search-space references, resolved decisions, resources, metrics, artifacts |
+| `ExperimentSpec` / `ExperimentResult` | Model, data, code, effective parameters, source brief/search-space references, runtime instruction bundle reference, resolved decisions, resources, metrics, artifacts |
 | `EvaluationReport` | Metrics, validity checks, baseline comparison, evidence |
 | `ApprovalRecord` | Reviewer, scope, decision, timestamp, audit trail |
 
@@ -288,6 +290,29 @@ Run at most 50 hyperparameter trials per algorithm.
 ```
 
 Before execution, the agent resolves delegated choices into a structured plan, records its reasoning, and submits that plan through the existing problem-definition and evaluation gates. Ambiguous or conflicting requirements must be resolved before affected runs begin. The resolved plan identifies the allowed algorithm set, selected features, metric and direction, split protocol, and budgets.
+
+### Development and runtime agent instructions
+
+Use `AGENTS.md` for both coding agents developing the harness and ML agents conducting experiments, with separate directory trees and an explicit audience in each file.
+
+| Instruction location | Audience and scope |
+|---|---|
+| Repository-root `AGENTS.md` | Repository-wide development conventions |
+| `src/agentic_ml/AGENTS.md` and targeted component files | Coding agents implementing and maintaining the harness; component responsibilities, invariants, relevant contracts, and verification guidance |
+| `runtime_guidance/AGENTS.md` | Shared scientific and operational practices for experiment agents |
+| `runtime_guidance/{data,features,modeling}/AGENTS.md` | Task-specific practices for data assessment, feature engineering, and training/tuning |
+
+Add deeper development files only where a component needs distinct instructions. Keep shared rules in their common parent and load task-specific runtime guidance only when relevant.
+
+The runtime instruction loader must:
+
+1. Select the shared runtime file and task-specific files through an explicit task-to-guidance mapping. Record the mapping and load order; the filename alone does not activate instructions. Development files are not automatically included in experiment-agent context.
+2. Assemble shared guidance before task-specific guidance. Task-specific instructions may specialize shared practices within the experiment's constraints; incompatible requirements require clarification before affected work begins rather than silent override.
+3. Keep input authority explicit: runtime guidance describes how to work, the resolved experiment brief defines objectives and experiment-specific constraints, and YAML defines allowed algorithms and hyperparameter boundaries. Guidance cannot broaden data access, bypass approval gates, change evaluation criteria, or expand the search boundary. Harness-enforced policies apply to every task.
+4. Snapshot the exact contents, paths, versions/checksums, and loading order of all applicable runtime guidance when the experiment plan is resolved. Preserve the instruction bundle with run lineage and use it for subsequent tasks and resumed execution in that experiment.
+5. Treat adoption of changed runtime guidance as a new versioned experiment configuration subject to the existing gates. Record conflicting instructions as a validation error or clarification request before dependent execution.
+
+Runtime instruction files contain reusable practices. Dataset locations, targets, chosen metrics, budgets, and algorithm search spaces remain in the experiment brief, resolved plan, and YAML configuration. Executable validation and access controls enforce these constraints independently of agent compliance with Markdown instructions.
 
 ### Algorithm and hyperparameter configuration
 
@@ -463,6 +488,8 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 | AC-34 | Search supports categorical choices and integer/float ranges with linear/logarithmic scales; invalid configurations and out-of-bound candidates are rejected before training |
 | AC-35 | Use, select, and compare modes respect the allowed algorithm set and budgets; search-space expansion is recorded only as a recommendation for a subsequent experiment |
 | AC-36 | Run lineage preserves source inputs, resolved decisions, effective defaults, and configuration versions/checksums |
+| AC-37 | Runtime explicitly loads shared and relevant task-specific guidance, records the mapping and load order, and excludes development instructions from automatic runtime loading |
+| AC-38 | Resumed experiments use the preserved runtime instruction bundle; conflicting guidance or attempted expansion of experiment constraints blocks affected execution |
 
 ### Reference acceptance-test datasets
 
@@ -471,6 +498,7 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 - Small image classification dataset (PyTorch CPU; optional GPU).
 - Notebook fixtures covering successful parameterized execution, cell errors, timeouts, and cancellation.
 - Negative fixtures for leakage, schema errors, missing artifacts, unauthorized access, and skipped approval gates.
+- Runtime-guidance fixtures covering task selection, conflicting instructions, development/runtime separation, and resumption after source guidance changes.
 - Experiment-input fixtures covering delegated decisions, all three algorithm modes, numeric/categorical search spaces, and rejected boundary violations.
 
 ## 11. Phased Implementation Plan
@@ -480,7 +508,7 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 | 1. Data and harness foundation | Markdown brief resolution, YAML search-space validation, schemas, local Python and notebook execution, extraction, dataset snapshots, validation, MLflow, CLI | Repeatable extraction and execution without agents |
 | 2. EDA and feature pipelines | Profiling, split manifests, transformations, lineage, feature comparison | Validated, reproducible feature artifacts |
 | 3. Model experimentation | scikit-learn, LightGBM, basic PyTorch, bounded hyperparameter evaluation, algorithm use/select/compare modes, evaluation, baseline comparisons | Tabular and basic deep-learning runs tracked and assessed |
-| 4. Agent integration | First coding-assistant adapter, structured feedback, inner-loop iteration | Agent improves a model within an approved budget |
+| 4. Agent integration | First coding-assistant adapter, runtime instruction loading and snapshots, structured feedback, inner-loop iteration | Agent improves a model within an approved budget |
 | 5. Orchestration and approvals | Durable workflow, gates, recovery, second adapter | Supervised multi-phase workflow with enforced approvals |
 | 6. Iterative data acquisition | Gap diagnosis, proposals, approved extraction, retraining comparisons | Outer-loop improvement with lineage and budgets |
 | 7. Advanced capabilities | Optuna, active learning, labeling, augmentation, specialized agents, containers/distributed backends | Extensible multi-agent workflow with advanced compute/data strategies |
@@ -505,15 +533,23 @@ agentic-ml/
 │   ├── interfaces.md
 │   ├── adr/
 │   └── acceptance/
+├── runtime_guidance/
+│   ├── AGENTS.md
+│   ├── data/AGENTS.md
+│   ├── features/AGENTS.md
+│   └── modeling/AGENTS.md
 ├── src/agentic_ml/
+│   ├── AGENTS.md
 │   ├── contracts/
 │   ├── orchestrator/
+│   │   └── AGENTS.md
 │   ├── agents/adapters/
 │   ├── data/
 │   │   ├── sources/
 │   │   ├── acquisition/
 │   │   └── validation/
 │   ├── features/
+│   │   └── AGENTS.md
 │   ├── harness/
 │   │   ├── execution/
 │   │   ├── evaluation/
