@@ -1,8 +1,8 @@
 # Agentic ML Development Harness — Architecture Proposal
 
-**Version:** 0.1  
+**Version:** 0.2
 **Status:** Proposed specification; ADR-001 accepted  
-**Date:** 2026-10-26
+**Date:** 2026-10-27
 
 ## 1. Executive Summary
 
@@ -27,6 +27,8 @@ A central design principle is **hierarchical closed-loop ML development**:
 | Data | Extraction, EDA, feature engineering, and iterative acquisition are first-class |
 | Execution | Local first; container/GPU and distributed backends incrementally |
 | Tracking | MLflow initially; portable versioned manifests and artifact lineage |
+| Experiment guidance | Developer-authored Markdown brief plus versioned YAML algorithm and hyperparameter boundaries |
+| Search autonomy | Agent searches only within declared boundaries; expansions are recommendations for subsequent experiments |
 | Deployment | Outside initial scope |
 
 ### Principles
@@ -235,17 +237,109 @@ class ApprovalService(Protocol):
 
 | Contract | Key fields |
 |---|---|
-| `MLTaskSpec` | Objective, target, task type, data, metrics, budgets, policies |
+| `MLTaskSpec` | Objective, target, task type, data, feature guidance, delegated decisions, algorithm mode, metrics, budgets, policies, source brief reference |
+| `SearchSpaceSpec` | Schema version, registered algorithm identifiers, fixed parameters, typed choices/ranges, scales, configuration checksum |
 | `WorkflowPlan` | Phases, dependencies, gates, iteration limits |
 | `AgentTask` / `AgentResult` | Task scope, context, tools, proposed changes, outputs |
 | `ExtractionSpec` / `DatasetRef` | Source, query, snapshot, checksum, schema, lineage |
 | `DataGapReport` / `DataAcquisitionProposal` | Evidence, acquisition hypothesis, scope, cost, approval |
 | `FeaturePlan` / `FeatureSetRef` | Transformations, fitted state, versions, provenance |
-| `ExperimentSpec` / `ExperimentResult` | Model, data, code, parameters, resources, metrics, artifacts |
+| `ExperimentSpec` / `ExperimentResult` | Model, data, code, effective parameters, source brief/search-space references, resolved decisions, resources, metrics, artifacts |
 | `EvaluationReport` | Metrics, validity checks, baseline comparison, evidence |
 | `ApprovalRecord` | Reviewer, scope, decision, timestamp, audit trail |
 
-### Example experiment
+### Developer experiment inputs
+
+Developers provide two complementary inputs: a Markdown experiment brief describing intent and constraints, and a YAML configuration defining the allowed algorithms and hyperparameter search spaces. These inputs are distinct from the resolved `ExperimentSpec` submitted for execution.
+
+The Markdown brief uses recognizable sections with natural-language guidance for:
+
+- Dataset location and target variable.
+- Task type, initially classification or regression for tabular experiments.
+- Features to include or exclude, or explicit delegation of feature selection to the agent; include information-availability and leakage constraints.
+- Evaluation metric and optimization direction, or delegation to the agent to propose them.
+- Evaluation split strategy and constraints, including time or group boundaries where applicable.
+- Algorithm mode: **use** a specified algorithm, **select** an algorithm from a declared allowed set, or **compare** every algorithm in that set.
+- Trial counts, runtime limits, and other experiment budgets.
+
+Example developer brief:
+
+```markdown
+# Experiment: Predict customer churn
+
+## Data
+Dataset: ./data/customers.parquet
+Target: churned
+Task: classification
+
+## Features
+Choose suitable features.
+Exclude customer_id and information unavailable at prediction time.
+
+## Evaluation
+Propose a metric appropriate for an imbalanced target and its direction.
+Use a time-based split on signup_date.
+
+## Algorithms
+Compare all classification algorithms declared in ./search-space.yaml.
+
+## Budget
+Run at most 50 hyperparameter trials per algorithm.
+```
+
+Before execution, the agent resolves delegated choices into a structured plan, records its reasoning, and submits that plan through the existing problem-definition and evaluation gates. Ambiguous or conflicting requirements must be resolved before affected runs begin. The resolved plan identifies the allowed algorithm set, selected features, metric and direction, split protocol, and budgets.
+
+### Algorithm and hyperparameter configuration
+
+The YAML configuration references supported algorithm identifiers from the harness registry. It separates fixed parameters from tunable parameters and supports categorical choices, integer ranges, and floating-point ranges. Numeric ranges declare minimum and maximum bounds and a linear (raw-value) or logarithmic sampling scale.
+
+```yaml
+schema_version: "0.1"
+algorithms:
+  random_forest_classifier:
+    fixed:
+      random_state: 42
+    search:
+      n_estimators:
+        type: integer
+        min: 100
+        max: 1000
+        scale: linear
+      max_depth:
+        type: categorical
+        choices: [null, 5, 10, 20, 40]
+      min_samples_leaf:
+        type: integer
+        min: 1
+        max: 20
+        scale: linear
+
+  logistic_regression:
+    fixed:
+      max_iter: 2000
+    search:
+      C:
+        type: float
+        min: 0.0001
+        max: 100
+        scale: logarithmic
+      class_weight:
+        type: categorical
+        choices: [null, balanced]
+```
+
+Configuration rules:
+
+- The YAML is a **hard allowed boundary for the current experiment**, not an initial space the agent may expand. The brief may narrow that boundary but cannot expand it.
+- Fixed parameters retain their declared values. Search parameters may take only declared choices or values within their inclusive bounds. Integer ranges produce integers; logarithmic ranges require strictly positive bounds.
+- The harness validates algorithm/task compatibility, parameter names and types, nonempty choices, ordered bounds, and parameter combinations before execution. Initial configurations should use mutually compatible combinations; a conditional-parameter schema is deferred.
+- Parameters omitted from the YAML use registry-defined defaults, recorded with the adapter/library version in the resolved run configuration. Omission does not authorize the agent to tune them.
+- Every candidate, including candidates submitted through custom code or notebooks, is subject to the same boundary validation. Invalid candidates are rejected before training.
+- Search-space definitions specify where to search; the resolved trial and runtime budgets specify how much work may occur. Comparing all algorithms does not require exhaustively enumerating every parameter combination.
+- The agent may recommend new algorithms, choices, ranges, or fixed values based on evidence. It records these recommendations for a subsequent experiment without modifying the current inputs or expanding the current run. A developer-adopted revision creates a new versioned experiment configuration subject to the existing gates.
+- Preserve the original Markdown, YAML, their versions/checksums, the resolved plan, and effective parameters with run lineage so that delegated decisions and boundary compliance are auditable.
+
+### Resolved experiment example
 
 ```yaml
 schema_version: "0.1"
@@ -365,6 +459,10 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 | AC-30 | Workflow resumes after approved acquisition with complete audit trail |
 | AC-31 | Harness automatically executes a parameterized notebook from a fresh kernel and records its environment, inputs, executed outputs, and artifacts |
 | AC-32 | Notebook errors, timeouts, and cancellation produce the corresponding run status; notebook runs enforce the same access, budget, lineage, and evaluation rules as Python entrypoints |
+| AC-33 | Markdown guidance and YAML search spaces resolve into a versioned plan that records delegated feature, metric, and algorithm decisions |
+| AC-34 | Search supports categorical choices and integer/float ranges with linear/logarithmic scales; invalid configurations and out-of-bound candidates are rejected before training |
+| AC-35 | Use, select, and compare modes respect the allowed algorithm set and budgets; search-space expansion is recorded only as a recommendation for a subsequent experiment |
+| AC-36 | Run lineage preserves source inputs, resolved decisions, effective defaults, and configuration versions/checksums |
 
 ### Reference acceptance-test datasets
 
@@ -373,14 +471,15 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 - Small image classification dataset (PyTorch CPU; optional GPU).
 - Notebook fixtures covering successful parameterized execution, cell errors, timeouts, and cancellation.
 - Negative fixtures for leakage, schema errors, missing artifacts, unauthorized access, and skipped approval gates.
+- Experiment-input fixtures covering delegated decisions, all three algorithm modes, numeric/categorical search spaces, and rejected boundary violations.
 
 ## 11. Phased Implementation Plan
 
 | Implementation phase | Deliverables | Exit criteria |
 |---|---|---|
-| 1. Data and harness foundation | Schemas, local Python and notebook execution, extraction, dataset snapshots, validation, MLflow, CLI | Repeatable extraction and execution without agents |
+| 1. Data and harness foundation | Markdown brief resolution, YAML search-space validation, schemas, local Python and notebook execution, extraction, dataset snapshots, validation, MLflow, CLI | Repeatable extraction and execution without agents |
 | 2. EDA and feature pipelines | Profiling, split manifests, transformations, lineage, feature comparison | Validated, reproducible feature artifacts |
-| 3. Model experimentation | scikit-learn, LightGBM, basic PyTorch, evaluation, baseline comparisons | Tabular and basic deep-learning runs tracked and assessed |
+| 3. Model experimentation | scikit-learn, LightGBM, basic PyTorch, bounded hyperparameter evaluation, algorithm use/select/compare modes, evaluation, baseline comparisons | Tabular and basic deep-learning runs tracked and assessed |
 | 4. Agent integration | First coding-assistant adapter, structured feedback, inner-loop iteration | Agent improves a model within an approved budget |
 | 5. Orchestration and approvals | Durable workflow, gates, recovery, second adapter | Supervised multi-phase workflow with enforced approvals |
 | 6. Iterative data acquisition | Gap diagnosis, proposals, approved extraction, retraining comparisons | Outer-loop improvement with lineage and budgets |
@@ -428,6 +527,8 @@ agentic-ml/
 │   └── cli/
 ├── examples/
 │   ├── tabular-classification/
+│   │   ├── experiment.md
+│   │   └── search-space.yaml
 │   ├── tabular-regression/
 │   └── image-classification/
 └── tests/
