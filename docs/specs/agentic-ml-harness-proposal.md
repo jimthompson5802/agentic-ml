@@ -1,6 +1,6 @@
 # Agentic ML Development Harness — Architecture Proposal
 
-**Version:** 0.3
+**Version:** 0.5
 **Status:** Proposed specification; ADR-001 accepted  
 **Date:** 2026-10-27
 
@@ -25,8 +25,9 @@ A central design principle is **hierarchical closed-loop ML development**:
 | Model types | Tabular classification/regression and deep learning |
 | Autonomy | Supervised with developer approvals at phase boundaries |
 | Data | Extraction, EDA, feature engineering, and iterative acquisition are first-class |
-| Execution | Local first; container/GPU and distributed backends incrementally |
-| Tracking | MLflow initially; portable versioned manifests and artifact lineage |
+| Execution | Local subprocesses for the proof of concept; Ray planned for later distributed and parallel execution; container/GPU backends incrementally |
+| Experiment tracking | MLflow for runs, parameters, metrics, model artifacts, and experiment comparisons |
+| Data versioning and pipelines | DVC for dataset and derived-data versioning, dependency tracking, and reproducible pipelines; Git versions DVC metadata and pipeline definitions |
 | Agent instructions | Targeted `AGENTS.md` files in separate development and runtime guidance trees; runtime loading is explicit and versioned |
 | Experiment guidance | Developer-authored Markdown brief plus versioned YAML algorithm and hyperparameter boundaries |
 | Search autonomy | Agent searches only within declared boundaries; expansions are recommendations for subsequent experiments |
@@ -78,10 +79,11 @@ flowchart TB
 | Data acquisition executor | Authorize and execute acquisition, validate and version results |
 | EDA/validation | Profiling, missingness, class balance, anomalies, leakage diagnostics, split strategy |
 | Feature engineering | Propose/fit/transform/select features, version pipelines, evaluate feature sets |
-| Experiment runner | Isolated jobs, resources, timeouts, cancellation, logs, artifacts, checkpoints |
+| Experiment runner | Backend-independent submission, status, cancellation, resources, logs, artifacts, and checkpoints; local execution initially, Ray-backed execution later |
 | Framework adapters | Standardized and custom training entrypoints for scikit-learn, LightGBM, PyTorch |
 | Evaluation engine | Metrics, baseline comparisons, scientific validity, robustness, reproducibility |
-| Tracking and artifact store | Dataset, feature, model, metric, environment, approval, and execution lineage |
+| Tracking and artifact store | MLflow records runs, parameters, metrics, and model artifacts; links to DVC dataset/pipeline versions and harness manifests for complete lineage |
+| Data versioning and pipelines | DVC tracks source and derived datasets, dependencies, stage outputs, and reproducible pipeline definitions; integrates with harness execution |
 | Approval service | Phase and acquisition approvals, authorization scope, audit records |
 
 ## 4. Hierarchical Closed-Loop Workflow
@@ -135,7 +137,7 @@ Phases may be configured or skipped when valid preexisting artifacts are supplie
 - Connect to local CSV/Parquet, SQL, and object storage initially; add APIs later.
 - Discover source schemas and metadata without unrestricted data exposure.
 - Execute approved extraction queries and sampling plans.
-- Snapshot or otherwise version extracted datasets; capture source identity, query, parameters, extraction time, checksums, and permissions metadata.
+- Version extracted datasets with DVC; capture source identity, query, parameters, extraction time, checksums, and permissions metadata in associated manifests. Commit DVC metadata to Git; store dataset content in the DVC cache and configured remote storage.
 - Validate schema, row counts, nulls, types, duplicates, and other configured quality rules.
 - Enforce least-privilege access, source allowlists, network restrictions, and cost/record limits.
 
@@ -419,6 +421,24 @@ governance:
 - Treat unsuccessful model performance as a valid experiment result, distinct from execution failure.
 - Restrict filesystem, network, and credential access for agent-generated code.
 
+### Execution backend evolution
+
+The proof of concept executes experiments locally through the `ExperimentRunner` interface, covering submission, status monitoring, cancellation, resource limits where supported, and artifact collection. Keep orchestration and independent evaluation separate from backend-specific scheduling and transport. Implement the local runner first; introduce additional backend abstractions when integration requires them.
+
+Ray is the planned backend for later distributed and parallel execution. Initial Ray support will run independent experiments and hyperparameter trials in parallel. Distributing a single model-training job is a separate, subsequent capability requiring framework-specific design as needed.
+
+Ray dependencies, integration, cluster provisioning, distributed scheduling, and distributed training are outside proof-of-concept scope. Future Ray execution must preserve the existing search boundaries, aggregate experiment budgets, approval gates, cancellation semantics, and provenance requirements. The proof of concept does not require Ray installation or a cluster to execute or validate its local workflow.
+
+### Experiment tracking, data versioning, and pipelines
+
+- Use **MLflow** as the experiment tracking system for Python and notebook runs. Record effective parameters, metrics, execution status, model artifacts, and references to dataset, feature, environment, and instruction provenance.
+- Use **DVC** to version raw datasets, extracted snapshots, split manifests, and derived feature datasets. Use `dvc.yaml` to declare pipeline stages and their dependencies, parameters, and outputs; preserve resolved dependency/output hashes in `dvc.lock`.
+- Track DVC metadata, pipeline definitions, and lockfiles in Git. Configure DVC remote storage for sharing and restoring versioned data; choose the remote backend and access configuration during implementation.
+- The workflow orchestrator retains responsibility for agent delegation, approvals, budgets, and recovery. DVC executes reproducible data and training stages under harness control; it does not replace workflow governance or independent evaluation.
+- Link each MLflow run to the Git revision, DVC data/output hashes, applicable stage definitions and lockfile snapshot, and harness run identifier. Preserve resolved manifests when execution produces metadata not yet committed to Git. Record the MLflow run identifier in the harness result for bidirectional lookup.
+- Keep ownership explicit: DVC manages versioned data and pipeline outputs, MLflow manages experiment records and model artifacts, and harness manifests connect both to approvals and runtime instruction bundles.
+- DVC stage reuse must preserve producer provenance and remain subject to current evaluation and authorization checks. A cached stage does not establish that an experiment meets acceptance criteria.
+
 ### Notebook development
 
 - Use `notebooks/` for interactive exploration, EDA, and experiment analysis; organize notebooks into `eda/`, `experiments/`, and `analysis/`.
@@ -455,7 +475,7 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 | AC-01 | Two agent adapters successfully use the same task contract |
 | AC-02 | End-to-end training/evaluation with scikit-learn, LightGBM, and PyTorch |
 | AC-03 | Experiments support submission, monitoring, cancellation, and inspection |
-| AC-04 | Each run records parameters, metrics, artifacts, and provenance |
+| AC-04 | Each run records parameters, metrics, artifacts, and provenance in MLflow with linked harness and DVC references |
 | AC-05 | Independent evaluator determines acceptance without trusting agent assertions |
 | AC-06 | Agent revises experiments using structured evaluation feedback |
 | AC-07 | Phase advancement is blocked without approval |
@@ -467,7 +487,7 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 | AC-13 | Leakage and protected-test violations are rejected |
 | AC-14 | PyTorch supports checkpoints, cancellation, and CPU/GPU execution |
 | AC-15 | Extract data from at least two source types |
-| AC-16 | Reconstruct or retrieve a versioned dataset |
+| AC-16 | Restore a DVC-versioned dataset from configured storage using its recorded metadata and verify its content hashes |
 | AC-17 | Detect schema mismatches and extraction failures |
 | AC-18 | Agent generates and executes candidate feature transformations |
 | AC-19 | Feature sets are compared on consistent validation splits |
@@ -491,6 +511,9 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 | AC-37 | Runtime explicitly loads shared and relevant task-specific guidance, records the mapping and load order, and excludes development instructions from automatic runtime loading |
 | AC-38 | Resumed experiments use the preserved runtime instruction bundle; conflicting guidance or attempted expansion of experiment constraints blocks affected execution |
 
+| AC-39 | DVC reproduces declared pipeline stages with recorded dependencies and outputs; reused stages retain producer provenance and respect harness governance |
+| AC-40 | MLflow run records link to the exact DVC dataset/pipeline state and Git revision used by the experiment |
+
 ### Reference acceptance-test datasets
 
 - Small tabular classification dataset (scikit-learn/LightGBM).
@@ -505,13 +528,13 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 
 | Implementation phase | Deliverables | Exit criteria |
 |---|---|---|
-| 1. Data and harness foundation | Markdown brief resolution, YAML search-space validation, schemas, local Python and notebook execution, extraction, dataset snapshots, validation, MLflow, CLI | Repeatable extraction and execution without agents |
-| 2. EDA and feature pipelines | Profiling, split manifests, transformations, lineage, feature comparison | Validated, reproducible feature artifacts |
+| 1. Data and harness foundation | Markdown brief resolution, YAML search-space validation, schemas, local Python and notebook execution, extraction, dataset snapshots, validation, MLflow tracking, DVC data versioning and local storage configuration, CLI | Repeatable extraction and execution without agents |
+| 2. EDA and feature pipelines | Profiling, split manifests, transformations, DVC pipeline stages and lockfiles, lineage, feature comparison | Validated, reproducible feature artifacts |
 | 3. Model experimentation | scikit-learn, LightGBM, basic PyTorch, bounded hyperparameter evaluation, algorithm use/select/compare modes, evaluation, baseline comparisons | Tabular and basic deep-learning runs tracked and assessed |
 | 4. Agent integration | First coding-assistant adapter, runtime instruction loading and snapshots, structured feedback, inner-loop iteration | Agent improves a model within an approved budget |
 | 5. Orchestration and approvals | Durable workflow, gates, recovery, second adapter | Supervised multi-phase workflow with enforced approvals |
 | 6. Iterative data acquisition | Gap diagnosis, proposals, approved extraction, retraining comparisons | Outer-loop improvement with lineage and budgets |
-| 7. Advanced capabilities | Optuna, active learning, labeling, augmentation, specialized agents, containers/distributed backends | Extensible multi-agent workflow with advanced compute/data strategies |
+| 7. Advanced capabilities (after proof of concept) | Ray-backed runner for parallel experiments and hyperparameter trials, followed by distributed training as needed; Optuna, active learning, labeling, augmentation, specialized agents, containers | Ray execution preserves harness governance and lineage; extensible multi-agent workflow with advanced compute/data strategies |
 
 The phase order is an implementation sequence, not a restriction on the final development workflow. Basic PyTorch is included early; advanced distributed deep learning comes later.
 
@@ -523,6 +546,10 @@ agentic-ml/
 ├── README.md
 ├── pyproject.toml
 ├── uv.lock
+├── .dvc/
+├── dvc.yaml
+├── dvc.lock
+├── data/                     # DVC-managed content; metadata tracked in Git
 ├── notebooks/
 │   ├── eda/
 │   ├── experiments/
@@ -604,7 +631,7 @@ agentic-ml/
 - **ADR-002:** Expose harness through Python API and CLI initially; consider MCP server later.
 - **ADR-003:** Start with a lightweight durable state-machine orchestrator; evaluate agent orchestration frameworks if complexity requires.
 - **ADR-004:** Hybrid ML operations: standardized capabilities plus sandboxed custom Python code.
-- **ADR-005:** Choose concrete dataset versioning and artifact storage mechanisms.
+- **ADR-005:** Choose DVC remote storage and MLflow backend/artifact storage configuration; DVC data versioning/pipelines and MLflow experiment tracking are selected stack components.
 - **ADR-006:** Define the authorization and isolation model for data connectors and generated code.
 
 ## 15. Next Steps
