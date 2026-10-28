@@ -1,7 +1,7 @@
 # Agentic ML Development Harness — Architecture Proposal
 
-**Version:** 0.6
-**Status:** Proposed specification; ADR-001 accepted  
+**Version:** 0.7
+**Status:** Proposed specification; ADR-001 accepted; ADR-007 installation decisions accepted
 **Date:** 2026-10-27
 
 ## 1. Executive Summary
@@ -23,6 +23,8 @@ A central design principle is **hierarchical closed-loop ML development**:
 | Agent integrations | Standardized adapters for coding assistants and specialized agents |
 | ML frameworks | Initial scikit-learn, LightGBM, and PyTorch; extensible |
 | Package management | Use `uv` for Python dependency management, lockfiles, and virtual environments |
+| Initial distribution | Install the Python package directly from its GitHub repository using `uv`, pinned to a full Git commit SHA; package-registry distribution is future work |
+| CLI and Python imports | Use `agent-ml` as the installed CLI name and retain `agentic_ml` as the Python import/package directory name |
 | Repository boundary | Separate harness product repository and user experiment repositories; consume the harness as a versioned Python dependency through its public API and CLI |
 | Jupyter notebooks | Agent-generated notebooks in the user experiment repository are the primary experiment interface; support interactive use and automatic harness-managed execution |
 | Model types | Tabular classification/regression and deep learning |
@@ -129,7 +131,7 @@ Both loops must terminate on success, budget exhaustion, lack of improvement, un
 
 ### Notebook-centered user workflow
 
-1. Initialize a separate experiment repository from a harness-provided template and install its locked environment.
+1. Install `uv` and Git, create a separate user repository and Python project, install the harness from a pinned GitHub commit, and run `uv run agent-ml init` to add experiment scaffolding and configure its environment.
 2. Configure local data access, tracking, storage, and an agent adapter; write the experiment brief and search-space configuration.
 3. Ask the agent to generate readable notebooks and any experiment-specific helper code in that repository.
 4. Inspect the notebooks and approve the resolved task contract, evaluation protocol, access scope, and budgets through the applicable gates before dependent execution.
@@ -275,29 +277,52 @@ class ApprovalService(Protocol):
 | `ExtractionSpec` / `DatasetRef` | Source, query, snapshot, checksum, schema, lineage |
 | `DataGapReport` / `DataAcquisitionProposal` | Evidence, acquisition hypothesis, scope, cost, approval |
 | `FeaturePlan` / `FeatureSetRef` | Transformations, fitted state, versions, provenance |
-| `ExperimentSpec` / `ExperimentResult` | Project/experiment identity, model, data, notebook/code snapshots, experiment Git revision, harness version/build identity, environment/lockfile identity, effective parameters, source configuration references, runtime instruction bundle reference, resolved decisions, resources, metrics, artifacts |
+| `ExperimentSpec` / `ExperimentResult` | Project/experiment identity, model, data, notebook/code snapshots, experiment Git revision, harness repository URL/full commit SHA/package version, build identity where available, environment/lockfile identity, effective parameters, source configuration references, runtime instruction bundle reference, resolved decisions, resources, metrics, artifacts |
 | `EvaluationReport` | Metrics, validity checks, baseline comparison, evidence |
 | `ApprovalRecord` | Reviewer, scope, decision, timestamp, audit trail |
 
 ### Project initialization and installation
 
-Provide a documented bootstrap path starting with a vanilla Python interpreter and local raw data. Identify how to install `uv` and Git and obtain the harness distribution; downloads require network access or separately supplied installation artifacts. Users must be able to initialize and run an experiment project without cloning the harness source repository. The distribution mechanism and exact commands remain implementation decisions.
+Provide a documented bootstrap path starting with a vanilla Python interpreter and local raw data. Users first install `uv` and Git, then install the harness as a Python package directly from its GitHub repository into the user project's environment. Pin the Git dependency to a full commit SHA and use a normal package installation, rather than an editable installation. Package-registry distribution is future work.
 
-Project initialization must:
+Users do not need to manually clone or maintain a harness working checkout. The installer may fetch the pinned source into its managed cache to build and install the package. Downloads require network access and, for a private repository, configured Git credentials; keep credentials outside committed configuration.
 
-1. Create a separate Git repository from a harness-provided template, including project configuration, ignore rules, experiment brief, search space, and notebook templates.
-2. Declare the versioned harness dependency and required ML, notebook-execution, and interactive JupyterLab dependencies in the project's `pyproject.toml`; create its `uv` environment and commit its own `uv.lock`.
-3. Initialize project-local DVC metadata and configure DVC storage, MLflow tracking/artifact storage, and durable workflow-state storage. Support a single-machine local configuration; remote backend choices remain configurable.
-4. Register existing raw data through explicit paths and permissions, including sources outside the repository; snapshot and version approved inputs without requiring external acquisition.
-5. Configure a supported agent adapter and any required authentication, plus the mechanism for presenting and recording phase approvals. Keep credentials outside committed configuration.
+The intended installation and initialization sequence is:
 
-The project lockfile records the resolved harness and library versions. Harness upgrades are explicit project dependency changes with a new lockfile/environment identity; resumed runs use the preserved compatible configuration and instruction bundle. The harness repository's own lockfile is for product development and does not replace the experiment project's environment record.
+```bash
+# After installing uv and Git:
+mkdir customer-churn
+cd customer-churn
+
+git init
+uv init
+uv add "git+https://github.com/OWNER/HARNESS-REPO.git" --rev FULL_COMMIT_SHA
+
+uv run agent-ml init
+uv run jupyter lab
+```
+
+The repository URL and commit SHA are placeholders. These commands specify the intended product interface; the harness and CLI still require implementation. There is no separate initializer-tool installation: `agent-ml init` runs from the harness already installed in the project's `.venv`.
+
+`agent-ml init` must:
+
+1. Add project configuration, ignore rules, an initial experiment brief, search-space and execution configuration, notebook templates, and any project-package scaffolding to the existing user repository.
+2. Preserve existing files and report conflicts rather than silently overwriting them. Preserve the declared harness Git dependency and pinned commit.
+3. Add required ML, notebook-execution, and interactive JupyterLab dependencies to the project's `pyproject.toml` and synchronize its `uv` environment and lockfile. Users commit their project files and `uv.lock` to Git.
+4. Initialize project-local DVC metadata and configure local DVC storage, MLflow tracking/artifact storage, and durable workflow-state storage. Remote backend choices remain configurable.
+5. Generate explicit settings or prompts for raw-data paths/permissions, agent adapter/authentication, and the mechanism for presenting and recording approvals. Authentication and experiment-specific choices remain explicit setup steps; initialization does not authorize data access or execution. Keep credentials outside committed configuration.
+
+After initialization, users register existing raw data, including approved sources outside the repository, and resolve experiment-specific inputs before dependent work begins. Existing inputs are snapshotted and versioned without requiring external acquisition.
+
+The harness repository's root `pyproject.toml` must define its build system, package metadata, supported Python versions, dependencies, and `agent-ml` CLI entrypoint. Package the `src/agentic_ml/` implementation, initialization templates, and default runtime guidance. Load resources from the installed package without relying on a source checkout. The Python import name remains `agentic_ml`; the distribution name and actual GitHub URL require implementation decisions.
+
+The project lockfile records the resolved harness Git revision and library versions. Harness upgrades explicitly change the declared full commit SHA and project lockfile, creating a new environment identity; package version alone does not identify Git revisions. Resumed runs use the preserved compatible configuration and instruction bundle. The harness repository's own lockfile is for product development and does not replace the experiment project's environment record.
 
 ### Developer experiment inputs
 
 Developers provide two complementary inputs: a Markdown experiment brief describing intent and constraints, and a YAML configuration defining the allowed algorithms and hyperparameter search spaces. These inputs are distinct from the resolved `ExperimentSpec` submitted for execution.
 
-Store these as `experiments/<name>/experiment.md` and `search-space.yaml` in the user repository. An adjacent `experiment.yaml` identifies notebook entrypoints, data references, and execution settings; it does not replace the brief or expand the search space. A project-root `project.yaml` holds project-wide environment, tracking, storage, agent, and guidance settings. Relative paths in these declarative inputs resolve against the experiment repository root; notebook working directories are explicitly recorded. The schemas and concrete CLI/API commands require further design.
+Store these as `experiments/<name>/experiment.md` and `search-space.yaml` in the user repository. An adjacent `experiment.yaml` identifies notebook entrypoints, data references, and execution settings; it does not replace the brief or expand the search space. A project-root `project.yaml` holds project-wide environment, tracking, storage, agent, and guidance settings. Relative paths in these declarative inputs resolve against the experiment repository root; notebook working directories are explicitly recorded. The schemas and CLI/API commands beyond the selected `agent-ml init` interface require further design.
 
 The Markdown brief uses recognizable sections with natural-language guidance for:
 
@@ -449,7 +474,9 @@ reproducibility:
   experiment_git_revision: "<experiment-repository-commit>"
   source_snapshot: "sha256:<notebook-and-code-snapshot>"
   harness_version: "<installed-version>"
-  harness_build_identity: "sha256:<distribution-hash>"
+  harness_repository_url: "https://github.com/OWNER/HARNESS-REPO.git"
+  harness_git_commit: "<full-harness-commit-sha>"
+  harness_build_identity: "sha256:<distribution-hash-if-available>"
   project_lockfile: uv.lock
   project_lockfile_checksum: "sha256:<lockfile-hash>"
 governance:
@@ -468,7 +495,7 @@ governance:
 - Preserve the source notebook, supplied parameters, executed notebook with cell outputs, execution errors, and generated artifacts in the run record. Cell errors fail execution; successful notebooks remain subject to independent evaluation and protected-data rules.
 - Keep experiment-specific preprocessing, models, and training logic in the experiment repository's notebooks, helpers, or project package. Both notebook and Python entrypoints import generic capabilities from the installed harness public API; they must not import through paths into the harness source checkout.
 - Enforce timeouts, cancellation, experiment counts, memory/GPU quotas where supported.
-- Capture logs, exit status, project environment/lockfile identity, experiment Git revision, exact executed notebook/code snapshots including uncommitted changes, harness version/build identity, datasets, checkpoints, and artifacts.
+- Capture logs, exit status, project environment/lockfile identity, experiment Git revision, exact executed notebook/code snapshots including uncommitted changes, harness repository URL/full commit SHA/package version, build identity where available, datasets, checkpoints, and artifacts.
 - Treat unsuccessful model performance as a valid experiment result, distinct from execution failure.
 - Restrict filesystem, network, and credential access for agent-generated code.
 - Resolve paths against the selected experiment project and record the working directory. Explicitly authorize writable project paths, storage locations, and access to external raw data. Routine experiment execution must not modify the harness installation or source repository.
@@ -487,7 +514,7 @@ Ray dependencies, integration, cluster provisioning, distributed scheduling, and
 - Use **DVC** to version raw datasets, extracted snapshots, split manifests, and derived feature datasets. Use `dvc.yaml` to declare pipeline stages and their dependencies, parameters, and outputs; preserve resolved dependency/output hashes in `dvc.lock`.
 - Track DVC metadata, pipeline definitions, and lockfiles in the experiment repository's Git history. Exclude dataset contents and large generated artifacts from Git. Configure DVC storage for sharing and restoring versioned data; support local storage initially and choose remote backends/access configuration during implementation.
 - The workflow orchestrator retains responsibility for agent delegation, approvals, budgets, and recovery. DVC executes reproducible data and training stages under harness control; it does not replace workflow governance or independent evaluation.
-- Link each MLflow run to the experiment Git revision, exact executed notebook/helper/project-code snapshots, harness version and build/source identity, project lockfile/environment identity, DVC data/output hashes, applicable stage definitions and lockfile snapshot, and harness run identifier. Preserve uncommitted source and resolved metadata in immutable run snapshots. Record the MLflow run identifier in the harness result for bidirectional lookup.
+- Link each MLflow run to the experiment Git revision, exact executed notebook/helper/project-code snapshots, harness repository URL/full commit SHA/package version and build identity where available, project lockfile/environment identity, DVC data/output hashes, applicable stage definitions and lockfile snapshot, and harness run identifier. Preserve uncommitted source and resolved metadata in immutable run snapshots. Record the MLflow run identifier in the harness result for bidirectional lookup.
 - Keep ownership explicit: DVC manages versioned data and pipeline outputs, MLflow manages experiment records and model artifacts, and harness manifests connect both to approvals and runtime instruction bundles.
 - Store executed notebook snapshots and model artifacts in configured MLflow artifact storage, versioned datasets in DVC storage, and durable workflow state in configured project-associated state storage. These locations may be local or external; preserve references and nonsecret configuration in the experiment repository and exclude generated stores from Git.
 - DVC stage reuse must preserve producer provenance and remain subject to current evaluation and authorization checks. A cached stage does not establish that an experiment meets acceptance criteria.
@@ -569,14 +596,16 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 | AC-37 | Runtime explicitly loads shared and relevant task-specific guidance, records the mapping and load order, and excludes development instructions from automatic runtime loading |
 | AC-38 | Resumed experiments use the preserved runtime instruction bundle; conflicting guidance or attempted expansion of experiment constraints blocks affected execution |
 | AC-39 | DVC reproduces declared pipeline stages with recorded dependencies and outputs; reused stages retain producer provenance and respect harness governance |
-| AC-40 | MLflow run records link to the exact DVC dataset/pipeline state, experiment Git revision and source snapshot, harness version/build identity, and project lockfile/environment identity |
-| AC-41 | Starting with Python and local raw data, documented bootstrap steps initialize a separate experiment Git repository, locked environment, notebook templates, configuration, and local tracking/DVC/state storage without cloning the harness source |
+| AC-40 | MLflow run records link to the exact DVC dataset/pipeline state, experiment Git revision and source snapshot, harness repository URL/full commit SHA/package version, build identity where available, and project lockfile/environment identity |
+| AC-41 | Starting with Python and local raw data, documented bootstrap steps install uv/Git, create the user Git/Python project, install the harness from a full GitHub commit SHA, and run agent-ml init to produce a locked environment, notebook templates, configuration, and local tracking/DVC/state storage without a manually maintained harness checkout |
 | AC-42 | Agent-generated notebooks import the installed harness and project package and support interactive use and fresh-kernel automated execution without hidden state or paths into a harness checkout |
 | AC-43 | Routine experiment generation and execution modify only the experiment repository and authorized storage; the harness installation/source remain unchanged |
 | AC-44 | Each recorded run preserves exact notebook, helper, project-code, configuration, and runtime-guidance snapshots, including uncommitted source changes |
-| AC-45 | On a second machine, the experiment checkout and recorded snapshots/environment/data restore a run within declared reproducibility tolerances without a harness source checkout |
+| AC-45 | On a second machine, the experiment checkout and recorded snapshots/environment/data restore the pinned GitHub harness commit and reproduce a run within declared tolerances without a manually maintained harness checkout |
 | AC-46 | Interactive kernels cannot access protected test data; interactive success does not bypass phase approval or independent evaluation, and managed training enforces candidate boundaries and budgets |
 | AC-47 | Installed harness guidance and explicitly configured project guidance load with recorded ownership/order; neither repository's development instructions load automatically into runtime experiment tasks |
+| AC-48 | A clean-environment GitHub installation exposes the agent-ml CLI and packaged templates/runtime guidance without relying on the installer cache or source checkout at runtime |
+| AC-49 | agent-ml init preserves existing project files and the pinned Git dependency, reports conflicts, and installs the notebook dependencies needed to launch JupyterLab from the project environment |
 
 ### Reference acceptance-test datasets
 
@@ -587,13 +616,13 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 - Negative fixtures for leakage, schema errors, missing artifacts, unauthorized access, and skipped approval gates.
 - Runtime-guidance fixtures covering task selection, conflicting instructions, development/runtime separation, and resumption after source guidance changes.
 - Experiment-input fixtures covering delegated decisions, all three algorithm modes, numeric/categorical search spaces, and rejected boundary violations.
-- Separate experiment-project fixtures covering bootstrap from an installed harness, generated notebooks, project-package imports, uncommitted source snapshots, interactive access boundaries, and restoration in a clean environment.
+- Separate experiment-project fixtures covering pinned GitHub installation, agent-ml init and file conflicts, installed CLI/resources, generated notebooks, project-package imports, uncommitted source snapshots, interactive access boundaries, and restoration in a clean environment.
 
 ## 11. Phased Implementation Plan
 
 | Implementation phase | Deliverables | Exit criteria |
 |---|---|---|
-| 1. Data and harness foundation | Installable versioned harness, separate-project initialization/templates, bootstrap documentation, project configuration and locked environment, Markdown brief resolution, YAML search-space validation, schemas, local Python/notebook execution, extraction, snapshots, validation, MLflow tracking, local DVC/state storage, public API/CLI | Repeatable extraction and notebook execution in a separate project without agents or a harness source checkout |
+| 1. Data and harness foundation | GitHub-installable package pinned by full commit SHA, agent-ml CLI/init, packaged templates/guidance, bootstrap documentation, project configuration and locked environment, Markdown brief resolution, YAML search-space validation, schemas, local Python/notebook execution, extraction, snapshots, validation, MLflow tracking, local DVC/state storage, public API | Clean-environment GitHub install and initialization followed by repeatable extraction/notebook execution in a separate project without agents or a manually maintained harness checkout |
 | 2. EDA and feature pipelines | Profiling, split manifests, transformations, DVC pipeline stages and lockfiles, lineage, feature comparison | Validated, reproducible feature artifacts |
 | 3. Model experimentation | scikit-learn, LightGBM, basic PyTorch, bounded hyperparameter evaluation, algorithm use/select/compare modes, evaluation, baseline comparisons | Tabular and basic deep-learning runs tracked and assessed |
 | 4. Agent integration | First coding-assistant adapter, project-local notebook/code generation, packaged/project runtime instruction loading and snapshots, structured feedback, inner-loop iteration | Agent improves a model through user-reviewable notebooks within an approved budget without modifying the harness |
@@ -613,7 +642,7 @@ This repository contains the installable product, templates, examples, and produ
 agent-ml-harness/
 ├── AGENTS.md
 ├── README.md
-├── pyproject.toml
+├── pyproject.toml             # Build metadata, dependencies, agent-ml entrypoint
 ├── uv.lock
 ├── docs/
 │   └── specs/
@@ -669,7 +698,7 @@ The following is an illustrative initialized project, not a directory inside the
 customer-churn/
 ├── README.md
 ├── AGENTS.md                 # Project development conventions
-├── pyproject.toml            # Project package and versioned harness dependency
+├── pyproject.toml            # Project package and harness Git dependency/full SHA
 ├── uv.lock                   # Resolved experiment environment
 ├── project.yaml              # Storage, tracking, state, agent, guidance settings
 ├── .gitignore
@@ -724,6 +753,18 @@ Executed notebook snapshots, model artifacts, DVC content/cache, and durable wor
 
 **Consequences:** Requires data-gap diagnostics, acquisition contracts, dataset versioning, authorization, consistent before/after evaluation, and termination conditions for both loops.
 
+### ADR-007 — GitHub Package Installation and Project Initialization
+
+**Status: Installation decisions accepted; remaining interface details pending**
+
+**Decision:** Initially install the harness as a normal Python package directly from its GitHub repository using `uv`, pinned to a full commit SHA. Use `agent-ml` as the installed CLI name and retain `agentic_ml` as the Python import name. Users install `uv` and Git, initialize a separate Git/Python project, install the harness into that project's environment, and then run `uv run agent-ml init`. No separate initializer-tool installation is required. Package-registry distribution is future work.
+
+**Rationale:** Direct GitHub installation supports the separate-repository workflow without requiring package-registry publishing. A full commit pin identifies the exact harness source used by an experiment.
+
+**Consequences:** The repository must build an installable package containing the CLI, templates, and runtime guidance. The initializer preserves existing project files and the pinned dependency. Run provenance records the harness repository URL, full commit SHA, package version, and project lockfile identity. Users need GitHub access at installation/restoration time; the installer may fetch source into its cache, but runtime use requires no manually maintained harness checkout.
+
+**Remaining decisions:** Actual GitHub URL and distribution name, supported Python versions, API compatibility/versioning policy, project/experiment configuration schemas, and CLI/API details beyond `agent-ml init`.
+
 ### Pending decisions
 
 - **ADR-002:** Expose harness through Python API and CLI initially; consider MCP server later.
@@ -731,7 +772,7 @@ Executed notebook snapshots, model artifacts, DVC content/cache, and durable wor
 - **ADR-004:** Hybrid ML operations: standardized capabilities plus sandboxed custom Python code.
 - **ADR-005:** Choose configurable project-associated DVC storage, MLflow backend/artifact storage, and durable workflow-state configuration, including single-machine local defaults; DVC data versioning/pipelines and MLflow experiment tracking are selected stack components.
 - **ADR-006:** Define the authorization and isolation model for data connectors, generated code, and interactive notebook kernels, including protected-test isolation and project/harness filesystem boundaries.
-- **ADR-007:** Choose harness package distribution, bootstrap commands, public API compatibility/versioning, and project/experiment configuration schemas for independent experiment repositories.
+- **ADR-007 remaining details:** Finalize the repository URL/distribution name, supported Python versions, API compatibility/versioning, configuration schemas, and remaining CLI/API commands; GitHub installation, full commit pinning, and the agent-ml CLI/init sequence are selected above.
 
 ## 15. Next Steps
 
