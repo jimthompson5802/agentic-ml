@@ -11,6 +11,7 @@ The proposed harness coordinates coding assistants and specialized ML agents, ex
 - [User stories](docs/specs/user-stories.md): Authoritative product requirements and acceptance criteria, organized into six milestones with stable story and criterion IDs.
 - [Harness design](docs/specs/agentic-ml-harness-design.md): Supporting architecture, workflow phases, custom component support, execution and approval contracts, acceptance-criteria traceability, implementation plan, and architecture decisions.
 - [Agent instructions](AGENTS.md): Repository conventions for coding agents.
+- [User-story implementation-plan template](docs/templates/user-story-implementation-plan.md): Detailed task planning, verification evidence, and developer approval gates.
 
 ## Planning terminology
 
