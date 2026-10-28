@@ -6,7 +6,7 @@
 
 ## 1. Executive Summary
 
-Build an agent-independent machine learning development harness for tabular ML and deep learning. A separate workflow orchestrator coordinates AI coding assistants and specialized ML agents; the harness independently executes, validates, and tracks experiments. Development is supervised: agents may iterate within approved phases and budgets, while developers approve phase transitions and expanded data-access scope.
+Build an agent-independent machine learning development harness for tabular ML and deep learning. Within the installed package, a workflow orchestrator coordinates AI coding assistants and specialized ML agents; distinct execution and evaluation components independently execute, validate, and track experiments. Development is supervised: agents may iterate within approved phases and budgets, while developers approve phase transitions and expanded data-access scope.
 
 The harness is a versioned Python dependency installed into a separate user experiment repository. That repository is the unit users own, review, version, and share: it contains experiment briefs, configuration, agent-generated notebooks and Python code, and data-versioning metadata. Notebooks are the primary user interface for inspecting, running, and refining experiments; the harness provides reusable capabilities and independent execution and evaluation controls.
 
@@ -19,7 +19,7 @@ A central design principle is **hierarchical closed-loop ML development**:
 
 | Dimension | Decision |
 |---|---|
-| Orchestration | Separate orchestrator from execution/evaluation harness |
+| Orchestration | Distinct orchestration and execution/evaluation components within the installed harness package |
 | Agent integrations | Standardized adapters for coding assistants and specialized agents |
 | ML frameworks | Initial scikit-learn, LightGBM, and PyTorch; extensible |
 | Package management | Use `uv` for Python dependency management, lockfiles, and virtual environments |
@@ -52,26 +52,47 @@ A central design principle is **hierarchical closed-loop ML development**:
 
 ```mermaid
 flowchart TB
-    U[Developer / Data Scientist] --> O[Workflow Orchestrator]
-    O --> A[Agent Integration Layer]
-    A --> C[Coding Assistant Adapters]
-    A --> S[Specialized ML Agent Adapters]
-    C --> H[Execution and Evaluation Harness]
-    S --> H
-    H --> D[Data Extraction and Validation]
-    H --> F[Feature Engineering]
-    H --> T[Model Training and Tuning]
-    H --> E[Independent Evaluation]
-    D --> P[(Datasets / Snapshots)]
-    F --> P
-    T --> R[(Experiment Tracking / Model Artifacts)]
-    E --> R
-    P --> R
-    E -. metrics and diagnostics .-> O
-    O --> G{Approval Gate}
-    G -->|Approved| O
-    G -->|Changes requested| O
+    U[Developer / Data Scientist]
+
+    subgraph H["Installed agentic-ml Package — Public Python API and CLI"]
+        O[Workflow Orchestrator]
+        G{Approval Service}
+        A[Agent Integration Layer<br/>Coding Assistant and Specialized ML Adapters]
+
+        subgraph R["Execution and Evaluation"]
+            X[Managed Execution<br/>Data, Features, Training, and Tuning]
+            E[Independent Evaluation]
+        end
+    end
+
+    subgraph P["User Experiment Project"]
+        N[Notebooks and Experiment Code]
+        C[Brief, Configuration, and Custom Components<br/>Supplied Models and Preprocessors]
+    end
+
+    U --> O
+    O -->|Request phase or scope approval| G
+    U -->|Approve, revise, or reject| G
+    G -->|Recorded decision| O
+    O -->|Delegate within approved scope| A
+    U -->|Inspect, edit, and run| N
+    A -->|Generate and revise authorized code| N
+    C -->|Inputs and component references| N
+    C -->|Resolve plan and boundaries| O
+
+    O -->|Authorize managed runs| X
+    N -->|Invoke within approved scope| X
+    X -->|Run artifacts| E
+    E -. Development evidence or final review results .-> O
+    X <-->|Versioned data and pipeline outputs| D[(DVC Storage)]
+    X -->|Runs, snapshots, and model artifacts| M[(MLflow Tracking and Artifacts)]
+    E -->|Evaluation results| M
+    D -. Dataset and pipeline references .-> M
 ```
+
+The installed harness package supplies orchestration, agent integration, approval handling, execution, and evaluation. Separation of orchestration from execution/evaluation means distinct component responsibilities within the package, rather than separate installations or repositories. Agent adapters connect to coding assistants or external agent services; those external systems need not run inside the package. Package boundaries show implementation ownership, not process or deployment boundaries.
+
+These capabilities operate in the selected experiment project's environment using its configuration and project-associated state/storage. The orchestrator coordinates approved work; execution independently enforces boundaries, and evaluation assesses results. Project-owned models and preprocessors run through harness interfaces alongside built-in components. Interactive notebook use follows the same access rules and cannot establish acceptance by itself. Protected holdout access is reserved for independent final evaluation; its feedback cannot drive development iterations. Harness manifests link DVC and MLflow records to project snapshots, component identities, approvals, and durable project-associated workflow state.
 
 ### Component responsibilities
 
@@ -81,7 +102,7 @@ flowchart TB
 | Agent integration | Capability discovery, structured task/result exchange, cancellation, CLI/SDK/tool adapters |
 | Data extraction engine | Source discovery, approved queries, ingestion, snapshots, schema checks, lineage |
 | Data acquisition planner | Diagnose gaps, propose additional samples/labels/sources, estimate costs and expected benefit |
-| Data acquisition executor | Authorize and execute acquisition, validate and version results |
+| Data acquisition executor | Enforce recorded acquisition authorization, execute acquisition, validate and version results |
 | EDA/validation | Profiling, missingness, class balance, anomalies, leakage diagnostics, split strategy |
 | Feature engineering | Propose/fit/transform/select features, version pipelines, evaluate feature sets |
 | Experiment runner | Backend-independent submission, status, cancellation, resources, logs, artifacts, and checkpoints; local execution initially, Ray-backed execution later |
@@ -93,13 +114,13 @@ flowchart TB
 
 ### Harness and experiment project boundary
 
-The harness repository contains reusable execution, evaluation, tracking, agent integration, orchestration, templates, and default runtime guidance. Each user experiment repository contains objectives, notebooks, generated code, configuration, and versioning metadata. One experiment repository may contain multiple related experiments sharing project code and dependencies.
+The harness repository contains reusable execution, evaluation, tracking, agent integration, orchestration, approval handling, templates, and default runtime guidance. Each user experiment repository contains objectives, notebooks, supplied and generated code, configuration, and versioning metadata. One experiment repository may contain multiple related experiments sharing project code and dependencies.
 
 ```mermaid
 flowchart LR
     subgraph H["Harness repository"]
         direction TB
-        HC["Reusable Python package<br/>src/agentic_ml/"]
+        HC["Reusable Python package<br/>src/agentic_ml/<br/>Orchestration, Adapters, Approvals, Execution, and Evaluation"]
         HR["Templates and runtime guidance<br/>templates/ · runtime_guidance/"]
         HD["Package metadata and tests<br/>pyproject.toml · tests/"]
     end
@@ -126,7 +147,7 @@ The orchestrator operates on an explicitly selected experiment project and envir
 flowchart TD
     A[Define Objectives, Components, and Boundaries] --> B[Developer Approves Plan]
     B --> C["Execute Authorized Phase (see Phase Descriptions Below)"]
-    C --> D[Validate Evidence]
+    C --> D[Independently Validate Phase Evidence]
     D --> E[Developer Reviews Phase]
     E -->|Advance| F[Next Phase]
     F --> C
@@ -777,6 +798,7 @@ agent-ml-harness/
 │   ├── orchestrator/
 │   │   └── AGENTS.md
 │   ├── agents/adapters/
+│   ├── approvals/            # Approval service and scoped decision handling
 │   ├── data/
 │   │   ├── sources/
 │   │   ├── acquisition/
@@ -819,18 +841,18 @@ customer-churn/
 ├── AGENTS.md                 # Project development conventions
 ├── pyproject.toml            # Project package and harness Git dependency/full SHA
 ├── uv.lock                   # Resolved experiment environment
-├── project.yaml              # Storage, tracking, state, agent, guidance settings
+├── project.yaml              # Storage, tracking, state, agent, guidance, components
 ├── .gitignore
 ├── .dvc/
 ├── data/                     # DVC-managed content; excluded from Git
 ├── data.dvc                  # Illustrative data-version metadata tracked in Git
 ├── runtime_guidance/         # Optional explicitly mapped project practices
-├── src/churn_experiments/    # Python shared across this project's experiments
+├── src/churn_experiments/    # Shared project code, custom models/preprocessors
 └── experiments/
     └── baseline-comparison/
         ├── experiment.md
         ├── search-space.yaml
-        ├── experiment.yaml   # Entrypoints, data references, execution settings
+        ├── experiment.yaml   # Entrypoints, data, feature pipeline, execution
         ├── dvc.yaml
         ├── dvc.lock
         ├── notebooks/
