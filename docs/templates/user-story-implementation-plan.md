@@ -32,6 +32,19 @@ During execution, complete the current implementation phase's tasks and verifica
 - **Decision reference and date:** <record when given>
 - **Requested plan changes:** <record if applicable>
 
+## Scope-change history
+
+Follow the [manage-plan-scope procedure](../../.agents/skills/manage-plan-scope/SKILL.md) when scope changes during execution. Initially record "None"; repeat the record below for each meaningful change. Link requested changes in the affected implementation phase to their scope-change record.
+
+- **Change ID and date:** <stable local identifier and date>
+- **Request and reason:** <requested outcome, reason, and request reference>
+- **Scope difference:** <work added, removed, deferred, or changed>
+- **Impact:** <affected tasks, acceptance criteria, dependencies, completed work, evidence, and commitments>
+- **Plan and requirement revisions:** <links or identifiers for revised sections and authoritative documents>
+- **Verification and gates:** <required checks, evidence needing renewal, and affected gate status>
+- **Decision:** Proposed — <record Approved, Rejected, or Deferred with an explicit decision reference and date when given>
+- **Resume point:** <authorized next task or decision blocking affected work>
+
 ## US-<ID> / Implementation Phase 1: <concrete objective>
 
 - **Outcome:** <reviewable result of this implementation phase>

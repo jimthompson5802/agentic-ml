@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Plan Scope"
+  short_description: "Revise plan scope while preserving approvals and evidence"
+  default_prompt: "Use $manage-plan-scope to assess my scope change, revise the active implementation plan, and identify any required approval before resuming work."
