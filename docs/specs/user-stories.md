@@ -7,7 +7,7 @@
 | **5. Supervise and resume the complete workflow** | Run the multi-phase workflow with durable approvals, interruption recovery, and interchangeable agents. | US-23, US-25; second-adapter portion of US-30; audit portion of US-26 |
 | **6. Improve the dataset through authorized acquisition** | Diagnose a data limitation, authorize acquisition, version the resulting data, and measure the effect of retraining. | US-28, US-29 |
 
-This document is the authoritative source of product requirements and acceptance criteria. The stories originated from version 0.10 of the [Agentic ML Development Harness architecture proposal](specs/agentic-ml-harness-proposal.md); the proposal now describes the supporting design and references the criteria defined here. These requirements describe proposed behavior, not implemented capabilities or finalized interfaces.
+This document is the authoritative source of product requirements and acceptance criteria. The stories originated from version 0.10 of the [Agentic ML Development Harness architecture proposal](agentic-ml-harness-proposal.md); the proposal now describes the supporting design and references the criteria defined here. These requirements describe proposed behavior, not implemented capabilities or finalized interfaces.
 
 Acceptance criteria use stable IDs of the form `US-<story>-AC-<criterion>`, such as `US-01-AC-01`. Criterion numbers are unique within a story and continue across slices. Preserve IDs when wording changes or criteria move; assign the next unused number to a new criterion and never reuse a retired ID. Architecture references identify supporting design sections rather than defining another set of requirements.
 

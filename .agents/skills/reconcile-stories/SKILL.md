@@ -5,7 +5,7 @@ description: Reconcile the architecture proposal against authoritative user stor
 
 # Reconcile Stories and Architecture
 
-Treat `docs/user-stories.md` as the authoritative source of product
+Treat `docs/specs/user-stories.md` as the authoritative source of product
 requirements. The supporting architecture document is
 `docs/specs/agentic-ml-harness-proposal.md`.
 
