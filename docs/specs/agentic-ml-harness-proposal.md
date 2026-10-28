@@ -1,8 +1,8 @@
 # Agentic ML Development Harness — Architecture Proposal
 
-**Version:** 0.10
+**Version:** 0.11
 **Status:** Proposed specification; ADR-001 accepted; ADR-007 installation decisions accepted
-**Date:** 2026-10-27
+**Date:** 2026-10-28
 
 ## 1. Executive Summary
 
@@ -687,67 +687,53 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 - Protected test sets cannot be used for iterative tuning or data acquisition decisions.
 - Resource limits and stopping conditions apply to both inner and outer loops.
 
-## 10. Acceptance Criteria
+## 10. Acceptance Criteria Traceability
 
-| ID | Acceptance criterion |
-|---|---|
-| AC-01 | Two agent adapters successfully use the same task contract |
-| AC-02 | End-to-end training/evaluation with scikit-learn, LightGBM, and PyTorch |
-| AC-03 | Experiments support submission, monitoring, cancellation, and inspection |
-| AC-04 | Each run records parameters, metrics, artifacts, and provenance in MLflow with linked harness and DVC references |
-| AC-05 | Independent evaluator determines acceptance without trusting agent assertions |
-| AC-06 | Agent revises experiments using structured evaluation feedback |
-| AC-07 | Phase advancement is blocked without approval |
-| AC-08 | Experiment-count and runtime budgets stop new work |
-| AC-09 | Repeated runs satisfy specified reproducibility tolerances |
-| AC-10 | Interrupted workflows resume without duplicating completed runs |
-| AC-11 | Unauthorized filesystem/credential access is blocked |
-| AC-12 | Final report includes model, metrics, baseline, and lineage |
-| AC-13 | Leakage and protected-test violations are rejected |
-| AC-14 | PyTorch supports checkpoints, cancellation, and CPU/GPU execution |
-| AC-15 | Extract data from at least two source types |
-| AC-16 | Restore a DVC-versioned dataset from configured storage using its recorded metadata and verify its content hashes |
-| AC-17 | Detect schema mismatches and extraction failures |
-| AC-18 | Agent generates and executes candidate feature transformations |
-| AC-19 | Feature sets are compared on consistent validation splits |
-| AC-20 | Fitted feature pipelines and outputs are reproducible |
-| AC-21 | Feature transforms violating split boundaries are rejected |
-| AC-22 | Model lineage traces back to features and source datasets |
-| AC-23 | Agent identifies data deficiencies with recorded evidence |
-| AC-24 | Agent creates a structured acquisition proposal |
-| AC-25 | Unauthorized acquisition is blocked |
-| AC-26 | Approved acquisition creates versioned datasets with lineage |
-| AC-27 | Harness compares performance before/after acquisition |
-| AC-28 | Acquisition respects cost, record, and compute budgets |
-| AC-29 | Acquisition loops terminate at stopping conditions |
-| AC-30 | Workflow resumes after approved acquisition with complete audit trail |
-| AC-31 | Harness automatically executes a parameterized notebook from a fresh kernel and records its environment, inputs, executed outputs, and artifacts |
-| AC-32 | Notebook errors, timeouts, and cancellation produce the corresponding run status; notebook runs enforce the same access, budget, lineage, and evaluation rules as Python entrypoints |
-| AC-33 | Markdown guidance and YAML search spaces resolve into a versioned plan that records delegated feature, metric, and algorithm decisions |
-| AC-34 | Search supports categorical choices and integer/float ranges with linear/logarithmic scales; invalid configurations and out-of-bound candidates are rejected before training |
-| AC-35 | Use, select, and compare modes respect the allowed algorithm set and budgets; search-space expansion is recorded only as a recommendation for a subsequent experiment |
-| AC-36 | Run lineage preserves source inputs, resolved decisions, effective defaults, and configuration versions/checksums |
-| AC-37 | Runtime explicitly loads shared and relevant task-specific guidance, records the mapping and load order, and excludes development instructions from automatic runtime loading |
-| AC-38 | Resumed experiments use the preserved runtime instruction bundle; conflicting guidance or attempted expansion of experiment constraints blocks affected execution |
-| AC-39 | DVC reproduces declared pipeline stages with recorded dependencies and outputs; reused stages retain producer provenance and respect harness governance |
-| AC-40 | MLflow run records link to the exact DVC dataset/pipeline state, experiment Git revision and source snapshot, harness repository URL/full commit SHA/package version, build identity where available, and project lockfile/environment identity |
-| AC-41 | Starting with Python and local raw data, documented bootstrap steps install uv/Git, create the user Git/Python project, install the harness from a full GitHub commit SHA, and run agent-ml init to produce a locked environment, notebook templates, configuration, and local tracking/DVC/state storage without a manually maintained harness checkout |
-| AC-42 | Agent-generated notebooks import the installed harness and project package and support interactive use and fresh-kernel automated execution without hidden state or paths into a harness checkout |
-| AC-43 | Routine experiment generation and execution modify only the experiment repository and authorized storage; the harness installation/source remain unchanged |
-| AC-44 | Each recorded run preserves exact notebook, helper, project-code, configuration, and runtime-guidance snapshots, including uncommitted source changes |
-| AC-45 | On a second machine, the experiment checkout and recorded snapshots/environment/data restore the pinned GitHub harness commit and reproduce a run within declared tolerances without a manually maintained harness checkout |
-| AC-46 | Interactive kernels cannot access protected test data; interactive success does not bypass phase approval or independent evaluation, and managed training enforces candidate boundaries and budgets |
-| AC-47 | Installed harness guidance and explicitly configured project guidance load with recorded ownership/order; neither repository's development instructions load automatically into runtime experiment tasks |
-| AC-48 | A clean-environment GitHub installation exposes the agent-ml CLI and packaged templates/runtime guidance without relying on the installer cache or source checkout at runtime |
-| AC-49 | agent-ml init preserves existing project files and the pinned Git dependency, reports conflicts, and installs the notebook dependencies needed to launch JupyterLab from the project environment |
-| AC-50 | A user-supplied algorithm runs, tunes, persists, restores, and undergoes independent evaluation from a separate experiment repository without harness modifications |
-| AC-51 | A supplied stateful preprocessor fits only on training data; restored state reproduces validation and inference transformations |
-| AC-52 | Invalid component declarations, parameter values, and incompatible prediction outputs are rejected before training |
-| AC-53 | Agents cannot modify immutable supplied components without recorded developer approval |
-| AC-54 | Run lineage captures component declarations, exact code snapshots or pinned dependency identities, effective parameters, and fitted artifacts |
+[User stories](../user-stories.md) define the authoritative product acceptance criteria and own their stable IDs. This proposal describes architectural support for those requirements; it does not define a separate product acceptance-criteria list.
+
+The table groups criterion links by story increment and slice. Each link resolves to the criterion definition in the user stories. Design references identify relevant mechanisms, not proof of complete coverage, implementation, or successful verification. Pending design decisions remain subject to satisfying the story criteria.
+
+The former proposal-local `AC-01` through `AC-54` identifiers are retired. Historical versions retain those definitions; current requirements and future references use the story-owned IDs below.
+
+| Slice | Story increment | Authoritative acceptance criteria | Supporting design sections |
+|---|---|---|---|
+| 1 | US-01: Install a pinned harness version | [US-01-AC-01](../user-stories.md#us-01-ac-01), [US-01-AC-02](../user-stories.md#us-01-ac-02), [US-01-AC-03](../user-stories.md#us-01-ac-03), [US-01-AC-04](../user-stories.md#us-01-ac-04) | §8 Project initialization and installation; §9 Execution |
+| 1 | US-02: Initialize an experiment project | [US-02-AC-01](../user-stories.md#us-02-ac-01), [US-02-AC-02](../user-stories.md#us-02-ac-02), [US-02-AC-03](../user-stories.md#us-02-ac-03), [US-02-AC-04](../user-stories.md#us-02-ac-04), [US-02-AC-05](../user-stories.md#us-02-ac-05) | §8 Project initialization and installation |
+| 1 | US-03: Define experiment objectives and boundaries | [US-03-AC-01](../user-stories.md#us-03-ac-01), [US-03-AC-02](../user-stories.md#us-03-ac-02), [US-03-AC-03](../user-stories.md#us-03-ac-03), [US-03-AC-04](../user-stories.md#us-03-ac-04), [US-03-AC-05](../user-stories.md#us-03-ac-05) | §8 Developer experiment inputs; §8 Algorithm and hyperparameter configuration |
+| 1 | US-05: Reject invalid configurations before execution | [US-05-AC-01](../user-stories.md#us-05-ac-01), [US-05-AC-02](../user-stories.md#us-05-ac-02), [US-05-AC-03](../user-stories.md#us-05-ac-03), [US-05-AC-04](../user-stories.md#us-05-ac-04), [US-05-AC-05](../user-stories.md#us-05-ac-05) | §8 Algorithm and hyperparameter configuration; §8 User-supplied ML components |
+| 1 | US-09: Execute saved notebooks reproducibly | [US-09-AC-01](../user-stories.md#us-09-ac-01), [US-09-AC-02](../user-stories.md#us-09-ac-02), [US-09-AC-03](../user-stories.md#us-09-ac-03), [US-09-AC-04](../user-stories.md#us-09-ac-04), [US-09-AC-05](../user-stories.md#us-09-ac-05) | §9 Execution; §9 Notebook development and execution contract |
+| 1 | US-10: Control and inspect runs | [US-10-AC-01](../user-stories.md#us-10-ac-01), [US-10-AC-02](../user-stories.md#us-10-ac-02), [US-10-AC-03](../user-stories.md#us-10-ac-03), [US-10-AC-04](../user-stories.md#us-10-ac-04), [US-10-AC-05](../user-stories.md#us-10-ac-05) | §8 ExperimentRunner interface; §9 Execution; §9 Workflow states |
+| 1 | US-11: Extract approved source data | [US-11-AC-01](../user-stories.md#us-11-ac-01), [US-11-AC-02](../user-stories.md#us-11-ac-02), [US-11-AC-03](../user-stories.md#us-11-ac-03), [US-11-AC-04](../user-stories.md#us-11-ac-04), [US-11-AC-05](../user-stories.md#us-11-ac-05) | §6 Data extraction requirements |
+| 1 | US-12: Assess data quality and define splits | [US-12-AC-01](../user-stories.md#us-12-ac-01), [US-12-AC-02](../user-stories.md#us-12-ac-02), [US-12-AC-03](../user-stories.md#us-12-ac-03), [US-12-AC-04](../user-stories.md#us-12-ac-04) | §4 Data extraction and EDA; §5 Development phases and gates; §6 Data extraction requirements; §9 Independent evaluation |
+| 1 | US-13: Version and restore datasets | [US-13-AC-01](../user-stories.md#us-13-ac-01), [US-13-AC-02](../user-stories.md#us-13-ac-02), [US-13-AC-03](../user-stories.md#us-13-ac-03), [US-13-AC-04](../user-stories.md#us-13-ac-04) | §9 Experiment tracking, data versioning, and pipelines |
+| 1 | US-26: Record run artifacts and provenance | [US-26-AC-01](../user-stories.md#us-26-ac-01), [US-26-AC-02](../user-stories.md#us-26-ac-02), [US-26-AC-03](../user-stories.md#us-26-ac-03), [US-26-AC-04](../user-stories.md#us-26-ac-04), [US-26-AC-05](../user-stories.md#us-26-ac-05) | §3 Component responsibilities; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation |
+| 1 | US-27: Reproduce a basic run in a clean environment | [US-27-AC-01](../user-stories.md#us-27-ac-01), [US-27-AC-02](../user-stories.md#us-27-ac-02), [US-27-AC-03](../user-stories.md#us-27-ac-03), [US-27-AC-04](../user-stories.md#us-27-ac-04) | §8 Project initialization and installation; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation |
+| 2 | US-14: Generate and compare feature pipelines | [US-14-AC-01](../user-stories.md#us-14-ac-01), [US-14-AC-02](../user-stories.md#us-14-ac-02), [US-14-AC-03](../user-stories.md#us-14-ac-03), [US-14-AC-04](../user-stories.md#us-14-ac-04), [US-14-AC-05](../user-stories.md#us-14-ac-05) | §7 Feature Engineering; §5 Development phases and gates |
+| 2 | US-15: Preserve training-only preprocessing | [US-15-AC-01](../user-stories.md#us-15-ac-01), [US-15-AC-02](../user-stories.md#us-15-ac-02), [US-15-AC-03](../user-stories.md#us-15-ac-03), [US-15-AC-04](../user-stories.md#us-15-ac-04) | §7 Feature Engineering; §8 User-supplied ML components |
+| 2 | US-16: Register supplied preprocessing components | [US-16-AC-01](../user-stories.md#us-16-ac-01), [US-16-AC-02](../user-stories.md#us-16-ac-02), [US-16-AC-03](../user-stories.md#us-16-ac-03), [US-16-AC-04](../user-stories.md#us-16-ac-04), [US-16-AC-05](../user-stories.md#us-16-ac-05) | §7 Feature Engineering; §8 User-supplied ML components; §9 Independent evaluation |
+| 2 | US-27: Reproduce and reuse pipeline stages | [US-27-AC-05](../user-stories.md#us-27-ac-05), [US-27-AC-06](../user-stories.md#us-27-ac-06), [US-27-AC-07](../user-stories.md#us-27-ac-07), [US-27-AC-08](../user-stories.md#us-27-ac-08), [US-27-AC-09](../user-stories.md#us-27-ac-09) | §8 Project initialization and installation; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation |
+| 3 | US-06: Choose an algorithm execution mode | [US-06-AC-01](../user-stories.md#us-06-ac-01), [US-06-AC-02](../user-stories.md#us-06-ac-02), [US-06-AC-03](../user-stories.md#us-06-ac-03), [US-06-AC-04](../user-stories.md#us-06-ac-04) | §8 Developer experiment inputs; §8 Algorithm and hyperparameter configuration |
+| 3 | US-16: Register supplied models | [US-16-AC-06](../user-stories.md#us-16-ac-06), [US-16-AC-07](../user-stories.md#us-16-ac-07), [US-16-AC-08](../user-stories.md#us-16-ac-08), [US-16-AC-09](../user-stories.md#us-16-ac-09), [US-16-AC-10](../user-stories.md#us-16-ac-10) | §7 Feature Engineering; §8 User-supplied ML components; §9 Independent evaluation |
+| 3 | US-18: Train across supported frameworks | [US-18-AC-01](../user-stories.md#us-18-ac-01), [US-18-AC-02](../user-stories.md#us-18-ac-02), [US-18-AC-03](../user-stories.md#us-18-ac-03), [US-18-AC-04](../user-stories.md#us-18-ac-04) | §4 Baseline modeling and Model development; §8 ModelAdapter interface; §9 Experiment tracking, data versioning, and pipelines |
+| 3 | US-19: Manage PyTorch execution | [US-19-AC-01](../user-stories.md#us-19-ac-01), [US-19-AC-02](../user-stories.md#us-19-ac-02), [US-19-AC-03](../user-stories.md#us-19-ac-03), [US-19-AC-04](../user-stories.md#us-19-ac-04) | §9 Execution; §8 ModelAdapter interface |
+| 3 | US-20: Tune within declared limits | [US-20-AC-01](../user-stories.md#us-20-ac-01), [US-20-AC-02](../user-stories.md#us-20-ac-02), [US-20-AC-03](../user-stories.md#us-20-ac-03), [US-20-AC-04](../user-stories.md#us-20-ac-04) | §8 Algorithm and hyperparameter configuration; §5 Optimization; §9 Execution |
+| 3 | US-21: Independently assess experiment results | [US-21-AC-01](../user-stories.md#us-21-ac-01), [US-21-AC-02](../user-stories.md#us-21-ac-02), [US-21-AC-03](../user-stories.md#us-21-ac-03), [US-21-AC-04](../user-stories.md#us-21-ac-04), [US-21-AC-05](../user-stories.md#us-21-ac-05) | §9 Independent evaluation |
+| 3 | US-24: Protect final holdout evaluation | [US-24-AC-01](../user-stories.md#us-24-ac-01), [US-24-AC-02](../user-stories.md#us-24-ac-02), [US-24-AC-03](../user-stories.md#us-24-ac-03), [US-24-AC-04](../user-stories.md#us-24-ac-04), [US-24-AC-05](../user-stories.md#us-24-ac-05) | §4 Final evaluation; §9 Notebook development and execution contract; §9 Governance; ADR-006 |
+| 3 | US-26: Compare runs and review the final report | [US-26-AC-06](../user-stories.md#us-26-ac-06), [US-26-AC-07](../user-stories.md#us-26-ac-07), [US-26-AC-08](../user-stories.md#us-26-ac-08), [US-26-AC-09](../user-stories.md#us-26-ac-09) | §3 Component responsibilities; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation |
+| 4 | US-04: Approve delegated experiment decisions | [US-04-AC-01](../user-stories.md#us-04-ac-01), [US-04-AC-02](../user-stories.md#us-04-ac-02), [US-04-AC-03](../user-stories.md#us-04-ac-03), [US-04-AC-04](../user-stories.md#us-04-ac-04) | §8 Developer experiment inputs; §4 Problem definition |
+| 4 | US-07: Generate reviewable experiment notebooks | [US-07-AC-01](../user-stories.md#us-07-ac-01), [US-07-AC-02](../user-stories.md#us-07-ac-02), [US-07-AC-03](../user-stories.md#us-07-ac-03), [US-07-AC-04](../user-stories.md#us-07-ac-04) | §9 Notebook development and execution contract; §3 Harness and experiment project boundary |
+| 4 | US-08: Explore interactively under the same controls | [US-08-AC-01](../user-stories.md#us-08-ac-01), [US-08-AC-02](../user-stories.md#us-08-ac-02), [US-08-AC-03](../user-stories.md#us-08-ac-03), [US-08-AC-04](../user-stories.md#us-08-ac-04) | §9 Notebook development and execution contract; §8 Project initialization and installation; ADR-006 |
+| 4 | US-17: Respect immutable supplied components | [US-17-AC-01](../user-stories.md#us-17-ac-01), [US-17-AC-02](../user-stories.md#us-17-ac-02), [US-17-AC-03](../user-stories.md#us-17-ac-03), [US-17-AC-04](../user-stories.md#us-17-ac-04) | §8 User-supplied ML components; §4 Scope changes |
+| 4 | US-22: Improve models using development feedback | [US-22-AC-01](../user-stories.md#us-22-ac-01), [US-22-AC-02](../user-stories.md#us-22-ac-02), [US-22-AC-03](../user-stories.md#us-22-ac-03), [US-22-AC-04](../user-stories.md#us-22-ac-04), [US-22-AC-05](../user-stories.md#us-22-ac-05) | §4 Hierarchical Closed-Loop Workflow; §9 Independent evaluation |
+| 4 | US-30: Connect the first agent with preserved runtime guidance | [US-30-AC-01](../user-stories.md#us-30-ac-01), [US-30-AC-02](../user-stories.md#us-30-ac-02), [US-30-AC-03](../user-stories.md#us-30-ac-03), [US-30-AC-04](../user-stories.md#us-30-ac-04), [US-30-AC-05](../user-stories.md#us-30-ac-05) | §8 AgentAdapter interface; §8 Development and runtime agent instructions |
+| 5 | US-23: Approve phase progression and scope changes | [US-23-AC-01](../user-stories.md#us-23-ac-01), [US-23-AC-02](../user-stories.md#us-23-ac-02), [US-23-AC-03](../user-stories.md#us-23-ac-03), [US-23-AC-04](../user-stories.md#us-23-ac-04), [US-23-AC-05](../user-stories.md#us-23-ac-05) | §4 Hierarchical Closed-Loop Workflow; §5 Development phases and gates; §9 Governance |
+| 5 | US-25: Resume interrupted workflows | [US-25-AC-01](../user-stories.md#us-25-ac-01), [US-25-AC-02](../user-stories.md#us-25-ac-02), [US-25-AC-03](../user-stories.md#us-25-ac-03), [US-25-AC-04](../user-stories.md#us-25-ac-04) | §3 Component responsibilities; §9 Workflow states; §8 Development and runtime agent instructions |
+| 5 | US-30: Use interchangeable agent adapters | [US-30-AC-06](../user-stories.md#us-30-ac-06), [US-30-AC-07](../user-stories.md#us-30-ac-07), [US-30-AC-08](../user-stories.md#us-30-ac-08), [US-30-AC-09](../user-stories.md#us-30-ac-09) | §8 AgentAdapter interface; §8 Development and runtime agent instructions |
+| 5 | US-26: Audit workflow decisions and evidence | [US-26-AC-10](../user-stories.md#us-26-ac-10), [US-26-AC-11](../user-stories.md#us-26-ac-11), [US-26-AC-12](../user-stories.md#us-26-ac-12), [US-26-AC-13](../user-stories.md#us-26-ac-13) | §3 Component responsibilities; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation |
+| 6 | US-28: Diagnose data gaps and propose acquisition | [US-28-AC-01](../user-stories.md#us-28-ac-01), [US-28-AC-02](../user-stories.md#us-28-ac-02), [US-28-AC-03](../user-stories.md#us-28-ac-03), [US-28-AC-04](../user-stories.md#us-28-ac-04) | §6 Acquisition strategies and Acquisition proposal contract; §4 Outer loop |
+| 6 | US-29: Acquire data and measure its effect within approved limits | [US-29-AC-01](../user-stories.md#us-29-ac-01), [US-29-AC-02](../user-stories.md#us-29-ac-02), [US-29-AC-03](../user-stories.md#us-29-ac-03), [US-29-AC-04](../user-stories.md#us-29-ac-04), [US-29-AC-05](../user-stories.md#us-29-ac-05), [US-29-AC-06](../user-stories.md#us-29-ac-06), [US-29-AC-07](../user-stories.md#us-29-ac-07) | §6 Data Extraction and Iterative Acquisition; §4 Scope changes and stopping conditions; §9 Governance |
 
 ### Reference acceptance-test datasets
-
 - Small tabular classification dataset (scikit-learn/LightGBM).
 - Tabular regression dataset (metrics and objective direction).
 - Small image classification dataset (PyTorch CPU; optional GPU).
@@ -918,7 +904,7 @@ Executed notebook snapshots, model artifacts, DVC content/cache, and durable wor
 ## 15. Next Steps
 
 1. Ratify pending architectural decisions and clarify nonfunctional targets.
-2. Convert requirements and acceptance criteria into independently testable user stories.
+2. Reconcile this proposal against the authoritative [user stories and acceptance criteria](../user-stories.md), recording design gaps and unresolved decisions.
 3. Define JSON Schemas and Python models for core contracts.
 4. Build the Phase 1 vertical slice in a separate user project: initialize/install → extract → validate → snapshot → run notebook → evaluate → track, recording both experiment and harness identities.
 5. Add inner-loop agent iteration, supervised orchestration, and then outer-loop acquisition.
