@@ -95,6 +95,27 @@ flowchart TB
 
 The harness repository contains reusable execution, evaluation, tracking, agent integration, orchestration, templates, and default runtime guidance. Each user experiment repository contains objectives, notebooks, generated code, configuration, and versioning metadata. One experiment repository may contain multiple related experiments sharing project code and dependencies.
 
+```mermaid
+flowchart LR
+    subgraph H["Harness repository"]
+        direction TB
+        HC["Reusable Python package<br/>src/agentic_ml/"]
+        HR["Templates and runtime guidance<br/>templates/ · runtime_guidance/"]
+        HD["Package metadata and tests<br/>pyproject.toml · tests/"]
+    end
+
+    subgraph U["User experiment repository"]
+        direction TB
+        UC["Project configuration<br/>pyproject.toml · uv.lock · project.yaml"]
+        UP["Custom models and preprocessing<br/>src/churn_experiments/"]
+        UE["Experiment definitions and notebooks<br/>experiments/baseline-comparison/<br/>experiment.md · search-space.yaml<br/>experiment.yaml · notebooks/ · helpers/"]
+    end
+
+    H -->|Install agentic-ml package| U
+```
+
+Directory contents are illustrative subsets; Section 12 provides fuller layouts. The installation arrow represents a pinned GitHub package dependency installed into the user project's Python environment.
+
 Experiment agents operate within the experiment repository and use the installed harness through its public Python API and CLI. Routine experiment work does not modify the harness installation or source repository and must not require a neighboring harness checkout. Changes to shared harness capabilities follow a separate software-development review process.
 
 The orchestrator operates on an explicitly selected experiment project and environment. Durable workflow state and run artifacts are stored in configured locations associated with that project, independently of the harness source tree.
