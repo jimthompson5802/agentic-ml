@@ -1,7 +1,7 @@
 | Slice | User-visible outcome | Stories |
 |---|---|---|
-| **1. Run and record a reproducible experiment** | Initialize a separate project, extract and validate data, execute a notebook, inspect its recorded results, and reproduce the run. | US-01, US-02, US-03, US-05, US-09, US-10, US-11, US-12, US-13; initial US-26 and US-27 |
-| **2. Build and compare reproducible features** | Produce and compare feature pipelines whose fitted state and outputs can be restored. | US-14, US-15; preprocessing portion of US-16; pipeline portion of US-27 |
+| **1. Run and record a reproducible experiment** | Initialize a separate project, extract and validate data, execute a notebook, inspect its recorded results, and reproduce the run. | US-01, US-02, US-03, US-05, US-09, US-10, US-11, validation portion of US-12, US-13; initial US-26 and US-27 |
+| **2. Assess data and build reproducible feature pipelines** | Profile data, approve versioned splits, and produce and compare feature pipelines whose fitted state and outputs can be restored. | assessment/split portion of US-12; US-14, US-15; preprocessing portion of US-16; pipeline portion of US-27 |
 | **3. Train, tune, and independently evaluate models** | Compare baselines and candidate models within declared boundaries and obtain an independent assessment. | US-06, US-18, US-19, US-20, US-21, US-24; model portion of US-16; reporting portion of US-26 |
 | **4. Let an agent improve an experiment** | Generate reviewable notebooks and improve a model using development feedback within an approved phase. | US-04, US-07, US-08, US-17, US-22; first-adapter portion of US-30 |
 | **5. Supervise and resume the complete workflow** | Run the multi-phase workflow with durable approvals, interruption recovery, and interchangeable agents. | US-23, US-25; second-adapter portion of US-30; audit portion of US-26 |
@@ -15,7 +15,7 @@ Slices are cumulative. Repeated story identifiers describe incremental delivery 
 
 ## Slice 1: Run and record a reproducible experiment
 
-Starting with Python and local raw data, the developer creates a separate experiment repository and completes an extraction-to-recorded-notebook run without an agent or a manually maintained harness checkout.
+Starting with Python and local raw data, the developer creates a separate experiment repository and completes an extraction-to-recorded-notebook run without requiring an agent or a manually maintained harness checkout. Developers may use an external coding assistant to prepare inputs and code and invoke the public harness CLI/API without an agent adapter; the harness must validate, record, and execute supplied inputs without an agent dependency. This slice covers extraction, snapshots, basic validation and review, recorded execution, and restoration. Detailed profiling and train/validation/protected-test splits are introduced in Slice 2; Slice 1 versioning and restoration cover the source dataset and recorded run inputs.
 
 ### US-01: Install a pinned harness version
 
@@ -114,16 +114,14 @@ Acceptance criteria:
 
 Architecture references: §6 Data extraction requirements.
 
-### US-12: Assess data quality and define splits
+### US-12: Validate extracted data
 
-As a data scientist, I want data-quality assessments and an explicit split protocol so that I can identify unsuitable data before modeling.
+As a data scientist, I want basic data validation and review so that I can identify extraction and quality-rule failures before accepting a reproducible data run.
 
 Acceptance criteria:
 
 - <a id="us-12-ac-01"></a> **US-12-AC-01:** Validation checks schema, row counts, types, nulls, duplicates, and configured quality rules, reporting mismatches and failures.
-- <a id="us-12-ac-02"></a> **US-12-AC-02:** Assessment includes distributions, class balance where relevant, anomalies, and leakage diagnostics.
-- <a id="us-12-ac-03"></a> **US-12-AC-03:** A versioned split manifest records training, validation, and protected-test partitions, respecting approved time or group constraints.
-- <a id="us-12-ac-04"></a> **US-12-AC-04:** Dataset assessment and split protocol are presented for approval before dependent feature or modeling work.
+- <a id="us-12-ac-05"></a> **US-12-AC-05:** Basic validation results are presented for approval before the dataset is accepted for the Slice 1 run.
 
 Architecture references: §4 Data extraction and EDA; §5 Development phases and gates; §6 Data extraction requirements; §9 Independent evaluation.
 
@@ -167,9 +165,21 @@ Acceptance criteria:
 
 Architecture references: §8 Project initialization and installation; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation.
 
-## Slice 2: Build and compare reproducible features
+## Slice 2: Assess data and build reproducible feature pipelines
 
-Starting with versioned data and an approved split protocol, the developer prepares features, compares alternatives, and restores fitted preprocessing and pipeline outputs.
+Starting with versioned source data, the developer profiles the dataset, creates versioned training/validation/protected-test splits respecting time and group constraints, and obtains approval of the assessment and split protocol before dependent feature or modeling work. The developer then prepares features, compares alternatives, and restores fitted preprocessing and pipeline outputs.
+
+### US-12: Assess data quality and define splits
+
+As a data scientist, I want detailed data-quality assessments and an explicit split protocol so that I can identify unsuitable data before feature engineering or modeling.
+
+Acceptance criteria:
+
+- <a id="us-12-ac-02"></a> **US-12-AC-02:** Assessment includes distributions, class balance where relevant, anomalies, and leakage diagnostics.
+- <a id="us-12-ac-03"></a> **US-12-AC-03:** A versioned split manifest records training, validation, and protected-test partitions, respecting approved time or group constraints.
+- <a id="us-12-ac-04"></a> **US-12-AC-04:** Dataset assessment and split protocol are presented for approval before dependent feature or modeling work.
+
+Architecture references: §4 Data extraction and EDA; §5 Development phases and gates; §6 Data extraction requirements; §9 Independent evaluation.
 
 ### US-14: Generate and compare feature pipelines
 
@@ -413,10 +423,10 @@ As a data scientist, I want an agent adapter with explicit, preserved runtime gu
 
 Acceptance criteria:
 
-- <a id="us-30-ac-01"></a> **US-30-AC-01:** The first coding-assistant adapter supports capability discovery, structured task/result exchange, and cancellation through the common contract.
+- <a id="us-30-ac-01"></a> **US-30-AC-01:** The first managed coding-assistant adapter verifies a concrete product/interface/version and supports capability discovery, structured task/result exchange, and documented task cancellation through the common contract. Interactive assistants can use the public harness CLI/API without an adapter. Acceptance demonstrates task receipt, project-code/notebook revision, managed execution, development-feedback consumption, and stopping at a developer approval boundary.
 - <a id="us-30-ac-02"></a> **US-30-AC-02:** Runtime loading explicitly selects packaged shared guidance, relevant task-specific guidance, and configured project guidance, recording ownership and order.
-- <a id="us-30-ac-03"></a> **US-30-AC-03:** Development `AGENTS.md` files from either repository are excluded from automatic runtime loading.
-- <a id="us-30-ac-04"></a> **US-30-AC-04:** The plan snapshots guidance contents, paths, versions/checksums, and load order; subsequent tasks use the preserved bundle.
+- <a id="us-30-ac-03"></a> **US-30-AC-03:** Development `AGENTS.md` files from either repository are excluded from automatic loading by the harness runtime loader. Instructions independently loaded by an external assistant are outside this guarantee; observable additional context and capture limitations are recorded.
+- <a id="us-30-ac-04"></a> **US-30-AC-04:** The plan snapshots harness-supplied guidance contents, paths, versions/checksums, and load order; subsequent tasks reference the preserved bundle, with managed adapters demonstrating delivery. This records harness-supplied guidance, not the assistant's complete instruction context.
 - <a id="us-30-ac-05"></a> **US-30-AC-05:** Conflicting guidance or attempts to expand experiment constraints block affected execution; adopting changed guidance requires a new versioned configuration and applicable approvals.
 
 Architecture references: §8 AgentAdapter interface; §8 Development and runtime agent instructions.
@@ -432,7 +442,7 @@ As a data scientist, I want to approve, revise, or reject phase progression usin
 Acceptance criteria:
 
 - <a id="us-23-ac-01"></a> **US-23-AC-01:** Initial plan approval completes problem definition; later phase advancement is blocked until sufficient independent evidence and developer approval are recorded.
-- <a id="us-23-ac-02"></a> **US-23-AC-02:** Each decision records reviewer, scope, decision, timestamp, and associated evidence in durable project-associated state.
+- <a id="us-23-ac-02"></a> **US-23-AC-02:** Each decision records an authenticated developer reviewer, reviewed plan/configuration identity and scope, decision, timestamp, and associated evidence in durable project-associated state. Agent actions and assistant tool-execution permissions cannot stand in for developer approval.
 - <a id="us-23-ac-03"></a> **US-23-AC-03:** Revision authorizes work only within its recorded scope; phase returns, expanded permissions, and changed evaluation criteria require authorization before execution.
 - <a id="us-23-ac-04"></a> **US-23-AC-04:** Phases can be skipped only when the approved plan identifies valid existing artifacts supporting the skip.
 - <a id="us-23-ac-05"></a> **US-23-AC-05:** Rejection or cancellation preserves results; successful final evaluation requires explicit model approval before completion.
@@ -460,7 +470,7 @@ Acceptance criteria:
 
 - <a id="us-30-ac-06"></a> **US-30-AC-06:** Two adapters successfully execute tasks using the same versioned task/result contract.
 - <a id="us-30-ac-07"></a> **US-30-AC-07:** Capability discovery identifies which tasks each adapter supports before delegation.
-- <a id="us-30-ac-08"></a> **US-30-AC-08:** Both adapters obey the same cancellation, guidance-loading, approval, access, and budget requirements.
+- <a id="us-30-ac-08"></a> **US-30-AC-08:** Both managed adapters meet the common cancellation, harness-guidance delivery, developer-approval, access, and harness-run budget requirements, including boundaries for assistant tools/workspaces. Agent-task cancellation is recorded separately from experiment-run cancellation; assistant usage measurement/control capabilities and limitations are explicit. Resumption uses durable task/run evidence and consumed budgets rather than assistant memory.
 - <a id="us-30-ac-09"></a> **US-30-AC-09:** Agent selection does not alter independent evaluation or the experiment's allowed boundaries.
 
 Architecture references: §8 AgentAdapter interface; §8 Development and runtime agent instructions.
