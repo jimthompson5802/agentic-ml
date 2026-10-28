@@ -1,13 +1,13 @@
 ---
 name: reconcile-stories
-description: Reconcile the architecture proposal against authoritative user stories. Use when checking alignment, identifying coverage gaps or scope drift, or proposing document corrections.
+description: Reconcile the design document against authoritative user stories. Use when checking alignment, identifying coverage gaps or scope drift, or proposing document corrections.
 ---
 
-# Reconcile Stories and Architecture
+# Reconcile Stories and Design
 
 Treat `docs/specs/user-stories.md` as the authoritative source of product
-requirements. The supporting architecture document is
-`docs/specs/agentic-ml-harness-proposal.md`.
+requirements. The supporting design document is
+`docs/specs/agentic-ml-harness-design.md`.
 
 Use alternative input paths when supplied by the user. Resolve these paths
 against the repository root, not the skill directory.
@@ -16,15 +16,15 @@ against the repository root, not the skill directory.
 
 - User stories and their acceptance criteria define required behavior.
 - Slice descriptions and the summary table define delivery expectations.
-- The proposal explains how the architecture supports those requirements.
-- Proposal acceptance criteria are supporting design assertions, not
+- The design document explains how the architecture supports those requirements.
+- Design acceptance criteria are supporting design assertions, not
   independent authority to expand product scope.
 - Distinguish architectural implementation details from additional
   user-facing requirements.
 - Preserve accepted, proposed, pending, and deferred decision statuses.
   Flag statuses that conflict with story requirements for review.
 - When stories conflict or are ambiguous, identify the decision needed.
-  The proposal may provide context but cannot settle the requirement.
+  The design document may provide context but cannot settle the requirement.
 
 ## Review workflow
 
@@ -52,15 +52,15 @@ needed rather than silently choosing an interpretation.
 
 ### 3. Map stories to architectural support
 
-For every story acceptance criterion, locate the proposal sections
+For every story acceptance criterion, locate the design document sections
 that explain its architectural support.
 
 Classify coverage as:
 
-- Supported: the proposal describes a compatible mechanism.
+- Supported: the design document describes a compatible mechanism.
 - Partial: some required behavior or architectural responsibility is missing.
 - Missing: no supporting design is present.
-- Contradictory: the proposal specifies incompatible behavior.
+- Contradictory: the design document specifies incompatible behavior.
 - Decision needed: ambiguity prevents a reliable assessment.
 
 Assess meaning rather than relying on matching terminology or AC
@@ -69,11 +69,11 @@ alignment alone.
 
 For each gap, propose the smallest architectural clarification or
 change that supports the story. A pending design decision may remain
-pending if the proposal clearly records the requirement it must satisfy.
+pending if the design document clearly records the requirement it must satisfy.
 
-### 4. Check the proposal for unsupported scope
+### 4. Check the design document for unsupported scope
 
-Account for every substantive proposal requirement and capability,
+Account for every substantive design document requirement and capability,
 including those expressed outside its numbered acceptance criteria.
 
 Classify each as:
@@ -88,11 +88,11 @@ relationship to an existing requirement.
 
 For unsupported product requirements, recommend removal, explicit
 deferral, or a user decision about adding a story. Do not automatically
-expand the stories to match the proposal.
+expand the stories to match the design document.
 
 ### 5. Check slice feasibility and cross-cutting controls
 
-Compare the proposal's implementation sequence with the story slices.
+Compare the design document's implementation sequence with the story slices.
 
 Identify dependencies required before a slice can deliver its stated
 outcome. Distinguish partial delivery from claims of complete coverage.
@@ -111,7 +111,7 @@ Present:
 
 1. Baseline: documents reviewed and any scope limitations.
 2. Coverage matrix: one row per story acceptance criterion, with its
-   slice, proposal references, status, and any finding ID.
+   slice, design document references, status, and any finding ID.
 3. Findings: actionable discrepancies, grouped by severity.
 4. Decisions needed: unresolved story conflicts or scope choices.
 5. Proposed edits: concrete replacement or addition text for findings
@@ -121,7 +121,7 @@ For each finding include:
 
 - A report-local ID.
 - Severity.
-- Story and proposal locations, with line references where available.
+- Story and design document locations, with line references where available.
 - Evidence and the practical consequence.
 - Recommended target document and correction.
 
@@ -134,13 +134,13 @@ Use these severity levels:
 - Low: terminology, traceability, or editorial inconsistencies that
   do not change behavior.
 
-Recommend proposal changes by default. Recommend story changes only
+Recommend design document changes by default. Recommend story changes only
 to resolve ambiguity or inconsistency, or to present an explicit
 product-scope decision.
 
 Finish with counts by coverage status and severity. Call out unresolved
 decisions that prevent declaring alignment. A clean report requires
-every acceptance criterion and substantive proposal requirement to
+every acceptance criterion and substantive design document requirement to
 be accounted for.
 
 ## Applying approved corrections

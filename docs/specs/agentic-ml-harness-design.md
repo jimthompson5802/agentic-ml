@@ -1,4 +1,4 @@
-# Agentic ML Development Harness — Architecture Proposal
+# Agentic ML Development Harness — Design
 
 **Version:** 0.11
 **Status:** Proposed specification; ADR-001 accepted; ADR-007 installation decisions accepted
@@ -689,7 +689,7 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 
 ## 10. Acceptance Criteria Traceability
 
-[User stories](user-stories.md) define the authoritative product acceptance criteria and own their stable IDs. This proposal describes architectural support for those requirements; it does not define a separate product acceptance-criteria list.
+[User stories](user-stories.md) define the authoritative product acceptance criteria and own their stable IDs. This design document describes architectural support for those requirements; it does not define a separate product acceptance-criteria list.
 
 The table groups criterion links by story increment and slice. Each link resolves to the criterion definition in the user stories. Design references identify relevant mechanisms, not proof of complete coverage, implementation, or successful verification. Pending design decisions remain subject to satisfying the story criteria.
 
@@ -904,7 +904,7 @@ Executed notebook snapshots, model artifacts, DVC content/cache, and durable wor
 ## 15. Next Steps
 
 1. Ratify pending architectural decisions and clarify nonfunctional targets.
-2. Reconcile this proposal against the authoritative [user stories and acceptance criteria](user-stories.md), recording design gaps and unresolved decisions.
+2. Reconcile this design document against the authoritative [user stories and acceptance criteria](user-stories.md), recording design gaps and unresolved decisions.
 3. Define JSON Schemas and Python models for core contracts.
 4. Build the Phase 1 vertical slice in a separate user project: initialize/install → extract → validate → snapshot → run notebook → evaluate → track, recording both experiment and harness identities.
 5. Add inner-loop agent iteration, supervised orchestration, and then outer-loop acquisition.

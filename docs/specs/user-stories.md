@@ -7,7 +7,7 @@
 | **5. Supervise and resume the complete workflow** | Run the multi-phase workflow with durable approvals, interruption recovery, and interchangeable agents. | US-23, US-25; second-adapter portion of US-30; audit portion of US-26 |
 | **6. Improve the dataset through authorized acquisition** | Diagnose a data limitation, authorize acquisition, version the resulting data, and measure the effect of retraining. | US-28, US-29 |
 
-This document is the authoritative source of product requirements and acceptance criteria. The stories originated from version 0.10 of the [Agentic ML Development Harness architecture proposal](agentic-ml-harness-proposal.md); the proposal now describes the supporting design and references the criteria defined here. These requirements describe proposed behavior, not implemented capabilities or finalized interfaces.
+This document is the authoritative source of product requirements and acceptance criteria. The stories originated from version 0.10 of the [Agentic ML Development Harness design document](agentic-ml-harness-design.md); the design document now describes the supporting design and references the criteria defined here. These requirements describe proposed behavior, not implemented capabilities or finalized interfaces.
 
 Acceptance criteria use stable IDs of the form `US-<story>-AC-<criterion>`, such as `US-01-AC-01`. Criterion numbers are unique within a story and continue across slices. Preserve IDs when wording changes or criteria move; assign the next unused number to a new criterion and never reuse a retired ID. Architecture references identify supporting design sections rather than defining another set of requirements.
 
@@ -507,6 +507,6 @@ Acceptance criteria:
 - <a id="us-29-ac-04"></a> **US-29-AC-04:** Returning to validation/EDA and downstream development requires the applicable phase authorization, with complete audit records.
 - <a id="us-29-ac-05"></a> **US-29-AC-05:** Before-and-after model comparisons use consistent approved evaluation protocols and link results to the corresponding dataset versions.
 - <a id="us-29-ac-06"></a> **US-29-AC-06:** The acquisition loop stops on success, budget exhaustion, lack of improvement, unrecoverable failure, policy violation, or cancellation, preserving a reviewable outcome.
-- <a id="us-29-ac-07"></a> **US-29-AC-07:** Resumption after acquisition retains approvals, budget usage, dataset lineage, and completed-run identities; advanced acquisition strategies remain deferred according to the proposal's implementation plan.
+- <a id="us-29-ac-07"></a> **US-29-AC-07:** Resumption after acquisition retains approvals, budget usage, dataset lineage, and completed-run identities; advanced acquisition strategies remain deferred according to the design document's implementation plan.
 
 Architecture references: §6 Data Extraction and Iterative Acquisition; §4 Scope changes and stopping conditions; §9 Governance.
