@@ -1,64 +1,134 @@
 ---
 name: create-implementation-plan
-description: Create or revise a repository-grounded implementation plan from a local file, GitHub feature request issue, or supplied requirements, with concrete tasks, verification, and developer approval gates. Produces a saved plan; use separate workflows for implementation or scope changes during execution.
+description: Create or revise an implementation plan from a local file, GitHub feature request issue, or supplied requirements. Save concrete tasks, verification methods, and developer approval gates. Use separate workflows to implement the plan or change its scope during execution.
 ---
 
 # Create an implementation plan
 
-Produce a technical plan that another implementation session can execute and verify. Investigate the repository and save the plan within the requested scope. Planning alone authorizes neither implementation nor dependency installation, environment setup, or external issue changes. A request to edit this skill does not authorize creating or executing a story plan.
+Create a plan that another agent can implement and verify. Base the plan on the working repository and the supplied requirements.
 
-## Establish requirements and repository conventions
+This skill covers investigation and plan writing. Implementation, dependency installation, environment setup, and external issue changes require separate authorization. A request to edit this skill covers only the skill itself.
 
-1. Resolve the working repository from the user's working directory, independently of where this skill is installed. Read applicable agent instructions and relevant repository documentation. Follow pointers to planning terminology, templates, authoritative requirements, existing plans, evidence requirements, and approval gates. Repository conventions govern the plan's structure, location, identifiers, and progress format; use the fallback below only where conventions are absent.
-2. Accept a local requirements or design file, a GitHub feature request issue (URL or issue number), or requirements supplied in the conversation. Read the local file and its relevant references. For GitHub, resolve the target repository from the issue URL or the working checkout for a bare issue number; retrieve the issue title, body, and relevant discussion through an available connector or `gh issue view` with an explicit repository. Preserve a durable source reference, source identifiers, acceptance criteria, exclusions, dependencies, and approval boundaries. If a required source is inaccessible, request its contents and identify the blocked work rather than reconstructing it. A feature request need not already be formatted as a user story: derive proposed acceptance criteria from its stated outcomes when absent, label them as proposed, and resolve material gaps with the developer before finalizing. Keep source requirements distinct from planning assumptions and proposed criteria.
-3. Inspect relevant code, configuration, dependencies, tests, and existing plans. Separate observed behavior from proposals, assumptions, and unresolved decisions. Identify checks that exist and checks the work must introduce. In a design-only repository, treat documented layouts, APIs, schemas, and commands as proposed until implementation evidence establishes them.
-4. Resolve material ambiguities before finalizing: conflicting requirements, unclear observable outcomes, missing acceptance criteria, scope decisions, or choices that change the approach. First look up facts available in the repository. Continue independent investigation while awaiting answers; mark saved interim plans as drafts with their blockers.
+## Read the repository instructions
 
-This step is complete when scope and acceptance criteria are understood and material decisions are resolved or explicitly assigned to a bounded feasibility implementation phase.
+Find the working repository from the user's working directory. The skill's installation directory does not determine the working repository.
 
-## Design implementation phases and tasks
+Read the applicable agent instructions and relevant repository documents. Follow their links to planning terms, templates, requirements, existing plans, verification rules, and approval gates.
 
-Use the repository's planning hierarchy and terminology. Preserve milestone and story boundaries, existing slices, and criterion IDs where they exist; avoid inventing milestones or story IDs for an unnumbered feature. Distinguish implementation phases from any phases in the product's own workflow.
+Use the repository's plan structure, save location, identifiers, and progress format. Use the defaults below only when the repository has no convention for that item.
 
-Use one implementation phase for small work. Add implementation phases when complexity, risk, dependencies, or developer feedback justify separate, independently verifiable outcomes. Each implementation phase ends with a developer approval gate, including the final one.
+## Read the source requirements
 
-When an approach is unproven, begin with a bounded feasibility implementation phase. State the question, investigation scope, required evidence, completion criteria, and developer checkpoint. Keep dependent work conditional on the findings. Detail later work only as far as evidence supports, with refinement and review before dependent implementation begins.
+Accept any of these sources:
 
-For each implementation phase, specify:
+- A local requirements or design file. Read the file and its relevant references.
+- A GitHub feature request issue, given as a URL or issue number. Get the repository from the URL. For an issue number alone, use the working checkout's GitHub repository. Read the title, body, and relevant discussion. Use an available connector or `gh issue view` with an explicit repository.
+- Requirements supplied in the conversation.
 
-- Outcome, entry conditions, dependencies, and acceptance criteria advanced.
-- Ordered granular tasks with stable identifiers and progress fields matching the repository template or existing plan. If no convention exists, use unchecked Markdown tasks such as `- [ ] IP1-T01: ...`. Start new work incomplete; preserve prior completion states only where recorded evidence supports them.
-- Repository-relative files to create, modify, delete, or inspect, and the intended change or evidence for each. Mark new paths as proposed. If a path depends on investigation, make that investigation a prerequisite and require refinement before dependent implementation.
-- Expected behavior for software-writing tasks: relevant inputs, outputs, failure handling, and symbols to add or change where useful. Distinguish existing symbols from proposed names; give enough detail to implement without inventing unsupported APIs or prescribing line-by-line edits.
-- Dependencies and an assessable completion condition for each task. Include meaningful automated tests where appropriate and manual checks or diagnostic evidence where automation is unsuitable. Specify observable expected results and distinguish existing commands from checks to introduce. Avoid unnecessary tests for low-impact, reversible changes or tests that mirror implementation details.
-- Implementation phase completion criteria, review evidence, and a separate developer approval field, initially pending. Technical completion and developer acceptance are separate states.
+Keep a source reference that a later session can use. Preserve source IDs, acceptance criteria, exclusions, dependencies, and approval rules.
 
-Map every in-scope acceptance criterion to task identifiers and verification evidence. Preserve criterion meaning; technical tasks supplement requirements. Identify criteria deferred to other milestones or plans and any verification blockers rather than implying full coverage.
+If a required source is unavailable, identify the blocked work and ask for the missing content. Keep missing requirements unresolved until the source or developer supplies them.
 
-## Encode execution controls
+A feature request can be the source without a formal user story. If it has no acceptance criteria, propose criteria based on its stated outcomes. Label these criteria as proposed. Keep source requirements, proposed criteria, and assumptions separate.
 
-The saved plan must tell the future implementing agent to:
+## Check the current state
 
-- Mark tasks complete only after their work and required verification pass, recording actual results and evidence. Leave partial, blocked, failed, or unverified tasks incomplete.
-- Stop at the end of every implementation phase, including the final one, and present completed tasks, checks actually performed and their results, evidence paths, deviations, and limitations. Await explicit developer approval before progression and record the decision and reference. Plan approval does not satisfy implementation gates; silence is not approval. Honor prior decisions only where they explicitly cover the applicable gate.
-- Pause affected work when evidence invalidates the approach or changes requirements or authorized scope. Follow the repository's scope-change procedure and record the change, impact, and decision in the plan. Discover `manage-plan-scope` through repository instructions or available skills when applicable; if unavailable, record the proposed revision and obtain any required authorization before dependent implementation. Routine choices within approved scope can proceed.
-- Follow retry or escalation limits actually defined by the repository or plan, linking their source relative to the saved plan when local. This skill supplies no fixed retry count. If repeated failures invalidate the approach, report the attempts, findings, and decision needed before continuing affected work.
+Inspect the relevant code, configuration, dependencies, tests, and existing plans. Record what exists, what is proposed, and what remains unknown. Identify checks that exist and checks that implementation must add.
 
-## Save and review
+In a design-only repository, treat documented paths, APIs, schemas, and commands as proposals until implementation evidence confirms them.
 
-Inspect existing plans first. Update the matching plan when appropriate, preserving identifiers, evidence, developer decisions, and history. For a plan already being executed, use the repository's scope-change procedure for substantive replanning rather than silently replacing it.
+Look up facts in the repository before asking the developer. Resolve questions that affect scope, observable outcomes, acceptance criteria, or the implementation approach. Continue independent investigation while waiting for answers. Mark interim plans as drafts and record their blockers.
 
-Save to the repository's prescribed location using its template. If none is specified, use `docs/plans/<story-id-or-short-slug>.md`. Resolve repository paths from the working checkout, and links from the saved plan's location, never from this skill's installation directory.
+Start detailed planning when scope and acceptance criteria are clear. Resolve important decisions first, or assign them to an initial implementation phase with a defined investigation scope.
 
-Where no repository template exists, include:
+## Define implementation phases
 
-1. Title, source reference, and draft/review status. Include supplied requirements and acceptance criteria when no durable source exists.
-2. Scope, exclusions, dependencies, current-state findings with source references, assumptions, and unresolved prerequisites.
-3. Technical approach and rationale sufficient for a separate implementation session.
-4. Implementation phases with granular tasks, progress fields, verification, completion criteria, and developer approval gates.
-5. Acceptance-criterion mapping to tasks and evidence, with deferred work identified.
-6. Execution controls, plan review status, and a place to record scope changes and developer decisions.
+Use the repository's planning hierarchy and terms. Preserve existing milestone boundaries, story boundaries, story slices, and criterion IDs. Add milestone or story IDs only when the repository requires them. Distinguish implementation phases from the product's workflow phases.
 
-Before completion, verify that every in-scope acceptance criterion is mapped, dependencies are feasible, and tasks have concrete file operations, progress fields, expected behavior where applicable, and assessable outcomes. Confirm conditional work is explicit and every implementation phase has a stop instruction and pending developer gate. Check local links and consistency with authoritative requirements and the repository template. Record only validation actually performed; planned checks are not passing results.
+Use one implementation phase for small work. Add implementation phases when risk, dependencies, complexity, or developer feedback require separate results that can be verified.
 
-Return a link to the saved plan, briefly describe its implementation phases and blockers, and request developer review. Finish within planning scope; implementation requires separate authorization.
+If the approach is unproven, start with a feasibility implementation phase. Define its question, scope, required evidence, completion criteria, and developer checkpoint. Make later work depend on its findings. Require refinement and review before dependent implementation starts.
+
+For each implementation phase, define:
+
+- The expected outcome and entry conditions.
+- Dependencies and acceptance criteria covered.
+- Ordered granular tasks, as described below.
+- Completion criteria and required review evidence.
+- A separate developer approval field, initially pending.
+
+Every implementation phase must end with a developer approval gate, including the final one. Track technical completion separately from developer approval.
+
+## Define granular tasks
+
+Give each task a stable ID and a progress field. Follow the repository template or existing plan. If neither defines a format, use unchecked Markdown tasks such as `- [ ] IP1-T01: ...`.
+
+Start new tasks as incomplete. Preserve existing completion records only when evidence supports them.
+
+For each task, specify:
+
+- **Action and files:** Give repository-relative paths to create, modify, delete, or inspect. State the change or evidence required for each file. Mark new paths as proposed.
+- **Behavior:** For software changes, describe inputs, outputs, and failure handling. Identify functions, methods, or classes when useful. Distinguish existing names from proposed names. Give enough detail to implement the behavior without prescribing each line of code or assuming unsupported APIs.
+- **Dependencies:** Identify prerequisites. If investigation must determine a path or approach, require that investigation and task refinement before dependent implementation.
+- **Completion condition:** State the result that shows the task is complete.
+- **Verification:** State the check and its expected result. Distinguish existing commands from checks to add. Use meaningful automated tests where appropriate. Use manual checks or diagnostic evidence when automation is unsuitable. Match verification effort to the change. Avoid tests that repeat implementation details.
+
+Map every acceptance criterion within scope to task IDs and verification evidence. Preserve each criterion's meaning. Identify deferred criteria and verification blockers explicitly.
+
+## Add execution rules to the plan
+
+The saved plan must include these instructions for the implementing agent.
+
+### Record task progress
+
+Mark a task complete only after its work and required verification pass. Record actual results and evidence. Keep partial, blocked, failed, and unverified tasks incomplete.
+
+### Stop at developer gates
+
+Stop at the end of every implementation phase, including the final one. Present completed tasks, checks performed, actual results, evidence paths, deviations, and limitations.
+
+Wait for explicit developer approval before progression. Record the decision and its reference. Plan approval does not approve implementation gates. Silence is not approval. Apply a prior decision only when it explicitly covers the current gate.
+
+### Handle scope changes
+
+Pause affected work when evidence invalidates the approach or requires a change to requirements or authorized scope. Follow the repository's scope-change procedure. Record the change, impact, and decision in the plan.
+
+Use `manage-plan-scope` when repository instructions or available skills provide it. If no procedure is available, record the proposed revision and obtain any required authorization before dependent implementation. Routine decisions within approved scope can proceed.
+
+### Handle repeated failures
+
+Follow retry and escalation limits defined by the repository or plan. Link local sources relative to the saved plan. This skill sets no fixed retry count.
+
+If repeated failures invalidate the approach, report the attempts, findings, and required decision before continuing affected work.
+
+## Save the plan
+
+Inspect existing plans first. Update a matching plan when appropriate. Preserve IDs, evidence, developer decisions, and history. For a plan already in execution, use the scope-change procedure for substantive revisions.
+
+Use the repository's template and save location. If no location is specified, use `docs/plans/<story-id-or-short-slug>.md`.
+
+Resolve repository paths from the working checkout. Resolve document links from the saved plan's location.
+
+If no repository template exists, include:
+
+1. Title, source reference, and plan review status. Include requirements and acceptance criteria when no lasting source reference exists.
+2. Scope, exclusions, dependencies, findings with sources, assumptions, and unresolved prerequisites.
+3. Technical approach and reasons for that approach.
+4. Implementation phases, granular tasks, progress fields, verification, completion criteria, and developer approval gates.
+5. Acceptance criteria mapped to tasks and evidence, with deferred work identified.
+6. Execution rules and fields for scope changes and developer decisions.
+
+## Review and deliver the plan
+
+Before delivery, check that:
+
+- Every acceptance criterion within scope maps to tasks and verification.
+- Task order and dependencies are feasible.
+- Every task identifies files, progress, completion conditions, and expected behavior where applicable.
+- Work that depends on unresolved findings is marked as conditional.
+- Every implementation phase has a stop instruction and a pending developer gate.
+- Local links resolve, and the plan follows the source requirements and repository template.
+
+Record only validation actually performed. Keep planned checks distinct from passing results.
+
+Return a link to the saved plan. Briefly describe its implementation phases and blockers, then request developer review. Finish within planning scope. Implementation requires separate authorization.
