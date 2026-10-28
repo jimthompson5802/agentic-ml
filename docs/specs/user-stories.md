@@ -2,18 +2,61 @@ Planning terms follow the [repository terminology](../../README.md#planning-term
 
 | Milestone | User-visible outcome | Stories |
 |---|---|---|
+| **0. Establish the harness development foundation** | Set up this repository, run the harness from source, and verify contributor changes and distributable packages locally and in CI. | US-31, US-32, US-33 |
 | **1. Run and record a reproducible experiment** | Initialize a separate project, extract and validate data, execute a notebook, inspect its recorded results, and reproduce the run. | US-01, US-02, US-03, US-05, US-09, US-10, US-11, validation portion of US-12, US-13; initial US-26 and US-27 |
 | **2. Assess data and build reproducible feature pipelines** | Profile data, approve versioned splits, restore fitted feature pipelines and outputs, and compare predictive performance using a fixed approved reference estimator. | assessment/split portion of US-12; US-14, US-15; preprocessing portion of US-16; pipeline portion of US-27 |
 | **3. Train, tune, and independently evaluate models** | Compare baselines and candidate models within declared boundaries and obtain an independent assessment. | US-06, US-18, US-19, US-20, US-21, US-24; model portion of US-16; reporting portion of US-26 |
 | **4. Let an agent improve an experiment** | Generate reviewable notebooks and improve a model using development feedback within an approved workflow phase. | US-04, US-07, US-08, US-17, US-22; first-adapter portion of US-30 |
 | **5. Supervise and resume the complete workflow** | Run the workflow spanning multiple ML workflow phases with durable approvals, interruption recovery, and interchangeable agents. | US-23, US-25; second-adapter portion of US-30; audit portion of US-26 |
 | **6. Improve the dataset through authorized acquisition** | Diagnose a data limitation, authorize acquisition, version the resulting data, and measure the effect of retraining. | US-28, US-29 |
+| **99. Future enhancements** | Capture improvements deferred because they are not critical to current functionality. | US-34 |
 
 This document is the authoritative source of product requirements and acceptance criteria. The stories originated from version 0.10 of the [Agentic ML Development Harness design document](agentic-ml-harness-design.md); the design document now describes the supporting design and references the criteria defined here. These requirements describe proposed behavior, not implemented capabilities or finalized interfaces.
 
 Acceptance criteria use stable IDs of the form `US-<story>-AC-<criterion>`, such as `US-01-AC-01`. Criterion numbers are unique within a story and continue across milestones. Preserve IDs when wording changes or criteria move; assign the next unused number to a new criterion and never reuse a retired ID. Architecture references identify supporting design sections rather than defining another set of requirements.
 
 Milestones are cumulative. Repeated story identifiers describe incremental delivery of the same user outcome. Access controls, applicable approvals, budget enforcement, independent validation, and provenance accompany each capability when introduced; Milestone 5 completes their durable orchestration across workflow phases. The acceptance criteria below define verifiable outcomes without settling its pending API, configuration-schema, or isolation-design decisions.
+
+## Milestone 0: Establish the harness development foundation
+
+Contributors set up this repository for harness development, run the CLI from the local source checkout, and verify changes using documented checks. Automated CI checks verify changes, and clean-environment package checks verify distributable artifacts. This milestone establishes the development foundation for the experiment-user capabilities introduced in Milestone 1.
+
+### US-31: Set up the harness development environment
+
+As a contributor, I want documented steps to set up this repository for local development so that I can make changes and verify them consistently.
+
+Acceptance criteria:
+
+- <a id="us-31-ac-01"></a> **US-31-AC-01:** Documented prerequisites identify supported Python versions and required tools.
+- <a id="us-31-ac-02"></a> **US-31-AC-02:** Instructions cover cloning the harness repository and installing runtime and development dependencies using `uv` and the committed lockfile.
+- <a id="us-31-ac-03"></a> **US-31-AC-03:** Contributors can run the harness CLI from the local source checkout.
+- <a id="us-31-ac-04"></a> **US-31-AC-04:** Documented commands run automated tests, linting, formatting checks, and type checks.
+- <a id="us-31-ac-05"></a> **US-31-AC-05:** A documented smoke check confirms that the environment is ready for development.
+- <a id="us-31-ac-06"></a> **US-31-AC-06:** Setup identifies required configuration and credentials and provides local defaults where practical.
+- <a id="us-31-ac-07"></a> **US-31-AC-07:** Setup instructions are verified from a clean checkout.
+
+### US-32: Verify changes automatically in CI
+
+As a contributor, I want automated checks on every pull request so that I receive consistent feedback before changes are merged.
+
+Acceptance criteria:
+
+- <a id="us-32-ac-01"></a> **US-32-AC-01:** CI runs on pull requests and updates to the default branch from a clean checkout.
+- <a id="us-32-ac-02"></a> **US-32-AC-02:** CI installs the supported Python version and required tools and synchronizes runtime and development dependencies using `uv` and the committed lockfile without modifying the lockfile.
+- <a id="us-32-ac-03"></a> **US-32-AC-03:** CI runs automated tests, linting, formatting checks, type checks, and the development smoke check using the same documented commands available locally under US-31.
+- <a id="us-32-ac-04"></a> **US-32-AC-04:** Failed checks produce a failing CI result, and contributors can inspect check results and diagnostic logs from the pull request.
+
+### US-33: Build and verify the harness package
+
+As a contributor, I want distributable packages verified outside the source checkout so that I can trust that the harness works when installed as a dependency.
+
+Acceptance criteria:
+
+- <a id="us-33-ac-01"></a> **US-33-AC-01:** A documented command builds both wheel and source distributions from the repository.
+- <a id="us-33-ac-02"></a> **US-33-AC-02:** Verification installs the built wheel and its declared runtime dependencies in a clean environment and runs outside the source checkout without relying on an editable installation or development dependencies.
+- <a id="us-33-ac-03"></a> **US-33-AC-03:** Installed-package checks verify the `agent-ml` CLI, `agentic_ml` imports, and access to packaged templates and runtime guidance.
+- <a id="us-33-ac-04"></a> **US-33-AC-04:** Verification builds a wheel from the source distribution and confirms that it passes the same installed-package checks.
+- <a id="us-33-ac-05"></a> **US-33-AC-05:** CI runs package build and verification checks and reports failures with diagnostic logs; the commands are documented for local reproduction.
 
 ## Milestone 1: Run and record a reproducible experiment
 
@@ -522,3 +565,17 @@ Acceptance criteria:
 - <a id="us-29-ac-07"></a> **US-29-AC-07:** Resumption after acquisition retains approvals, budget usage, dataset lineage, and completed-run identities; advanced acquisition strategies remain deferred according to the design document's implementation plan.
 
 Architecture references: §6 Data Extraction and Iterative Acquisition; §4 Scope changes and stopping conditions; §9 Governance.
+
+## Milestone 99: Future enhancements
+
+This milestone groups enhancements that are not critical to current functionality. Inclusion records deferred scope rather than a commitment to delivery order. Unlike Milestones 0–6, this milestone is a backlog of future enhancements; stories can move into a delivery milestone when prioritized, preserving their acceptance criterion IDs.
+
+### US-34: Establish contribution and review checks
+
+As a contributor, I want clear contribution instructions and consistent review checks so that I understand how to submit changes and when they are ready to merge.
+
+Acceptance criteria:
+
+- <a id="us-34-ac-01"></a> **US-34-AC-01:** Contribution instructions describe how to prepare and submit changes and link to the development setup and verification commands.
+- <a id="us-34-ac-02"></a> **US-34-AC-02:** Required CI checks and review expectations are documented, including the conditions for merging a pull request.
+- <a id="us-34-ac-03"></a> **US-34-AC-03:** Branch protection enforces the documented required checks and review expectations on the default branch.
