@@ -1,7 +1,7 @@
 | Slice | User-visible outcome | Stories |
 |---|---|---|
 | **1. Run and record a reproducible experiment** | Initialize a separate project, extract and validate data, execute a notebook, inspect its recorded results, and reproduce the run. | US-01, US-02, US-03, US-05, US-09, US-10, US-11, validation portion of US-12, US-13; initial US-26 and US-27 |
-| **2. Assess data and build reproducible feature pipelines** | Profile data, approve versioned splits, and produce and compare feature pipelines whose fitted state and outputs can be restored. | assessment/split portion of US-12; US-14, US-15; preprocessing portion of US-16; pipeline portion of US-27 |
+| **2. Assess data and build reproducible feature pipelines** | Profile data, approve versioned splits, restore fitted feature pipelines and outputs, and compare predictive performance using a fixed approved reference estimator. | assessment/split portion of US-12; US-14, US-15; preprocessing portion of US-16; pipeline portion of US-27 |
 | **3. Train, tune, and independently evaluate models** | Compare baselines and candidate models within declared boundaries and obtain an independent assessment. | US-06, US-18, US-19, US-20, US-21, US-24; model portion of US-16; reporting portion of US-26 |
 | **4. Let an agent improve an experiment** | Generate reviewable notebooks and improve a model using development feedback within an approved phase. | US-04, US-07, US-08, US-17, US-22; first-adapter portion of US-30 |
 | **5. Supervise and resume the complete workflow** | Run the multi-phase workflow with durable approvals, interruption recovery, and interchangeable agents. | US-23, US-25; second-adapter portion of US-30; audit portion of US-26 |
@@ -167,7 +167,7 @@ Architecture references: §8 Project initialization and installation; §9 Experi
 
 ## Slice 2: Assess data and build reproducible feature pipelines
 
-Starting with versioned source data, the developer profiles the dataset, creates versioned training/validation/protected-test splits respecting time and group constraints, and obtains approval of the assessment and split protocol before dependent feature or modeling work. The developer then prepares features, compares alternatives, and restores fitted preprocessing and pipeline outputs.
+Starting with versioned source data, the developer profiles the dataset, creates versioned training/validation/protected-test splits respecting time and group constraints, and obtains approval of the assessment and split protocol before dependent feature or modeling work. The developer then prepares features, compares their predictive performance using a fixed approved reference estimator, metric, and split protocol, and restores fitted preprocessing and pipeline outputs. Slice 2 includes the minimal training/evaluation capability for these comparisons; broader model experimentation remains in Slice 3.
 
 ### US-12: Assess data quality and define splits
 
@@ -189,7 +189,7 @@ Acceptance criteria:
 
 - <a id="us-14-ac-01"></a> **US-14-AC-01:** Feature plans identify ordered components, effective parameters, input/output schemas, fitting scope, and modification permissions.
 - <a id="us-14-ac-02"></a> **US-14-AC-02:** The harness executes candidate transformations and records their definitions, dependencies, outputs, and lineage.
-- <a id="us-14-ac-03"></a> **US-14-AC-03:** Candidate feature sets are compared against a fixed baseline using the same approved validation protocol.
+- <a id="us-14-ac-03"></a> **US-14-AC-03:** Candidate feature sets are compared for predictive performance against a fixed approved baseline feature set using the same fixed approved reference estimator, estimator settings, metric, and split protocol. Improvement follows the declared metric direction; comparisons record gains, ties, or regressions. Slice 2 includes the minimal training/evaluation capability needed for this comparison; broader model experimentation remains in Slice 3.
 - <a id="us-14-ac-04"></a> **US-14-AC-04:** Feature artifacts trace back to their source datasets and are independently validated before phase advancement.
 - <a id="us-14-ac-05"></a> **US-14-AC-05:** This slice supports supplied or explicitly authored candidates; agent generation is exercised when agent integration arrives in Slice 4.
 
