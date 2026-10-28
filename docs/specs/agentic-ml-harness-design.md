@@ -6,7 +6,7 @@
 
 ## 1. Executive Summary
 
-Build an agent-independent machine learning development harness for tabular ML and deep learning. Coding assistants can invoke the harness interactively through its public CLI/API, while a workflow orchestrator within the installed package can delegate tasks through managed agent adapters; distinct execution and evaluation components independently execute, validate, and track experiments. Development is supervised: agents may iterate within approved phases and budgets, while developers approve phase transitions and expanded data-access scope.
+Build an agent-independent machine learning development harness for tabular ML and deep learning. Coding assistants can invoke the harness interactively through its public CLI/API, while a workflow orchestrator within the installed package can delegate tasks through managed agent adapters; distinct execution and evaluation components independently execute, validate, and track experiments. Development is supervised: agents may iterate within approved workflow phases and budgets, while developers approve workflow phase transitions and expanded data-access scope.
 
 The harness is a versioned Python dependency installed into a separate user experiment repository. That repository is the unit users own, review, version, and share: it contains experiment briefs, configuration, agent-generated notebooks and Python code, and data-versioning metadata. Notebooks are the primary user interface for inspecting, running, and refining experiments; the harness provides reusable capabilities and independent execution and evaluation controls.
 
@@ -28,7 +28,7 @@ A central design principle is **hierarchical closed-loop ML development**:
 | Repository boundary | Separate harness product repository and user experiment repositories; consume the harness as a versioned Python dependency through its public API and CLI |
 | Jupyter notebooks | Agent-generated notebooks in the user experiment repository are the primary experiment interface; support interactive use and automatic harness-managed execution |
 | Model types | Tabular classification/regression and deep learning |
-| Autonomy | Supervised with developer approvals at phase boundaries |
+| Autonomy | Supervised with developer approvals at workflow phase boundaries |
 | Data | Extraction, EDA, feature engineering, and iterative acquisition are first-class |
 | Execution | Local subprocesses for the proof of concept; Ray planned for later distributed and parallel execution; container/GPU backends incrementally |
 | Experiment tracking | MLflow for runs, parameters, metrics, model artifacts, and experiment comparisons |
@@ -75,7 +75,7 @@ flowchart TB
     U -->|Direct interactive work| I
     I -->|Public CLI/API requests| O
     I -->|Submit authorized work via CLI/API| X
-    O -->|Request phase or scope approval| G
+    O -->|Request workflow phase or scope approval| G
     U -->|Approve, revise, or reject| G
     G -->|Recorded decision| O
     O -->|Delegate within approved scope| A
@@ -102,7 +102,7 @@ These capabilities operate in the selected experiment project's environment usin
 
 | Component | Responsibilities |
 |---|---|
-| Workflow orchestrator | Plans phases, delegates tasks, maintains durable state, controls iterations, enforces approvals and budgets, resumes work |
+| Workflow orchestrator | Plans workflow phases, delegates tasks, maintains durable state, controls iterations, enforces approvals and budgets, resumes work |
 | Agent integration | Capability discovery, structured task/result exchange, cancellation, CLI/SDK/tool adapters |
 | Data extraction engine | Source discovery, approved queries, ingestion, snapshots, schema checks, lineage |
 | Data acquisition planner | Diagnose gaps, propose additional samples/labels/sources, estimate costs and expected benefit |
@@ -114,7 +114,7 @@ These capabilities operate in the selected experiment project's environment usin
 | Evaluation engine | Metrics, baseline comparisons, scientific validity, robustness, reproducibility |
 | Tracking and artifact store | MLflow records runs, parameters, metrics, and model artifacts; links to DVC dataset/pipeline versions and harness manifests for complete lineage |
 | Data versioning and pipelines | DVC tracks source and derived datasets, dependencies, stage outputs, and reproducible pipeline definitions; integrates with harness execution |
-| Approval service | Phase and acquisition approvals, authorization scope, audit records |
+| Approval service | Workflow phase and acquisition approvals, authorization scope, audit records |
 
 ### Harness and experiment project boundary
 
@@ -148,7 +148,7 @@ Experiment agents operate within the experiment repository and use the installed
 - **Interactive mode:** The developer works with an external coding assistant, such as Codex, GitHub Copilot, or Claude Code, which prepares project files and invokes the harness CLI/API. No agent adapter is required, and the harness does not own the assistant session.
 - **Managed mode:** The orchestrator delegates bounded tasks through a configured agent adapter, receives structured results, and coordinates evaluation and further revisions. Managed support requires verification of a concrete product, interface, and version; a product name alone does not establish adapter capabilities.
 
-Both modes use the same harness-owned experiment state, plan validation, approvals, managed execution, budgets, artifact records, and independent evaluation. The assistant proposes changes and requests work; only recorded harness evidence and authorized developer decisions establish acceptance or phase progression. The architecture diagram shows both directions: managed delegation through the agent integration layer and interactive CLI/API requests from an external assistant.
+Both modes use the same harness-owned experiment state, plan validation, approvals, managed execution, budgets, artifact records, and independent evaluation. The assistant proposes changes and requests work; only recorded harness evidence and authorized developer decisions establish acceptance or workflow phase progression. The architecture diagram shows both directions: managed delegation through the agent integration layer and interactive CLI/API requests from an external assistant.
 
 The orchestrator operates on an explicitly selected experiment project and environment. Durable workflow state and run artifacts are stored in configured locations associated with that project, independently of the harness source tree.
 
@@ -157,10 +157,10 @@ The orchestrator operates on an explicitly selected experiment project and envir
 ```mermaid
 flowchart TD
     A[Define Objectives, Components, and Boundaries] --> B[Developer Approves Plan]
-    B --> C["Execute Authorized Phase (see Phase Descriptions Below)"]
-    C --> D[Independently Validate Phase Evidence]
-    D --> E[Developer Reviews Phase]
-    E -->|Advance| F[Next Phase]
+    B --> C["Execute Authorized Workflow Phase (see Workflow Phase Descriptions Below)"]
+    C --> D[Independently Validate Workflow Phase Evidence]
+    D --> E[Developer Reviews Workflow Phase]
+    E -->|Advance| F[Next Workflow Phase]
     F --> C
     E -->|Revise| G[Revise Within Approved Scope]
     G --> C
@@ -168,24 +168,24 @@ flowchart TD
     E -->|Reject or Stop| I[Preserve Results and Stop]
 ```
 
-The diagram summarizes the phase cycle. The individual phases are:
+The diagram summarizes the workflow phase cycle. The individual workflow phases are:
 
 1. **Problem definition:** Define the objective, target, metrics, data sources, allowed algorithms, supplied components, constraints, and budgets. Approve the task contract and plan.
 2. **Data extraction and EDA:** Obtain and version data, inspect its quality and distributions, and establish training/validation/test splits. Approve the dataset assessment and split protocol.
-3. **Feature engineering:** Use supplied preprocessing or develop transformations and feature sets. Fit stateful preprocessing only on training data. Compare predictive performance against an approved baseline feature set with a fixed approved reference estimator and validation protocol. This limited training/evaluation is authorized within feature engineering; broader baseline modeling follows in the next phase. Review the validated pipeline, comparison evidence, and lineage.
+3. **Feature engineering:** Use supplied preprocessing or develop transformations and feature sets. Fit stateful preprocessing only on training data. Compare predictive performance against an approved baseline feature set with a fixed approved reference estimator and validation protocol. This limited training/evaluation is authorized within feature engineering; broader baseline modeling follows in the next workflow phase. Review the validated pipeline, comparison evidence, and lineage.
 4. **Baseline modeling:** Train simple, reproducible reference models. Approve baseline results for later comparisons.
 5. **Model development:** Train and compare candidate models, including user-supplied algorithms, and improve them within approved boundaries. Review candidate evidence.
 6. **Optimization:** Tune hyperparameters within the declared search space and budgets. Approve the optimization summary and candidate for final evaluation.
 7. **Final evaluation:** Evaluate the selected model on the protected holdout, check robustness and reproducibility, and produce the final report. Approve or reject the model.
 
-**Each phase transition requires approval.** Agents can iterate within an approved phase. Valid existing artifacts can support skipping a phase when that is approved in the plan. Section 5 defines the gate evidence for each phase.
+**Each workflow phase transition requires approval.** Agents can iterate within an approved workflow phase. Valid existing artifacts can support skipping a workflow phase when that is approved in the plan. Section 5 defines the gate evidence for each workflow phase.
 
-Data acquisition is an activity that can trigger a return to earlier phases, rather than an eighth phase. Supplied components and authorized data acquisition fit within “Execute Authorized Phase”; their detailed requirements appear in Sections 6–8. The following rules apply:
+Data acquisition is an activity that can trigger a return to earlier workflow phases, rather than an eighth workflow phase. Supplied components and authorized data acquisition fit within “Execute Authorized Workflow Phase”; their detailed requirements appear in Sections 6–8. The following rules apply:
 
-- **Phases:** Initial plan approval completes problem definition. Execution then follows the configured phases in Section 5: data extraction and EDA → feature engineering → baseline modeling → model development → optimization → final evaluation. Each phase approval authorizes entry to the next phase and its recorded scope.
-- **Iteration:** Agents may iterate within the current approved phase, component permissions, parameter boundaries, access scope, and budgets without approval for every run. Evidence is independently validated against phase-specific requirements before developer review; only sufficient evidence permits advancement.
-- **Scope changes:** Phase returns, expanded permissions, and changes to immutable components require authorization before execution. Authorized changes are recorded durably; changes to immutable code, allowed algorithms, or data-access scope create a new versioned experiment configuration. Acquisition requires recorded authorization covering its source, strategy, and limits, followed by authorized validation/EDA and downstream work.
-- **Final evaluation:** Protected-test evaluation occurs only in its authorized final phase. Its results cannot feed feature, model, or acquisition improvement loops, so the revision arrow does not apply to protected-test feedback. Unsuccessful final evaluation ends in rejection or review; any further development requires a separately approved evaluation protocol that preserves holdout protection. Completion requires developer approval of successful final evaluation.
+- **Workflow phases:** Initial plan approval completes problem definition. Execution then follows the configured workflow phases in Section 5: data extraction and EDA → feature engineering → baseline modeling → model development → optimization → final evaluation. Each workflow phase approval authorizes entry to the next workflow phase and its recorded scope.
+- **Iteration:** Agents may iterate within the current approved workflow phase, component permissions, parameter boundaries, access scope, and budgets without approval for every run. Evidence is independently validated against requirements specific to the workflow phase before developer review; only sufficient evidence permits advancement.
+- **Scope changes:** Workflow phase returns, expanded permissions, and changes to immutable components require authorization before execution. Authorized changes are recorded durably; changes to immutable code, allowed algorithms, or data-access scope create a new versioned experiment configuration. Acquisition requires recorded authorization covering its source, strategy, and limits, followed by authorized validation/EDA and downstream work.
+- **Final evaluation:** Protected-test evaluation occurs only in its authorized final workflow phase. Its results cannot feed feature, model, or acquisition improvement loops, so the revision arrow does not apply to protected-test feedback. Unsuccessful final evaluation ends in rejection or review; any further development requires a separately approved evaluation protocol that preserves holdout protection. Completion requires developer approval of successful final evaluation.
 
 **Inner loop:** feature engineering → training/tuning → evaluation → evidence-based revision.  
 **Outer loop:** diagnose data limitations → propose acquisition → approve where required → acquire/validate/version → retrain and compare.
@@ -194,21 +194,21 @@ Both loops must terminate on success, budget exhaustion, lack of improvement, un
 
 ### Notebook-centered user workflow
 
-The steps below describe the workflow with integrated agent support. Before phase 4, developers can prepare inputs and notebooks themselves or with an external coding assistant such as Codex, GitHub Copilot, or Claude Code; no agent adapter is required for interactive use. In managed mode, configure a verified adapter. Harness-managed agent proposals, execution, and revision loops begin in phase 4. The harness validates, records, and executes supplied inputs without requiring an agent.
+The steps below describe the workflow with integrated agent support. Before milestone 4, developers can prepare inputs and notebooks themselves or with an external coding assistant such as Codex, GitHub Copilot, or Claude Code; no agent adapter is required for interactive use. In managed mode, configure a verified adapter. Harness-managed agent proposals, execution, and revision loops begin in milestone 4. The harness validates, records, and executes supplied inputs without requiring an agent.
 
 1. Install `uv` and Git, create a separate user repository and Python project, install the harness from a pinned GitHub commit, and run `uv run agent-ml init` to add experiment scaffolding and configure its environment.
 2. Configure local data access, tracking, storage, and an agent adapter; optionally register supplied algorithms and preprocessors with their parameter specifications and modification permissions. Write the experiment brief, feature pipeline configuration, and search-space configuration.
 3. Ask the agent to generate readable notebooks that invoke supplied or built-in components. Generate new experiment-specific implementations or helper code only as needed and authorized.
-4. Inspect the notebooks and approve the resolved task contract, phase plan, component selection, evaluation protocol, access scope, and budgets through the applicable gates before dependent execution. Validate component interfaces, parameters, and evaluation compatibility before training.
-5. Open the notebooks in JupyterLab, execute approved work, and inspect results. The agent may also execute and revise notebooks automatically within the current approved phase, component permissions, parameter boundaries, and budgets. Phase returns and scope changes require authorization; changes to immutable supplied code require approval and a new versioned experiment configuration.
+4. Inspect the notebooks and approve the resolved task contract, workflow phase plan, component selection, evaluation protocol, access scope, and budgets through the applicable gates before dependent execution. Validate component interfaces, parameters, and evaluation compatibility before training.
+5. Open the notebooks in JupyterLab, execute approved work, and inspect results. The agent may also execute and revise notebooks automatically within the current approved workflow phase, component permissions, parameter boundaries, and budgets. Workflow phase returns and scope changes require authorization; changes to immutable supplied code require approval and a new versioned experiment configuration.
 6. Record experiments through harness-managed execution of saved notebook and code snapshots, followed by independent evaluation. Interactive exploration alone does not establish acceptance.
-7. Review evidence at every phase boundary and approve entry to the next phase or request changes. Review final evaluation separately to approve or reject the final model. Preserved state supports interruption and resumption.
+7. Review evidence at every workflow phase boundary and approve entry to the next workflow phase or request changes. Review final evaluation separately to approve or reject the final model. Preserved state supports interruption and resumption.
 
-Reviewing every notebook edit is optional unless configured as an additional gate; phase approvals and scope controls remain mandatory.
+Reviewing every notebook edit is optional unless configured as an additional gate; workflow phase approvals and scope controls remain mandatory.
 
-## 5. Standard Development Phases and Gates
+## 5. Standard Workflow Phases and Gates
 
-| Phase | Activities | Required gate evidence |
+| Workflow phase | Activities | Required gate evidence |
 |---|---|---|
 | 1. Problem definition | Objective, target, metrics, sources, budgets, constraints | Approved ML task contract |
 | 2. Data extraction and EDA | Source discovery, snapshots, profiling, quality, split strategy | Approved dataset assessment and split protocol |
@@ -218,7 +218,7 @@ Reviewing every notebook edit is optional unless configured as an additional gat
 | 6. Optimization | Hyperparameter search within budgets | Approved optimization summary |
 | 7. Final evaluation | Protected holdout, robustness, reproducibility, reporting | Final model approval/rejection |
 
-Phases may be configured or skipped when valid preexisting artifacts are supplied. Agents can iterate within approved phase scope; phase transitions require approval. Additional data acquisition may trigger an explicit scope approval and a return to earlier phases.
+Workflow phases may be configured or skipped when valid preexisting artifacts are supplied. Agents can iterate within approved workflow phase scope; workflow phase transitions require approval. Additional data acquisition may trigger an explicit scope approval and a return to earlier workflow phases.
 
 ## 6. Data Extraction and Iterative Acquisition
 
@@ -278,7 +278,7 @@ The feature engineering engine must:
 - Support deep-learning preprocessing, image augmentation, tokenization, and PyTorch datasets where relevant.
 - Make transformations reusable for inference without requiring model deployment in the initial release.
 
-Slice 2 supplies the minimal estimator training, prediction, and independent validation-metric computation needed for feature comparison. Approve and record the baseline feature set, reference estimator/settings, metric/direction, and split protocol before candidate comparison. Fit preprocessing and the estimator only on approved training partitions, score only on approved validation partitions, and enforce protected-test isolation for experiment code and exploratory kernels. Apply execution authorization, resource budgets, independent leakage/result checks, and existing run-evidence contracts to these runs. Preserve baseline/candidate feature identities, estimator code/dependency identities and settings, fitted artifacts, predictions, scores, and data/split lineage so comparisons can be reviewed and reproduced. A candidate need not improve to produce a valid comparison; an improvement claim must follow the recorded metric direction. Algorithm selection and hyperparameter search remain in Slice 3.
+Milestone 2 supplies the minimal estimator training, prediction, and independent validation-metric computation needed for feature comparison. Approve and record the baseline feature set, reference estimator/settings, metric/direction, and split protocol before candidate comparison. Fit preprocessing and the estimator only on approved training partitions, score only on approved validation partitions, and enforce protected-test isolation for experiment code and exploratory kernels. Apply execution authorization, resource budgets, independent leakage/result checks, and existing run-evidence contracts to these runs. Preserve baseline/candidate feature identities, estimator code/dependency identities and settings, fitted artifacts, predictions, scores, and data/split lineage so comparisons can be reviewed and reproduced. A candidate need not improve to produce a valid comparison; an improvement claim must follow the recorded metric direction. Algorithm selection and hyperparameter search remain in Milestone 3.
 
 Experiment-specific transformations belong in the experiment repository's notebooks or helper modules. Code shared across experiments in that repository belongs in its own Python package. Generic feature-engineering capabilities belong in the harness package; promoting project code into the harness is a separate development change.
 
@@ -356,7 +356,7 @@ Restoration recovers the state declared by the checkpoint. Exact training contin
 | `ExperimentConfig` | Schema version, experiment identifier, brief/search-space references, notebook entrypoints, data references, feature pipeline component references and parameters, working directory, execution settings; resolved into the approved `ExperimentSpec` |
 | `RuntimeInstructionBundle` | Harness-supplied shared/task-specific guidance snapshots, audience, task mapping, ordered source paths, versions/checksums; separately identified additional assistant context where observable, with capture limitations |
 | `SearchSpaceSpec` | Schema version, registered algorithm identifiers, fixed parameters, typed choices/ranges, scales, configuration checksum |
-| `WorkflowPlan` | Phases, dependencies, gates, iteration limits |
+| `WorkflowPlan` | Workflow phases, dependencies, gates, iteration limits |
 | `AgentTask` / `AgentResult` | Durable task/attempt identifiers, scope, approved plan and guidance references, allowed tools, proposed changes, output/artifact references, status, available usage evidence, cancellation outcome |
 | `ExtractionSpec` / `DatasetRef` | Source, query, snapshot, checksum, schema, lineage |
 | `DataGapReport` / `DataAcquisitionProposal` | Evidence, acquisition hypothesis, scope, cost, approval |
@@ -369,7 +369,7 @@ Restoration recovers the state declared by the checkpoint. Exact training contin
 
 ### Submission identity and recovery contracts
 
-Before runner submission, persist a project-associated recovery record with a stable submission key for that task attempt, the approved configuration and immutable input-manifest checksum, applicable approval/guidance references, and a reservation against applicable execution budgets. If this record cannot be persisted, do not submit. Preserve phase progress and dataset lineage, including across acquisition and subsequent downstream work.
+Before runner submission, persist a project-associated recovery record with a stable submission key for that task attempt, the approved configuration and immutable input-manifest checksum, applicable approval/guidance references, and a reservation against applicable execution budgets. If this record cannot be persisted, do not submit. Preserve workflow phase progress and dataset lineage, including across acquisition and subsequent downstream work.
 
 Repeated submission with the same key and identical bound inputs returns the existing run identity without starting another execution. Reusing a key with different inputs fails. The runner must durably associate the key and input identity with the execution before starting work and support lookup by that key after restart. Concurrent submissions with the same key must obey the same rule. Retain this association for as long as the workflow can be resumed; lost or unavailable associations produce an unknown status rather than making the key eligible for fresh execution.
 
@@ -447,9 +447,9 @@ features:
       parameters: {}
 ```
 
-Component parameter specifications define valid types, defaults, and constraints. Experiment search spaces define the narrower values agents may explore. Declaring a component does not automatically authorize its use or parameter tuning. Feature pipeline parameters are fixed by the approved feature plan; changes require the applicable feature-phase authorization and a recorded plan revision.
+Component parameter specifications define valid types, defaults, and constraints. Experiment search spaces define the narrower values agents may explore. Declaring a component does not automatically authorize its use or parameter tuning. Feature pipeline parameters are fixed by the approved feature plan; changes require the applicable feature-engineering workflow phase authorization and a recorded plan revision.
 
-Run lineage preserves component declarations, exact project-code snapshots or pinned dependency identities, effective parameters, and fitted artifacts. Component code changes authorized within a phase are captured in each run's source snapshot.
+Run lineage preserves component declarations, exact project-code snapshots or pinned dependency identities, effective parameters, and fitted artifacts. Component code changes authorized within a workflow phase are captured in each run's source snapshot.
 
 ### Project initialization and installation
 
@@ -531,7 +531,7 @@ Run at most 50 hyperparameter trials per algorithm.
 
 Before integrated agent support, developers supply experiment decisions through the brief and configuration files, optionally prepared with an external coding assistant. The harness validates these inputs and records the effective, versioned plan, including supplied decisions, defaults, source references, input checksums, and approval evidence, before dependent execution. Unresolved delegated choices and ambiguous or conflicting requirements block affected execution; delegated decisions require approval before use. The resolved plan identifies the allowed algorithm set, selected features, metric and direction, split protocol, and budgets as those capabilities are introduced.
 
-Phase 4 adds harness-managed agent proposals and iteration. The agent proposes delegated decisions and records its reasoning; those proposals use the same harness validation, plan recording, and applicable problem-definition and evaluation approval gates before use.
+Milestone 4 adds harness-managed agent proposals and iteration. The agent proposes delegated decisions and records its reasoning; those proposals use the same harness validation, plan recording, and applicable problem-definition and evaluation approval gates before use.
 
 ### Development and runtime agent instructions
 
@@ -711,13 +711,13 @@ Capture these evidence groups:
 
 The harness owns this lifecycle:
 
-1. **Prepare:** Resolve required inputs, verify dataset content hashes, and freeze the source/configuration bundle and declared output checks. Persist the immutable input manifest and referenced evidence before launching execution. For phase 1, snapshot declared project source roots rather than infer coverage through Python import tracing. Exclude credentials, datasets, environments, and generated stores from the source bundle; required external code/file inputs must be explicitly registered and captured or versioned. Failure to resolve or preserve a required input blocks execution.
+1. **Prepare:** Resolve required inputs, verify dataset content hashes, and freeze the source/configuration bundle and declared output checks. Persist the immutable input manifest and referenced evidence before launching execution. For milestone 1, snapshot declared project source roots rather than infer coverage through Python import tracing. Exclude credentials, datasets, environments, and generated stores from the source bundle; required external code/file inputs must be explicitly registered and captured or versioned. Failure to resolve or preserve a required input blocks execution.
 2. **Execute:** Materialize the frozen bundle in a separate execution directory and execute that source with the recorded environment and verified dataset inputs. The input bundle remains immutable; outputs go to declared writable locations. Later edits to the developer's working tree do not change the submitted run. Apply current execution authorization, access boundaries, and budgets to this directory and its inputs.
 3. **Finalize:** Preserve available results and verification evidence in MLflow artifact storage. Write an immutable terminal manifest referencing the input manifest by checksum, output evidence, harness run identifier, and MLflow run identifier. Failed or cancelled runs retain available evidence and their outcome; incomplete evidence must not be reported as successful verification. The input manifest remains available if execution is interrupted before finalization; reconcile submission and finalization through the §8 submission identity contract and §9 workflow recovery rules.
 4. **Restore:** Starting from an experiment checkout and recorded run manifest, retrieve the pinned harness revision, project dependency files, source/configuration bundle, applicable guidance, and DVC inputs. Verify required evidence checksums and restored dataset content hashes before execution. Rebuild the locked environment without a manually maintained harness checkout and materialize the recorded source, including preserved uncommitted changes. Missing source, dependencies, dataset content, or mismatched required evidence produces an explicit restoration failure identifying the affected input; never substitute a current working-tree file, newer dependency, or alternate dataset silently. Access credentials and current execution authorization remain required; historical approval evidence does not grant new access.
 5. **Compare:** Execute the recorded entrypoint from its recorded relative working directory as a new run linked to the original manifest. Independently assess the new outputs against the original declared checks/tolerances, recording comparison results and retaining both runs. Output checksums identify evidence; declared checks determine whether reproduction succeeds when byte equality is not required.
 
-Phase 1 provides this restoration path without an agent. Demonstrate it in a clean second-machine environment with an uncommitted notebook edit and a required untracked helper, verify that working-tree edits after capture cannot affect execution, and verify explicit failures for removed or corrupted required inputs. Configured storage must be accessible from the second machine; initially local stores may be transferred with their recorded content identities preserved. Exact manifest serialization and CLI/API signatures remain implementation decisions.
+Milestone 1 provides this restoration path without an agent. Demonstrate it in a clean second-machine environment with an uncommitted notebook edit and a required untracked helper, verify that working-tree edits after capture cannot affect execution, and verify explicit failures for removed or corrupted required inputs. Configured storage must be accessible from the second machine; initially local stores may be transferred with their recorded content identities preserved. Exact manifest serialization and CLI/API signatures remain implementation decisions.
 
 ### Notebook development and execution contract
 
@@ -737,18 +737,18 @@ Phase 1 provides this restoration path without an agent. Demonstrate it in a cle
 1. **Execution correctness:** code completes and expected artifacts exist.
 2. **Scientific validity:** split boundaries, preprocessing fitting, and leakage rules are respected.
 3. **Model quality:** agreed metrics and baseline comparisons are computed consistently.
-4. **Generalization/robustness:** folds, slices, or stress tests satisfy defined criteria.
+4. **Generalization/robustness:** folds, data slices, or stress tests satisfy defined criteria.
 5. **Reproducibility:** reruns meet explicit metric tolerances, acknowledging GPU nondeterminism where applicable.
 
 ### Workflow states
 
 `Planned → Running → Evaluating → AwaitingApproval → Approved → NextPhase/Completed`.
 
-Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhausted`, and `NeedsReview`. A rejection or revision request returns work to an authorized phase; it does not silently bypass gates.
+Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhausted`, and `NeedsReview`. A rejection or revision request returns work to an authorized workflow phase; it does not silently bypass gates.
 
 #### Recovery and reconciliation
 
-On restart, acquire exclusive recovery ownership for the workflow and reconcile its durable records with runner submission/execution status and MLflow evidence before issuing new work or accepting results. State transitions and submission authority must reject stale owners, for example through an ownership epoch checked at submission and state update; a lock timeout alone must not allow an old owner to continue advancing work. Exact locking, fencing, and transaction mechanisms remain phase 5 design decisions.
+On restart, acquire exclusive recovery ownership for the workflow and reconcile its durable records with runner submission/execution status and MLflow evidence before issuing new work or accepting results. State transitions and submission authority must reject stale owners, for example through an ownership epoch checked at submission and state update; a lock timeout alone must not allow an old owner to continue advancing work. Exact locking, fencing, and transaction mechanisms remain milestone 5 design decisions.
 
 | Reconciled finding | Required action |
 |---|---|
@@ -760,7 +760,7 @@ On restart, acquire exclusive recovery ownership for the workflow and reconcile 
 
 Preserve consumed budgets across restart and account for each usage record once. Keep reservations for uncertain work until reconciliation establishes actual usage or non-execution; uncertainty must not release capacity for duplicate spending. Settling a reservation into consumed usage must not count both against the budget. Cancellation, failure, budget exhaustion, and review do not silently authorize further work. Any review decision and subsequent authorized action are durable and auditable.
 
-Reused evidence retains its original producer, configuration/input and guidance identities, dataset lineage, artifacts, and approval history. Record the decisions authorizing subsequent use separately. Recovery grants no additional authorization, does not bypass pending gates, and applies current access restrictions. Results from stale, cancelled, or superseded attempts cannot silently advance the workflow. Apply these rules to recovery after acquisition as well as other phases.
+Reused evidence retains its original producer, configuration/input and guidance identities, dataset lineage, artifacts, and approval history. Record the decisions authorizing subsequent use separately. Recovery grants no additional authorization, does not bypass pending gates, and applies current access restrictions. Results from stale, cancelled, or superseded attempts cannot silently advance the workflow. Apply these rules to recovery after acquisition as well as other workflow phases.
 
 ### Agent cancellation, usage, and resumption
 
@@ -776,7 +776,7 @@ Controls are rules and checks enforced by the harness to govern what an experime
 
 - Approvals are durable, scoped, and auditable. Bind each decision to an authenticated developer and the reviewed plan/configuration and scope. Agent requests and assistant tool-execution permissions do not establish experiment approval. The approval channel must distinguish developer decisions from agent actions; agents cannot approve their own scope expansions or final acceptance.
 - Approval records, evaluator credentials, and protected-test data must be inaccessible for unauthorized reading or modification by assistant tools as well as experiment code. Define accessible resources for both modes under ADR-006. An unrestricted assistant workspace cannot be described as enforcing these boundaries; instruction text and CLI/API validation alone do not provide isolation.
-- New data sources, expanded permissions, changed evaluation criteria, and phase transitions require authorization.
+- New data sources, expanded permissions, changed evaluation criteria, and workflow phase transitions require authorization.
 - Protected test sets cannot be used for iterative tuning or data acquisition decisions.
 - Resource limits and stopping conditions apply to both inner and outer loops.
 
@@ -784,11 +784,11 @@ Controls are rules and checks enforced by the harness to govern what an experime
 
 [User stories](user-stories.md) define the authoritative product acceptance criteria and own their stable IDs. This design document describes architectural support for those requirements; it does not define a separate product acceptance-criteria list.
 
-The table groups criterion links by story increment and slice. Each link resolves to the criterion definition in the user stories. Design references identify relevant mechanisms, not proof of complete coverage, implementation, or successful verification. Pending design decisions remain subject to satisfying the story criteria.
+The table groups criterion links by story increment and milestone. Each link resolves to the criterion definition in the user stories. Design references identify relevant mechanisms, not proof of complete coverage, implementation, or successful verification. Pending design decisions remain subject to satisfying the story criteria.
 
 The former proposal-local `AC-01` through `AC-54` identifiers are retired. Historical versions retain those definitions; current requirements and future references use the story-owned IDs below.
 
-| Slice | Story increment | Authoritative acceptance criteria | Supporting design sections |
+| Milestone | Story increment | Authoritative acceptance criteria | Supporting design sections |
 |---|---|---|---|
 | 1 | US-01: Install a pinned harness version | [US-01-AC-01](user-stories.md#us-01-ac-01), [US-01-AC-02](user-stories.md#us-01-ac-02), [US-01-AC-03](user-stories.md#us-01-ac-03), [US-01-AC-04](user-stories.md#us-01-ac-04) | §8 Project initialization and installation; §9 Execution |
 | 1 | US-02: Initialize an experiment project | [US-02-AC-01](user-stories.md#us-02-ac-01), [US-02-AC-02](user-stories.md#us-02-ac-02), [US-02-AC-03](user-stories.md#us-02-ac-03), [US-02-AC-04](user-stories.md#us-02-ac-04), [US-02-AC-05](user-stories.md#us-02-ac-05) | §8 Project initialization and installation |
@@ -801,8 +801,8 @@ The former proposal-local `AC-01` through `AC-54` identifiers are retired. Histo
 | 1 | US-13: Version and restore datasets | [US-13-AC-01](user-stories.md#us-13-ac-01), [US-13-AC-02](user-stories.md#us-13-ac-02), [US-13-AC-03](user-stories.md#us-13-ac-03), [US-13-AC-04](user-stories.md#us-13-ac-04) | §9 Experiment tracking, data versioning, and pipelines |
 | 1 | US-26: Record run artifacts and provenance | [US-26-AC-01](user-stories.md#us-26-ac-01), [US-26-AC-02](user-stories.md#us-26-ac-02), [US-26-AC-03](user-stories.md#us-26-ac-03), [US-26-AC-04](user-stories.md#us-26-ac-04), [US-26-AC-05](user-stories.md#us-26-ac-05) | §3 Component responsibilities; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation |
 | 1 | US-27: Reproduce a basic run in a clean environment | [US-27-AC-01](user-stories.md#us-27-ac-01), [US-27-AC-02](user-stories.md#us-27-ac-02), [US-27-AC-03](user-stories.md#us-27-ac-03), [US-27-AC-04](user-stories.md#us-27-ac-04) | §8 Project initialization and installation; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation |
-| 2 | US-12: Assess data quality and define splits | [US-12-AC-02](user-stories.md#us-12-ac-02), [US-12-AC-03](user-stories.md#us-12-ac-03), [US-12-AC-04](user-stories.md#us-12-ac-04) | §4 Data extraction and EDA; §5 Development phases and gates; §6 Data extraction requirements; §9 Independent evaluation |
-| 2 | US-14: Generate and compare feature pipelines | [US-14-AC-01](user-stories.md#us-14-ac-01), [US-14-AC-02](user-stories.md#us-14-ac-02), [US-14-AC-03](user-stories.md#us-14-ac-03), [US-14-AC-04](user-stories.md#us-14-ac-04), [US-14-AC-05](user-stories.md#us-14-ac-05) | §7 Feature Engineering; §5 Development phases and gates |
+| 2 | US-12: Assess data quality and define splits | [US-12-AC-02](user-stories.md#us-12-ac-02), [US-12-AC-03](user-stories.md#us-12-ac-03), [US-12-AC-04](user-stories.md#us-12-ac-04) | §4 Data extraction and EDA; §5 Workflow phases and gates; §6 Data extraction requirements; §9 Independent evaluation |
+| 2 | US-14: Generate and compare feature pipelines | [US-14-AC-01](user-stories.md#us-14-ac-01), [US-14-AC-02](user-stories.md#us-14-ac-02), [US-14-AC-03](user-stories.md#us-14-ac-03), [US-14-AC-04](user-stories.md#us-14-ac-04), [US-14-AC-05](user-stories.md#us-14-ac-05) | §7 Feature Engineering; §5 Workflow phases and gates |
 | 2 | US-15: Preserve training-only preprocessing | [US-15-AC-01](user-stories.md#us-15-ac-01), [US-15-AC-02](user-stories.md#us-15-ac-02), [US-15-AC-03](user-stories.md#us-15-ac-03), [US-15-AC-04](user-stories.md#us-15-ac-04) | §7 Feature Engineering; §8 User-supplied ML components |
 | 2 | US-16: Register supplied preprocessing components | [US-16-AC-01](user-stories.md#us-16-ac-01), [US-16-AC-02](user-stories.md#us-16-ac-02), [US-16-AC-03](user-stories.md#us-16-ac-03), [US-16-AC-04](user-stories.md#us-16-ac-04), [US-16-AC-05](user-stories.md#us-16-ac-05) | §7 Feature Engineering; §8 User-supplied ML components; §9 Independent evaluation |
 | 2 | US-27: Reproduce and reuse pipeline stages | [US-27-AC-05](user-stories.md#us-27-ac-05), [US-27-AC-06](user-stories.md#us-27-ac-06), [US-27-AC-07](user-stories.md#us-27-ac-07), [US-27-AC-08](user-stories.md#us-27-ac-08), [US-27-AC-09](user-stories.md#us-27-ac-09) | §8 Project initialization and installation; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation |
@@ -820,7 +820,7 @@ The former proposal-local `AC-01` through `AC-54` identifiers are retired. Histo
 | 4 | US-17: Respect immutable supplied components | [US-17-AC-01](user-stories.md#us-17-ac-01), [US-17-AC-02](user-stories.md#us-17-ac-02), [US-17-AC-03](user-stories.md#us-17-ac-03), [US-17-AC-04](user-stories.md#us-17-ac-04) | §8 User-supplied ML components; §4 Scope changes |
 | 4 | US-22: Improve models using development feedback | [US-22-AC-01](user-stories.md#us-22-ac-01), [US-22-AC-02](user-stories.md#us-22-ac-02), [US-22-AC-03](user-stories.md#us-22-ac-03), [US-22-AC-04](user-stories.md#us-22-ac-04), [US-22-AC-05](user-stories.md#us-22-ac-05) | §4 Hierarchical Closed-Loop Workflow; §9 Independent evaluation |
 | 4 | US-30: Connect the first agent with preserved runtime guidance | [US-30-AC-01](user-stories.md#us-30-ac-01), [US-30-AC-02](user-stories.md#us-30-ac-02), [US-30-AC-03](user-stories.md#us-30-ac-03), [US-30-AC-04](user-stories.md#us-30-ac-04), [US-30-AC-05](user-stories.md#us-30-ac-05) | §8 AgentAdapter interface; §8 Development and runtime agent instructions |
-| 5 | US-23: Approve phase progression and scope changes | [US-23-AC-01](user-stories.md#us-23-ac-01), [US-23-AC-02](user-stories.md#us-23-ac-02), [US-23-AC-03](user-stories.md#us-23-ac-03), [US-23-AC-04](user-stories.md#us-23-ac-04), [US-23-AC-05](user-stories.md#us-23-ac-05) | §4 Hierarchical Closed-Loop Workflow; §5 Development phases and gates; §9 Governance |
+| 5 | US-23: Approve workflow phase progression and scope changes | [US-23-AC-01](user-stories.md#us-23-ac-01), [US-23-AC-02](user-stories.md#us-23-ac-02), [US-23-AC-03](user-stories.md#us-23-ac-03), [US-23-AC-04](user-stories.md#us-23-ac-04), [US-23-AC-05](user-stories.md#us-23-ac-05) | §4 Hierarchical Closed-Loop Workflow; §5 Workflow phases and gates; §9 Governance |
 | 5 | US-25: Resume interrupted workflows | [US-25-AC-01](user-stories.md#us-25-ac-01), [US-25-AC-02](user-stories.md#us-25-ac-02), [US-25-AC-03](user-stories.md#us-25-ac-03), [US-25-AC-04](user-stories.md#us-25-ac-04) | §3 Component responsibilities; §9 Workflow states; §8 Development and runtime agent instructions |
 | 5 | US-30: Use interchangeable agent adapters | [US-30-AC-06](user-stories.md#us-30-ac-06), [US-30-AC-07](user-stories.md#us-30-ac-07), [US-30-AC-08](user-stories.md#us-30-ac-08), [US-30-AC-09](user-stories.md#us-30-ac-09) | §8 AgentAdapter interface; §8 Development and runtime agent instructions |
 | 5 | US-26: Audit workflow decisions and evidence | [US-26-AC-10](user-stories.md#us-26-ac-10), [US-26-AC-11](user-stories.md#us-26-ac-11), [US-26-AC-12](user-stories.md#us-26-ac-12), [US-26-AC-13](user-stories.md#us-26-ac-13) | §3 Component responsibilities; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation |
@@ -829,37 +829,39 @@ The former proposal-local `AC-01` through `AC-54` identifiers are retired. Histo
 
 ### Reference acceptance-test datasets
 - Small tabular classification dataset (scikit-learn/LightGBM).
-- Phase 2 predictive feature-comparison fixtures using a fixed approved baseline feature set, reference estimator/settings, metric/direction, and split protocol. Verify recorded gains/ties/regressions, reproducible scores within declared tolerances, training-only fitting, preserved run evidence and lineage, and rejection of unapproved estimator/protocol changes, protected-test access, and budget violations.
+- Milestone 2 predictive feature-comparison fixtures using a fixed approved baseline feature set, reference estimator/settings, metric/direction, and split protocol. Verify recorded gains/ties/regressions, reproducible scores within declared tolerances, training-only fitting, preserved run evidence and lineage, and rejection of unapproved estimator/protocol changes, protected-test access, and budget violations.
 - Tabular regression dataset (metrics and objective direction).
 - Small image classification dataset (PyTorch CPU; optional GPU).
-- Phase 3 PyTorch checkpoint fixtures restoring an emitted checkpoint through the documented model-implementation path in the recorded environment and verifying its declared state is usable (for example, restored weights produce expected predictions within declared tolerances). Cancel a managed training run after a checkpoint is available; verify training stops and the existing checkpoint, restoration metadata, logs, and terminal cancellation status remain retrievable. Verify preservation after forced termination without requiring a newly emitted checkpoint.
+- Milestone 3 PyTorch checkpoint fixtures restoring an emitted checkpoint through the documented model-implementation path in the recorded environment and verifying its declared state is usable (for example, restored weights produce expected predictions within declared tolerances). Cancel a managed training run after a checkpoint is available; verify training stops and the existing checkpoint, restoration metadata, logs, and terminal cancellation status remain retrievable. Verify preservation after forced termination without requiring a newly emitted checkpoint.
 - Notebook fixtures covering successful parameterized execution, cell errors, timeouts, and cancellation.
 - Negative fixtures for leakage, schema errors, missing artifacts, unauthorized access, and skipped approval gates.
 - Runtime-guidance fixtures covering task selection, conflicting instructions, harness-loader development/runtime separation, observable external-context capture and its limitations, managed bundle delivery, and resumption after source guidance changes.
 - Coding-assistant fixtures covering interactive CLI/API use without an adapter; a verified managed product/interface/version receiving a task, editing project code or notebooks, submitting managed execution, consuming development feedback, and stopping at an approval boundary; separate run/task cancellation, late results, unavailable assistant accounting, and rejection of agent-authored approvals or unauthorized access to protected resources.
-- Phase 5 recovery fixtures covering interruption after intent persistence but before submission, runner acceptance with a lost acknowledgement, completion before workflow persistence, tracking outages and interrupted finalization, repeated/concurrent submissions, concurrent recovery and stale owners, and conflicting or unknown status. Verify reuse of completed identities, review without blind resubmission, preserved reservations/consumed budgets without double counting, producer provenance and acquisition dataset lineage, and pending approval gates across restart.
+- Milestone 5 recovery fixtures covering interruption after intent persistence but before submission, runner acceptance with a lost acknowledgement, completion before workflow persistence, tracking outages and interrupted finalization, repeated/concurrent submissions, concurrent recovery and stale owners, and conflicting or unknown status. Verify reuse of completed identities, review without blind resubmission, preserved reservations/consumed budgets without double counting, producer provenance and acquisition dataset lineage, and pending approval gates across restart.
 - Experiment-input fixtures covering delegated decisions, all three algorithm modes, numeric/categorical search spaces, and rejected boundary violations.
 - User-supplied component fixtures covering project-local and pinned-dependency implementations, model persistence/restoration, stateful and stateless preparation, training-only fitting, duplicate identifiers, incompatible interfaces/prediction outputs, parameter validation, immutable-code approval, and component lineage.
 - Separate experiment-project fixtures covering pinned GitHub installation, agent-ml init and file conflicts, installed CLI/resources, generated notebooks, project-package imports, uncommitted source snapshots, interactive access boundaries, and restoration in a clean environment.
-- Phase 1 run-evidence fixtures covering capture before execution, frozen-source execution despite later working-tree edits, clean second-machine restoration with an uncommitted notebook edit and a required untracked helper, checksum verification, explicit missing/corrupted source/dependency/data failures, and independent output comparison linked to the original run.
+- Milestone 1 run-evidence fixtures covering capture before execution, frozen-source execution despite later working-tree edits, clean second-machine restoration with an uncommitted notebook edit and a required untracked helper, checksum verification, explicit missing/corrupted source/dependency/data failures, and independent output comparison linked to the original run.
 
-## 11. Phased Implementation Plan
+## 11. Milestone Delivery Plan
 
-Each implementation phase delivers the controls required by its corresponding story slice before the capability they govern becomes available. Early approvals may be developer-driven, but must be recorded, scoped, and enforced. Phase 1 includes execution/extraction authorization, access restrictions, budget enforcement, and independent artifact checks. Phase 2 adds dataset-assessment and split-protocol approval, approval of the baseline feature set and fixed reference estimator/settings and metric, training-only preprocessing/estimator fitting, independent validation scoring, and enforced protected-test isolation for predictive feature comparison. Phase 3 adds approval of broader model baselines, authorized final evaluation using independently enforced protected-test access, and developer approval of successful final evaluation. Phase 4 applies these controls to agent work, including component permissions, parameter boundaries, and stopping conditions. Phase 5 completes durable multi-phase coordination and recovery using the controls delivered earlier.
+Use the [repository planning terminology](../../README.md#planning-terminology). Milestones 1–6 correspond to the authoritative user-story milestones; Milestone 7 is optional future scope. Detailed plans divide each user story into implementation phases with granular tasks, required evidence, and an explicit developer approval gate at the end of each implementation phase. Label them with the story ID and local phase number, plus the milestone when a story spans milestones. Workflow phases in Sections 4–5 describe ML experiment execution.
 
-| Implementation phase | Deliverables | Exit criteria |
+Each milestone delivers the controls required by its assigned user stories before the capability they govern becomes available. Early approvals may be developer-driven, but must be recorded, scoped, and enforced. Milestone 1 includes execution/extraction authorization, access restrictions, budget enforcement, and independent artifact checks. Milestone 2 adds dataset-assessment and split-protocol approval, approval of the baseline feature set and fixed reference estimator/settings and metric, training-only preprocessing/estimator fitting, independent validation scoring, and enforced protected-test isolation for predictive feature comparison. Milestone 3 adds approval of broader model baselines, authorized final evaluation using independently enforced protected-test access, and developer approval of successful final evaluation. Milestone 4 applies these controls to agent work, including component permissions, parameter boundaries, and stopping conditions. Milestone 5 completes durable coordination across workflow phases and recovery using the controls delivered earlier.
+
+| Milestone | Deliverables | Exit criteria |
 |---|---|---|
 | 1. Data and harness foundation | GitHub-installable package pinned by full commit SHA, agent-ml CLI/init, packaged templates/guidance, bootstrap documentation, project configuration and locked environment, validation of developer-supplied brief/configuration decisions and versioned plan recording without an agent dependency, YAML search-space validation, schemas, local Python/notebook execution, extraction, immutable source/configuration bundles and versioned run manifests, verified dataset restoration and agent-free replay, basic validation and review, recorded scoped execution/extraction approvals, filesystem/credential/source access restrictions, runtime/experiment-count and applicable resource/cost/record limits, independent expected-artifact checks, MLflow tracking, local DVC/state storage, public API | Basic validation results approved; unauthorized access and unapproved work blocked for Python and notebooks, configured limits enforced, and expected artifacts independently checked before run acceptance; clean-environment GitHub install and initialization followed by validated, versioned plan recording and repeatable extraction/notebook execution in a separate project without agents or a manually maintained harness checkout; clean second-machine replay executes captured uncommitted notebook changes and a required untracked helper, verifies required evidence/data checksums, fails explicitly for missing or corrupted inputs, and passes the recorded output checks |
 | 2. EDA and feature pipelines | Dataset profiling (distributions, class balance where relevant, anomalies, and leakage diagnostics), versioned training/validation/protected-test split manifests respecting approved time/group constraints, dataset-assessment and split-protocol approval before dependent feature or modeling work, transformations, project-local registration of user-supplied stateful/stateless preparation, fitted-state persistence/restoration, DVC pipeline stages and lockfiles, lineage, minimal reference-estimator training/prediction and independent validation scoring for predictive feature comparison, approved baseline feature set and fixed estimator/settings and metric, protected-test isolation | Approved dataset assessment and split protocol; validated, reproducible feature artifacts with training-only fitting, including supplied preprocessing without harness modifications; reproducible baseline/candidate predictive comparisons under the fixed approved estimator and validation protocol with recorded gains/ties/regressions, preserved run evidence, enforced budgets, and protected-test access blocked |
-| 3. Model experimentation | Broader model experimentation beyond the phase 2 fixed reference estimator: scikit-learn, LightGBM, basic PyTorch, project-local custom model registration and parameter validation, model persistence/restoration, documented PyTorch checkpoint restoration with declared-state metadata and cancellation preservation, bounded hyperparameter evaluation, algorithm use/select/compare modes, approved baseline before candidate comparisons, independent protected-test isolation, authorized final evaluation, final-model review | Baseline approved before candidate comparisons; protected test data inaccessible to training code and exploratory kernels and accessible only to the independent evaluator for authorized final evaluation; successful final evaluation approved by the developer before completion; tabular and basic deep-learning runs tracked and assessed; emitted PyTorch checkpoints restored and verified usable through the model implementation; cancellation stops training and preserves available checkpoints, restoration metadata, logs, and terminal status, including after forced termination; supplied models run and undergo independent evaluation without harness modifications |
+| 3. Model experimentation | Broader model experimentation beyond the milestone 2 fixed reference estimator: scikit-learn, LightGBM, basic PyTorch, project-local custom model registration and parameter validation, model persistence/restoration, documented PyTorch checkpoint restoration with declared-state metadata and cancellation preservation, bounded hyperparameter evaluation, algorithm use/select/compare modes, approved baseline before candidate comparisons, independent protected-test isolation, authorized final evaluation, final-model review | Baseline approved before candidate comparisons; protected test data inaccessible to training code and exploratory kernels and accessible only to the independent evaluator for authorized final evaluation; successful final evaluation approved by the developer before completion; tabular and basic deep-learning runs tracked and assessed; emitted PyTorch checkpoints restored and verified usable through the model implementation; cancellation stops training and preserves available checkpoints, restoration metadata, logs, and terminal status, including after forced termination; supplied models run and undergo independent evaluation without harness modifications |
 | 4. Agent integration | Verified first managed coding-assistant adapter and documented interactive CLI/API use, project-local notebook/code generation, packaged/project runtime instruction loading and snapshots, structured feedback, inner-loop iteration with recorded approvals, enforced component/parameter/access boundaries, budgets, and stopping conditions | Agent revisions independently evaluated within approved scope; scope expansions blocked pending authorization; a concrete managed integration receives a task, edits project code/notebooks, submits managed execution, consumes development feedback, and stops at a developer approval boundary; run/task cancellation and guidance delivery verified; agent improves a model through user-reviewable notebooks within approved harness budgets, with assistant usage coverage explicit, without modifying the harness |
-| 5. Orchestration and approvals | Durable multi-phase workflow coordinating existing approvals and gates, submission identity and recovery contracts, second adapter; define concrete schemas, persistence, ownership/fencing, and runner/tracking reconciliation mechanisms | Supervised multi-phase workflow preserves and coordinates earlier controls through interruption and recovery; recovery fixtures demonstrate duplicate-free submission/completed-run reuse, safe review of uncertainty, retry-safe finalization, preserved budgets/provenance, and rejection of stale recovery owners |
+| 5. Orchestration and approvals | Durable workflow spanning multiple ML workflow phases coordinating existing approvals and gates, submission identity and recovery contracts, second adapter; define concrete schemas, persistence, ownership/fencing, and runner/tracking reconciliation mechanisms | Supervised workflow spanning multiple ML workflow phases preserves and coordinates earlier controls through interruption and recovery; recovery fixtures demonstrate duplicate-free submission/completed-run reuse, safe review of uncertainty, retry-safe finalization, preserved budgets/provenance, and rejection of stale recovery owners |
 | 6. Iterative data acquisition | Gap diagnosis, proposals, approved extraction, retraining comparisons | Outer-loop improvement with lineage and budgets |
 | 7. Advanced capabilities (after proof of concept) | Ray-backed runner for parallel experiments and hyperparameter trials, followed by distributed training as needed; Optuna, active learning, labeling, augmentation, specialized agents, containers | Ray execution preserves harness governance and lineage; extensible multi-agent workflow with advanced compute/data strategies |
 
-Phase 1 delivers reproducible extraction, basic validation and review, recorded Python/notebook execution, and source-data/run restoration without requiring an agent. Developers may use external coding assistants to prepare inputs and code; harness-managed agent proposals and iteration are introduced in phase 4. Detailed profiling and split manifests are introduced in phase 2, before dependent feature or modeling work.
+Milestone 1 delivers reproducible extraction, basic validation and review, recorded Python/notebook execution, and source-data/run restoration without requiring an agent. Developers may use external coding assistants to prepare inputs and code; harness-managed agent proposals and iteration are introduced in milestone 4. Detailed profiling and split manifests are introduced in milestone 2, before dependent feature or modeling work.
 
-The phase order is an implementation sequence, not a restriction on the final development workflow. Basic PyTorch is included early; advanced distributed deep learning comes later.
+The milestone order is a product delivery sequence; workflow phases describe execution within an ML experiment. Basic PyTorch is included early; advanced distributed deep learning comes later.
 
 ## 12. Proposed Repository Layout
 
@@ -977,7 +979,7 @@ Executed notebook snapshots, model artifacts, DVC content/cache, and durable wor
 
 **Status: Accepted**
 
-**Decision:** The harness will implement a model-improvement inner loop and data-improvement outer loop. The orchestrator coordinates both, while the harness executes and independently validates actions. Developers approve phase boundaries and acquisition scope changes.
+**Decision:** The harness will implement a model-improvement inner loop and data-improvement outer loop. The orchestrator coordinates both, while the harness executes and independently validates actions. Developers approve workflow phase boundaries and acquisition scope changes.
 
 **Rationale:** Poor model performance can reflect insufficient or unrepresentative data, not just inadequate features, architecture, or hyperparameters. Feedback must support both model and dataset improvement.
 
@@ -1001,7 +1003,7 @@ Executed notebook snapshots, model artifacts, DVC content/cache, and durable wor
 - **ADR-003:** Start with a lightweight durable state-machine orchestrator; evaluate agent orchestration frameworks if complexity requires.
 - **ADR-004:** Hybrid ML operations: standardized capabilities plus sandboxed custom Python code, with project-local registration of user-supplied algorithms and feature preparation through versioned public interfaces. Components may come from project code or pinned dependencies; using them requires no harness modifications. Supplied code is immutable by default, with explicit developer approval required to change immutable components. This proposed decision remains pending.
 - **ADR-005:** Choose configurable project-associated DVC storage, MLflow backend/artifact storage, and durable workflow-state configuration, including single-machine local defaults; DVC data versioning/pipelines and MLflow experiment tracking are selected stack components.
-- **ADR-006:** Define the authorization and isolation model for data connectors, generated code, and interactive notebook kernels, including protected-test isolation, project/harness filesystem boundaries, assistant-process/tool/workspace access in interactive and managed modes, protected approval/evaluator resources, and a developer-authenticated approval channel. The mechanism remains pending; it must enforce each phase’s required access and authorization controls before the governed capability is delivered. Phase 1 requires execution/extraction boundaries, phase 3 requires protected-test isolation, and phase 4 extends these boundaries to agent and interactive work.
+- **ADR-006:** Define the authorization and isolation model for data connectors, generated code, and interactive notebook kernels, including protected-test isolation, project/harness filesystem boundaries, assistant-process/tool/workspace access in interactive and managed modes, protected approval/evaluator resources, and a developer-authenticated approval channel. The mechanism remains pending; it must enforce each milestone’s required access and authorization controls before the governed capability is delivered. Milestone 1 requires execution/extraction boundaries, milestone 3 requires protected-test isolation, and milestone 4 extends these boundaries to agent and interactive work.
 - **ADR-007 remaining details:** Finalize the repository URL/distribution name, supported Python versions, API compatibility/versioning, configuration schemas, and remaining CLI/API commands; GitHub installation, full commit pinning, and the agent-ml CLI/init sequence are selected above.
 
 ## 15. Next Steps
@@ -1009,7 +1011,7 @@ Executed notebook snapshots, model artifacts, DVC content/cache, and durable wor
 1. Ratify pending architectural decisions and clarify nonfunctional targets.
 2. Reconcile this design document against the authoritative [user stories and acceptance criteria](user-stories.md), recording design gaps and unresolved decisions.
 3. Define JSON Schemas and Python models for core contracts.
-4. Build the Phase 1 vertical slice in a separate user project: initialize/install → extract → validate → snapshot → run notebook → evaluate → track, recording both experiment and harness identities.
+4. Build the Milestone 1 in a separate user project: initialize/install → extract → validate → snapshot → run notebook → evaluate → track, recording both experiment and harness identities.
 5. Add inner-loop agent iteration, supervised orchestration, and then outer-loop acquisition.
 
 **Guiding principle:** Build an ML experimentation and data-development harness that agents can use, rather than a framework that hardcodes one particular agent's reasoning or workflow.

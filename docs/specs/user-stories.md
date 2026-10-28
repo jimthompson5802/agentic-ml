@@ -1,21 +1,23 @@
-| Slice | User-visible outcome | Stories |
+Planning terms follow the [repository terminology](../../README.md#planning-terminology): milestones group user stories into usable product increments, implementation phases group tasks within a story with developer approval gates, and workflow phases describe ML experiment execution.
+
+| Milestone | User-visible outcome | Stories |
 |---|---|---|
 | **1. Run and record a reproducible experiment** | Initialize a separate project, extract and validate data, execute a notebook, inspect its recorded results, and reproduce the run. | US-01, US-02, US-03, US-05, US-09, US-10, US-11, validation portion of US-12, US-13; initial US-26 and US-27 |
 | **2. Assess data and build reproducible feature pipelines** | Profile data, approve versioned splits, restore fitted feature pipelines and outputs, and compare predictive performance using a fixed approved reference estimator. | assessment/split portion of US-12; US-14, US-15; preprocessing portion of US-16; pipeline portion of US-27 |
 | **3. Train, tune, and independently evaluate models** | Compare baselines and candidate models within declared boundaries and obtain an independent assessment. | US-06, US-18, US-19, US-20, US-21, US-24; model portion of US-16; reporting portion of US-26 |
-| **4. Let an agent improve an experiment** | Generate reviewable notebooks and improve a model using development feedback within an approved phase. | US-04, US-07, US-08, US-17, US-22; first-adapter portion of US-30 |
-| **5. Supervise and resume the complete workflow** | Run the multi-phase workflow with durable approvals, interruption recovery, and interchangeable agents. | US-23, US-25; second-adapter portion of US-30; audit portion of US-26 |
+| **4. Let an agent improve an experiment** | Generate reviewable notebooks and improve a model using development feedback within an approved workflow phase. | US-04, US-07, US-08, US-17, US-22; first-adapter portion of US-30 |
+| **5. Supervise and resume the complete workflow** | Run the workflow spanning multiple ML workflow phases with durable approvals, interruption recovery, and interchangeable agents. | US-23, US-25; second-adapter portion of US-30; audit portion of US-26 |
 | **6. Improve the dataset through authorized acquisition** | Diagnose a data limitation, authorize acquisition, version the resulting data, and measure the effect of retraining. | US-28, US-29 |
 
 This document is the authoritative source of product requirements and acceptance criteria. The stories originated from version 0.10 of the [Agentic ML Development Harness design document](agentic-ml-harness-design.md); the design document now describes the supporting design and references the criteria defined here. These requirements describe proposed behavior, not implemented capabilities or finalized interfaces.
 
-Acceptance criteria use stable IDs of the form `US-<story>-AC-<criterion>`, such as `US-01-AC-01`. Criterion numbers are unique within a story and continue across slices. Preserve IDs when wording changes or criteria move; assign the next unused number to a new criterion and never reuse a retired ID. Architecture references identify supporting design sections rather than defining another set of requirements.
+Acceptance criteria use stable IDs of the form `US-<story>-AC-<criterion>`, such as `US-01-AC-01`. Criterion numbers are unique within a story and continue across milestones. Preserve IDs when wording changes or criteria move; assign the next unused number to a new criterion and never reuse a retired ID. Architecture references identify supporting design sections rather than defining another set of requirements.
 
-Slices are cumulative. Repeated story identifiers describe incremental delivery of the same user outcome. Access controls, applicable approvals, budget enforcement, independent validation, and provenance accompany each capability when introduced; Slice 5 completes their durable multi-phase orchestration. The acceptance criteria below define verifiable outcomes without settling its pending API, configuration-schema, or isolation-design decisions.
+Milestones are cumulative. Repeated story identifiers describe incremental delivery of the same user outcome. Access controls, applicable approvals, budget enforcement, independent validation, and provenance accompany each capability when introduced; Milestone 5 completes their durable orchestration across workflow phases. The acceptance criteria below define verifiable outcomes without settling its pending API, configuration-schema, or isolation-design decisions.
 
-## Slice 1: Run and record a reproducible experiment
+## Milestone 1: Run and record a reproducible experiment
 
-Starting with Python and local raw data, the developer creates a separate experiment repository and completes an extraction-to-recorded-notebook run without requiring an agent or a manually maintained harness checkout. Developers may use an external coding assistant to prepare inputs and code and invoke the public harness CLI/API without an agent adapter; the harness must validate, record, and execute supplied inputs without an agent dependency. This slice covers extraction, snapshots, basic validation and review, recorded execution, and restoration. Detailed profiling and train/validation/protected-test splits are introduced in Slice 2; Slice 1 versioning and restoration cover the source dataset and recorded run inputs.
+Starting with Python and local raw data, the developer creates a separate experiment repository and completes an extraction-to-recorded-notebook run without requiring an agent or a manually maintained harness checkout. Developers may use an external coding assistant to prepare inputs and code and invoke the public harness CLI/API without an agent adapter; the harness must validate, record, and execute supplied inputs without an agent dependency. This milestone covers extraction, snapshots, basic validation and review, recorded execution, and restoration. Detailed profiling and train/validation/protected-test splits are introduced in Milestone 2; Milestone 1 versioning and restoration cover the source dataset and recorded run inputs.
 
 ### US-01: Install a pinned harness version
 
@@ -121,9 +123,9 @@ As a data scientist, I want basic data validation and review so that I can ident
 Acceptance criteria:
 
 - <a id="us-12-ac-01"></a> **US-12-AC-01:** Validation checks schema, row counts, types, nulls, duplicates, and configured quality rules, reporting mismatches and failures.
-- <a id="us-12-ac-05"></a> **US-12-AC-05:** Basic validation results are presented for approval before the dataset is accepted for the Slice 1 run.
+- <a id="us-12-ac-05"></a> **US-12-AC-05:** Basic validation results are presented for approval before the dataset is accepted for the Milestone 1 run.
 
-Architecture references: §4 Data extraction and EDA; §5 Development phases and gates; §6 Data extraction requirements; §9 Independent evaluation.
+Architecture references: §4 Data extraction and EDA; §5 Workflow phases and gates; §6 Data extraction requirements; §9 Independent evaluation.
 
 ### US-13: Version and restore datasets
 
@@ -147,7 +149,7 @@ Acceptance criteria:
 - <a id="us-26-ac-01"></a> **US-26-AC-01:** MLflow records run status, effective parameters, available metrics, outputs, and artifact references, linked to the harness run identifier.
 - <a id="us-26-ac-02"></a> **US-26-AC-02:** Each run links to the exact DVC dataset state, experiment Git revision, source snapshots including uncommitted changes, and configuration checksums.
 - <a id="us-26-ac-03"></a> **US-26-AC-03:** Provenance includes the harness repository URL, full commit SHA, package version, build identity where available, and project lockfile/environment identity.
-- <a id="us-26-ac-04"></a> **US-26-AC-04:** Source snapshots include notebooks, imported helpers, project code, configuration, and applicable runtime guidance; later slices extend these records to components, pipelines, and approvals.
+- <a id="us-26-ac-04"></a> **US-26-AC-04:** Source snapshots include notebooks, imported helpers, project code, configuration, and applicable runtime guidance; later milestones extend these records to components, pipelines, and approvals.
 - <a id="us-26-ac-05"></a> **US-26-AC-05:** Basic execution correctness is independently checked against expected artifacts; notebook completion alone does not establish experiment acceptance.
 
 Architecture references: §3 Component responsibilities; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation.
@@ -165,9 +167,9 @@ Acceptance criteria:
 
 Architecture references: §8 Project initialization and installation; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation.
 
-## Slice 2: Assess data and build reproducible feature pipelines
+## Milestone 2: Assess data and build reproducible feature pipelines
 
-Starting with versioned source data, the developer profiles the dataset, creates versioned training/validation/protected-test splits respecting time and group constraints, and obtains approval of the assessment and split protocol before dependent feature or modeling work. The developer then prepares features, compares their predictive performance using a fixed approved reference estimator, metric, and split protocol, and restores fitted preprocessing and pipeline outputs. Slice 2 includes the minimal training/evaluation capability for these comparisons; broader model experimentation remains in Slice 3.
+Starting with versioned source data, the developer profiles the dataset, creates versioned training/validation/protected-test splits respecting time and group constraints, and obtains approval of the assessment and split protocol before dependent feature or modeling work. The developer then prepares features, compares their predictive performance using a fixed approved reference estimator, metric, and split protocol, and restores fitted preprocessing and pipeline outputs. Milestone 2 includes the minimal training/evaluation capability for these comparisons; broader model experimentation remains in Milestone 3.
 
 ### US-12: Assess data quality and define splits
 
@@ -179,7 +181,7 @@ Acceptance criteria:
 - <a id="us-12-ac-03"></a> **US-12-AC-03:** A versioned split manifest records training, validation, and protected-test partitions, respecting approved time or group constraints.
 - <a id="us-12-ac-04"></a> **US-12-AC-04:** Dataset assessment and split protocol are presented for approval before dependent feature or modeling work.
 
-Architecture references: §4 Data extraction and EDA; §5 Development phases and gates; §6 Data extraction requirements; §9 Independent evaluation.
+Architecture references: §4 Data extraction and EDA; §5 Workflow phases and gates; §6 Data extraction requirements; §9 Independent evaluation.
 
 ### US-14: Generate and compare feature pipelines
 
@@ -189,11 +191,11 @@ Acceptance criteria:
 
 - <a id="us-14-ac-01"></a> **US-14-AC-01:** Feature plans identify ordered components, effective parameters, input/output schemas, fitting scope, and modification permissions.
 - <a id="us-14-ac-02"></a> **US-14-AC-02:** The harness executes candidate transformations and records their definitions, dependencies, outputs, and lineage.
-- <a id="us-14-ac-03"></a> **US-14-AC-03:** Candidate feature sets are compared for predictive performance against a fixed approved baseline feature set using the same fixed approved reference estimator, estimator settings, metric, and split protocol. Improvement follows the declared metric direction; comparisons record gains, ties, or regressions. Slice 2 includes the minimal training/evaluation capability needed for this comparison; broader model experimentation remains in Slice 3.
-- <a id="us-14-ac-04"></a> **US-14-AC-04:** Feature artifacts trace back to their source datasets and are independently validated before phase advancement.
-- <a id="us-14-ac-05"></a> **US-14-AC-05:** This slice supports supplied or explicitly authored candidates; agent generation is exercised when agent integration arrives in Slice 4.
+- <a id="us-14-ac-03"></a> **US-14-AC-03:** Candidate feature sets are compared for predictive performance against a fixed approved baseline feature set using the same fixed approved reference estimator, estimator settings, metric, and split protocol. Improvement follows the declared metric direction; comparisons record gains, ties, or regressions. Milestone 2 includes the minimal training/evaluation capability needed for this comparison; broader model experimentation remains in Milestone 3.
+- <a id="us-14-ac-04"></a> **US-14-AC-04:** Feature artifacts trace back to their source datasets and are independently validated before workflow phase advancement.
+- <a id="us-14-ac-05"></a> **US-14-AC-05:** This milestone supports supplied or explicitly authored candidates; agent generation is exercised when agent integration arrives in Milestone 4.
 
-Architecture references: §7 Feature Engineering; §5 Development phases and gates.
+Architecture references: §7 Feature Engineering; §5 Workflow phases and gates.
 
 ### US-15: Preserve training-only preprocessing
 
@@ -236,7 +238,7 @@ Acceptance criteria:
 
 Architecture references: §8 Project initialization and installation; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation.
 
-## Slice 3: Train, tune, and independently evaluate models
+## Milestone 3: Train, tune, and independently evaluate models
 
 Starting with approved features, the developer establishes baselines, compares and tunes candidates within declared limits, and obtains an independent assessment and final report.
 
@@ -315,14 +317,14 @@ Acceptance criteria:
 - <a id="us-21-ac-01"></a> **US-21-AC-01:** The evaluator checks successful execution and required artifacts independently of agent assertions.
 - <a id="us-21-ac-02"></a> **US-21-AC-02:** Scientific-validity checks reject split violations, improper preprocessing fitting, and leakage.
 - <a id="us-21-ac-03"></a> **US-21-AC-03:** Approved metrics and baseline comparisons are computed consistently, respecting optimization direction.
-- <a id="us-21-ac-04"></a> **US-21-AC-04:** Defined folds, slices, or stress tests assess robustness; repeated runs are checked against explicit reproducibility tolerances.
+- <a id="us-21-ac-04"></a> **US-21-AC-04:** Defined folds, data slices, or stress tests assess robustness; repeated runs are checked against explicit reproducibility tolerances.
 - <a id="us-21-ac-05"></a> **US-21-AC-05:** Structured evaluation results distinguish execution failure, scientific invalidity, and insufficient model quality.
 
 Architecture references: §9 Independent evaluation.
 
 ### US-24: Protect final holdout evaluation
 
-As a data scientist, I want protected holdout evaluation reserved for the authorized final phase so that final-test results do not influence development.
+As a data scientist, I want protected holdout evaluation reserved for the authorized final workflow phase so that final-test results do not influence development.
 
 Acceptance criteria:
 
@@ -347,9 +349,9 @@ Acceptance criteria:
 
 Architecture references: §3 Component responsibilities; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation.
 
-## Slice 4: Let an agent improve an experiment
+## Milestone 4: Let an agent improve an experiment
 
-An agent resolves delegated choices, generates notebooks, and improves a model using development feedback while the developer retains control of phase scope and component permissions.
+An agent resolves delegated choices, generates notebooks, and improves a model using development feedback while the developer retains control of workflow phase scope and component permissions.
 
 ### US-04: Approve delegated experiment decisions
 
@@ -410,10 +412,10 @@ As a data scientist, I want agents to revise experiments using structured develo
 Acceptance criteria:
 
 - <a id="us-22-ac-01"></a> **US-22-AC-01:** The agent receives structured evaluation feedback and produces revised notebooks or code with an evidence-based explanation.
-- <a id="us-22-ac-02"></a> **US-22-AC-02:** Revisions remain within the current approved phase, component permissions, parameter boundaries, access scope, and budgets.
+- <a id="us-22-ac-02"></a> **US-22-AC-02:** Revisions remain within the current approved workflow phase, component permissions, parameter boundaries, access scope, and budgets.
 - <a id="us-22-ac-03"></a> **US-22-AC-03:** Each revision undergoes managed execution and independent evaluation, preserving its source snapshots and results.
 - <a id="us-22-ac-04"></a> **US-22-AC-04:** Iteration stops on success, budget exhaustion, lack of improvement, unrecoverable failure, policy violation, or developer cancellation.
-- <a id="us-22-ac-05"></a> **US-22-AC-05:** Phase returns and scope expansions await authorization; protected-test feedback never enters the revision loop.
+- <a id="us-22-ac-05"></a> **US-22-AC-05:** Workflow phase returns and scope expansions await authorization; protected-test feedback never enters the revision loop.
 
 Architecture references: §4 Hierarchical Closed-Loop Workflow; §9 Independent evaluation.
 
@@ -431,23 +433,23 @@ Acceptance criteria:
 
 Architecture references: §8 AgentAdapter interface; §8 Development and runtime agent instructions.
 
-## Slice 5: Supervise and resume the complete workflow
+## Milestone 5: Supervise and resume the complete workflow
 
-The developer supervises all development phases through durable, scoped approval decisions, recovers interrupted work, and can use another agent adapter without changing experiment contracts.
+The developer supervises all workflow phases through durable, scoped approval decisions, recovers interrupted work, and can use another agent adapter without changing experiment contracts.
 
-### US-23: Approve phase progression and scope changes
+### US-23: Approve workflow phase progression and scope changes
 
-As a data scientist, I want to approve, revise, or reject phase progression using validated evidence so that I supervise consequential decisions.
+As a data scientist, I want to approve, revise, or reject workflow phase progression using validated evidence so that I supervise consequential decisions.
 
 Acceptance criteria:
 
-- <a id="us-23-ac-01"></a> **US-23-AC-01:** Initial plan approval completes problem definition; later phase advancement is blocked until sufficient independent evidence and developer approval are recorded.
+- <a id="us-23-ac-01"></a> **US-23-AC-01:** Initial plan approval completes problem definition; later workflow phase advancement is blocked until sufficient independent evidence and developer approval are recorded.
 - <a id="us-23-ac-02"></a> **US-23-AC-02:** Each decision records an authenticated developer reviewer, reviewed plan/configuration identity and scope, decision, timestamp, and associated evidence in durable project-associated state. Agent actions and assistant tool-execution permissions cannot stand in for developer approval.
-- <a id="us-23-ac-03"></a> **US-23-AC-03:** Revision authorizes work only within its recorded scope; phase returns, expanded permissions, and changed evaluation criteria require authorization before execution.
-- <a id="us-23-ac-04"></a> **US-23-AC-04:** Phases can be skipped only when the approved plan identifies valid existing artifacts supporting the skip.
+- <a id="us-23-ac-03"></a> **US-23-AC-03:** Revision authorizes work only within its recorded scope; workflow phase returns, expanded permissions, and changed evaluation criteria require authorization before execution.
+- <a id="us-23-ac-04"></a> **US-23-AC-04:** Workflow phases can be skipped only when the approved plan identifies valid existing artifacts supporting the skip.
 - <a id="us-23-ac-05"></a> **US-23-AC-05:** Rejection or cancellation preserves results; successful final evaluation requires explicit model approval before completion.
 
-Architecture references: §4 Hierarchical Closed-Loop Workflow; §5 Development phases and gates; §9 Governance.
+Architecture references: §4 Hierarchical Closed-Loop Workflow; §5 Workflow phases and gates; §9 Governance.
 
 ### US-25: Resume interrupted workflows
 
@@ -455,7 +457,7 @@ As a data scientist, I want interrupted workflows to resume from durable state w
 
 Acceptance criteria:
 
-- <a id="us-25-ac-01"></a> **US-25-AC-01:** Project-associated durable state preserves phase progress, run identifiers, evidence, approvals, budgets, and terminal or reviewable outcomes.
+- <a id="us-25-ac-01"></a> **US-25-AC-01:** Project-associated durable state preserves workflow phase progress, run identifiers, evidence, approvals, budgets, and terminal or reviewable outcomes.
 - <a id="us-25-ac-02"></a> **US-25-AC-02:** Recovery reconciles recorded work and resumes without duplicating completed runs or bypassing pending gates.
 - <a id="us-25-ac-03"></a> **US-25-AC-03:** Resumed tasks use the preserved compatible configuration and runtime instruction bundle, even if source guidance has changed.
 - <a id="us-25-ac-04"></a> **US-25-AC-04:** Cancelled, failed, budget-exhausted, and review-required outcomes retain evidence and do not silently authorize further work.
@@ -482,13 +484,13 @@ As a reviewer, I want run lineage connected to workflow decisions so that I can 
 Acceptance criteria:
 
 - <a id="us-26-ac-10"></a> **US-26-AC-10:** Harness manifests connect runs, MLflow records, DVC state, configuration versions, runtime bundles, and approval records.
-- <a id="us-26-ac-11"></a> **US-26-AC-11:** The audit trail identifies the scope authorizing each phase, approved scope changes, and the evidence used for each decision.
+- <a id="us-26-ac-11"></a> **US-26-AC-11:** The audit trail identifies the scope authorizing each workflow phase, approved scope changes, and the evidence used for each decision.
 - <a id="us-26-ac-12"></a> **US-26-AC-12:** Bidirectional run references allow lookup from a harness result to its MLflow run and from the tracking record to harness provenance.
 - <a id="us-26-ac-13"></a> **US-26-AC-13:** Resumption and reuse preserve original producer provenance and the decisions authorizing subsequent use.
 
 Architecture references: §3 Component responsibilities; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation.
 
-## Slice 6: Improve the dataset through authorized acquisition
+## Milestone 6: Improve the dataset through authorized acquisition
 
 The developer reviews evidence of data limitations, authorizes a bounded acquisition, and evaluates the effect of the resulting dataset through approved downstream work.
 
@@ -498,7 +500,7 @@ As a data scientist, I want evidence-backed data-gap diagnoses and acquisition p
 
 Acceptance criteria:
 
-- <a id="us-28-ac-01"></a> **US-28-AC-01:** Diagnosis records evidence of data deficiencies, such as underrepresented classes or slices, using approved data and development evaluation results.
+- <a id="us-28-ac-01"></a> **US-28-AC-01:** Diagnosis records evidence of data deficiencies, such as underrepresented classes or data slices, using approved data and development evaluation results.
 - <a id="us-28-ac-02"></a> **US-28-AC-02:** A structured proposal records its reason, evidence, acquisition hypothesis, source, strategy, expected benefit, costs, limits, and required authorization.
 - <a id="us-28-ac-03"></a> **US-28-AC-03:** Expected benefit is presented as a hypothesis rather than a guaranteed improvement.
 - <a id="us-28-ac-04"></a> **US-28-AC-04:** Proposals do not use protected final-test feedback or expand access, evaluation protocols, or budgets without approval.
@@ -514,7 +516,7 @@ Acceptance criteria:
 - <a id="us-29-ac-01"></a> **US-29-AC-01:** Acquisition is blocked without recorded authorization covering source, strategy, scope, and limits; approved in-scope activity need not request permission for every operation.
 - <a id="us-29-ac-02"></a> **US-29-AC-02:** Execution enforces source permissions and cost, record, runtime, and compute budgets, preserving evidence when a limit is reached.
 - <a id="us-29-ac-03"></a> **US-29-AC-03:** Acquired data is validated and versioned with source lineage; synthetic or augmented data is explicitly identified as distinct from observed data.
-- <a id="us-29-ac-04"></a> **US-29-AC-04:** Returning to validation/EDA and downstream development requires the applicable phase authorization, with complete audit records.
+- <a id="us-29-ac-04"></a> **US-29-AC-04:** Returning to validation/EDA and downstream development requires the applicable workflow phase authorization, with complete audit records.
 - <a id="us-29-ac-05"></a> **US-29-AC-05:** Before-and-after model comparisons use consistent approved evaluation protocols and link results to the corresponding dataset versions.
 - <a id="us-29-ac-06"></a> **US-29-AC-06:** The acquisition loop stops on success, budget exhaustion, lack of improvement, unrecoverable failure, policy violation, or cancellation, preserving a reviewable outcome.
 - <a id="us-29-ac-07"></a> **US-29-AC-07:** Resumption after acquisition retains approvals, budget usage, dataset lineage, and completed-run identities; advanced acquisition strategies remain deferred according to the design document's implementation plan.

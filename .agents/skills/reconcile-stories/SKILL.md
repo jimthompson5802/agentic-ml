@@ -15,7 +15,7 @@ against the repository root, not the skill directory.
 ## Authority and scope
 
 - User stories and their acceptance criteria define required behavior.
-- Slice descriptions and the summary table define delivery expectations.
+- Milestone descriptions and the summary table define delivery expectations.
 - The design document explains how the architecture supports those requirements.
 - Design acceptance criteria are supporting design assertions, not
   independent authority to expand product scope.
@@ -39,14 +39,14 @@ For a limited review, state exclusions and inspect relevant dependencies.
 
 ### 2. Inventory the authoritative requirements
 
-Extract each story ID, slice assignment, user outcome, and acceptance
+Extract each story ID, milestone assignment, user outcome, and acceptance
 criterion. Assign report-local references to acceptance criteria that
-lack identifiers, such as `US-09 / slice 1 / criterion 2`.
+lack identifiers, such as `US-09 / milestone 1 / criterion 2`.
 
-Treat repeated story IDs across slices as incremental delivery.
+Treat repeated story IDs across milestones as incremental delivery.
 Check whether their combined requirements and sequencing are consistent.
 
-Identify conflicts between the summary table, slice descriptions,
+Identify conflicts between the summary table, milestone descriptions,
 story text, and acceptance criteria. Report these as story decisions
 needed rather than silently choosing an interpretation.
 
@@ -80,7 +80,7 @@ Classify each as:
 
 - Story-backed behavior.
 - Necessary implementation detail supporting identified stories.
-- Optional or future capability clearly outside committed slice scope.
+- Optional or future capability clearly outside committed milestone scope.
 - Unsupported product requirement requiring a scope decision.
 
 An implementation detail need not become a user story. Explain its
@@ -90,11 +90,11 @@ For unsupported product requirements, recommend removal, explicit
 deferral, or a user decision about adding a story. Do not automatically
 expand the stories to match the design document.
 
-### 5. Check slice feasibility and cross-cutting controls
+### 5. Check milestone feasibility and cross-cutting controls
 
-Compare the design document's implementation sequence with the story slices.
+Compare the design document's implementation sequence with the story milestones.
 
-Identify dependencies required before a slice can deliver its stated
+Identify dependencies required before a milestone can deliver its stated
 outcome. Distinguish partial delivery from claims of complete coverage.
 
 Check that approvals, access restrictions, protected evaluation data,
@@ -111,7 +111,7 @@ Present:
 
 1. Baseline: documents reviewed and any scope limitations.
 2. Coverage matrix: one row per story acceptance criterion, with its
-   slice, design document references, status, and any finding ID.
+   milestone, design document references, status, and any finding ID.
 3. Findings: actionable discrepancies, grouped by severity.
 4. Decisions needed: unresolved story conflicts or scope choices.
 5. Proposed edits: concrete replacement or addition text for findings
@@ -128,7 +128,7 @@ For each finding include:
 Use these severity levels:
 
 - High: contradicts required behavior, omits a required control, or
-  prevents delivery of a stated slice outcome.
+  prevents delivery of a stated milestone outcome.
 - Medium: partial support, unsupported scope, or ambiguity affecting
   implementation or verification.
 - Low: terminology, traceability, or editorial inconsistencies that
