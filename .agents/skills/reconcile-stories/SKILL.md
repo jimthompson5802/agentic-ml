@@ -77,6 +77,8 @@ Check criteria and required outcomes for observable behavior and sufficient veri
 
 ### 6. Produce the reconciliation report
 
+Include the report creation date and time in the review filename using `yyyy-mm-dd-hh-mm` (24-hour local time), for example `reconciliation-review-2026-10-28-14-30.md`. Preserve the requested or repository-defined directory and descriptive filename prefix.
+
 Present:
 
 1. Baseline: reviewed sources, their authority roles, and scope or input limitations.
