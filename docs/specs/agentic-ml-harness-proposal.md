@@ -1,6 +1,6 @@
 # Agentic ML Development Harness — Architecture Proposal
 
-**Version:** 0.7
+**Version:** 0.10
 **Status:** Proposed specification; ADR-001 accepted; ADR-007 installation decisions accepted
 **Date:** 2026-10-27
 
@@ -103,26 +103,36 @@ The orchestrator operates on an explicitly selected experiment project and envir
 
 ```mermaid
 flowchart TD
-    A[Define Objectives and Acceptance Criteria] --> B[Extract / Acquire Initial Data]
-    B --> C[EDA and Data Validation]
-    C --> D[Feature Engineering]
-    D --> E[Train Candidate Models]
-    E --> F[Evaluate and Compare]
-    F --> G{Acceptance Criteria Met?}
-    G -->|Yes| H[Developer Review / Phase Approval]
-    H -->|Approved| Z[Finalize or Advance]
-    H -->|Changes requested| I[Diagnose Gaps]
-    G -->|No| I
-    I --> J{Recommended Next Action}
-    J -->|Improve features| D
-    J -->|Tune / change model| E
-    J -->|Data deficiency| K[Data Acquisition Proposal]
-    K --> L{Acquisition Authorized?}
-    L -->|Yes| M[Acquire / Label / Augment Data]
-    M --> N[Validate and Version Dataset]
-    N --> C
-    L -->|No| I
+    A[Define Objectives, Components, and Boundaries] --> B[Developer Approves Plan]
+    B --> C["Execute Authorized Phase (see Phase Descriptions Below)"]
+    C --> D[Validate Evidence]
+    D --> E[Developer Reviews Phase]
+    E -->|Advance| F[Next Phase]
+    F --> C
+    E -->|Revise| G[Revise Within Approved Scope]
+    G --> C
+    E -->|Approve Final Model| H[Complete]
+    E -->|Reject or Stop| I[Preserve Results and Stop]
 ```
+
+The diagram summarizes the phase cycle. The individual phases are:
+
+1. **Problem definition:** Define the objective, target, metrics, data sources, allowed algorithms, supplied components, constraints, and budgets. Approve the task contract and plan.
+2. **Data extraction and EDA:** Obtain and version data, inspect its quality and distributions, and establish training/validation/test splits. Approve the dataset assessment and split protocol.
+3. **Feature engineering:** Use supplied preprocessing or develop transformations and feature sets. Fit stateful preprocessing only on training data. Review the validated pipeline and lineage.
+4. **Baseline modeling:** Train simple, reproducible reference models. Approve baseline results for later comparisons.
+5. **Model development:** Train and compare candidate models, including user-supplied algorithms, and improve them within approved boundaries. Review candidate evidence.
+6. **Optimization:** Tune hyperparameters within the declared search space and budgets. Approve the optimization summary and candidate for final evaluation.
+7. **Final evaluation:** Evaluate the selected model on the protected holdout, check robustness and reproducibility, and produce the final report. Approve or reject the model.
+
+**Each phase transition requires approval.** Agents can iterate within an approved phase. Valid existing artifacts can support skipping a phase when that is approved in the plan. Section 5 defines the gate evidence for each phase.
+
+Data acquisition is an activity that can trigger a return to earlier phases, rather than an eighth phase. Supplied components and authorized data acquisition fit within “Execute Authorized Phase”; their detailed requirements appear in Sections 6–8. The following rules apply:
+
+- **Phases:** Initial plan approval completes problem definition. Execution then follows the configured phases in Section 5: data extraction and EDA → feature engineering → baseline modeling → model development → optimization → final evaluation. Each phase approval authorizes entry to the next phase and its recorded scope.
+- **Iteration:** Agents may iterate within the current approved phase, component permissions, parameter boundaries, access scope, and budgets without approval for every run. Evidence is independently validated against phase-specific requirements before developer review; only sufficient evidence permits advancement.
+- **Scope changes:** Phase returns, expanded permissions, and changes to immutable components require authorization before execution. Authorized changes are recorded durably; changes to immutable code, allowed algorithms, or data-access scope create a new versioned experiment configuration. Acquisition requires recorded authorization covering its source, strategy, and limits, followed by authorized validation/EDA and downstream work.
+- **Final evaluation:** Protected-test evaluation occurs only in its authorized final phase. Its results cannot feed feature, model, or acquisition improvement loops, so the revision arrow does not apply to protected-test feedback. Unsuccessful final evaluation ends in rejection or review; any further development requires a separately approved evaluation protocol that preserves holdout protection. Completion requires developer approval of successful final evaluation.
 
 **Inner loop:** feature engineering → training/tuning → evaluation → evidence-based revision.  
 **Outer loop:** diagnose data limitations → propose acquisition → approve where required → acquire/validate/version → retrain and compare.
@@ -132,12 +142,12 @@ Both loops must terminate on success, budget exhaustion, lack of improvement, un
 ### Notebook-centered user workflow
 
 1. Install `uv` and Git, create a separate user repository and Python project, install the harness from a pinned GitHub commit, and run `uv run agent-ml init` to add experiment scaffolding and configure its environment.
-2. Configure local data access, tracking, storage, and an agent adapter; write the experiment brief and search-space configuration.
-3. Ask the agent to generate readable notebooks and any experiment-specific helper code in that repository.
-4. Inspect the notebooks and approve the resolved task contract, evaluation protocol, access scope, and budgets through the applicable gates before dependent execution.
-5. Open the notebooks in JupyterLab, execute approved work, and inspect results. The agent may also execute and revise notebooks automatically within approved phase scope and budgets.
+2. Configure local data access, tracking, storage, and an agent adapter; optionally register supplied algorithms and preprocessors with their parameter specifications and modification permissions. Write the experiment brief, feature pipeline configuration, and search-space configuration.
+3. Ask the agent to generate readable notebooks that invoke supplied or built-in components. Generate new experiment-specific implementations or helper code only as needed and authorized.
+4. Inspect the notebooks and approve the resolved task contract, phase plan, component selection, evaluation protocol, access scope, and budgets through the applicable gates before dependent execution. Validate component interfaces, parameters, and evaluation compatibility before training.
+5. Open the notebooks in JupyterLab, execute approved work, and inspect results. The agent may also execute and revise notebooks automatically within the current approved phase, component permissions, parameter boundaries, and budgets. Phase returns and scope changes require authorization; changes to immutable supplied code require approval and a new versioned experiment configuration.
 6. Record experiments through harness-managed execution of saved notebook and code snapshots, followed by independent evaluation. Interactive exploration alone does not establish acceptance.
-7. Review phase evidence and approve advancement, request changes, or approve/reject the final model. Preserved state supports interruption and resumption.
+7. Review evidence at every phase boundary and approve entry to the next phase or request changes. Review final evaluation separately to approve or reject the final model. Preserved state supports interruption and resumption.
 
 Reviewing every notebook edit is optional unless configured as an additional gate; phase approvals and scope controls remain mandatory.
 
@@ -215,6 +225,12 @@ The feature engineering engine must:
 
 Experiment-specific transformations belong in the experiment repository's notebooks or helper modules. Code shared across experiments in that repository belongs in its own Python package. Generic feature-engineering capabilities belong in the harness package; promoting project code into the harness is a separate development change.
 
+Feature preparation supports user-supplied stateless transformations and stateful preprocessors. Stateful preprocessors expose separate fitting and transformation operations: fitting receives only the approved training partition, and the fitted state is reused unchanged for validation, test, and inference.
+
+Users may require a supplied preparation pipeline or explicitly delegate selection and modification to the agent. The resolved feature plan records component order, effective parameters, input/output schemas, fitting scope, and whether agent modifications are permitted.
+
+Preserve the preparation code, fitted state, dependencies, and output feature schema as run artifacts. Supplied pipelines must satisfy the same leakage, reproducibility, and lineage checks as generated pipelines.
+
 ## 8. Interfaces and Contracts
 
 All contracts should have versioned JSON Schemas and typed Python models. These conceptual interfaces require further design for asynchronous operations, idempotency, error handling, and authorization.
@@ -254,6 +270,7 @@ class ModelAdapter(Protocol):
     def train(self, context: "TrainingContext") -> Any: ...
     def predict(self, model: Any, data: Any) -> Any: ...
     def save(self, model: Any, path: str) -> None: ...
+    def load(self, path: str) -> Any: ...
 
 class Evaluator(Protocol):
     def evaluate(self, run_id: str, criteria: "AcceptanceCriteria") -> "EvaluationReport": ...
@@ -268,18 +285,93 @@ class ApprovalService(Protocol):
 | Contract | Key fields |
 |---|---|
 | `MLTaskSpec` | Objective, target, task type, data, feature guidance, delegated decisions, algorithm mode, metrics, budgets, policies, source brief reference |
-| `ExperimentProjectConfig` | Schema version, project root and environment reference, tracking/storage/state locations, access policy references, agent adapter, explicit project guidance mapping |
-| `ExperimentConfig` | Schema version, experiment identifier, brief/search-space references, notebook entrypoints, data references, working directory, execution settings; resolved into the approved `ExperimentSpec` |
+| `ExperimentProjectConfig` | Schema version, project root and environment reference, tracking/storage/state locations, access policy references, agent adapter, explicit project guidance mapping, project-local component declarations |
+| `ComponentSpec` | Identifier, kind, Python entrypoint, interface version, supported tasks/prediction outputs where applicable, parameter types/defaults/constraints, code or dependency identity, agent modification permission |
+| `ExperimentConfig` | Schema version, experiment identifier, brief/search-space references, notebook entrypoints, data references, feature pipeline component references and parameters, working directory, execution settings; resolved into the approved `ExperimentSpec` |
 | `RuntimeInstructionBundle` | Shared/task-specific guidance snapshots, audience, task mapping, ordered source paths, versions/checksums |
 | `SearchSpaceSpec` | Schema version, registered algorithm identifiers, fixed parameters, typed choices/ranges, scales, configuration checksum |
 | `WorkflowPlan` | Phases, dependencies, gates, iteration limits |
 | `AgentTask` / `AgentResult` | Task scope, context, tools, proposed changes, outputs |
 | `ExtractionSpec` / `DatasetRef` | Source, query, snapshot, checksum, schema, lineage |
 | `DataGapReport` / `DataAcquisitionProposal` | Evidence, acquisition hypothesis, scope, cost, approval |
-| `FeaturePlan` / `FeatureSetRef` | Transformations, fitted state, versions, provenance |
+| `FeaturePlan` / `FeatureSetRef` | Ordered component references, effective parameters, input/output schemas, fitting scope, modification permissions, fitted state, versions, provenance |
 | `ExperimentSpec` / `ExperimentResult` | Project/experiment identity, model, data, notebook/code snapshots, experiment Git revision, harness repository URL/full commit SHA/package version, build identity where available, environment/lockfile identity, effective parameters, source configuration references, runtime instruction bundle reference, resolved decisions, resources, metrics, artifacts |
 | `EvaluationReport` | Metrics, validity checks, baseline comparison, evidence |
 | `ApprovalRecord` | Reviewer, scope, decision, timestamp, audit trail |
+
+### User-supplied ML components
+
+Users may supply existing model implementations, training routines, and feature-preparation code in their experiment repository or as pinned Python dependencies. Using these components must not require modifying the harness.
+
+Project configuration declares each component's identifier, Python entrypoint, interface version, supported tasks where applicable, and parameter specification. The harness combines these declarations with its built-in registry for that project. Duplicate identifiers and incompatible interfaces are rejected before execution.
+
+User-supplied components receive the same execution controls, parameter validation, independent evaluation, provenance tracking, and resource limits as built-in components.
+
+Users may designate supplied components as immutable or authorize agents to modify them. Supplied code is immutable by default; agents may configure and invoke it within approved boundaries. Changes to immutable components require explicit developer approval and a new versioned experiment configuration. Permission to modify code does not expand the approved component, data-access, parameter, or evaluation boundaries.
+
+The following capabilities become versioned public interfaces, refining the conceptual adapters above:
+
+| Component | Required capabilities |
+|---|---|
+| Custom model | Train using approved training/validation inputs; predict through an interface usable by the independent evaluator; save and restore the fitted model |
+| Stateful preprocessor | Fit on training inputs; transform using fitted state; save and restore that state |
+| Stateless transformation | Transform inputs without fitting; declare output schema |
+
+Framework-native implementations may be integrated through project-local wrappers. Training routines may return framework-specific models, provided the wrapper exposes the required prediction and persistence operations. The existing `FeatureEngineeringAdapter` plans and evaluates feature work; supplied preprocessors and transformations provide the execution capabilities listed above. Exact preprocessor method signatures remain subject to interface design.
+
+Component declarations include supported prediction outputs, such as labels, probabilities, or regression values. Before training, the harness rejects components that cannot provide the outputs required by the approved evaluation metrics. Protected test data remains accessible only through independent evaluation.
+
+The following configuration illustrates the intended workflow; the precise schemas remain subject to interface design:
+
+```yaml
+# project.yaml
+components:
+  models:
+    custom_churn_model:
+      interface_version: "0.1"
+      entrypoint: churn_experiments.models:ChurnModelAdapter
+      task_types: [classification]
+      prediction_outputs: [labels, probabilities]
+      agent_may_modify: false
+      parameters:
+        regularization:
+          type: float
+          default: 0.1
+          minimum: 0.0
+
+  preprocessors:
+    domain_features:
+      interface_version: "0.1"
+      entrypoint: churn_experiments.features:DomainFeatureAdapter
+      kind: stateful
+      agent_may_modify: false
+      parameters: {}
+```
+
+```yaml
+# search-space.yaml
+schema_version: "0.1"
+algorithms:
+  custom_churn_model:
+    search:
+      regularization:
+        type: float
+        min: 0.001
+        max: 1.0
+        scale: logarithmic
+```
+
+```yaml
+# experiment.yaml — additional fields
+features:
+  pipeline:
+    - component: domain_features
+      parameters: {}
+```
+
+Component parameter specifications define valid types, defaults, and constraints. Experiment search spaces define the narrower values agents may explore. Declaring a component does not automatically authorize its use or parameter tuning. Feature pipeline parameters are fixed by the approved feature plan; changes require the applicable feature-phase authorization and a recorded plan revision.
+
+Run lineage preserves component declarations, exact project-code snapshots or pinned dependency identities, effective parameters, and fitted artifacts. Component code changes authorized within a phase are captured in each run's source snapshot.
 
 ### Project initialization and installation
 
@@ -322,7 +414,7 @@ The project lockfile records the resolved harness Git revision and library versi
 
 Developers provide two complementary inputs: a Markdown experiment brief describing intent and constraints, and a YAML configuration defining the allowed algorithms and hyperparameter search spaces. These inputs are distinct from the resolved `ExperimentSpec` submitted for execution.
 
-Store these as `experiments/<name>/experiment.md` and `search-space.yaml` in the user repository. An adjacent `experiment.yaml` identifies notebook entrypoints, data references, and execution settings; it does not replace the brief or expand the search space. A project-root `project.yaml` holds project-wide environment, tracking, storage, agent, and guidance settings. Relative paths in these declarative inputs resolve against the experiment repository root; notebook working directories are explicitly recorded. The schemas and CLI/API commands beyond the selected `agent-ml init` interface require further design.
+Store these as `experiments/<name>/experiment.md` and `search-space.yaml` in the user repository. An adjacent `experiment.yaml` identifies notebook entrypoints, data references, feature pipeline components and parameters, and execution settings; it does not replace the brief or expand the search space. A project-root `project.yaml` holds project-wide environment, tracking, storage, agent, guidance settings, and user-supplied component declarations. Relative paths in these declarative inputs resolve against the experiment repository root; notebook working directories are explicitly recorded. The schemas and CLI/API commands beyond the selected `agent-ml init` interface require further design.
 
 The Markdown brief uses recognizable sections with natural-language guidance for:
 
@@ -388,7 +480,7 @@ Runtime instruction files contain reusable practices. Dataset locations, targets
 
 ### Algorithm and hyperparameter configuration
 
-The YAML configuration references supported algorithm identifiers from the harness registry. It separates fixed parameters from tunable parameters and supports categorical choices, integer ranges, and floating-point ranges. Numeric ranges declare minimum and maximum bounds and a linear (raw-value) or logarithmic sampling scale.
+The YAML configuration references supported algorithm identifiers from the project's combined built-in and user-supplied component registry. It separates fixed parameters from tunable parameters and supports categorical choices, integer ranges, and floating-point ranges. Numeric ranges declare minimum and maximum bounds and a linear (raw-value) or logarithmic sampling scale.
 
 ```yaml
 schema_version: "0.1"
@@ -606,6 +698,11 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 | AC-47 | Installed harness guidance and explicitly configured project guidance load with recorded ownership/order; neither repository's development instructions load automatically into runtime experiment tasks |
 | AC-48 | A clean-environment GitHub installation exposes the agent-ml CLI and packaged templates/runtime guidance without relying on the installer cache or source checkout at runtime |
 | AC-49 | agent-ml init preserves existing project files and the pinned Git dependency, reports conflicts, and installs the notebook dependencies needed to launch JupyterLab from the project environment |
+| AC-50 | A user-supplied algorithm runs, tunes, persists, restores, and undergoes independent evaluation from a separate experiment repository without harness modifications |
+| AC-51 | A supplied stateful preprocessor fits only on training data; restored state reproduces validation and inference transformations |
+| AC-52 | Invalid component declarations, parameter values, and incompatible prediction outputs are rejected before training |
+| AC-53 | Agents cannot modify immutable supplied components without recorded developer approval |
+| AC-54 | Run lineage captures component declarations, exact code snapshots or pinned dependency identities, effective parameters, and fitted artifacts |
 
 ### Reference acceptance-test datasets
 
@@ -616,6 +713,7 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 - Negative fixtures for leakage, schema errors, missing artifacts, unauthorized access, and skipped approval gates.
 - Runtime-guidance fixtures covering task selection, conflicting instructions, development/runtime separation, and resumption after source guidance changes.
 - Experiment-input fixtures covering delegated decisions, all three algorithm modes, numeric/categorical search spaces, and rejected boundary violations.
+- User-supplied component fixtures covering project-local and pinned-dependency implementations, model persistence/restoration, stateful and stateless preparation, training-only fitting, duplicate identifiers, incompatible interfaces/prediction outputs, parameter validation, immutable-code approval, and component lineage.
 - Separate experiment-project fixtures covering pinned GitHub installation, agent-ml init and file conflicts, installed CLI/resources, generated notebooks, project-package imports, uncommitted source snapshots, interactive access boundaries, and restoration in a clean environment.
 
 ## 11. Phased Implementation Plan
@@ -623,8 +721,8 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 | Implementation phase | Deliverables | Exit criteria |
 |---|---|---|
 | 1. Data and harness foundation | GitHub-installable package pinned by full commit SHA, agent-ml CLI/init, packaged templates/guidance, bootstrap documentation, project configuration and locked environment, Markdown brief resolution, YAML search-space validation, schemas, local Python/notebook execution, extraction, snapshots, validation, MLflow tracking, local DVC/state storage, public API | Clean-environment GitHub install and initialization followed by repeatable extraction/notebook execution in a separate project without agents or a manually maintained harness checkout |
-| 2. EDA and feature pipelines | Profiling, split manifests, transformations, DVC pipeline stages and lockfiles, lineage, feature comparison | Validated, reproducible feature artifacts |
-| 3. Model experimentation | scikit-learn, LightGBM, basic PyTorch, bounded hyperparameter evaluation, algorithm use/select/compare modes, evaluation, baseline comparisons | Tabular and basic deep-learning runs tracked and assessed |
+| 2. EDA and feature pipelines | Profiling, split manifests, transformations, project-local registration of user-supplied stateful/stateless preparation, fitted-state persistence/restoration, DVC pipeline stages and lockfiles, lineage, feature comparison | Validated, reproducible feature artifacts, including supplied preprocessing without harness modifications |
+| 3. Model experimentation | scikit-learn, LightGBM, basic PyTorch, project-local custom model registration and parameter validation, model persistence/restoration, bounded hyperparameter evaluation, algorithm use/select/compare modes, evaluation, baseline comparisons | Tabular and basic deep-learning runs tracked and assessed; supplied models run and undergo independent evaluation without harness modifications |
 | 4. Agent integration | First coding-assistant adapter, project-local notebook/code generation, packaged/project runtime instruction loading and snapshots, structured feedback, inner-loop iteration | Agent improves a model through user-reviewable notebooks within an approved budget without modifying the harness |
 | 5. Orchestration and approvals | Durable workflow, gates, recovery, second adapter | Supervised multi-phase workflow with enforced approvals |
 | 6. Iterative data acquisition | Gap diagnosis, proposals, approved extraction, retraining comparisons | Outer-loop improvement with lineage and budgets |
@@ -769,7 +867,7 @@ Executed notebook snapshots, model artifacts, DVC content/cache, and durable wor
 
 - **ADR-002:** Expose harness through Python API and CLI initially; consider MCP server later.
 - **ADR-003:** Start with a lightweight durable state-machine orchestrator; evaluate agent orchestration frameworks if complexity requires.
-- **ADR-004:** Hybrid ML operations: standardized capabilities plus sandboxed custom Python code.
+- **ADR-004:** Hybrid ML operations: standardized capabilities plus sandboxed custom Python code, with project-local registration of user-supplied algorithms and feature preparation through versioned public interfaces. Components may come from project code or pinned dependencies; using them requires no harness modifications. Supplied code is immutable by default, with explicit developer approval required to change immutable components. This proposed decision remains pending.
 - **ADR-005:** Choose configurable project-associated DVC storage, MLflow backend/artifact storage, and durable workflow-state configuration, including single-machine local defaults; DVC data versioning/pipelines and MLflow experiment tracking are selected stack components.
 - **ADR-006:** Define the authorization and isolation model for data connectors, generated code, and interactive notebook kernels, including protected-test isolation and project/harness filesystem boundaries.
 - **ADR-007 remaining details:** Finalize the repository URL/distribution name, supported Python versions, API compatibility/versioning, configuration schemas, and remaining CLI/API commands; GitHub installation, full commit pinning, and the agent-ml CLI/init sequence are selected above.
