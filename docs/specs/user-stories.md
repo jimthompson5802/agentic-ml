@@ -46,7 +46,7 @@ As a contributor, I want automated checks on every pull request so that I receiv
 
 Acceptance criteria:
 
-- <a id="us-32-ac-01"></a> **US-32-AC-01:** CI runs on pull requests and updates to the default branch from a clean checkout, using macOS as the initial verification platform.
+- <a id="us-32-ac-01"></a> **US-32-AC-01:** CI runs on pull requests and updates to the default branch from a clean checkout, using Linux as the initial CI verification platform.
 - <a id="us-32-ac-02"></a> **US-32-AC-02:** CI verifies Python 3.12 as the minimum supported version, documents any additional Python versions tested, installs the required tools, and synchronizes runtime and development dependencies using `uv` and the committed lockfile without modifying the lockfile.
 - <a id="us-32-ac-03"></a> **US-32-AC-03:** CI runs automated tests, linting, formatting checks, type checks, and the development smoke check using the same documented commands available locally under US-31.
 - <a id="us-32-ac-04"></a> **US-32-AC-04:** Failed checks produce a failing CI result, and contributors can inspect check results and diagnostic logs from the pull request.

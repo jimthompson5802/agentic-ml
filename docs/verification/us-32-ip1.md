@@ -8,7 +8,7 @@ Retrieved the full issue twice with `gh api repos/jimthompson5802/agentic-ml/iss
 
 Repository API confirms `main`, Actions enabled, all actions allowed and authenticated admin/push permissions. Capacity and hosted execution have not been exercised. These read results do not authorize publication or merge.
 
-## Configuration choices (T1)
+## Original configuration choices (T1; runner superseded by SC-01)
 
 - Runner: `macos-15`, explicit supported image label; [official image inventory](https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md). Hosted image version will be captured from job setup and environment diagnostics in IP2.
 - [checkout v5](https://github.com/actions/checkout/tree/fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09): pin `fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09`, resolved from the official v5 Git ref. Supports Node 24 on hosted runners. Credential persistence disabled; token permissions limited to contents read.
@@ -17,7 +17,7 @@ Repository API confirms `main`, Actions enabled, all actions allowed and authent
 
 Official sources were inspected during implementation, along with the design reading map, contributor contract, delivery dependencies, traceability and ADR-007. No new prerequisite or runtime capability is required.
 
-## Workflow inspection and local failure boundary (T2)
+## Original workflow inspection and local failure boundary (T2)
 
 `/tmp/us32-ip1-tools/actionlint -version`: 1.7.12, Go 1.26.1, darwin/arm64. Downloaded official release archive; SHA-256 `aba9ced2dee8d27fecca3dc7feb1a7f9a52caefa1eb46f3271ea66b6e0e6953f` matches the [release checksum](https://github.com/rhysd/actionlint/releases/tag/v1.7.12).
 
@@ -55,3 +55,19 @@ README/development guide now describe configured coverage, local reproduction, c
 | AC-04 | Named steps, preserved exits, local shell/tool failure and contributor log instructions | Each planned hosted failure/correction and accessible PR diagnostics |
 
 T1–T3 technically complete. IP1 developer approval pending. No hosted run, publication or merge occurred. Other Python versions/platforms, US-33 distribution verification and US-34 policy remain excluded. After explicit IP1 approval and publication authorization, IP2 will collect a successful PR run, six isolated failure/correction cases, an authorized merge/default-branch run and final criterion mappings.
+
+## SC-01 renewal — Linux CI (2026-10-29)
+
+Developer instruction “for gh action I want to use a linux host, not macos” authorizes changing current IP1 to Linux. [Issue #2](https://github.com/jimthompson5802/agentic-ml/issues/2) now records that decision, with revised description and AC-01. The local story criterion, contributor design contract, plan, execution index, README and development guide agree. Prior macOS configuration results above are historical; local macOS test evidence remains valid for the unchanged seven shared commands.
+
+T1: Selected `ubuntu-24.04`, confirmed against the [official Ubuntu 24.04 runner inventory](https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md). Using an explicit image label avoids relying on `ubuntu-latest`. Actual hosted image/architecture/tool versions will be recorded in IP2. Existing immutable checkout/setup-uv revisions support the Linux hosted runner; Python 3.12/uv 0.13.1 choices remain unchanged.
+
+T2: Workflow job is now **Linux / Python 3.12**, on `ubuntu-24.04`. Replaced macOS `sw_vers` with `cat /etc/os-release`. Bash, checksum capture/verification, permissions, events, independent-check conditions and all seven shared commands are unchanged. `/tmp/us32-ip1-tools/actionlint .github/workflows/ci.yml` passes with actionlint 1.7.12. Configuration inspection confirms the explicit Linux runner and absence of macOS-specific diagnostics. No suppressions or new executable harness behavior; appropriate verification is workflow validation and existing regression evidence. Hosted Linux execution cannot be verified on this macOS host and remains IP2 work.
+
+T3: Development guide and README describe configured Linux CI and pending hosted verification while preserving macOS development status. Local Markdown file targets, exact shared command comparison, shell syntax and `git diff --check` pass. No fresh Python test run was needed: no Python source, tests, dependencies or shared command text changed. The original seven passing local checks remain applicable to macOS only. Lock hash remains `ab8b6c9de02061ea788fa13a2dba162bcb963fb211ca938af3408e01bb1f5d9d`; tracked lock diff is empty.
+
+T1–T3 complete for the revised configuration, IP1 gate pending renewed developer review. AC-01 now targets Linux PR/default-branch runs; all four criteria still require IP2 hosted evidence. No Linux execution, branch/PR publication, merge or IP1 approval is claimed.
+
+## Developer approval
+
+Developer approved IP1 including the Linux revision on 2026-10-29: “I approve IP1. Commit the Linux changes, push the branch, and create a PR to begin IP2.” Historical pending-gate statements above describe evidence preparation before this decision. IP2 entry and branch/PR publication are authorized; merge remains separately authorized.

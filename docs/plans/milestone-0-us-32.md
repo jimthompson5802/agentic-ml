@@ -4,7 +4,7 @@
 
 - **Milestone:** 0 — Establish the harness development foundation.
 - **User story:** [US-32 / issue #2](https://github.com/jimthompson5802/agentic-ml/issues/2).
-- **User-visible outcome:** Pull requests and default-branch updates receive macOS/Python 3.12 development checks with visible results and failure diagnostics.
+- **User-visible outcome:** Pull requests and default-branch updates receive Linux/Python 3.12 development checks with visible results and failure diagnostics.
 - **Acceptance criteria covered:** [US-32-AC-01–04](../specs/user-stories.md#us-32-verify-changes-automatically-in-ci), all criteria in this story.
 - **Scope boundaries:** CI triggers, clean checkout/environment, locked uv synchronization, shared development checks, contributor instructions and execution evidence. Package builds, isolated wheel/sdist/resource checks remain US-33; branch protection and contribution/review policy remain US-34 in Milestone 99. No new harness runtime behavior or additional Python/platform matrix is proposed.
 - **Supporting design:** [Contributor contract](../specs/design/interfaces-and-configuration.md#contributor-development-and-package-verification-milestone-0), [delivery dependencies](../specs/design/milestone-delivery.md#milestone-0-dependencies-and-delivery-order), [traceability](../specs/design/acceptance-traceability.md), [ADR-007](../specs/design/architecture-decisions.md#adr-007--github-package-installation-and-project-initialization).
@@ -14,7 +14,7 @@
 
 Retrieved complete issue bodies, metadata and all comment pages on 2026-10-29. Issue #2 is open, has zero comments, and unchanged update time `2026-10-29T03:09:11Z` on recheck. Its body assigns Milestone 0; GitHub milestone metadata is unset. Issue #1 is closed, has zero comments, and unchanged update time `2026-10-29T23:03:10Z`. Issue #3 is open, has one comment, and unchanged update time `2026-10-29T23:10:06Z`. All reported counts match fetched unique comments. The [sole #3 comment](https://github.com/jimthompson5802/agentic-ml/issues/3#issuecomment-6510671946), by jimthompson5802, created/updated 2026-10-29T23:10:06Z, says: “PR #4 prematurely closed this issue, reopening.” It confirms the partial-delivery boundary.
 
-Issue #2 and current repository criteria agree. Earlier issue #1/#3 CLI spelling is superseded by SC-01 and ADR-007: use `agentic-ml`. Older ADR-007 paragraphs still call distribution/repository selection pending; the explicit decisions in the approved prerequisite plans and current `pyproject.toml` settle those choices. No affected US-32 requirement conflict remains.
+Issue #2 and current repository criteria agree. Earlier issue #1/#3 CLI spelling is superseded by SC-01 and ADR-007: use `agentic-ml`. Older ADR-007 paragraphs still call distribution/repository selection pending; the explicit decisions in the approved prerequisite plans and current `pyproject.toml` settle those choices. Original requirements agreed at planning time. SC-01 below supersedes the original macOS CI requirement with Linux; the issue and local requirements now agree.
 
 Inspected clean `main` at `808d4e0`: `.github` contains templates but no workflow. `pyproject.toml`, `uv.lock`, Python 3.12 selection, three public subprocess tests and all shared local commands exist. US-31 is accepted; US-33 IP1 is approved. Local macOS evidence does not establish hosted CI behavior. `gh auth status` reported an invalid default token in this environment, but every required read-only API call succeeded; verify write/run access before publication during execution, without collecting credentials.
 
@@ -24,13 +24,13 @@ Inspected clean `main` at `808d4e0`: `.github` contains templates but no workflo
 |---|---|---|---|
 | US-31 tooling and commands | US-31-IP1-T1–T3 and IP2-T1–T3 complete, gates approved | US-32 IP1 | [Owning plan](milestone-0-us-31.md), [fresh macOS evidence](../verification/us-31-ip2.md); accepted 2026-10-29 |
 | US-33 minimal CLI | US-33-IP1-T1–T3 and gate approved | Source installation, tests and smoke | [Owning plan](milestone-0-us-33.md), [corrected CLI evidence](../verification/cli-name-correction.md); approved 2026-10-29; remaining story unnecessary here |
-| CI implementation choices | GitHub Actions; explicit macOS runner image, Python 3.12 only, pinned uv version initially 0.13.1 | Workflow configuration | Selected macos-15, checkout v5 and setup-uv v7 immutable revisions; see IP1 evidence |
+| CI implementation choices | GitHub Actions; explicit Linux runner image, Python 3.12 only, pinned uv version initially 0.13.1 | Workflow configuration | Selected ubuntu-24.04 (SC-01), checkout v5 and setup-uv v7 immutable revisions; see IP1 evidence |
 | Default branch | Push trigger targets actual default branch | Workflow trigger and default-branch evidence | Repository API reports `main`; recheck before implementation |
 | Hosted execution and publication | Actions enabled, hosted runner availability, repository permissions; authorize branch/PR publication and merge separately | IP2 hosted evidence | Not exercised in planning; absence of access blocks affected evidence, not configuration work |
 
 ## Technical approach and public verification boundaries
 
-Create proposed `.github/workflows/ci.yml`. Use `pull_request` without path filters and `push` restricted to `main`; do not use a privileged pull-request trigger. Start each job with a clean checkout and new environment; do not restore a prebuilt virtual environment. Install explicit uv and Python 3.12 versions, record OS/architecture, Python, uv and resolved checker versions. Use reviewed immutable action revisions with readable version comments and minimal read permissions. Confirm current official setup syntax at implementation time. Record the runner image/version actually used; do not claim parity with the local macOS release.
+Create proposed `.github/workflows/ci.yml`. Use `pull_request` without path filters and `push` restricted to `main`; do not use a privileged pull-request trigger. Start each job with a clean checkout and new environment; do not restore a prebuilt virtual environment. Install explicit uv and Python 3.12 versions, record OS/architecture, Python, uv and resolved checker versions. Use reviewed immutable action revisions with readable version comments and minimal read permissions. Confirm current official setup syntax at implementation time. Record the runner image/version actually used; local macOS verification does not establish Linux CI behavior.
 
 Run the existing commands verbatim from the checkout:
 
@@ -69,9 +69,16 @@ Keep raw logs and disposable failure fixtures outside maintained source; redact 
 
 ## Scope-change history
 
-None.
+### SC-01 — Linux CI runner (2026-10-29)
 
-## US-32 / Implementation Phase 1: Configure macOS development CI
+- **Request / decision:** Approved by developer instruction “for gh action I want to use a linux host, not macos”. This authorizes revision of current IP1 work; it does not approve the IP1 gate or IP2 progression.
+- **Scope difference:** Replace macOS Actions hosting with Linux, selecting `ubuntu-24.04`. Preserve macOS local development and historical evidence. Use `/etc/os-release` for hosted OS diagnostics.
+- **Requirements:** Updated [issue #2](https://github.com/jimthompson5802/agentic-ml/issues/2) description, AC-01 and recorded decision, plus [US-32-AC-01](../specs/user-stories.md#us-32-ac-01) and the design contributor contract. IDs and all other criteria remain unchanged. Issue update returned `2026-10-29T23:26:24Z`; complete issue/comments were refreshed beforehand, with stable metadata and zero comments.
+- **Impact:** T1 runner selection, T2 workflow/validation, T3 docs and all IP2 hosted platform expectations revised. Existing macOS local check results remain valid for unchanged shared commands; they do not verify Linux execution. Original workflow validation is historical; renewed actionlint/configuration checks are required and recorded in IP1 evidence. No dependency or runtime changes.
+- **Verification / gates:** IP1 tasks re-reviewed against Linux configuration; actual Linux success/failure/event evidence remains IP2. IP1 developer gate remains pending. No additional milestone or story work is introduced.
+- **Resume point:** Complete current IP1 Linux revisions and present the renewed gate evidence. External branch/PR publication and merge remain separately authorized.
+
+## US-32 / Implementation Phase 1: Configure Linux development CI
 
 - **Outcome:** Reviewable workflow and contributor instructions reproduce all shared commands and preserve failure status.
 - **Entry conditions:** Plan/public boundaries approved and implementation explicitly authorized; prerequisite gates confirmed.
@@ -82,26 +89,26 @@ None.
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
 | US-32-IP1-T1 | Complete | Confirm official runner/action compatibility, immutable revisions, uv installation and Python selection; inspect repository Actions availability and default branch. Record choices and source links in proposed `docs/verification/us-32-ip1.md`. | Approved plan and prerequisite records | Concrete supported configuration selected; any unavailable permission/capacity recorded before dependent work. | AC-01–02 |
-| US-32-IP1-T2 | Complete | Create proposed `.github/workflows/ci.yml` with PR/default-branch triggers, macOS/Python 3.12 setup, locked synchronization, five named shared checks, version diagnostics and final lock immutability check. | T1 | Inspect valid YAML and event/job conditions; reproduce commands locally, confirm identical command text and nonzero failure propagation; dependency failure cannot produce success. No package verification added. | AC-01–04 |
+| US-32-IP1-T2 | Complete | Create proposed `.github/workflows/ci.yml` with PR/default-branch triggers, Linux/Python 3.12 setup, locked synchronization, five named shared checks, version diagnostics and final lock immutability check. | T1 | Inspect valid YAML and event/job conditions; reproduce commands locally, confirm identical command text and nonzero failure propagation; dependency failure cannot produce success. No package verification added. | AC-01–04 |
 | US-32-IP1-T3 | Complete | Update `docs/development.md` and README CI status/instructions; run all documented shared checks on macOS, record results and lock hash in proposed IP1 evidence; update plan/index/checkpoint. | T2 | Tests/lint/format/types/smoke and lock consistency pass; docs explain PR checks/logs, reproduction, pinned setup, pending hosted verification and platform limits. | AC-02–04 |
 
 ### Verification and review evidence
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Workflow structure | Parse YAML with a suitable Actions-aware validator available during implementation; inspect triggers, action revisions, shell failure handling and conditions | Both required events, macOS/3.12 and visible nonzero conclusions; record validator/version and limitations | actionlint 1.7.12 passed; local nonzero propagation passed; hosted conclusions pending. [Evidence](../verification/us-32-ip1.md) |
+| Workflow structure | Parse YAML with a suitable Actions-aware validator available during implementation; inspect triggers, action revisions, shell failure handling and conditions | Both required events, Linux/3.12 and visible nonzero conclusions; record validator/version and limitations | actionlint 1.7.12 passed; local nonzero propagation passed; hosted conclusions pending. [Evidence](../verification/us-32-ip1.md) |
 | Local shared checks | Exact seven commands above; compare lock SHA-256 and `git diff --exit-code -- uv.lock` | All pass without modifying lockfile | All seven passed, three tests; matching SHA-256 and clean lock diff. [Evidence](../verification/us-32-ip1.md) |
 | Documentation | Compare workflow commands with development guide; validate Markdown links and `git diff --check` | Reproduction instructions agree; no unsupported hosted claims | Commands agree; local targets and diff check passed. [Evidence](../verification/us-32-ip1.md) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete with configuration review, actual local check results and hosted-verification procedure.
-- **Evidence presented:** [IP1 verification](../verification/us-32-ip1.md); T1–T3 technically complete, developer approval pending.
+- **Evidence presented:** [IP1 verification](../verification/us-32-ip1.md); T1–T3 technically complete, developer approval recorded.
 - **Remaining limitations or blocked work:** Hosted triggers, PR diagnostics and default-branch run remain unverified until IP2.
-- **Developer decision:** Pending.
-- **Decision reference and date:** None.
+- **Developer decision:** Approved, including SC-01 Linux revision.
+- **Decision reference and date:** Developer message “I approve IP1. Commit the Linux changes, push the branch, and create a PR to begin IP2.”, 2026-10-29.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** US-32 IP2 only after explicit gate approval; external publication/merge authorization remains separate.
+- **Progression authorized:** Begin IP2; committing/pushing the Linux changes and PR creation explicitly authorized. Merge remains separately authorized.
 
 ## US-32 / Implementation Phase 2: Verify hosted triggers and failure diagnostics
 
@@ -113,9 +120,9 @@ None.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-32-IP2-T1 | Not started | Publish authorized review branch/PR with workflow, observe PR-triggered run; record run/event URL, commit SHA, runner/Python/tool versions, clean setup and lock hashes in proposed `docs/verification/us-32-ip2.md`. | IP1 approval and publication authorization | Actual PR check passes all documented commands on clean macOS/Python 3.12. | AC-01–03 |
+| US-32-IP2-T1 | Not started | Publish authorized review branch/PR with workflow, observe PR-triggered run; record run/event URL, commit SHA, runner/Python/tool versions, clean setup and lock hashes in proposed `docs/verification/us-32-ip2.md`. | IP1 approval and publication authorization | Actual PR check passes all documented commands on clean Linux/Python 3.12. | AC-01–03 |
 | US-32-IP2-T2 | Not started | On an authorized disposable PR branch, introduce then correct isolated defects one at a time: failing pytest assertion, lint violation, formatting defect, type error, failing version smoke and dependency metadata/lock mismatch. Preserve links/log excerpts, correction commits and successful reruns in proposed IP2 evidence. | T1 | Each relevant command fails and overall CI fails with inspectable PR diagnostics; stale metadata is rejected without lock mutation. All temporary defects removed; real checks remain intact. | AC-02–04 |
-| US-32-IP2-T3 | Not started | Present clean PR and failure evidence for merge authorization; after authorized merge observe `push` run on `main`. Record exact default-branch revision/run and results in proposed IP2 evidence. | T2; separate merge authorization | Actual default-branch event passes same checks on clean macOS/Python 3.12; failure evidence never merged. If merge deferred, AC-01 stays pending. | AC-01–04 |
+| US-32-IP2-T3 | Not started | Present clean PR and failure evidence for merge authorization; after authorized merge observe `push` run on `main`. Record exact default-branch revision/run and results in proposed IP2 evidence. | T2; separate merge authorization | Actual default-branch event passes same checks on clean Linux/Python 3.12; failure evidence never merged. If merge deferred, AC-01 stays pending. | AC-01–04 |
 | US-32-IP2-T4 | Not started | Update `docs/development.md`, README, both planned evidence reports as needed, this plan/index and CHECKPOINTS with actual CI coverage and acceptance mapping; rerun checks affected by any final changes. | T3 | Document only observed versions/platforms, link green PR/default-branch runs and failure logs, explain local reproduction; all final relevant checks pass and developer review is ready. | AC-01–04 |
 
 ### Verification and review evidence
@@ -141,7 +148,7 @@ None.
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-32-AC-01 — clean macOS PR/default-branch runs | IP1-T1–T2; IP2-T1,T3–T4 | Proposed IP1 configuration and IP2 real event/run records | Pending |
+| US-32-AC-01 — clean Linux PR/default-branch runs | IP1-T1–T2; IP2-T1,T3–T4 | Proposed IP1 configuration and IP2 real event/run records | Pending |
 | US-32-AC-02 — Python 3.12, tools, locked dependencies | IP1-T1–T3; IP2-T1–T4 | Proposed version/setup/hash records and mismatch rejection | Pending |
 | US-32-AC-03 — shared development commands | IP1-T2–T3; IP2-T1–T4 | Proposed workflow/local command comparison and hosted results | Pending |
 | US-32-AC-04 — failing result and PR diagnostics | IP1-T2–T3; IP2-T2–T4 | Proposed isolated failure/correction records and contributor log instructions | Pending |
