@@ -1,5 +1,7 @@
 # User stories and design reconciliation — current baseline
 
+> Historical CLI spelling: this report preserves the original `agent-ml` references. The developer corrected the CLI to `agentic-ml` on 2026-10-29; see [ADR-007](../specs/design/architecture-decisions.md#adr-007--github-package-installation-and-project-initialization) and the [correction verification](../verification/cli-name-correction.md). Original results below are historical evidence, not verification of the renamed command.
+
 ## Subsequent documentation disposition (2026-10-28)
 
 The findings below describe the recorded baseline, not a fresh review of all updated documents. Subsequent changes add Milestone 0 supporting design, contributor checks, package verification, and traceability; align README and delivery sequencing with Milestones 0–6 and deferred Milestone 99; and specify the minimal version CLI and initial macOS verification platform. These address documentation portions of C-01–C-04. Subsequent decisions require Python 3.12 or newer, CI verification of the 3.12 baseline, and at least one provisional template and one provisional runtime guidance file whose contents are checked through each installed wheel. Additional Python versions tested must be documented. No implementation or verification completion is implied. The subsequent C-05 correction below aligns ADR-006 with the Milestone 2 protected-test dependency and resolves the remaining documentation finding.

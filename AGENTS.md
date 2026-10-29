@@ -71,7 +71,7 @@ Keep the original test and acceptance criteria intact while fixing a problem. Ne
 
 Implement reusable harness capabilities in the installable package. Verify the boundary with separate experiment-project fixtures: experiment-specific notebooks, configuration, and custom code must work through the installed public interfaces without modifying or importing from a harness checkout.
 
-Preserve `agent-ml` as the CLI name and `agentic_ml` as the Python import name. Load templates and runtime guidance through installed-package resources.
+Preserve `agentic-ml` as the CLI name and `agentic_ml` as the Python import name. Load templates and runtime guidance through installed-package resources.
 
 Verify distribution changes outside the source checkout, using declared runtime dependencies. Check both the directly built wheel and a wheel rebuilt from the source distribution. Verify CLI version output, imports, and packaged resource contents.
 

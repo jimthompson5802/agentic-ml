@@ -2,7 +2,7 @@
 
 Target: [US-31 / #1](https://github.com/jimthompson5802/agentic-ml/issues/1). Included prerequisite: the minimal source CLI portion of [US-33 / #3](https://github.com/jimthompson5802/agentic-ml/issues/3). This index coordinates owning plans; it does not own tasks or evidence.
 
-**Plan-review decision:** Approved for both linked plans and this coordinated scope, including proposed tooling and public test boundaries. Reference: developer message “i approve the plan” in this conversation, 2026-10-29. Distribution name `agentic-ml` previously approved on the same date. All implementation gates remain pending. Implementation requires separate authorization.
+**Plan-review decision:** Approved for both linked plans and this coordinated scope, including proposed tooling and public test boundaries. Reference: developer message “i approve the plan” in this conversation, 2026-10-29. Distribution name `agentic-ml` previously approved on the same date. US-31 IP1 gate approved by developer message “i approve” after its review, 2026-10-29, authorizing US-33 IP1 progression. US-33 IP1 tasks and gate are approved by developer message “I appove us-33 ip1; commit changes”, 2026-10-29. US-31 IP2 remains unstarted; current instruction is to commit.
 
 | Order | Owning implementation phase | Prerequisite capabilities / supplying tasks | Required evidence and approvals before progression |
 |---|---|---|---|
@@ -15,3 +15,7 @@ Shared integration check: US-33 supplies CLI and its public behavior tests; US-3
 US-32 and the remainder of US-33 are downstream work and excluded. Completing this index completes neither CI nor Milestone 0. US-32 must later consume the same documented check commands and update documentation with actual verified CI versions. Full US-33 planning must add provisional resources and both isolated distribution paths before its acceptance can be claimed.
 
 Changes to prerequisite scope during execution require [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md), updates to both owning plans and this index, and developer approval before added implementation.
+
+## CLI naming scope correction
+
+SC-01 (2026-10-29) is explicitly authorized by the developer's correction request. Both owning plans record it. ADR-007 and current requirements now use `agentic-ml`; GitHub issue bodies and preserved historical evidence may still say `agent-ml`. US-33 IP1 entrypoint/version/help evidence is renewed in the [correction report](../verification/cli-name-correction.md); its gate was approved by the developer on 2026-10-29. US-31 IP1 approval is preserved; US-31 IP2 remains unstarted. Execution order is unchanged.

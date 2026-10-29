@@ -6,6 +6,10 @@ The proposed harness provides reusable orchestration, experiment execution, inde
 
 **This project is in its early days.** The repository currently contains a proposed design rather than a working implementation. Its design, interfaces, directory structure, and documentation will change as development progresses.
 
+## Contributor setup
+
+Start with the [development guide](docs/development.md) for Python 3.12, uv, locked dependencies, coding conventions, and local checks. Development tooling, the minimal package, and `agentic-ml --version` are available. Fresh-checkout macOS verification and CI are still pending.
+
 ## Repository contents
 
 - [User stories](docs/specs/user-stories.md): Authoritative product requirements and acceptance criteria, covering the development foundation (Milestone 0), product increments (Milestones 1–6), and deferred enhancements (Milestone 99), with stable story and criterion IDs.

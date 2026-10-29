@@ -20,11 +20,11 @@ The inspected tree at `c5d5d37` has documentation and skills, with no Python pac
 
 | Dependency or decision | Required outcome | Work blocked | Status / evidence |
 |---|---|---|---|
-| Distribution identity | `agentic-ml` distribution, `agentic_ml` import, `agent-ml` CLI | Package metadata | Distribution name explicitly approved by developer in this conversation, 2026-10-29; CLI/import settled in ADR-007 |
+| Distribution identity | `agentic-ml` distribution, `agentic_ml` import, `agentic-ml` CLI | Package metadata | Distribution name explicitly approved by developer in this conversation, 2026-10-29; CLI/import settled in ADR-007 |
 | Repository source | `https://github.com/jimthompson5802/agentic-ml.git`; editable local repository install for development | Setup documentation | Confirmed origin; full-SHA experiment installation remains Milestone 1 |
 | Build/version choices | Hatchling backend; static initial version `0.1.0` in pyproject metadata; standard-library argparse CLI | US-33 prerequisite | Proposed implementation choices for plan review; no runtime third-party dependencies initially |
 | Tools | Python 3.12 baseline; uv; pytest, Ruff, mypy in dev dependency group | US-31 IP1 | Proposed; resolve compatible releases at implementation, commit exact resolutions in uv.lock, record uv version; do not invent unverified version pins |
-| Minimal CLI | US-33-IP1-T1–T3 and approved US-33 IP1 gate | US-31 IP2 | Pending; [owning plan](milestone-0-us-33.md) supplies source CLI/version evidence |
+| Minimal CLI | US-33-IP1-T1–T3 and approved US-33 IP1 gate | US-31 IP2 | [Renamed CLI tasks complete with evidence](../verification/cli-name-correction.md); owning US-33 IP1 gate approved 2026-10-29 |
 | CI status | Document Python 3.12 target separately from versions actually verified in CI | AC-01 final status | US-32 deferred; initially state CI not yet established, no claimed CI success; future CI evidence must update docs |
 | macOS host and clean source snapshot | Fresh clone of reviewed commit, new .venv, recorded prerequisite versions | IP2 verification | Pending; if unavailable, keep AC-07 incomplete; copying the active .venv is invalid |
 
@@ -39,7 +39,7 @@ Proposed shared commands after the package exists:
 - Lint: `uv run --locked ruff check .`.
 - Formatting: `uv run --locked ruff format --check .`.
 - Types: `uv run --locked mypy src tests`.
-- Smoke: `uv run --locked agent-ml --version`.
+- Smoke: `uv run --locked agentic-ml --version`.
 
 Configure pytest discovery, Ruff Python 3.12 target with naming/import/docstring/error rules selected individually, Ruff formatting, and strict mypy for typed source/tests. Document snake_case functions/modules, PascalCase classes, UPPER_CASE constants, explicit public types, Google-style public docstrings, grouped imports, specific exceptions, contextual errors, and no silent exception swallowing. Document which conventions are automated and which require review. Each suppression/exclusion needs a nearby specific reason and a reviewable exception record (rule, path, rationale, scope, removal condition) in proposed `docs/development.md`; no blanket exclusions to make checks pass.
 
@@ -59,12 +59,20 @@ Record evidence in proposed `docs/verification/` Markdown reports; keep temporar
 
 - **Status:** Approved.
 - **Developer decision:** Approved — coordinated scope, proposed tooling choices, and public test boundaries.
-- **Decision reference and date:** Developer message “i approve the plan” in this conversation, 2026-10-29. Implementation authorization and all implementation gate decisions remain pending.
+- **Decision reference and date:** Developer message “i approve the plan” in this conversation, 2026-10-29. US-31 IP1 execution authorized by developer message “you can begin us-31 ip 1”, 2026-10-29; all implementation gate decisions remain pending.
 - **Requested plan changes:** None.
 
 ## Scope-change history
 
-None.
+- **Change ID and date:** SC-01, 2026-10-29.
+- **Request and reason:** Developer explicitly requested correction of ADR-007 and generated code/documents: CLI should be `agentic-ml` for consistent package naming.
+- **Scope difference:** Replace the CLI name `agent-ml` with `agentic-ml`; distribution `agentic-ml` and import `agentic_ml` stay as selected. No legacy alias or additional experiment command is added.
+- **Impact:** US-31 CLI/smoke expectations (AC-03,05,07) and US-33 CLI/import/version expectations (AC-03,06,07) require renewed evidence; stable task and criterion IDs retained. US-33-IP1-T2–T3 were reopened and are complete again after renamed command checks passed; see correction evidence. US-31 IP1 approval remains historical; its tooling checks remain valid, while renamed guidance is reviewed in this correction. No milestone or prerequisite changes.
+- **Plan and requirement revisions:** ADR-007, current user stories, harness design/examples, README, contributor guide, repository instructions, both story plans, and execution index. GitHub issue bodies still contain the old spelling; this explicit developer direction overrides that spelling for implementation. Historical reports retain original results and link the correction evidence.
+- **Verification and gates:** Rename the public CLI regression first and confirm failure for the absent required command, then correct entrypoint and verify version/import/help plus all shared checks and lock immutability. US-33 IP1 gate stays pending; US-31 IP2 does not start.
+- **Decision:** Approved — developer instruction requesting this correction in this conversation, 2026-10-29, authorizes the scope revision and implementation without another approval cycle.
+- **Resume point:** Correct and reverify US-33 IP1 within its existing gate; see [CLI correction evidence](../verification/cli-name-correction.md).
+
 
 ## US-31 / Implementation Phase 1: Establish locked tooling and contributor conventions
 
@@ -76,27 +84,27 @@ None.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-31-IP1-T1 | Not started | Create proposed `pyproject.toml`, `.python-version`, `uv.lock`, `.gitignore`: build backend/version metadata and dev tools; Python >=3.12, baseline 3.12. Lock once during setup; subsequent verification must use locked mode. | Approved decisions | Metadata parse and lock consistency checks pass; exact tool versions recorded; no empty-package execution claim. | US-31-AC-02, 08 |
-| US-31-IP1-T2 | Not started | Configure pytest, Ruff lint/format, and strict mypy in proposed `pyproject.toml`; create proposed `docs/development.md` conventions and exception policy. | T1 | Each documented convention mapped to automated rule or manual review; temporary naming/import/docstring/type/format violations are rejected by applicable tools and corrected examples pass. Keep fixtures outside tracked source and record commands/results. | US-31-AC-04, 08–10 |
-| US-31-IP1-T3 | Not started | Update `README.md` and proposed `docs/development.md`: clone URL, Git/uv/Python prerequisites, macOS notes, locked setup, shared commands, no-service local defaults, credential/access needs for cloning/dependency downloads; no MLflow/DVC/model credentials for minimal checks. | T1–T2 | Guide distinguishes future CLI verification from available tooling and Python 3.12 CI target from actual CI evidence (none yet). Linux/Windows explicitly unverified. | US-31-AC-01–02, 04, 06, 09–10 |
+| US-31-IP1-T1 | Complete | Create proposed `pyproject.toml`, `.python-version`, `uv.lock`, `.gitignore`: build backend/version metadata and dev tools; Python >=3.12, baseline 3.12. Lock once during setup; subsequent verification must use locked mode. | Approved decisions | Metadata parse and lock consistency checks pass; exact tool versions recorded; no empty-package execution claim. | US-31-AC-02, 08 |
+| US-31-IP1-T2 | Complete | Configure pytest, Ruff lint/format, and strict mypy in proposed `pyproject.toml`; create proposed `docs/development.md` conventions and exception policy. | T1 | Each documented convention mapped to automated rule or manual review; temporary naming/import/docstring/type/format violations are rejected by applicable tools and corrected examples pass. Keep fixtures outside tracked source and record commands/results. | US-31-AC-04, 08–10 |
+| US-31-IP1-T3 | Complete | Update `README.md` and proposed `docs/development.md`: clone URL, Git/uv/Python prerequisites, macOS notes, locked setup, shared commands, no-service local defaults, credential/access needs for cloning/dependency downloads; no MLflow/DVC/model credentials for minimal checks. | T1–T2 | Guide distinguishes future CLI verification from available tooling and Python 3.12 CI target from actual CI evidence (none yet). Linux/Windows explicitly unverified. | US-31-AC-01–02, 04, 06, 09–10 |
 
 ### Verification and review evidence
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Metadata/lock | `uv lock --check`; record selected tools with uv environment/version diagnostics | Lock matches metadata; verification leaves uv.lock unchanged | Pending |
-| Tool configuration | Bootstrap tool commands above from locked dev group before source exists; record exact commands in `docs/verification/us-31-ip1.md` (proposed) | Invalid temporary examples fail relevant checks; corrected examples pass; no suppression hides failure | Pending |
-| Documentation | Review commands, prerequisites, rule mapping, credential requirements and justified exceptions | All IP1 criterion portions documented; no claims of completed CLI/CI/package verification | Pending |
+| Metadata/lock | `uv lock --check`; record selected tools with uv environment/version diagnostics | Lock matches metadata; verification leaves uv.lock unchanged | Passed; [IP1 evidence](../verification/us-31-ip1.md) records versions and unchanged checksum |
+| Tool configuration | Bootstrap tool commands above from locked dev group before source exists; record exact commands in `docs/verification/us-31-ip1.md` (proposed) | Invalid temporary examples fail relevant checks; corrected examples pass; no suppression hides failure | Passed; six invalid examples rejected and corrected examples pass; [IP1 evidence](../verification/us-31-ip1.md) |
+| Documentation | Review commands, prerequisites, rule mapping, credential requirements and justified exceptions | All IP1 criterion portions documented; no claims of completed CLI/CI/package verification | Passed; [guide](../development.md) and [IP1 review](../verification/us-31-ip1.md) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete and evidence reviewed; proposed public boundaries confirmed.
-- **Evidence presented:** Pending; proposed `docs/verification/us-31-ip1.md`.
+- **Evidence presented:** [IP1 verification](../verification/us-31-ip1.md); T1–T3 technically complete. Gate approved.
 - **Remaining limitations or blocked work:** No runnable CLI or fresh-checkout evidence yet.
-- **Developer decision:** Pending.
-- **Decision reference and date:** None.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer message “i approve” after IP1 review and convention questions, 2026-10-29.
 - **Requested changes and resolution:** None.
-- **Progression authorized:** Pending explicit approval, proceed to US-33 IP1 in the index. Stop here.
+- **Progression authorized:** US-33 IP1 in the coordinated index; approval responds to the request to authorize this progression.
 
 ## US-31 / Implementation Phase 2: Verify documented macOS setup and source smoke check
 
@@ -146,7 +154,7 @@ None.
 | US-31-AC-09 — conventions and enforcement | IP1-T2–T3; IP2-T3 | Rule/review mapping and tool demonstrations | Pending |
 | US-31-AC-10 — justified exceptions | IP1-T2–T3; IP2-T3 | Exception policy and review of actual suppressions/exclusions | Pending |
 
-- **Remaining work:** All implementation and evidence pending; no US-31 criterion deferred.
+- **Remaining work:** IP1 tasks and gate approved; US-33 prerequisite tasks complete with [evidence](../verification/us-33-ip1.md), and its gate approved; US-31 IP2 remains unstarted. No US-31 criterion deferred.
 - **Partial prerequisite delivery:** US-33 slice supplies CLI only; its distribution and CI criteria remain open.
 - **Developer acceptance:** Pending.
 - **Decision reference and date:** None.
