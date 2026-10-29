@@ -2,6 +2,10 @@
 
 Created 2026-10-28 21:26 EDT (America/New_York).
 
+## Subsequent documentation disposition (2026-10-28)
+
+R-01 is resolved by the ADR-006 timing correction recorded under [C-05 in the current reconciliation](user-stories-current-reconciliation.md#c-05--resolved-adr-006-states-the-protected-test-dependency). The current design explicitly requires protected-test isolation for predictive feature comparison in Milestone 2 and distinguishes authorized independent final evaluation in Milestone 3. The isolation mechanism remains pending. This is a scoped document-alignment disposition, not a fresh full review or evidence of implementation or successful verification. The original finding, proposed edit, coverage matrix, and baseline counts below remain historical evidence.
+
 ## Baseline and authority
 
 Reviewed Git revision `58f848bf59ea10e29209750f01860bd2f4b6d793`. The working tree was clean before this review. All selected sources were read in full; no required inputs were missing. This report is the only new file. No product requirements, design documents, decision statuses, or implementation plans were changed.
@@ -275,13 +279,17 @@ None.
 
 None.
 
-### Low — R-01: ADR-006 understates the Milestone 2 isolation dependency
+### Low — R-01 — Resolved: ADR-006 states the Milestone 2 isolation dependency
+
+Original finding (Low), retained as baseline evidence:
 
 - **Requirement locations:** stories L18 (controls accompany capabilities), L220 (Milestone 2 predictive comparisons), US-12-AC-03 at L229 (protected-test split), and US-14-AC-03 at L242 (fixed-protocol predictive comparisons).
 - **Design locations:** §7 L281 and §11 L864/L870 explicitly require protected-test isolation for Milestone 2. ADR-006 at L1025 instead names Milestone 3 for protected-test isolation and Milestone 4 for agent/interactive boundaries, without mentioning the earlier feature-comparison obligation.
 - **Evidence:** ADR-006 says “milestone 3 requires protected-test isolation”; the main design already requires it during Milestone 2 reference-estimator comparisons. The ADR also says controls must precede the governed capability, so this is an incomplete summary rather than an omission of the control throughout the design. The walkthrough L104–116 correctly keeps the holdout inaccessible before feature comparison.
 - **Practical consequence:** An implementer following the ADR summary alone could schedule isolation too late. Overall criterion coverage remains Supported because §7 and the delivery plan explicitly establish the earlier dependency.
 - **Target and correction:** Update only ADR-006's milestone-timing summary to include Milestone 2 and distinguish the later final-evaluation capability. Preserve pending status and the requirement to resolve enforcement before delivery. This confirms the remaining C-05 issue noted in the previous review's disposition.
+
+Scoped reconciliation (2026-10-28): Verified that [ADR-006](../specs/agentic-ml-harness-design.md#pending-decisions) now explicitly assigns protected-test isolation for predictive feature comparison to Milestone 2 and authorized independent final evaluation to Milestone 3, as recorded in the C-05 correction. Its requirement to enforce each milestone's controls before the governed capability is delivered remains explicit; §9's notebook contract also requires protected-test data to remain inaccessible to exploratory kernels. This resolves R-01's timing inconsistency without requiring the exact wording of the original proposed edit below. No further design change was needed. The mechanism remains pending; implementation and successful verification remain separate work.
 
 ## Decisions needed
 
@@ -295,7 +303,7 @@ In [design ADR-006](../specs/agentic-ml-harness-design.md#pending-decisions), re
 
 > Milestone 1 requires execution/extraction boundaries; Milestone 2 requires protected-test isolation for predictive feature comparison, including exploratory kernels; Milestone 3 adds authorized independent final evaluation; Milestone 4 extends applicable boundaries to managed agents and assistant tools/workspaces, while interactive use available in earlier milestones remains subject to those milestones' controls.
 
-This edit is proposed only. It changes neither requirement scope nor ADR status.
+This was the original proposed edit; it was not applied verbatim. The subsequent C-05 correction resolves the timing issue as recorded above. No further edit is required for R-01, and the ADR status remains pending.
 
 ## Design scope inventory
 
@@ -355,6 +363,10 @@ Criteria provide observable checks: version output/distribution metadata, packag
 No implementation commands or tests were run because this task assesses documentation. Report validation checks criterion uniqueness, exact inventory coverage, milestone counts, and source references. No development approval gate was advanced.
 
 ## Counts and verdict
+
+Current findings: **0 High; 0 Medium; 0 Low** — no open findings. R-01 is resolved as document alignment through the scoped reassessment above. This does not constitute a fresh full review or implementation certification.
+
+The following counts and verdict describe the original reviewed baseline:
 
 - Acceptance criteria: **184 Supported; 0 Partial; 0 Missing; 0 Contradictory; 0 Decision needed**.
 - Additional explicit outcomes outside numbered criteria: **4 Supported; 0 Partial; 0 Missing; 0 Contradictory; 0 Decision needed**. Total assessed review units: **188**.
