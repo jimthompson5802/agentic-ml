@@ -71,3 +71,7 @@ T1–T3 complete for the revised configuration, IP1 gate pending renewed develop
 ## Developer approval
 
 Developer approved IP1 including the Linux revision on 2026-10-29: “I approve IP1. Commit the Linux changes, push the branch, and create a PR to begin IP2.” Historical pending-gate statements above describe evidence preparation before this decision. IP2 entry and branch/PR publication are authorized; merge remains separately authorized.
+
+## Final hosted follow-up
+
+IP2 now verifies successful Linux PR and main push runs plus all six failure/correction cases; see [final IP2 evidence](us-32-ip2.md). Developer approved IP2 and accepted US-32 on 2026-10-29. Earlier pending-hosted statements in this report describe the IP1 checkpoint.

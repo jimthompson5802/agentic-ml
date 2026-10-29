@@ -122,40 +122,40 @@ Keep raw logs and disposable failure fixtures outside maintained source; redact 
 |---|---|---|---|---|---|
 | US-32-IP2-T1 | Complete | Publish authorized review branch/PR with workflow, observe PR-triggered run; record run/event URL, commit SHA, runner/Python/tool versions, clean setup and lock hashes in proposed `docs/verification/us-32-ip2.md`. | IP1 approval and publication authorization | Actual PR check passes all documented commands on clean Linux/Python 3.12. | AC-01–03 |
 | US-32-IP2-T2 | Complete | On an authorized disposable PR branch, introduce then correct isolated defects one at a time: failing pytest assertion, lint violation, formatting defect, type error, failing version smoke and dependency metadata/lock mismatch. Preserve links/log excerpts, correction commits and successful reruns in proposed IP2 evidence. | T1 | Each relevant command fails and overall CI fails with inspectable PR diagnostics; stale metadata is rejected without lock mutation. All temporary defects removed; real checks remain intact. | AC-02–04 |
-| US-32-IP2-T3 | In progress | Present clean PR and failure evidence for merge authorization; after authorized merge observe `push` run on `main`. Record exact default-branch revision/run and results in proposed IP2 evidence. | T2; separate merge authorization | Actual default-branch event passes same checks on clean Linux/Python 3.12; failure evidence never merged. If merge deferred, AC-01 stays pending. | AC-01–04 |
-| US-32-IP2-T4 | Not started | Update `docs/development.md`, README, both planned evidence reports as needed, this plan/index and CHECKPOINTS with actual CI coverage and acceptance mapping; rerun checks affected by any final changes. | T3 | Document only observed versions/platforms, link green PR/default-branch runs and failure logs, explain local reproduction; all final relevant checks pass and developer review is ready. | AC-01–04 |
+| US-32-IP2-T3 | Complete | Present clean PR and failure evidence for merge authorization; after authorized merge observe `push` run on `main`. Record exact default-branch revision/run and results in proposed IP2 evidence. | T2; separate merge authorization | Actual default-branch event passes same checks on clean Linux/Python 3.12; failure evidence never merged. If merge deferred, AC-01 stays pending. | AC-01–04 |
+| US-32-IP2-T4 | Complete | Update `docs/development.md`, README, both planned evidence reports as needed, this plan/index and CHECKPOINTS with actual CI coverage and acceptance mapping; rerun checks affected by any final changes. | T3 | Document only observed versions/platforms, link green PR/default-branch runs and failure logs, explain local reproduction; all final relevant checks pass and developer review is ready. | AC-01–04 |
 
 ### Verification and review evidence
 
-T1 baseline: [PR #5](https://github.com/jimthompson5802/agentic-ml/pull/5), [successful Linux PR run](https://github.com/jimthompson5802/agentic-ml/actions/runs/40973713670); [IP2 evidence](../verification/us-32-ip2.md). T2 completed all six red/correction-green pairs on disposable draft PR #6; final tree equals clean baseline. Merge authorization pending for T3.
+T1 baseline: [PR #5](https://github.com/jimthompson5802/agentic-ml/pull/5), [successful Linux PR run](https://github.com/jimthompson5802/agentic-ml/actions/runs/40973713670); [IP2 evidence](../verification/us-32-ip2.md). T2 completed all six red/correction-green pairs on disposable draft PR #6; final tree equals clean baseline. Developer merged PR #5; [main push run](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975472618) passed. T3/T4 complete.
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Required triggers | Inspect actual event, revision, job steps and logs through PR Checks/Actions or explicit-repo `gh run view` / `gh pr checks` | Successful PR and default-branch push runs on intended revisions | PR baseline passed on 6e7c389; main push pending authorized merge. [IP2 evidence](../verification/us-32-ip2.md) |
+| Required triggers | Inspect actual event, revision, job steps and logs through PR Checks/Actions or explicit-repo `gh run view` / `gh pr checks` | Successful PR and default-branch push runs on intended revisions | PR baseline and main push at 0a3c087 passed. [IP2 evidence](../verification/us-32-ip2.md) |
 | Failure propagation | T2 isolated red/correction-green runs, step/job conclusions and accessible PR log links | Every check failure fails CI, diagnostics explain cause, restored branch passes | All six cases verified with red/green run and head records; ineffective first smoke fixture corrected on attempt 2. [IP2 evidence](../verification/us-32-ip2.md) |
 | Lock integrity and setup | Logged hashes, lock diff, sync result, environment versions | Matching committed lock before/after successful and failed check runs; mismatch rejected, no silent regeneration | All red/green lock checks passed; stale metadata rejected with --locked. [IP2 evidence](../verification/us-32-ip2.md) |
-| Final evidence/docs | Review all four criterion mappings, links and `git diff --check`; run affected documented checks | Complete evidence, no unsupported coverage claim or leftover defect | Pending |
+| Final evidence/docs | Review all four criterion mappings, links and `git diff --check`; run affected documented checks | Complete evidence, no unsupported coverage claim or leftover defect | All four criteria verified; docs/links/command comparison, actionlint, lock and diff checks passed. [IP2 evidence](../verification/us-32-ip2.md) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete, successful real runs for both events, controlled failure diagnostics and corrected green result, actual CI versions documented.
-- **Evidence presented:** [IP2 evidence](../verification/us-32-ip2.md): T1/T2 complete; T3 awaiting separate merge authorization, T4/final gate pending.
-- **Remaining limitations or blocked work:** Hosted permissions/capacity and merge timing may block evidence. Other platforms/versions, US-33 package checks and US-34 policies remain excluded.
-- **Developer decision:** Pending.
-- **Decision reference and date:** None.
+- **Evidence presented:** [IP2 evidence](../verification/us-32-ip2.md): T1–T4 complete; successful PR/main runs and all six failure/correction pairs.
+- **Remaining limitations or blocked work:** No remaining US-32 blocker. Other platforms/versions, US-33 package checks and US-34 policies remain excluded.
+- **Developer decision:** Approved; final US-32 acceptance recorded.
+- **Decision reference and date:** Developer message “I approve us-32 ip2”, 2026-10-29; developer previously reported “I merged pr #5”.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Final US-32 acceptance only if explicitly approved; no downstream story implementation authorized.
+- **Progression authorized:** US-32 complete and accepted. No downstream story implementation authorized.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-32-AC-01 — clean Linux PR/default-branch runs | IP1-T1–T2; IP2-T1,T3–T4 | IP1 configuration and IP2 PR run records | PR verified; main push pending merge |
-| US-32-AC-02 — Python 3.12, tools, locked dependencies | IP1-T1–T3; IP2-T1–T4 | [IP2 versions, hashes and mismatch rejection](../verification/us-32-ip2.md) | Verified for PR execution |
-| US-32-AC-03 — shared development commands | IP1-T2–T3; IP2-T1–T4 | [IP1 comparison and IP2 hosted results](../verification/us-32-ip2.md) | Verified for PR execution |
+| US-32-AC-01 — clean Linux PR/default-branch runs | IP1-T1–T2; IP2-T1,T3–T4 | [IP2 PR/main run records](../verification/us-32-ip2.md) | Verified |
+| US-32-AC-02 — Python 3.12, tools, locked dependencies | IP1-T1–T3; IP2-T1–T4 | [IP2 versions, hashes and mismatch rejection](../verification/us-32-ip2.md) | Verified for PR and main push |
+| US-32-AC-03 — shared development commands | IP1-T2–T3; IP2-T1–T4 | [IP1 comparison and IP2 hosted results](../verification/us-32-ip2.md) | Verified for PR and main push |
 | US-32-AC-04 — failing result and PR diagnostics | IP1-T2–T3; IP2-T2–T4 | [IP2 six failure/correction pairs](../verification/us-32-ip2.md) and contributor instructions | Verified |
 
-- **Remaining work:** Authorized merge/default-branch run (T3), final documentation/evidence (T4), IP2 final gate and story acceptance. IP1 approved; T1/T2 complete. No criteria deferred beyond this story.
+- **Remaining work:** None for US-32. T1–T4 complete, both implementation gates approved and final story accepted.
 - **Partial prerequisite delivery:** Reuses accepted foundation only. Does not complete remaining US-33 or Milestone 0.
-- **Developer acceptance:** Pending.
-- **Decision reference and date:** None.
+- **Developer acceptance:** Approved.
+- **Decision reference and date:** Developer message “I approve us-32 ip2”, 2026-10-29.
