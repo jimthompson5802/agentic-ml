@@ -8,5 +8,5 @@ def main() -> None:
     """Run the command-line interface."""
     parser = argparse.ArgumentParser(prog="agentic-ml")
     parser.add_argument("--version", action="version", version=version("agentic-ml"))
-    parser.parse_args()
     raise SystemExit(17)
+    parser.parse_args()
