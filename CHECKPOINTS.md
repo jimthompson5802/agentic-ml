@@ -5,40 +5,34 @@ Last updated: 2026-10-29
 ## Current position
 
 - Milestone: 0 — Harness development foundation.
-- Active work: US-32 implementation plan approved; planning changes prepared for commit; implementation not started. US-31 remains complete and accepted.
-- Branch at handoff: `us-32-setup-gh-action-ci`.
-- Last relevant commit: `e40cf7d` merges PR #4; `5207cca` records final US-31 acceptance; `c9fbb75` contains verified executable source. This checkpoint update records review and merge completion.
+- Active work: US-32 IP1 technically complete; developer approval pending. IP2 not started.
+- Branch: `us-32-setup-gh-action-ci`; base commit `2d1b9b6` (approved plan).
+- Commit scope: new CI workflow and IP1 evidence; updated README, development guide, owning plan, execution index and checkpoint. Developer message “commit changes” authorizes this local commit. IP1 approval remains pending; no publication performed. No runtime/dependency changes.
 
 ## Progress overview
 
 | Story | Implementation plan | Implementation | Developer gate |
 |---|---|---|---|
-| [US-31 / #1 — Development environment](https://github.com/jimthompson5802/agentic-ml/issues/1) | [Approved](docs/plans/milestone-0-us-31.md#plan-review) | Complete and accepted | IP1 and IP2 approved |
-| [US-32 / #2 — CI verification](https://github.com/jimthompson5802/agentic-ml/issues/2) | [Approved](docs/plans/milestone-0-us-32.md#plan-review) | Not started | IP1 and IP2 pending |
-| [US-33 / #3 — Package build and verification](https://github.com/jimthompson5802/agentic-ml/issues/3) | [CLI prerequisite slice approved](docs/plans/milestone-0-us-33.md); remainder unplanned | CLI prerequisite complete; remainder unplanned | US-33 IP1 approved |
+| US-31 / #1 | [Approved](docs/plans/milestone-0-us-31.md) | Complete and accepted | IP1/IP2 approved |
+| US-32 / #2 | [Approved](docs/plans/milestone-0-us-32.md) | IP1 T1–T3 complete; IP2 not started | IP1 approval pending |
+| US-33 / #3 | [CLI prerequisite approved](docs/plans/milestone-0-us-33.md) | CLI prerequisite complete; remainder unplanned | IP1 approved |
 
 ## Resume here
 
-US-31 was accepted through final IP2 approval (developer message “i approve us-31 ip2”, 2026-10-29) after the story-completion review. See the [owning gate and acceptance record](docs/plans/milestone-0-us-31.md#us-31--implementation-phase-2-verify-documented-macos-setup-and-source-smoke-check) and [fresh macOS evidence](docs/verification/us-31-ip2.md). The coordinated scope is complete. Documentation/evidence and acceptance records were reviewed and merged into `main` through [PR #4](https://github.com/jimthompson5802/agentic-ml/pull/4) on 2026-10-29. The developer approved the [US-32 plan](docs/plans/milestone-0-us-32.md) and [execution index](docs/plans/milestone-0-us-32-execution-order.md) on 2026-10-29 (“i approve plan; commit changes”). It specifies configuration/local verification followed by hosted event/failure verification, each with a pending developer gate. Implementation requires authorization; remaining US-33 remains unplanned.
+Developer message “execute plan for us-32” authorized IP1 on 2026-10-29. Review [IP1 evidence](docs/verification/us-32-ip1.md) and the [owning gate](docs/plans/milestone-0-us-32.md#us-32--implementation-phase-1-configure-macos-development-ci). Await explicit approval before IP2 in the [execution order](docs/plans/milestone-0-us-32-execution-order.md). Publication and merge authorization remain separate.
 
 ## Pending developer decisions
 
-- No US-31 implementation gate, acceptance decision, or PR review/merge remains pending.
-- US-32 plan approval is recorded; implementation has not been authorized by the current commit-only instruction. Hosted publication and merge require separate authorization during execution; default-branch evidence remains pending until an authorized merge.
-- Remaining US-33 scope needs separate planning/authorization.
-- SC-01 CLI spelling `agentic-ml` governs the older GitHub issue wording; distribution/import/tooling choices are recorded in the plans and ADR-007.
+- Approve US-32 IP1 or request changes. No hosted evidence or story acceptance is claimed.
+- IP2 needs branch/PR publication authorization; default-branch evidence additionally requires authorized merge.
+- Remaining US-33 requires separate planning/authorization; Milestone 99 stays deferred.
 
 ## Handoff notes
 
-- US-32 planning retrieved complete issues #1/#2/#3 and all comment pages with stable metadata: zero/zero/one comments respectively. Issue #3 remains open; its sole comment records reopening after premature closure by PR #4. Planning found no required new prerequisite work.
-- Planning began on clean `main` at `808d4e0`. Changes in this planning commit are documentation only: US-32 plan, its execution index and this checkpoint. No workflow, dependencies or executable behavior changed; TDD does not apply to this planning change. Local file-link validation, acceptance/task-record checks and `git diff --check` passed. Developer approval was recorded before committing; all implementation tasks and gates remain pending.
-
-- Refreshed complete issue #1 and all comment pages; zero comments and unchanged metadata. Its body assigns Milestone 0. Naming override remains the recorded developer decision.
-- Fresh GitHub clone checked out exact reviewed commit `c9fbb758c9ee6a85974de0a30783199338ef80df` using a local Git fetch for that review revision; no copied source patches or environment. New .venv created by documented locked synchronization.
-- macOS 15.7.9 arm64, Python 3.12.15, uv 0.13.1: all documented checks passed (3 tests, lint, formatting, strict types, CLI version smoke and lock consistency). Fresh clone stayed clean and uv.lock SHA-256 stayed unchanged. Complete commands/results and all ten criterion mappings are in the IP2 report.
-- README/guide now record verified fresh-checkout status and reviewed-commit source selection. This implementation phase changes no executable behavior; TDD uses existing regression tests rather than a manufactured failure. No failed corrective attempt or new suppression occurred.
-- Evidence covers a new checkout/environment on this macOS host with existing Python/uv and dependency cache. Other platforms/Python versions, CI, isolated wheel/sdist verification and packaged resources remain unverified/deferred to their owning stories. Milestone 0 is incomplete.
-- Temporary clone/results remain at `/tmp/us31-ip2-5w99njqw/`. The merged work includes README/guide, plan/index/checkpoint and the new IP2 evidence report. Documentation formatting, local file-target validation and git diff --check passed before publication. PR #4 received a static review with no actionable findings and merged at 2026-10-29 23:03:09 UTC as `e40cf7d9e57af505b810f4fdf4fb6afca6a4f57c`; the review did not rerun project checks. US-31 was delivered through this PR, while US-33 #3 remains partial work. The working tree was clean on `main` before this checkpoint update.
+- Refreshed full issue #2 and every comment page: zero comments, stable metadata, Milestone 0 in body, no scope conflict. Existing US-31/US-33 prerequisite approvals/evidence checked against current tree.
+- Actions enabled; main is default branch. Configured macos-15/Python 3.12/uv 0.13.1 with immutable checkout/setup-uv commits, locked setup, named independent checks and final checksum/diff. Hosted capacity/events remain unverified.
+- actionlint 1.7.12 passed; disposable local lint defect propagated exit 1 under CI shell options. All seven documented commands passed on macOS 15.7.9 arm64/Python 3.12.15; three tests. Lock SHA-256 unchanged. Local file-target/command comparison and diff checks passed.
+- No runtime behavior added: existing regression checks and workflow validation apply. Hosted red/correction-green cases remain IP2. No corrective attempts, suppressions or scope changes. Sandbox cache/network failures succeeded on authorized retries. Raw local results remain `/tmp/us32-ip1-evidence/`; durable results are in the evidence report.
 
 ## Maintenance rules
 

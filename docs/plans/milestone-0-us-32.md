@@ -24,7 +24,7 @@ Inspected clean `main` at `808d4e0`: `.github` contains templates but no workflo
 |---|---|---|---|
 | US-31 tooling and commands | US-31-IP1-T1–T3 and IP2-T1–T3 complete, gates approved | US-32 IP1 | [Owning plan](milestone-0-us-31.md), [fresh macOS evidence](../verification/us-31-ip2.md); accepted 2026-10-29 |
 | US-33 minimal CLI | US-33-IP1-T1–T3 and gate approved | Source installation, tests and smoke | [Owning plan](milestone-0-us-33.md), [corrected CLI evidence](../verification/cli-name-correction.md); approved 2026-10-29; remaining story unnecessary here |
-| CI implementation choices | GitHub Actions; explicit macOS runner image, Python 3.12 only, pinned uv version initially 0.13.1 | Workflow configuration | Proposed for plan review; confirm supported runner/actions and immutable action revisions from official sources during IP1 |
+| CI implementation choices | GitHub Actions; explicit macOS runner image, Python 3.12 only, pinned uv version initially 0.13.1 | Workflow configuration | Selected macos-15, checkout v5 and setup-uv v7 immutable revisions; see IP1 evidence |
 | Default branch | Push trigger targets actual default branch | Workflow trigger and default-branch evidence | Repository API reports `main`; recheck before implementation |
 | Hosted execution and publication | Actions enabled, hosted runner availability, repository permissions; authorize branch/PR publication and merge separately | IP2 hosted evidence | Not exercised in planning; absence of access blocks affected evidence, not configuration work |
 
@@ -64,7 +64,7 @@ Keep raw logs and disposable failure fixtures outside maintained source; redact 
 
 - **Status:** Approved.
 - **Developer decision:** Approved — scope, implementation phases, proposed technical choices and public verification boundaries.
-- **Decision reference and date:** Developer message “i approve plan; commit changes”, 2026-10-29. Approval covers this plan and its execution index; the current instruction authorizes recording approval and committing planning changes. Implementation has not started and implementation gates remain pending.
+- **Decision reference and date:** Developer message “i approve plan; commit changes”, 2026-10-29. Approval covers this plan and its execution index; the current instruction authorizes recording approval and committing planning changes. IP1 execution authorized by developer message “execute plan for us-32”, 2026-10-29; implementation gates remain pending.
 - **Requested plan changes:** None recorded.
 
 ## Scope-change history
@@ -81,22 +81,22 @@ None.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-32-IP1-T1 | Not started | Confirm official runner/action compatibility, immutable revisions, uv installation and Python selection; inspect repository Actions availability and default branch. Record choices and source links in proposed `docs/verification/us-32-ip1.md`. | Approved plan and prerequisite records | Concrete supported configuration selected; any unavailable permission/capacity recorded before dependent work. | AC-01–02 |
-| US-32-IP1-T2 | Not started | Create proposed `.github/workflows/ci.yml` with PR/default-branch triggers, macOS/Python 3.12 setup, locked synchronization, five named shared checks, version diagnostics and final lock immutability check. | T1 | Inspect valid YAML and event/job conditions; reproduce commands locally, confirm identical command text and nonzero failure propagation; dependency failure cannot produce success. No package verification added. | AC-01–04 |
-| US-32-IP1-T3 | Not started | Update `docs/development.md` and README CI status/instructions; run all documented shared checks on macOS, record results and lock hash in proposed IP1 evidence; update plan/index/checkpoint. | T2 | Tests/lint/format/types/smoke and lock consistency pass; docs explain PR checks/logs, reproduction, pinned setup, pending hosted verification and platform limits. | AC-02–04 |
+| US-32-IP1-T1 | Complete | Confirm official runner/action compatibility, immutable revisions, uv installation and Python selection; inspect repository Actions availability and default branch. Record choices and source links in proposed `docs/verification/us-32-ip1.md`. | Approved plan and prerequisite records | Concrete supported configuration selected; any unavailable permission/capacity recorded before dependent work. | AC-01–02 |
+| US-32-IP1-T2 | Complete | Create proposed `.github/workflows/ci.yml` with PR/default-branch triggers, macOS/Python 3.12 setup, locked synchronization, five named shared checks, version diagnostics and final lock immutability check. | T1 | Inspect valid YAML and event/job conditions; reproduce commands locally, confirm identical command text and nonzero failure propagation; dependency failure cannot produce success. No package verification added. | AC-01–04 |
+| US-32-IP1-T3 | Complete | Update `docs/development.md` and README CI status/instructions; run all documented shared checks on macOS, record results and lock hash in proposed IP1 evidence; update plan/index/checkpoint. | T2 | Tests/lint/format/types/smoke and lock consistency pass; docs explain PR checks/logs, reproduction, pinned setup, pending hosted verification and platform limits. | AC-02–04 |
 
 ### Verification and review evidence
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Workflow structure | Parse YAML with a suitable Actions-aware validator available during implementation; inspect triggers, action revisions, shell failure handling and conditions | Both required events, macOS/3.12 and visible nonzero conclusions; record validator/version and limitations | Pending |
-| Local shared checks | Exact seven commands above; compare lock SHA-256 and `git diff --exit-code -- uv.lock` | All pass without modifying lockfile | Pending |
-| Documentation | Compare workflow commands with development guide; validate Markdown links and `git diff --check` | Reproduction instructions agree; no unsupported hosted claims | Pending |
+| Workflow structure | Parse YAML with a suitable Actions-aware validator available during implementation; inspect triggers, action revisions, shell failure handling and conditions | Both required events, macOS/3.12 and visible nonzero conclusions; record validator/version and limitations | actionlint 1.7.12 passed; local nonzero propagation passed; hosted conclusions pending. [Evidence](../verification/us-32-ip1.md) |
+| Local shared checks | Exact seven commands above; compare lock SHA-256 and `git diff --exit-code -- uv.lock` | All pass without modifying lockfile | All seven passed, three tests; matching SHA-256 and clean lock diff. [Evidence](../verification/us-32-ip1.md) |
+| Documentation | Compare workflow commands with development guide; validate Markdown links and `git diff --check` | Reproduction instructions agree; no unsupported hosted claims | Commands agree; local targets and diff check passed. [Evidence](../verification/us-32-ip1.md) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete with configuration review, actual local check results and hosted-verification procedure.
-- **Evidence presented:** Pending — proposed `docs/verification/us-32-ip1.md`.
+- **Evidence presented:** [IP1 verification](../verification/us-32-ip1.md); T1–T3 technically complete, developer approval pending.
 - **Remaining limitations or blocked work:** Hosted triggers, PR diagnostics and default-branch run remain unverified until IP2.
 - **Developer decision:** Pending.
 - **Decision reference and date:** None.
@@ -146,7 +146,7 @@ None.
 | US-32-AC-03 — shared development commands | IP1-T2–T3; IP2-T1–T4 | Proposed workflow/local command comparison and hosted results | Pending |
 | US-32-AC-04 — failing result and PR diagnostics | IP1-T2–T3; IP2-T2–T4 | Proposed isolated failure/correction records and contributor log instructions | Pending |
 
-- **Remaining work:** All implementation and execution evidence; no criteria deferred beyond this story.
+- **Remaining work:** IP1 approval and all IP2 hosted execution evidence/final gate; no criteria deferred beyond this story.
 - **Partial prerequisite delivery:** Reuses accepted foundation only. Does not complete remaining US-33 or Milestone 0.
 - **Developer acceptance:** Pending.
 - **Decision reference and date:** None.
