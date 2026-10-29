@@ -16,6 +16,8 @@ If no GitHub issue is supplied or identifiable, request the issue before startin
 
 ## Development workflow
 
+When starting or resuming development, read [CHECKPOINTS.md](CHECKPOINTS.md) and follow its maintenance rules. Update it at completed work, approval gates, blockers, and before handing work back. Verify its summary against the owning issues, implementation plans, and current working tree before acting.
+
 Use Conventional Commits for commit messages: `<type>[optional scope]: <description>` (for example, `docs: update architecture proposal`).
 
 When creating, revising, or executing detailed user-story implementation plans, follow the [planning terminology](README.md#planning-terminology) and [implementation-plan template](docs/templates/user-story-implementation-plan.md). Organize work as milestone → user story → implementation phases → granular tasks. Each implementation phase ends with an explicit developer approval gate; await approval before progressing. Approval of a written plan does not approve its implementation gates.
