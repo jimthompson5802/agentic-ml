@@ -7,7 +7,7 @@ Last updated: 2026-10-29
 - Milestone: 0 — Harness development foundation.
 - Active work: US-32 complete and accepted; no active implementation gate remains.
 - PR #5 merged by developer at 2026-10-29T23:47:14Z as `0a3c087f8b0273be9cd3fb4b2f57a9846614fd86`. [Main push CI](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975472618) passed.
-- Local branch: `us-32-setup-gh-action-ci`; reviewed head `e6f0bd9` has the same source tree as the merge. Final documentation/evidence and approval records updated locally after merge.
+- Follow-up branch: `docs/us-32-final-acceptance`; commit `046487e` records final evidence and approval after PR #5 merged. Developer requested publication of the documentation follow-up PR. Its review/merge remains pending.
 
 ## Progress overview
 
@@ -24,7 +24,7 @@ Developer message “I approve us-32 ip2” on 2026-10-29 approves final IP2 and
 ## Pending developer decisions
 
 - No US-32 implementation gate or acceptance decision remains pending.
-- Final post-merge evidence/approval documentation is local and has not been published in a follow-up PR.
+- Review and merge the documentation follow-up PR from `docs/us-32-final-acceptance` to place final evidence and approval records on main. This publication does not reopen the approved US-32 gates.
 - Remaining US-33 requires separate planning/authorization. Milestone 99 stays deferred.
 
 ## Handoff notes
