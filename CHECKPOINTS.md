@@ -5,8 +5,8 @@ Last updated: 2026-10-29
 ## Current position
 
 - Milestone: 0 — Harness development foundation.
-- Active work: US-31 complete and accepted; [PR #4](https://github.com/jimthompson5802/agentic-ml/pull/4) reviewed and merged on 2026-10-29.
-- Branch at handoff: `main`.
+- Active work: US-32 implementation plan approved; planning changes prepared for commit; implementation not started. US-31 remains complete and accepted.
+- Branch at handoff: `us-32-setup-gh-action-ci`.
 - Last relevant commit: `e40cf7d` merges PR #4; `5207cca` records final US-31 acceptance; `c9fbb75` contains verified executable source. This checkpoint update records review and merge completion.
 
 ## Progress overview
@@ -14,20 +14,24 @@ Last updated: 2026-10-29
 | Story | Implementation plan | Implementation | Developer gate |
 |---|---|---|---|
 | [US-31 / #1 — Development environment](https://github.com/jimthompson5802/agentic-ml/issues/1) | [Approved](docs/plans/milestone-0-us-31.md#plan-review) | Complete and accepted | IP1 and IP2 approved |
-| [US-32 / #2 — CI verification](https://github.com/jimthompson5802/agentic-ml/issues/2) | Not started | Not started | Not presented |
+| [US-32 / #2 — CI verification](https://github.com/jimthompson5802/agentic-ml/issues/2) | [Approved](docs/plans/milestone-0-us-32.md#plan-review) | Not started | IP1 and IP2 pending |
 | [US-33 / #3 — Package build and verification](https://github.com/jimthompson5802/agentic-ml/issues/3) | [CLI prerequisite slice approved](docs/plans/milestone-0-us-33.md); remainder unplanned | CLI prerequisite complete; remainder unplanned | US-33 IP1 approved |
 
 ## Resume here
 
-US-31 was accepted through final IP2 approval (developer message “i approve us-31 ip2”, 2026-10-29) after the story-completion review. See the [owning gate and acceptance record](docs/plans/milestone-0-us-31.md#us-31--implementation-phase-2-verify-documented-macos-setup-and-source-smoke-check) and [fresh macOS evidence](docs/verification/us-31-ip2.md). The coordinated scope is complete. Documentation/evidence and acceptance records were reviewed and merged into `main` through [PR #4](https://github.com/jimthompson5802/agentic-ml/pull/4) on 2026-10-29. US-32 and remaining US-33 require separate planning/authorization; no downstream implementation has started.
+US-31 was accepted through final IP2 approval (developer message “i approve us-31 ip2”, 2026-10-29) after the story-completion review. See the [owning gate and acceptance record](docs/plans/milestone-0-us-31.md#us-31--implementation-phase-2-verify-documented-macos-setup-and-source-smoke-check) and [fresh macOS evidence](docs/verification/us-31-ip2.md). The coordinated scope is complete. Documentation/evidence and acceptance records were reviewed and merged into `main` through [PR #4](https://github.com/jimthompson5802/agentic-ml/pull/4) on 2026-10-29. The developer approved the [US-32 plan](docs/plans/milestone-0-us-32.md) and [execution index](docs/plans/milestone-0-us-32-execution-order.md) on 2026-10-29 (“i approve plan; commit changes”). It specifies configuration/local verification followed by hosted event/failure verification, each with a pending developer gate. Implementation requires authorization; remaining US-33 remains unplanned.
 
 ## Pending developer decisions
 
 - No US-31 implementation gate, acceptance decision, or PR review/merge remains pending.
-- US-32 and remaining US-33 scope need separate planning/authorization.
+- US-32 plan approval is recorded; implementation has not been authorized by the current commit-only instruction. Hosted publication and merge require separate authorization during execution; default-branch evidence remains pending until an authorized merge.
+- Remaining US-33 scope needs separate planning/authorization.
 - SC-01 CLI spelling `agentic-ml` governs the older GitHub issue wording; distribution/import/tooling choices are recorded in the plans and ADR-007.
 
 ## Handoff notes
+
+- US-32 planning retrieved complete issues #1/#2/#3 and all comment pages with stable metadata: zero/zero/one comments respectively. Issue #3 remains open; its sole comment records reopening after premature closure by PR #4. Planning found no required new prerequisite work.
+- Planning began on clean `main` at `808d4e0`. Changes in this planning commit are documentation only: US-32 plan, its execution index and this checkpoint. No workflow, dependencies or executable behavior changed; TDD does not apply to this planning change. Local file-link validation, acceptance/task-record checks and `git diff --check` passed. Developer approval was recorded before committing; all implementation tasks and gates remain pending.
 
 - Refreshed complete issue #1 and all comment pages; zero comments and unchanged metadata. Its body assigns Milestone 0. Naming override remains the recorded developer decision.
 - Fresh GitHub clone checked out exact reviewed commit `c9fbb758c9ee6a85974de0a30783199338ef80df` using a local Git fetch for that review revision; no copied source patches or environment. New .venv created by documented locked synchronization.
