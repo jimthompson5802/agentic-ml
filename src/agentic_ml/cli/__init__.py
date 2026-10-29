@@ -9,3 +9,4 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="agentic-ml")
     parser.add_argument("--version", action="version", version=version("agentic-ml"))
     parser.parse_args()
+    raise SystemExit(17)
