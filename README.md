@@ -8,7 +8,7 @@ The proposed harness provides reusable orchestration, experiment execution, inde
 
 ## Contributor setup
 
-Start with the [development guide](docs/development.md) for Python 3.12, uv, locked dependencies, coding conventions, and local checks. Development tooling, the minimal package, and `agentic-ml --version` are available. Fresh-checkout macOS verification passed; see the [evidence](docs/verification/us-31-ip2.md). The [development CI workflow](.github/workflows/ci.yml) is configured for Linux/Python 3.12; hosted verification is pending. See [CI checks and logs](docs/development.md#development-ci-and-diagnostic-logs).
+Start with the [development guide](docs/development.md) for Python 3.12, uv, locked dependencies, coding conventions, and local checks. Development tooling, the minimal package, and `agentic-ml --version` are available. Fresh-checkout macOS verification passed; see the [evidence](docs/verification/us-31-ip2.md). The [development CI workflow](.github/workflows/ci.yml) is configured for Linux/Python 3.12; the [first hosted PR run passed](docs/verification/us-32-ip2.md). Failure/correction cases are verified; default-branch verification remains pending authorized merge. See [CI checks and logs](docs/development.md#development-ci-and-diagnostic-logs).
 
 ## Repository contents
 

@@ -5,35 +5,35 @@ Last updated: 2026-10-29
 ## Current position
 
 - Milestone: 0 — Harness development foundation.
-- Active work: US-32 IP1 Linux revision approved; IP2 beginning with authorized branch/PR publication.
-- Branch: `us-32-setup-gh-action-ci`; last commit `14527c1` (original IP1 configuration).
-- Current uncommitted revision switches CI to Linux (Ubuntu 24.04), updates requirements/design/docs and records SC-01 in the plan and issue #2. Linux execution remains pending IP2.
-- Previous commit scope: new CI workflow and IP1 evidence; updated README, development guide, owning plan, execution index and checkpoint. Developer message “commit changes” authorizes this local commit. IP1 approval is recorded; no publication performed. No runtime/dependency changes.
+- Active work: US-32 IP1 approved; IP2-T1/T2 complete. T3 awaits explicit merge authorization; T4 and final gate pending.
+- Branch: `us-32-setup-gh-action-ci`; Linux implementation commit `6e7c389`. Evidence/docs follow-up prepared for commit and push.
+- Review PR: [#5](https://github.com/jimthompson5802/agentic-ml/pull/5). [Baseline run](https://github.com/jimthompson5802/agentic-ml/actions/runs/40973713670) passed. Disposable draft PR #6 has all six red/green pairs and is closed without merge; its final tree matches the clean baseline.
 
 ## Progress overview
 
 | Story | Implementation plan | Implementation | Developer gate |
 |---|---|---|---|
 | US-31 / #1 | [Approved](docs/plans/milestone-0-us-31.md) | Complete and accepted | IP1/IP2 approved |
-| US-32 / #2 | [Approved](docs/plans/milestone-0-us-32.md) | IP1 T1–T3 complete; IP2 starting | IP1 approved |
+| US-32 / #2 | [Approved](docs/plans/milestone-0-us-32.md) | IP1 complete; IP2-T1/T2 complete | IP1 approved; merge authorization and IP2 final gate pending |
 | US-33 / #3 | [CLI prerequisite approved](docs/plans/milestone-0-us-33.md) | CLI prerequisite complete; remainder unplanned | IP1 approved |
 
 ## Resume here
 
-Developer message “execute plan for us-32” authorized IP1 on 2026-10-29. Review [IP1 evidence](docs/verification/us-32-ip1.md) and the [owning gate](docs/plans/milestone-0-us-32.md#us-32--implementation-phase-1-configure-linux-development-ci). Developer approved IP1 and authorized commit/push/PR creation to begin IP2 on 2026-10-29. Follow the [execution order](docs/plans/milestone-0-us-32-execution-order.md); merge authorization remains separate.
+Developer approved IP1 including Linux SC-01, committing/pushing changes and creating a PR to begin IP2 on 2026-10-29. Review [IP2 evidence](docs/verification/us-32-ip2.md) and PR #5. Await explicit merge authorization before T3's default-branch update; then observe the main push run, finish T4 and present the final IP2 gate. Follow the [execution index](docs/plans/milestone-0-us-32-execution-order.md). No merge or final story acceptance has been authorized.
 
 ## Pending developer decisions
 
-- IP1 approved by developer 2026-10-29; IP2 and branch/PR publication authorized. No story acceptance claimed.
-- Default-branch evidence still requires explicit merge authorization.
-- Remaining US-33 requires separate planning/authorization; Milestone 99 stays deferred.
+- Authorize merging clean PR #5 so IP2-T3 can verify the main push event.
+- IP2 final approval/story acceptance follow complete T3/T4 evidence.
+- Remaining US-33 needs separate planning/authorization; Milestone 99 stays deferred.
 
 ## Handoff notes
 
-- Refreshed full issue #2 and every comment page: zero comments, stable metadata, Milestone 0 in body, no scope conflict. Existing US-31/US-33 prerequisite approvals/evidence checked against current tree.
-- Actions enabled; main is default branch. Configured ubuntu-24.04/Python 3.12/uv 0.13.1 with immutable checkout/setup-uv commits, locked setup, named independent checks and final checksum/diff. Hosted capacity/events remain unverified.
-- actionlint 1.7.12 passed; disposable local lint defect propagated exit 1 under CI shell options. All seven documented commands passed on macOS 15.7.9 arm64/Python 3.12.15; three tests. Lock SHA-256 unchanged. Local file-target/command comparison and diff checks passed.
-- No runtime behavior added: existing regression checks and workflow validation apply. Hosted red/correction-green cases remain IP2. No corrective attempts or suppressions. SC-01 records the authorized Linux CI change in issue #2 and the owning plan. Sandbox cache/network failures succeeded on authorized retries. Raw local results remain `/tmp/us32-ip1-evidence/`; durable results are in the evidence report.
+- Full issue #2 and all comment pages refreshed before IP2: stable metadata, zero comments, Linux decision present. Issue and local criterion/design agree on Linux CI; historical macOS local development evidence retained.
+- Real hosted Ubuntu 24.04.5 x86_64, image 20261025.353.1, Python 3.12.15, uv 0.13.1. Three integration tests, lint, format, types, CLI smoke and locked setup/check passed. Lock hash unchanged.
+- Disposable pytest/lint/format/types/smoke/stale-lock cases each produced failed CI and a separate green correction run. Independent checks continued after failure; stale-lock failure skipped dependent checks and preserved final checksum verification. No deliberate defect reached PR #5.
+- First smoke fixture was ineffective because argparse's version action exited before the injected failure. Attempt 2 moved failure before parsing, verified exit 17, then restored the exact CLI and verified green. Full attempt/run evidence is preserved; no assertion or checker was weakened. No other corrective attempts or suppressions.
+- Raw metadata/logs remain `/tmp/us32-ip2-evidence/`; durable run/commit links and criterion mapping are in the IP2 report. Disposable worktree `/tmp/us32-ip2-fixture` is clean and matches 6e7c389.
 
 ## Maintenance rules
 
