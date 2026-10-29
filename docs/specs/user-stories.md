@@ -27,13 +27,13 @@ As a contributor, I want documented steps to set up this repository for local de
 
 Acceptance criteria:
 
-- <a id="us-31-ac-01"></a> **US-31-AC-01:** Documented prerequisites identify supported Python versions and required tools.
+- <a id="us-31-ac-01"></a> **US-31-AC-01:** Documented prerequisites identify supported Python versions and required tools. macOS is the initial verified development platform; Linux and Windows remain eligible for future verification, and platform-specific requirements and known limitations are documented.
 - <a id="us-31-ac-02"></a> **US-31-AC-02:** Instructions cover cloning the harness repository and installing runtime and development dependencies using `uv` and the committed lockfile.
 - <a id="us-31-ac-03"></a> **US-31-AC-03:** Contributors can run the harness CLI from the local source checkout.
 - <a id="us-31-ac-04"></a> **US-31-AC-04:** Documented commands run automated tests, linting, formatting checks, and type checks.
 - <a id="us-31-ac-05"></a> **US-31-AC-05:** A documented smoke check confirms that the environment is ready for development.
 - <a id="us-31-ac-06"></a> **US-31-AC-06:** Setup identifies required configuration and credentials and provides local defaults where practical.
-- <a id="us-31-ac-07"></a> **US-31-AC-07:** Setup instructions are verified from a clean checkout.
+- <a id="us-31-ac-07"></a> **US-31-AC-07:** Setup instructions are verified on macOS from a fresh checkout and a new development environment using only the documented prerequisites and setup steps. Verification runs all documented development checks, including `agent-ml --version`, and records the operating system and Python/tool versions, commands run, and results as review evidence.
 - <a id="us-31-ac-08"></a> **US-31-AC-08:** The repository includes configuration for automated tests, linting, formatting, and type checking. Tool versions are controlled through the development dependencies and committed lockfile, and the documented local commands use these configurations.
 - <a id="us-31-ac-09"></a> **US-31-AC-09:** Documented Python coding conventions cover naming, typing, docstrings, imports, and error handling. Automated checks enforce the conventions that the selected tools can verify.
 - <a id="us-31-ac-10"></a> **US-31-AC-10:** Documented guidance defines when and how contributors may add rule suppressions and check exclusions, requiring a recorded justification for each exception so that it can be reviewed.
@@ -44,7 +44,7 @@ As a contributor, I want automated checks on every pull request so that I receiv
 
 Acceptance criteria:
 
-- <a id="us-32-ac-01"></a> **US-32-AC-01:** CI runs on pull requests and updates to the default branch from a clean checkout.
+- <a id="us-32-ac-01"></a> **US-32-AC-01:** CI runs on pull requests and updates to the default branch from a clean checkout, using macOS as the initial verification platform.
 - <a id="us-32-ac-02"></a> **US-32-AC-02:** CI installs the supported Python version and required tools and synchronizes runtime and development dependencies using `uv` and the committed lockfile without modifying the lockfile.
 - <a id="us-32-ac-03"></a> **US-32-AC-03:** CI runs automated tests, linting, formatting checks, type checks, and the development smoke check using the same documented commands available locally under US-31.
 - <a id="us-32-ac-04"></a> **US-32-AC-04:** Failed checks produce a failing CI result, and contributors can inspect check results and diagnostic logs from the pull request.

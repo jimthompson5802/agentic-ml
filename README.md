@@ -8,14 +8,15 @@ The proposed harness coordinates coding assistants and specialized ML agents, ex
 
 ## Repository contents
 
-- [User stories](docs/specs/user-stories.md): Authoritative product requirements and acceptance criteria, organized into six milestones with stable story and criterion IDs.
+- [User stories](docs/specs/user-stories.md): Authoritative product requirements and acceptance criteria, covering the development foundation (Milestone 0), product increments (Milestones 1–6), and deferred enhancements (Milestone 99), with stable story and criterion IDs.
 - [Harness design](docs/specs/agentic-ml-harness-design.md): Supporting architecture, workflow phases, custom component support, execution and approval contracts, acceptance-criteria traceability, implementation plan, and architecture decisions.
+- [Baseline reconciliation review](docs/reviews/user-stories-current-reconciliation.md): Findings against the recorded baseline, with subsequent documentation dispositions.
 - [Agent instructions](AGENTS.md): Repository conventions for coding agents.
 - [User-story implementation-plan template](docs/templates/user-story-implementation-plan.md): Detailed task planning, verification evidence, and developer approval gates.
 
 ## Planning terminology
 
-- **Milestone:** A cumulative, usable product increment comprising user stories. A target date is optional. Milestones 1–6 define the committed product scope; Milestone 7 is an optional future roadmap item.
+- **Milestone:** A cumulative, usable product increment comprising user stories. A target date is optional. Milestones 0–6 define the delivery sequence. Milestone 99 groups deferred enhancements without committing their order.
 - **Implementation phase:** A group of granular tasks within a user story's implementation plan, ending with an explicit developer approval gate.
 - **Workflow phase:** A stage of an ML experiment run through the harness, such as feature engineering or final evaluation.
 - **Approval gate:** A developer decision permitting progression after reviewing the required evidence.

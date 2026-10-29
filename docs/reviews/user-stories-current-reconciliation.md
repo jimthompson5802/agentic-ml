@@ -1,5 +1,9 @@
 # User stories and design reconciliation — current baseline
 
+## Subsequent documentation disposition (2026-10-28)
+
+The findings below describe the recorded baseline, not a fresh review of the updated documents. Subsequent changes add Milestone 0 supporting design, contributor checks, package verification, and traceability; align README and delivery sequencing with Milestones 0–6 and deferred Milestone 99; and specify the minimal version CLI and initial macOS verification platform. These address documentation portions of C-01–C-04. Minimum packaged template/guidance contents and supported Python versions remain unresolved. No implementation or verification completion is implied; C-05 is unchanged.
+
 ## Baseline and authority
 
 Reviewed 2026-10-28 at Git revision `dc5e5b3bfa4c8289bbcbb4f707078c18fa8274d4`; working tree clean before this report. The authoritative source is [user-stories.md](../specs/user-stories.md): 34 unique stories, 40 story increments, and 179 unique acceptance criteria. Supporting architecture is [design version 0.12](../specs/agentic-ml-harness-design.md). [README](../../README.md) supplies repository terminology and document roles; AGENTS.md supplies planning and approval conventions.
