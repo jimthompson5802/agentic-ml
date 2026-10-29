@@ -1,6 +1,6 @@
 # US-32 IP2 hosted verification
 
-Date: 2026-10-29. Issue [#2](https://github.com/jimthompson5802/agentic-ml/issues/2), Milestone 0, US-32-AC-01–04. IP1 including Linux SC-01 approved by developer message “I approve IP1. Commit the Linux changes, push the branch, and create a PR to begin IP2.” This authorizes publication and IP2 entry; merge remains separately authorized.
+Date: 2026-10-29. Issue [#2](https://github.com/jimthompson5802/agentic-ml/issues/2), Milestone 0, US-32-AC-01–04. IP1 including Linux SC-01 approved by developer message “I approve IP1. Commit the Linux changes, push the branch, and create a PR to begin IP2.” This authorized publication and IP2 entry. Developer subsequently merged PR #5 and approved IP2; final decisions are recorded below.
 
 ## T1 — Pull-request baseline
 
@@ -32,21 +32,33 @@ Every intended failed command and overall job concluded failure. After successfu
 Final disposable commit `3ba80c949cdb64ed7a90dcb7c8839f5ccc39e192` matches clean baseline `6e7c389` exactly (`git diff 6e7c389 --` empty). No deliberate defects are in PR #5. Raw per-case JSON/logs preserve complete step conclusions and diagnostics. Hosted run links are reachable from draft PR #6's Checks tab. The fixture PR is closed after verification, without merge.
 
 
-## T3/T4 — Remaining work and gates
+## T3 — Default-branch merge and push verification
 
-Merge authorization has not been given. Default-branch push evidence remains pending; IP2-T3 and final documentation/acceptance mapping IP2-T4 are incomplete. No full AC-01 or final story acceptance is claimed. Other Python versions/platforms and isolated wheel/sdist checks remain outside this evidence.
+Developer reported “I merged pr #5” on 2026-10-29. GitHub confirms PR #5 merged at `2026-10-29T23:47:14Z`, merge commit `0a3c087f8b0273be9cd3fb4b2f57a9846614fd86`. The merge tree `65c29788effbad87c78a0c0c8f167af1296ba6ce` exactly matches the reviewed local PR head tree. No disposable defect was merged.
+
+[Default-branch run 40975472618](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975472618): event `push`, branch `main`, exact merge SHA above, conclusion success. Every job step passed, including clean checkout/new environment, locked setup, all seven shared commands and final checksum/diff verification. Observed Ubuntu 24.04.5 x86_64, image `20261025.353.1`, Python 3.12.15, uv 0.13.1, pytest 9.2.0, Ruff 0.17.3 and mypy 1.20.2. Three tests passed; formatting checked 47 files; strict types checked 3 source files; CLI printed 0.1.0. Lock checksum remained `ab8b6c9de02061ea788fa13a2dba162bcb963fb211ca938af3408e01bb1f5d9d`; final `uv.lock: OK`, tracked lock diff exit 0.
+
+Retrieved with explicit-repository `gh pr view 5 --json state,mergedAt,mergeCommit,url`, `gh run list --branch main`, and `gh run view 40975472618 --json databaseId,event,headSha,conclusion,jobs,url` / `--log`. Raw metadata/logs preserved as `main.json/.log` alongside other IP2 evidence. Issue #2 complete body/comments refreshed again: stable snapshots, open issue, zero comments, Linux scope decision retained.
+
+## T4 — Final documentation and verification
+
+README and development guide now link successful PR/default-branch runs and the six failure/correction pairs. Plans/index/checkpoint distinguish technical verification, IP2 approval and remaining US-33 scope. Final changes are documentation only: no new or corrected executable behavior, so existing hosted regression evidence applies instead of manufacturing a failing test. actionlint 1.7.12, local Markdown file-target checks, exact seven-command comparison, unchanged lock hash/tracked diff and `git diff --check` pass. Historical IP1 pending-hosted statements describe that earlier checkpoint; this report supplies final hosted evidence. Other Python versions/platforms and isolated wheel/sdist checks remain outside this evidence.
 
 ## Fixture correction attempt record
 
 Smoke fixture attempt 1 placed `raise SystemExit(17)` after `parser.parse_args()`, expecting the version smoke to exit 17. [Run 40974507244](https://github.com/jimthompson5802/agentic-ml/actions/runs/40974507244), commit `1a82b0bc1a594d187c7764d306cf957065e98a28`, passed: argparse's version action exits successfully before that line. The evidence verifier correctly rejected this as failure evidence (`AssertionError: data['conclusion']=='failure'`); no CI failure was established. Raw metadata/log preserved as `smoke-ineffective.json/.log` outside Git. This was an ineffective disposable fixture, not a product defect. Corrective hypothesis: moving the exit before parsing reaches the real `--version` invocation. Attempt 2 moved the exit before parsing: run 40974682445 failed the smoke step with exit 17; restoring the exact baseline CLI produced passing run 40974731993. The original failure-verification assertion now passes. Two fixture attempts total; no product fix was required. No assertions, thresholds or workflow checks were weakened.
 
-## Current acceptance mapping and merge checkpoint
+## Final acceptance mapping
 
 | Criterion | Evidence | Result |
 |---|---|---|
-| AC-01 | Real clean Linux pull-request baseline and all fixture runs | PR portion verified; main push pending authorized merge |
-| AC-02 | Actual Python/uv/tool versions, locked install, matching checksum and stale-lock rejection | Verified for PR execution |
-| AC-03 | All seven documented commands pass in real hosted Linux runs | Verified for PR execution |
+| AC-01 | Real clean Linux pull-request baseline and all fixture runs | Verified for PR and main push |
+| AC-02 | Actual Python/uv/tool versions, locked install, matching checksum and stale-lock rejection | Verified for PR and main push |
+| AC-03 | All seven documented commands pass in real hosted Linux runs | Verified for PR and main push |
 | AC-04 | Six failed jobs/step diagnostics, independent checks continue, six green corrections; contributor PR/log instructions | Verified |
 
-IP2-T1 and T2 complete. IP2-T3 awaits developer merge authorization; T4 finalization and the IP2 approval gate remain pending. PR #5 is the clean review candidate. The evidence/docs follow-up contains no runtime, dependency or workflow change; applicable final checks are actionlint, local documentation targets/command comparison and diff/lock checks, followed by observing the updated PR CI. Evidence commit `7661e1e6581c70a9da8390d35365c2c30796d78a` passed [PR run 40975072117](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975072117), including all shared checks. This final handoff adds that reference only; the current PR Checks tab identifies the latest revision/run. No story closure or final approval is recorded.
+IP2-T1–T4 complete. Evidence commit `7661e1e6581c70a9da8390d35365c2c30796d78a` passed [PR run 40975072117](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975072117); final PR head `e6f0bd98452d02470fccd7c336d19797a9d75e7f` passed [run 40975167938](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975167938). The merge push run above completes both event requirements.
+
+## Developer decision
+
+Developer message “I approve us-32 ip2”, 2026-10-29, approves the final IP2 gate and accepts US-32 after all four criteria were verified. US-32 is complete and accepted. No downstream story or remaining US-33 implementation is authorized by this approval. Milestone 0 remains incomplete.
