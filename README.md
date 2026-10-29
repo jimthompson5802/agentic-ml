@@ -10,9 +10,8 @@ The proposed harness provides reusable orchestration, experiment execution, inde
 
 - [User stories](docs/specs/user-stories.md): Authoritative product requirements and acceptance criteria, covering the development foundation (Milestone 0), product increments (Milestones 1–6), and deferred enhancements (Milestone 99), with stable story and criterion IDs.
 - [Harness design](docs/specs/agentic-ml-harness-design.md): Supporting architecture, workflow phases, custom component support, execution and approval contracts, acceptance-criteria traceability, implementation plan, and architecture decisions.
-- [Baseline reconciliation review](docs/reviews/user-stories-current-reconciliation.md): Findings against the recorded baseline, with subsequent documentation dispositions.
-- [Agent instructions](AGENTS.md): Repository conventions for coding agents.
-- [User-story implementation-plan template](docs/templates/user-story-implementation-plan.md): Detailed task planning, verification evidence, and developer approval gates.
+- [Example walkthrough](docs/specs/example-walkthrough.md): A data scientist's end-to-end model-building workflow, including example commands, coding-assistant prompts, notebooks, and approval gates.
+- [Reviews](docs/reviews/): Reconciliation findings and documentation dispositions assessing alignment between the user stories and design.
 
 ## Planning terminology
 
