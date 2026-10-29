@@ -21,6 +21,8 @@ Milestones are cumulative. Repeated story identifiers describe incremental deliv
 
 Contributors set up this repository for harness development, run the CLI from the local source checkout, and verify changes using documented checks. Automated CI checks verify changes, and clean-environment package checks verify distributable artifacts. This milestone establishes the development foundation for the experiment-user capabilities introduced in Milestone 1.
 
+See the design's [Milestone 0 dependencies and delivery order](agentic-ml-harness-design.md#milestone-0-dependencies-and-delivery-order) for capability dependencies between these stories and recommended implementation sequencing.
+
 ### US-31: Set up the harness development environment
 
 As a contributor, I want documented steps to set up this repository for local development so that I can make changes and verify them consistently.

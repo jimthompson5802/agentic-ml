@@ -874,6 +874,31 @@ Each milestone delivers the controls required by its assigned user stories befor
 | 6. Iterative data acquisition | Gap diagnosis, proposals, approved extraction, retraining comparisons | Outer-loop improvement with lineage and budgets |
 | Uncommitted future ideas (not assigned delivery stories) | Ray-backed runner for parallel experiments and hyperparameter trials, followed by distributed training as needed; Optuna, active learning, labeling, augmentation, specialized agents, containers | Ray execution preserves harness governance and lineage; extensible multi-agent workflow with advanced compute/data strategies |
 
+### Milestone 0 dependencies and delivery order
+
+Milestone 0 covers US-31, US-32, and US-33. The dependencies below follow from their [acceptance criteria](user-stories.md#milestone-0-establish-the-harness-development-foundation). They apply to portions of stories rather than requiring each prerequisite story to be complete. The delivery order is a recommendation, not an additional acceptance requirement.
+
+**Prerequisites:** No earlier milestone is required. Python 3.12 or newer, `uv`, and the other documented contributor prerequisites support the initial development foundation (US-31-AC-01–02).
+
+| Dependent work | Required capability | Acceptance criterion basis |
+|---|---|---|
+| US-31 source-checkout execution and fresh-environment smoke verification | US-33 minimal `agent-ml --version` CLI | US-31-AC-03, US-31-AC-07; US-33-AC-06–07 |
+| US-32 automated development checks | US-31 locked development tools, check configuration, and documented local commands | US-31-AC-02, US-31-AC-04–05, US-31-AC-08; US-32-AC-02–03 |
+| US-33 local package builds and verification | Shared development environment and documented tooling established under US-31 | US-31-AC-02, US-31-AC-08; US-33-AC-01–04 |
+| US-33 package verification in CI | US-32 CI infrastructure plus working US-33 build and installed-package checks | US-32-AC-01–04; US-33-AC-05 |
+
+**Recommended delivery order:**
+
+1. Establish the US-31 development foundation: package configuration, locked environment, coding conventions, automated check configuration, and local commands.
+2. Add the US-33 minimal package foundation: `agentic_ml`, `agent-ml --version`, and provisional template and runtime guidance resources.
+3. Complete US-31 fresh-checkout macOS verification, including the version smoke check.
+4. Establish US-32 CI using the shared local development commands.
+5. Complete US-33 isolated verification of the directly built wheel and the wheel rebuilt from the source distribution, and run those checks in CI.
+
+Local package verification and CI setup can proceed in parallel once their prerequisites exist. Treating these relationships as whole-story completion gates would create an apparent cycle: US-31 needs the minimal CLI from US-33, while US-33 uses the development foundation and CI from US-31 and US-32. Detailed implementation plans should stage those capabilities explicitly and retain their developer approval gates.
+
+**Completion boundary:** All acceptance criteria for US-31, US-32, and US-33 must be verified to complete Milestone 0. No Milestone 1 capability is a prerequisite: Milestone 0 owns the minimal version CLI and provisional packaged resources; usable experiment initialization resources and experiment commands remain in later milestones (US-33-AC-03, US-33-AC-06).
+
 ### Deferred enhancements
 
 Milestone 99 contains US-34: contribution instructions, documented merge checks and review expectations, and enforced default-branch protection. These are deferred rather than Milestone 0 exit criteria. Advanced capability ideas above do not add approved stories to Milestone 99.
