@@ -34,6 +34,14 @@ Every feedback comment body must begin with the exact literal prefix `Codex revi
 
 Report actionable defects introduced or exposed by the change and concrete violations of applicable requirements. Explain the trigger, resulting behavior, and impact. Use one distinct problem per comment, with severity proportional to impact. Distinguish confirmed defects from questions. Avoid speculative findings and duplicate or already resolved feedback.
 
+Label each finding with `[High]`, `[Medium]`, or `[Low]` using these definitions:
+
+- **High:** Breaks a core workflow, violates a critical requirement, or risks data loss, security exposure, or invalid results. Should be fixed before merging.
+- **Medium:** Causes incorrect behavior in a supported scenario, with limited impact or a practical workaround. Should normally be fixed before merging.
+- **Low:** A concrete, localized defect with minor impact on usability, clarity, or maintainability. Can be deferred without materially affecting correct operation.
+
+Base severity on impact, not confidence. Support findings in every category with evidence; stylistic preferences alone do not qualify.
+
 Attach each finding to the smallest relevant commentable line or range in the PR diff:
 
 - Use the repository-relative file path from the current PR diff and actual file line numbers, not diff positions or hunk-header offsets.
@@ -47,7 +55,7 @@ Verify each anchor against the current diff. If no relevant commentable line exi
 Example inline body:
 
 ```text
-Codex review: [P1] Handle an empty query result before reading its identifier. When no row matches, this access throws and the request fails instead of returning the expected empty response.
+Codex review: [Medium] Handle an empty query result before reading its identifier. When no row matches, this access throws and the request fails instead of returning the expected empty response.
 ```
 
 Derive real findings and locations from the target PR. When no actionable findings remain, use `Codex review: No actionable findings identified.` as the summary and disclose material review limitations.
