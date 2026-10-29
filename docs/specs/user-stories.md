@@ -80,7 +80,7 @@ Acceptance criteria:
 - <a id="us-01-ac-03"></a> **US-01-AC-03:** The project lockfile records the resolved harness revision and dependencies; the installed package exposes `agent-ml`, `agentic_ml`, templates, and runtime guidance.
 - <a id="us-01-ac-04"></a> **US-01-AC-04:** An explicit harness upgrade changes the commit pin and lockfile, producing a new environment identity.
 
-Architecture references: §8 Project initialization and installation; §9 Execution.
+Architecture references: [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation); [§9 Execution](design/execution-and-governance.md#execution).
 
 ### US-02: Initialize an experiment project
 
@@ -94,7 +94,7 @@ Acceptance criteria:
 - <a id="us-02-ac-04"></a> **US-02-AC-04:** Project-associated DVC, MLflow, and durable-state storage are initialized with local defaults and configurable locations.
 - <a id="us-02-ac-05"></a> **US-02-AC-05:** Data access, agent authentication, and approval presentation remain explicit setup choices; initialization grants no execution or data-access authorization, and credentials remain outside committed configuration.
 
-Architecture references: §8 Project initialization and installation.
+Architecture references: [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation).
 
 ### US-03: Define experiment objectives and boundaries
 
@@ -108,7 +108,7 @@ Acceptance criteria:
 - <a id="us-03-ac-04"></a> **US-03-AC-04:** Ambiguous or conflicting requirements block affected runs until resolved; delegated decisions require approval before use.
 - <a id="us-03-ac-05"></a> **US-03-AC-05:** Relative input paths resolve against the experiment repository root, with the notebook working directory recorded explicitly.
 
-Architecture references: §8 Developer experiment inputs; §8 Algorithm and hyperparameter configuration.
+Architecture references: [§8 Developer experiment inputs](design/interfaces-and-configuration.md#developer-experiment-inputs); [§8 Algorithm and hyperparameter configuration](design/interfaces-and-configuration.md#algorithm-and-hyperparameter-configuration).
 
 ### US-05: Reject invalid configurations before execution
 
@@ -122,7 +122,7 @@ Acceptance criteria:
 - <a id="us-05-ac-04"></a> **US-05-AC-04:** Invalid inputs produce actionable validation errors before training starts.
 - <a id="us-05-ac-05"></a> **US-05-AC-05:** As training entrypoints are introduced, every candidate submitted through Python, custom code, or notebooks receives the same boundary checks.
 
-Architecture references: §8 Algorithm and hyperparameter configuration; §8 User-supplied ML components.
+Architecture references: [§8 Algorithm and hyperparameter configuration](design/interfaces-and-configuration.md#algorithm-and-hyperparameter-configuration); [§8 User-supplied ML components](design/interfaces-and-configuration.md#user-supplied-ml-components).
 
 ### US-09: Execute saved notebooks reproducibly
 
@@ -136,7 +136,7 @@ Acceptance criteria:
 - <a id="us-09-ac-04"></a> **US-09-AC-04:** Cell errors, timeouts, and cancellation produce the corresponding run status; successful execution remains subject to independent validation.
 - <a id="us-09-ac-05"></a> **US-09-AC-05:** Access restrictions, approvals, and budgets apply equally to notebook and Python entrypoints; unauthorized filesystem or credential access is blocked.
 
-Architecture references: §9 Execution; §9 Notebook development and execution contract.
+Architecture references: [§9 Execution](design/execution-and-governance.md#execution); [§9 Notebook development and execution contract](design/execution-and-governance.md#notebook-development-and-execution-contract).
 
 ### US-10: Control and inspect runs
 
@@ -150,7 +150,7 @@ Acceptance criteria:
 - <a id="us-10-ac-04"></a> **US-10-AC-04:** Unsuccessful model performance is distinguishable from execution failure when modeling is added.
 - <a id="us-10-ac-05"></a> **US-10-AC-05:** Cancelled or budget-exhausted work preserves available evidence for review.
 
-Architecture references: §8 ExperimentRunner interface; §9 Execution; §9 Workflow states.
+Architecture references: [§8 ExperimentRunner interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts); [§9 Execution](design/execution-and-governance.md#execution); [§9 Workflow states](design/execution-and-governance.md#workflow-states).
 
 ### US-11: Extract approved source data
 
@@ -164,7 +164,7 @@ Acceptance criteria:
 - <a id="us-11-ac-04"></a> **US-11-AC-04:** Each snapshot records source identity, query, parameters, extraction time, checksums, and permissions metadata.
 - <a id="us-11-ac-05"></a> **US-11-AC-05:** Extraction failures are reported without presenting incomplete output as a validated dataset.
 
-Architecture references: §6 Data extraction requirements.
+Architecture references: [§6 Data extraction requirements](design/data-and-features.md#data-extraction-requirements).
 
 ### US-12: Validate extracted data
 
@@ -175,7 +175,7 @@ Acceptance criteria:
 - <a id="us-12-ac-01"></a> **US-12-AC-01:** Validation checks schema, row counts, types, nulls, duplicates, and configured quality rules, reporting mismatches and failures.
 - <a id="us-12-ac-05"></a> **US-12-AC-05:** Basic validation results are presented for approval before the dataset is accepted for the Milestone 1 run.
 
-Architecture references: §4 Data extraction and EDA; §5 Workflow phases and gates; §6 Data extraction requirements; §9 Independent evaluation.
+Architecture references: [§4 Data extraction and EDA](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§5 Workflow phases and gates](agentic-ml-harness-design.md#5-standard-workflow-phases-and-gates); [§6 Data extraction requirements](design/data-and-features.md#data-extraction-requirements); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
 
 ### US-13: Version and restore datasets
 
@@ -188,7 +188,7 @@ Acceptance criteria:
 - <a id="us-13-ac-03"></a> **US-13-AC-03:** A dataset can be restored from configured storage using its recorded metadata, and restored content hashes are verified.
 - <a id="us-13-ac-04"></a> **US-13-AC-04:** Missing or mismatched content prevents the dataset from being treated as successfully restored.
 
-Architecture references: §9 Experiment tracking, data versioning, and pipelines.
+Architecture references: [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines).
 
 ### US-26: Record run artifacts and provenance
 
@@ -202,7 +202,7 @@ Acceptance criteria:
 - <a id="us-26-ac-04"></a> **US-26-AC-04:** Source snapshots include notebooks, imported helpers, project code, configuration, and applicable runtime guidance; later milestones extend these records to components, pipelines, and approvals.
 - <a id="us-26-ac-05"></a> **US-26-AC-05:** Basic execution correctness is independently checked against expected artifacts; notebook completion alone does not establish experiment acceptance.
 
-Architecture references: §3 Component responsibilities; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation.
+Architecture references: [§3 Component responsibilities](agentic-ml-harness-design.md#component-responsibilities); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
 
 ### US-27: Reproduce a basic run in a clean environment
 
@@ -215,7 +215,7 @@ Acceptance criteria:
 - <a id="us-27-ac-03"></a> **US-27-AC-03:** Declared output checks or tolerances determine whether the basic run reproduces successfully; metric tolerances apply when modeling is introduced.
 - <a id="us-27-ac-04"></a> **US-27-AC-04:** Missing source, dependencies, or dataset content is reported explicitly instead of silently substituted.
 
-Architecture references: §8 Project initialization and installation; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation.
+Architecture references: [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
 
 ## Milestone 2: Assess data and build reproducible feature pipelines
 
@@ -231,7 +231,7 @@ Acceptance criteria:
 - <a id="us-12-ac-03"></a> **US-12-AC-03:** A versioned split manifest records training, validation, and protected-test partitions, respecting approved time or group constraints.
 - <a id="us-12-ac-04"></a> **US-12-AC-04:** Dataset assessment and split protocol are presented for approval before dependent feature or modeling work.
 
-Architecture references: §4 Data extraction and EDA; §5 Workflow phases and gates; §6 Data extraction requirements; §9 Independent evaluation.
+Architecture references: [§4 Data extraction and EDA](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§5 Workflow phases and gates](agentic-ml-harness-design.md#5-standard-workflow-phases-and-gates); [§6 Data extraction requirements](design/data-and-features.md#data-extraction-requirements); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
 
 ### US-14: Generate and compare feature pipelines
 
@@ -245,7 +245,7 @@ Acceptance criteria:
 - <a id="us-14-ac-04"></a> **US-14-AC-04:** Feature artifacts trace back to their source datasets and are independently validated before workflow phase advancement.
 - <a id="us-14-ac-05"></a> **US-14-AC-05:** This milestone supports supplied or explicitly authored candidates; agent generation is exercised when agent integration arrives in Milestone 4.
 
-Architecture references: §7 Feature Engineering; §5 Workflow phases and gates.
+Architecture references: [§7 Feature Engineering](design/data-and-features.md#7-feature-engineering); [§5 Workflow phases and gates](agentic-ml-harness-design.md#5-standard-workflow-phases-and-gates).
 
 ### US-15: Preserve training-only preprocessing
 
@@ -258,7 +258,7 @@ Acceptance criteria:
 - <a id="us-15-ac-03"></a> **US-15-AC-03:** Preparation code, fitted state, dependencies, parameters, and output schemas are preserved as artifacts.
 - <a id="us-15-ac-04"></a> **US-15-AC-04:** Restored preprocessing reproduces validation and inference transformations under declared reproducibility checks.
 
-Architecture references: §7 Feature Engineering; §8 User-supplied ML components.
+Architecture references: [§7 Feature Engineering](design/data-and-features.md#7-feature-engineering); [§8 User-supplied ML components](design/interfaces-and-configuration.md#user-supplied-ml-components).
 
 ### US-16: Register supplied preprocessing components
 
@@ -272,7 +272,7 @@ Acceptance criteria:
 - <a id="us-16-ac-04"></a> **US-16-AC-04:** Registered components follow the same validation, resource, access, and lineage rules as built-in components.
 - <a id="us-16-ac-05"></a> **US-16-AC-05:** Lineage records declarations, exact code snapshots or pinned dependency identities, effective parameters, and fitted artifacts.
 
-Architecture references: §7 Feature Engineering; §8 User-supplied ML components; §9 Independent evaluation.
+Architecture references: [§7 Feature Engineering](design/data-and-features.md#7-feature-engineering); [§8 User-supplied ML components](design/interfaces-and-configuration.md#user-supplied-ml-components); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
 
 ### US-27: Reproduce and reuse pipeline stages
 
@@ -286,7 +286,7 @@ Acceptance criteria:
 - <a id="us-27-ac-08"></a> **US-27-AC-08:** Reused outputs retain producer provenance and remain subject to current authorization and evaluation checks.
 - <a id="us-27-ac-09"></a> **US-27-AC-09:** Cache reuse alone does not establish experiment acceptance or bypass a gate.
 
-Architecture references: §8 Project initialization and installation; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation.
+Architecture references: [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
 
 ## Milestone 3: Train, tune, and independently evaluate models
 
@@ -303,7 +303,7 @@ Acceptance criteria:
 - <a id="us-06-ac-03"></a> **US-06-AC-03:** Comparing algorithms does not require exhaustive enumeration of parameter combinations.
 - <a id="us-06-ac-04"></a> **US-06-AC-04:** Suggested algorithms or expanded ranges are recorded only as recommendations for a subsequent experiment; adopting them requires a new versioned configuration and applicable approvals.
 
-Architecture references: §8 Developer experiment inputs; §8 Algorithm and hyperparameter configuration.
+Architecture references: [§8 Developer experiment inputs](design/interfaces-and-configuration.md#developer-experiment-inputs); [§8 Algorithm and hyperparameter configuration](design/interfaces-and-configuration.md#algorithm-and-hyperparameter-configuration).
 
 ### US-16: Register supplied models
 
@@ -317,7 +317,7 @@ Acceptance criteria:
 - <a id="us-16-ac-09"></a> **US-16-AC-09:** Supplied models can be tuned within approved boundaries and independently evaluated after restoration.
 - <a id="us-16-ac-10"></a> **US-16-AC-10:** Component declarations, code/dependency identities, effective parameters, and fitted artifacts appear in run lineage.
 
-Architecture references: §7 Feature Engineering; §8 User-supplied ML components; §9 Independent evaluation.
+Architecture references: [§7 Feature Engineering](design/data-and-features.md#7-feature-engineering); [§8 User-supplied ML components](design/interfaces-and-configuration.md#user-supplied-ml-components); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
 
 ### US-18: Train across supported frameworks
 
@@ -330,7 +330,7 @@ Acceptance criteria:
 - <a id="us-18-ac-03"></a> **US-18-AC-03:** Framework adapters expose training, prediction, and persistence operations usable by independent evaluation.
 - <a id="us-18-ac-04"></a> **US-18-AC-04:** Each run records effective parameters, framework/library identities, metrics, model artifacts, and feature/data lineage.
 
-Architecture references: §4 Baseline modeling and Model development; §8 ModelAdapter interface; §9 Experiment tracking, data versioning, and pipelines.
+Architecture references: [§4 Baseline modeling and Model development](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§8 ModelAdapter interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines).
 
 ### US-19: Manage PyTorch execution
 
@@ -343,7 +343,7 @@ Acceptance criteria:
 - <a id="us-19-ac-03"></a> **US-19-AC-03:** Cancellation stops managed training and preserves available logs, checkpoints, and status.
 - <a id="us-19-ac-04"></a> **US-19-AC-04:** Resource requests, hardware metadata, runtime limits, and supported quotas are recorded and enforced where supported.
 
-Architecture references: §9 Execution; §8 ModelAdapter interface.
+Architecture references: [§9 Execution](design/execution-and-governance.md#execution); [§8 ModelAdapter interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts).
 
 ### US-20: Tune within declared limits
 
@@ -356,7 +356,7 @@ Acceptance criteria:
 - <a id="us-20-ac-03"></a> **US-20-AC-03:** Experiment-count and runtime budgets stop new work and leave a reviewable summary of completed trials.
 - <a id="us-20-ac-04"></a> **US-20-AC-04:** The optimization summary identifies the search performed, resources consumed, candidate evidence, and model proposed for final evaluation.
 
-Architecture references: §8 Algorithm and hyperparameter configuration; §5 Optimization; §9 Execution.
+Architecture references: [§8 Algorithm and hyperparameter configuration](design/interfaces-and-configuration.md#algorithm-and-hyperparameter-configuration); [§5 Optimization](agentic-ml-harness-design.md#5-standard-workflow-phases-and-gates); [§9 Execution](design/execution-and-governance.md#execution).
 
 ### US-21: Independently assess experiment results
 
@@ -370,7 +370,7 @@ Acceptance criteria:
 - <a id="us-21-ac-04"></a> **US-21-AC-04:** Defined folds, data slices, or stress tests assess robustness; repeated runs are checked against explicit reproducibility tolerances.
 - <a id="us-21-ac-05"></a> **US-21-AC-05:** Structured evaluation results distinguish execution failure, scientific invalidity, and insufficient model quality.
 
-Architecture references: §9 Independent evaluation.
+Architecture references: [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
 
 ### US-24: Protect final holdout evaluation
 
@@ -384,7 +384,7 @@ Acceptance criteria:
 - <a id="us-24-ac-04"></a> **US-24-AC-04:** Unsuccessful final evaluation ends in rejection or review; further development requires a separately approved protocol preserving holdout protection.
 - <a id="us-24-ac-05"></a> **US-24-AC-05:** Completion requires developer approval of successful final evaluation.
 
-Architecture references: §4 Final evaluation; §9 Notebook development and execution contract; §9 Governance; ADR-006.
+Architecture references: [§4 Final evaluation](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§9 Notebook development and execution contract](design/execution-and-governance.md#notebook-development-and-execution-contract); [§9 Governance](design/execution-and-governance.md#governance); [ADR-006](design/architecture-decisions.md#pending-decisions).
 
 ### US-26: Compare runs and review the final report
 
@@ -397,7 +397,7 @@ Acceptance criteria:
 - <a id="us-26-ac-08"></a> **US-26-AC-08:** Model lineage traces through component identities, fitted feature pipelines, source datasets, exact code/configuration snapshots, and environment identity.
 - <a id="us-26-ac-09"></a> **US-26-AC-09:** Reports preserve references to independent evaluation evidence rather than treating generated narrative as proof of acceptance.
 
-Architecture references: §3 Component responsibilities; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation.
+Architecture references: [§3 Component responsibilities](agentic-ml-harness-design.md#component-responsibilities); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
 
 ## Milestone 4: Let an agent improve an experiment
 
@@ -414,7 +414,7 @@ Acceptance criteria:
 - <a id="us-04-ac-03"></a> **US-04-AC-03:** Ambiguities and conflicts are surfaced before affected execution, and dependent work waits for approval through applicable gates.
 - <a id="us-04-ac-04"></a> **US-04-AC-04:** Original inputs, resolved decisions, and their versions/checksums remain available in run lineage.
 
-Architecture references: §8 Developer experiment inputs; §4 Problem definition.
+Architecture references: [§8 Developer experiment inputs](design/interfaces-and-configuration.md#developer-experiment-inputs); [§4 Problem definition](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow).
 
 ### US-07: Generate reviewable experiment notebooks
 
@@ -427,7 +427,7 @@ Acceptance criteria:
 - <a id="us-07-ac-03"></a> **US-07-AC-03:** Saved notebooks support interactive use and fresh-kernel managed execution without hidden state.
 - <a id="us-07-ac-04"></a> **US-07-AC-04:** Generated notebooks, helpers, and project code stay within the experiment repository and authorized storage; the harness installation/source remain unchanged.
 
-Architecture references: §9 Notebook development and execution contract; §3 Harness and experiment project boundary.
+Architecture references: [§9 Notebook development and execution contract](design/execution-and-governance.md#notebook-development-and-execution-contract); [§3 Harness and experiment project boundary](agentic-ml-harness-design.md#harness-and-experiment-project-boundary).
 
 ### US-08: Explore interactively under the same controls
 
@@ -440,7 +440,7 @@ Acceptance criteria:
 - <a id="us-08-ac-03"></a> **US-08-AC-03:** Training cells submit through managed APIs that enforce candidate boundaries, applicable approvals, budgets, and tracking.
 - <a id="us-08-ac-04"></a> **US-08-AC-04:** Interactive execution cannot establish acceptance; recorded results require managed execution of saved snapshots and independent evaluation.
 
-Architecture references: §9 Notebook development and execution contract; §8 Project initialization and installation; ADR-006.
+Architecture references: [§9 Notebook development and execution contract](design/execution-and-governance.md#notebook-development-and-execution-contract); [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation); [ADR-006](design/architecture-decisions.md#pending-decisions).
 
 ### US-17: Respect immutable supplied components
 
@@ -453,7 +453,7 @@ Acceptance criteria:
 - <a id="us-17-ac-03"></a> **US-17-AC-03:** Approved changes to immutable code create a new versioned experiment configuration.
 - <a id="us-17-ac-04"></a> **US-17-AC-04:** Modification permission does not expand algorithm, parameter, data-access, or evaluation boundaries; authorized code changes appear in run snapshots.
 
-Architecture references: §8 User-supplied ML components; §4 Scope changes.
+Architecture references: [§8 User-supplied ML components](design/interfaces-and-configuration.md#user-supplied-ml-components); [§4 Scope changes](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow).
 
 ### US-22: Improve models using development feedback
 
@@ -467,7 +467,7 @@ Acceptance criteria:
 - <a id="us-22-ac-04"></a> **US-22-AC-04:** Iteration stops on success, budget exhaustion, lack of improvement, unrecoverable failure, policy violation, or developer cancellation.
 - <a id="us-22-ac-05"></a> **US-22-AC-05:** Workflow phase returns and scope expansions await authorization; protected-test feedback never enters the revision loop.
 
-Architecture references: §4 Hierarchical Closed-Loop Workflow; §9 Independent evaluation.
+Architecture references: [§4 Hierarchical Closed-Loop Workflow](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
 
 ### US-30: Connect the first agent with preserved runtime guidance
 
@@ -481,7 +481,7 @@ Acceptance criteria:
 - <a id="us-30-ac-04"></a> **US-30-AC-04:** The plan snapshots harness-supplied guidance contents, paths, versions/checksums, and load order; subsequent tasks reference the preserved bundle, with managed adapters demonstrating delivery. This records harness-supplied guidance, not the assistant's complete instruction context.
 - <a id="us-30-ac-05"></a> **US-30-AC-05:** Conflicting guidance or attempts to expand experiment constraints block affected execution; adopting changed guidance requires a new versioned configuration and applicable approvals.
 
-Architecture references: §8 AgentAdapter interface; §8 Development and runtime agent instructions.
+Architecture references: [§8 AgentAdapter interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts); [§8 Development and runtime agent instructions](design/interfaces-and-configuration.md#development-and-runtime-agent-instructions).
 
 ## Milestone 5: Supervise and resume the complete workflow
 
@@ -499,7 +499,7 @@ Acceptance criteria:
 - <a id="us-23-ac-04"></a> **US-23-AC-04:** Workflow phases can be skipped only when the approved plan identifies valid existing artifacts supporting the skip.
 - <a id="us-23-ac-05"></a> **US-23-AC-05:** Rejection or cancellation preserves results; successful final evaluation requires explicit model approval before completion.
 
-Architecture references: §4 Hierarchical Closed-Loop Workflow; §5 Workflow phases and gates; §9 Governance.
+Architecture references: [§4 Hierarchical Closed-Loop Workflow](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§5 Workflow phases and gates](agentic-ml-harness-design.md#5-standard-workflow-phases-and-gates); [§9 Governance](design/execution-and-governance.md#governance).
 
 ### US-25: Resume interrupted workflows
 
@@ -512,7 +512,7 @@ Acceptance criteria:
 - <a id="us-25-ac-03"></a> **US-25-AC-03:** Resumed tasks use the preserved compatible configuration and runtime instruction bundle, even if source guidance has changed.
 - <a id="us-25-ac-04"></a> **US-25-AC-04:** Cancelled, failed, budget-exhausted, and review-required outcomes retain evidence and do not silently authorize further work.
 
-Architecture references: §3 Component responsibilities; §9 Workflow states; §8 Development and runtime agent instructions.
+Architecture references: [§3 Component responsibilities](agentic-ml-harness-design.md#component-responsibilities); [§9 Workflow states](design/execution-and-governance.md#workflow-states); [§8 Development and runtime agent instructions](design/interfaces-and-configuration.md#development-and-runtime-agent-instructions).
 
 ### US-30: Use interchangeable agent adapters
 
@@ -525,7 +525,7 @@ Acceptance criteria:
 - <a id="us-30-ac-08"></a> **US-30-AC-08:** Both managed adapters meet the common cancellation, harness-guidance delivery, developer-approval, access, and harness-run budget requirements, including boundaries for assistant tools/workspaces. Agent-task cancellation is recorded separately from experiment-run cancellation; assistant usage measurement/control capabilities and limitations are explicit. Resumption uses durable task/run evidence and consumed budgets rather than assistant memory.
 - <a id="us-30-ac-09"></a> **US-30-AC-09:** Agent selection does not alter independent evaluation or the experiment's allowed boundaries.
 
-Architecture references: §8 AgentAdapter interface; §8 Development and runtime agent instructions.
+Architecture references: [§8 AgentAdapter interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts); [§8 Development and runtime agent instructions](design/interfaces-and-configuration.md#development-and-runtime-agent-instructions).
 
 ### US-26: Audit workflow decisions and evidence
 
@@ -538,7 +538,7 @@ Acceptance criteria:
 - <a id="us-26-ac-12"></a> **US-26-AC-12:** Bidirectional run references allow lookup from a harness result to its MLflow run and from the tracking record to harness provenance.
 - <a id="us-26-ac-13"></a> **US-26-AC-13:** Resumption and reuse preserve original producer provenance and the decisions authorizing subsequent use.
 
-Architecture references: §3 Component responsibilities; §9 Experiment tracking, data versioning, and pipelines; §9 Independent evaluation.
+Architecture references: [§3 Component responsibilities](agentic-ml-harness-design.md#component-responsibilities); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
 
 ## Milestone 6: Improve the dataset through authorized acquisition
 
@@ -555,7 +555,7 @@ Acceptance criteria:
 - <a id="us-28-ac-03"></a> **US-28-AC-03:** Expected benefit is presented as a hypothesis rather than a guaranteed improvement.
 - <a id="us-28-ac-04"></a> **US-28-AC-04:** Proposals do not use protected final-test feedback or expand access, evaluation protocols, or budgets without approval.
 
-Architecture references: §6 Acquisition strategies and Acquisition proposal contract; §4 Outer loop.
+Architecture references: [§6 Acquisition strategies and Acquisition proposal contract](design/data-and-features.md#6-data-extraction-and-iterative-acquisition); [§4 Outer loop](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow).
 
 ### US-29: Acquire data and measure its effect within approved limits
 
@@ -569,9 +569,9 @@ Acceptance criteria:
 - <a id="us-29-ac-04"></a> **US-29-AC-04:** Returning to validation/EDA and downstream development requires the applicable workflow phase authorization, with complete audit records.
 - <a id="us-29-ac-05"></a> **US-29-AC-05:** Before-and-after model comparisons use consistent approved evaluation protocols and link results to the corresponding dataset versions.
 - <a id="us-29-ac-06"></a> **US-29-AC-06:** The acquisition loop stops on success, budget exhaustion, lack of improvement, unrecoverable failure, policy violation, or cancellation, preserving a reviewable outcome.
-- <a id="us-29-ac-07"></a> **US-29-AC-07:** Resumption after acquisition retains approvals, budget usage, dataset lineage, and completed-run identities; advanced acquisition strategies remain deferred according to the design document's implementation plan.
+- <a id="us-29-ac-07"></a> **US-29-AC-07:** Resumption after acquisition retains approvals, budget usage, dataset lineage, and completed-run identities; advanced acquisition strategies remain deferred according to the design's [milestone delivery plan](design/milestone-delivery.md#11-milestone-delivery-plan).
 
-Architecture references: §6 Data Extraction and Iterative Acquisition; §4 Scope changes and stopping conditions; §9 Governance.
+Architecture references: [§6 Data Extraction and Iterative Acquisition](design/data-and-features.md#6-data-extraction-and-iterative-acquisition); [§4 Scope changes and stopping conditions](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§9 Governance](design/execution-and-governance.md#governance).
 
 ## Milestone 99: Future enhancements
 
