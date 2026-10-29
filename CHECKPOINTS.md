@@ -5,36 +5,36 @@ Last updated: 2026-10-29
 ## Current position
 
 - Milestone: 0 — Harness development foundation.
-- Active work: Ready to prepare implementation plans; no story implementation has started.
-- Branch at handoff: `main`.
-- Last relevant commit: `b78943a` — ADR-007 Milestone 0 scope clarification.
+- Active work: US-31 complete and accepted; [PR #4](https://github.com/jimthompson5802/agentic-ml/pull/4) opened for review.
+- Branch at handoff: `us-31-setup-dev-environment`.
+- Last relevant commit: `5207cca` records final US-31 acceptance; `c9fbb75` contains verified executable source. This checkpoint update records PR publication.
 
 ## Progress overview
 
 | Story | Implementation plan | Implementation | Developer gate |
 |---|---|---|---|
-| [US-31 / #1 — Development environment](https://github.com/jimthompson5802/agentic-ml/issues/1) | Not started | Not started | Not presented |
+| [US-31 / #1 — Development environment](https://github.com/jimthompson5802/agentic-ml/issues/1) | [Approved](docs/plans/milestone-0-us-31.md#plan-review) | Complete and accepted | IP1 and IP2 approved |
 | [US-32 / #2 — CI verification](https://github.com/jimthompson5802/agentic-ml/issues/2) | Not started | Not started | Not presented |
-| [US-33 / #3 — Package build and verification](https://github.com/jimthompson5802/agentic-ml/issues/3) | Not started | Not started | Not presented |
+| [US-33 / #3 — Package build and verification](https://github.com/jimthompson5802/agentic-ml/issues/3) | [CLI prerequisite slice approved](docs/plans/milestone-0-us-33.md); remainder unplanned | CLI prerequisite complete; remainder unplanned | US-33 IP1 approved |
 
 ## Resume here
 
-Retrieve issues #1–#3, including their complete bodies and all comments, using the [retrieve-github-issue skill](.agents/skills/retrieve-github-issue/SKILL.md). Then use the [create-implementation-plan skill](.agents/skills/create-implementation-plan/SKILL.md) to prepare coordinated story plans following the [Milestone 0 dependencies and delivery order](docs/specs/design/milestone-delivery.md#milestone-0-dependencies-and-delivery-order) and [plan template](docs/templates/user-story-implementation-plan.md).
-
-Include the public test boundaries, acceptance-criterion mappings, cross-story prerequisites, verification evidence requirements, and implementation-phase approval gates. Creating these plans remains the next proposed action; this checkpoint records no plan approval or implementation authorization.
+US-31 was accepted through final IP2 approval (developer message “i approve us-31 ip2”, 2026-10-29) after the story-completion review. See the [owning gate and acceptance record](docs/plans/milestone-0-us-31.md#us-31--implementation-phase-2-verify-documented-macos-setup-and-source-smoke-check) and [fresh macOS evidence](docs/verification/us-31-ip2.md). The coordinated scope is complete. Documentation/evidence and acceptance records are committed and published in [PR #4](https://github.com/jimthompson5802/agentic-ml/pull/4), from `us-31-setup-dev-environment` to `main`; PR review/merge remain pending. US-32 and remaining US-33 require separate planning/authorization; no downstream implementation has started.
 
 ## Pending developer decisions
 
-- Confirm the distribution name during planning; `agentic-ml` is proposed.
-- Select and record the repository installation source, build backend, initial package version, and development tools in the plans before dependent implementation.
-- No implementation-phase approval gate is currently awaiting review.
+- No US-31 implementation gate or acceptance decision remains pending. PR #4 awaits normal pull-request review and merge; creation does not authorize merging.
+- US-32 and remaining US-33 scope need separate planning/authorization.
+- SC-01 CLI spelling `agentic-ml` governs the older GitHub issue wording; distribution/import/tooling choices are recorded in the plans and ADR-007.
 
 ## Handoff notes
 
-- [ADR-007](docs/specs/design/architecture-decisions.md#adr-007--github-package-installation-and-project-initialization) records the agreed Milestone 0 scope: repository installation, no package-registry publishing, Python 3.12 verification baseline, and minimal package build/verification. ADR-002–006 do not block this foundation.
-- The [latest documentation consistency review](docs/reviews/design-consistency-review-2026-10-29-00-03.md) records no open findings.
-- This handoff adds `CHECKPOINTS.md` and its `AGENTS.md` reading/update instruction, committed together as `docs: add development checkpoints and handoff guidance`. The working tree was clean before these changes.
-- Verification: `git diff --check` and local Markdown link-target checks passed. TDD does not apply because this change adds development documentation without changing executable behavior. No application checks were run.
+- Refreshed complete issue #1 and all comment pages; zero comments and unchanged metadata. Its body assigns Milestone 0. Naming override remains the recorded developer decision.
+- Fresh GitHub clone checked out exact reviewed commit `c9fbb758c9ee6a85974de0a30783199338ef80df` using a local Git fetch for that review revision; no copied source patches or environment. New .venv created by documented locked synchronization.
+- macOS 15.7.9 arm64, Python 3.12.15, uv 0.13.1: all documented checks passed (3 tests, lint, formatting, strict types, CLI version smoke and lock consistency). Fresh clone stayed clean and uv.lock SHA-256 stayed unchanged. Complete commands/results and all ten criterion mappings are in the IP2 report.
+- README/guide now record verified fresh-checkout status and reviewed-commit source selection. This implementation phase changes no executable behavior; TDD uses existing regression tests rather than a manufactured failure. No failed corrective attempt or new suppression occurred.
+- Evidence covers a new checkout/environment on this macOS host with existing Python/uv and dependency cache. Other platforms/Python versions, CI, isolated wheel/sdist verification and packaged resources remain unverified/deferred to their owning stories. Milestone 0 is incomplete.
+- Temporary clone/results remain at `/tmp/us31-ip2-5w99njqw/`. This commit includes README/guide, plan/index/checkpoint and the new IP2 evidence report. Documentation formatting, local file-target validation and git diff --check passed. Branch pushed and PR #4 created using the repository template; US-31 closes #1 on merge, while US-33 #3 is referenced as partial work. Verify current branch/PR state before resuming.
 
 ## Maintenance rules
 

@@ -12,7 +12,7 @@ US-31–33 establish the harness repository before experiment-user features. mac
 
 Provide contributor prerequisites, clone/setup instructions, runtime and development dependency synchronization through `uv` and the committed lockfile, configuration/credential guidance with practical local defaults, and shared commands for tests, linting, formatting checks, type checks, and smoke verification. Commit tool configurations and control tool versions through development dependencies and the lockfile. Document Python naming, typing, docstring, import, and error-handling conventions; enforce conventions through automated checks where supported. Document when and how contributors may add rule suppressions and check exclusions, requiring a recorded justification for each exception.
 
-The initial CLI implements `agent-ml --version`, reporting the installed distribution version and exiting successfully. The source-checkout smoke check invokes it. Verify setup on macOS from a fresh checkout and a new development environment using only documented prerequisites and steps. Run all documented development checks and retain the operating system, Python/tool versions, commands, and results as review evidence. CI starts from a clean checkout on pull requests and default-branch updates, installs required tools, synchronizes runtime and development dependencies without changing the lockfile, and runs the same documented checks. Failed checks produce a failing CI result; check results and diagnostic logs are accessible from the pull request.
+The initial CLI implements `agentic-ml --version`, reporting the installed distribution version and exiting successfully. The source-checkout smoke check invokes it. Verify setup on macOS from a fresh checkout and a new development environment using only documented prerequisites and steps. Run all documented development checks and retain the operating system, Python/tool versions, commands, and results as review evidence. CI starts from a clean checkout on pull requests and default-branch updates, installs required tools, synchronizes runtime and development dependencies without changing the lockfile, and runs the same documented checks. Failed checks produce a failing CI result; check results and diagnostic logs are accessible from the pull request.
 
 Build wheel and source distributions. Install each directly built wheel and each wheel rebuilt from the source distribution with declared runtime dependencies into a clean environment. Run checks outside the checkout without editable installation or development dependencies: verify version output against distribution metadata, `agentic_ml` imports, and access to packaged templates and runtime guidance. Document local reproduction and run these checks in CI. Milestone 0 ships at least one minimal template and one minimal runtime guidance file with explicitly provisional contents. Installed-package checks read both resources and compare their contents with expected values for each wheel build path. Complete, usable experiment initialization resources belong to Milestone 1.
 
@@ -21,27 +21,41 @@ All contracts should have versioned JSON Schemas and typed Python models. `Agent
 ```python
 from typing import Protocol, Any
 
+
 class AgentAdapter(Protocol):
     def capabilities(self) -> set[str]: ...
     def execute(self, task: "AgentTask") -> "AgentResult": ...
     def cancel(self, task_id: str) -> None: ...
+
 
 class DataSourceAdapter(Protocol):
     def discover(self) -> "DataSourceMetadata": ...
     def extract(self, spec: "ExtractionSpec") -> "DatasetRef": ...
     def validate(self, dataset: "DatasetRef") -> "ValidationReport": ...
 
+
 class DataAcquisitionPlanner(Protocol):
-    def diagnose(self, dataset: "DatasetRef", evaluation: "EvaluationReport") -> "DataGapReport": ...
+    def diagnose(
+        self, dataset: "DatasetRef", evaluation: "EvaluationReport"
+    ) -> "DataGapReport": ...
     def propose(self, gaps: "DataGapReport") -> "DataAcquisitionProposal": ...
 
+
 class DataAcquisitionExecutor(Protocol):
-    def execute(self, proposal: "DataAcquisitionProposal", authorization: "ApprovalRecord") -> "DatasetRef": ...
+    def execute(
+        self, proposal: "DataAcquisitionProposal", authorization: "ApprovalRecord"
+    ) -> "DatasetRef": ...
+
 
 class FeatureEngineeringAdapter(Protocol):
-    def propose(self, dataset: "DatasetRef", context: "FeatureContext") -> "FeaturePlan": ...
-    def transform(self, dataset: "DatasetRef", plan: "FeaturePlan") -> "FeatureSetRef": ...
+    def propose(
+        self, dataset: "DatasetRef", context: "FeatureContext"
+    ) -> "FeaturePlan": ...
+    def transform(
+        self, dataset: "DatasetRef", plan: "FeaturePlan"
+    ) -> "FeatureSetRef": ...
     def evaluate(self, feature_set: "FeatureSetRef") -> "FeatureEvaluationReport": ...
+
 
 class ExperimentRunner(Protocol):
     def submit(self, spec: "ExperimentSpec", submission_key: str) -> str: ...
@@ -50,14 +64,19 @@ class ExperimentRunner(Protocol):
     def cancel(self, run_id: str) -> None: ...
     def artifacts(self, run_id: str) -> list[str]: ...
 
+
 class ModelAdapter(Protocol):
     def train(self, context: "TrainingContext") -> Any: ...
     def predict(self, model: Any, data: Any) -> Any: ...
     def save(self, model: Any, path: str) -> None: ...
     def load(self, path: str) -> Any: ...
 
+
 class Evaluator(Protocol):
-    def evaluate(self, run_id: str, criteria: "AcceptanceCriteria") -> "EvaluationReport": ...
+    def evaluate(
+        self, run_id: str, criteria: "AcceptanceCriteria"
+    ) -> "EvaluationReport": ...
+
 
 class ApprovalService(Protocol):
     def request(self, phase_id: str) -> str: ...
@@ -194,13 +213,13 @@ git init
 uv init
 uv add "git+https://github.com/OWNER/HARNESS-REPO.git" --rev FULL_COMMIT_SHA
 
-uv run agent-ml init
+uv run agentic-ml init
 uv run jupyter lab
 ```
 
-The repository URL and commit SHA are placeholders. These commands specify the intended product interface; the harness and CLI still require implementation. There is no separate initializer-tool installation: `agent-ml init` runs from the harness already installed in the project's `.venv`.
+The repository URL and commit SHA are placeholders. These commands specify the intended product interface; the harness and CLI still require implementation. There is no separate initializer-tool installation: `agentic-ml init` runs from the harness already installed in the project's `.venv`.
 
-`agent-ml init` must:
+`agentic-ml init` must:
 
 1. Add project configuration, ignore rules, an initial experiment brief, search-space and execution configuration, notebook templates, and any project-package scaffolding to the existing user repository.
 2. Preserve existing files and report conflicts rather than silently overwriting them. Preserve the declared harness Git dependency and pinned commit.
@@ -210,7 +229,7 @@ The repository URL and commit SHA are placeholders. These commands specify the i
 
 After initialization, users register existing raw data, including approved sources outside the repository, and resolve experiment-specific inputs before dependent work begins. Existing inputs are snapshotted and versioned without requiring external acquisition.
 
-The harness repository's root `pyproject.toml` must define its build system, package metadata, supported Python versions, dependencies, and `agent-ml` CLI entrypoint. Package the `src/agentic_ml/` implementation, initialization templates, and default runtime guidance. Load resources from the installed package without relying on a source checkout. The Python import name remains `agentic_ml`; the distribution name and actual GitHub URL require implementation decisions.
+The harness repository's root `pyproject.toml` must define its build system, package metadata, supported Python versions, dependencies, and `agentic-ml` CLI entrypoint. Package the `src/agentic_ml/` implementation, initialization templates, and default runtime guidance. Load resources from the installed package without relying on a source checkout. The Python import name remains `agentic_ml`; the distribution name and actual GitHub URL require implementation decisions.
 
 The project lockfile records the resolved harness Git revision and library versions. Harness upgrades explicitly change the declared full commit SHA and project lockfile, creating a new environment identity; package version alone does not identify Git revisions. Resumed runs use the preserved compatible configuration and instruction bundle. The harness repository's own lockfile is for product development and does not replace the experiment project's environment record.
 
@@ -218,7 +237,7 @@ The project lockfile records the resolved harness Git revision and library versi
 
 Developers provide two complementary inputs: a Markdown experiment brief describing intent and constraints, and a YAML configuration defining the allowed algorithms and hyperparameter search spaces. These inputs are distinct from the resolved `ExperimentSpec` submitted for execution.
 
-Store these as `experiments/<name>/experiment.md` and `search-space.yaml` in the user repository. An adjacent `experiment.yaml` identifies notebook entrypoints, data references, feature pipeline components and parameters, and execution settings; it does not replace the brief or expand the search space. A project-root `project.yaml` holds project-wide environment, tracking, storage, agent, guidance settings, and user-supplied component declarations. Relative paths in these declarative inputs resolve against the experiment repository root; notebook working directories are explicitly recorded. The schemas and CLI/API commands beyond the selected `agent-ml init` interface require further design.
+Store these as `experiments/<name>/experiment.md` and `search-space.yaml` in the user repository. An adjacent `experiment.yaml` identifies notebook entrypoints, data references, feature pipeline components and parameters, and execution settings; it does not replace the brief or expand the search space. A project-root `project.yaml` holds project-wide environment, tracking, storage, agent, guidance settings, and user-supplied component declarations. Relative paths in these declarative inputs resolve against the experiment repository root; notebook working directories are explicitly recorded. The schemas and CLI/API commands beyond the selected `agentic-ml init` interface require further design.
 
 The Markdown brief uses recognizable sections with natural-language guidance for:
 

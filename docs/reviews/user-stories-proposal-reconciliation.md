@@ -1,5 +1,7 @@
 # User Stories and Design Reconciliation
 
+> Historical CLI spelling: this report preserves the original `agent-ml` references. The developer corrected the CLI to `agentic-ml` on 2026-10-29; see [ADR-007](../specs/design/architecture-decisions.md#adr-007--github-package-installation-and-project-initialization) and the [correction verification](../verification/cli-name-correction.md). Original results below are historical evidence, not verification of the renamed command.
+
 Historical review of an earlier requirements baseline. See [the current reconciliation](user-stories-current-reconciliation.md) for subsequent findings and dispositions. The counts and resolved findings below remain historical evidence.
 
 ## Baseline and scope

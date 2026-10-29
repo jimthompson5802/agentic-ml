@@ -11,10 +11,10 @@ Part of the [harness design](../agentic-ml-harness-design.md). Scope: Proposed R
 This repository contains the installable product, templates, examples, and product tests. Example projects and fixtures demonstrate usage; user experiment repositories are created separately.
 
 ```text
-agent-ml-harness/
+agentic-ml-harness/
 ├── AGENTS.md
 ├── README.md
-├── pyproject.toml             # Build metadata, dependencies, agent-ml entrypoint
+├── pyproject.toml             # Build metadata, dependencies, agentic-ml entrypoint
 ├── uv.lock
 ├── docs/
 │   └── specs/

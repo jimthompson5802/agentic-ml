@@ -1,5 +1,7 @@
 # User stories and design reconciliation
 
+> Historical CLI spelling: this report preserves the original `agent-ml` references. The developer corrected the CLI to `agentic-ml` on 2026-10-29; see [ADR-007](../specs/design/architecture-decisions.md#adr-007--github-package-installation-and-project-initialization) and the [correction verification](../verification/cli-name-correction.md). Original results below are historical evidence, not verification of the renamed command.
+
 Created 2026-10-28 21:26 EDT (America/New_York).
 
 ## Subsequent documentation disposition (2026-10-28)

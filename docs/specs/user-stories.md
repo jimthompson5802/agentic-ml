@@ -35,7 +35,7 @@ Acceptance criteria:
 - <a id="us-31-ac-04"></a> **US-31-AC-04:** Documented commands run automated tests, linting, formatting checks, and type checks.
 - <a id="us-31-ac-05"></a> **US-31-AC-05:** A documented smoke check confirms that the environment is ready for development.
 - <a id="us-31-ac-06"></a> **US-31-AC-06:** Setup identifies required configuration and credentials and provides local defaults where practical.
-- <a id="us-31-ac-07"></a> **US-31-AC-07:** Setup instructions are verified on macOS from a fresh checkout and a new development environment using only the documented prerequisites and setup steps. Verification runs all documented development checks, including `agent-ml --version`, and records the operating system and Python/tool versions, commands run, and results as review evidence.
+- <a id="us-31-ac-07"></a> **US-31-AC-07:** Setup instructions are verified on macOS from a fresh checkout and a new development environment using only the documented prerequisites and setup steps. Verification runs all documented development checks, including `agentic-ml --version`, and records the operating system and Python/tool versions, commands run, and results as review evidence.
 - <a id="us-31-ac-08"></a> **US-31-AC-08:** The repository includes configuration for automated tests, linting, formatting, and type checking. Tool versions are controlled through the development dependencies and committed lockfile, and the documented local commands use these configurations.
 - <a id="us-31-ac-09"></a> **US-31-AC-09:** Documented Python coding conventions cover naming, typing, docstrings, imports, and error handling. Automated checks enforce the conventions that the selected tools can verify.
 - <a id="us-31-ac-10"></a> **US-31-AC-10:** Documented guidance defines when and how contributors may add rule suppressions and check exclusions, requiring a recorded justification for each exception so that it can be reviewed.
@@ -59,11 +59,11 @@ Acceptance criteria:
 
 - <a id="us-33-ac-01"></a> **US-33-AC-01:** A documented command builds both wheel and source distributions from the repository.
 - <a id="us-33-ac-02"></a> **US-33-AC-02:** Verification installs the built wheel and its declared runtime dependencies in a clean environment and runs outside the source checkout without relying on an editable installation or development dependencies.
-- <a id="us-33-ac-03"></a> **US-33-AC-03:** Installed-package checks verify the `agent-ml` CLI, `agentic_ml` imports, and access to at least one minimal packaged template and one minimal runtime guidance file. Both files have explicitly provisional contents for Milestone 0; checks read them through the installed package and compare their contents with expected values. Usable experiment initialization resources are delivered in Milestone 1.
+- <a id="us-33-ac-03"></a> **US-33-AC-03:** Installed-package checks verify the `agentic-ml` CLI, `agentic_ml` imports, and access to at least one minimal packaged template and one minimal runtime guidance file. Both files have explicitly provisional contents for Milestone 0; checks read them through the installed package and compare their contents with expected values. Usable experiment initialization resources are delivered in Milestone 1.
 - <a id="us-33-ac-04"></a> **US-33-AC-04:** Verification builds a wheel from the source distribution and confirms that it passes the same installed-package checks.
 - <a id="us-33-ac-05"></a> **US-33-AC-05:** CI runs package build and verification checks and reports failures with diagnostic logs; the commands are documented for local reproduction.
-- <a id="us-33-ac-06"></a> **US-33-AC-06:** The Milestone 0 CLI provides `agent-ml --version`, which prints the installed package version and exits successfully. The reported version matches the installed distribution metadata. Experiment commands are introduced in later milestones.
-- <a id="us-33-ac-07"></a> **US-33-AC-07:** The installed-package checks run `agent-ml --version` for both the directly built wheel and the wheel rebuilt from the source distribution, verifying successful exit and the expected version. The documented source-checkout smoke check also runs `agent-ml --version`.
+- <a id="us-33-ac-06"></a> **US-33-AC-06:** The Milestone 0 CLI provides `agentic-ml --version`, which prints the installed package version and exits successfully. The reported version matches the installed distribution metadata. Experiment commands are introduced in later milestones.
+- <a id="us-33-ac-07"></a> **US-33-AC-07:** The installed-package checks run `agentic-ml --version` for both the directly built wheel and the wheel rebuilt from the source distribution, verifying successful exit and the expected version. The documented source-checkout smoke check also runs `agentic-ml --version`.
 
 ## Milestone 1: Run and record a reproducible experiment
 
@@ -77,7 +77,7 @@ Acceptance criteria:
 
 - <a id="us-01-ac-01"></a> **US-01-AC-01:** Documented bootstrap instructions cover installing `uv` and Git, creating the user Git/Python project, and installing the harness from GitHub at a full commit SHA.
 - <a id="us-01-ac-02"></a> **US-01-AC-02:** The harness is a normal installed dependency; runtime use requires no manually maintained harness checkout or installer cache.
-- <a id="us-01-ac-03"></a> **US-01-AC-03:** The project lockfile records the resolved harness revision and dependencies; the installed package exposes `agent-ml`, `agentic_ml`, templates, and runtime guidance.
+- <a id="us-01-ac-03"></a> **US-01-AC-03:** The project lockfile records the resolved harness revision and dependencies; the installed package exposes `agentic-ml`, `agentic_ml`, templates, and runtime guidance.
 - <a id="us-01-ac-04"></a> **US-01-AC-04:** An explicit harness upgrade changes the commit pin and lockfile, producing a new environment identity.
 
 Architecture references: [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation); [§9 Execution](design/execution-and-governance.md#execution).
@@ -88,7 +88,7 @@ As a developer, I want to initialize configuration, notebooks, dependencies, and
 
 Acceptance criteria:
 
-- <a id="us-02-ac-01"></a> **US-02-AC-01:** `uv run agent-ml init` adds project configuration, ignore rules, an initial experiment brief, search-space and execution configuration, notebook templates, and required project-package scaffolding.
+- <a id="us-02-ac-01"></a> **US-02-AC-01:** `uv run agentic-ml init` adds project configuration, ignore rules, an initial experiment brief, search-space and execution configuration, notebook templates, and required project-package scaffolding.
 - <a id="us-02-ac-02"></a> **US-02-AC-02:** Initialization preserves existing files and the pinned harness dependency, reporting conflicts instead of silently overwriting files.
 - <a id="us-02-ac-03"></a> **US-02-AC-03:** Required ML, notebook execution, and JupyterLab dependencies are declared and synchronized with the project environment and lockfile.
 - <a id="us-02-ac-04"></a> **US-02-AC-04:** Project-associated DVC, MLflow, and durable-state storage are initialized with local defaults and configurable locations.

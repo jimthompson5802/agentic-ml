@@ -24,7 +24,7 @@ git init
 uv init
 uv add "git+https://github.com/OWNER/HARNESS-REPO.git" --rev FULL_COMMIT_SHA
 
-uv run agent-ml init
+uv run agentic-ml init
 uv run jupyter lab
 ```
 

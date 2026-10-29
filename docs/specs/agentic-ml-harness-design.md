@@ -42,7 +42,7 @@ A central design principle is **hierarchical closed-loop ML development**:
 | ML frameworks | Initial scikit-learn, LightGBM, and PyTorch; extensible |
 | Package management | Use `uv` for Python dependency management, lockfiles, and virtual environments |
 | Initial distribution | Install the Python package directly from its GitHub repository using `uv`, pinned to a full Git commit SHA; package-registry distribution is future work |
-| CLI and Python imports | Use `agent-ml` as the installed CLI name and retain `agentic_ml` as the Python import/package directory name |
+| CLI and Python imports | Use `agentic-ml` as the installed CLI name and retain `agentic_ml` as the Python import/package directory name |
 | Repository boundary | Separate harness product repository and user experiment repositories; consume the harness as a versioned Python dependency through its public API and CLI |
 | Jupyter notebooks | Agent-generated notebooks in the user experiment repository are the primary experiment interface; support interactive use and automatic harness-managed execution |
 | Model types | Tabular classification/regression and deep learning |
@@ -214,7 +214,7 @@ Both loops must terminate on success, budget exhaustion, lack of improvement, un
 
 The steps below describe the workflow with integrated agent support. Before milestone 4, developers can prepare inputs and notebooks themselves or with an external coding assistant such as Codex, GitHub Copilot, or Claude Code; no agent adapter is required for interactive use. In managed mode, configure a verified adapter. Harness-managed agent proposals, execution, and revision loops begin in milestone 4. The harness validates, records, and executes supplied inputs without requiring an agent.
 
-1. Install `uv` and Git, create a separate user repository and Python project, install the harness from a pinned GitHub commit, and run `uv run agent-ml init` to add experiment scaffolding and configure its environment.
+1. Install `uv` and Git, create a separate user repository and Python project, install the harness from a pinned GitHub commit, and run `uv run agentic-ml init` to add experiment scaffolding and configure its environment.
 2. Configure local data access, tracking, storage, and an agent adapter; optionally register supplied algorithms and preprocessors with their parameter specifications and modification permissions. Write the experiment brief, feature pipeline configuration, and search-space configuration.
 3. Ask the agent to generate readable notebooks that invoke supplied or built-in components. Generate new experiment-specific implementations or helper code only as needed and authorized.
 4. Inspect the notebooks and approve the resolved task contract, workflow phase plan, component selection, evaluation protocol, access scope, and budgets through the applicable gates before dependent execution. Validate component interfaces, parameters, and evaluation compatibility before training.
