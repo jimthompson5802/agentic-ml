@@ -2,7 +2,7 @@
 
 ## Subsequent documentation disposition (2026-10-28)
 
-The findings below describe the recorded baseline, not a fresh review of all updated documents. Subsequent changes add Milestone 0 supporting design, contributor checks, package verification, and traceability; align README and delivery sequencing with Milestones 0–6 and deferred Milestone 99; and specify the minimal version CLI and initial macOS verification platform. These address documentation portions of C-01–C-04. Subsequent decisions require Python 3.12 or newer, CI verification of the 3.12 baseline, and at least one provisional template and one provisional runtime guidance file whose contents are checked through each installed wheel. Additional Python versions tested must be documented. No implementation or verification completion is implied; C-05 is unchanged.
+The findings below describe the recorded baseline, not a fresh review of all updated documents. Subsequent changes add Milestone 0 supporting design, contributor checks, package verification, and traceability; align README and delivery sequencing with Milestones 0–6 and deferred Milestone 99; and specify the minimal version CLI and initial macOS verification platform. These address documentation portions of C-01–C-04. Subsequent decisions require Python 3.12 or newer, CI verification of the 3.12 baseline, and at least one provisional template and one provisional runtime guidance file whose contents are checked through each installed wheel. Additional Python versions tested must be documented. No implementation or verification completion is implied. The subsequent C-05 correction below aligns ADR-006 with the Milestone 2 protected-test dependency and resolves the remaining documentation finding.
 
 ## Baseline and authority
 
@@ -60,15 +60,17 @@ Final correction applied: The following notice now appears below the title of [t
 
 A direct link from README's Reviews entry is optional. No requirement or supporting-design correction is needed. The table above records the reassessment before the navigation correction. After verifying the notice and its relative link to this existing report, all seven scoped review units are Supported: 0 Partial, 0 Missing, 0 Contradictory, 0 Decision needed. C-04 is resolved, with no missing inputs or product-scope decision needed. These are scoped document findings, not recomputed full-report coverage counts. C-05 was not reassessed.
 
-### C-05 — Low: ADR-006 understates the protected-test dependency
+### C-05 — Resolved: ADR-006 states the protected-test dependency
 
 Requirements: US-12-AC-03 and US-14-AC-03 in Milestone 2 (stories L225, L237). Design §7 L280 and §11 L850/L856 already require protected-test isolation during predictive feature comparison. ADR-006 L1006 instead singles out Milestone 3 as requiring that isolation. Consequence: an implementer reading the pending decision in isolation could defer it too long, although the main design is explicit.
 
 Target: ADR-006. Replace its delivery timing sentence with: “Milestone 1 requires execution/extraction boundaries; Milestone 2 requires protected-test isolation for predictive feature comparison; Milestone 3 adds authorized independent final evaluation; Milestone 4 extends boundaries to managed agent and interactive work.” Keep the mechanism pending.
 
+Correction applied (2026-10-28): ADR-006 now uses the delivery timing sentence above, aligning its Milestone 2 protected-test dependency with §7 and §11. The isolation mechanism remains pending. C-05 is resolved as document alignment; no implementation or verification completion is implied. The original finding and criterion matrix remain historical baseline evidence.
+
 ## Decisions and proposed corrections
 
-Current disposition: C-01–C-04 are resolved as document alignment. The C-03 scope decision below has been settled by the current user stories and design. C-04's delivery summaries, future-roadmap terminology, traceability, and historical-review navigation are aligned. C-05 remains open and has not been reassessed.
+Current disposition: C-01–C-05 are resolved as document alignment. The C-03 scope decision below has been settled by the current user stories and design. C-04's delivery summaries, future-roadmap terminology, traceability, and historical-review navigation are aligned. C-05's ADR timing correction is recorded above.
 
 Original baseline decisions and proposed corrections:
 
@@ -279,7 +281,7 @@ Each row includes the complete authoritative review unit, its current delivery a
 
 ## Counts and disposition
 
-Current findings: **0 High, 0 Medium, 1 Low** — 1 open finding: C-05 is unchanged. C-01–C-04 are resolved as document alignment. These dispositions reflect focused reassessments, not implementation certification or a fresh full review.
+Current findings: **0 High, 0 Medium, 0 Low** — no open findings. C-01–C-05 are resolved as document alignment. These dispositions reflect focused reassessments and the C-05 documentation correction, not implementation certification or a fresh full review.
 
 The coverage matrix, scope inventory, and counts below describe the original baseline; they have not been recomputed against the expanded current acceptance criteria.
 
