@@ -1,6 +1,6 @@
 ---
 name: review-pull-request
-description: Review a GitHub pull request through static inspection and publish actionable inline observations without running project code or checks. Every feedback comment starts with "Codex review: ". Explicit draft-only requests remain unpublished.
+description: Review a GitHub pull request through static inspection and publish actionable inline observations without running project code or checks. Every feedback comment starts with "Agent review: ". Explicit draft-only requests remain unpublished.
 ---
 
 ## Purpose and authorization
@@ -30,7 +30,7 @@ gh pr diff PR_NUMBER --repo OWNER/REPO
 
 ## Prepare feedback and line anchors
 
-Every feedback comment body must begin with the exact literal prefix `Codex review: `, including its trailing space. Place it before severity labels or Markdown. Apply this rule to inline comments and the review summary, including summaries with no findings.
+Every feedback comment body must begin with the exact literal prefix `Agent review: `, including its trailing space. Place it before severity labels or Markdown. Apply this rule to inline comments and the review summary, including summaries with no findings.
 
 Report actionable defects introduced or exposed by the change and concrete violations of applicable requirements. Explain the trigger, resulting behavior, and impact. Use one distinct problem per comment, with severity proportional to impact. Distinguish confirmed defects from questions. Avoid speculative findings and duplicate or already resolved feedback.
 
@@ -55,10 +55,10 @@ Verify each anchor against the current diff. If no relevant commentable line exi
 Example inline body:
 
 ```text
-Codex review: [Medium] Handle an empty query result before reading its identifier. When no row matches, this access throws and the request fails instead of returning the expected empty response.
+Agent review: [Medium] Handle an empty query result before reading its identifier. When no row matches, this access throws and the request fails instead of returning the expected empty response.
 ```
 
-Derive real findings and locations from the target PR. When no actionable findings remain, use `Codex review: No actionable findings identified.` as the summary and disclose material review limitations.
+Derive real findings and locations from the target PR. When no actionable findings remain, use `Agent review: No actionable findings identified.` as the summary and disclose material review limitations.
 
 ## Publish inline review comments
 
