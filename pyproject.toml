@@ -9,7 +9,7 @@ description = "Agent-independent machine learning experimentation harness"
 readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
-dependencies = ["packaging>=26"]
+dependencies = []
 
 [project.scripts]
 agentic-ml = "agentic_ml.cli:main"
