@@ -26,7 +26,7 @@ The inspected tree at `c5d5d37` has documentation and skills, with no Python pac
 | Tools | Python 3.12 baseline; uv; pytest, Ruff, mypy in dev dependency group | US-31 IP1 | Proposed; resolve compatible releases at implementation, commit exact resolutions in uv.lock, record uv version; do not invent unverified version pins |
 | Minimal CLI | US-33-IP1-T1–T3 and approved US-33 IP1 gate | US-31 IP2 | [Renamed CLI tasks complete with evidence](../verification/cli-name-correction.md); owning US-33 IP1 gate approved 2026-10-29 |
 | CI status | Document Python 3.12 target separately from versions actually verified in CI | AC-01 final status | US-32 deferred; initially state CI not yet established, no claimed CI success; future CI evidence must update docs |
-| macOS host and clean source snapshot | Fresh clone of reviewed commit, new .venv, recorded prerequisite versions | IP2 verification | Pending; if unavailable, keep AC-07 incomplete; copying the active .venv is invalid |
+| macOS host and clean source snapshot | Fresh clone of reviewed commit, new .venv, recorded prerequisite versions | IP2 verification | Available and verified; [fresh macOS report](../verification/us-31-ip2.md). New clone and .venv, no copied environment |
 
 ## Technical approach and public test boundaries
 
@@ -59,7 +59,7 @@ Record evidence in proposed `docs/verification/` Markdown reports; keep temporar
 
 - **Status:** Approved.
 - **Developer decision:** Approved — coordinated scope, proposed tooling choices, and public test boundaries.
-- **Decision reference and date:** Developer message “i approve the plan” in this conversation, 2026-10-29. US-31 IP1 execution authorized by developer message “you can begin us-31 ip 1”, 2026-10-29; all implementation gate decisions remain pending.
+- **Decision reference and date:** Developer message “i approve the plan” in this conversation, 2026-10-29. US-31 IP1 and US-33 IP1 gates subsequently approved in their owning records. US-31 IP2 execution authorized by developer message “start the next phase”, 2026-10-29; its final gate remains pending.
 - **Requested plan changes:** None.
 
 ## Scope-change history
@@ -116,45 +116,45 @@ Record evidence in proposed `docs/verification/` Markdown reports; keep temporar
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-31-IP2-T1 | Not started | Finalize `README.md`, `docs/development.md` with exact shared commands including version smoke, setup troubleshooting, platform limits and honest CI verification status. | US-33-IP1-T1–T3 and approved gate | All commands executable; smoke success means version output and zero exit; missing setup or CLI failures produce nonzero status. No experiment services required. | US-31-AC-01–06, 08–10 |
-| US-31-IP2-T2 | Not started | From a new macOS clone of the reviewed source revision and a new environment, follow only documented setup and run all six commands above; create proposed `docs/verification/us-31-ip2.md`. | T1 | Record revision, OS/architecture, Python/Git/uv/dev-tool versions, commands, exit codes and results; tests actually collected, all checks pass, version agrees with metadata, uv.lock unchanged before/after. Record any extra steps as defects requiring guide correction and rerun. | US-31-AC-02–05, 07–08 |
-| US-31-IP2-T3 | Not started | Review complete criterion evidence and update this plan plus `CHECKPOINTS.md`. | T2 | Each criterion has evidence and limitations; macOS verification separated from unverified Linux/Windows and pending CI; no US-33 completion claim. | US-31-AC-01–10 |
+| US-31-IP2-T1 | Complete | Finalize `README.md`, `docs/development.md` with exact shared commands including version smoke, setup troubleshooting, platform limits and honest CI verification status. | US-33-IP1-T1–T3 and approved gate | All commands executable; smoke success means version output and zero exit; missing setup or CLI failures produce nonzero status. No experiment services required. | US-31-AC-01–06, 08–10 |
+| US-31-IP2-T2 | Complete | From a new macOS clone of the reviewed source revision and a new environment, follow only documented setup and run all six commands above; create proposed `docs/verification/us-31-ip2.md`. | T1 | Record revision, OS/architecture, Python/Git/uv/dev-tool versions, commands, exit codes and results; tests actually collected, all checks pass, version agrees with metadata, uv.lock unchanged before/after. Record any extra steps as defects requiring guide correction and rerun. | US-31-AC-02–05, 07–08 |
+| US-31-IP2-T3 | Complete | Review complete criterion evidence and update this plan plus `CHECKPOINTS.md`. | T2 | Each criterion has evidence and limitations; macOS verification separated from unverified Linux/Windows and pending CI; no US-33 completion claim. | US-31-AC-01–10 |
 
 ### Verification and review evidence
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Fresh setup | Documented clone, Python selection and `uv sync --locked --group dev` | New environment installs only documented prerequisites and dependencies | Pending |
-| Shared checks | Tests, lint, format, types and version smoke commands above | Every command exits zero; collected tests exercise public CLI; stdout version matches metadata | Pending |
-| Reproducibility | Compare lockfile checksum and Git diff before/after; record host/tool diagnostics | No lock update or undocumented setup edits; macOS evidence reproducible | Pending |
-| Coverage | Review criterion mapping and source docs | AC-01–10 supported without claiming CI execution | Pending |
+| Fresh setup | Documented clone, Python selection and `uv sync --locked --group dev` | New environment installs only documented prerequisites and dependencies | Passed; [fresh setup and diagnostics](../verification/us-31-ip2.md) |
+| Shared checks | Tests, lint, format, types and version smoke commands above | Every command exits zero; collected tests exercise public CLI; stdout version matches metadata | Passed; 3 tests, lint, format, types and smoke; [command outputs](../verification/us-31-ip2.md#command-results-from-the-fresh-clone) |
+| Reproducibility | Compare lockfile checksum and Git diff before/after; record host/tool diagnostics | No lock update or undocumented setup edits; macOS evidence reproducible | Passed; unchanged lock checksum and clean fresh clone; [integrity evidence](../verification/us-31-ip2.md#integrity-and-documentation-review) |
+| Coverage | Review criterion mapping and source docs | AC-01–10 supported without claiming CI execution | Verified; [criterion review](../verification/us-31-ip2.md#acceptance-criterion-review), developer acceptance pending |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete; fresh macOS evidence and every criterion reviewed.
-- **Evidence presented:** Pending; proposed `docs/verification/us-31-ip2.md`.
+- **Evidence presented:** [Fresh macOS verification](../verification/us-31-ip2.md); T1–T3 technically complete. Final developer gate approved.
 - **Remaining limitations or blocked work:** CI and full distribution checks belong to other stories; additional platforms unverified.
-- **Developer decision:** Pending.
-- **Decision reference and date:** None.
+- **Developer decision:** Approved — final IP2 gate and US-31 acceptance.
+- **Decision reference and date:** Developer message “i approve us-31 ip2” following the final US-31 acceptance review in this conversation, 2026-10-29.
 - **Requested changes and resolution:** None.
-- **Progression authorized:** Pending final US-31 acceptance; stop here. No downstream story implementation authorized.
+- **Progression authorized:** US-31 accepted; coordinated scope complete. Stop here. No downstream story implementation authorized.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-31-AC-01 — Python/tools, CI version status, platform limits | IP1-T3; IP2-T1, T3 | Guide and macOS/version report; explicitly identify no verified CI versions until US-32 | Pending |
-| US-31-AC-02 — clone and locked dependencies | IP1-T1, T3; IP2-T2 | Fresh-clone setup and unchanged lock | Pending |
-| US-31-AC-03 — source CLI | IP2-T1–T2; US-33 IP1 prerequisite | Source version subprocess success | Pending |
-| US-31-AC-04 — documented check commands | IP1-T2–T3; IP2-T2 | All shared check results | Pending |
-| US-31-AC-05 — readiness smoke | IP2-T1–T2 | Version smoke result | Pending |
-| US-31-AC-06 — configuration, credentials, defaults | IP1-T3; IP2-T1–T2 | Guide and setup using local defaults | Pending |
-| US-31-AC-07 — fresh macOS verification and diagnostics | IP2-T2–T3 | OS/tool versions, revision, commands, results | Pending |
-| US-31-AC-08 — configured locked tools | IP1-T1–T2; IP2-T2 | Configuration, negative examples, lock and shared commands | Pending |
-| US-31-AC-09 — conventions and enforcement | IP1-T2–T3; IP2-T3 | Rule/review mapping and tool demonstrations | Pending |
-| US-31-AC-10 — justified exceptions | IP1-T2–T3; IP2-T3 | Exception policy and review of actual suppressions/exclusions | Pending |
+| US-31-AC-01 — Python/tools, CI version status, platform limits | IP1-T3; IP2-T1, T3 | [IP2 criterion evidence](../verification/us-31-ip2.md#acceptance-criterion-review) | Verified and accepted |
+| US-31-AC-02 — clone and locked dependencies | IP1-T1, T3; IP2-T2 | [IP2 criterion evidence](../verification/us-31-ip2.md#acceptance-criterion-review) | Verified and accepted |
+| US-31-AC-03 — source CLI | IP2-T1–T2; US-33 IP1 prerequisite | [IP2 criterion evidence](../verification/us-31-ip2.md#acceptance-criterion-review) | Verified and accepted |
+| US-31-AC-04 — documented check commands | IP1-T2–T3; IP2-T2 | [IP2 criterion evidence](../verification/us-31-ip2.md#acceptance-criterion-review) | Verified and accepted |
+| US-31-AC-05 — readiness smoke | IP2-T1–T2 | [IP2 criterion evidence](../verification/us-31-ip2.md#acceptance-criterion-review) | Verified and accepted |
+| US-31-AC-06 — configuration, credentials, defaults | IP1-T3; IP2-T1–T2 | [IP2 criterion evidence](../verification/us-31-ip2.md#acceptance-criterion-review) | Verified and accepted |
+| US-31-AC-07 — fresh macOS verification and diagnostics | IP2-T2–T3 | [IP2 criterion evidence](../verification/us-31-ip2.md#acceptance-criterion-review) | Verified and accepted |
+| US-31-AC-08 — configured locked tools | IP1-T1–T2; IP2-T2 | [IP2 criterion evidence](../verification/us-31-ip2.md#acceptance-criterion-review) | Verified and accepted |
+| US-31-AC-09 — conventions and enforcement | IP1-T2–T3; IP2-T3 | [IP2 criterion evidence](../verification/us-31-ip2.md#acceptance-criterion-review) | Verified and accepted |
+| US-31-AC-10 — justified exceptions | IP1-T2–T3; IP2-T3 | [IP2 criterion evidence](../verification/us-31-ip2.md#acceptance-criterion-review) | Verified and accepted |
 
-- **Remaining work:** IP1 tasks and gate approved; US-33 prerequisite tasks complete with [evidence](../verification/us-33-ip1.md), and its gate approved; US-31 IP2 remains unstarted. No US-31 criterion deferred.
+- **Remaining work:** All US-31 tasks and technical checks complete. Final IP2 gate and story acceptance approved. No US-31 criterion deferred; no later-story implementation authorized.
 - **Partial prerequisite delivery:** US-33 slice supplies CLI only; its distribution and CI criteria remain open.
-- **Developer acceptance:** Pending.
-- **Decision reference and date:** None.
+- **Developer acceptance:** Approved through the final IP2 gate after the explicit story-completion review.
+- **Decision reference and date:** Developer message “i approve us-31 ip2” following the final US-31 acceptance review in this conversation, 2026-10-29.

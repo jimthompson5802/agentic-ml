@@ -5,39 +5,36 @@ Last updated: 2026-10-29
 ## Current position
 
 - Milestone: 0 — Harness development foundation.
-- Active work: US-31 IP1 and US-33 IP1 approved; US-31 IP2 is next and remains unstarted.
+- Active work: US-31 complete and accepted; both implementation gates approved.
 - Branch at handoff: `us-31-setup-dev-environment`.
-- Last relevant commit: This checkpoint accompanies the development-tooling and minimal-CLI commit; prior commit `3e0fe3f` contains the approved plans.
+- Last relevant commit: This checkpoint accompanies the US-31 acceptance and fresh-checkout verification commit; `c9fbb75` contains the verified executable source.
 
 ## Progress overview
 
 | Story | Implementation plan | Implementation | Developer gate |
 |---|---|---|---|
-| [US-31 / #1 — Development environment](https://github.com/jimthompson5802/agentic-ml/issues/1) | [Approved](docs/plans/milestone-0-us-31.md#plan-review) | IP1 tasks complete; IP2 not started | IP1 approved |
+| [US-31 / #1 — Development environment](https://github.com/jimthompson5802/agentic-ml/issues/1) | [Approved](docs/plans/milestone-0-us-31.md#plan-review) | Complete and accepted | IP1 and IP2 approved |
 | [US-32 / #2 — CI verification](https://github.com/jimthompson5802/agentic-ml/issues/2) | Not started | Not started | Not presented |
-| [US-33 / #3 — Package build and verification](https://github.com/jimthompson5802/agentic-ml/issues/3) | [CLI prerequisite slice approved](docs/plans/milestone-0-us-33.md); remainder unplanned | CLI prerequisite tasks complete; remainder unplanned | US-33 IP1 approved |
+| [US-33 / #3 — Package build and verification](https://github.com/jimthompson5802/agentic-ml/issues/3) | [CLI prerequisite slice approved](docs/plans/milestone-0-us-33.md); remainder unplanned | CLI prerequisite complete; remainder unplanned | US-33 IP1 approved |
 
 ## Resume here
 
-US-33 IP1 was approved by developer message “I appove us-33 ip1; commit changes”, 2026-10-29; see its [gate record](docs/plans/milestone-0-us-33.md#developer-approval-gate) and [renewed evidence](docs/verification/cli-name-correction.md). Both prerequisite gates are satisfied. Next is [US-31 IP2](docs/plans/milestone-0-us-31.md#us-31--implementation-phase-2-verify-documented-macos-setup-and-source-smoke-check), subject to an instruction to execute it. The current request records approval and commits existing work. Follow the [coordinated index](docs/plans/milestone-0-execution-order.md); US-31 IP2, US-32 and the remainder of US-33 have not started.
+US-31 was accepted through final IP2 approval (developer message “i approve us-31 ip2”, 2026-10-29) after the story-completion review. See the [owning gate and acceptance record](docs/plans/milestone-0-us-31.md#us-31--implementation-phase-2-verify-documented-macos-setup-and-source-smoke-check) and [fresh macOS evidence](docs/verification/us-31-ip2.md). The coordinated scope is complete. Documentation/evidence and acceptance records are included in the commit accompanying this checkpoint. US-32 and remaining US-33 require separate planning/authorization; no downstream implementation has started.
 
 ## Pending developer decisions
 
-- Plan approval includes Hatchling backend, initial version `0.1.0`, pytest/Ruff/mypy tools, and public test boundaries; see the owning plans’ plan-review records.
-- Distribution name `agentic-ml` was explicitly approved by the developer in this conversation on 2026-10-29. Repository source is the confirmed Git origin.
-- No completed implementation phase awaits approval. US-31 IP2 remains unstarted pending execution instruction.
-- SC-01 CLI rename to `agentic-ml` explicitly authorized by developer correction request, 2026-10-29; corrected local requirements govern the superseded spelling in GitHub issue bodies.
+- No US-31 gate or acceptance decision remains pending.
+- US-32 and remaining US-33 scope need separate planning/authorization.
+- SC-01 CLI spelling `agentic-ml` governs the older GitHub issue wording; distribution/import/tooling choices are recorded in the plans and ADR-007.
 
 ## Handoff notes
 
-- Retrieved complete issues #1 and #3 and all comment pages; both have zero comments, with unchanged metadata on repeat reads. Their bodies assign Milestone 0; GitHub milestone fields are empty.
-- Planning uses ADR-007's minimal foundation boundary. US-33 supplies only the version CLI prerequisite; full distribution checks, provisional resources and CI remain open.
-- IP1 configuration/documentation changes add no executable harness behavior; TDD does not apply. Tool enforcement was checked with temporary invalid and corrected examples.
-- Verification: 15 expected command outcomes passed, locked synchronization left uv.lock unchanged, metadata parsing and local link/diff checks passed. See the evidence for versions, commands, outputs and corrective attempts. No CLI, application tests, distribution builds, CI or fresh-clone checks were claimed.
-- Ruff required formatting existing design-document Python examples; its formatting-only correction passed the original check. A temporary fixture named typing.py was renamed to avoid standard-library shadowing; intended negative type verification then passed. No suppressions or exclusions added.
-- US-33 CLI TDD: initial version test failed for missing output, then passed after implementation; public import regression added after green. Original full checks passed: 2 tests, lint, formatting, strict mypy, version smoke (0.1.0) and lock consistency. One import-order correction passed original checks; no suppressions added. Fresh-clone, wheel/resource and CI verification remain pending.
-- CLI naming correction: two red–green slices verified required command and help-name changes. Final checks passed: 3 tests, lint, format, strict mypy, corrected CLI smoke/help and lock consistency; lock hash unchanged. See the correction report. Historical reviews/reports retain original spelling with correction notes.
-- Working tree includes tooling, minimal package/CLI and tests, contributor docs, evidence, corrected requirements/ADR/instructions, plans and checkpoint. These changes are included in the commit accompanying this checkpoint; verify the working tree before resuming.
+- Refreshed complete issue #1 and all comment pages; zero comments and unchanged metadata. Its body assigns Milestone 0. Naming override remains the recorded developer decision.
+- Fresh GitHub clone checked out exact reviewed commit `c9fbb758c9ee6a85974de0a30783199338ef80df` using a local Git fetch for that review revision; no copied source patches or environment. New .venv created by documented locked synchronization.
+- macOS 15.7.9 arm64, Python 3.12.15, uv 0.13.1: all documented checks passed (3 tests, lint, formatting, strict types, CLI version smoke and lock consistency). Fresh clone stayed clean and uv.lock SHA-256 stayed unchanged. Complete commands/results and all ten criterion mappings are in the IP2 report.
+- README/guide now record verified fresh-checkout status and reviewed-commit source selection. This implementation phase changes no executable behavior; TDD uses existing regression tests rather than a manufactured failure. No failed corrective attempt or new suppression occurred.
+- Evidence covers a new checkout/environment on this macOS host with existing Python/uv and dependency cache. Other platforms/Python versions, CI, isolated wheel/sdist verification and packaged resources remain unverified/deferred to their owning stories. Milestone 0 is incomplete.
+- Temporary clone/results remain at `/tmp/us31-ip2-5w99njqw/`. This commit includes README/guide, plan/index/checkpoint and the new IP2 evidence report. Documentation formatting, local file-target validation and git diff --check passed. No push performed; verify the working tree before resuming.
 
 ## Maintenance rules
 

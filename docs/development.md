@@ -6,7 +6,7 @@ This guide applies to harness contributors. Experiment runtime instructions will
 
 Use Git, `uv`, Python 3.12 or newer, a shell, and network access to GitHub and the Python package index. Install uv using its [official installation instructions](https://docs.astral.sh/uv/getting-started/installation/). Install Python 3.12 yourself or use `uv python install 3.12`. The committed `.python-version` selects the 3.12 baseline; `pyproject.toml` requires Python >=3.12. Exact development dependency resolutions are in `uv.lock`.
 
-macOS is the initial development platform. Tooling was checked on macOS 15.7.9 arm64 with Python 3.12.15 and uv 0.13.1; see [implementation-phase evidence](verification/us-31-ip1.md). This is tooling verification, not the pending fresh-checkout verification. CI has not been established: no Python version is currently verified by CI. US-32 will verify Python 3.12 and record actual CI results. Other Python versions, Linux, and Windows remain unverified. Commands below use POSIX shell syntax; Windows shell/path handling will need verification. This initial foundation needs neither GPU tooling nor ML system services.
+macOS is the initial development platform. Fresh-checkout setup and all documented development checks were verified on macOS 15.7.9 arm64 with Python 3.12.15 and uv 0.13.1; see [fresh-checkout evidence](verification/us-31-ip2.md). Earlier tool enforcement evidence is in the [IP1 report](verification/us-31-ip1.md). CI has not been established: no Python version is currently verified by CI. US-32 will verify Python 3.12 and record actual CI results. Other Python versions, Linux, and Windows remain unverified. Commands below use POSIX shell syntax; Windows shell/path handling will need verification. This initial foundation needs neither GPU tooling nor ML system services.
 
 ## Clone and install the development environment
 
@@ -17,7 +17,7 @@ uv sync --locked --group dev
 uv lock --check
 ```
 
-When reviewing an implementation branch, check out the reviewed branch or commit before synchronization. The package installs from this checkout in editable mode. For tooling-only work before product source exists, `uv sync --locked --group dev --no-install-project` installs dependencies without building the project; this was the US-31 IP1 bootstrap path. There are currently no third-party runtime dependencies. Keep `uv.lock` committed. `--locked` must reject stale metadata rather than silently regenerate the lockfile. Deliberate dependency changes require `uv lock`, review of the lock diff, and renewed verification.
+When reviewing an implementation branch, check out the reviewed branch or commit before synchronization. If that commit is not yet pushed, Git can fetch it from a local harness clone: run `git fetch /absolute/path/to/harness REVIEWED_COMMIT_SHA`, then `git checkout --detach REVIEWED_COMMIT_SHA` before synchronization; replace the path and SHA with the reviewed source. This changes only how Git obtains the reviewed revision, not the Python setup steps. The package installs from this checkout in editable mode. For tooling-only work before product source exists, `uv sync --locked --group dev --no-install-project` installs dependencies without building the project; this was the US-31 IP1 bootstrap path. There are currently no third-party runtime dependencies. Keep `uv.lock` committed. `--locked` must reject stale metadata rather than silently regenerate the lockfile. Deliberate dependency changes require `uv lock`, review of the lock diff, and renewed verification.
 
 Bootstrap commands available now:
 
@@ -43,7 +43,7 @@ The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. U
 | Strict type checks | `uv run --locked mypy src tests` |
 | Development smoke check | `uv run --locked agentic-ml --version` |
 
-The smoke check must exit zero and print the installed package version; version tests compare it to distribution metadata. A missing command, nonzero exit, or wrong version is a failed smoke check. US-31 Implementation Phase 2 will verify all shared commands from a fresh macOS checkout and a new environment. Wheel/source-distribution verification belongs to US-33 and is separate from this editable development install.
+The smoke check must exit zero and print the installed package version; version tests compare it to distribution metadata. A missing command, nonzero exit, or wrong version is a failed smoke check. US-31 Implementation Phase 2 verified all shared commands from a fresh macOS checkout and a new environment; see the [recorded results](verification/us-31-ip2.md). Wheel/source-distribution verification belongs to US-33 and is separate from this editable development install.
 
 ## Configuration, credentials, and troubleshooting
 
