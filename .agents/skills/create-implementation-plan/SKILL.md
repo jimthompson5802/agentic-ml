@@ -41,6 +41,18 @@ Look up facts in the repository before asking the developer. Resolve questions t
 
 Start detailed planning when scope and acceptance criteria are clear. Resolve important decisions first, or assign them to an initial implementation phase with a defined investigation scope.
 
+## Coordinate prerequisite stories
+
+A request naming one story can include planning the minimum prerequisite portions of other stories, including transitive dependencies. Keep the named story as the target outcome. Respect explicit scope limits and milestone boundaries; unresolved scope decisions remain blockers.
+
+Read the milestone's capability dependencies and recommended delivery order. Dependencies may concern portions of stories; require the needed capability rather than whole-story completion. Retrieve the complete issue body and all comments for every affected story using the repository's issue-retrieval workflow. Reconcile issue scope, design contracts, existing implementation, and existing plans before planning dependent work.
+
+Keep a separate plan for each story and milestone slice. Each implementation phase and task has one owning story. Reuse existing task records through links rather than duplicating them. Distinguish acceptance criteria advanced by a prerequisite slice from criteria fully verified; including a slice does not imply completion of its story.
+
+Save a coordinated execution index alongside the story plans, using the repository's convention or `docs/plans/milestone-<number>-execution-order.md`. Record the target story, included prerequisite scope, plan-review decision, and ordered links to story implementation phases. For each entry, name prerequisite capabilities, supplying story/phase/task IDs, verification evidence, and required gate approvals. Link every participating plan to the index. The index coordinates order; owning story plans remain authoritative for tasks, evidence, and gate decisions.
+
+Order implementation phases so required capabilities are available before dependent work. If the order contains a cycle, refine the capability slices or record a blocker. Identify shared integration checks and each story's contribution. Include applicable controls in every enabled operation. Plan review must cover the coordinated scope and all participating plans; approval leaves every implementation gate pending.
+
 ## Define implementation phases
 
 Use the repository's planning hierarchy and terms. Preserve existing milestone boundaries, story boundaries, story slices, and criterion IDs. Add milestone or story IDs only when the repository requires them. Distinguish implementation phases from the product's workflow phases.
@@ -65,6 +77,8 @@ Give each task a stable ID and a progress field. Follow the repository template 
 
 Start new tasks as incomplete. Preserve existing completion records only when evidence supports them.
 
+For this repository's task tables, use columns in this order: Task ID, Status, Action and relevant files or components, Depends on, Expected output / completion condition, Acceptance criteria. Start tasks as `Not started`; use `Complete` only after work and required verification pass and evidence is recorded. Intermediate statuses remain incomplete. Preserve justified existing formats when revising plans.
+
 For each task, specify:
 
 - **Action and files:** Give repository-relative paths to create, modify, delete, or inspect. State the change or evidence required for each file. Mark new paths as proposed.
@@ -83,6 +97,8 @@ The saved plan must include these instructions for the implementing agent.
 
 Mark a task complete only after its work and required verification pass. Record actual results and evidence. Keep partial, blocked, failed, and unverified tasks incomplete.
 
+Follow the coordinated execution index when present and check the supplying story's evidence and gate decisions before starting dependent work. Reopen affected tasks and renew verification when changes invalidate their results.
+
 ### Stop at developer gates
 
 Stop at the end of every implementation phase, including the final one. Present completed tasks, checks performed, actual results, evidence paths, deviations, and limitations.
@@ -92,6 +108,8 @@ Wait for explicit developer approval before progression. Record the decision and
 ### Handle scope changes
 
 Pause affected work when evidence invalidates the approach or requires a change to requirements or authorized scope. Follow the repository's scope-change procedure. Record the change, impact, and decision in the plan.
+
+Prerequisite work discovered during execution that is outside the approved scope requires a documented scope revision and developer approval before implementation. Update affected story plans and the execution index together.
 
 Use `manage-plan-scope` when repository instructions or available skills provide it. If no procedure is available, record the proposed revision and obtain any required authorization before dependent implementation. Routine decisions within approved scope can proceed.
 
@@ -124,6 +142,7 @@ Before delivery, check that:
 
 - Every acceptance criterion within scope maps to tasks and verification.
 - Task order and dependencies are feasible.
+- Cross-story prerequisites identify their owning tasks, required capabilities, evidence, and approval gates; the execution index and story plans agree.
 - Every task identifies files, progress, completion conditions, and expected behavior where applicable.
 - Work that depends on unresolved findings is marked as conditional.
 - Every implementation phase has a stop instruction and a pending developer gate.

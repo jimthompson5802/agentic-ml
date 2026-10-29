@@ -18,12 +18,15 @@ During execution, complete the current implementation phase's tasks and verifica
 - **Acceptance criteria covered:** <links to the existing criterion IDs>
 - **Scope boundaries:** <included work, exclusions, and portions deferred to other milestones>
 - **Supporting design:** <relevant sections or accepted architecture decisions>
+- **Coordinated execution index:** <link when cross-story prerequisites are included; otherwise None>
 
 ## Dependencies and decisions
 
 | Dependency or decision | Required outcome | Work blocked | Status / evidence |
 |---|---|---|---|
 | <prerequisite or unresolved question> | <what must be available or decided> | <implementation phase or task> | <status and reference> |
+
+For cross-story prerequisites, link the supplying story plan and implementation phase/task IDs. State the required capability, verification evidence, and developer gate approval. Require only the needed story portion. Keep task and gate records in their owning plan; use the execution index to coordinate order across plans.
 
 ## Plan review
 
@@ -55,9 +58,11 @@ Follow the [manage-plan-scope procedure](../../.agents/skills/manage-plan-scope/
 
 Order tasks by dependency. Each task should identify an action and a checkable result; mark completion only after producing that result.
 
-| Task ID | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria | Status |
+Use `Not started` initially and `Complete` only after the work and required verification pass and actual evidence is recorded. Partial, blocked, failed, and unverified tasks remain incomplete. Reopen affected tasks and repeat verification when requested changes invalidate results. Task completion is separate from developer approval of the implementation phase.
+
+| Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-<ID>-IP1-T1 | <concrete action> | <prerequisite or none> | <observable result> | <criterion IDs> | Not started |
+| US-<ID>-IP1-T1 | Not started | <concrete action> | <prerequisite or none> | <observable result> | <criterion IDs> |
 
 ### Verification and review evidence
 
@@ -73,7 +78,7 @@ Order tasks by dependency. Each task should identify an action and a checkable r
 - **Developer decision:** Pending — record Approved, Changes requested, or Rejected when explicitly given.
 - **Decision reference and date:** <record the developer's decision>
 - **Requested changes and resolution:** <record if applicable>
-- **Progression authorized:** <next implementation phase, or final story acceptance; pending until approved>
+- **Progression authorized:** <link to the next implementation phase in the coordinated order, possibly in another story plan, or final acceptance; pending until approved>
 
 ## Story completion review
 
@@ -82,5 +87,6 @@ Order tasks by dependency. Each task should identify an action and a checkable r
 | <each criterion covered by this plan> | <identifiers> | <evidence reference> | Pending |
 
 - **Remaining work:** <limitations and any story portions assigned to later milestones>
+- **Partial prerequisite delivery:** <criteria advanced versus fully verified; identify remaining work in this milestone without implying full story completion>
 - **Developer acceptance:** Pending
 - **Decision reference and date:** <record when given; the final implementation gate may also serve as story acceptance if explicitly stated>
