@@ -34,6 +34,9 @@ Acceptance criteria:
 - <a id="us-31-ac-05"></a> **US-31-AC-05:** A documented smoke check confirms that the environment is ready for development.
 - <a id="us-31-ac-06"></a> **US-31-AC-06:** Setup identifies required configuration and credentials and provides local defaults where practical.
 - <a id="us-31-ac-07"></a> **US-31-AC-07:** Setup instructions are verified from a clean checkout.
+- <a id="us-31-ac-08"></a> **US-31-AC-08:** The repository includes configuration for automated tests, linting, formatting, and type checking. Tool versions are controlled through the development dependencies and committed lockfile, and the documented local commands use these configurations.
+- <a id="us-31-ac-09"></a> **US-31-AC-09:** Documented Python coding conventions cover naming, typing, docstrings, imports, and error handling. Automated checks enforce the conventions that the selected tools can verify.
+- <a id="us-31-ac-10"></a> **US-31-AC-10:** Documented guidance defines when and how contributors may add rule suppressions and check exclusions, requiring a recorded justification for each exception so that it can be reviewed.
 
 ### US-32: Verify changes automatically in CI
 
@@ -48,7 +51,7 @@ Acceptance criteria:
 
 ### US-33: Build and verify the harness package
 
-As a contributor, I want distributable packages verified outside the source checkout so that I can trust that the harness works when installed as a dependency.
+As a contributor, I want to build and verify distributable packages with a minimal CLI that reports its version so that I can confirm the harness installs and runs outside the source checkout.
 
 Acceptance criteria:
 
@@ -57,6 +60,8 @@ Acceptance criteria:
 - <a id="us-33-ac-03"></a> **US-33-AC-03:** Installed-package checks verify the `agent-ml` CLI, `agentic_ml` imports, and access to packaged templates and runtime guidance.
 - <a id="us-33-ac-04"></a> **US-33-AC-04:** Verification builds a wheel from the source distribution and confirms that it passes the same installed-package checks.
 - <a id="us-33-ac-05"></a> **US-33-AC-05:** CI runs package build and verification checks and reports failures with diagnostic logs; the commands are documented for local reproduction.
+- <a id="us-33-ac-06"></a> **US-33-AC-06:** The Milestone 0 CLI provides `agent-ml --version`, which prints the installed package version and exits successfully. The reported version matches the installed distribution metadata. Experiment commands are introduced in later milestones.
+- <a id="us-33-ac-07"></a> **US-33-AC-07:** The installed-package checks run `agent-ml --version` for both the directly built wheel and the wheel rebuilt from the source distribution, verifying successful exit and the expected version. The documented source-checkout smoke check also runs `agent-ml --version`.
 
 ## Milestone 1: Run and record a reproducible experiment
 
