@@ -5,36 +5,34 @@ Last updated: 2026-10-29
 ## Current position
 
 - Milestone: 0 — Harness development foundation.
-- Active work: Ready to prepare implementation plans; no story implementation has started.
-- Branch at handoff: `main`.
-- Last relevant commit: `b78943a` — ADR-007 Milestone 0 scope clarification.
+- Active work: US-31 coordinated implementation plan approved; implementation authorization pending; no implementation has started.
+- Branch at handoff: `us-31-setup-dev-environment`.
+- Last relevant commit: `c5d5d37` — Development checkpoints and handoff guidance.
 
 ## Progress overview
 
 | Story | Implementation plan | Implementation | Developer gate |
 |---|---|---|---|
-| [US-31 / #1 — Development environment](https://github.com/jimthompson5802/agentic-ml/issues/1) | Not started | Not started | Not presented |
+| [US-31 / #1 — Development environment](https://github.com/jimthompson5802/agentic-ml/issues/1) | [Approved](docs/plans/milestone-0-us-31.md#plan-review) | Not started | Plan approved; implementation gates pending |
 | [US-32 / #2 — CI verification](https://github.com/jimthompson5802/agentic-ml/issues/2) | Not started | Not started | Not presented |
-| [US-33 / #3 — Package build and verification](https://github.com/jimthompson5802/agentic-ml/issues/3) | Not started | Not started | Not presented |
+| [US-33 / #3 — Package build and verification](https://github.com/jimthompson5802/agentic-ml/issues/3) | [CLI prerequisite slice approved](docs/plans/milestone-0-us-33.md); remainder unplanned | Not started | Plan approved; implementation gate pending |
 
 ## Resume here
 
-Retrieve issues #1–#3, including their complete bodies and all comments, using the [retrieve-github-issue skill](.agents/skills/retrieve-github-issue/SKILL.md). Then use the [create-implementation-plan skill](.agents/skills/create-implementation-plan/SKILL.md) to prepare coordinated story plans following the [Milestone 0 dependencies and delivery order](docs/specs/design/milestone-delivery.md#milestone-0-dependencies-and-delivery-order) and [plan template](docs/templates/user-story-implementation-plan.md).
-
-Include the public test boundaries, acceptance-criterion mappings, cross-story prerequisites, verification evidence requirements, and implementation-phase approval gates. Creating these plans remains the next proposed action; this checkpoint records no plan approval or implementation authorization.
+Review the [US-31 plan](docs/plans/milestone-0-us-31.md), [US-33 prerequisite slice](docs/plans/milestone-0-us-33.md), and [coordinated execution index](docs/plans/milestone-0-execution-order.md). Plan review is approved (developer message “i approve the plan”, 2026-10-29); obtain separate implementation authorization before starting US-31 IP1. Follow the index and stop at each implementation gate. US-32 and remaining US-33 planning are outside this request.
 
 ## Pending developer decisions
 
-- Confirm the distribution name during planning; `agentic-ml` is proposed.
-- Select and record the repository installation source, build backend, initial package version, and development tools in the plans before dependent implementation.
-- No implementation-phase approval gate is currently awaiting review.
+- Plan approval includes Hatchling backend, initial version `0.1.0`, pytest/Ruff/mypy tools, and public test boundaries; see the owning plans’ plan-review records.
+- Distribution name `agentic-ml` was explicitly approved by the developer in this conversation on 2026-10-29. Repository source is the confirmed Git origin.
+- No implementation gate is awaiting approval; implementation authorization remains pending.
 
 ## Handoff notes
 
-- [ADR-007](docs/specs/design/architecture-decisions.md#adr-007--github-package-installation-and-project-initialization) records the agreed Milestone 0 scope: repository installation, no package-registry publishing, Python 3.12 verification baseline, and minimal package build/verification. ADR-002–006 do not block this foundation.
-- The [latest documentation consistency review](docs/reviews/design-consistency-review-2026-10-29-00-03.md) records no open findings.
-- This handoff adds `CHECKPOINTS.md` and its `AGENTS.md` reading/update instruction, committed together as `docs: add development checkpoints and handoff guidance`. The working tree was clean before these changes.
-- Verification: `git diff --check` and local Markdown link-target checks passed. TDD does not apply because this change adds development documentation without changing executable behavior. No application checks were run.
+- Retrieved complete issues #1 and #3 and all comment pages; both have zero comments, with unchanged metadata on repeat reads. Their bodies assign Milestone 0; GitHub milestone fields are empty.
+- Planning uses ADR-007's minimal foundation boundary. US-33 supplies only the version CLI prerequisite; full distribution checks, provisional resources and CI remain open.
+- Work is documentation only. TDD does not apply to plan creation; all implementation and planned checks remain pending.
+- Working tree: three new plan documents and this checkpoint update; no product code changes. Planning verification: `git diff --check`, local Markdown file-target checks and criterion mapping checks passed. No application checks were run.
 
 ## Maintenance rules
 
