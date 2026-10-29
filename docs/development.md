@@ -6,7 +6,7 @@ This guide applies to harness contributors. Experiment runtime instructions will
 
 Use Git, `uv`, Python 3.12 or newer, a shell, and network access to GitHub and the Python package index. Install uv using its [official installation instructions](https://docs.astral.sh/uv/getting-started/installation/). Install Python 3.12 yourself or use `uv python install 3.12`. The committed `.python-version` selects the 3.12 baseline; `pyproject.toml` requires Python >=3.12. Exact development dependency resolutions are in `uv.lock`.
 
-macOS is the initial development platform. Fresh-checkout setup and all documented development checks were verified on macOS 15.7.9 arm64 with Python 3.12.15 and uv 0.13.1; see [fresh-checkout evidence](verification/us-31-ip2.md). Earlier tool enforcement evidence is in the [IP1 report](verification/us-31-ip1.md). CI has not been established: no Python version is currently verified by CI. US-32 will verify Python 3.12 and record actual CI results. Other Python versions, Linux, and Windows remain unverified. Commands below use POSIX shell syntax; Windows shell/path handling will need verification. This initial foundation needs neither GPU tooling nor ML system services.
+macOS is the initial development platform. Fresh-checkout setup and all documented development checks were verified on macOS 15.7.9 arm64 with Python 3.12.15 and uv 0.13.1; see [fresh-checkout evidence](verification/us-31-ip2.md). Earlier tool enforcement evidence is in the [IP1 report](verification/us-31-ip1.md). The development CI workflow is configured for Linux (Ubuntu 24.04) and Python 3.12; a hosted PR run passed on Ubuntu 24.04.5 x86_64 with Python 3.12.15 and uv 0.13.1; see [IP2 evidence](verification/us-32-ip2.md). Six hosted failure/correction cases are verified; default-branch verification remains pending authorized merge. Other Python versions and Windows remain unverified. Commands below use POSIX shell syntax; Windows shell/path handling will need verification. This initial foundation needs neither GPU tooling nor ML system services.
 
 ## Clone and install the development environment
 
@@ -32,11 +32,12 @@ uv run --no-sync mypy --version
 
 ## Shared development commands
 
-The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. Use the following commands from the repository root; these will also be the commands consumed by US-32 CI:
+The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. Use the following commands from the repository root; these are also the commands configured in development CI:
 
 | Purpose | Command |
 |---|---|
 | Install source package and development dependencies | `uv sync --locked --group dev` |
+| Lock consistency | `uv lock --check` |
 | Automated tests | `uv run --locked pytest` |
 | Lint | `uv run --locked ruff check .` |
 | Formatting check | `uv run --locked ruff format --check .` |
@@ -73,3 +74,21 @@ Prefer correcting code or configuration over adding an exception. An exception i
 ### Exception register
 
 No source-rule suppressions or custom checker exclusions exist. Tools retain their default generated-directory exclusions; `.gitignore` excludes reproducible environments/caches/build products, local secrets and generated runtime state because those are not maintained source. Review reports in `docs/verification/` remain tracked; raw diagnostic `*.log` files stay local to avoid accidental sensitive-output commits. Add future exceptions here and beside the affected code/configuration.
+
+## Development CI and diagnostic logs
+
+[Development CI](../.github/workflows/ci.yml) runs on pull requests and pushes to `main`, without path filters. It selects `ubuntu-24.04`, uv 0.13.1 and Python 3.12. Checkout and setup-uv actions use immutable commit revisions. Each hosted job checks out source, verifies that no virtual environment exists, installs Python, and creates the environment using locked synchronization. Dependency caching is disabled. Runner images and Python 3.12 patch releases can change; the job records the actual image, OS, architecture and tool versions. See [configuration and local evidence](verification/us-32-ip1.md); the hosted PR baseline and six failure/correction cases passed verification; default-branch verification remains pending. See the [hosted evidence](verification/us-32-ip2.md).
+
+The workflow runs the seven shared commands above verbatim, with a separate step for every check. After successful synchronization, independent checks still run when an earlier check fails. Original nonzero exits fail the job. If setup fails, dependent checks are skipped and setup logs explain the failure. A final step compares the lockfile SHA-256 and tracked diff even after a setup/check failure, provided the initial checksum was captured. No command may silently regenerate the lockfile.
+
+On a pull request, open **Checks**, select **Linux / Python 3.12**, and expand the failed step. Alternatively, open **Actions → Development CI → run → job**. The **Set up job** log records the hosted runner image. Use the run menu's **Download log archive** option to save diagnostics; repository access and GitHub sign-in may be needed. GitHub documents [viewing and downloading logs](https://docs.github.com/en/actions/how-tos/monitor-workflows/use-workflow-run-logs).
+
+With GitHub CLI, replace the placeholders below with the PR number and run ID:
+
+```sh
+gh pr checks PR_NUMBER --repo jimthompson5802/agentic-ml
+gh run view RUN_ID --repo jimthompson5802/agentic-ml --log-failed
+gh run view RUN_ID --repo jimthompson5802/agentic-ml --log
+```
+
+Reproduce failures locally from the same revision using the shared commands, Python 3.12 and uv 0.13.1. Compare `shasum -a 256 uv.lock` before and after, then run `git diff --exit-code -- uv.lock`. A passing local run does not establish hosted event delivery. Package builds and isolated installation checks remain US-33 work; branch protection remains deferred US-34 work.

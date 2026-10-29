@@ -1,0 +1,74 @@
+name: Development CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  development:
+    name: Linux / Python 3.12
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out source
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - name: Record initial lock checksum
+        id: lock
+        run: |
+          shasum -a 256 uv.lock > "$RUNNER_TEMP/uv-lock.sha256"
+          cat "$RUNNER_TEMP/uv-lock.sha256"
+          test ! -e .venv
+      - name: Install uv
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
+        with:
+          version: "0.13.1"
+          python-version: "3.12"
+          enable-cache: false
+      - name: Install Python 3.12
+        run: uv python install 3.12
+      - name: Synchronize locked dependencies
+        id: sync
+        run: uv sync --locked --group dev
+      - name: Record environment and tool versions
+        if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
+        run: |
+          cat /etc/os-release
+          uname -m
+          printf 'Runner image: %s %s\n' "$ImageOS" "$ImageVersion"
+          uv --version
+          uv run --locked python --version
+          uv run --locked pytest --version
+          uv run --locked ruff --version
+          uv run --locked mypy --version
+      - name: Check lock consistency
+        if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
+        run: uv lock --check
+      - name: Automated tests
+        if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
+        run: uv run --locked pytest
+      - name: Lint
+        if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
+        run: uv run --locked ruff check .
+      - name: Formatting check
+        if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
+        run: uv run --locked ruff format --check .
+      - name: Strict type checks
+        if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
+        run: uv run --locked mypy src tests
+      - name: Development smoke check
+        if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
+        run: uv run --locked agentic-ml --version
+      - name: Verify lock immutability
+        if: ${{ always() && steps.lock.outcome == 'success' }}
+        run: |
+          shasum -a 256 -c "$RUNNER_TEMP/uv-lock.sha256"
+          git diff --exit-code -- uv.lock
