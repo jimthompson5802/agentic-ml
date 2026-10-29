@@ -6,7 +6,7 @@ Last updated: 2026-10-29
 
 - Milestone: 0 — Harness development foundation.
 - Active work: US-32 IP1 approved; IP2-T1/T2 complete. T3 awaits explicit merge authorization; T4 and final gate pending.
-- Branch: `us-32-setup-gh-action-ci`; Linux implementation commit `6e7c389`. Evidence/docs follow-up prepared for commit and push.
+- Branch: `us-32-setup-gh-action-ci`; Linux implementation commit `6e7c389`. Hosted evidence commit `7661e1e` is published; [its Linux run passed](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975072117). This handoff only adds that run reference.
 - Review PR: [#5](https://github.com/jimthompson5802/agentic-ml/pull/5). [Baseline run](https://github.com/jimthompson5802/agentic-ml/actions/runs/40973713670) passed. Disposable draft PR #6 has all six red/green pairs and is closed without merge; its final tree matches the clean baseline.
 
 ## Progress overview
