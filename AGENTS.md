@@ -6,7 +6,7 @@ This file guides agents building, testing, and maintaining the agentic-ml harnes
 
 Before implementing a user story, retrieve its GitHub issue, including the complete body and all comments, using the [retrieve-github-issue skill](.agents/skills/retrieve-github-issue/SKILL.md). Identify the milestone, story ID, acceptance criteria, and recorded scope decisions that govern the work.
 
-Use the GitHub issue as the implementation scope. Consult [user stories](docs/specs/user-stories.md) for milestone context and the [harness design](docs/specs/agentic-ml-harness-design.md) for supporting design. Resolve conflicts between the issue and repository specifications before implementing affected behavior. Design examples describe proposed interfaces unless explicitly settled.
+Use the GitHub issue as the implementation scope. Consult [user stories](docs/specs/user-stories.md) for milestone context and the [harness design](docs/specs/agentic-ml-harness-design.md) for supporting design. Resolve conflicts between the issue and repository specifications before implementing affected behavior. Design examples describe proposed interfaces unless explicitly settled. Before implementing a capability, use the design’s [reading map](docs/specs/agentic-ml-harness-design.md#reading-map-and-document-authority) to read the relevant topic documents, follow related-contract links for affected behavior, and check the applicable milestone, acceptance traceability, and architecture decisions.
 
 Reference the issue and applicable acceptance criterion IDs in the implementation plan and verification evidence. For stories spanning milestones, identify the criteria covered by the current implementation. Record unresolved design decisions before dependent implementation.
 

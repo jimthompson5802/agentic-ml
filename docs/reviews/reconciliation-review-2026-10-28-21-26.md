@@ -289,7 +289,7 @@ Original finding (Low), retained as baseline evidence:
 - **Practical consequence:** An implementer following the ADR summary alone could schedule isolation too late. Overall criterion coverage remains Supported because §7 and the delivery plan explicitly establish the earlier dependency.
 - **Target and correction:** Update only ADR-006's milestone-timing summary to include Milestone 2 and distinguish the later final-evaluation capability. Preserve pending status and the requirement to resolve enforcement before delivery. This confirms the remaining C-05 issue noted in the previous review's disposition.
 
-Scoped reconciliation (2026-10-28): Verified that [ADR-006](../specs/agentic-ml-harness-design.md#pending-decisions) now explicitly assigns protected-test isolation for predictive feature comparison to Milestone 2 and authorized independent final evaluation to Milestone 3, as recorded in the C-05 correction. Its requirement to enforce each milestone's controls before the governed capability is delivered remains explicit; §9's notebook contract also requires protected-test data to remain inaccessible to exploratory kernels. This resolves R-01's timing inconsistency without requiring the exact wording of the original proposed edit below. No further design change was needed. The mechanism remains pending; implementation and successful verification remain separate work.
+Scoped reconciliation (2026-10-28): Verified that [ADR-006](../specs/design/architecture-decisions.md#pending-decisions) now explicitly assigns protected-test isolation for predictive feature comparison to Milestone 2 and authorized independent final evaluation to Milestone 3, as recorded in the C-05 correction. Its requirement to enforce each milestone's controls before the governed capability is delivered remains explicit; §9's notebook contract also requires protected-test data to remain inaccessible to exploratory kernels. This resolves R-01's timing inconsistency without requiring the exact wording of the original proposed edit below. No further design change was needed. The mechanism remains pending; implementation and successful verification remain separate work.
 
 ## Decisions needed
 
@@ -299,7 +299,7 @@ Pending ADR-002–006 and ADR-007 details remain pending: concrete interfaces/ad
 
 ## Proposed edit
 
-In [design ADR-006](../specs/agentic-ml-harness-design.md#pending-decisions), retain the first two sentences and replace its final milestone-timing sentence with:
+In [design ADR-006](../specs/design/architecture-decisions.md#pending-decisions), retain the first two sentences and replace its final milestone-timing sentence with:
 
 > Milestone 1 requires execution/extraction boundaries; Milestone 2 requires protected-test isolation for predictive feature comparison, including exploratory kernels; Milestone 3 adds authorized independent final evaluation; Milestone 4 extends applicable boundaries to managed agents and assistant tools/workspaces, while interactive use available in earlier milestones remains subject to those milestones' controls.
 
