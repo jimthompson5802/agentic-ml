@@ -899,6 +899,38 @@ Local package verification and CI setup can proceed in parallel once their prere
 
 **Completion boundary:** All acceptance criteria for US-31, US-32, and US-33 must be verified to complete Milestone 0. No Milestone 1 capability is a prerequisite: Milestone 0 owns the minimal version CLI and provisional packaged resources; usable experiment initialization resources and experiment commands remain in later milestones (US-33-AC-03, US-33-AC-06).
 
+### Milestone 1 dependencies and delivery order
+
+Milestone 1 covers US-01, US-02, US-03, US-05, US-09, US-10, US-11, the validation portion of US-12, US-13, and initial US-26 and US-27. The dependencies below follow from their [acceptance criteria](user-stories.md#milestone-1-run-and-record-a-reproducible-experiment). They apply to portions of stories rather than requiring each prerequisite story to be complete. The delivery order is a recommendation, not an additional acceptance requirement.
+
+**Prerequisites:** Milestone 0 establishes the installable package, CLI, packaged resources, shared development checks, and CI. Milestone 1 extends that foundation with usable experiment initialization resources and execution capabilities.
+
+| Dependent work | Required capability | Acceptance criterion basis |
+|---|---|---|
+| US-02 experiment initialization | US-01 installed harness and pinned project dependency | US-01-AC-01–03; US-02-AC-01–03 |
+| US-03 input resolution and US-05 configuration validation | Initialized project inputs and environment; declared objectives, search boundaries, and execution configuration | US-02-AC-01–03; US-03-AC-01–05; US-05-AC-01–05 |
+| US-10 managed run controls and initial US-26 capture | Configured storage, resolved inputs, environment identity, and applicable validation before execution | US-02-AC-04; US-03-AC-03–05; US-05-AC-04–05; US-10-AC-01–03; US-26-AC-02–04 |
+| US-11 approved extraction | Configured sources and storage, resolved extraction requirements, and authorization, access, and limit enforcement | US-02-AC-04–05; US-03-AC-03–04; US-11-AC-02–05 |
+| US-12 basic validation and US-13 source-data versioning | US-11 extracted snapshots and metadata; US-02 DVC/storage setup | US-11-AC-04–05; US-12-AC-01, US-12-AC-05; US-13-AC-01–04 |
+| US-09 recorded notebook execution | Locked environment, resolved inputs and applicable validation, US-10 run controls, and US-26 source capture and evidence recording; accepted and versioned datasets where required | US-09-AC-01–05; US-10-AC-01–03, US-10-AC-05; US-12-AC-05; US-13-AC-01–02; US-26-AC-01–05 |
+| US-26 complete run provenance and independent artifact checks | US-01 harness/environment identity, US-03 configuration identity, US-13 dataset state, and US-09/US-10 execution outcomes and artifacts | US-01-AC-03–04; US-03-AC-03; US-13-AC-01–02; US-26-AC-01–05 |
+| US-27 clean-environment reproduction | Pinned installation, US-13 verified dataset restoration, US-26 preserved source and provenance, managed replay, and declared output checks | US-01-AC-01–03; US-13-AC-03–04; US-26-AC-02–05; US-27-AC-01–04 |
+
+**Recommended delivery order:**
+
+1. Establish US-01 pinned installation and US-02 conflict-safe project initialization, including the locked environment and local storage.
+2. Implement US-03 resolved, versioned experiment inputs and US-05 applicable configuration and boundary validation.
+3. Establish US-10 run controls and initial US-26 capture and evidence storage. Enforce the authorization, access restrictions, and budgets required by each operation before enabling it.
+4. Implement US-11 approved extraction, followed by US-12 basic validation and approval and US-13 source-snapshot versioning and verified restoration.
+5. Integrate US-09 saved-notebook execution with US-10 lifecycle controls and US-26 complete provenance and independent artifact checks.
+6. Complete US-27 clean-environment restoration and replay against declared output checks, including missing or corrupted input failures.
+
+Basic data validation and source-data versioning can proceed in parallel once extraction snapshots exist. US-09, US-10, and US-26 require coordinated integration slices: preserve exact source, configuration, input references, and environment identity before execution; enforce controls and expose status and cancellation during execution; then preserve available outputs and diagnostics and independently check expected artifacts before acceptance. Start with a small complete run path and extend it through failure, timeout, cancellation, and restoration behavior. Each slice must include the controls applicable to the operation it enables. Detailed story plans should name these capability prerequisites and retain their developer approval gates.
+
+Milestone 1 already requires approved extraction within source permissions and limits, equivalent restrictions for Python and notebook execution, run budgets, and approval of basic dataset validation results (US-11-AC-03; US-09-AC-05; US-10-AC-03; US-12-AC-05). These controls accompany their capabilities rather than waiting for Milestone 5. Milestone 5 extends them into durable coordination across the complete workflow, including interruption recovery. Record and resolve authorization and isolation design decisions before implementing dependent Milestone 1 behavior.
+
+**Completion boundary:** Verify the Milestone 1 criteria for the stories listed above through an authorized, recorded, independently checked, reproducible extraction-to-notebook run in a separate experiment project without an agent dependency. Detailed profiling and split protocols begin in Milestone 2; broader modeling, agent integration, and complete workflow orchestration remain in their assigned milestones. Later portions of US-12, US-26, and US-27 are not prerequisites for Milestone 1 completion.
+
 ### Deferred enhancements
 
 Milestone 99 contains US-34: contribution instructions, documented merge checks and review expectations, and enforced default-branch protection. These are deferred rather than Milestone 0 exit criteria. Advanced capability ideas above do not add approved stories to Milestone 99.
