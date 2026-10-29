@@ -28,6 +28,10 @@ Part of the [harness design](../agentic-ml-harness-design.md). Scope: Architectu
 
 **Remaining decisions:** Actual GitHub URL and distribution name, additional Python versions to verify beyond the required Python 3.12 baseline, API compatibility/versioning policy, project/experiment configuration schemas, and CLI/API details beyond `agent-ml init`.
 
+**Milestone 0 scope clarification (2026-10-29):** Development and testing may install the package from the harness repository. Publishing to PyPI or another package registry is not required. Milestone 0 demonstrates a minimal package: `agent-ml --version`, `agentic_ml` imports, provisional template and runtime guidance resources, wheel/source-distribution builds, and isolated verification of both the directly built wheel and a wheel rebuilt from the source distribution. This preserves US-31–US-33's acceptance criteria; full-commit-pinned GitHub installation and usable experiment initialization remain Milestone 1 work.
+
+Python 3.12 is the required initial verification baseline; additional verified versions may remain pending. Record the distribution name and repository installation source in the Milestone 0 implementation plan before dependent package configuration. The proposed distribution name `agentic-ml` has not yet been explicitly accepted. Build backend, initial version, and development-tool choices are implementation-plan decisions. Configuration schemas, broader API compatibility/versioning, initialization behavior, and remaining experiment commands do not block Milestone 0 and must be resolved before their dependent capabilities are implemented. Pending ADR-002–006 mechanisms do not block the minimal Milestone 0 package foundation.
+
 ### Pending decisions
 
 - **ADR-002:** Expose harness through Python API and CLI initially for developer and interactive coding-assistant use without an adapter. Managed delegation uses verified adapters; consider an MCP server later. Exact commands and managed product/interface choices remain pending.
