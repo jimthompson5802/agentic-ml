@@ -27,7 +27,7 @@ As a contributor, I want documented steps to set up this repository for local de
 
 Acceptance criteria:
 
-- <a id="us-31-ac-01"></a> **US-31-AC-01:** Documented prerequisites identify supported Python versions and required tools. macOS is the initial verified development platform; Linux and Windows remain eligible for future verification, and platform-specific requirements and known limitations are documented.
+- <a id="us-31-ac-01"></a> **US-31-AC-01:** Documented prerequisites specify Python 3.12 or newer and required tools, and identify the Python versions verified by CI. macOS is the initial verified development platform; Linux and Windows remain eligible for future verification, and platform-specific requirements and known limitations are documented.
 - <a id="us-31-ac-02"></a> **US-31-AC-02:** Instructions cover cloning the harness repository and installing runtime and development dependencies using `uv` and the committed lockfile.
 - <a id="us-31-ac-03"></a> **US-31-AC-03:** Contributors can run the harness CLI from the local source checkout.
 - <a id="us-31-ac-04"></a> **US-31-AC-04:** Documented commands run automated tests, linting, formatting checks, and type checks.
@@ -45,7 +45,7 @@ As a contributor, I want automated checks on every pull request so that I receiv
 Acceptance criteria:
 
 - <a id="us-32-ac-01"></a> **US-32-AC-01:** CI runs on pull requests and updates to the default branch from a clean checkout, using macOS as the initial verification platform.
-- <a id="us-32-ac-02"></a> **US-32-AC-02:** CI installs the supported Python version and required tools and synchronizes runtime and development dependencies using `uv` and the committed lockfile without modifying the lockfile.
+- <a id="us-32-ac-02"></a> **US-32-AC-02:** CI verifies Python 3.12 as the minimum supported version, documents any additional Python versions tested, installs the required tools, and synchronizes runtime and development dependencies using `uv` and the committed lockfile without modifying the lockfile.
 - <a id="us-32-ac-03"></a> **US-32-AC-03:** CI runs automated tests, linting, formatting checks, type checks, and the development smoke check using the same documented commands available locally under US-31.
 - <a id="us-32-ac-04"></a> **US-32-AC-04:** Failed checks produce a failing CI result, and contributors can inspect check results and diagnostic logs from the pull request.
 
@@ -57,7 +57,7 @@ Acceptance criteria:
 
 - <a id="us-33-ac-01"></a> **US-33-AC-01:** A documented command builds both wheel and source distributions from the repository.
 - <a id="us-33-ac-02"></a> **US-33-AC-02:** Verification installs the built wheel and its declared runtime dependencies in a clean environment and runs outside the source checkout without relying on an editable installation or development dependencies.
-- <a id="us-33-ac-03"></a> **US-33-AC-03:** Installed-package checks verify the `agent-ml` CLI, `agentic_ml` imports, and access to packaged templates and runtime guidance.
+- <a id="us-33-ac-03"></a> **US-33-AC-03:** Installed-package checks verify the `agent-ml` CLI, `agentic_ml` imports, and access to at least one minimal packaged template and one minimal runtime guidance file. Both files have explicitly provisional contents for Milestone 0; checks read them through the installed package and compare their contents with expected values. Usable experiment initialization resources are delivered in Milestone 1.
 - <a id="us-33-ac-04"></a> **US-33-AC-04:** Verification builds a wheel from the source distribution and confirms that it passes the same installed-package checks.
 - <a id="us-33-ac-05"></a> **US-33-AC-05:** CI runs package build and verification checks and reports failures with diagnostic logs; the commands are documented for local reproduction.
 - <a id="us-33-ac-06"></a> **US-33-AC-06:** The Milestone 0 CLI provides `agent-ml --version`, which prints the installed package version and exits successfully. The reported version matches the installed distribution metadata. Experiment commands are introduced in later milestones.
