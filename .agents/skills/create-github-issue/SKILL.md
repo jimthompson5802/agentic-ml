@@ -24,9 +24,9 @@ When several templates plausibly apply, use the user's requested type or ask onl
 - Preserve Markdown template headings and fields in order. For YAML forms, render the relevant field labels and responses as Markdown; the form schema itself is not an issue body. Honor required fields and conditional applicability. Use “Not specified” for unknown optional information and “Not applicable” where appropriate; resolve missing information that materially affects scope or acceptance before publishing.
 - Preserve acceptance criteria as unchecked checkboxes, keeping implementation tasks distinct. Preserve source wording and local planning terminology; apply template-specific wording only where required. Carry forward required evidence and approval checkpoints without inventing phases or completed results.
 - Keep approval checkpoints distinct from manual verification steps when the template includes both. Map them to the actual template fields rather than requiring particular field names.
-- Exclude frontmatter and form configuration from the body. Apply nonempty supported metadata defaults unless overridden by the user. Template name and description are template-selection information, not issue metadata. For an existing story, lead the title with its identifier unless repository conventions require otherwise.
+- Exclude frontmatter and form configuration from the body. Apply nonempty supported metadata defaults unless overridden by the user, except GitHub issue types. Ignore template `type` defaults, including `Feature`; omit `--type` and issue-type API updates. Use the selected template and its labels to classify feature requests. Template name and description are template-selection information, not issue metadata. For an existing story, lead the title with its identifier unless repository conventions require otherwise.
 
-Use a concrete title describing the outcome. Leave labels, assignees, projects, milestones, and issue types unset unless requested or supplied by applicable template defaults or repository instructions.
+Use a concrete title describing the outcome. Leave labels, assignees, projects, and milestones unset unless requested or supplied by applicable template defaults or repository instructions.
 
 ## Prepare and publish
 
