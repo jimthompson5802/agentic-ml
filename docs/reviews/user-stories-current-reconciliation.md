@@ -36,11 +36,29 @@ Original proposed correction: design §11 and §15. Introduce Milestone 0 with c
 
 Scoped reconciliation: A focused review at Git revision `361ee6d7cae96c98ce63cf80582bf8a84f64c8cc` confirms that the current user stories settle the Milestone 0 scope decision and the design reflects that delivery boundary. US-33-AC-03 requires at least one provisional template and one provisional runtime guidance file, reserving usable experiment initialization resources for Milestone 1. US-33-AC-06–07 define the minimal `agent-ml --version` CLI and its verification; US-31-AC-03 and US-31-AC-07 cover source-checkout execution and setup verification. Design §8 assigns the minimal CLI, provisional resources, and package verification to Milestone 0. Section 11 now includes Milestone 0 deliverables and exit criteria and explicitly states that Milestone 1 extends that package foundation. Section 15 places the Milestone 0 foundation before experiment-user capabilities. Milestone 0 therefore no longer depends on package capabilities first scheduled for Milestone 1, and no resource-completeness decision remains open for C-03. No user-story or design changes were needed in this reassessment. Implementation and successful verification remain separate work. The original finding, criterion matrix, and counts below remain historical baseline evidence. C-04–C-05 were not reassessed in this focused review.
 
-### C-04 — Low: delivery summaries and future-roadmap terminology are stale
+### C-04 — Resolved: delivery summaries, traceability, and historical review navigation are aligned
 
-Requirements: stories summary L5–12 and Milestone 99 L569–583. README L13 says six milestones and L22 identifies optional Milestone 7; design §11 L848 and L860 retains Milestone 7, omits Milestones 0/99, and §10 omits US-31–34. The previous report's 160-criterion clean verdict belongs to an earlier baseline. Consequence: readers get inconsistent scope and sequencing guidance.
+Original finding: Requirements: stories summary L5–12 and Milestone 99 L569–583. README L13 says six milestones and L22 identifies optional Milestone 7; design §11 L848 and L860 retains Milestone 7, omits Milestones 0/99, and §10 omits US-31–34. The previous report's 160-criterion clean verdict belongs to an earlier baseline. Consequence: readers get inconsistent scope and sequencing guidance.
 
-Target: README, design §§10–11, and historical report navigation. Proposed README replacement: “User stories: authoritative requirements and acceptance criteria covering the development foundation (Milestone 0), product increments (Milestones 1–6), and deferred enhancements (Milestone 99).” Replace the terminology description with: “Milestones 0–6 define the delivery sequence. Milestone 99 groups deferred enhancements without committing their order.” In design §11, label advanced capabilities as uncommitted future scope and reference Milestone 99 without implying that additional stories have been approved. Record US-34 as deferred, including contribution guidance, documented merge checks/reviews, and branch protection; its missing design is not a current delivery blocker. Link this report as the current review while preserving historical dispositions.
+Original proposed correction: README, design §§10–11, and historical report navigation. Proposed README replacement: “User stories: authoritative requirements and acceptance criteria covering the development foundation (Milestone 0), product increments (Milestones 1–6), and deferred enhancements (Milestone 99).” Replace the terminology description with: “Milestones 0–6 define the delivery sequence. Milestone 99 groups deferred enhancements without committing their order.” In design §11, label advanced capabilities as uncommitted future scope and reference Milestone 99 without implying that additional stories have been approved. Record US-34 as deferred, including contribution guidance, documented merge checks/reviews, and branch protection; its missing design is not a current delivery blocker. Link this report as the current review while preserving historical dispositions.
+
+Scoped reconciliation (2026-10-28, 21:48 EDT): A focused review at Git revision `16c03c4c24ef661697c9a8c991debbcae1edc4f2`, with a clean working tree before the reassessment, confirms that the delivery-summary, future-roadmap, and traceability discrepancies are resolved. The authoritative inputs were the milestone summary and US-34 in the user stories; supporting inputs were README, design §§10–11, and the baseline/navigation statements of both reconciliation reports. Other criteria, design sections, implementation, and verification results were not reassessed.
+
+| Review unit | Current evidence | Disposition |
+|---|---|---|
+| README delivery summary and terminology | README L11 and L18 identify Milestones 0–6 and deferred Milestone 99. | Supported; original discrepancy resolved |
+| US-31–33 traceability | Design L803–805 link all current criteria for these stories to supporting design. | Supported for C-04 traceability scope |
+| Milestone delivery and future ideas | Design L862–879 include Milestone 0, defer Milestone 99 without delivery order, and distinguish uncommitted advanced ideas from approved stories. | Supported; original discrepancy resolved |
+| US-34-AC-01 | Design L879 explicitly defers contribution instructions with US-34. | Supported as deferred scope; detailed design not assessed |
+| US-34-AC-02 | Design L879 explicitly defers documented merge checks and review expectations. | Supported as deferred scope; detailed design not assessed |
+| US-34-AC-03 | Design L879 explicitly defers default-branch protection. | Supported as deferred scope; detailed design not assessed |
+| Historical review navigation | This report labels the older report historical and links to it. README L14 links only to the reviews directory. The older report identifies its prior revision and 160 criteria but does not link to this report. | Partial; navigation correction remains |
+
+Final correction applied: The following notice now appears below the title of [the historical reconciliation](user-stories-proposal-reconciliation.md), directing readers to this report before its historical clean verdict. Historical Milestone 7 references, counts, and dispositions remain as baseline evidence.
+
+> Historical review of an earlier requirements baseline. See [the current reconciliation](user-stories-current-reconciliation.md) for subsequent findings and dispositions. The counts and resolved findings below remain historical evidence.
+
+A direct link from README's Reviews entry is optional. No requirement or supporting-design correction is needed. The table above records the reassessment before the navigation correction. After verifying the notice and its relative link to this existing report, all seven scoped review units are Supported: 0 Partial, 0 Missing, 0 Contradictory, 0 Decision needed. C-04 is resolved, with no missing inputs or product-scope decision needed. These are scoped document findings, not recomputed full-report coverage counts. C-05 was not reassessed.
 
 ### C-05 — Low: ADR-006 understates the protected-test dependency
 
@@ -50,7 +68,7 @@ Target: ADR-006. Replace its delivery timing sentence with: “Milestone 1 requi
 
 ## Decisions and proposed corrections
 
-Current disposition: C-01–C-03 are resolved as document alignment. The C-03 scope decision below has been settled by the current user stories and design. C-04–C-05 remain open pending reassessment.
+Current disposition: C-01–C-04 are resolved as document alignment. The C-03 scope decision below has been settled by the current user stories and design. C-04's delivery summaries, future-roadmap terminology, traceability, and historical-review navigation are aligned. C-05 remains open and has not been reassessed.
 
 Original baseline decisions and proposed corrections:
 
@@ -261,7 +279,7 @@ Each row includes the complete authoritative review unit, its current delivery a
 
 ## Counts and disposition
 
-Current findings: **0 High, 0 Medium, 2 Low** — 2 open findings (C-04–C-05); C-01–C-03 resolved as document alignment. These dispositions reflect focused reassessments, not implementation certification or a fresh full review.
+Current findings: **0 High, 0 Medium, 1 Low** — 1 open finding: C-05 is unchanged. C-01–C-04 are resolved as document alignment. These dispositions reflect focused reassessments, not implementation certification or a fresh full review.
 
 The coverage matrix, scope inventory, and counts below describe the original baseline; they have not been recomputed against the expanded current acceptance criteria.
 

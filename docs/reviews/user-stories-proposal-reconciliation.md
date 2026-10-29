@@ -1,5 +1,7 @@
 # User Stories and Design Reconciliation
 
+Historical review of an earlier requirements baseline. See [the current reconciliation](user-stories-current-reconciliation.md) for subsequent findings and dispositions. The counts and resolved findings below remain historical evidence.
+
 ## Baseline and scope
 
 Terminology follows the [repository planning definitions](../../README.md#planning-terminology). Historical findings below use the current milestone and workflow phase terms. This terminology update preserves story IDs, criterion IDs, milestone assignments, and review dispositions; it is not a fresh requirements reconciliation.
