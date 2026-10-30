@@ -9,6 +9,8 @@ A request to create an issue authorizes publication; a request for a draft, exam
 
 ## Resolve the repository and sources
 
+For CLI reads, follow the working repository's documented command forms and read helpers when they support the resolved target and required data. Resolve helper paths from that checkout. Use the generic commands below when no suitable helper applies; follow normal tool approval for unsupported reads. Keep pagination, completeness checks, and publication authorization requirements intact.
+
 Resolve the working checkout with `git rev-parse --show-toplevel` from the user's working directory. Read applicable repository instructions and follow their pointers to requirements and templates. Resolve repository files from that checkout, independently of where this skill is installed.
 
 Use an explicitly requested GitHub repository when supplied. Otherwise inspect Git remotes and resolve the current repository with `gh repo view --json nameWithOwner,url`. Reconcile the result with the remotes and user intent, especially for forks or multiple remotes. Ask for a target only when it remains ambiguous. Use the resolved `OWNER/REPO` explicitly in every issue command; never inherit a repository name from an example or this skill's source repository.
@@ -51,7 +53,7 @@ For publication:
    gh issue create --repo OWNER/REPO --title 'Actual issue title' --body-file /tmp/UNIQUE-issue-body.md
    ```
 
-6. Verify the returned issue using `gh issue view ISSUE_NUMBER --repo OWNER/REPO --json number,title,body,url`. Check the complete prepared content and resolved metadata, using `gh api` for fields unavailable through the CLI. Remove only the operation's temporary file after successful verification.
+6. Verify the returned issue using `gh issue view --repo OWNER/REPO ISSUE_NUMBER --json number,title,body,url`. Check the complete prepared content and resolved metadata, using `gh api` for fields unavailable through the CLI. Remove only the operation's temporary file after successful verification.
 
 Use the environment's approval mechanism for sandbox restrictions. Reconcile any uncertain publication before retrying.
 

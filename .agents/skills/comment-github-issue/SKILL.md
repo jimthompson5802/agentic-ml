@@ -9,6 +9,8 @@ A request to add or post a comment authorizes posting to the identified issue. A
 
 ## Resolve the issue
 
+For CLI reads, follow the working repository's documented command forms and read helpers when they support the resolved target and required data. Resolve helper paths from that checkout. Use the generic commands below when no suitable helper applies; follow normal tool approval for unsupported reads. Keep pagination, completeness checks, and publication authorization requirements intact.
+
 Read applicable repository instructions. Use the issue URL and repository supplied by the user. If the user supplies only an issue number, find the working checkout. Inspect its remotes and run `gh repo view --json nameWithOwner,url`. Ask the user only if the repository or issue is still unclear. Never copy a target from an example or this skill's installation directory.
 
 Prefer an available GitHub connector when it supports reading, posting, and verifying issue comments. Otherwise use `gh`. Use the resolved `OWNER/REPO` explicitly in every CLI issue command.
@@ -16,7 +18,7 @@ Prefer an available GitHub connector when it supports reading, posting, and veri
 Before posting with the command-line interface (CLI), check `gh --version` and `gh auth status`. If authentication is missing, ask the user to authenticate manually. Before writing a reply based on the discussion, read the issue and its comments:
 
 ```bash
-gh issue view ISSUE_NUMBER --repo OWNER/REPO --json number,title,body,state,url,comments
+gh issue view --repo OWNER/REPO ISSUE_NUMBER --json number,title,body,state,url,comments
 ```
 
 Replace all placeholders before running commands. Confirm that the target is an issue rather than a pull request. Use the connector's object type, or run `gh api repos/OWNER/REPO/issues/ISSUE_NUMBER` and check its `pull_request` field. If the target is a pull request or conflicts with the user's description, resolve the mismatch before posting. A closed issue can receive a comment without being reopened.

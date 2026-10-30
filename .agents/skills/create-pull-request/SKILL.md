@@ -9,6 +9,8 @@ A request to create a PR authorizes publication; a request for a description, ex
 
 ## Establish the change and target
 
+For CLI reads, follow the working repository's documented command forms and read helpers when they support the resolved target and required data. Resolve helper paths from that checkout. Use the generic commands below when no suitable helper applies; follow normal tool approval for unsupported reads. Keep pagination, completeness checks, and publication authorization requirements intact.
+
 Resolve the checkout with `git rev-parse --show-toplevel` from the user's working directory. Read applicable repository instructions and their pointers to planning conventions and requirements. Resolve repository files from the checkout, independently of where this skill is installed.
 
 Inspect the working tree, current branch, remotes, upstream, intended base, and full commit and file diff against that base. Use an explicitly requested GitHub target when supplied; otherwise reconcile remotes and `gh repo view --json nameWithOwner,url,defaultBranchRef` with the user's intent. Pay particular attention to fork head ownership and the upstream base repository. Use the requested base branch or resolve the target's default branch. Ask only when target, branch, or scope remains ambiguous. Pass the resolved `OWNER/REPO` explicitly to GitHub commands.
@@ -52,7 +54,7 @@ For a description-only request, return the prepared content without requiring au
    ```
 
    Substitute the resolved branches, fork owner if needed, title, and actual temporary path. Add `--draft` for a requested draft PR. Apply labels, reviewers, assignees, or milestones only when requested or required by repository instructions or applicable template defaults; confirm their availability before publication.
-5. Verify the returned PR with `gh pr view PR_NUMBER --repo OWNER/REPO --json number,title,body,url,baseRefName,headRefName,headRepositoryOwner,isDraft`. Confirm content, head ownership, branches, and draft status against the prepared result, as well as any requested metadata. Remove only the operation's temporary file after successful verification.
+5. Verify the returned PR with `gh pr view --repo OWNER/REPO PR_NUMBER --json number,title,body,url,baseRefName,headRefName,headRepositoryOwner,isDraft`. Confirm content, head ownership, branches, and draft status against the prepared result, as well as any requested metadata. Remove only the operation's temporary file after successful verification.
 
 If creation fails or its outcome is uncertain, inspect any returned URL and query relevant head/base PRs before retrying. Retry only when reliable inspection establishes that no matching PR was created and the cause is resolved. When publication or verification remains uncertain, retain the prepared body, report the limitation, and stop. Use the environment's approval mechanism for sandbox restrictions.
 

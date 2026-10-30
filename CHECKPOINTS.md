@@ -16,7 +16,15 @@ Validation: manually checked phase-only approval, accepted story with remaining 
 
 ## Command approval rules — 2026-10-30
 
-Developer requested committing and pushing the remaining `.codex/rules/default.rules` file on main. It allows Ruff lint and formatting checks plus pytest/mypy version checks. Reviewed the four command prefixes; `git diff --check` passed. No executable harness behavior changed; TDD does not apply.
+Developer accepted the recommendation for repository-local GitHub reads, locked tests/verification, lint fixes and formatting edits. Expanded `.codex/rules/default.rules`, retained bootstrap rules, and added `.codex/scripts/github-read.sh` to force validated GET requests to github.com and this repository. Usage and prefix-rule limitations are in [the development guide](docs/development.md#repository-local-codex-command-approvals). Developer requested committing and pushing the rule/helper and instruction updates on main; publication outcome is reported in the session. Restart Codex with the project layer trusted to load the changes. Existing user-level grants remain effective.
+
+Verification on macOS: `codex execpolicy check --rules .codex/rules/default.rules -- COMMAND` passed 22 positive and seven negative cases. Isolated stub-GitHub subprocess checks passed seven exact GET argument cases and 14 rejected-input cases; no network used. `sh -n .codex/scripts/github-read.sh` and `git diff --check` passed. No harness behavior, Python dependencies or lockfile changed; harness TDD/full runtime checks do not apply to these development rules and shell helper. No Linux/Windows execution verified.
+
+## Instruction alignment — 2026-10-30
+
+Developer approved documentation alignment with the command rules. Added the development-guide pointer to AGENTS.md; routed five GitHub skills to working-repository read guidance with generic fallbacks; reordered read examples to match repository prefixes; documented complete issue pagination and unsupported-read fallback. Implementation gates, static-only PR reviews, publication authorization, execute-plan and runtime guidance remain unchanged. No additional command permissions added. Developer authorized committing and pushing the combined rule/helper and instruction edits on main.
+
+Documentation-only change: TDD and harness runtime checks do not apply. Validation: `git diff --check` passed; 29 local link targets and five aligned read forms passed link/policy checks. Reviewed the diff for unchanged gates and static-review restrictions. Skill validator remains unavailable because system Python lacks PyYAML; no dependencies or lockfile changed.
 
 ## Resume here
 

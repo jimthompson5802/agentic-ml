@@ -52,6 +52,25 @@ Tool configuration lives in `pyproject.toml`. Defaults are repository-local `.ve
 
 If Python 3.12 is unavailable, install it before synchronization. If locked synchronization reports stale metadata, review the change and update the lock only as an intentional dependency change; do not remove `--locked` to hide the problem. If tools are missing after using `--no-sync`, repeat the documented bootstrap synchronization. When working on a historical revision before package source exists, use the tooling-only bootstrap synchronization above. Keep diagnostic logs outside Git and redact credentials before including evidence.
 
+## Repository-local Codex command approvals
+
+The trusted project layer loads [command rules](../.codex/rules/default.rules) for this repository. Restart Codex after changing these rules. They allow the shared locked test, type, lint, formatting and smoke commands above, plus the distribution and installation verification drivers. Ruff formatting edits and `ruff check --fix` are included. Existing bootstrap allowances remain available.
+
+For automatic GitHub read approvals, place the repository argument immediately after the subcommand:
+
+```sh
+gh pr view --repo jimthompson5802/agentic-ml 44
+gh issue list --repo jimthompson5802/agentic-ml
+sh .codex/scripts/github-read.sh issues/8/comments --paginate --slurp
+sh .codex/scripts/github-read.sh pulls/44/files --jq '.[].filename'
+```
+
+Allowed GitHub subcommands are issue list/view; PR list/view/diff/checks; run, workflow and release list/view; and repository view. The [API helper](../.codex/scripts/github-read.sh) fixes github.com, the repository and GET. It accepts relative issues, pulls, actions/runs, actions/workflows, releases and commits endpoints, with optional `--paginate`, `--slurp` and `--jq EXPRESSION`. It rejects query strings, traversal, other hosts/repositories and arbitrary API options.
+
+For complete issue retrieval, use the helper for issue metadata, every comment page, and the final metadata refresh. Omit `?per_page=100`; `--paginate --slurp` still retrieves all pages and returns an array of pages. Preserve the retrieval skill's unique-comment counts and snapshot checks. For PR review reads, use the helper for PR metadata, files, reviews and comments. Unsupported lookups, including labels, continue through normal tool approval without expanding the rules.
+
+These are command-prefix permissions, not restrictions on every trailing argument, file access or subprocess. Tests execute trusted repository code outside the sandbox. Run commands directly: shell redirections or complex wrappers can still prompt. The new rules do not grant general Python, general `uv run`, dependency installation, Git writes or GitHub publication. User-level grants still apply and can be broader; project rules do not revoke them. Save these project allowances in the repository file rather than through TUI persistent approvals, which can write user-level rules.
+
 ## Python conventions and enforcement
 
 Use Python 3.12 syntax or later only when compatible with the 3.12 baseline. Use reusable product code under `src/agentic_ml` and public-interface tests under `tests`. Avoid source-path manipulation that conceals installation problems.
@@ -86,9 +105,9 @@ On a pull request, open **Checks**, select **Linux / Python 3.12**, and expand t
 With GitHub CLI, replace the placeholders below with the PR number and run ID:
 
 ```sh
-gh pr checks PR_NUMBER --repo jimthompson5802/agentic-ml
-gh run view RUN_ID --repo jimthompson5802/agentic-ml --log-failed
-gh run view RUN_ID --repo jimthompson5802/agentic-ml --log
+gh pr checks --repo jimthompson5802/agentic-ml PR_NUMBER
+gh run view --repo jimthompson5802/agentic-ml RUN_ID --log-failed
+gh run view --repo jimthompson5802/agentic-ml RUN_ID --log
 ```
 
 Reproduce failures locally from the same revision using the shared commands, Python 3.12 and uv 0.13.1. Compare `shasum -a 256 uv.lock` before and after, then run `git diff --exit-code -- uv.lock`. A passing local run does not establish hosted event delivery. The named **Build wheel and source distribution** and **Verify isolated installed distributions** steps use the distribution commands below verbatim. Verification runs only after a successful build; both steps can run despite an unrelated development check failure. Their original nonzero exits fail the job, and the final lock comparison still runs. Expand these steps for artifact hashes, both wheel results, retained workspace paths and subprocess diagnostics. The command output is available in the Actions log archive even after the temporary runner is destroyed; the workspace files themselves are not uploaded. Branch protection remains deferred US-34 work.

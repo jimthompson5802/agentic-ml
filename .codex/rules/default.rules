@@ -26,3 +26,132 @@ prefix_rule(
     decision = "allow",
     justification = "Allow mypy availability checks",
 )
+
+# Repository-local rules: load only in this trusted project.
+# Prefixes allow trailing arguments; run checks directly, without shell wrappers.
+
+prefix_rule(
+    pattern = ["gh", "issue", "list", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "issue", "view", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "list", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "view", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "diff", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "checks", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "run", "list", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "run", "view", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "workflow", "list", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "workflow", "view", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "release", "list", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "release", "view", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "view", "--repo", "jimthompson5802/agentic-ml"],
+    decision = "allow",
+    justification = "Allow agentic-ml GitHub inspection",
+)
+
+prefix_rule(
+    pattern = ["uv", "run", "--locked", "pytest"],
+    decision = "allow",
+    justification = "Allow repository development verification and formatting",
+)
+
+prefix_rule(
+    pattern = ["uv", "run", "--locked", "mypy"],
+    decision = "allow",
+    justification = "Allow repository development verification and formatting",
+)
+
+prefix_rule(
+    pattern = ["uv", "run", "--locked", "ruff", "check"],
+    decision = "allow",
+    justification = "Allow repository development verification and formatting",
+)
+
+prefix_rule(
+    pattern = ["uv", "run", "--locked", "ruff", "format"],
+    decision = "allow",
+    justification = "Allow repository development verification and formatting",
+)
+
+prefix_rule(
+    pattern = ["uv", "run", "--locked", "agentic-ml", "--version"],
+    decision = "allow",
+    justification = "Allow repository development verification and formatting",
+)
+
+prefix_rule(
+    pattern = ["uv", "run", "--locked", "python", "tests/packaging/verify_distributions.py"],
+    decision = "allow",
+    justification = "Allow repository development verification and formatting",
+)
+
+prefix_rule(
+    pattern = ["uv", "run", "--locked", "python", "tests/installation/verify_installation.py"],
+    decision = "allow",
+    justification = "Allow repository development verification and formatting",
+)
+
+prefix_rule(
+    pattern = ["sh", ".codex/scripts/github-read.sh"],
+    decision = "allow",
+    justification = "Allow validated GET requests to the agentic-ml GitHub API",
+)

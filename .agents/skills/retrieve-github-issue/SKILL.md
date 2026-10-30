@@ -9,6 +9,8 @@ Retrieve the issue and all available issue comments. This is a read-only GitHub 
 
 ## Resolve the issue
 
+For CLI reads, follow the working repository's documented command forms and read helpers when they support the resolved target and required data. Resolve helper paths from that checkout. Use the generic commands below when no suitable helper applies; follow normal tool approval for unsupported reads. Keep pagination, completeness checks, and publication authorization requirements intact.
+
 Read applicable repository instructions. Use the issue URL and repository supplied by the user. If the user supplies only an issue number, find the working checkout. Inspect its remotes and run `gh repo view --json nameWithOwner,url`. Ask only if the target remains unclear. Resolve the target independently of this skill's installation directory.
 
 Support issues in open or closed states. Confirm that the target is an issue rather than a pull request. If it is a pull request or conflicts with the user's description, resolve the mismatch before continuing.
