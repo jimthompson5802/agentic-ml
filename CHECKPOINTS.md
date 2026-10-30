@@ -10,19 +10,23 @@ Developer message “i approve us-01 ip1; commit changes; execute ip2”, 2026-1
 
 ## Resume here
 
-US-01 implementation is complete with both implementation gates approved. Story accepted 2026-10-30; see the [completion record](docs/plans/milestone-1-us-01.md#story-completion-review). Issue #8 complete body/all comment pages refreshed before execution: stable zero-comment snapshot, updated `2026-10-30T02:06:17Z`. No new scope decision or unresolved failure.
+US-01 implementation is complete with both implementation gates approved; published PR and static review are recorded below. Story accepted 2026-10-30; see the [completion record](docs/plans/milestone-1-us-01.md#story-completion-review). Issue #8 complete body/all comment pages refreshed before execution: stable zero-comment snapshot, updated `2026-10-30T02:06:17Z`. No new scope decision or unresolved failure.
+
+## Publication and review — 2026-10-30
+
+[PR #44](https://github.com/jimthompson5802/agentic-ml/pull/44) targets main from `US-01-pinned-installation`, published at `ce414ca54ad3f9ecdaa8fc0626f545b62f5aedec`. Selected repository PR template preserved; closes #8 on merge. [Hosted Linux/Python 3.12 CI](https://github.com/jimthompson5802/agentic-ml/actions/runs/41042255309) passed. [Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/44#pullrequestreview-5711095039) completed with no actionable findings; reviewed all 10 changed files and owning issue, no project code/checks executed during review. Review publication and empty inline-comment collection verified. PR #44 merged on 2026-10-30 at `5d662f65ed38cdca988f968164c773b3be6f84bf`; issue #8 is closed. [Post-merge main CI 41042701474](https://github.com/jimthompson5802/agentic-ml/actions/runs/41042701474) passed at that commit. Main was fast-forwarded and the saved publication checkpoint restored before this final record.
 
 ## Pending developer decisions
 
-No US-01 implementation gate or story acceptance remains pending. Publication/merge and next-story planning await separate direction. No US-02 implementation authorized. Acceptance-record updates are documentation only and uncommitted; no push or PR authorized or performed.
+No US-01 implementation gate or story acceptance remains pending. No merge or post-merge verification remains pending; next-story planning awaits direction. No US-02 implementation authorized. Acceptance record committed as `ce414ca`. Developer request “push to remote; create pull request and start a pr review” authorized publication and review; branch pushed and PR #44 created. Merge completed on GitHub and was verified during main cleanup.
 
 ## Handoff notes
 
-- Branch: `US-01-pinned-installation`, IP1 commit `60941af`; IP2 commit `2bb46cc`. IP2 changes: verification driver, three added tests (12 installation tests total), upgrade guide, report, plan and checkpoint. No product source, dependency/lock, runtime resources, CI or suppressions changed.
+- Checkout: `main` at merged US-01 plus this documentation follow-up; story branch cleanup authorized. Implementation history: IP1 `60941af`, IP2 `2bb46cc`, acceptance `ce414ca`; squash merge `5d662f6`. IP2 changes: verification driver, three added tests (12 installation tests total), upgrade guide, report, plan and checkpoint. No product source, dependency/lock, runtime resources, CI or suppressions changed.
 - Verification: 23 tests (including both fresh wheel installation paths), lint, format, strict types, locked sync/check and smoke passed on macOS 15.7.9 arm64/Python 3.12.15/uv 0.13.1/Git 2.54.0. Harness lock SHA-256 unchanged: `ab8b6c9de02061ea788fa13a2dba162bcb963fb211ca938af3408e01bb1f5d9d`. Local Markdown targets and `git diff --check` passed. No new Linux/Windows verification.
 - Actual GitHub A→B upgrade verified in the same project: A `018e9d4bb26e121c7f9274d11e0de560b7514b95`, B `aead26e9c758878107ad72f230f9e607a9a7ecfa`; both package versions 0.1.0. Exact experiment lock hash changed from `b08e29f77524c9fd70bc57e8d792e915a357e8355e122c4e1fef8e68efb80673` to `20df20851edc6ab815a1396de63bfaf0837dddc74b2beee31188732256037ac7`. No-op locked sync preserved original identity. A/B installed interfaces passed after cache removal; original A evidence retained.
 - IP2 two red–green slices passed first green attempts; old-install substitution rejected. Raw projects/logs: `/private/tmp/us-01-ip2-evidence`. Prior IP1 raw evidence: `/private/tmp/us-01-ip1-evidence`. Sandbox Git-write restriction resolved by approved escalation; no unresolved failure.
-- Acceptance recording: only the owning plan and checkpoint changed; `git diff --check` passed. TDD/runtime checks do not apply to recording a developer decision.
+- Final handoff records only checkpoint documentation; `git diff --check` passed. TDD/runtime checks do not apply to this status update; prior implementation verification and successful post-merge CI remain the evidence. Developer requested committing the final record on main and previously authorized deleting local/remote story branches.
 - Milestones 1–5 issues remain published; later story implementation unauthorized. Milestone 99 deferred.
 
 ## Maintenance rules
