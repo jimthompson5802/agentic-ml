@@ -1,1 +1,1 @@
-Provisional Milestone 0 runtime guidance; experiment execution is unavailable.
+Deliberate US-33 hosted resource mismatch.
