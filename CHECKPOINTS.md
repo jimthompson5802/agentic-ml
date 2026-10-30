@@ -8,6 +8,12 @@ Milestone 0 is complete and accepted (US-31, US-32, US-33). PR #24 squash merged
 
 Developer message “i approve us-01 ip1; commit changes; execute ip2”, 2026-10-30, approved IP1 and authorized its commit and IP2. Approved IP1 changes committed as `60941af` (`feat(installation): verify pinned harness bootstrap`). IP2 T1–T3 are technically complete; all four US-01 criteria have macOS/Python 3.12 evidence. Developer message “i approve ip2; commit the changes”, 2026-10-30, approved IP2 and authorized its local commit. Both implementation gates are approved. Developer message “i approve us-01”, 2026-10-30, accepts the complete story. IP2 is committed as `2bb46cc`. [Owning plan](docs/plans/milestone-1-us-01.md), [IP1 evidence](docs/verification/us-01-ip1.md), [IP2 evidence](docs/verification/us-01-ip2.md).
 
+## Skill enhancement — 2026-10-30
+
+Updated `execute-plan` so explicit whole-story acceptance authorizes remaining story commits, ordinary push, PR creation through `create-pull-request`, and static COMMENT review through `review-pull-request`. Phase gates remain required. Publication resumption checks preserve unrelated work and avoid duplicate PRs/reviews; merging, cleanup, fixes, and next-story work remain separate. No live publication was performed for this edit.
+
+Validation: manually checked phase-only approval, accepted story with remaining or already committed work, unrelated changes, existing PR/review reuse, and uncertain publication handling. `git diff --check` passed. Skill validator could not run: both system Python and the locked project environment lack `yaml` (PyYAML). No dependencies or lockfile changed. TDD does not apply to this instruction-only change. Developer requested committing and pushing this skill and checkpoint update on the current branch (`main`); publication outcome is reported in the session.
+
 ## Resume here
 
 US-01 implementation is complete with both implementation gates approved; published PR and static review are recorded below. Story accepted 2026-10-30; see the [completion record](docs/plans/milestone-1-us-01.md#story-completion-review). Issue #8 complete body/all comment pages refreshed before execution: stable zero-comment snapshot, updated `2026-10-30T02:06:17Z`. No new scope decision or unresolved failure.

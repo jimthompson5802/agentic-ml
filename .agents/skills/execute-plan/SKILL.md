@@ -1,6 +1,6 @@
 ---
 name: execute-plan
-description: Execute or resume a supplied Markdown implementation plan, record verified task progress in its existing format, and stop at each implementation phase boundary for developer approval. Use for execution rather than plan drafting.
+description: Execute or resume a supplied Markdown implementation plan, record verified task progress in its existing format, and stop at each implementation phase boundary for developer approval. After whole-story acceptance, commit remaining story changes, push, create a PR, and publish a static review. Use for execution rather than plan drafting.
 ---
 
 # Execute a plan
@@ -34,4 +34,19 @@ Present the plan link, completed tasks, checks and results, evidence, deviations
 
 Request explicit developer approval, citing and linking the applicable plan or repository gate rule. If neither defines the checkpoint, cite this skill's requirement: “At the end of every implementation phase, including the final one, save progress and stop.” Explain that this is a checkpoint imposed by the invoked execution skill. Await approval before beginning the next implementation phase; silence and elapsed time are not decisions. A general execution instruction does not satisfy an implementation phase gate.
 
-Record the developer's decision, date, and decision reference in the owning story plan. For changes requested, keep work within the current implementation phase, reopen affected tasks, and repeat their required verification before renewed review. For rejection, record it and stop progression. For approval, mark the gate accordingly and continue only if its progression decision or existing authorization covers the next implementation phase in the coordinated order, including when it belongs to another story. Stop again at that implementation phase's gate. A story's final gate does not approve another story's work. Record story acceptance only when explicitly given; partial prerequisite delivery is not full story acceptance. After the final approval for the coordinated scope, stop without starting work outside that scope.
+Record the developer's decision, date, and decision reference in the owning story plan. For changes requested, keep work within the current implementation phase, reopen affected tasks, and repeat their required verification before renewed review. For rejection, record it and stop progression. For approval, mark the gate accordingly and continue only if its progression decision or existing authorization covers the next implementation phase in the coordinated order, including when it belongs to another story. Stop again at that implementation phase's gate. A story's final gate does not approve another story's work. Record story acceptance only when explicitly given; partial prerequisite delivery is not full story acceptance. After final phase approval, await explicit whole-story acceptance unless already given. Once acceptance, required gates, and verification are complete, continue with publication below. Keep other stories outside this authorization.
+
+## Publish and review an accepted story
+
+Explicit whole-story acceptance authorizes the following sequence without another confirmation, unless the user limits authorization. Phase approval alone does not trigger it. Editing this skill authorizes only the edit.
+
+1. Record acceptance, date, and decision reference in the owning plan and update required checkpoints. Verify required gates and checks are complete before publication.
+2. Inspect remaining changes and the full story diff. Commit only accepted-story work, including acceptance records, using repository commit conventions. Preserve unrelated changes. Reuse existing commits when nothing remains to commit.
+3. Resolve the story branch, remote ownership, and intended base. Resolve material branch or scope ambiguity before publication. If on the base branch, establish an appropriate story branch while preserving unrelated work. Publish the intended commits with an ordinary push; report conflicts rather than force-pushing.
+4. Discover and invoke `create-pull-request` through repository instructions or the environment. Follow its template, evidence, existing-PR reuse, and verification rules. Create a standard PR unless a draft is requested.
+5. Discover and invoke `review-pull-request` on the verified PR. Perform static inspection and publish and verify a `COMMENT` review, including when no actionable findings exist. If either companion skill is unavailable, report the blocker and preserve completed results.
+6. Record commit identifiers, PR and review URLs, findings, and blockers in the owning plan and checkpoints as applicable. Commit and push resulting story records when repository conventions require it. If this changes the PR head, ensure the review covers the updated head. Report the final results and limitations.
+
+On resumption, inspect local and remote state before repeating actions. Reuse matching PRs and valid reviews of the current head. After failed or uncertain publication, inspect the remote outcome before retrying. Stop and report unresolved uncertainty rather than creating duplicate PRs or feedback.
+
+Stop after publication, review, and outcome recording. Findings require separate authorization for fixes. This workflow does not authorize merging, branch cleanup, or another story's implementation.
