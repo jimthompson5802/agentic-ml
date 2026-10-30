@@ -1,0 +1,28 @@
+
+# Allow Ruff linting
+prefix_rule(
+    pattern = ["uv", "run", "--no-sync", "ruff", "check", "."],
+    decision = "allow",
+    justification = "Allow repository lint checks without approval",
+)
+
+# Allow Ruff formatting checks
+prefix_rule(
+    pattern = ["uv", "run", "--no-sync", "ruff", "format", "--check", "."],
+    decision = "allow",
+    justification = "Allow read-only formatting validation",
+)
+
+# Allow pytest version checks
+prefix_rule(
+    pattern = ["uv", "run", "--no-sync", "pytest", "--version"],
+    decision = "allow",
+    justification = "Allow pytest availability checks",
+)
+
+# Allow mypy version checks
+prefix_rule(
+    pattern = ["uv", "run", "--no-sync", "mypy", "--version"],
+    decision = "allow",
+    justification = "Allow mypy availability checks",
+)

@@ -14,6 +14,10 @@ Updated `execute-plan` so explicit whole-story acceptance authorizes remaining s
 
 Validation: manually checked phase-only approval, accepted story with remaining or already committed work, unrelated changes, existing PR/review reuse, and uncertain publication handling. `git diff --check` passed. Skill validator could not run: both system Python and the locked project environment lack `yaml` (PyYAML). No dependencies or lockfile changed. TDD does not apply to this instruction-only change. Developer requested committing and pushing this skill and checkpoint update on the current branch (`main`); publication outcome is reported in the session.
 
+## Command approval rules — 2026-10-30
+
+Developer requested committing and pushing the remaining `.codex/rules/default.rules` file on main. It allows Ruff lint and formatting checks plus pytest/mypy version checks. Reviewed the four command prefixes; `git diff --check` passed. No executable harness behavior changed; TDD does not apply.
+
 ## Resume here
 
 US-01 implementation is complete with both implementation gates approved; published PR and static review are recorded below. Story accepted 2026-10-30; see the [completion record](docs/plans/milestone-1-us-01.md#story-completion-review). Issue #8 complete body/all comment pages refreshed before execution: stable zero-comment snapshot, updated `2026-10-30T02:06:17Z`. No new scope decision or unresolved failure.
