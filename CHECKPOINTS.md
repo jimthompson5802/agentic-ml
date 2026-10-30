@@ -6,6 +6,8 @@ Last updated: 2026-10-29 (hosted evidence 2026-10-30 UTC)
 
 Milestone 0 development work complete and accepted: US-31, US-32 and US-33. All US-33 gates approved and story accepted. Developer request “squash merge pr #24”, 2026-10-29, authorized the merge; PR #24 squash merged as `018e9d4bb26e121c7f9274d11e0de560b7514b95`. Main push CI passed all checks, including package build and isolated installed verification.
 
+Latest follow-up (2026-10-29): resolved coding-standard discoverability by requiring agents to read `docs/development.md` before implementing or modifying Python code. The guide owns conventions, suppression rules, and shared verification commands. Documentation-only change; TDD and runtime checks do not apply. Verified the relative link and referenced sections; `git diff --check` passed. Developer request “commit and push” authorizes committing this update and pushing main. The earlier planning-skill revision is committed as `2894759`; the commit instructions below are historical.
+
 ## Resume here
 
 Review [US-33 plan](docs/plans/milestone-0-us-33.md), [execution index](docs/plans/milestone-0-us-33-execution-order.md), [IP3 evidence](docs/verification/us-33-ip3.md) and implementation [PR #24](https://github.com/jimthompson5802/agentic-ml/pull/24). Hosted baseline 40994320116 passed all checks and both wheel paths. Disposable PR #25 verified independent build/resource failures, each followed by exact restoration and passing correction; closed without merge. No defects entered implementation branch.

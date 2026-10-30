@@ -30,7 +30,7 @@ When writing pull request bodies, use the target repository's selected pull requ
 
 Use Python 3.12 or newer and `uv` with the committed lockfile. Keep dependency declarations and the lockfile consistent. Verification must not silently update the lockfile.
 
-Follow the repository's documented conventions for naming, typing, docstrings, imports, and error handling. When establishing the development foundation, document these conventions and configure automated enforcement.
+Before implementing or modifying Python code, read the [development guide](docs/development.md), including its Python conventions, suppression rules, and shared verification commands. Follow those conventions for naming, typing, docstrings, imports, and error handling.
 
 Record a specific justification for each rule suppression or check exclusion.
 
