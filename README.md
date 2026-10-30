@@ -37,3 +37,5 @@ Each implementation phase specifies its tasks, required review evidence, and app
 - Support model-improvement and data-improvement loops within approved scope and budgets.
 
 The installation commands and repository layouts in the design document describe the intended implementation; they are not yet a runnable setup guide.
+
+Build and check distributable packages using the [distribution verification commands](docs/development.md#distribution-builds-and-installed-verification).

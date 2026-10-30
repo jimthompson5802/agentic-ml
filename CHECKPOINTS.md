@@ -5,7 +5,7 @@ Last updated: 2026-10-29
 ## Current position
 
 - Milestone: 0 — Harness development foundation.
-- Active work: Full US-33 plan approved; awaiting execution authorization; US-32 remains complete and accepted. No new implementation has started.
+- Active work: US-33 IP2 technical tasks T1–T5 complete; developer IP2 gate approved 2026-10-29. IP3 unstarted; US-31/US-32 remain complete and accepted.
 - PR #5 merged by developer at 2026-10-29T23:47:14Z as `0a3c087f8b0273be9cd3fb4b2f57a9846614fd86`. [Main push CI](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975472618) passed.
 - Documentation follow-up PR [#7](https://github.com/jimthompson5802/agentic-ml/pull/7) merged at 2026-10-29T23:56:05Z as `b558514e76b13b18529af065364683a31b54536f`; current checkout includes this acceptance record.
 
@@ -15,35 +15,40 @@ Last updated: 2026-10-29
 |---|---|---|---|
 | US-31 / #1 | [Approved](docs/plans/milestone-0-us-31.md) | Complete and accepted | IP1/IP2 approved |
 | US-32 / #2 | [Approved](docs/plans/milestone-0-us-32.md) | Complete and accepted | IP1/IP2 approved |
-| US-33 / #3 | [Approved](docs/plans/milestone-0-us-33.md) | CLI prerequisite complete; IP2/IP3 not started | IP1 approved; new gates pending |
+| US-33 / #3 | [Approved](docs/plans/milestone-0-us-33.md) | CLI and IP2 complete; IP3 not started | IP1/IP2 approved |
 
 ## Milestone 1 story creation
 
 - Created and verified all 11 Milestone 1 issues from the authoritative story increments: US-01 [#8](https://github.com/jimthompson5802/agentic-ml/issues/8), US-02 [#9](https://github.com/jimthompson5802/agentic-ml/issues/9), US-03 [#10](https://github.com/jimthompson5802/agentic-ml/issues/10), US-05 [#11](https://github.com/jimthompson5802/agentic-ml/issues/11), US-09 [#12](https://github.com/jimthompson5802/agentic-ml/issues/12), US-10 [#13](https://github.com/jimthompson5802/agentic-ml/issues/13), US-11 [#14](https://github.com/jimthompson5802/agentic-ml/issues/14), US-12 [#15](https://github.com/jimthompson5802/agentic-ml/issues/15), US-13 [#16](https://github.com/jimthompson5802/agentic-ml/issues/16), US-26 [#17](https://github.com/jimthompson5802/agentic-ml/issues/17), US-27 [#18](https://github.com/jimthompson5802/agentic-ml/issues/18).
 - Exact titles/bodies and `enhancement` labels verified after publication; acceptance criteria preserve source IDs and wording. Later story increments remain excluded. No GitHub milestone objects exist; milestone scope is recorded in each body.
-- No implementation or gate progression authorized. Next development work remains separate planning/authorization, with US-33 remainder still outstanding. Issue #2 is now closed.
+- These issue-creation requests authorized no Milestone 1 implementation. Issue #2 is closed; current Milestone 0 execution status is recorded below.
 - Working tree was clean before this checkpoint update. Issue/documentation work adds no executable behavior; TDD and runtime checks do not apply.
 
 ## Milestone 2 story creation
 
 - Created and verified five Milestone 2 issues: US-12 [#19](https://github.com/jimthompson5802/agentic-ml/issues/19), US-14 [#20](https://github.com/jimthompson5802/agentic-ml/issues/20), US-15 [#21](https://github.com/jimthompson5802/agentic-ml/issues/21), US-16 [#22](https://github.com/jimthompson5802/agentic-ml/issues/22), US-27 [#23](https://github.com/jimthompson5802/agentic-ml/issues/23).
 - Exact published titles/bodies and `enhancement` labels verified. Acceptance criteria retain authoritative IDs/wording; US-12 and US-27 link their separate Milestone 1 increments. No duplicate Milestone 2 issues were found. Milestone scope is in each body; GitHub milestone objects remain absent.
-- No implementation or gate progression authorized. Next development action remains separate planning/authorization; US-33 remainder is still outstanding.
+- These issue-creation requests authorized no Milestone 2 implementation. Current Milestone 0 execution status is recorded below.
 - Preserved existing uncommitted checkpoint updates. This issue/documentation work changes no executable behavior; TDD/runtime checks do not apply. `git diff --check` passed.
 
 ## Resume here
 
-Developer message “i approve the plan”, 2026-10-29, approves [US-33 SC-02 and IP2–IP3](docs/plans/milestone-0-us-33.md) and the [execution index](docs/plans/milestone-0-us-33-execution-order.md). Proposed IP2 verifies provisional resources and both isolated wheel paths locally; IP3 integrates those commands into Linux CI and verifies pass/failure diagnostics. Approval includes technical choices and public test boundaries. Next task is US-33-IP2-T1 after separate execution authorization. No implementation, publication or merge authorized by plan approval. Historical IP1 and US-31/US-32 acceptance remain valid; Milestone 0 remains incomplete.
+Developer message “execute plan for us-33 ip2”, 2026-10-29, authorized IP2. All T1–T5 technical tasks are complete in the [owning plan](docs/plans/milestone-0-us-33.md); developer approved IP2 with “i approve us-33 ip2; commit changes”, 2026-10-29. See [IP2 evidence](docs/verification/us-33-ip2.md). Both wheel paths pass on macOS 15.7.9 arm64/Python 3.12.15; 11 tests and all shared checks pass; lock unchanged. IP3 hosted CI package work remains unstarted and needs separate execution/publication authorization. Approval recording and commit authorized; no story acceptance, publication or merge authorized.
 
 ## Pending developer decisions
 
 - No US-32 implementation gate or acceptance decision remains pending.
 - Documentation follow-up PR #7 is merged; no review/merge decision remains pending for it.
-- US-33 plan and public boundaries approved; execution authorization remains pending. IP2/IP3 gates remain pending. Milestone 99 stays deferred.
+- US-33 IP2 approved; IP3 execution/publication authorization remains separate. Milestone 99 stays deferred.
 
 ## Handoff notes
 
-- Recorded US-33 plan approval in the owning plan and both coordination indexes. IP2/IP3 tasks remain Not started and their developer gates remain pending. Approval recording is documentation only; `git diff --check` passed. Developer requested committing the planning changes on branch `us-33-build-verify-package`; implementation remains unstarted.
+- IP2 adds exact provisional resources, installed probe, real two-path build/install driver, malformed artifact subprocess tests and contributor documentation. These changes and approval records are included in the authorized IP2 commit; existing `sandbox/` ignore addition is preserved.
+- Final checks: 11 tests, Ruff lint/format, strict mypy, locked sync/check and source version smoke passed. Direct/rebuilt wheel checks passed; raw log `/tmp/us33-ip2/final-verification.log`. No dependency or lock changes.
+- TDD failures and corrective evidence are in the IP2 report. One mypy metadata-path type correction passed on attempt 1. Optional Hatchling version query failed because the backend is absent from the contributor environment; isolated builds passed, exact backend version unrecorded. Sandbox cache/API failures succeeded through escalation. No unresolved implementation failure.
+
+
+- Historical planning approval and prerequisite evidence remain valid; current IP2 execution/report supersedes earlier unstarted status.
 
 - US-33 planning retrieved complete issue #3 and its one comment; stable metadata confirms it remains open after premature closure. Prerequisite #1/#2 full bodies and all comment pages refreshed, both closed with zero comments and stable metadata. CLI naming follows prior approved correction.
 - Planning preserves pre-existing checkpoint edits and approved IP1 evidence. Changes are documentation only; TDD and runtime checks do not apply. New plan/index local file links and `git diff --check` passed; implementation checks remain planned. One GitHub metadata network failure succeeded on escalated retry; no corrective implementation attempt occurred.

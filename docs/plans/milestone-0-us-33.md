@@ -36,7 +36,7 @@ Record evidence in proposed `docs/verification/` Markdown reports; keep temporar
 
 ## Plan review
 
-- **Current revision:** Approved — full-story extension SC-02, IP2–IP3, technical choices and public test boundaries approved by developer message “i approve the plan”, 2026-10-29. Historical IP1 approval remains valid. Implementation authorization is separate; IP2/IP3 gates remain pending.
+- **Current revision:** Approved — full-story extension SC-02, IP2–IP3, technical choices and public test boundaries approved by developer message “i approve the plan”, 2026-10-29. Historical IP1 approval remains valid. IP2 execution authorized 2026-10-29; technical tasks complete and IP2 approved 2026-10-29. IP3 remains unstarted.
 - **Status:** Approved for the full plan; original IP1 decisions below remain historical.
 - **Developer decision:** Approved — coordinated scope, proposed tooling choices, and public test boundaries.
 - **Decision reference and date:** Developer message “i approve the plan” in this conversation, 2026-10-29. US-33 IP1 progression authorized by developer message “i approve” at the US-31 IP1 gate, 2026-10-29. US-33 IP1 gate subsequently approved as recorded below.
@@ -102,7 +102,7 @@ Inspected `pyproject.toml`, `uv.lock`, existing source, three subprocess tests, 
 - **Plan revisions:** This plan, new US-33 execution index, historical index cross-link and checkpoint. Authoritative requirements need no revision.
 - **Verification and gates:** Plan review confirms the public boundaries below; IP2 and IP3 each have a separate pending implementation gate. All new checks are planned, not executed.
 - **Decision:** Approved — developer message “i approve the plan”, 2026-10-29, approves SC-02, IP2–IP3, technical choices, public test boundaries and coordinated execution index. No implementation gate approval or publication authorization is implied.
-- **Resume point:** Await separate execution authorization for US-33-IP2-T1; stop at the IP2 gate before IP3.
+- **Resume point:** IP2 execution authorized by developer message “execute plan for us-33 ip2”, 2026-10-29. IP2 tasks complete and approved 2026-10-29; await IP3 execution authorization.
 
 ## Remaining dependencies and technical approach
 
@@ -148,29 +148,29 @@ The probe checks CLI exit zero, stdout equal to installed metadata version and a
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-33-IP2-T1 | Not started | Inspect installed uv build/venv/pip help and Hatchling configuration; refine proposed driver commands and isolation checks in this plan. Inspect `pyproject.toml`, `uv.lock`, `.gitignore` and current package contents. | Reviewed plan/boundaries | Concrete command options, artifact selection and safe extraction strategy recorded; no unsupported CLI assumption remains. Re-review if findings change scope or boundaries. | AC-01–04 |
-| US-33-IP2-T2 | Not started | Start one direct-wheel resource behavior slice in proposed `tests/packaging/check_installed.py`; build/install existing artifact to demonstrate missing template red. Add proposed template and only necessary `pyproject.toml` packaging changes; rerun green. Then repeat red–green for proposed runtime guidance file. | T1 | Independent exact-content assertions pass through installed resources; each initial failure identifies the missing resource. No development guidance is substituted. | AC-02–03 |
-| US-33-IP2-T3 | Not started | Add proposed `tests/packaging/verify_distributions.py`; incrementally add clean environment, CLI/version/import/path checks, then sdist extraction/rebuild and identical second-path probe. Retain existing source CLI tests. | T2 | Both artifact paths run in distinct runtime environments and project directories outside checkout. Wheel metadata/version and resource assertions pass; installed dependencies/path diagnostics demonstrate isolation. | AC-01–04,06–07 |
-| US-33-IP2-T4 | Not started | Add public subprocess failure cases in proposed `tests/integration/test_distribution_verification.py` for missing template, altered guidance and wrong CLI version, plus missing/ambiguous artifacts; implement diagnostic/failure behavior one red–green slice at a time. | T3 | Each malformed fixture fails for the intended reason; corrected artifacts pass. Driver does not conceal failure or reuse an earlier passing install. Preserve original acceptance assertions. | AC-02–05,06–07 |
-| US-33-IP2-T5 | Not started | Document exact build/verification commands, isolation, resource contents and diagnostics in `docs/development.md`; link from `README.md`. Run fresh macOS artifact checks and shared development checks. Record proposed `docs/verification/us-33-ip2.md`, update plan/index/checkpoint. | T4 | Both wheel paths and documented source smoke pass; all shared checks pass, lock SHA/diff unchanged. Report actual versions/platform, TDD sequence, artifact checksums and limitations. | AC-01–07; AC-05 local portion |
+| US-33-IP2-T1 | Complete | Inspect installed uv build/venv/pip help and Hatchling configuration; refine proposed driver commands and isolation checks in this plan. Inspect `pyproject.toml`, `uv.lock`, `.gitignore` and current package contents. | Reviewed plan/boundaries | Concrete command options, artifact selection and safe extraction strategy recorded; no unsupported CLI assumption remains. Re-review if findings change scope or boundaries. | AC-01–04 |
+| US-33-IP2-T2 | Complete | Start one direct-wheel resource behavior slice in proposed `tests/packaging/check_installed.py`; build/install existing artifact to demonstrate missing template red. Add proposed template and only necessary `pyproject.toml` packaging changes; rerun green. Then repeat red–green for proposed runtime guidance file. | T1 | Independent exact-content assertions pass through installed resources; each initial failure identifies the missing resource. No development guidance is substituted. | AC-02–03 |
+| US-33-IP2-T3 | Complete | Add proposed `tests/packaging/verify_distributions.py`; incrementally add clean environment, CLI/version/import/path checks, then sdist extraction/rebuild and identical second-path probe. Retain existing source CLI tests. | T2 | Both artifact paths run in distinct runtime environments and project directories outside checkout. Wheel metadata/version and resource assertions pass; installed dependencies/path diagnostics demonstrate isolation. | AC-01–04,06–07 |
+| US-33-IP2-T4 | Complete | Add public subprocess failure cases in proposed `tests/integration/test_distribution_verification.py` for missing template, altered guidance and wrong CLI version, plus missing/ambiguous artifacts; implement diagnostic/failure behavior one red–green slice at a time. | T3 | Each malformed fixture fails for the intended reason; corrected artifacts pass. Driver does not conceal failure or reuse an earlier passing install. Preserve original acceptance assertions. | AC-02–05,06–07 |
+| US-33-IP2-T5 | Complete | Document exact build/verification commands, isolation, resource contents and diagnostics in `docs/development.md`; link from `README.md`. Run fresh macOS artifact checks and shared development checks. Record proposed `docs/verification/us-33-ip2.md`, update plan/index/checkpoint. | T4 | Both wheel paths and documented source smoke pass; all shared checks pass, lock SHA/diff unchanged. Report actual versions/platform, TDD sequence, artifact checksums and limitations. | AC-01–07; AC-05 local portion |
 
 ### Verification and review evidence
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Build and installed checks | Proposed commands above from fresh output directory; rebuild from extracted sdist only | Wheel and sdist built; separate direct/rebuilt wheel probes both pass on Python 3.12/macOS | Pending; proposed `docs/verification/us-33-ip2.md` |
-| TDD and failure diagnostics | One public behavior red–green per slice; malformed artifact subprocess fixtures | Correct missing/incorrect behavior red, then green; stage-specific nonzero failures and logs | Pending |
-| Contributor regression | `uv sync --locked --group dev`, `uv lock --check`, `uv run --locked pytest`, `uv run --locked ruff check .`, `uv run --locked ruff format --check .`, `uv run --locked mypy src tests`, `uv run --locked agentic-ml --version` | All pass; before/after lock SHA-256 and `git diff --exit-code -- uv.lock` unchanged | Pending |
+| Build and installed checks | Proposed commands above from fresh output directory; rebuild from extracted sdist only | Wheel and sdist built; separate direct/rebuilt wheel probes both pass on Python 3.12/macOS | Passed locally; [IP2 evidence](../verification/us-33-ip2.md) |
+| TDD and failure diagnostics | One public behavior red–green per slice; malformed artifact subprocess fixtures | Correct missing/incorrect behavior red, then green; stage-specific nonzero failures and logs | Passed; [IP2 evidence](../verification/us-33-ip2.md) |
+| Contributor regression | `uv sync --locked --group dev`, `uv lock --check`, `uv run --locked pytest`, `uv run --locked ruff check .`, `uv run --locked ruff format --check .`, `uv run --locked mypy src tests`, `uv run --locked agentic-ml --version` | All pass; before/after lock SHA-256 and `git diff --exit-code -- uv.lock` unchanged | Passed; [IP2 evidence](../verification/us-33-ip2.md) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T5 complete; review both artifact identities, real isolation, exact provisional contents, red/green diagnostics and shared-check results.
-- **Evidence presented:** Pending — proposed `docs/verification/us-33-ip2.md`.
+- **Evidence presented:** [IP2 evidence](../verification/us-33-ip2.md): T1–T5 complete; both isolated paths pass on macOS/Python 3.12.15; 11 tests and all shared checks pass; lock unchanged.
 - **Remaining limitations or blocked work:** Hosted Linux package checks and failure diagnostics remain IP3; Windows/additional Python versions remain unverified.
-- **Developer decision:** Pending. Stop and await explicit approval.
-- **Decision reference and date:** None.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer message “i approve us-33 ip2; commit changes”, 2026-10-29.
 - **Requested changes and resolution:** None.
-- **Progression authorized:** IP3 only after explicit IP2 gate approval and execution authorization; publication permissions remain separate.
+- **Progression authorized:** IP2 gate satisfied; approval recording and commit authorized. IP3 awaits separate execution authorization; publication permissions remain separate.
 
 ## US-33 / Implementation Phase 3: Run distribution verification in CI
 
@@ -212,15 +212,29 @@ All IDs below have prefix US-33-. Planned checks are not passing evidence.
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| AC-01 — documented wheel/sdist build | IP2-T1,T3,T5; IP3-T1,T2,T4 | Proposed IP2/macOS and IP3/Linux reports, documented commands | Pending |
-| AC-02 — clean wheel install outside checkout | IP2-T2–T5; IP3-T2,T4 | Separate runtime environments, installed distribution/path reports | Pending |
-| AC-03 — CLI/import and exact provisional resources | IP1-T3; IP2-T2–T5; IP3-T2–T4 | Existing source evidence; both installed probe results and negative cases planned | Incomplete |
-| AC-04 — rebuild wheel from sdist, same checks | IP2-T3–T5; IP3-T2,T4 | Extracted sdist identity, rebuilt wheel and independent probe results | Pending |
-| AC-05 — CI checks/logs and local reproduction | IP2-T4,T5; IP3-T1–T4 | Contributor commands, hosted pass/failure logs planned | Pending |
-| AC-06 — version matches metadata | IP1-T1–T3; IP2-T3–T5; IP3-T2,T4 | [Approved source behavior](../verification/cli-name-correction.md); both artifact checks planned | Incomplete |
-| AC-07 — both wheel versions and source smoke | IP1-T3; US-31-IP2-T2; IP2-T3–T5; IP3-T1,T2,T4 | [Fresh source smoke](../verification/us-31-ip2.md); both wheel results planned | Incomplete |
+| AC-01 — documented wheel/sdist build | IP2-T1,T3,T5; IP3-T1,T2,T4 | [IP2/macOS evidence](../verification/us-33-ip2.md); IP3/Linux pending | Locally verified; IP3 pending |
+| AC-02 — clean wheel install outside checkout | IP2-T2–T5; IP3-T2,T4 | Separate runtime environments, installed distribution/path reports | Locally verified; IP3 pending |
+| AC-03 — CLI/import and exact provisional resources | IP1-T3; IP2-T2–T5; IP3-T2–T4 | Existing source evidence; both installed probe results and negative cases planned | Locally verified; IP3 pending |
+| AC-04 — rebuild wheel from sdist, same checks | IP2-T3–T5; IP3-T2,T4 | Extracted sdist identity, rebuilt wheel and independent probe results | Locally verified; IP3 pending |
+| AC-05 — CI checks/logs and local reproduction | IP2-T4,T5; IP3-T1–T4 | Contributor commands, hosted pass/failure logs planned | Locally verified; IP3 pending |
+| AC-06 — version matches metadata | IP1-T1–T3; IP2-T3–T5; IP3-T2,T4 | [Approved source behavior](../verification/cli-name-correction.md); both artifact checks planned | Locally verified; IP3 pending |
+| AC-07 — both wheel versions and source smoke | IP1-T3; US-31-IP2-T2; IP2-T3–T5; IP3-T1,T2,T4 | [Fresh source smoke](../verification/us-31-ip2.md); both wheel results planned | Locally verified; IP3 pending |
 
-- **Remaining work:** All IP2–IP3 tasks and gates; no Milestone 0 acceptance criterion deferred by this revision.
+- **Remaining work:** All IP3 tasks/gate; local IP2 criteria verified in [IP2 evidence](../verification/us-33-ip2.md). No Milestone 0 acceptance criterion deferred.
 - **Partial prerequisite delivery:** IP1 remains accepted as a prerequisite slice; it cannot close US-33. US-31 and US-32 are accepted independently.
 - **Developer acceptance:** Pending.
 - **Decision reference and date:** None.
+
+### IP2 execution record
+
+Execution authorized by developer message “execute plan for us-33 ip2”, 2026-10-29. Issue #3 body and all comments refreshed: one unique comment (6510671946), stable updated_at 2026-10-29T23:10:06Z; SC-01 spelling correction applies. Public boundaries remain approved.
+
+T1: uv 0.13.1 help confirms `uv build --out-dir PATH`, `uv build SOURCE --wheel --out-dir PATH`, `uv venv --no-project --python 3.12 PATH`, and `uv pip install --python PATH WHEEL`. Venv is unseeded with no system site packages; install retains normal dependency resolution. Select exactly one *.whl and *.tar.gz; validate archive members as regular files/directories within one root before extraction with Python 3.12 data filter. Distinct retained temporary workspaces preserve logs. Existing Hatchling package selection includes package-local data; no dependency/configuration change anticipated. Lock baseline SHA-256: ab8b6c9de02061ea788fa13a2dba162bcb963fb211ca938af3408e01bb1f5d9d.
+
+T2: Built baseline via `uv build --out-dir /tmp/us33-ip2/baseline`; installed with `uv pip install --python /tmp/us33-ip2/resource-env/bin/python WHEEL`. `python -I tests/packaging/check_installed.py` failed with installed template FileNotFoundError. Added exact template, rebuilt/reinstalled, probe passed. Added independent guidance assertion; same probe failed with installed guidance FileNotFoundError. Added exact guidance, rebuilt/reinstalled, probe passed. All runs Python 3.12.15; no Hatchling configuration or dependency changes. Temporary artifacts under `/tmp/us33-ip2/`.
+
+T3: Public driver success test first failed because driver did not exist; implemented direct wheel environment/probe and observed green. Added rebuilt-wheel success assertion, observed red (direct passed but rebuilt absent); implemented safe extraction and isolated uv rebuild from extracted source, then 4 tests passed including existing CLI tests. Probe checks Python 3.12, artifact/installed/CLI version agreement, import and metadata locations, sys.path/cwd outside checkout, noneditable metadata, exact sole installed distribution and both exact resources. Each path has a unique environment/project; stdlib build tools remain outside runtime environments.
+
+T4: Missing-template subprocess test initially failed for absent human-readable resource diagnostic; added explicit installed resource existence assertion and 2 tests passed. Altered guidance and wrong CLI version wheels then failed at their intended installed assertions while the original artifact success test passed after each slice (3 then 4 tests). Empty directory diagnostic test initially failed with IndexError; added exact artifact-count validation, 5 tests passed. Added wheel/sdist ambiguity cases; 7 tests passed. Independently mutated wheels have recomputed RECORD hashes; no production defects or weakened assertions. Driver retains each subprocess stdout/stderr in stage logs under its printed workspace. No failed corrective attempt: each minimal correction passed its original failure.
+
+T5: Contributor documentation and README link added. Fresh artifacts and both installed paths passed; 11 tests, lint, formatting, mypy, locked sync/check, version smoke and lock checksum/diff passed. See [IP2 report](../verification/us-33-ip2.md) for hashes, versions, commands, TDD/failure evidence and limitations. All technical tasks complete; developer approval recorded 2026-10-29.
