@@ -60,3 +60,6 @@ Thumbs.db
 
 # Generated project-associated harness state is not source.
 .agentic-ml/
+
+# agentic work area
+sandbox/

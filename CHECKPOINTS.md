@@ -1,40 +1,26 @@
 # Development Checkpoints
 
-Last updated: 2026-10-29
+Last updated: 2026-10-29 (hosted evidence 2026-10-30 UTC)
 
 ## Current position
 
-- Milestone: 0 — Harness development foundation.
-- Active work: US-32 complete and accepted; no active implementation gate remains.
-- PR #5 merged by developer at 2026-10-29T23:47:14Z as `0a3c087f8b0273be9cd3fb4b2f57a9846614fd86`. [Main push CI](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975472618) passed.
-- Follow-up branch: `docs/us-32-final-acceptance`; commit `046487e` records final evidence and approval after PR #5 merged. Developer requested publication of the documentation follow-up PR. Its review/merge remains pending.
-
-## Progress overview
-
-| Story | Implementation plan | Implementation | Developer gate |
-|---|---|---|---|
-| US-31 / #1 | [Approved](docs/plans/milestone-0-us-31.md) | Complete and accepted | IP1/IP2 approved |
-| US-32 / #2 | [Approved](docs/plans/milestone-0-us-32.md) | Complete and accepted | IP1/IP2 approved |
-| US-33 / #3 | [CLI prerequisite approved](docs/plans/milestone-0-us-33.md) | CLI prerequisite complete; remainder unplanned | IP1 approved |
+Milestone 0 development work complete and accepted: US-31, US-32 and US-33. US-33 IP1/IP2 approved; IP3 T1–T4 technically complete. IP3 approved by developer message “i approve ip3”, 2026-10-29; US-33 accepted by developer message “I accept the us-33”, 2026-10-29. Publication authorized by “I approve the next steps”; no merge authorized.
 
 ## Resume here
 
-Developer message “I approve us-32 ip2” on 2026-10-29 approves final IP2 and accepts US-32. All four criteria and T1–T4 are verified in [IP2 evidence](docs/verification/us-32-ip2.md). No further story implementation is authorized. Remaining US-33 needs separate planning/authorization; Milestone 0 remains incomplete.
+Review [US-33 plan](docs/plans/milestone-0-us-33.md), [execution index](docs/plans/milestone-0-us-33-execution-order.md), [IP3 evidence](docs/verification/us-33-ip3.md) and implementation [PR #24](https://github.com/jimthompson5802/agentic-ml/pull/24). Hosted baseline 40994320116 passed all checks and both wheel paths. Disposable PR #25 verified independent build/resource failures, each followed by exact restoration and passing correction; closed without merge. No defects entered implementation branch.
 
 ## Pending developer decisions
 
-- No US-32 implementation gate or acceptance decision remains pending.
-- Review and merge the documentation follow-up PR from `docs/us-32-final-acceptance` to place final evidence and approval records on main. This publication does not reopen the approved US-32 gates.
-- Remaining US-33 requires separate planning/authorization. Milestone 99 stays deferred.
+No implementation gate or story acceptance remains pending. US-33 accepted by “I accept the us-33”, 2026-10-29; see the owning plan. Merge remains separate; default-branch package run is post-merge follow-up. No required technical task or failed correction remains.
 
 ## Handoff notes
 
-- Verified PR #5 merge and exact push event/SHA; merged tree matches the reviewed PR. Every main CI step passed: clean setup, locked sync/check, three tests, lint, formatting, strict types, version smoke and final lock checksum/diff.
-- Real hosted Ubuntu 24.04.5 x86_64, image 20261025.353.1, Python 3.12.15, uv 0.13.1, pytest 9.2.0, Ruff 0.17.3, mypy 1.20.2. Lock hash unchanged. Windows/other Python versions and US-33 distribution checks remain unverified here; macOS local evidence is preserved separately.
-- Six deliberate defects each produced failed CI and a green correction run. Disposable PR #6 is closed without merge, restored to clean baseline. No defective source reached PR #5/main.
-- First smoke fixture was ineffective; attempt 2 reached --version and verified exit 17, followed by exact source restoration and green verification. Complete attempt/run records are preserved; no checks/assertions were weakened.
-- Issue #2 complete body/comment pages refreshed again: stable snapshots, open issue, zero comments, Linux scope decision retained. Issue closure has not been performed. Raw metadata/logs remain `/tmp/us32-ip2-evidence/`; durable run/commit evidence is in the IP2 report.
-- Final update changes documentation only; no new executable behavior, so TDD does not apply. actionlint, local file targets, shared-command comparison, lock hash/diff and git diff --check passed. No new correction attempt or scope change.
+- Baseline implementation commit 9f9c5f0. Build defect/correction runs 40994406312 (failure) / 40994481417 (success); resource defect/correction 40994573537 (failure) / 40994665653 (success). Full revision/run links, artifact hashes and diagnostics in IP3 report.
+- Final local checks after exact restoration: 11 tests, lint, format, strict types, locked sync/check, source smoke, actionlint and both fresh isolated wheel paths passed. macOS 15.7.9 arm64/Python 3.12.15/uv 0.13.1; hosted Ubuntu 24.04.5 x86_64/Python 3.12.15. Lock unchanged. Windows/additional Python versions unverified.
+- Evidence/docs updates are on implementation branch `us-33-build-verify-package`; no code changes after passing baseline. No dependency/lock changes or suppressions. Each correction passed attempt 1; no unresolved implementation failure or scope deviation.
+- Issue #3 complete body/all comments refreshed, stable one-comment snapshot; SC-01 CLI spelling authoritative. IP2 and US-31/32 prerequisite approvals verified. Escalated auth/API/Git writes succeed; initial sandbox failures resolved by escalation.
+- Raw logs and artifacts outside Git, report links permanent hosted runs. Prior PR #5/#7 merge evidence retained in US-32 report. Milestone 1 issues #8–18 and Milestone 2 #19–23 exist; no implementation authorized. Milestone 99 deferred.
 
 ## Maintenance rules
 
@@ -43,3 +29,9 @@ Developer message “I approve us-32 ip2” on 2026-10-29 approves final IP2 and
 - Record approval only after the developer explicitly gives it, and link to the decision recorded in the owning plan. Task completion and plan approval do not approve implementation-phase progression.
 - At each update, refresh the date, current position, progress summary, next action, pending decisions, and material working-tree or verification notes. Include failed checks, blockers, and relevant evidence links when present.
 - Commit checkpoint updates alongside the work they describe when practical. Keep credentials and sensitive environment details outside this file.
+
+Publication authorized by developer message “I approve the next steps”, 2026-10-29: commit/push implementation PR and disposable hosted failure/correction cases, restore source and close disposable PR without merge. IP3 gate approved; US-33 accepted; merge pending.
+
+Approval record changes documentation only; `git diff --check` passed. No executable behavior changed, so TDD/runtime checks do not apply.
+
+Acceptance recording includes the previously uncommitted IP3 approval records. Documentation only; git diff --check passed. Commit/push covered by existing publication authorization; merge remains separate.
