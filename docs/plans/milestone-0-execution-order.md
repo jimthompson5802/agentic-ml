@@ -19,3 +19,7 @@ Changes to prerequisite scope during execution require [manage-plan-scope](../..
 ## CLI naming scope correction
 
 SC-01 (2026-10-29) is explicitly authorized by the developer's correction request. Both owning plans record it. ADR-007 and current requirements now use `agentic-ml`; GitHub issue bodies and preserved historical evidence may still say `agent-ml`. US-33 IP1 entrypoint/version/help evidence is renewed in the [correction report](../verification/cli-name-correction.md); its gate was approved by the developer on 2026-10-29. US-31 IP1 approval is preserved; US-31 IP2 technical verification is complete, final gate and US-31 acceptance approved by developer message “i approve us-31 ip2”, 2026-10-29. Execution order is unchanged.
+
+## Subsequent US-33 planning
+
+The remaining distribution scope is now drafted in the [US-33 plan](milestone-0-us-33.md) and [US-33 execution index](milestone-0-us-33-execution-order.md). That extension preserves all historical approvals above. Developer message “i approve the plan”, 2026-10-29, approves its plan and public boundaries; execution authorization remains separate.
