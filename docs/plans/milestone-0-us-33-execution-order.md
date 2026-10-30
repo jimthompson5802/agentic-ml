@@ -2,7 +2,7 @@
 
 Target: [US-33 / #3](https://github.com/jimthompson5802/agentic-ml/issues/3), full Milestone 0 package verification. Owning [US-33 plan](milestone-0-us-33.md) controls tasks, evidence and gates. This index reuses accepted prerequisites; it introduces no tasks owned by another story.
 
-**Plan-review decision:** Approved — developer message “i approve the plan”, 2026-10-29, covers SC-02, IP2–IP3, technical choices and public test boundaries. IP2 execution authorized by developer message “execute plan for us-33 ip2”, 2026-10-29; IP2 technical tasks complete; gate approved by developer message “i approve us-33 ip2; commit changes”, 2026-10-29. IP3 execution authorization remains separate. Prior US-31, US-32 and US-33 IP1 approvals remain valid. Plan approval does not approve any implementation gate or publication.
+**Plan-review decision:** Approved — developer message “i approve the plan”, 2026-10-29, covers SC-02, IP2–IP3, technical choices and public test boundaries. IP2 execution authorized by developer message “execute plan for us-33 ip2”, 2026-10-29; IP2 technical tasks complete; gate approved by developer message “i approve us-33 ip2; commit changes”, 2026-10-29. IP3 execution authorized by developer message “execute plan for us-33 ip3”, 2026-10-29. T1 complete and T2 local checks passed; separate hosted publication authorization pending. Prior US-31, US-32 and US-33 IP1 approvals remain valid. Plan approval does not approve any implementation gate or publication.
 
 | Order | Owning implementation phase | Prerequisite capabilities / supplying tasks | Required evidence and approvals before progression |
 |---|---|---|---|
@@ -17,3 +17,5 @@ Shared integration check: run the documented development commands unchanged, the
 Historical coordination remains in the [US-31 index](milestone-0-execution-order.md) and [US-32 index](milestone-0-us-32-execution-order.md). Their completed gates are not reopened. SC-02 plans the remaining US-33 work previously excluded from those indexes.
 
 Stop at every implementation gate. Check owning evidence before dependent work. Use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md) for scope changes, updating owning plans/index together. No Milestone 1 or Milestone 99 work is authorized.
+
+Publication authorized by developer message “I approve the next steps”, 2026-10-29: commit/push implementation PR and disposable hosted failure/correction cases, restore source and close disposable PR without merge. Final gate and merge remain unapproved.

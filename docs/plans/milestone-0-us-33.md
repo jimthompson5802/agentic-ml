@@ -36,7 +36,7 @@ Record evidence in proposed `docs/verification/` Markdown reports; keep temporar
 
 ## Plan review
 
-- **Current revision:** Approved — full-story extension SC-02, IP2–IP3, technical choices and public test boundaries approved by developer message “i approve the plan”, 2026-10-29. Historical IP1 approval remains valid. IP2 execution authorized 2026-10-29; technical tasks complete and IP2 approved 2026-10-29. IP3 remains unstarted.
+- **Current revision:** Approved — full-story extension SC-02, IP2–IP3, technical choices and public test boundaries approved by developer message “i approve the plan”, 2026-10-29. Historical IP1 approval remains valid. IP2 execution authorized 2026-10-29; technical tasks complete and IP2 approved 2026-10-29. IP3 execution authorized by developer message “execute plan for us-33 ip3”, 2026-10-29; T1 complete, T2 local checks passed, hosted work awaits separate publication authorization.
 - **Status:** Approved for the full plan; original IP1 decisions below remain historical.
 - **Developer decision:** Approved — coordinated scope, proposed tooling choices, and public test boundaries.
 - **Decision reference and date:** Developer message “i approve the plan” in this conversation, 2026-10-29. US-33 IP1 progression authorized by developer message “i approve” at the US-31 IP1 gate, 2026-10-29. US-33 IP1 gate subsequently approved as recorded below.
@@ -102,7 +102,7 @@ Inspected `pyproject.toml`, `uv.lock`, existing source, three subprocess tests, 
 - **Plan revisions:** This plan, new US-33 execution index, historical index cross-link and checkpoint. Authoritative requirements need no revision.
 - **Verification and gates:** Plan review confirms the public boundaries below; IP2 and IP3 each have a separate pending implementation gate. All new checks are planned, not executed.
 - **Decision:** Approved — developer message “i approve the plan”, 2026-10-29, approves SC-02, IP2–IP3, technical choices, public test boundaries and coordinated execution index. No implementation gate approval or publication authorization is implied.
-- **Resume point:** IP2 execution authorized by developer message “execute plan for us-33 ip2”, 2026-10-29. IP2 tasks complete and approved 2026-10-29; await IP3 execution authorization.
+- **Resume point:** IP2 execution authorized by developer message “execute plan for us-33 ip2”, 2026-10-29. IP2 tasks complete and approved 2026-10-29; IP3 execution authorized 2026-10-29; hosted publication authorization pending.
 
 ## Remaining dependencies and technical approach
 
@@ -182,8 +182,8 @@ The probe checks CLI exit zero, stdout equal to installed metadata version and a
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-33-IP3-T1 | Not started | Extend `.github/workflows/ci.yml` with named build and isolated verification steps using IP2 documented commands; keep shared development commands, clean setup, pinned tools/actions and final always-run lock comparison. Update `docs/development.md` diagnostic instructions. | IP2 gate; US-32 approved | Existing PR/main triggers cover package checks; independent diagnostics remain inspectable and original failure exit is preserved. Validate workflow with actionlint and inspect command parity. | AC-01–05,07 |
-| US-33-IP3-T2 | Not started | Run shared checks and artifact verification locally; when publication is authorized, publish reviewed revision for hosted PR checks. Record actual OS/image/Python/uv, both artifact paths and immutable revision/run URLs in proposed `docs/verification/us-33-ip3.md`. | T1; hosted access/publication authorization | Passing hosted build and both isolated wheel results on Ubuntu/Python 3.12, with logs accessible from PR. No local-only CI claims. | AC-01–07 |
+| US-33-IP3-T1 | Complete | Extend `.github/workflows/ci.yml` with named build and isolated verification steps using IP2 documented commands; keep shared development commands, clean setup, pinned tools/actions and final always-run lock comparison. Update `docs/development.md` diagnostic instructions. | IP2 gate; US-32 approved | Existing PR/main triggers cover package checks; independent diagnostics remain inspectable and original failure exit is preserved. Validate workflow with actionlint and inspect command parity. | AC-01–05,07 |
+| US-33-IP3-T2 | In progress | Run shared checks and artifact verification locally; when publication is authorized, publish reviewed revision for hosted PR checks. Record actual OS/image/Python/uv, both artifact paths and immutable revision/run URLs in proposed `docs/verification/us-33-ip3.md`. | T1; hosted access/publication authorization | Passing hosted build and both isolated wheel results on Ubuntu/Python 3.12, with logs accessible from PR. No local-only CI claims. | AC-01–07 |
 | US-33-IP3-T3 | Not started | On an authorized disposable branch/PR, demonstrate package build failure and an installed resource mismatch failure separately, then restore exact reviewed source and obtain passing reruns. Preserve stage/job conclusions and logs; close disposable work without merging defects when authorized. | T2; explicit publication authorization | Both failures reach intended stages, fail CI and expose diagnostics; each correction passes. No defect enters production or assertions are weakened. | AC-03,05 |
 | US-33-IP3-T4 | Not started | Reconcile all seven criteria, source smoke and macOS/Linux evidence in this plan, proposed IP3 report, `docs/development.md`, index and `CHECKPOINTS.md`; run final required checks after corrections. | T3 | Every criterion has actual evidence, no fabricated platform coverage or pending failed checks; final gate review can explicitly accept US-33. Default-branch package run recorded only after separately authorized merge; if not yet available disclose it as follow-up evidence. | AC-01–07 |
 
@@ -191,7 +191,7 @@ The probe checks CLI exit zero, stdout equal to installed metadata version and a
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Workflow validity and parity | `actionlint .github/workflows/ci.yml` when available; inspect documented commands vs workflow | Valid workflow; same build/probe commands; package failure fails job; lock check still runs | Pending |
+| Workflow validity and parity | `actionlint .github/workflows/ci.yml` when available; inspect documented commands vs workflow | Valid workflow; same build/probe commands; package failure fails job; lock check still runs | Passed actionlint 1.7.12 and command/control-flow inspection; [IP3 evidence](../verification/us-33-ip3.md). Hosted failure propagation pending T3. |
 | Hosted successful artifacts | PR Actions run, build and verification step logs, actual revision and both wheel checksums | Python 3.12/Linux success for both wheel paths; source smoke retained | Pending; proposed `docs/verification/us-33-ip3.md` |
 | Hosted negative cases | Disposable build defect and resource mismatch, followed separately by exact restoration/passing reruns | Intended failure reason, nonzero job result and accessible diagnostics for each | Pending |
 | Final regression | IP2 shared commands, both artifact paths, lock SHA/diff and `git diff --check` | All pass; production source restored; no lock mutation | Pending |
@@ -238,3 +238,14 @@ T3: Public driver success test first failed because driver did not exist; implem
 T4: Missing-template subprocess test initially failed for absent human-readable resource diagnostic; added explicit installed resource existence assertion and 2 tests passed. Altered guidance and wrong CLI version wheels then failed at their intended installed assertions while the original artifact success test passed after each slice (3 then 4 tests). Empty directory diagnostic test initially failed with IndexError; added exact artifact-count validation, 5 tests passed. Added wheel/sdist ambiguity cases; 7 tests passed. Independently mutated wheels have recomputed RECORD hashes; no production defects or weakened assertions. Driver retains each subprocess stdout/stderr in stage logs under its printed workspace. No failed corrective attempt: each minimal correction passed its original failure.
 
 T5: Contributor documentation and README link added. Fresh artifacts and both installed paths passed; 11 tests, lint, formatting, mypy, locked sync/check, version smoke and lock checksum/diff passed. See [IP2 report](../verification/us-33-ip2.md) for hashes, versions, commands, TDD/failure evidence and limitations. All technical tasks complete; developer approval recorded 2026-10-29.
+
+
+### IP3 execution record
+
+Developer message “execute plan for us-33 ip3”, 2026-10-29, authorizes IP3 execution. Complete issue #3 body and all comment pages refreshed with stable metadata: open, one unique comment 6510671946, updated_at 2026-10-29T23:10:06Z, milestone metadata unset/body Milestone 0. SC-01 still governs CLI spelling. IP2 and accepted prerequisite evidence checked; working tree initially clean.
+
+T1 complete: named build and installed-verification steps use documented commands verbatim; verification depends on successful build, independent development checks remain runnable, original exit codes propagate and final lock comparison remains always-run. Documentation explains step logs and temporary-workspace lifetime. actionlint 1.7.12 and manual command parity passed.
+
+T2 partial: all shared commands and both installed paths passed locally on macOS; [report](../verification/us-33-ip3.md). Hosted publication requires explicit authorization under T2/T3 and the execution index; no commit, push, PR, failure fixture or merge performed. T3 and T4 remain incomplete. This is a publication checkpoint, not technical completion or final implementation gate approval.
+
+Publication authorized by developer message “I approve the next steps”, 2026-10-29: commit/push implementation PR and disposable hosted failure/correction cases, restore source and close disposable PR without merge. Final gate and merge remain unapproved.
