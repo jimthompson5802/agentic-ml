@@ -30,4 +30,4 @@ No implementation gate, story acceptance, merge or default-branch verification r
 - At each update, refresh the date, current position, progress summary, next action, pending decisions, and material working-tree or verification notes. Include failed checks, blockers, and relevant evidence links when present.
 - Commit checkpoint updates alongside the work they describe when practical. Keep credentials and sensitive environment details outside this file.
 
-Post-merge documentation only; `git diff --check` passed. No executable behavior changed, so TDD/runtime checks do not apply. Main push verification of the squash commit is linked above.
+Latest maintenance: updated the PR review skill's required feedback prefix to `**Coding Agent Review**: ` throughout its instructions and examples. Developer request “commit changes” authorizes this local commit; no push requested. `git diff --check` passed. No executable behavior changed, so TDD/runtime checks do not apply. Main push verification of the squash commit is linked above.
