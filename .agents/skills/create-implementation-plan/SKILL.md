@@ -17,6 +17,22 @@ Read the applicable agent instructions and relevant repository documents. Follow
 
 Use the repository's plan structure, save location, identifiers, and progress format. Use the defaults below only when the repository has no convention for that item.
 
+## Prepare the planning branch
+
+Before analyzing requirements or writing the plan, check the current Git branch.
+
+If the branch is `main`, identify the target user story from the planning request. Resolve its identifier before creating the branch. Read enough source metadata to identify the story when necessary.
+
+Create and switch to `US-<story-number>-<short-slug>`, for example `US-34-experiment-init`. Use the target story's number and a short, lowercase, hyphen-separated slug describing its scope. For coordinated planning across prerequisite stories, use the target story's identifier.
+
+Verify that the branch switch succeeded before continuing requirements analysis or plan writing.
+
+If already on another named branch, continue there.
+
+If HEAD is detached, the proposed branch already exists, or branch creation fails, report the condition and request developer direction before continuing. Preserve existing working-tree changes.
+
+Creating the local planning branch is part of this workflow. Publishing it requires separate authorization. Report the selected branch when delivering the plan.
+
 ## Read the source requirements
 
 Accept any of these sources:

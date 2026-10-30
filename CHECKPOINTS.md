@@ -12,7 +12,7 @@ Review [US-33 plan](docs/plans/milestone-0-us-33.md), [execution index](docs/pla
 
 ## Pending developer decisions
 
-No implementation gate, story acceptance, merge or default-branch verification remains pending for US-33. [Main push run 40995999688](https://github.com/jimthompson5802/agentic-ml/actions/runs/40995999688) passed at the squash commit. Next milestone implementation awaits separate direction. Developer request “commit changes and push” authorizes publication of this documentation follow-up on main.
+No implementation gate, story acceptance, merge or default-branch verification remains pending for US-33. [Main push run 40995999688](https://github.com/jimthompson5802/agentic-ml/actions/runs/40995999688) passed at the squash commit. Next milestone implementation awaits separate direction. The planning-skill revision below is complete. Developer request “commit” authorizes its local commit on main; no push requested.
 
 ## Handoff notes
 
@@ -30,4 +30,6 @@ No implementation gate, story acceptance, merge or default-branch verification r
 - At each update, refresh the date, current position, progress summary, next action, pending decisions, and material working-tree or verification notes. Include failed checks, blockers, and relevant evidence links when present.
 - Commit checkpoint updates alongside the work they describe when practical. Keep credentials and sensitive environment details outside this file.
 
-Latest maintenance: updated the PR review skill's required feedback prefix to `**Coding Agent Review**: ` throughout its instructions and examples. Developer request “commit changes” authorizes this local commit; no push requested. `git diff --check` passed. No executable behavior changed, so TDD/runtime checks do not apply. Main push verification of the squash commit is linked above.
+Latest maintenance (2026-10-29): developer approved the complete planning-branch proposal with “i accept the change.” Added the approved section to `.agents/skills/create-implementation-plan/SKILL.md`: create `US-<story-number>-<short-slug>` from main before planning, retain other named branches, and stop for detached HEAD, collisions, or creation failures. Editing the skill does not invoke its planning workflow; the checkout remains on main. Only the skill and this checkpoint changed. Developer request “commit” authorizes committing both files on main; no push requested.
+
+Verification: temporary-repository Git scenario checks passed for branch creation/switch, existing named branch continuation, collision/invalid-name failures, detached HEAD detection, and preservation of untracked content. Stop/report instructions reviewed manually; these checks verify Git mechanics rather than autonomous agent compliance. Initial fixture setup failed because global commit signing required unavailable GPG access; retry passed with signing disabled only for the disposable fixture commit. `quick_validate.py` could not run under either system or project Python because PyYAML is missing; no dependencies or lockfile changed. `git diff --check` passed. Documentation-only change; TDD and harness runtime checks do not apply. Remaining limitation: skill validator not run successfully.
