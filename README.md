@@ -6,6 +6,8 @@ The proposed harness provides reusable orchestration, experiment execution, inde
 
 **This project is in its early days.** The repository currently contains a proposed design rather than a working implementation. Its design, interfaces, directory structure, and documentation will change as development progresses.
 
+For a separate experiment project, follow the [pinned installation guide](docs/experiment-setup.md). The minimal package is available; experiment initialization and execution are planned downstream.
+
 ## Contributor setup
 
 Start with the [development guide](docs/development.md) for Python 3.12, uv, locked dependencies, coding conventions, and local checks. Development tooling, the minimal package, and `agentic-ml --version` are available. Fresh-checkout macOS verification passed; see the [evidence](docs/verification/us-31-ip2.md). The [development CI workflow](.github/workflows/ci.yml) is configured for Linux/Python 3.12; the [first hosted PR run passed](docs/verification/us-32-ip2.md). Failure/correction cases are verified; the [default-branch push run passed](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975472618). See [CI checks and logs](docs/development.md#development-ci-and-diagnostic-logs).
