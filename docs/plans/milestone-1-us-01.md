@@ -136,15 +136,15 @@ Store raw logs, environments and generated projects outside Git in isolated temp
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-01-AC-01 — documented prerequisites, separate project and full-SHA GitHub install | IP1-T1,T2,T4; IP2-T2,T3 | Bootstrap transcript and reviewed guide in proposed IP1/IP2 reports | Verified by [IP1](../verification/us-01-ip1.md) and renewed in [IP2](../verification/us-01-ip2.md); IP1 and IP2 approved; story acceptance pending |
-| US-01-AC-02 — normal installed dependency without maintained checkout/cache | IP1-T3,T4; IP2-T2 | Noneditable metadata, isolated import paths and cache-removed runtime probes | Verified by [IP1](../verification/us-01-ip1.md) and renewed in [IP2](../verification/us-01-ip2.md); IP1 and IP2 approved; story acceptance pending |
-| US-01-AC-03 — resolved revision/dependencies locked; CLI/import/resources available | IP1-T2–T4; IP2-T1–T3 | Independently checked declaration, parsed lock, installed metadata and resource/CLI results | Verified by [IP1](../verification/us-01-ip1.md) and renewed in [IP2](../verification/us-01-ip2.md); IP1 and IP2 approved; story acceptance pending |
-| US-01-AC-04 — explicit upgrade changes pin, lockfile and environment identity | IP1-T1; IP2-T1–T3 | [IP2 report](../verification/us-01-ip2.md): A/B metadata, exact lock hashes/diff, stable-sync control and upgraded installed probes | Verified; IP2 approved, story acceptance pending |
+| US-01-AC-01 — documented prerequisites, separate project and full-SHA GitHub install | IP1-T1,T2,T4; IP2-T2,T3 | Bootstrap transcript and reviewed guide in proposed IP1/IP2 reports | Verified by [IP1](../verification/us-01-ip1.md) and renewed in [IP2](../verification/us-01-ip2.md); IP1 and IP2 approved; story accepted 2026-10-30 |
+| US-01-AC-02 — normal installed dependency without maintained checkout/cache | IP1-T3,T4; IP2-T2 | Noneditable metadata, isolated import paths and cache-removed runtime probes | Verified by [IP1](../verification/us-01-ip1.md) and renewed in [IP2](../verification/us-01-ip2.md); IP1 and IP2 approved; story accepted 2026-10-30 |
+| US-01-AC-03 — resolved revision/dependencies locked; CLI/import/resources available | IP1-T2–T4; IP2-T1–T3 | Independently checked declaration, parsed lock, installed metadata and resource/CLI results | Verified by [IP1](../verification/us-01-ip1.md) and renewed in [IP2](../verification/us-01-ip2.md); IP1 and IP2 approved; story accepted 2026-10-30 |
+| US-01-AC-04 — explicit upgrade changes pin, lockfile and environment identity | IP1-T1; IP2-T1–T3 | [IP2 report](../verification/us-01-ip2.md): A/B metadata, exact lock hashes/diff, stable-sync control and upgraded installed probes | Verified; IP2 approved, story accepted 2026-10-30 |
 
-- **Remaining work:** IP1 approved; IP2 T1–T3 technically complete and all four criteria verified on macOS/Python 3.12. Both implementation gates approved; explicit story acceptance pending. No US-01 criteria deferred.
+- **Remaining work:** None for US-01 implementation or acceptance. All four criteria verified on macOS/Python 3.12; both implementation gates approved and story accepted 2026-10-30. Publication/merge remain separate.
 - **Partial prerequisite delivery:** Accepted US-33 foundation reused; no prerequisite story reopened. US-02 remains downstream.
-- **Developer acceptance:** Pending; final gate serves as story acceptance only if explicitly stated.
-- **Decision reference and date:** Pending.
+- **Developer acceptance:** Accepted — developer message “i approve us-01”.
+- **Decision reference and date:** Developer message “i approve us-01”, 2026-10-30.
 
 ## IP1 execution record — 2026-10-30
 
@@ -157,3 +157,7 @@ IP1 gate approved 2026-10-30 by developer message “i approve us-01 ip1; commit
 IP1 committed as `60941af` after the explicit approval/commit request. Complete issue #8 body/all comments refreshed, stable zero-comment metadata `2026-10-30T02:06:17Z`; no new scope decisions. IP2 T1–T3 complete with [evidence](../verification/us-01-ip2.md): two red–green slices, retained-old-install regression, actual GitHub A→B upgrade in one experiment, unchanged locked-sync control, preserved A evidence, changed B pin/lock/identity and post-upgrade cache-independent installed interfaces. All 23 tests, lint, format, strict types, locked sync/check and smoke passed; harness lock unchanged. Local documentation targets and diff whitespace verified. No scope deviation, dependency change, suppression or unresolved failure. IP2 changes remain uncommitted for gate review; no push/publication. Final gate and story acceptance pending; stop here.
 
 IP2 gate approved by developer message “i approve ip2; commit the changes”, 2026-10-30. Local commit authorized. This approves the implementation phase; explicit story acceptance remains pending under the separate completion-review field. No push or next-story execution authorized.
+
+## Story acceptance — 2026-10-30
+
+Developer message “i approve us-01” explicitly accepts US-01. All four acceptance criteria verified; both implementation gates approved. IP1 commit `60941af`, IP2 commit `2bb46cc`. Earlier pending/uncommitted statements are historical. Acceptance authorizes no push, PR, merge or next-story implementation.
