@@ -1,5 +1,7 @@
 # Milestone 0 / US-33: Build and verify the harness package
 
+Post-merge record (2026-10-29 local / 2026-10-30 UTC): developer request “squash merge pr #24” authorized merging. PR #24 squash merged as `018e9d4bb26e121c7f9274d11e0de560b7514b95`. [Main push CI 40995999688](https://github.com/jimthompson5802/agentic-ml/actions/runs/40995999688) passed all development, build, isolated distribution verification and lock checks. This completes the default-branch follow-up referenced below; earlier pending-merge statements are historical.
+
 ## Scope and outcome
 
 - **Milestone:** 0 — Establish the harness development foundation.
