@@ -70,7 +70,9 @@ jobs:
       - name: Build wheel and source distribution
         id: build
         if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
-        run: uv build --out-dir dist
+        run: |
+          sed -i 's/hatchling.build/us33_missing_backend/' pyproject.toml
+          uv build --out-dir dist
       - name: Verify isolated installed distributions
         if: ${{ !cancelled() && steps.sync.outcome == 'success' && steps.build.outcome == 'success' }}
         run: uv run --locked python tests/packaging/verify_distributions.py --artifacts-dir dist
