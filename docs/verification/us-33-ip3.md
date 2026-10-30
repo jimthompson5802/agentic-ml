@@ -1,6 +1,6 @@
 # US-33 IP3 verification
 
-Status: T1–T4 technically complete, 2026-10-29 local date (hosted runs 2026-10-30 UTC). Final IP3 gate and explicit US-33 acceptance pending.
+Status: T1–T4 technically complete, 2026-10-29 local date (hosted runs 2026-10-30 UTC). IP3 gate approved by developer message “i approve ip3”, 2026-10-29. US-33 accepted by developer message “I accept the us-33”, 2026-10-29.
 
 Issue #3 complete body and all comments retrieved and rechecked: open, one unique comment (6510671946), unchanged update time 2026-10-29T23:10:06Z. Milestone 0 is stated in its body. Approved SC-01 governs `agentic-ml` spelling.
 
@@ -35,7 +35,7 @@ All seven acceptance criteria have local and hosted evidence as mapped below. Ex
 
 No product/helper behavior changed in IP3; existing IP2 TDD boundaries/regressions were reused. The hosted workflow failure cases below verify CI behavior, without new tests that mirror YAML structure. No assertions weakened or suppressions added. Initial sandbox API/cache/Git index failures succeeded through escalation. Escalated authentication succeeded via keyring and authorized writes worked. No unresolved implementation failure or scope deviation.
 
-Publication authorized by developer message “I approve the next steps”, 2026-10-29: commit/push implementation PR and disposable hosted failure/correction cases, restore source and close disposable PR without merge. Final gate and merge remain unapproved.
+Publication authorized by developer message “I approve the next steps”, 2026-10-29: commit/push implementation PR and disposable hosted failure/correction cases, restore source and close disposable PR without merge. IP3 approved and US-33 accepted; merge remains unapproved.
 
 ## Hosted execution
 
@@ -68,3 +68,5 @@ After exact restoration, all documented shared commands passed again: 11 tests (
 | AC-07 | Both installed versions and source smoke pass in baseline/corrections and renewed local checks |
 
 No criterion is deferred. Technical verification does not record developer approval or story acceptance. Registry publication, usable initialization/guidance loading and later milestones remain excluded.
+
+Developer acceptance: “I accept the us-33”, 2026-10-29. All seven criteria accepted; no later milestone or merge authorized. Final evidence revision 7e26ea5 passed [hosted run 40994999706](https://github.com/jimthompson5802/agentic-ml/actions/runs/40994999706). This approval/acceptance update changes documentation only.

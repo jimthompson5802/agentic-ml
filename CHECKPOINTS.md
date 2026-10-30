@@ -4,7 +4,7 @@ Last updated: 2026-10-29 (hosted evidence 2026-10-30 UTC)
 
 ## Current position
 
-Milestone 0. US-31/US-32 complete and accepted. US-33 IP1/IP2 approved; IP3 T1–T4 technically complete. Final IP3 developer gate and explicit US-33 acceptance pending. Publication authorized by “I approve the next steps”; no merge authorized.
+Milestone 0 development work complete and accepted: US-31, US-32 and US-33. US-33 IP1/IP2 approved; IP3 T1–T4 technically complete. IP3 approved by developer message “i approve ip3”, 2026-10-29; US-33 accepted by developer message “I accept the us-33”, 2026-10-29. Publication authorized by “I approve the next steps”; no merge authorized.
 
 ## Resume here
 
@@ -12,7 +12,7 @@ Review [US-33 plan](docs/plans/milestone-0-us-33.md), [execution index](docs/pla
 
 ## Pending developer decisions
 
-Final IP3 approval and explicit US-33 acceptance. Stop at this gate under the owning plan and execute-plan skill. Merge remains separate; default-branch package run is post-merge follow-up. No required technical task or failed correction remains.
+No implementation gate or story acceptance remains pending. US-33 accepted by “I accept the us-33”, 2026-10-29; see the owning plan. Merge remains separate; default-branch package run is post-merge follow-up. No required technical task or failed correction remains.
 
 ## Handoff notes
 
@@ -30,4 +30,8 @@ Final IP3 approval and explicit US-33 acceptance. Stop at this gate under the ow
 - At each update, refresh the date, current position, progress summary, next action, pending decisions, and material working-tree or verification notes. Include failed checks, blockers, and relevant evidence links when present.
 - Commit checkpoint updates alongside the work they describe when practical. Keep credentials and sensitive environment details outside this file.
 
-Publication authorized by developer message “I approve the next steps”, 2026-10-29: commit/push implementation PR and disposable hosted failure/correction cases, restore source and close disposable PR without merge. Final gate and merge remain unapproved.
+Publication authorized by developer message “I approve the next steps”, 2026-10-29: commit/push implementation PR and disposable hosted failure/correction cases, restore source and close disposable PR without merge. IP3 gate approved; US-33 accepted; merge pending.
+
+Approval record changes documentation only; `git diff --check` passed. No executable behavior changed, so TDD/runtime checks do not apply.
+
+Acceptance recording includes the previously uncommitted IP3 approval records. Documentation only; git diff --check passed. Commit/push covered by existing publication authorization; merge remains separate.

@@ -38,4 +38,4 @@ Each implementation phase specifies its tasks, required review evidence, and app
 
 The installation commands and repository layouts in the design document describe the intended implementation; they are not yet a runnable setup guide.
 
-Build and check distributable packages using the [distribution verification commands](docs/development.md#distribution-builds-and-installed-verification). Both wheel paths pass locally on macOS and in hosted Linux/Python 3.12 CI, including verified build/resource failure diagnostics; see [US-33 evidence](docs/verification/us-33-ip3.md). Final developer acceptance remains pending.
+Build and check distributable packages using the [distribution verification commands](docs/development.md#distribution-builds-and-installed-verification). Both wheel paths pass locally on macOS and in hosted Linux/Python 3.12 CI, including verified build/resource failure diagnostics; see [US-33 evidence](docs/verification/us-33-ip3.md). US-33 is complete and developer-accepted.
