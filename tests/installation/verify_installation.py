@@ -1,6 +1,7 @@
 """Verify full-SHA Git installation in a disposable separate experiment project."""
 
 import argparse
+import json
 import os
 import re
 import shutil
@@ -33,9 +34,17 @@ def main() -> None:
     parser.add_argument("--repository", required=True)
     parser.add_argument("--revision", required=True)
     parser.add_argument("--workspace", type=Path)
+    parser.add_argument("--upgrade-revision")
     args = parser.parse_args()
     if not re.fullmatch(r"[0-9a-f]{40}", args.revision):
         parser.error("revision must be a full lowercase 40-character commit SHA")
+    if args.upgrade_revision is not None:
+        if not re.fullmatch(r"[0-9a-f]{40}", args.upgrade_revision):
+            parser.error(
+                "upgrade revision must be a full lowercase 40-character commit SHA"
+            )
+        if args.upgrade_revision == args.revision:
+            parser.error("upgrade revision must differ from the initial revision")
     if args.workspace is None:
         workspace = Path(tempfile.mkdtemp(prefix="agentic-ml-installation-")).resolve()
     else:
@@ -73,29 +82,38 @@ def main() -> None:
             project,
             env,
         )
+        probe_command = [
+            str(project / ".venv/bin/python"),
+            "-I",
+            str(probe),
+            "--project",
+            str(project),
+            "--repository",
+            args.repository,
+            "--revision",
+            args.revision,
+            "--checkout",
+            str(CHECKOUT),
+        ]
+        stage = "before-sync-probe"
+        before = run(stage, probe_command, project, env)
+        (workspace / "identity-before-sync.json").write_text(before)
+        declaration = (project / "pyproject.toml").read_bytes()
+        lock = (project / "uv.lock").read_bytes()
+        (workspace / "pyproject-before-sync.toml").write_bytes(declaration)
+        (workspace / "uv-before-sync.lock").write_bytes(lock)
         stage = "locked-sync"
         run(stage, ["uv", "sync", "--locked"], project, env)
+        assert (project / "uv.lock").read_bytes() == lock, "locked sync changed lock"
+        assert (project / "pyproject.toml").read_bytes() == declaration, (
+            "locked sync changed declaration"
+        )
         # This cache was created only inside this newly allocated workspace.
         shutil.rmtree(cache)
         stage = "installed-probe"
-        output = run(
-            stage,
-            [
-                str(project / ".venv/bin/python"),
-                "-I",
-                str(probe),
-                "--project",
-                str(project),
-                "--repository",
-                args.repository,
-                "--revision",
-                args.revision,
-                "--checkout",
-                str(CHECKOUT),
-            ],
-            project,
-            env,
-        )
+        output = run(stage, probe_command, project, env)
+        assert output == before, "locked sync changed environment identity"
+        print("PASS stable synchronization", flush=True)
         (workspace / "identity.json").write_text(output)
         stage = "offline-cli"
         run(
@@ -109,7 +127,51 @@ def main() -> None:
             shutil.rmtree(cache)
         print(output, end="")
         print("PASS pinned installation", flush=True)
-    except (OSError, RuntimeError) as error:
+        if args.upgrade_revision is not None:
+            stage = "explicit-upgrade"
+            run(
+                stage,
+                [
+                    "uv",
+                    "add",
+                    "git+" + args.repository,
+                    "--rev",
+                    args.upgrade_revision,
+                ],
+                project,
+                env,
+            )
+            stage = "upgrade-locked-sync"
+            run(stage, ["uv", "sync", "--locked"], project, env)
+            assert (project / "uv.lock").read_bytes() != lock, (
+                "upgrade did not change lock"
+            )
+            assert (project / "pyproject.toml").read_bytes() != declaration, (
+                "upgrade did not change declaration"
+            )
+            shutil.rmtree(cache)
+            upgrade_probe = [
+                args.upgrade_revision if value == args.revision else value
+                for value in probe_command
+            ]
+            stage = "upgrade-installed-probe"
+            upgraded = run(stage, upgrade_probe, project, env)
+            assert (
+                json.loads(upgraded)["lock_sha256"] != json.loads(before)["lock_sha256"]
+            ), "upgrade did not change environment identity"
+            (workspace / "identity-after-upgrade.json").write_text(upgraded)
+            stage = "upgrade-offline-cli"
+            run(
+                stage,
+                ["uv", "run", "--no-sync", "--offline", "agentic-ml", "--version"],
+                project,
+                env,
+            )
+            if cache.exists():
+                shutil.rmtree(cache)
+            print(upgraded, end="")
+            print("PASS explicit upgrade", flush=True)
+    except (OSError, RuntimeError, AssertionError) as error:
         print(f"FAIL {stage}: {error}; diagnostics={workspace}", file=sys.stderr)
         raise SystemExit(1) from error
 

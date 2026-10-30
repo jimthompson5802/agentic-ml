@@ -26,8 +26,8 @@ Design examples still contain placeholders and future init commands; the plan us
 |---|---|---|---|
 | Accepted package foundation | US-33 IP1 minimal CLI/resources, IP2 both wheel paths, IP3 hosted verification and gates approved | All tasks | [US-33 owning plan](milestone-0-us-33.md), [IP3 evidence](../verification/us-33-ip3.md); accepted and merged as `018e9d4bb26e121c7f9274d11e0de560b7514b95` |
 | Installation source and names | `https://github.com/jimthompson5802/agentic-ml.git`; distribution/CLI `agentic-ml`, import `agentic_ml` | Bootstrap and assertions | Existing metadata and accepted naming; no registry or editable installation |
-| Two published revisions | Select two distinct GitHub-reachable full 40-character commits containing the CLI/resources, record both independently before tests | Upgrade demonstration | Verified published A: `018e9d4bb26e121c7f9274d11e0de560b7514b95`; B: `aead26e9c758878107ad72f230f9e607a9a7ecfa`. Both package versions 0.1.0; actual upgrade remains IP2. [IP1 investigation](../verification/us-01-ip1.md#t1-toolsource-investigation) |
-| Environment identity | Record repository URL, requested/resolved full SHA, installed distribution version, SHA-256 of exact project `uv.lock`, Python implementation/version/platform | AC-03/04 verification | Proposed evidence contract for review. Compare revision and lock hash, not package version alone; this is installation evidence, not a new public run-manifest schema or CLI/API |
+| Two published revisions | Select two distinct GitHub-reachable full 40-character commits containing the CLI/resources, record both independently before tests | Upgrade demonstration | Verified published A: `018e9d4bb26e121c7f9274d11e0de560b7514b95`; B: `aead26e9c758878107ad72f230f9e607a9a7ecfa`. Both package versions 0.1.0; actual upgrade verified in [IP2 evidence](../verification/us-01-ip2.md). [IP1 investigation](../verification/us-01-ip1.md#t1-toolsource-investigation) |
+| Environment identity | Record repository URL, requested/resolved full SHA, installed distribution version, SHA-256 of exact project `uv.lock`, Python implementation/version/platform | AC-03/04 verification | Evidence contract approved in plan review and verified in IP1/IP2. Compare revision and lock hash, not package version alone; this is installation evidence, not a new public run-manifest schema or CLI/API |
 | Tool and platform baseline | Python 3.12, Git, uv; record actual versions and network/auth requirements | Real GitHub acceptance checks | macOS initial verification; existing Linux CI is prerequisite evidence only. Windows/additional Python versions unverified |
 | Bootstrap/upgrade syntax | Validate against installed uv help and official documentation before writing runnable commands | IP1 documentation, IP2 upgrade | Verified bootstrap uses `uv init --no-package --python 3.12`, `uv add "git+https://github.com/jimthompson5802/agentic-ml.git" --rev FULL_SHA`, `uv sync --locked`, `uv run --locked agentic-ml --version`; do not silently relax locked checks; [IP1 evidence](../verification/us-01-ip1.md) |
 
@@ -109,39 +109,39 @@ Store raw logs, environments and generated projects outside Git in isolated temp
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-01-IP2-T1 | Not started | Extend proposed driver/probe and focused subprocess tests for stable synchronization and explicit A→B upgrade, one red–green slice at a time | IP1 gate | No-op locked sync preserves identity; explicit upgrade changes declaration, resolved/installed commit, lock hash and evidence tuple; wrong retained revision fails verification even if version strings match | AC-03–04 |
-| US-01-IP2-T2 | Not started | Extend `docs/experiment-setup.md` with verified upgrade, review and commit instructions; perform actual GitHub A→B in same disposable project; write `docs/verification/us-01-ip2.md` | T1 | Before/after pins, lock hashes/diff and installed metadata show change; post-upgrade CLI/import/resources and cache-independent operation pass; explain identity versus package version and preserve original A evidence | AC-01–04 |
-| US-01-IP2-T3 | Not started | Run shared checks, inspect links/diff, reconcile AC table, update checkpoint and completion record | T2 | Gate report includes commands, versions, actual results, TDD evidence where applicable and limitations; harness lock unchanged; no claim of story acceptance before developer decision | AC-01–04 |
+| US-01-IP2-T1 | Complete | Extend proposed driver/probe and focused subprocess tests for stable synchronization and explicit A→B upgrade, one red–green slice at a time | IP1 gate | No-op locked sync preserves identity; explicit upgrade changes declaration, resolved/installed commit, lock hash and evidence tuple; wrong retained revision fails verification even if version strings match | AC-03–04 |
+| US-01-IP2-T2 | Complete | Extend `docs/experiment-setup.md` with verified upgrade, review and commit instructions; perform actual GitHub A→B in same disposable project; write `docs/verification/us-01-ip2.md` | T1 | Before/after pins, lock hashes/diff and installed metadata show change; post-upgrade CLI/import/resources and cache-independent operation pass; explain identity versus package version and preserve original A evidence | AC-01–04 |
+| US-01-IP2-T3 | Complete | Run shared checks, inspect links/diff, reconcile AC table, update checkpoint and completion record | T2 | Gate report includes commands, versions, actual results, TDD evidence where applicable and limitations; harness lock unchanged; no claim of story acceptance before developer decision | AC-01–04 |
 
 ### Verification and review evidence
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Stable identity | Locked synchronization without declaration change | Same resolved SHA and exact lock hash | Pending |
-| Explicit upgrade | Documented uv revision change and intentional experiment lock update, followed by locked sync | Different A/B, changed declaration/lock/environment evidence, correct installed B | Pending |
-| Upgrade regressions | Repeat isolated CLI/import/resource probes and disposable cache removal; focused verifier failure tests | Interfaces available; wrong revision rejected; no checkout/cache runtime reliance | Pending |
-| Final checks | Shared commands; existing packaging regressions; fresh both-wheel checks if distribution changed | Pass with criterion-mapped report and unchanged harness lock | Pending |
+| Stable identity | Locked synchronization without declaration change | Same resolved SHA and exact lock hash | Passed — [IP2 evidence](../verification/us-01-ip2.md) |
+| Explicit upgrade | Documented uv revision change and intentional experiment lock update, followed by locked sync | Different A/B, changed declaration/lock/environment evidence, correct installed B | Passed — [IP2 evidence](../verification/us-01-ip2.md) |
+| Upgrade regressions | Repeat isolated CLI/import/resource probes and disposable cache removal; focused verifier failure tests | Interfaces available; wrong revision rejected; no checkout/cache runtime reliance | Passed — [IP2 evidence](../verification/us-01-ip2.md) |
+| Final checks | Shared commands; existing packaging regressions; fresh both-wheel checks if distribution changed | Pass with criterion-mapped report and unchanged harness lock | Passed — [IP2 evidence](../verification/us-01-ip2.md) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete; all four criteria have actual installation/upgrade evidence; limitations explicitly reviewed.
-- **Evidence presented:** Pending — proposed `docs/verification/us-01-ip2.md` plus IP1 report.
+- **Evidence presented:** [IP2 evidence](../verification/us-01-ip2.md) and [approved IP1 evidence](../verification/us-01-ip1.md). T1–T3 complete; actual GitHub A→B upgrade and stable-sync control passed; 23 tests and all shared checks passed; harness lock unchanged.
 - **Remaining limitations or blocked work:** macOS/Python 3.12 verification scope; Windows/additional Python and any unrun Linux installation checks remain unverified. Initial installation requires network/GitHub access. Initialization and run provenance are downstream work.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer message “i approve ip2; commit the changes”, 2026-10-30.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Final story review only; stop for developer approval. US-02 requires separate planning/execution authorization.
+- **Progression authorized:** Final story review only; IP2 approved and local commit authorized. US-02 requires separate planning/execution authorization.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-01-AC-01 — documented prerequisites, separate project and full-SHA GitHub install | IP1-T1,T2,T4; IP2-T2,T3 | Bootstrap transcript and reviewed guide in proposed IP1/IP2 reports | Verified by [IP1 report](../verification/us-01-ip1.md); gate pending, upgrade renewal in IP2 |
-| US-01-AC-02 — normal installed dependency without maintained checkout/cache | IP1-T3,T4; IP2-T2 | Noneditable metadata, isolated import paths and cache-removed runtime probes | Verified by [IP1 report](../verification/us-01-ip1.md); gate pending, upgrade renewal in IP2 |
-| US-01-AC-03 — resolved revision/dependencies locked; CLI/import/resources available | IP1-T2–T4; IP2-T1–T3 | Independently checked declaration, parsed lock, installed metadata and resource/CLI results | Verified by [IP1 report](../verification/us-01-ip1.md); gate pending, upgrade renewal in IP2 |
-| US-01-AC-04 — explicit upgrade changes pin, lockfile and environment identity | IP1-T1; IP2-T1–T3 | A/B metadata, exact lock hashes/diff, stable-sync control and upgraded installed probes | Pending |
+| US-01-AC-01 — documented prerequisites, separate project and full-SHA GitHub install | IP1-T1,T2,T4; IP2-T2,T3 | Bootstrap transcript and reviewed guide in proposed IP1/IP2 reports | Verified by [IP1](../verification/us-01-ip1.md) and renewed in [IP2](../verification/us-01-ip2.md); IP1 and IP2 approved; story acceptance pending |
+| US-01-AC-02 — normal installed dependency without maintained checkout/cache | IP1-T3,T4; IP2-T2 | Noneditable metadata, isolated import paths and cache-removed runtime probes | Verified by [IP1](../verification/us-01-ip1.md) and renewed in [IP2](../verification/us-01-ip2.md); IP1 and IP2 approved; story acceptance pending |
+| US-01-AC-03 — resolved revision/dependencies locked; CLI/import/resources available | IP1-T2–T4; IP2-T1–T3 | Independently checked declaration, parsed lock, installed metadata and resource/CLI results | Verified by [IP1](../verification/us-01-ip1.md) and renewed in [IP2](../verification/us-01-ip2.md); IP1 and IP2 approved; story acceptance pending |
+| US-01-AC-04 — explicit upgrade changes pin, lockfile and environment identity | IP1-T1; IP2-T1–T3 | [IP2 report](../verification/us-01-ip2.md): A/B metadata, exact lock hashes/diff, stable-sync control and upgraded installed probes | Verified; IP2 approved, story acceptance pending |
 
-- **Remaining work:** IP1 technical tasks complete; IP1 developer gate pending. IP2 tasks and checks not started; AC-04 awaits explicit upgrade evidence. No US-01 criteria deferred.
+- **Remaining work:** IP1 approved; IP2 T1–T3 technically complete and all four criteria verified on macOS/Python 3.12. Both implementation gates approved; explicit story acceptance pending. No US-01 criteria deferred.
 - **Partial prerequisite delivery:** Accepted US-33 foundation reused; no prerequisite story reopened. US-02 remains downstream.
 - **Developer acceptance:** Pending; final gate serves as story acceptance only if explicitly stated.
 - **Decision reference and date:** Pending.
@@ -151,3 +151,9 @@ Store raw logs, environments and generated projects outside Git in isolated temp
 Developer message “i approve the plan; execute us-01 ip1” approved the plan and confirmed public test boundaries, authorizing IP1 only. Issue #8 complete body/all comment pages refreshed with stable zero-comment metadata. T1–T4 completed with [criterion-mapped evidence](../verification/us-01-ip1.md). Five red–green slices passed; all 20 tests, lint, format, strict types, locked sync/check and smoke passed. Real GitHub A installation, fixture-cache removal, offline/no-sync runtime, unknown GitHub commit and stale-lock refusal verified. No product code/dependency/lock/resource changes or suppressions. Local links and diff whitespace checked. No commit, push, PR, issue edit or hosted CI triggered. Stop at IP1 developer gate; IP2 and story acceptance remain pending.
 
 IP1 gate approved 2026-10-30 by developer message “i approve us-01 ip1; commit changes; execute ip2”. Commit IP1 changes, then execute IP2; final IP2 gate and story acceptance remain pending.
+
+## IP2 execution record — 2026-10-30
+
+IP1 committed as `60941af` after the explicit approval/commit request. Complete issue #8 body/all comments refreshed, stable zero-comment metadata `2026-10-30T02:06:17Z`; no new scope decisions. IP2 T1–T3 complete with [evidence](../verification/us-01-ip2.md): two red–green slices, retained-old-install regression, actual GitHub A→B upgrade in one experiment, unchanged locked-sync control, preserved A evidence, changed B pin/lock/identity and post-upgrade cache-independent installed interfaces. All 23 tests, lint, format, strict types, locked sync/check and smoke passed; harness lock unchanged. Local documentation targets and diff whitespace verified. No scope deviation, dependency change, suppression or unresolved failure. IP2 changes remain uncommitted for gate review; no push/publication. Final gate and story acceptance pending; stop here.
+
+IP2 gate approved by developer message “i approve ip2; commit the changes”, 2026-10-30. Local commit authorized. This approves the implementation phase; explicit story acceptance remains pending under the separate completion-review field. No push or next-story execution authorized.

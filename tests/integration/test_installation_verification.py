@@ -272,3 +272,131 @@ def test_source_mapping_without_dependency_is_rejected(
         assert "declared dependency mismatch" in result.stderr
     finally:
         declaration.write_bytes(original)
+
+
+def test_locked_sync_preserves_environment_identity(
+    source_repository: tuple[str, str], tmp_path: Path
+) -> None:
+    """Unchanged locked synchronization preserves declaration, lock and identity."""
+    repository, revision = source_repository
+    workspace = tmp_path / "stable"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(DRIVER),
+            "--repository",
+            repository,
+            "--revision",
+            revision,
+            "--workspace",
+            str(workspace),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    before = json.loads((workspace / "identity-before-sync.json").read_text())
+    after = json.loads((workspace / "identity.json").read_text())
+    assert before == after
+    assert (workspace / "uv-before-sync.lock").read_bytes() == (
+        workspace / "experiment/uv.lock"
+    ).read_bytes()
+    assert (workspace / "pyproject-before-sync.toml").read_bytes() == (
+        workspace / "experiment/pyproject.toml"
+    ).read_bytes()
+    assert "PASS stable synchronization" in result.stdout
+
+
+def test_explicit_upgrade_changes_pin_lock_and_identity(
+    source_repository: tuple[str, str], tmp_path: Path
+) -> None:
+    """Two commits with the same package version have different identities."""
+    from urllib.parse import unquote, urlsplit
+
+    repository, revision_a = source_repository
+    source = Path(unquote(urlsplit(repository).path))
+    (source / "upgrade-note.txt").write_text("Independent second commit.\n")
+    subprocess.run(["git", "add", "upgrade-note.txt"], cwd=source, check=True)
+    subprocess.run(
+        [
+            "git",
+            "-c",
+            "commit.gpgsign=false",
+            "-c",
+            "user.name=Fixture",
+            "-c",
+            "user.email=fixture@example.invalid",
+            "commit",
+            "-m",
+            "second fixture",
+        ],
+        cwd=source,
+        check=True,
+        capture_output=True,
+    )
+    revision_b = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=source, text=True
+    ).strip()
+    assert revision_a != revision_b
+    workspace = tmp_path / "upgrade"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(DRIVER),
+            "--repository",
+            repository,
+            "--revision",
+            revision_a,
+            "--upgrade-revision",
+            revision_b,
+            "--workspace",
+            str(workspace),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    before = json.loads((workspace / "identity.json").read_text())
+    after = json.loads((workspace / "identity-after-upgrade.json").read_text())
+    assert before["resolved_revision"] == revision_a
+    assert after["resolved_revision"] == revision_b
+    assert after["requested_revision"] == revision_b
+    assert after["locked_revision"] == revision_b
+    assert before["lock_sha256"] != after["lock_sha256"]
+    assert before["package_version"] == after["package_version"] == "0.1.0"
+    assert (workspace / "uv-before-sync.lock").read_bytes() != (
+        workspace / "experiment/uv.lock"
+    ).read_bytes()
+    assert revision_b in (workspace / "experiment/pyproject.toml").read_text()
+    assert revision_a in (workspace / "pyproject-before-sync.toml").read_text()
+    assert not (workspace / "cache").exists()
+    assert "PASS explicit upgrade" in result.stdout
+
+
+def test_retained_old_install_cannot_pass_as_upgrade(
+    installed_project: tuple[Path, str, str],
+) -> None:
+    """Updating declarations and lock cannot hide an old installed Git revision."""
+    project, repository, revision_a = installed_project
+    revision_b = "f" * 40
+    declaration = project / "pyproject.toml"
+    lock = project / "uv.lock"
+    original_declaration = declaration.read_bytes()
+    original_lock = lock.read_bytes()
+    declaration.write_text(
+        original_declaration.decode().replace(revision_a, revision_b)
+    )
+    lock.write_text(original_lock.decode().replace(revision_a, revision_b))
+    try:
+        result = probe_project(project, repository, revision_b)
+        assert result.returncode != 0
+        assert "installed revision mismatch" in result.stderr
+    finally:
+        declaration.write_bytes(original_declaration)
+        lock.write_bytes(original_lock)

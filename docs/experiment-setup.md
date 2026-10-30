@@ -66,7 +66,7 @@ For newly created untracked files, inspect their contents directly or review `gi
 
 Keep the repository URL, full requested/resolved commit, installed package version, exact project lockfile, and Python/platform details with installation evidence. A package version such as `0.1.0` can be shared by different Git commits. Record the lockfile's SHA-256 when comparing environments; on macOS, run `shasum -a 256 uv.lock`. This installation evidence is the foundation for later run provenance, not a complete run manifest.
 
-Use `uv sync --locked` and `uv run --locked ...` for normal synchronization and use. `--locked` fails when declarations and lock disagree rather than rewriting the lock silently. An intentional harness upgrade will explicitly change the full commit pin and experiment lockfile; the verified upgrade workflow is delivered in US-01 IP2.
+Use `uv sync --locked` and `uv run --locked ...` for normal synchronization and use. `--locked` fails when declarations and lock disagree rather than rewriting the lock silently. An intentional harness upgrade explicitly changes the full commit pin and experiment lockfile; follow the upgrade steps below.
 
 Once `.venv` is installed, public imports/resources and the CLI work without the installer source cache or a harness checkout. For a no-sync offline invocation:
 
@@ -75,6 +75,32 @@ uv run --no-sync --offline agentic-ml --version
 ```
 
 `--no-sync` uses the existing environment without validating it against changed declarations. This command demonstrates installed runtime independence; it does not replace locked synchronization. Initial installation, restoring a removed environment, and upgrades may require network access and cache repopulation. You do not need to clear your normal uv cache.
+
+## Explicitly upgrade the harness
+
+Choose a reviewed full commit SHA. From the experiment project initially pinned to the example revision above, this verified example upgrades to a later published commit:
+
+```sh
+uv add "git+https://github.com/jimthompson5802/agentic-ml.git" --rev aead26e9c758878107ad72f230f9e607a9a7ecfa
+uv sync --locked
+uv lock --check
+uv run --locked agentic-ml --version
+uv run --locked python -c 'from importlib.metadata import distribution; print(distribution("agentic-ml").read_text("direct_url.json"))'
+shasum -a 256 uv.lock
+git diff -- pyproject.toml uv.lock
+```
+
+`uv add` intentionally updates the experiment declaration, resolves the new commit and updates the experiment lockfile/environment. Review the full source revision in `pyproject.toml`, the resolved revision in `uv.lock`, and the installed `direct_url.json` commit. Repeat the import/resource commands above. Commit the reviewed metadata together:
+
+```sh
+git add pyproject.toml uv.lock
+git diff --cached -- pyproject.toml uv.lock
+git commit -m "chore: upgrade harness pin"
+```
+
+For these two example commits, the CLI reports `0.1.0` before and after upgrade. The full requested/resolved commit and lockfile SHA-256 change even though the package version is unchanged. A normal locked synchronization without a declaration change must preserve the lockfile and installation identity. Keep the original pin, lockfile and installation evidence with historical experiment records; upgrading the current project does not rewrite an earlier run's identity or establish compatibility with its preserved configuration/guidance.
+
+The upgrade was verified on the same macOS/Python baseline as bootstrap. It does not require or update the harness contributor environment. An unavailable commit or failed update is a failure to investigate; inspect the declaration, lock and installed revision before accepting the new environment.
 
 ## Verification and troubleshooting
 
@@ -87,3 +113,11 @@ uv run --locked python tests/installation/verify_installation.py --repository ht
 ```
 
 The verifier prints a fresh temporary workspace and retains stage logs and `identity.json`. It creates a separate experiment project, uses a dedicated disposable cache and copy installation mode, installs and checks the pinned dependency, removes only its own cache, and probes installed CLI/imports/resources before an offline/no-sync CLI invocation. The copied stdlib probe runs under isolated Python outside the checkout. Ordinary pytest covers the verifier using local Git fixtures; the explicit command above supplies real GitHub installation evidence. See [US-01 IP1 evidence](verification/us-01-ip1.md).
+
+To include stable-sync and explicit-upgrade verification in a fresh disposable project:
+
+```sh
+uv run --locked python tests/installation/verify_installation.py --repository https://github.com/jimthompson5802/agentic-ml.git --revision 018e9d4bb26e121c7f9274d11e0de560b7514b95 --upgrade-revision aead26e9c758878107ad72f230f9e607a9a7ecfa
+```
+
+The verifier preserves `identity-before-sync.json`, `pyproject-before-sync.toml`, `uv-before-sync.lock` and the original `identity.json`; upgraded metadata is recorded separately in `identity-after-upgrade.json`. A passing initial installation alone does not count as a passing upgrade. Review all three PASS stages and the original exit code. See [US-01 IP2 evidence](verification/us-01-ip2.md).
