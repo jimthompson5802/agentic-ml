@@ -34,7 +34,7 @@ def project_identity(options: InitOptions) -> tuple[Path, dict[str, Any], str]:
         raise InitializationError("Select the Git project root explicitly")
     if (root / "src/agentic_ml").exists():
         raise InitializationError("Cannot initialize the harness source project")
-    for name in ("pyproject.toml", "uv.lock"):
+    for name in ("pyproject.toml", "uv.lock", ".venv"):
         check_path(root / name)
     try:
         metadata = tomllib.loads((root / "pyproject.toml").read_text())

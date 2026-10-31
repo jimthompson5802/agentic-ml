@@ -138,27 +138,27 @@ During execution use [manage-plan-scope](../../.agents/skills/manage-plan-scope/
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-02-IP3-T1 | Not started | Add a real separate-project dependency/lock test, then implement dependency declarations and uv synchronization in initialization modules; update harness `pyproject.toml`/`uv.lock` only for deliberate runtime needs established in IP1. | IP2 gate | Required project dependencies declared, resolved and importable; installed project package import works; full harness SHA/source and unrelated declarations preserved. | AC-02, AC-03 |
-| US-02-IP3-T2 | Not started | Add red–green slices for incompatible existing dependencies, uv resolution/sync failure and safe retry. Use deterministic external-tool failure injection plus real resolver conflict fixture; retain diagnostics outside Git. | T1 | Nonzero failures identify stage and preserved/completed changes; no false success, pin upgrades, discarded user settings or hidden lock regeneration. | AC-02, AC-03, AC-05 |
-| US-02-IP3-T3 | Not started | Verify locked no-op resync, project-package imports, notebook-library imports and notebook kernel availability in clean installed projects. Extend `tests/packaging/verify_distributions.py` and probes for declared runtime closure; record `docs/verification/us-02-ip3.md` (proposed). | T1, T2 | Exact lock identity stable after normal locked verification; no harness checkout or development dependencies needed. Shared checks pass. | AC-02, AC-03 |
+| US-02-IP3-T1 | Complete | Add a real separate-project dependency/lock test, then implement dependency declarations and uv synchronization in initialization modules; update harness `pyproject.toml`/`uv.lock` only for deliberate runtime needs established in IP1. | IP2 gate | Required project dependencies declared, resolved and importable; installed project package import works; full harness SHA/source and unrelated declarations preserved. | AC-02, AC-03 |
+| US-02-IP3-T2 | Complete | Add red–green slices for incompatible existing dependencies, uv resolution/sync failure and safe retry. Use deterministic external-tool failure injection plus real resolver conflict fixture; retain diagnostics outside Git. | T1 | Nonzero failures identify stage and preserved/completed changes; no false success, pin upgrades, discarded user settings or hidden lock regeneration. | AC-02, AC-03, AC-05 |
+| US-02-IP3-T3 | Complete | Verify locked no-op resync, project-package imports, notebook-library imports and notebook kernel availability in clean installed projects. Extend `tests/packaging/verify_distributions.py` and probes for declared runtime closure; record `docs/verification/us-02-ip3.md` (proposed). | T1, T2 | Exact lock identity stable after normal locked verification; no harness checkout or development dependencies needed. Shared checks pass. | AC-02, AC-03 |
 
 ### Verification and review evidence
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Real environment | Installed init, then project `uv sync --locked`, `uv lock --check`, approved import probes and notebook kernel import probe | Required packages and project import usable; harness pin unchanged | Pending |
-| Failures and retry | Focused red–green tests, original-file/pin hashes and explicit partial-state observations | Approved failure/retry contract holds | Pending |
-| Development/package checks | Shared commands and both distribution paths below | Pass with intentional runtime dependency changes documented | Pending |
+| Real environment | Installed init, then project `uv sync --locked`, `uv lock --check`, approved import probes and notebook kernel import probe | Required packages and project import usable; harness pin unchanged | Passed — [IP3 evidence](../verification/us-02-ip3.md); commands, outcomes and boundaries recorded |
+| Failures and retry | Focused red–green tests, original-file/pin hashes and explicit partial-state observations | Approved failure/retry contract holds | Passed — [IP3 evidence](../verification/us-02-ip3.md); commands, outcomes and boundaries recorded |
+| Development/package checks | Shared commands and both distribution paths below | Pass with intentional runtime dependency changes documented | Passed — [IP3 evidence](../verification/us-02-ip3.md); commands, outcomes and boundaries recorded |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete, pin preservation and real environment plus failure evidence reviewed.
-- **Evidence presented:** Pending `docs/verification/us-02-ip3.md`.
+- **Evidence presented:** [IP3 report](../verification/us-02-ip3.md): 62-test full suite, final focused environment-path checks, shared development checks and both fresh wheel paths passed; deliberate runtime/lock changes and retained failure evidence recorded.
 - **Remaining limitations or blocked work:** Storage integration and final complete init acceptance remain IP4.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer message “i approve ip3”, 2026-10-31.
 - **Requested changes and resolution:** None.
-- **Progression authorized:** Stop and await explicit approval before IP4.
+- **Progression authorized:** IP3 gate approved; await separate IP4 execution authorization.
 
 ## US-02 / Implementation Phase 4: Initialize storage and verify the complete user path
 
@@ -219,7 +219,7 @@ Pause affected work for scope changes and use manage-plan-scope; new prerequisit
 | [US-02-AC-04](../specs/user-stories.md#us-02-ac-04): configurable DVC/MLflow/state | IP1-T4; IP4-T1/T2/T3/T4 | Planned IP4 report: real defaults/overrides, public usability/reopen probes and failures | Pending |
 | [US-02-AC-05](../specs/user-stories.md#us-02-ac-05): explicit setup; no grants or committed credentials | IP1-T2/T4; IP2-T3/T4; IP3-T2; IP4-T1/T2/T3/T4 | Planned IP2–IP4 reports: unset setup choices, no data reads/logins/grants, secret exclusion and ignore behavior | Pending |
 
-- **Remaining work:** IP2 gate approved; await separately authorized IP3/IP4. Scaffolding is verified; environment/storage and full-story delivery criteria remain pending.
+- **Remaining work:** IP3 T1–T3 complete and developer-approved. Scaffolding and environment synchronization verified; IP4 storage/final integration, whole-story acceptance and publication remain pending.
 - **Partial prerequisite delivery:** None newly included. Accepted US-01 reused; downstream stories remain outside scope.
 - **Developer acceptance:** Pending.
 - **Decision reference and date:** Pending; final gate also counts as story acceptance only if explicitly stated.
@@ -231,3 +231,21 @@ T1–T4 technically complete; [evidence](../verification/us-02-ip2.md) records a
 Developer subsequently requested “commit changes”, authorizing the local IP2 commit. This does not approve the IP2 gate or authorize IP3; those decisions remain pending.
 
 IP2 gate approved by developer message “i approve us-02 ip2” (2026-10-30). Implementation commit: `265ed5b`. IP3 execution and whole-story acceptance remain pending.
+
+
+## IP3 execution authorization — 2026-10-31
+
+Developer message “Execute US-02 IP3.” authorizes IP3 T1–T3 only, reusing IP1-approved public CLI/API, uv and installed-package test boundaries. IP2 approval verified against its completion record. Issue #9 body and all comment pages refreshed: stable zero-comment snapshot, updated 2026-10-31T01:15:38Z; Milestone 1 in body (no GitHub milestone assigned), AC-02/03/05 apply. No new scope decision. IP4, acceptance, commit and publication remain unauthorized.
+
+IP3 technically complete; [IP3 evidence](../verification/us-02-ip3.md) records implementation, TDD, corrective attempts and verification. First behavior red: `uv run --locked pytest tests/integration/test_initialization.py -k synchronizes_required -q` failed because all eight required experiment declarations were missing. Runtime dependency lock deliberately expanded per approved IP1 table. False-success red: `... -k sync_success_requires -q` failed because init accepted a tool that installed no project package; separate-interpreter import verification added. Real impossible `numpy<2` / required `numpy>=2,<3` fixture verifies preserved bounds and failed lock. Existing IP2 assertions for an unchanged initial lock, scaffold-only journal and pending environment are superseded by IP3 synchronization obligations; original backup/pin, rerun stability and corruption checks retained. Verification complete as recorded in the IP3 report; gate subsequently approved by “i approve ip3” (2026-10-31).
+
+
+## IP3 completion record — 2026-10-31
+
+T1–T3 complete under “Execute US-02 IP3.” Required declarations, real uv resolution/locked inexact synchronization, pin preservation, separate-interpreter imports, safe failure/retry, environment override/symlink boundaries and revised installed runtime closure are verified. [IP3 report](../verification/us-02-ip3.md) records criterion-mapped evidence, red/green commands, supplemental tests, corrected intermediate IP2 expectations, attempts, lock/artifact identities and limitations. Full suite: 62 passed; final path guard: two focused tests passed, covering the added 63rd distinct test and normal synchronization. Shared checks and both final wheel paths passed after the guard. No unresolved failed check, suppression or scope change. Changes remain uncommitted on `US-02-experiment-init`. Developer approved IP3 with “i approve ip3” (2026-10-31); await separate IP4 execution authorization. Story acceptance, commit, push and publication remain unauthorized.
+
+
+IP3 approval recorded on 2026-10-31 from developer message “i approve ip3”. This approval does not authorize a commit, IP4 execution, story acceptance or publication. Documentation-only approval record: `git diff --check` passed; no runtime behavior changed and no runtime rerun required.
+
+
+Developer message “commit” (2026-10-31) subsequently authorizes the local commit of approved IP3 implementation and approval records, including this plan update. IP4 execution, story acceptance and publication remain unauthorized.

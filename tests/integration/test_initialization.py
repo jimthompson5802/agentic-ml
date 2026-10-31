@@ -81,7 +81,7 @@ def test_installed_cli_creates_inert_project_scaffolding(project: Path) -> None:
     """Initialization supplies draft inputs and valid output-free notebook files."""
     result = initialize(project)
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "environment" in result.stdout and "storage" in result.stdout
+    assert "Setup pending: storage" in result.stdout
     assert "pending" in result.stdout.lower()
     base = project / "experiments/initial"
     for name in ("project.yaml", "src/experiment/__init__.py"):
@@ -142,7 +142,9 @@ def test_shared_metadata_is_additive_and_rerun_preserves_edits(project: Path) ->
     assert result["tool"]["hatch"]["build"]["targets"]["wheel"]["packages"] == [
         "src/experiment"
     ]
-    assert result["project"]["dependencies"] == original["project"]["dependencies"]
+    assert set(original["project"]["dependencies"]) <= set(
+        result["project"]["dependencies"]
+    )
     assert result["tool"]["uv"]["sources"] == original["tool"]["uv"]["sources"]
     assert result["tool"]["example"]["keep"] is True
     assert "# custom setting" in pyproject.read_text()
@@ -157,6 +159,7 @@ def test_shared_metadata_is_additive_and_rerun_preserves_edits(project: Path) ->
         "!/.env.example",
     ):
         assert pattern in ignores.splitlines()
+    lock = (project / "uv.lock").read_bytes()
     brief = project / "experiments/initial/experiment.md"
     brief.write_text("# My reviewed draft\n")
     before = {
@@ -276,7 +279,7 @@ print(json.dumps({"root": str(result.project_root), "pending": result.setup_pend
     assert result.returncode == 0, result.stderr
     payload = json.loads(result.stdout)
     assert payload["root"] == str(project.resolve())
-    assert payload["pending"] == ["environment", "storage"]
+    assert payload["pending"] == ["storage"]
     config = (project / "project.yaml").read_text()
     assert "stores/dvc" in config
     assert "data_access: unconfigured" in config
@@ -348,7 +351,16 @@ def test_explicit_existing_package_preserves_source_and_build(project: Path) -> 
     original = config.read_bytes()
     result = initialize(project, "--package-name", "my_package")
     assert result.returncode == 0, result.stderr
-    assert config.read_bytes() == original
+    import tomllib
+
+    before = tomllib.loads(original.decode())
+    after = tomllib.loads(config.read_text())
+    assert set(before["project"]["dependencies"]) <= set(
+        after["project"]["dependencies"]
+    )
+    assert "numpy>=2,<3" in after["project"]["dependencies"]
+    after["project"]["dependencies"] = before["project"]["dependencies"]
+    assert after == before
     assert source.read_text() == '"""My package."""\nVALUE = 42\n'
     assert not (project / "src/experiment").exists()
 
@@ -370,10 +382,14 @@ def test_setup_inventory_and_backups_are_private_and_preserve_originals(
     state = project / ".agentic-ml"
     journal = json.loads((state / "init.json").read_text())
     assert journal["status"] == "incomplete"
-    assert journal["completed_steps"] == ["preflight", "scaffold"]
-    assert journal["pending_steps"] == [
+    assert journal["completed_steps"] == [
+        "preflight",
+        "scaffold",
         "lock",
         "sync",
+        "environment-check",
+    ]
+    assert journal["pending_steps"] == [
         "DVC",
         "MLflow",
         "state",
@@ -385,9 +401,11 @@ def test_setup_inventory_and_backups_are_private_and_preserve_originals(
         assert backup.read_bytes() == content
         assert stat.S_IMODE(backup.stat().st_mode) == 0o600
     assert stat.S_IMODE((state / "init.json").stat().st_mode) == 0o600
-    for name, digest in journal["checksums"].items():
+    for name, digest in (
+        journal["checksums"] | journal["environment"]["checksums"]
+    ).items():
         assert hashlib.sha256((project / name).read_bytes()).hexdigest() == digest
-    assert (project / "uv.lock").read_bytes() == original["uv.lock"]
+    assert (project / "uv.lock").read_bytes() != original["uv.lock"]
 
 
 def test_interrupted_scaffold_preserves_evidence_and_retries_safely(
@@ -442,8 +460,7 @@ def test_new_package_scaffold_is_importable_after_normal_project_install(
     """Generated build metadata installs the project package without source tricks."""
     first = initialize(project)
     assert first.returncode == 0, first.stderr
-    # IP2 leaves environment synchronization to IP3; verify the emitted package
-    # independently using a normal no-dependency install of the project itself.
+    # Also verify that a normal no-dependency reinstall preserves public imports.
     install = run(
         [
             "uv",
@@ -531,3 +548,211 @@ def test_existing_project_code_is_not_copied_into_setup_journal(project: Path) -
         if path.is_file():
             assert "source-sentinel" not in path.read_text()
     assert "source-sentinel" in source.read_text()
+
+
+def test_init_synchronizes_required_environment(project: Path) -> None:
+    """Installed init supplies ML/notebook tools and an importable project package."""
+    import tomllib
+
+    original = tomllib.loads((project / "pyproject.toml").read_text())
+    result = initialize(project)
+    assert result.returncode == 0, result.stdout + result.stderr
+    metadata = tomllib.loads((project / "pyproject.toml").read_text())
+    required = {
+        "numpy>=2,<3",
+        "pandas>=2,<4",
+        "scikit-learn>=1.6,<2",
+        "nbclient>=0.10,<1",
+        "ipykernel>=6,<8",
+        "nbformat>=5,<6",
+        "dvc>=3,<4",
+        "mlflow>=3,<4",
+    }
+    assert required <= set(metadata["project"]["dependencies"])
+    assert metadata["tool"]["uv"]["sources"] == original["tool"]["uv"]["sources"]
+    probe = run(
+        [
+            str(project / ".venv/bin/python"),
+            "-I",
+            "-c",
+            "import numpy, pandas, sklearn, nbclient, ipykernel, nbformat, dvc, mlflow, experiment",
+        ],
+        project,
+    )
+    assert probe.returncode == 0, probe.stderr
+    lock = (project / "uv.lock").read_bytes()
+    for command in (["uv", "sync", "--locked"], ["uv", "lock", "--check"]):
+        checked = run(command, project)
+        assert checked.returncode == 0, checked.stderr
+    assert (project / "uv.lock").read_bytes() == lock
+
+
+def test_dependency_conflict_preserves_settings_and_allows_reviewed_retry(
+    project: Path,
+) -> None:
+    """Resolver failures retain conflicting bounds and the original harness source."""
+    import tomllib
+
+    metadata = project / "pyproject.toml"
+    metadata.write_text(
+        metadata.read_text().replace('"agentic-ml",', '"agentic-ml",\n    "numpy<2",')
+    )
+    original = tomllib.loads(metadata.read_text())
+    lock = (project / "uv.lock").read_bytes()
+    result = initialize(project)
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert "lock" in result.stderr and "exit" in result.stderr
+    assert "numpy<2" in metadata.read_text()
+    assert (
+        tomllib.loads(metadata.read_text())["tool"]["uv"]["sources"]
+        == original["tool"]["uv"]["sources"]
+    )
+    assert (project / "uv.lock").read_bytes() == lock
+    journal = json.loads((project / ".agentic-ml/init.json").read_text())
+    assert journal["status"] == "incomplete"
+    assert journal["environment"]["exit_code"] != 0
+    assert "sync" not in journal["completed_steps"]
+    assert not (project / ".agentic-ml/init.lock").exists()
+    second = initialize(project)
+    assert second.returncode == 1
+    assert "lock" in second.stderr
+
+
+def test_sync_success_requires_importable_project(
+    project: Path, tmp_path: Path
+) -> None:
+    """A tool reporting success without installing the project cannot complete setup."""
+    tools = tmp_path / "tools"
+    tools.mkdir()
+    executable = tools / "uv"
+    executable.write_text("#!/bin/sh\nexit 0\n")
+    executable.chmod(0o700)
+    env = dict(os.environ)
+    env["PATH"] = str(tools) + os.pathsep + env["PATH"]
+    result = subprocess.run(
+        [str(project / ".venv/bin/agentic-ml"), "init"],
+        cwd=project,
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert "environment-check" in result.stderr
+    saved = json.loads((project / ".agentic-ml/init.json").read_text())
+    assert "environment-check" not in saved["completed_steps"]
+    assert not (project / ".agentic-ml/init.lock").exists()
+
+
+@pytest.mark.parametrize("change_metadata", [False, True])
+def test_sync_failure_retry_preserves_metadata(
+    project: Path, tmp_path: Path, change_metadata: bool
+) -> None:
+    """A failed sync retains evidence and retries only unchanged intermediate files."""
+    uv = shutil.which("uv")
+    assert uv is not None
+    tools = tmp_path / "tools"
+    tools.mkdir()
+    executable = tools / "uv"
+    executable.write_text(
+        '#!/bin/sh\nif [ "$1" = sync ]; then echo "token=sentinel-secret" >&2; exit 73; fi\n'
+        'exec "' + uv + '" "$@"\n'
+    )
+    executable.chmod(0o700)
+    env = dict(os.environ)
+    env["PATH"] = str(tools) + os.pathsep + env["PATH"]
+    failed = subprocess.run(
+        [str(project / ".venv/bin/agentic-ml"), "init"],
+        cwd=project,
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert failed.returncode == 1
+    assert "sync" in failed.stderr and "73" in failed.stderr
+    assert "sentinel-secret" not in failed.stdout + failed.stderr
+    journal = project / ".agentic-ml/init.json"
+    assert "sentinel-secret" not in journal.read_text()
+    saved = json.loads(journal.read_text())
+    assert "lock" in saved["completed_steps"] and "sync" not in saved["completed_steps"]
+    metadata = project / "pyproject.toml"
+    if change_metadata:
+        metadata.write_text(metadata.read_text() + "\n# user edit after failure\n")
+    before = metadata.read_bytes()
+    retried = initialize(project)
+    assert metadata.read_bytes() == before
+    if change_metadata:
+        assert retried.returncode == 1
+        assert "changed" in retried.stderr
+    else:
+        assert retried.returncode == 0, retried.stderr
+        assert "Setup pending: storage" in retried.stdout
+
+
+def test_sync_preserves_existing_bounds_packages_and_environment_choice(
+    project: Path, tmp_path: Path
+) -> None:
+    """Setup intersects existing bounds, retains unrelated packages and uses .venv."""
+    import tomllib
+
+    added = run(["uv", "add", "numpy>=2.0,<2.5", "humanize>=4,<5"], project)
+    assert added.returncode == 0, added.stderr
+    extra = run(
+        [
+            "uv",
+            "pip",
+            "install",
+            "--python",
+            str(project / ".venv/bin/python"),
+            "more-itertools",
+        ],
+        project,
+    )
+    assert extra.returncode == 0, extra.stderr
+    original = tomllib.loads((project / "pyproject.toml").read_text())
+    other = tmp_path / "other-environment"
+    env = dict(os.environ)
+    env["UV_PROJECT_ENVIRONMENT"] = str(other)
+    env["VIRTUAL_ENV"] = str(other)
+    result = subprocess.run(
+        [str(project / ".venv/bin/agentic-ml"), "init"],
+        cwd=project,
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    assert not other.exists()
+    metadata = tomllib.loads((project / "pyproject.toml").read_text())
+    assert set(original["project"]["dependencies"]) <= set(
+        metadata["project"]["dependencies"]
+    )
+    assert metadata["tool"]["uv"]["sources"] == original["tool"]["uv"]["sources"]
+    probe = run(
+        [
+            str(project / ".venv/bin/python"),
+            "-I",
+            "-c",
+            "import humanize, more_itertools; from importlib.metadata import version; print(version('numpy'))",
+        ],
+        project,
+    )
+    assert probe.returncode == 0, probe.stderr
+    assert probe.stdout.startswith(("2.0.", "2.1.", "2.2.", "2.3.", "2.4."))
+
+
+def test_symlink_environment_is_rejected_before_setup(
+    project: Path, tmp_path: Path
+) -> None:
+    """Setup cannot synchronize an environment outside its selected project root."""
+    outside = tmp_path / "outside-environment"
+    environment = project / ".venv"
+    environment.rename(outside)
+    environment.symlink_to(outside, target_is_directory=True)
+    result = initialize(project)
+    assert result.returncode == 1
+    assert "Symlink" in result.stderr
+    assert not (project / "project.yaml").exists()
+    assert not (project / ".agentic-ml").exists()

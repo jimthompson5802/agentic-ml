@@ -11,6 +11,7 @@ from typing import Any
 import tomlkit
 import yaml
 
+from .environment import synchronize
 from .journal import read_journal, write_private
 from .models import InitializationError, InitOptions, InitResult
 from .preflight import (
@@ -270,7 +271,7 @@ def _resume_scaffold(root: Path, saved: dict[str, Any]) -> InitResult:
 def initialize_project(options: InitOptions) -> InitResult:
     """Create draft files, preserving safe diagnostics on metadata or I/O failure."""
     try:
-        return _initialize_project(options)
+        return synchronize(_initialize_project(options))
     except (OSError, ValueError, KeyError, TypeError) as error:
         raise InitializationError(
             "Invalid setup metadata or filesystem destination"
