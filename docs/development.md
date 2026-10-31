@@ -32,7 +32,7 @@ uv run --no-sync mypy --version
 
 ## Shared development commands
 
-The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. Use the following commands from the repository root for local verification. Development CI uses the same checks but runs pytest serially.
+The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. Use the following commands from the repository root for local verification. Development CI uses the same checks, including four-worker pytest execution with `loadgroup`.
 
 | Purpose | Command |
 |---|---|
@@ -60,8 +60,8 @@ uv run --locked pytest -n 4 --dist=loadgroup --junitxml=/private/tmp/agentic-ml-
 For serial diagnosis or a short focused TDD cycle, use `uv run --locked pytest`
 with the relevant selector and record why serial execution was selected.
 Use two workers only for an explicit comparison or resource investigation.
-Pytest configuration does not add worker flags automatically; CI continues to
-invoke the serial command.
+Pytest configuration does not add worker flags automatically; local and CI test
+commands explicitly select four workers with `loadgroup`.
 
 `pytest-xdist` is a development dependency. Pytest is constrained to `>=8,<9.2`
 because pytest 9.2.0 silently breaks group scheduling with pytest-xdist 3.8.0.
@@ -91,8 +91,8 @@ existing assertions and subprocess timeouts intact. Record worker count, suite
 count, durations, diagnostics and platform with results. A complete unfiltered
 parallel run exercises the full suite; selected runs do not replace final full
 verification. Retain serial execution for diagnosis. Parallel macOS evidence
-does not establish Linux or Windows support; CI remains serial until separately
-validated and authorized to change.
+does not establish Linux or Windows support. The Linux CI workflow now requests
+four workers; hosted parallel verification remains pending until a run is observed.
 
 The initial verified macOS benchmark passed 129 tests in 16m59s with two workers
 and 12m06s with four. Four workers reduced elapsed time by about 29%, while some

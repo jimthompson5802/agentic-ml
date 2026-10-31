@@ -16,7 +16,11 @@ distribution groups stay together, initialization/CLI cases distribute individua
 Developer subsequently requested agent instructions to use four workers locally.
 The development guide now requires `uv run --locked pytest -n 4 --dist=loadgroup`
 for local verification, with recorded exceptions for focused TDD/diagnosis and
-resource comparisons. Pytest configuration and CI remain serial. Final complete runs: **129 passed** with
+resource comparisons. Pytest configuration remains serial without explicit flags.
+Developer subsequently requested parallel workers in GitHub Actions: automated
+tests now explicitly use four workers with `loadgroup`; workflow/documentation
+changes are ready for the local commit authorized by developer “commit changes”. Hosted Linux parallel verification
+remains pending. Final local complete runs: **129 passed** with
 two workers in **16m59s**, four in **12m06s**; group placement and unique case sets
 verified. New public scheduling regression caught pytest 9.2.0 silently ignoring
 groups; approved compatibility correction passed on its first attempt. Earlier
@@ -26,7 +30,8 @@ Shared checks passed; final lock SHA-256
 Evidence: [parallel tests](docs/verification/parallel-test-execution.md).
 Developer “commit change” authorizes the local commit of parallel tooling,
 four-worker local instructions and verification records. Push remains unauthorized.
-Next action: developer review. macOS verified; Linux/Windows parallel execution
+Local tooling/instructions committed as `a593c6f`. Current CI change awaits
+developer review; local commit authorized, push remains unauthorized. macOS verified; Linux/Windows parallel execution
 and cancellation descendant cleanup remain unverified.
 
 Local-command instruction update is documentation-only: no executable behavior,

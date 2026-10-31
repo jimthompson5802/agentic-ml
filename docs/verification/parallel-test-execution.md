@@ -159,3 +159,24 @@ tooling, local-command instructions and verification records. Final documentatio
 checks verified 33 local link paths, the AGENTS.md development-guide pointer and
 preserved policy anchors; whitespace passed. No executable changes followed the
 two/four-worker full-suite verification. No push authorized.
+
+## GitHub Actions parallel command
+
+Developer requested parallel workers for GitHub Actions automated tests.
+The workflow test step now runs `uv run --locked pytest -n 4 --dist=loadgroup`,
+matching the verified local four-worker command. Development guidance now reflects
+this CI setting. Runner, timeout, conditions, remaining checks and package-build
+steps are unchanged. This is a workflow configuration change with no new harness
+behavior; TDD does not require a manufactured product failure. Existing local
+129-test parallel evidence applies to the command, not hosted Linux execution.
+Hosted verification remains pending publication and observation of a CI run.
+No commit or push authorized for this change.
+
+Static verification passed: parsed workflow YAML, exact four-worker test command,
+existing sync-success condition, 20-minute timeout and main-branch push trigger;
+final workflow diff is one command-line change. Local documentation links and
+whitespace checks passed. `actionlint` is not installed, so its validation was
+not run. No product suite rerun: no source, tests, dependencies or lock changed.
+
+Developer “commit changes” authorizes the local commit of the CI command and
+documentation records. Hosted verification remains pending; no push authorized.
