@@ -4,6 +4,25 @@ Last updated: 2026-10-31
 
 ## Current position
 
+**Fixture profiling (2026-10-31):** Developer “do the profile” authorizes
+temporary measurement on the restored `4207086` baseline. See
+[fixture profile](docs/verification/pytest-fixture-profile.md). Four batches of
+eight existing rejection cases, clone/hardlink/hardlink/clone, four workers:
+**32 valid runs passed**. Initial scratch-plugin scope error preserved/excluded;
+one correction then passed. Clone project medians **16.60s/15.51s**, hardlink
+**44.82s/45.10s**. uv's package-installation phase dominates: clone medians
+**14.12s/13.07s**, hardlink **43.41s/43.25s**. Median child system CPU per uv
+add **~3s clone versus 131–134s hardlink** (CPU seconds across threads).
+Resolution/preparation and Git setup are much smaller. Precise filesystem
+contention mechanism unverified. All 32 dependency maps and 53 maintained
+source/test/build hashes matched. Raw events/logs/XML/scripts and aggregate
+comparison: `/private/tmp/pytest-fixture-profile-1262ov7g`.
+Repository executable/configuration inputs unchanged; no second performance
+correction or reactivation of the rolled-back policy. Next proposed diagnostic:
+clone-mode installer thread limits under four pytest workers; not applied or
+measured. Developer “commit” authorizes the local report/checkpoint commit;
+Git history records its result. No push authorized.
+
 **Hardlink rollback complete (2026-10-31):** Developer “do the rollback”
 authorizes removing the failed optimization while retaining its documentation.
 All four affected Python files now match `861b2db`; all 53 maintained
