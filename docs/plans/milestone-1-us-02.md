@@ -123,10 +123,10 @@ During execution use [manage-plan-scope](../../.agents/skills/manage-plan-scope/
 - **Approval criteria:** T1–T4 complete, red–green evidence and independent installed-interface checks reviewed.
 - **Evidence presented:** [IP2 evidence](../verification/us-02-ip2.md); all 56 tests, shared checks and direct/rebuilt wheels passed on macOS/Python 3.12. Technical completion is separate from gate approval.
 - **Remaining limitations or blocked work:** Dependency synchronization and storage setup remain IP3/IP4; no full-story acceptance claim. One backup test initially failed fixture setup rather than behavior; corrected without weakening assertions, disclosed in evidence. No Linux/Windows execution or VS Code manual check claimed.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer message “i approve us-02 ip2”, 2026-10-30.
 - **Requested changes and resolution:** None.
-- **Progression authorized:** Stop and await explicit approval before IP3.
+- **Progression authorized:** IP2 gate approved; await explicit IP3 execution authorization.
 
 ## US-02 / Implementation Phase 3: Synchronize the experiment environment
 
@@ -219,7 +219,7 @@ Pause affected work for scope changes and use manage-plan-scope; new prerequisit
 | [US-02-AC-04](../specs/user-stories.md#us-02-ac-04): configurable DVC/MLflow/state | IP1-T4; IP4-T1/T2/T3/T4 | Planned IP4 report: real defaults/overrides, public usability/reopen probes and failures | Pending |
 | [US-02-AC-05](../specs/user-stories.md#us-02-ac-05): explicit setup; no grants or committed credentials | IP1-T2/T4; IP2-T3/T4; IP3-T2; IP4-T1/T2/T3/T4 | Planned IP2–IP4 reports: unset setup choices, no data reads/logins/grants, secret exclusion and ignore behavior | Pending |
 
-- **Remaining work:** IP2 developer gate review, then separately authorized IP3/IP4. Scaffolding is verified; environment/storage and full-story delivery criteria remain pending.
+- **Remaining work:** IP2 gate approved; await separately authorized IP3/IP4. Scaffolding is verified; environment/storage and full-story delivery criteria remain pending.
 - **Partial prerequisite delivery:** None newly included. Accepted US-01 reused; downstream stories remain outside scope.
 - **Developer acceptance:** Pending.
 - **Decision reference and date:** Pending; final gate also counts as story acceptance only if explicitly stated.
@@ -229,3 +229,5 @@ Pause affected work for scope changes and use manage-plan-scope; new prerequisit
 T1–T4 technically complete; [evidence](../verification/us-02-ip2.md) records actual commands, red–green slices, corrective attempts, boundary coverage and limitations. Public CLI/API and packaged templates/schemas implemented; intermediate results explicitly report environment/storage pending. Parser/schema runtime dependencies and dev stubs deliberately added; harness lock identity changed and remained stable through verification. Existing installation/distribution probes now assert the exact required runtime closure rather than the superseded zero-dependency baseline. Complete original corruption checks retained. No IP3 synchronization or IP4 storage behavior delivered. IP2 gate and whole-story acceptance remain pending; no publication authorized.
 
 Developer subsequently requested “commit changes”, authorizing the local IP2 commit. This does not approve the IP2 gate or authorize IP3; those decisions remain pending.
+
+IP2 gate approved by developer message “i approve us-02 ip2” (2026-10-30). Implementation commit: `265ed5b`. IP3 execution and whole-story acceptance remain pending.

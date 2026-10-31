@@ -1,6 +1,6 @@
 # US-02 IP2: Conflict-safe installed scaffolding
 
-Status: technically complete; developer gate pending. IP1 was approved and committed as `12df741` after developer message “i approve ip1; commit changes and I authorize ip2”. No IP3 work authorized or performed.
+Status: technically complete; developer gate approved by “i approve us-02 ip2” (2026-10-30). IP1 was approved and committed as `12df741` after developer message “i approve ip1; commit changes and I authorize ip2”. No IP3 work authorized or performed.
 
 ## Delivered boundary
 
@@ -85,4 +85,4 @@ Platform: macOS 15.7.9 arm64, Python 3.12.15, uv 0.13.1, Git 2.54.0. No new host
 
 ## Handoff
 
-Review installed behavior and limitations against the [IP2 gate](../plans/milestone-1-us-02.md). No complete-story acceptance, dependency synchronization, store provisioning or IP3 authorization is recorded. Developer subsequently requested “commit changes”; IP2 implementation/evidence committed with this record. The IP2 approval gate remains pending.
+Review installed behavior and limitations against the [IP2 gate](../plans/milestone-1-us-02.md). No complete-story acceptance, dependency synchronization, store provisioning or IP3 authorization is recorded. Developer subsequently requested “commit changes”; IP2 implementation/evidence committed with this record. The IP2 approval gate is now approved; IP3 execution remains pending.
