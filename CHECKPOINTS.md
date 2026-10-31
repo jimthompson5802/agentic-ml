@@ -28,6 +28,8 @@ Documentation-only change: TDD and harness runtime checks do not apply. Validati
 
 ## Resume here
 
+US-02 [implementation plan](docs/plans/milestone-1-us-02.md) approved; developer authorized IP1 and committing existing changes. IP1 in progress on `US-02-experiment-init`; all implementation gates remain pending.
+
 US-01 implementation is complete with both implementation gates approved; published PR and static review are recorded below. Story accepted 2026-10-30; see the [completion record](docs/plans/milestone-1-us-01.md#story-completion-review). Issue #8 complete body/all comment pages refreshed before execution: stable zero-comment snapshot, updated `2026-10-30T02:06:17Z`. No new scope decision or unresolved failure.
 
 ## Publication and review — 2026-10-30
@@ -36,7 +38,7 @@ US-01 implementation is complete with both implementation gates approved; publis
 
 ## Pending developer decisions
 
-No US-01 implementation gate or story acceptance remains pending. No merge or post-merge verification remains pending; next-story planning awaits direction. No US-02 implementation authorized. Acceptance record committed as `ce414ca`. Developer request “push to remote; create pull request and start a pr review” authorized publication and review; branch pushed and PR #44 created. Merge completed on GitHub and was verified during main cleanup.
+No US-01 implementation gate or story acceptance remains pending. No merge or post-merge verification remains pending. US-02 planning requested 2026-10-30; draft plan review is pending. No US-02 implementation authorized. Acceptance record committed as `ce414ca`. Developer request “push to remote; create pull request and start a pr review” authorized publication and review; branch pushed and PR #44 created. Merge completed on GitHub and was verified during main cleanup.
 
 ## Handoff notes
 
@@ -47,6 +49,16 @@ No US-01 implementation gate or story acceptance remains pending. No merge or po
 - Final handoff records only checkpoint documentation; `git diff --check` passed. TDD/runtime checks do not apply to this status update; prior implementation verification and successful post-merge CI remain the evidence. Developer requested committing the final record on main and previously authorized deleting local/remote story branches.
 - Milestones 1–5 issues remain published; later story implementation unauthorized. Milestone 99 deferred.
 
+## Executive overview — 2026-10-30
+
+Created the requested external executive summary at `/Users/jim/Desktop/genai/agent-ml-overview.md`, covering purpose, delivered foundation, milestone roadmap, and all ten local skills with emphasis on GitHub workflows. Checked the summary against specifications, plans/checkpoint evidence, current package source, and live GitHub issue/PR/CI metadata. PR #44 remains merged; the latest main CI checked, run `41046797761` at `4477162`, passed. Product scope and next-story authorization remain unchanged. Reviewed Markdown and source links; documentation-only work requires no TDD or runtime rerun. The overview is outside the repository; only this checkpoint record changes the working tree. No commit or publication requested.
+
+## US-02 planning — 2026-10-30
+
+Created [Milestone 1 / US-02 plan](docs/plans/milestone-1-us-02.md) on local branch `US-02-experiment-init` from `4477162`. Complete issue #9 and prerequisite #8 bodies/all comment pages retrieved; both zero-comment snapshots remained stable after metadata refresh. US-01 prerequisite acceptance verified against its owning plan. Four proposed implementation phases: settle initialization contracts; conflict-safe scaffolding; synchronized dependencies; storage and complete installed-interface verification. Pending schema, dependency, storage and failure-protocol decisions belong to IP1 and block dependent implementation until its gate is approved. No new prerequisite-story implementation included.
+
+Plan review, public test-boundary confirmation, all implementation gates and story acceptance remain pending. No implementation, dependency installation, commit or publication performed. Preserved the existing executive-overview checkpoint entry. Planning validation: all local plan link targets resolve, all five criteria map to tasks/evidence, all 15 tasks start Not started, and four developer gates remain Pending; `git diff --check` passed. TDD and runtime checks do not apply to this documentation-only plan. GitHub reads succeeded after retrying a sandbox network failure with escalation; local `gh auth status` separately reported an invalid stored token, so recheck if future reads fail.
+
 ## Maintenance rules
 
 - Keep this file a concise current handoff. Replace stale resume instructions and notes; Git history preserves earlier checkpoints.
@@ -54,3 +66,11 @@ No US-01 implementation gate or story acceptance remains pending. No merge or po
 - Record approval only after the developer explicitly gives it, and link to the decision recorded in the owning plan. Task completion and plan approval do not approve implementation-phase progression.
 - At each update, refresh the date, current position, progress summary, next action, pending decisions, and material working-tree or verification notes. Include failed checks, blockers, and relevant evidence links when present.
 - Commit checkpoint updates alongside the work they describe when practical. Keep credentials and sensitive environment details outside this file.
+
+## Notebook editor scope change — 2026-10-30
+
+Developer approved removing JupyterLab throughout delivery and documenting VS Code as the manual notebook editor, not a harness dependency. Updated US-02-AC-03 and US-08-AC-01, supporting design/walkthrough and US-02 plan (SC-01); GitHub issues #9 and #36 bodies updated with the scope decision. Retained ipykernel/nbclient and all authorization/isolation requirements. Added planned manual project-kernel verification. Historical review reports preserved. All US-02 implementation gates remain pending; this change authorizes no harness implementation. No dependencies or lockfile changed. Documentation validation: local links and git diff --check passed; remaining active JupyterLab mention explicitly states it is not installed. TDD/runtime tests do not apply. No commit or push requested.
+
+US-02 plan wording follow-up: removed remaining obsolete editor-name references from its scope-change record and manual-check expectation while preserving the recorded decision. Verified the plan has zero matches for the removed editor name; `git diff --check` passed. Documentation-only correction; no runtime checks required.
+
+Developer message “commit changes; i approve the plan, execute us-02 ip1” approves the plan/public test boundaries and authorizes IP1. Existing documentation changes committed before IP1; no push authorized.

@@ -10,7 +10,7 @@ Part of the [harness design](../agentic-ml-harness-design.md). Scope: Execution,
 
 - Declare dependencies separately in the harness and experiment repositories' `pyproject.toml` files and commit their respective `uv.lock` files. Execute user experiments in the selected experiment project's environment, including its installed harness version and project package.
 - Support local Python subprocesses, followed by containerized and GPU execution.
-- Support automatic execution of Jupyter notebooks as experiment entrypoints using `nbclient` and an `ipykernel` kernel in the experiment's `uv`-managed environment; provide JupyterLab for interactive development.
+- Support automatic execution of Jupyter notebooks as experiment entrypoints using `nbclient` and an `ipykernel` kernel in the experiment's `uv`-managed environment; document VS Code for interactive development without requiring an editor dependency.
 - Execute notebooks from a fresh kernel, in cell order, with explicit input parameters and a recorded working directory. Apply experiment timeouts, cancellation, resource budgets, and filesystem/network restrictions to notebook execution.
 - Preserve the source notebook, supplied parameters, executed notebook with cell outputs, execution errors, and generated artifacts in the run record. Cell errors fail execution; successful notebooks remain subject to independent evaluation and protected-data rules.
 - Keep experiment-specific preprocessing, models, and training logic in the experiment repository's notebooks, helpers, or project package. Both notebook and Python entrypoints import generic capabilities from the installed harness public API; they must not import through paths into the harness source checkout.
@@ -67,9 +67,9 @@ Milestone 1 provides this restoration path without an agent. Demonstrate it in a
 
 ### Notebook development and execution contract
 
-- Use `experiments/<name>/notebooks/` in the user repository as the primary interface for data assessment, feature/baseline work, model development, and results analysis. Agents generate and revise these notebooks; users inspect, edit, and run them in JupyterLab. Python entrypoints remain available for advanced use.
+- Use `experiments/<name>/notebooks/` in the user repository as the primary interface for data assessment, feature/baseline work, model development, and results analysis. Agents generate and revise these notebooks; users inspect, edit, and run them in VS Code. Python entrypoints remain available for advanced use.
 - Provide numbered notebook templates for these activities; allow fewer or additional notebooks as appropriate. Include explanatory Markdown describing objectives, assumptions, generated code, results, and proposed next steps.
-- Declare JupyterLab and `ipykernel` in the experiment project's dependencies or an explicitly installed interactive dependency group managed by `uv`. Include `nbclient` and `ipykernel` in the installed harness notebook-execution dependencies. Users do not need the harness development environment.
+- Declare `ipykernel` in the experiment project's dependencies or an explicitly installed interactive dependency group managed by `uv`. Include `nbclient` and `ipykernel` in the installed harness notebook-execution dependencies. Users do not need the harness development environment.
 - Use an explicit parameter cell for dataset/configuration references and run identifiers. Require saved notebooks to execute from a fresh kernel in cell order with a defined working directory and locked environment; do not depend on hidden interactive state.
 - Exchange artifacts across notebooks through recorded versioned references rather than variables in another notebook's kernel. Snapshot imported experiment helpers and project code with each recorded run.
 - Import project-specific shared logic from the experiment repository's own Python package and generic capabilities from the installed harness. Promoting project code into the harness requires a separate development review.
@@ -126,3 +126,7 @@ Controls are rules and checks enforced by the harness to govern what an experime
 - Protected test sets cannot be used for iterative tuning or data acquisition decisions.
 - Resource limits and stopping conditions apply to both inner and outer loops.
 
+
+### Notebook editor setup
+
+VS Code is the documented editor for manual notebook verification, not a harness dependency. Install VS Code and its Python and Jupyter extensions separately. Open the experiment project and select its `.venv` interpreter in the notebook kernel picker. Keep automated execution through `nbclient` and `ipykernel` independent of the editor. Record editor and extension versions when reporting manual verification. Initialization does not install JupyterLab or remove a user-installed copy.

@@ -1,0 +1,225 @@
+# Milestone 1 / US-02: Initialize an experiment project
+
+## Scope and outcome
+
+- **Milestone:** 1 — Run and record a reproducible experiment.
+- **User story:** [US-02 / issue #9](https://github.com/jimthompson5802/agentic-ml/issues/9).
+- **User-visible outcome:** From a separate Git/Python project containing a full-SHA installed harness dependency, `uv run agentic-ml init` creates reviewable experiment inputs, project-package scaffolding, a synchronized environment, and usable local storage while preserving existing work and granting no experiment authorization.
+- **Acceptance criteria covered:** [US-02-AC-01–05](../specs/user-stories.md#us-02-initialize-an-experiment-project), in full.
+- **Scope boundaries:** Initialization, packaged templates, dependency/environment setup, storage setup, explicit incomplete setup choices, and installed-interface verification. Input resolution/semantic validation (US-03/US-05), managed execution, extraction, dataset versioning/restoration, scientific evaluation, component registration, runtime-guidance loading, adapters, and orchestration remain with their owning stories. Storage initialization does not require a dataset, experiment run, authenticated agent, or approval-service implementation. No registry publication or Milestone 99 work.
+- **Supporting design:** [Reading map](../specs/agentic-ml-harness-design.md#reading-map-and-document-authority), [initialization](../specs/design/interfaces-and-configuration.md#project-initialization-and-installation), [input contracts](../specs/design/interfaces-and-configuration.md#developer-experiment-inputs), [execution and storage](../specs/design/execution-and-governance.md), [layout](../specs/design/repository-layout.md), [delivery order](../specs/design/milestone-delivery.md#milestone-1-dependencies-and-delivery-order), [acceptance fixtures](../specs/design/acceptance-traceability.md), [architecture decisions](../specs/design/architecture-decisions.md).
+- **Coordinated execution index:** None. Reuse accepted US-01; no new prerequisite-story implementation is planned.
+
+## Findings and source reconciliation
+
+Planning baseline: main `4477162`, 2026-10-30. Created local branch `US-02-experiment-init` before requirements analysis. Preserved the pre-existing uncommitted executive-overview checkpoint entry.
+
+Issue #9: open, enhancement, author jimthompson5802, no assignees or GitHub milestone object; its body assigns Milestone 1. Full body and all comment pages retrieved successfully; zero comments, stable refreshed `updated_at=2026-10-30T02:06:19Z`. No comment scope decisions. Prerequisite issue #8: closed, full body and all comment pages retrieved, zero comments; refreshed timestamp `2026-10-30T10:42:22Z`. US-01's owning plan records both approved implementation gates and whole-story acceptance. API reads succeeded, although local `gh auth status` reported an invalid stored token; recheck authentication if later required reads fail.
+
+Existing package has Python >=3.12, Hatchling builds, a version-only argparse CLI in `src/agentic_ml/cli/__init__.py`, no third-party runtime dependencies, and provisional template/guidance resources. Existing installation drivers verify full-SHA dependency identity and upgrades; packaging drivers verify direct and sdist-rebuilt wheels outside the checkout. No initializer, usable experiment templates, configuration models, or storage implementation exists. The packaging probe currently expects a one-distribution runtime closure and exact provisional resource contents; extend that contract deliberately when real dependencies/resources are added, preserving meaningful independence of its assertions.
+
+The issue and repository story agree. Design layouts and schemas are illustrative. ADR-007 settles naming and full-SHA installation, but configuration and extra CLI/API interfaces remain pending. ADR-005 storage mechanisms and the initialization-relevant portion of ADR-006 need decisions before code. IP1 produces those decisions for developer review; it does not claim to settle later execution isolation or recovery. The old pending package-name sentence in the design is superseded by ADR-007 and implemented metadata.
+
+## Dependencies and decisions
+
+| Dependency or decision | Required outcome | Work blocked | Status / evidence |
+|---|---|---|---|
+| Installed pinned dependency | Normal installed harness, full Git SHA and project lock identity, public CLI/resources available | IP2 onward | Delivered: [US-01 plan](milestone-1-us-01.md), [IP1 evidence](../verification/us-01-ip1.md), [IP2 evidence](../verification/us-01-ip2.md); both gates approved, story accepted, PR #44 merged |
+| Public init contract and schema slice | Root selection, naming, CLI/API arguments/results/errors, schema versions and template inventory; review test boundaries | IP2 | Pending IP1-T1/T2 and IP1 gate |
+| Existing-file and partial-failure rules | Distinguish safe edits to shared metadata from conflicts; define reruns, symlinks, interrupted setup, recovery instructions | IP2–IP4 | Pending IP1-T2 and gate |
+| Dependency set and ownership | Separate harness runtime needs from experiment ML/notebook/storage needs; compatible Python 3.12 versions and lock-preserving uv workflow | IP3 | Pending IP1-T3 and gate; no installation authorized by this planning request |
+| ADR-005 storage slice | DVC metadata/cache/store, MLflow backend/artifacts, durable-state location and initialization format; local defaults and explicit overrides | IP4 | Pending IP1-T4 and gate; full workflow-state/recovery schemas remain downstream |
+| Setup authority boundary | Explicit path choices authorize only setup writes; no data reads, experiment execution, adapter login, or approval grants; no credentials in tracked files | IP2 onward | Pending IP1-T2/T4 and gate; later isolation remains unresolved and unavailable |
+
+## Technical approach and public test boundaries
+
+Implement reusable initialization under `src/agentic_ml/initialization/` (proposed), reached by the existing CLI and a typed public Python API whose signature is settled in IP1. Package templates under `src/agentic_ml/templates/`; load them through `importlib.resources`. Keep project-owned configuration/code in the selected experiment project. Add only the minimum initialization schema/model slice; full brief resolution and search-space enforcement remain downstream.
+
+Preflight the complete setup plan before writing: project identity/root, dependency pin, target collisions, configuration choices, and writable storage destinations. Preserve existing custom files byte-for-byte; shared files such as `pyproject.toml` and `.gitignore` need explicit, documented additive-edit rules. Never silently replace incompatible settings or user work. IP1 must define a safe rerun and failure protocol for non-atomic uv/DVC operations; do not promise cross-tool rollback without evidence. Report nonzero failures, completed steps, remaining work, and safe retry instructions while preserving diagnostics and existing state. No overwrite/force behavior is assumed.
+
+Proposed test boundaries, subject to developer confirmation in plan review and refinement at IP1:
+
+| Public boundary | Independent observations / coverage | Limits |
+|---|---|---|
+| Installed CLI, invoked in separate temporary experiment projects | Exit/stdout/stderr, generated file inventory/content, original-file hashes, pin/lock/environment identity, explicit root and storage behavior | Does not prove later managed execution, authorization enforcement for user code, or scientific validity |
+| Installed public Python initialization API | Same result/error contract and filesystem outcomes as CLI; explicit root from an unrelated working directory | No assertions on private helpers or collaborator call sequences; exact signature awaits IP1 |
+| uv and installed project environment | Real metadata/lock consistency, required distribution imports, project-package import, notebook kernel availability | Dependency availability does not prove model training or managed notebook execution |
+| DVC, MLflow and initialized state through their public interfaces | Usable local configuration/stores and reopenable initial state; default and explicit locations; no synthetic dataset/run accepted by initialization | Setup smoke probes do not implement full provenance, data restoration, workflow approvals or recovery |
+| Direct wheel and sdist-rebuilt wheel | Isolated installation and init with declared runtime dependencies, packaged resources and no harness checkout imports | Actual platforms tested must be recorded; no inferred Windows support |
+
+Use controlled local fixture projects without real data or credentials. Sentinel secrets may test exclusion; never use actual secrets. Test successful paths and one boundary/failure at a time, using independently specified expected outputs. Resource inventories must be explicit, not derived from production generation code. Any process seam used for deterministic external-tool failure injection supplements real-tool integration; it cannot replace it. No tests are written until boundary confirmation.
+
+## Plan review
+
+- **Status:** Approved.
+- **Developer decision:** Approved — plan and proposed public test boundaries; IP1 execution authorized.
+- **Decision reference and date:** Developer message “commit changes; i approve the plan, execute us-02 ip1”, 2026-10-30.
+- **Requested plan changes:** None recorded.
+- **Review requested:** Confirm scope, proposed public test boundaries, and IP1's bounded design investigation. IP1 gate must approve its concrete contracts and refined tests before executable implementation.
+
+## Scope-change history
+
+**US-02-SC-01 — 2026-10-30:** Developer removed the mandatory notebook-editor dependency throughout delivery and selected VS Code as the documented editor, not a required dependency. Approved by “Implement the plan.” Use kernel availability probes; retain ipykernel/nbclient and editor-independent CI. Update US-02-AC-03 and US-08-AC-01 without changing IDs. No completed implementation evidence invalidated; all gates remain pending. Resume at plan review, then separately authorized IP1.
+
+During execution use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md) for scope changes; record request, difference, impacted tasks/evidence, decision and authorized resume point here.
+
+## US-02 / Implementation Phase 1: Settle initialization contracts
+
+- **Outcome:** Reviewable initialization design and refined implementation tasks with no unresolved decision blocking IP2–IP4.
+- **Entry conditions:** Developer approves this plan and authorizes IP1. Refresh issue #9 and prerequisite status before execution.
+- **Acceptance criteria advanced:** US-02-AC-01–05; design evidence only, no criterion claimed complete.
+
+### Granular tasks
+
+| Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
+|---|---|---|---|---|---|
+| US-02-IP1-T1 | Not started | Inspect existing CLI/package/probes and public tool documentation; create `docs/verification/us-02-ip1.md` (proposed). Specify CLI/API, explicit root and project/experiment/package naming, file inventory, versioned schemas/typed models and incomplete template semantics. Refine concrete files and cases in this plan. | Plan approval | Concrete interfaces, examples and independently defined expected file contents ready for review; existing project package handling specified. | AC-01, AC-02 |
+| US-02-IP1-T2 | Not started | In the IP1 report define shared-file additive edits, conflict diagnostics, no-write preflight, repeat init, missing/malformed project metadata, full-SHA pin validation, nested roots, symlinks/path escape, concurrency and failure/retry boundaries. Specify setup choices for data, agents and approval presentation. | T1 | Reviewable success/failure matrix; explicit setup-write destinations, unset authority and no implicit data reads/execution; ambiguous cases block dependent implementation. | AC-01, AC-02, AC-05 |
+| US-02-IP1-T3 | Not started | Inspect uv public help/docs and selected libraries' official dependency/platform requirements. Record minimum required ML, notebook (`nbclient`, `ipykernel`), notebook kernel and storage packages, ownership, version ranges, installation ordering and lock checks. Decide initial framework set against design scope rather than assuming all later modeling integrations are required now. | T1 | Exact dependency table and uv commands; preservation of harness source/SHA and unrelated dependencies; failures diagnosable without weakening locked checks. | AC-02, AC-03 |
+| US-02-IP1-T4 | Not started | Specify local DVC/cache/store, MLflow backend/artifacts and initial durable-state representation, default paths, root-relative resolution and configurable local/external destinations. Record bounded ADR-002/005/006/007 decisions in `docs/specs/design/architecture-decisions.md` for review; refine schema/example sections only as needed. | T1–T3 | Supported local backend mechanisms and public usability probes chosen; credential-bearing URI/settings handling, existing stores and permission failures specified. Remote service provisioning stays outside scope. | AC-04, AC-05 |
+
+### Verification and review evidence
+
+| Check | Method or command | Expected result | Actual result / evidence reference |
+|---|---|---|---|
+| Contract completeness | Trace each criterion to concrete interfaces, proposed files, expected outputs and test matrix in IP1 report | No blocking implementation decision unresolved; otherwise revise plan and stop | Pending |
+| Source compatibility | Read installed uv help and primary documentation; cite exact versions/links in report | Feasible commands, dependency ownership and storage choices | Pending |
+| Documentation consistency | Local-link inspection and `git diff --check` | Valid links, consistent contracts; no executable behavior changed | Pending |
+
+### Developer approval gate
+
+- **Approval criteria:** T1–T4 complete; concrete contracts, public test boundaries, dependency choices and bounded architecture decisions reviewed. TDD is inapplicable to documentation-only design work.
+- **Evidence presented:** Pending `docs/verification/us-02-ip1.md` and refined plan/design diff.
+- **Remaining limitations or blocked work:** All executable initialization remains unavailable.
+- **Developer decision:** Pending.
+- **Decision reference and date:** Pending.
+- **Requested changes and resolution:** None.
+- **Progression authorized:** Stop and await explicit approval before IP2. Plan approval alone does not approve this gate.
+
+## US-02 / Implementation Phase 2: Deliver conflict-safe installed scaffolding
+
+- **Outcome:** Public CLI/API creates the agreed files safely from packaged resources and exposes explicit setup choices.
+- **Entry conditions:** IP1 approved; refined interfaces, schemas, failure matrix and tests confirmed.
+- **Acceptance criteria advanced:** AC-01, AC-02, AC-05; environment/storage completion follows.
+
+### Granular tasks
+
+| Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
+|---|---|---|---|---|---|
+| US-02-IP2-T1 | Not started | Add one failing installed CLI scaffold test in `tests/integration/test_initialization.py` (proposed), then minimal public API/CLI dispatch and installed resource loading in `src/agentic_ml/initialization/` and `src/agentic_ml/cli/__init__.py`. Add templates and minimal schema/model paths settled in IP1. | IP1 gate | New files include brief, search/execution inputs, valid output-free notebooks and importable project scaffold; version CLI regression passes. Phase evidence states dependency/storage setup is not yet complete. | AC-01 |
+| US-02-IP2-T2 | Not started | Add separate red–green slices for file collisions, safe shared metadata edits, preserved custom files/pin, compatible reruns, invalid roots and path/symlink cases from IP1. Implement only required behavior. | T1 | Hash comparisons establish preservation; conflicts have useful nonzero diagnostics and agreed no-write behavior; reruns cannot silently reset files/state. | AC-02 |
+| US-02-IP2-T3 | Not started | Add separate CLI/API tests for explicit root from unrelated cwd and unset data/agent/approval setup; implement agreed configuration defaults and input rejection. Extend resource probes in `tests/packaging/check_installed.py` as needed. | T1, T2 | Same public CLI/API outcomes; no raw-data reads, credentials, login, approvals or execution generated; development instructions not copied/loaded as runtime guidance. | AC-01, AC-02, AC-05 |
+| US-02-IP2-T4 | Not started | Record red/green and shared checks in `docs/verification/us-02-ip2.md` (proposed); update plan/checkpoint. | T1–T3 | Required checks pass; intermediate limitations and AC coverage clearly recorded. | AC-01, AC-02, AC-05 |
+
+### Verification and review evidence
+
+| Check | Method or command | Expected result | Actual result / evidence reference |
+|---|---|---|---|
+| Scaffold/conflict/API cases | One focused failing behavior test, minimal implementation, rerun and relevant regressions; installed fixtures outside checkout | Original failure reproduced, then expected files/errors and preserved hashes | Pending |
+| Development checks | Shared command set below | All pass; no unexplained lock changes | Pending |
+
+### Developer approval gate
+
+- **Approval criteria:** T1–T4 complete, red–green evidence and independent installed-interface checks reviewed.
+- **Evidence presented:** Pending `docs/verification/us-02-ip2.md`.
+- **Remaining limitations or blocked work:** Dependency synchronization and storage setup remain IP3/IP4; no full-story acceptance claim.
+- **Developer decision:** Pending.
+- **Decision reference and date:** Pending.
+- **Requested changes and resolution:** None.
+- **Progression authorized:** Stop and await explicit approval before IP3.
+
+## US-02 / Implementation Phase 3: Synchronize the experiment environment
+
+- **Outcome:** Initializer declares and installs required dependencies without changing the harness pin or unrelated project settings.
+- **Entry conditions:** IP2 approved; dependency set and failure protocol from IP1 remain valid.
+- **Acceptance criteria advanced:** AC-02, AC-03, AC-05.
+
+### Granular tasks
+
+| Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
+|---|---|---|---|---|---|
+| US-02-IP3-T1 | Not started | Add a real separate-project dependency/lock test, then implement dependency declarations and uv synchronization in initialization modules; update harness `pyproject.toml`/`uv.lock` only for deliberate runtime needs established in IP1. | IP2 gate | Required project dependencies declared, resolved and importable; installed project package import works; full harness SHA/source and unrelated declarations preserved. | AC-02, AC-03 |
+| US-02-IP3-T2 | Not started | Add red–green slices for incompatible existing dependencies, uv resolution/sync failure and safe retry. Use deterministic external-tool failure injection plus real resolver conflict fixture; retain diagnostics outside Git. | T1 | Nonzero failures identify stage and preserved/completed changes; no false success, pin upgrades, discarded user settings or hidden lock regeneration. | AC-02, AC-03, AC-05 |
+| US-02-IP3-T3 | Not started | Verify locked no-op resync, project-package imports, notebook-library imports and notebook kernel availability in clean installed projects. Extend `tests/packaging/verify_distributions.py` and probes for declared runtime closure; record `docs/verification/us-02-ip3.md` (proposed). | T1, T2 | Exact lock identity stable after normal locked verification; no harness checkout or development dependencies needed. Shared checks pass. | AC-02, AC-03 |
+
+### Verification and review evidence
+
+| Check | Method or command | Expected result | Actual result / evidence reference |
+|---|---|---|---|
+| Real environment | Installed init, then project `uv sync --locked`, `uv lock --check`, approved import probes and notebook kernel import probe | Required packages and project import usable; harness pin unchanged | Pending |
+| Failures and retry | Focused red–green tests, original-file/pin hashes and explicit partial-state observations | Approved failure/retry contract holds | Pending |
+| Development/package checks | Shared commands and both distribution paths below | Pass with intentional runtime dependency changes documented | Pending |
+
+### Developer approval gate
+
+- **Approval criteria:** T1–T3 complete, pin preservation and real environment plus failure evidence reviewed.
+- **Evidence presented:** Pending `docs/verification/us-02-ip3.md`.
+- **Remaining limitations or blocked work:** Storage integration and final complete init acceptance remain IP4.
+- **Developer decision:** Pending.
+- **Decision reference and date:** Pending.
+- **Requested changes and resolution:** None.
+- **Progression authorized:** Stop and await explicit approval before IP4.
+
+## US-02 / Implementation Phase 4: Initialize storage and verify the complete user path
+
+- **Outcome:** Complete safe initialization with usable configurable storage, documented setup choices, and criterion-mapped installed-package evidence.
+- **Entry conditions:** IP3 approved; IP1 storage/authority decisions remain applicable.
+- **Acceptance criteria advanced:** AC-01–05, final integrated verification.
+
+### Granular tasks
+
+| Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
+|---|---|---|---|---|---|
+| US-02-IP4-T1 | Not started | Add separate failing tests and minimal implementations for DVC initialization/configuration, MLflow backend/artifact setup and durable initial state in initialization modules. Exercise public storage interfaces from installed projects. | IP3 gate | Defaults create usable local stores; initial durable state can be reopened and grants no approval; existing DVC/MLflow/state content preserved. | AC-02, AC-04, AC-05 |
+| US-02-IP4-T2 | Not started | Add red–green slices for explicit storage locations (including local paths outside project), root-relative paths, pre-existing stores, invalid/credential-bearing settings, permission errors and interrupted storage setup/retry. | T1 | Explicit setup writes restricted to selected destinations; no unrelated stores changed; diagnostics and recoverable evidence preserved; secrets excluded from tracked config/output. | AC-02, AC-04, AC-05 |
+| US-02-IP4-T3 | Not started | Extend/create `tests/installation/verify_initialization.py` (proposed) and integration tests; cover fresh and existing pinned projects through complete CLI/API init with both wheel paths. Update `tests/packaging/check_installed.py` and integration coverage without removing original version/resource checks. | T1, T2 | Real CLI/API, complete inventory, notebook validity, project import, locks, stores, preservation and no implicit authorization independently verified outside checkout. | AC-01–05 |
+| US-02-IP4-T4 | Not started | Update `docs/experiment-setup.md`, `docs/development.md`, README links and relevant CI/probe invocation only as needed. Record `docs/verification/us-02-ip4.md` (proposed), final matrix, plan/checkpoint. | T3 | Reproducible setup/default/override/conflict/failure guidance; no claims that unresolved inputs or initialization authorize execution. Full checks and both wheel paths pass. | AC-01–05 |
+
+### Verification and review evidence
+
+| Check | Method or command | Expected result | Actual result / evidence reference |
+|---|---|---|---|
+| Storage defaults/overrides/errors | Focused red–green public-interface cases and real DVC/MLflow/state probes | Usable/reopenable setup; independent paths and existing content preserved | Pending |
+| Full installed user path | New verification driver from separate fresh/existing projects, direct wheel and sdist-rebuilt wheel | Every criterion supported; declared dependencies only; no maintained checkout | Pending |
+| Setup authority and Git boundary | Inspect generated files and `git status`/ignore behavior with sentinel data, secret and store fixtures | Track source/config/lock/DVC metadata; exclude data, credentials and generated stores; no execution/approval records created | Pending |
+| Manual VS Code notebook check | Open a small notebook, select project `.venv`, execute cells and inspect `sys.executable`; record VS Code/extension versions | Interpreter belongs to project environment; no separate notebook editor package required | Pending |
+| Full regression/package checks | Commands below and criterion matrix review | All pass with actual versions/platforms and limitations recorded | Pending |
+
+### Developer approval gate
+
+- **Approval criteria:** T1–T4 complete; AC-01–05 evidence, failure cases and limitations reviewed.
+- **Evidence presented:** Pending `docs/verification/us-02-ip4.md` and final matrix.
+- **Remaining limitations or blocked work:** Later semantic validation, execution/isolation, tracking runs, dataset restoration and adapters remain outside this story; record actual platform limitations.
+- **Developer decision:** Pending.
+- **Decision reference and date:** Pending.
+- **Requested changes and resolution:** None.
+- **Progression authorized:** Stop for final implementation gate approval and separate explicit whole-story acceptance; no next-story implementation authorized.
+
+## Shared verification and execution rules
+
+Use [development commands and conventions](../development.md). For each executable implementation phase, record focused red/green commands/results and run `uv sync --locked --group dev`, `uv lock --check`, `uv run --locked pytest`, `uv run --locked ruff check .`, `uv run --locked ruff format --check .`, `uv run --locked mypy src tests`, and `uv run --locked agentic-ml --version`. Record deliberate dependency/lock changes separately; checks must never silently rewrite the lock. Compare its SHA-256 before/after verification. Run `git diff --check`.
+
+For distribution-affecting changes, use `uv build --out-dir FRESH_DIRECTORY` and `uv run --locked python tests/packaging/verify_distributions.py --artifacts-dir FRESH_DIRECTORY`; test both the direct wheel and wheel rebuilt from the sdist. Refine the new initialization driver's command in IP1 before implementation; the proposed path is not an existing runnable check. Real pinned Git fixtures may use an isolated local committed harness repository for unpublished implementation, recording the exact full SHA and distinguishing this from live GitHub installation. Reuse US-01's live GitHub installation evidence; do not claim unpublished changes were fetched from GitHub.
+
+Record OS, Python/uv/Git and library versions, commands, actual outcomes, artifact identities, raw diagnostic paths, limitations and AC IDs in each report. Use small temporary fixtures/storage outside Git. macOS is the local baseline; hosted Linux evidence must be observed separately, and Windows/additional Python versions remain unverified unless actually tested.
+
+Work in small vertical TDD slices: one behavior-focused failing test, confirm the intended missing behavior, minimal implementation, rerun and relevant regressions, then next behavior. Do not batch all tests before implementation. Documentation-only work uses appropriate checks without manufactured red tests. Review refactoring after green.
+
+Mark tasks Complete only after required verification passes and evidence is linked. Preserve incomplete/failed/blocked status and reopen invalidated evidence. At every implementation phase boundary update this plan and CHECKPOINTS.md, present outcomes/deviations/limitations, and stop for explicit developer approval. Plan approval, tool permission and silence do not approve gates. Record decisions with date and message reference. Maintain the three-attempt limit and original assertions under [AGENTS.md](../../AGENTS.md); after three unsuccessful corrective attempts stop and present hypotheses, changes, original failure, logs, tree state and next-step options.
+
+Pause affected work for scope changes and use manage-plan-scope; new prerequisite-story implementation requires an approved scope revision and coordinated plans/index. Routine choices within approved scope can proceed. No implementation, dependency installation, publication or acceptance is authorized by drafting this plan.
+
+## Story completion review
+
+| Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
+|---|---|---|---|
+| [US-02-AC-01](../specs/user-stories.md#us-02-ac-01): configuration, inputs, notebooks and scaffolding | IP1-T1/T2; IP2-T1/T3/T4; IP4-T3/T4 | Planned IP2 and IP4 reports: installed inventory/content, notebook validity, project import, CLI/API equivalence | Pending |
+| [US-02-AC-02](../specs/user-stories.md#us-02-ac-02): preserve files and pin; report conflicts | IP1-T1/T2/T3; IP2-T2/T3/T4; IP3-T1/T2/T3; IP4-T1/T2/T3/T4 | Planned reports: independent original-file hashes, metadata semantics, exact pin identity, conflict/rerun/failure cases | Pending |
+| [US-02-AC-03](../specs/user-stories.md#us-02-ac-03): declared and synchronized dependencies | IP1-T3; IP3-T1/T2/T3; IP4-T3/T4 | Planned IP3/IP4 reports: real resolution/sync/imports/kernel availability, lock consistency, both wheels | Pending |
+| [US-02-AC-04](../specs/user-stories.md#us-02-ac-04): configurable DVC/MLflow/state | IP1-T4; IP4-T1/T2/T3/T4 | Planned IP4 report: real defaults/overrides, public usability/reopen probes and failures | Pending |
+| [US-02-AC-05](../specs/user-stories.md#us-02-ac-05): explicit setup; no grants or committed credentials | IP1-T2/T4; IP2-T3/T4; IP3-T2; IP4-T1/T2/T3/T4 | Planned IP2–IP4 reports: unset setup choices, no data reads/logins/grants, secret exclusion and ignore behavior | Pending |
+
+- **Remaining work:** All implementation tasks; IP1 must resolve the documented decisions before dependent code.
+- **Partial prerequisite delivery:** None newly included. Accepted US-01 reused; downstream stories remain outside scope.
+- **Developer acceptance:** Pending.
+- **Decision reference and date:** Pending; final gate also counts as story acceptance only if explicitly stated.
