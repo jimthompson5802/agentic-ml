@@ -32,19 +32,73 @@ uv run --no-sync mypy --version
 
 ## Shared development commands
 
-The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. Use the following commands from the repository root; these are also the commands configured in development CI:
+The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. Use the following commands from the repository root for local verification. Development CI uses the same checks but runs pytest serially.
 
 | Purpose | Command |
 |---|---|
 | Install source package and development dependencies | `uv sync --locked --group dev` |
 | Lock consistency | `uv lock --check` |
-| Automated tests | `uv run --locked pytest` |
+| Automated tests (local, four workers) | `uv run --locked pytest -n 4 --dist=loadgroup` |
 | Lint | `uv run --locked ruff check .` |
 | Formatting check | `uv run --locked ruff format --check .` |
 | Strict type checks | `uv run --locked mypy src tests` |
 | Development smoke check | `uv run --locked agentic-ml --version` |
 
 The smoke check must exit zero and print the installed package version; version tests compare it to distribution metadata. A missing command, nonzero exit, or wrong version is a failed smoke check. US-31 Implementation Phase 2 verified all shared commands from a fresh macOS checkout and a new environment; see the [recorded results](verification/us-31-ip2.md). Wheel/source-distribution verification belongs to US-33 and is separate from this editable development install.
+
+## Local parallel test execution
+
+Agents must use four workers with `loadgroup` for local pytest verification,
+including complete-suite runs and selected tests. After locked development
+synchronization, use:
+
+```sh
+uv run --locked pytest -n 4 --dist=loadgroup
+uv run --locked pytest -n 4 --dist=loadgroup --junitxml=/private/tmp/agentic-ml-parallel.xml --durations=20
+```
+
+For serial diagnosis or a short focused TDD cycle, use `uv run --locked pytest`
+with the relevant selector and record why serial execution was selected.
+Use two workers only for an explicit comparison or resource investigation.
+Pytest configuration does not add worker flags automatically; CI continues to
+invoke the serial command.
+
+`pytest-xdist` is a development dependency. Pytest is constrained to `>=8,<9.2`
+because pytest 9.2.0 silently breaks group scheduling with pytest-xdist 3.8.0.
+The public subprocess regression in `test_parallel_execution.py` verifies that
+marked cases share a worker. Revisit the upper bound after an upstream-compatible
+pair passes that regression and complete-suite verification.
+
+`loadgroup` keeps the installation
+tests in one worker and the distribution tests in another scheduling group;
+each group runs sequentially, but a worker can run other tests afterward.
+Initialization and CLI cases are ungrouped and can run individually on available
+workers. Grouping does not guarantee test order. Use `loadgroup` with these
+commands so shared mutable installation fixtures stay together and expensive
+distribution fixtures are reused. Avoid `loadfile`/`loadscope`: they place the
+entire initialization module on one worker.
+
+Each worker creates its own module fixtures. Experiment projects, source Git
+fixtures, databases, storage and artifact directories use pytest temporary paths
+or independently allocated temporary workspaces. Installation probes intentionally
+mutate their group-local installed project and restore its contents. Cache-removal
+checks remove only their own workspace cache. Keep those isolation properties
+when adding tests. Do not point multiple runs at the same `--basetemp` directory.
+
+Environment installation and MLflow initialization compete for CPU, memory and
+disk. Investigate resource constraints with a recorded worker-count comparison. Keep
+existing assertions and subprocess timeouts intact. Record worker count, suite
+count, durations, diagnostics and platform with results. A complete unfiltered
+parallel run exercises the full suite; selected runs do not replace final full
+verification. Retain serial execution for diagnosis. Parallel macOS evidence
+does not establish Linux or Windows support; CI remains serial until separately
+validated and authorized to change.
+
+The initial verified macOS benchmark passed 129 tests in 16m59s with two workers
+and 12m06s with four. Four workers reduced elapsed time by about 29%, while some
+individual tests took longer under contention. These measurements are not a
+Linux performance claim. See [parallel verification](verification/parallel-test-execution.md)
+for grouping checks, compatibility findings, commands and retained evidence.
 
 ## Phase and story verification
 
@@ -64,8 +118,8 @@ Record the following in each phase's verification section before implementation:
 Use the documented locked pytest command with explicit paths, node IDs or `-k` selectors. For example, these are valid targeted commands; the plan must justify the selection for its actual change:
 
 ```sh
-uv run --locked pytest tests/integration/test_cli_version.py
-uv run --locked pytest tests/integration/test_initialization.py -k 'storage_cannot_overlap or unsafe_backup'
+uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_cli_version.py
+uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_initialization.py -k 'storage_cannot_overlap or unsafe_backup'
 ```
 
 Confirm that the intended cases were collected and report selected/deselected counts. Selection defers unrelated coverage; it is not a passing result for deselected tests. Keep tests enabled and assertions unchanged. A known failing regression remains unresolved and cannot be hidden by narrowing the selection.
@@ -76,7 +130,7 @@ Run the full suite before an intermediate phase gate when changes affect depende
 
 ### Final verification before story acceptance
 
-Every new plan must assign final verification to a named task in its last implementation phase. After all implementation work is complete, run `uv run --locked pytest` across the complete repository suite without selection filters, together with the shared development checks. For distribution-affecting work, verify both the directly built wheel and a wheel rebuilt from the source distribution outside the checkout, using the [distribution and installation commands](#distribution-builds-and-installed-verification). Include other story-required installed-interface, manual and platform checks. A passing complete-suite run may supply these results when it demonstrably executes the required checks; reference that evidence instead of repeating identical checks against unchanged artifacts.
+Every new plan must assign final verification to a named task in its last implementation phase. After all implementation work is complete, run `uv run --locked pytest -n 4 --dist=loadgroup` locally across the complete repository suite without selection filters, together with the shared development checks. For distribution-affecting work, verify both the directly built wheel and a wheel rebuilt from the source distribution outside the checkout, using the [distribution and installation commands](#distribution-builds-and-installed-verification). Include other story-required installed-interface, manual and platform checks. A passing complete-suite run may supply these results when it demonstrably executes the required checks; reference that evidence instead of repeating identical checks against unchanged artifacts.
 
 Record the tested revision and working-tree changes, lockfile identity, commands, test counts, outcomes, artifact identities where applicable, platform and limitations. Reconcile all deferred checks and the acceptance-criterion matrix. Present the final phase gate only after required verification passes; request whole-story acceptance only after the gates and final verification are complete. Failing or unverified required checks remain blockers.
 

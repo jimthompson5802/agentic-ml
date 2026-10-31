@@ -8,6 +8,8 @@ from pathlib import Path
 
 import pytest
 
+pytestmark = pytest.mark.xdist_group("installation")
+
 ROOT = Path(__file__).resolve().parents[2]
 DRIVER = ROOT / "tests/installation/verify_installation.py"
 PROBE = ROOT / "tests/installation/check_project.py"

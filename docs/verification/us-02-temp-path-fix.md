@@ -93,3 +93,12 @@ Developer subsequently requested “commit changes”, authorizing the local com
 of the correction and records. This does not complete full verification or approve
 the correction gate. No push authorized. Final whitespace check passed; only
 documentation records changed after the recorded executable checks.
+
+Later authorized parallel-test tooling supplied renewed complete verification:
+129 passed with two workers (16m59s) and four workers (12m06s), including direct
+and rebuilt wheel checks and installed initialization. All original product
+assertions are unchanged. [Parallel evidence](parallel-test-execution.md) records
+the approved development-only pytest compatibility constraint, final lock,
+grouping regression, commands and logs. This supersedes the incomplete full-suite
+status for technical verification; the cancelled serial result remains historical.
+Correction gate still awaits developer review; no push or merge is authorized.

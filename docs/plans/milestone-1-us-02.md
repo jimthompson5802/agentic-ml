@@ -369,7 +369,7 @@ and successful corrected retry. These do not verify concurrent hostile mutation.
 |---|---|---|
 | TMP-T1 | Complete | Installed red reproduced conflict; one-line preflight guard and all four exact/descendant flag cases passed. |
 | TMP-T2 | Complete | Both installed API rejection/corrected CLI retry cases passed; original metadata case retained. |
-| TMP-T3 | Incomplete | Shared checks and direct/rebuilt distribution/installed initialization passed. Developer cancelled full suite after 27/128 passed (exit 130); 101 did not complete. |
+| TMP-T3 | Complete | Original serial run cancelled at 27/128. Later authorized tooling verification passed the full 129-case suite with two/four workers, including direct/rebuilt distribution and installed initialization. See renewed evidence below. |
 
 TDD selects `test_storage_cannot_overlap_initialization_metadata` first for the
 exact MLflow temporary path, then all overlap cases and API retry. Full suite
@@ -387,3 +387,12 @@ incomplete. Historical acceptance is preserved; no new gate approval is claimed.
 Developer “commit changes” authorizes a local commit of this correction and its
 records. Cancelled full-suite verification and the correction gate remain
 incomplete; this does not authorize push, merge or restarting the suite.
+
+Subsequent developer-authorized optional parallel-test tooling, including the
+explicitly approved pytest compatibility constraint, supplied renewed complete
+regression evidence: **129 passed** with two workers (16m59s) and four (12m06s),
+including both distribution paths and installed initialization. All original
+product assertions remain intact; a new test verifies grouped scheduling.
+See [tooling evidence](../verification/parallel-test-execution.md). This completes
+TMP-T3 verification; the cancelled serial run remains historical evidence.
+Final correction gate remains **Pending**, with no automatic approval, push or merge.

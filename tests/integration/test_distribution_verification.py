@@ -12,6 +12,8 @@ from zipfile import ZipFile
 
 import pytest
 
+pytestmark = pytest.mark.xdist_group("distribution")
+
 ROOT = Path(__file__).resolve().parents[2]
 DRIVER = ROOT / "tests/packaging/verify_distributions.py"
 

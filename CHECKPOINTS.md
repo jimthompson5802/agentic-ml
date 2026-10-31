@@ -9,14 +9,42 @@ original corrections approved. Accepted changes committed as `8fe0e8f` and pushe
 on `US-02-experiment-init`. [PR #45](https://github.com/jimthompson5802/agentic-ml/pull/45)
 is open against `main`; [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/45#pullrequestreview-5722316537) is published.
 
-**Next action:** await developer direction after cancellation of the full suite
+**Current tooling work:** Optional parallel tests implemented and verified under
+developer “implement the change” and “yes” for the compatibility constraint.
+Development pytest-xdist 3.8.0 / pytest 9.1.1 (`>=8,<9.2`); installation and
+distribution groups stay together, initialization/CLI cases distribute individually.
+Developer subsequently requested agent instructions to use four workers locally.
+The development guide now requires `uv run --locked pytest -n 4 --dist=loadgroup`
+for local verification, with recorded exceptions for focused TDD/diagnosis and
+resource comparisons. Pytest configuration and CI remain serial. Final complete runs: **129 passed** with
+two workers in **16m59s**, four in **12m06s**; group placement and unique case sets
+verified. New public scheduling regression caught pytest 9.2.0 silently ignoring
+groups; approved compatibility correction passed on its first attempt. Earlier
+128-case benchmarks are historical and do not establish grouping correctness.
+Shared checks passed; final lock SHA-256
+`90b77d41ded3a40f047e2df636b7fd645a8e94c772caca194b7f96aa084c0fd8`.
+Evidence: [parallel tests](docs/verification/parallel-test-execution.md).
+Developer “commit change” authorizes the local commit of parallel tooling,
+four-worker local instructions and verification records. Push remains unauthorized.
+Next action: developer review. macOS verified; Linux/Windows parallel execution
+and cancellation descendant cleanup remain unverified.
+
+Local-command instruction update is documentation-only: no executable behavior,
+dependencies, lock or CI changed in that update. TDD and runtime reruns do not
+apply. Local Markdown link/anchor and whitespace checks verify the edited guidance.
+
+**US-02 status:** temporary-path correction committed as `3a5fd84`, focused
+regressions passed. The later complete tooling runs renew TMP-T3 verification,
+including installed initialization and distribution checks. Correction gate
+remains pending; no push or merge authorized. Historical cancellation follows:
+developer requested cancellation of the full suite
 for the approved temporary-path correction. Source guard and nine added cases
-are implemented, uncommitted. Focused regressions: 38 passed. Shared checks and
+are implemented and committed as `3a5fd84`. Focused regressions: 38 passed. Shared checks and
 both distribution/complete installed initialization paths passed. Full suite
 cancelled at developer request: 27/128 passed, 101 incomplete, exit 130;
 `/private/tmp/us-02-tmp-full.xml`. Do not restart without direction. Correction
-gate remains pending. Developer “commit changes” authorizes a local commit of
-the correction and records; push remains unauthorized. See
+gate remains pending. Developer “commit changes” authorized the local correction
+commit; push remains unauthorized. See
 [correction evidence](docs/verification/us-02-temp-path-fix.md) and
 [owning plan](docs/plans/milestone-1-us-02.md).
 
