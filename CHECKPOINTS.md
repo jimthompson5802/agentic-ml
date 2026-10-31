@@ -4,15 +4,18 @@ Last updated: 2026-10-31
 
 ## Current position
 
-US-02 is accepted by developer message “i accept us-02” (2026-10-31). All
-implementation gates and IP4 correction review are approved. Final verification:
-**119 tests passed**, shared checks and both installed distribution paths passed.
-See [owning plan](docs/plans/milestone-1-us-02.md) and
-[correction evidence](docs/verification/us-02-review-fixes.md).
+US-02 accepted by “i accept us-02” (2026-10-31); all implementation gates and
+original corrections approved. Accepted changes committed as `8fe0e8f` and pushed
+on `US-02-experiment-init`. [PR #45](https://github.com/jimthompson5802/agentic-ml/pull/45)
+is open against `main`; [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/45#pullrequestreview-5722316537) is published.
 
-**Next action:** commit remaining accepted-story changes, ordinary push, create
-the PR and publish a static COMMENT review under execute-plan. Publication is
-authorized and in progress. No merge, branch cleanup or next-story work authorized.
+**Next action:** await developer direction on the new
+[Medium review finding](https://github.com/jimthompson5802/agentic-ml/pull/45#discussion_r4431369976): storage override
+`.agentic-ml/init.tmp` conflicts with the journal temporary file. The 119-test
+suite passed but does not cover this additional path. Original acceptance remains
+recorded; this follow-up remains unresolved before merge. No merge, cleanup,
+next-story work or automatic review fix is authorized. Hosted Linux CI pending
+at observation. See [owning plan](docs/plans/milestone-1-us-02.md).
 
 ## Resume here
 
@@ -28,7 +31,7 @@ authorized and in progress. No merge, branch cleanup or next-story work authoriz
 - macOS 15.7.9 arm64/Python 3.12.15/uv 0.13.1/Git 2.54.0 verified locally. No new Linux/Windows evidence. Harness lock remains `b7ca45a27ad337812eff5555bf2a74edee3bfb637ca7c756e382fc82f867ab66`.
 - Issue #9 complete body/all comment pages refreshed at entry: stable zero-comment snapshot, updated `2026-10-31T01:15:38Z`; Milestone 1 / AC-01–05, no new scope decision. GitHub public reads succeeded. Publication-time authentication succeeds outside the sandbox; the earlier invalid-token result was sandbox-specific.
 - Cache/log-directory sandbox denials were retried with approved escalation. They were infrastructure failures, not behavior reds. All granular failure/correction evidence is in the IP4 report.
-- Original IP4 implementation and approval records are committed as `b6a353c`. Remaining source, tests, correction evidence, plan and checkpoint belong to the accepted story; no unrelated changes were present at entry. Commit/publication authorized by acceptance.
+- Original IP4 implementation and approval records are committed as `b6a353c`. Accepted source, tests, correction evidence and acceptance records are committed as `8fe0e8f` and pushed. Publication outcome records are documentation-only and will be committed/pushed under acceptance authorization; no unrelated changes were present at entry.
 
 ## Accepted work and supporting context
 

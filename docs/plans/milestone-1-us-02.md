@@ -225,7 +225,7 @@ Pause affected work for scope changes and use manage-plan-scope; new prerequisit
 | [US-02-AC-04](../specs/user-stories.md#us-02-ac-04): configurable DVC/MLflow/state | IP1-T4; IP4-T1/T2/T3/T4 | [IP4](../verification/us-02-ip4.md): real DVC/cache, MLflow/artifacts and durable state, defaults/overrides and failure cases | Verified on macOS; accepted 2026-10-31 |
 | [US-02-AC-05](../specs/user-stories.md#us-02-ac-05): explicit setup; no grants or committed credentials | IP1-T2/T4; IP2-T3/T4; IP3-T2; IP4-T1/T2/T3/T4 | [IP2](../verification/us-02-ip2.md), [IP4](../verification/us-02-ip4.md): explicit unconfigured choices, empty approvals/runs, credential/data/store boundaries | Verified on macOS; accepted 2026-10-31 |
 
-- **Remaining work:** All implementation phases and corrections approved. US-02 accepted; commit/push/PR/static review authorized by the execute-plan accepted-story workflow. Publication pending.
+- **Remaining work:** All implementation phases and corrections approved. US-02 accepted and published in PR #45. Post-acceptance static review identified one additional metadata temporary-path conflict; follow-up correction requires authorization before merge.
 - **Partial prerequisite delivery:** None newly included. Accepted US-01 reused; downstream stories remain outside scope.
 - **Developer acceptance:** Accepted.
 - **Decision reference and date:** Developer message “i accept us-02”, 2026-10-31.
@@ -326,3 +326,27 @@ The execute-plan accepted-story workflow authorizes remaining local commits,
 ordinary push, PR creation and a static COMMENT review. Publication is in
 progress; merge, cleanup and another story remain outside this authorization.
 Acceptance-record edits are documentation-only; no runtime rerun required.
+
+
+## Publication and static review — 2026-10-31
+
+- Accepted corrections and acceptance records committed as `8fe0e8f`; ordinary
+  push of `US-02-experiment-init` succeeded.
+- [PR #45](https://github.com/jimthompson5802/agentic-ml/pull/45) targets `main`
+  (`4477162aa688636dcbea8f0493a5793dfc8e878b`) and closes issue #9 on merge.
+- [Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/45#pullrequestreview-5722316537) published and verified against
+  `8fe0e8f44e6e0cbb24625f98982018a77a212ec9`; one
+  [Medium finding](https://github.com/jimthompson5802/agentic-ml/pull/45#discussion_r4431369976) remains unresolved: storage can target
+  `.agentic-ml/init.tmp`, conflicting with the journal's atomic-write temporary
+  file after setup has already modified the project. This is a newly identified
+  AC-02/04 gap; original P1/P2 corrections and developer acceptance remain
+  historical facts. The existing 119-test suite does not cover this path.
+- Review was static only; no project code/checks were executed during review.
+  Published thread location/body/commit and unresolved state were verified.
+- Hosted Linux [CI run](https://github.com/jimthompson5802/agentic-ml/actions/runs/41192049523)
+  was pending at observation. No new platform result is claimed.
+- This publication-record update is documentation-only. A head review refresh
+  accompanies publication of these records; the product finding remains in its
+  original inline thread without duplication.
+- Next action: developer direction for the new finding. Acceptance authorized
+  publication, not automatic review fixes, merge, cleanup or another story.
