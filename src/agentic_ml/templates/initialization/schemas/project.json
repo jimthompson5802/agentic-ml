@@ -1,0 +1,91 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "package": {
+          "type": "string",
+          "minLength": 1
+        },
+        "environment": {
+          "const": ".venv"
+        }
+      },
+      "required": [
+        "package",
+        "environment"
+      ],
+      "additionalProperties": false
+    },
+    "storage": {
+      "type": "object",
+      "properties": {
+        "dvc_store": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mlflow_backend": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifacts": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "dvc_store",
+        "mlflow_backend",
+        "artifacts",
+        "state"
+      ],
+      "additionalProperties": false
+    },
+    "setup": {
+      "type": "object",
+      "properties": {
+        "data_access": {
+          "const": "unconfigured"
+        },
+        "agent": {
+          "const": "unconfigured"
+        },
+        "approval_presentation": {
+          "const": "unconfigured"
+        }
+      },
+      "required": [
+        "data_access",
+        "agent",
+        "approval_presentation"
+      ],
+      "additionalProperties": false
+    },
+    "guidance": {
+      "type": "object",
+      "maxProperties": 0
+    },
+    "components": {
+      "type": "object",
+      "maxProperties": 0
+    }
+  },
+  "required": [
+    "schema_version",
+    "project",
+    "storage",
+    "setup",
+    "guidance",
+    "components"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

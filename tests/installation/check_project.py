@@ -66,11 +66,28 @@ def main() -> None:
         "installed requested revision mismatch"
     )
     inventory = sorted((d.metadata["Name"], d.version) for d in distributions())
-    assert inventory == [("agentic-ml", installed.version)], (
-        f"unexpected installed dependency closure: {inventory}"
-    )
-    assert not (installed.requires or []), "review new runtime dependencies"
-    assert len(lock["package"]) == 2, "unexpected locked dependency closure"
+    expected_names = {
+        "agentic-ml",
+        "attrs",
+        "jsonschema",
+        "jsonschema-specifications",
+        "pyyaml",
+        "referencing",
+        "rpds-py",
+        "tomlkit",
+        "typing-extensions",
+    }
+    assert {
+        name.lower().replace("_", "-") for name, _ in inventory
+    } == expected_names, f"unexpected installed dependency closure: {inventory}"
+    assert set(installed.requires or []) == {
+        "jsonschema<5,>=4",
+        "pyyaml<7,>=6",
+        "tomlkit<1,>=0.13",
+    }, "unexpected declared runtime dependencies"
+    assert {p["name"] for p in lock["package"]} == expected_names | {
+        declaration["project"]["name"]
+    }, "unexpected locked dependency closure"
     assert harness[0]["version"] == installed.version, "locked version mismatch"
     result = subprocess.run(
         [str(environment / "bin/agentic-ml"), "--version"],

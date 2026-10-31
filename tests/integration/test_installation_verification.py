@@ -73,7 +73,20 @@ def test_pinned_project_runs_without_checkout_or_cache(
     assert identity["resolved_revision"] == revision
     assert identity["repository"] == repository
     assert len(identity["lock_sha256"]) == 64
-    assert identity["distributions"] == [["agentic-ml", "0.1.0"]]
+    assert {
+        name.lower().replace("_", "-") for name, _ in identity["distributions"]
+    } == {
+        "agentic-ml",
+        "attrs",
+        "jsonschema",
+        "jsonschema-specifications",
+        "pyyaml",
+        "referencing",
+        "rpds-py",
+        "tomlkit",
+        "typing-extensions",
+    }
+    assert ["agentic-ml", "0.1.0"] in identity["distributions"]
     assert str(ROOT) not in identity["package_path"]
 
 

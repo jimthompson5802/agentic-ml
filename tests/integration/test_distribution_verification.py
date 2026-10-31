@@ -183,3 +183,18 @@ def test_corrupted_sdist_cannot_reuse_direct_success(
     assert "PASS direct-wheel" in result.stdout
     assert "PASS rebuilt-wheel" not in result.stdout
     assert "sdist extraction" in result.stderr
+
+
+def test_missing_initialization_schema_reports_installed_failure(
+    artifacts: Path, tmp_path: Path
+) -> None:
+    """The installed artifact must contain usable initialization schemas."""
+    result = damaged_wheel_result(
+        artifacts,
+        tmp_path,
+        "agentic_ml/templates/initialization/schemas/project.json",
+        None,
+    )
+    assert result.returncode != 0
+    assert "initialization resource missing" in result.stderr
+    assert "PASS direct-wheel" not in result.stdout

@@ -25,11 +25,11 @@ The issue and repository story agree. Design layouts and schemas are illustrativ
 | Dependency or decision | Required outcome | Work blocked | Status / evidence |
 |---|---|---|---|
 | Installed pinned dependency | Normal installed harness, full Git SHA and project lock identity, public CLI/resources available | IP2 onward | Delivered: [US-01 plan](milestone-1-us-01.md), [IP1 evidence](../verification/us-01-ip1.md), [IP2 evidence](../verification/us-01-ip2.md); both gates approved, story accepted, PR #44 merged |
-| Public init contract and schema slice | Root selection, naming, CLI/API arguments/results/errors, schema versions and template inventory; review test boundaries | IP2 | Contracts prepared in [IP1 report](../verification/us-02-ip1.md); gate pending |
-| Existing-file and partial-failure rules | Distinguish safe edits to shared metadata from conflicts; define reruns, symlinks, interrupted setup, recovery instructions | IP2–IP4 | IP1 report preservation/failure matrix prepared; gate pending |
-| Dependency set and ownership | Separate harness runtime needs from experiment ML/notebook/storage needs; compatible Python 3.12 versions and lock-preserving uv workflow | IP3 | Dependency contract prepared in IP1 report; gate pending; actual resolution belongs to IP3 |
-| ADR-005 storage slice | DVC metadata/cache/store, MLflow backend/artifacts, durable-state location and initialization format; local defaults and explicit overrides | IP4 | Storage contract prepared in IP1 report; gate pending; full workflow-state/recovery schemas remain downstream |
-| Setup authority boundary | Explicit path choices authorize only setup writes; no data reads, experiment execution, adapter login, or approval grants; no credentials in tracked files | IP2 onward | Setup boundary prepared in IP1 report; gate pending; later isolation remains unresolved and unavailable |
+| Public init contract and schema slice | Root selection, naming, CLI/API arguments/results/errors, schema versions and template inventory; review test boundaries | IP2 | Contracts approved at IP1 gate; [IP1 report](../verification/us-02-ip1.md) |
+| Existing-file and partial-failure rules | Distinguish safe edits to shared metadata from conflicts; define reruns, symlinks, interrupted setup, recovery instructions | IP2–IP4 | IP1 preservation/failure matrix approved; IP2 scaffold checks passed |
+| Dependency set and ownership | Separate harness runtime needs from experiment ML/notebook/storage needs; compatible Python 3.12 versions and lock-preserving uv workflow | IP3 | IP1 dependency contract approved; parser/schema runtime closure verified in IP2; experiment resolution belongs to IP3 |
+| ADR-005 storage slice | DVC metadata/cache/store, MLflow backend/artifacts, durable-state location and initialization format; local defaults and explicit overrides | IP4 | IP1 storage contract approved; actual provisioning belongs to IP4; full workflow-state/recovery schemas remain downstream |
+| Setup authority boundary | Explicit path choices authorize only setup writes; no data reads, experiment execution, adapter login, or approval grants; no credentials in tracked files | IP2 onward | IP1 setup boundary approved; scaffold boundary verified in IP2; later isolation remains unresolved and unavailable |
 
 ## Technical approach and public test boundaries
 
@@ -106,23 +106,23 @@ During execution use [manage-plan-scope](../../.agents/skills/manage-plan-scope/
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-02-IP2-T1 | Not started | Add one failing installed CLI scaffold test in `tests/integration/test_initialization.py` (proposed), then minimal public API/CLI dispatch and installed resource loading in `src/agentic_ml/initialization/` and `src/agentic_ml/cli/__init__.py`. Add templates and minimal schema/model paths settled in IP1. | IP1 gate | New files include brief, search/execution inputs, valid output-free notebooks and importable project scaffold; version CLI regression passes. Phase evidence states dependency/storage setup is not yet complete. | AC-01 |
-| US-02-IP2-T2 | Not started | Add separate red–green slices for file collisions, safe shared metadata edits, preserved custom files/pin, compatible reruns, invalid roots and path/symlink cases from IP1. Implement only required behavior. | T1 | Hash comparisons establish preservation; conflicts have useful nonzero diagnostics and agreed no-write behavior; reruns cannot silently reset files/state. | AC-02 |
-| US-02-IP2-T3 | Not started | Add separate CLI/API tests for explicit root from unrelated cwd and unset data/agent/approval setup; implement agreed configuration defaults and input rejection. Extend resource probes in `tests/packaging/check_installed.py` as needed. | T1, T2 | Same public CLI/API outcomes; no raw-data reads, credentials, login, approvals or execution generated; development instructions not copied/loaded as runtime guidance. | AC-01, AC-02, AC-05 |
-| US-02-IP2-T4 | Not started | Record red/green and shared checks in `docs/verification/us-02-ip2.md` (proposed); update plan/checkpoint. | T1–T3 | Required checks pass; intermediate limitations and AC coverage clearly recorded. | AC-01, AC-02, AC-05 |
+| US-02-IP2-T1 | Complete | Add one failing installed CLI scaffold test in `tests/integration/test_initialization.py` (proposed), then minimal public API/CLI dispatch and installed resource loading in `src/agentic_ml/initialization/` and `src/agentic_ml/cli/__init__.py`. Add templates and minimal schema/model paths settled in IP1. | IP1 gate | New files include brief, search/execution inputs, valid output-free notebooks and importable project scaffold; version CLI regression passes. Phase evidence states dependency/storage setup is not yet complete. | AC-01 |
+| US-02-IP2-T2 | Complete | Add separate red–green slices for file collisions, safe shared metadata edits, preserved custom files/pin, compatible reruns, invalid roots and path/symlink cases from IP1. Implement only required behavior. | T1 | Hash comparisons establish preservation; conflicts have useful nonzero diagnostics and agreed no-write behavior; reruns cannot silently reset files/state. | AC-02 |
+| US-02-IP2-T3 | Complete | Add separate CLI/API tests for explicit root from unrelated cwd and unset data/agent/approval setup; implement agreed configuration defaults and input rejection. Extend resource probes in `tests/packaging/check_installed.py` as needed. | T1, T2 | Same public CLI/API outcomes; no raw-data reads, credentials, login, approvals or execution generated; development instructions not copied/loaded as runtime guidance. | AC-01, AC-02, AC-05 |
+| US-02-IP2-T4 | Complete | Record red/green and shared checks in `docs/verification/us-02-ip2.md` (proposed); update plan/checkpoint. | T1–T3 | Required checks pass; intermediate limitations and AC coverage clearly recorded. | AC-01, AC-02, AC-05 |
 
 ### Verification and review evidence
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Scaffold/conflict/API cases | One focused failing behavior test, minimal implementation, rerun and relevant regressions; installed fixtures outside checkout | Original failure reproduced, then expected files/errors and preserved hashes | Pending |
-| Development checks | Shared command set below | All pass; no unexplained lock changes | Pending |
+| Scaffold/conflict/API cases | One focused failing behavior test, minimal implementation, rerun and relevant regressions; installed fixtures outside checkout | Original failure reproduced, then expected files/errors and preserved hashes | Passed — [IP2 evidence](../verification/us-02-ip2.md), 56 tests and both distribution paths; red/green and limitations recorded |
+| Development checks | Shared command set below | All pass; no unexplained lock changes | Passed — [IP2 evidence](../verification/us-02-ip2.md), 56 tests and both distribution paths; red/green and limitations recorded |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete, red–green evidence and independent installed-interface checks reviewed.
-- **Evidence presented:** Pending `docs/verification/us-02-ip2.md`.
-- **Remaining limitations or blocked work:** Dependency synchronization and storage setup remain IP3/IP4; no full-story acceptance claim.
+- **Evidence presented:** [IP2 evidence](../verification/us-02-ip2.md); all 56 tests, shared checks and direct/rebuilt wheels passed on macOS/Python 3.12. Technical completion is separate from gate approval.
+- **Remaining limitations or blocked work:** Dependency synchronization and storage setup remain IP3/IP4; no full-story acceptance claim. One backup test initially failed fixture setup rather than behavior; corrected without weakening assertions, disclosed in evidence. No Linux/Windows execution or VS Code manual check claimed.
 - **Developer decision:** Pending.
 - **Decision reference and date:** Pending.
 - **Requested changes and resolution:** None.
@@ -219,7 +219,13 @@ Pause affected work for scope changes and use manage-plan-scope; new prerequisit
 | [US-02-AC-04](../specs/user-stories.md#us-02-ac-04): configurable DVC/MLflow/state | IP1-T4; IP4-T1/T2/T3/T4 | Planned IP4 report: real defaults/overrides, public usability/reopen probes and failures | Pending |
 | [US-02-AC-05](../specs/user-stories.md#us-02-ac-05): explicit setup; no grants or committed credentials | IP1-T2/T4; IP2-T3/T4; IP3-T2; IP4-T1/T2/T3/T4 | Planned IP2–IP4 reports: unset setup choices, no data reads/logins/grants, secret exclusion and ignore behavior | Pending |
 
-- **Remaining work:** IP1 developer gate review, then separately authorized IP2–IP4. IP1 contracts are technically complete; all executable delivery criteria remain pending.
+- **Remaining work:** IP2 developer gate review, then separately authorized IP3/IP4. Scaffolding is verified; environment/storage and full-story delivery criteria remain pending.
 - **Partial prerequisite delivery:** None newly included. Accepted US-01 reused; downstream stories remain outside scope.
 - **Developer acceptance:** Pending.
 - **Decision reference and date:** Pending; final gate also counts as story acceptance only if explicitly stated.
+
+## IP2 completion record — 2026-10-30
+
+T1–T4 technically complete; [evidence](../verification/us-02-ip2.md) records actual commands, red–green slices, corrective attempts, boundary coverage and limitations. Public CLI/API and packaged templates/schemas implemented; intermediate results explicitly report environment/storage pending. Parser/schema runtime dependencies and dev stubs deliberately added; harness lock identity changed and remained stable through verification. Existing installation/distribution probes now assert the exact required runtime closure rather than the superseded zero-dependency baseline. Complete original corruption checks retained. No IP3 synchronization or IP4 storage behavior delivered. IP2 gate and whole-story acceptance remain pending; no publication authorized.
+
+Developer subsequently requested “commit changes”, authorizing the local IP2 commit. This does not approve the IP2 gate or authorize IP3; those decisions remain pending.

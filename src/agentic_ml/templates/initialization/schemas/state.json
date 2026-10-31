@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "experiment": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "const": "unconfigured"
+    },
+    "approvals": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "runs": {
+      "type": "array",
+      "maxItems": 0
+    }
+  },
+  "required": [
+    "schema_version",
+    "experiment",
+    "status",
+    "approvals",
+    "runs"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

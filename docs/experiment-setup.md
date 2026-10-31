@@ -2,7 +2,7 @@
 
 These instructions are for experiment users. The harness is installed into your project's own Python environment; you do not need a harness checkout or the contributor environment. Contributor setup is described separately in [the development guide](development.md).
 
-The current package provides `agentic-ml --version`, Python imports, and provisional template/runtime guidance resources. Experiment initialization (`agentic-ml init`), notebook execution, and ML services will be added by subsequent stories. The provisional resources demonstrate packaging; they are not usable experiment initialization templates.
+The current development revision provides `agentic-ml --version`, Python imports and draft initialization scaffolding (see the preview below). The published revisions in the bootstrap examples predate that preview and provide provisional resources only. Environment/storage initialization, notebook execution and ML services remain subsequent work.
 
 ## Prerequisites
 
@@ -121,3 +121,11 @@ uv run --locked python tests/installation/verify_installation.py --repository ht
 ```
 
 The verifier preserves `identity-before-sync.json`, `pyproject-before-sync.toml`, `uv-before-sync.lock` and the original `identity.json`; upgraded metadata is recorded separately in `identity-after-upgrade.json`. A passing initial installation alone does not count as a passing upgrade. Review all three PASS stages and the original exit code. See [US-01 IP2 evidence](verification/us-01-ip2.md).
+
+## Scaffolding preview (US-02 IP2)
+
+The current development revision adds `uv run agentic-ml init` for draft project scaffolding. After installing that exact reviewed revision as a full-SHA dependency, run it from the experiment Git root, or pass `--project-root /absolute/project`. Use `--experiment NAME` and `--package-name IDENTIFIER` to select names; an existing src package requires explicit selection.
+
+This intermediate implementation creates draft configuration, a brief, search/execution inputs, four inert notebooks, project-package build scaffolding and ignore rules. It reports **environment and storage setup pending**. It does not yet synchronize the experiment environment or initialize DVC, MLflow or durable workflow storage. Those are US-02 IP3/IP4 deliverables; this preview does not satisfy the full initialization story. The experiment lock remains unchanged until synchronization is delivered.
+
+Review generated files before use. Resolve reported conflicts without deleting your work; reruns preserve compatible edited drafts. The private, ignored `.agentic-ml/init.json` and metadata backups record setup progress for interrupted scaffolding. A setup record grants no data access, agent authentication or execution approval. Source notebooks, configuration and project code remain ordinary reviewable Git files.
