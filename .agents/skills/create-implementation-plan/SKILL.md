@@ -87,6 +87,12 @@ For each implementation phase, define:
 
 Every implementation phase must end with a developer approval gate, including the final one. Track technical completion separately from developer approval.
 
+### Plan verification by impact
+
+Read the working repository's verification policy before choosing phase checks. For this repository, use [phase and story verification](../../../docs/development.md#phase-and-story-verification). New plans must specify selected test commands, affected behavior and dependencies, acceptance-criterion coverage, confirmed public boundaries, and unrelated checks deferred to a named final task. Follow early full-run triggers; duration alone does not justify deferral. Preserve stronger requirements in an existing approved plan unless an explicit revision is authorized and recorded through the scope-change procedure.
+
+Assign final verification to a task in the last implementation phase, before its approval gate and whole-story acceptance. Require the complete unfiltered suite, shared checks and applicable distribution/installation, manual and platform evidence against the final implementation. Resolve every deferred check there. Record evidence-renewal conditions after later changes; document-only work uses appropriate document checks with a rationale. Approval of an intermediate phase covers only its verified scope.
+
 ## Define granular tasks
 
 Give each task a stable ID and a progress field. Follow the repository template or existing plan. If neither defines a format, use unchecked Markdown tasks such as `- [ ] IP1-T01: ...`.
@@ -162,6 +168,7 @@ Before delivery, check that:
 - Every task identifies files, progress, completion conditions, and expected behavior where applicable.
 - Work that depends on unresolved findings is marked as conditional.
 - Every implementation phase has a stop instruction and a pending developer gate.
+- Phase test selections have impact rationales and explicit deferrals; a named final task resolves them and requires complete verification before final gate approval and story acceptance.
 - Local links resolve, and the plan follows the source requirements and repository template.
 
 Record only validation actually performed. Keep planned checks distinct from passing results.

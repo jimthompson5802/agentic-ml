@@ -54,6 +54,12 @@ Review refactoring after the behavior is green; keep relevant tests passing whil
 
 For documentation-only changes or refactoring that preserves behavior, use appropriate checks and existing regression tests instead of manufacturing a failing test. Record why TDD does not apply when the change has no new or corrected executable behavior.
 
+## Verification during implementation
+
+For new implementation plans, follow the development guide's [phase and story verification policy](docs/development.md#phase-and-story-verification). Use impact-based test selection during development and at intermediate phase gates. Each plan must identify selected tests, dependent behavior, selection rationale, and checks deferred to final verification. Verify all behavior required by the current phase before requesting its approval; deferred unrelated regression checks do not establish whole-story correctness.
+
+For executable changes, require full-suite and applicable distribution/installation verification of the final implementation before presenting the final phase for approval and requesting whole-story acceptance. Follow the guide's early full-run triggers, evidence-renewal rules and documentation-only exceptions. Keep all tests enabled and assertions intact. Existing approved plans retain their verification requirements unless explicitly revised through the scope-change procedure; this policy does not retroactively change completed evidence or approvals.
+
 ## Problem-solving attempt limit
 
 Make at most three attempts to fix the same problem. An attempt consists of a proposed corrective change followed by verification against the original failure and relevant tests. Track the hypothesis, change, and verification result for each attempt. Treat an unsuccessful verification as a failed attempt; changing tactics or starting a new turn does not reset the count for the same unresolved problem.

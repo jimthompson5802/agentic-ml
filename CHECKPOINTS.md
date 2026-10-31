@@ -17,6 +17,29 @@ recorded; this follow-up remains unresolved before merge. No merge, cleanup,
 next-story work or automatic review fix is authorized. Hosted Linux CI pending
 at observation. See [owning plan](docs/plans/milestone-1-us-02.md).
 
+## Development verification policy — 2026-10-31
+
+Developer “Ok make this change” authorized impact-based testing for future plans.
+Updated AGENTS.md, the [development policy](docs/development.md#phase-and-story-verification),
+the plan template and create-implementation-plan / execute-plan / manage-plan-scope
+skills. Intermediate gates use justified affected/dependent tests and shared
+checks; final verification requires the full suite and applicable installed
+distribution checks before final gate approval and story acceptance. Broad
+changes trigger earlier full runs. Existing approved plans, including US-02,
+retain their recorded requirements unless explicitly revised.
+
+Documentation/workflow changes only: TDD and the product suite do not apply;
+no executable behavior changed. All three edited skills passed `quick_validate.py`
+using the existing project interpreter; 34 local Markdown links/anchors and
+`git diff --check` passed. Manual policy walkthrough covered narrow phase scope,
+slow relevant tests, broad-change triggers, known failures, existing approved
+plans, deferred-check reconciliation, and executable versus document-only
+evidence renewal. No source, tests, dependencies, lock, CI or story-plan changes.
+Developer “commit changes” authorizes the local commit of these policy edits
+and this checkpoint on `US-02-experiment-init`. Push/publication of this separate
+workflow change is not requested. The US-02 review finding above remains pending
+and is outside this change.
+
 ## Resume here
 
 - P1/P2 focused regressions passed: 5 unsafe-backup cases, 28 metadata overlap cases, and installed API rejection/corrected CLI retry with matching backups. Shared sync/lock/lint/format/types/version checks passed. Full suite passed: **119 passed**, exit 0, 1898.17s (31:38), including direct/rebuilt distribution checks and full installed initialization. Retained fixtures at `/private/tmp/us-02-review-suite`; XML `/private/tmp/us-02-review-suite.xml`. Earlier evidence below is historical IP4 evidence and does not by itself cover these defects.

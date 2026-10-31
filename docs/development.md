@@ -46,6 +46,42 @@ The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. U
 
 The smoke check must exit zero and print the installed package version; version tests compare it to distribution metadata. A missing command, nonzero exit, or wrong version is a failed smoke check. US-31 Implementation Phase 2 verified all shared commands from a fresh macOS checkout and a new environment; see the [recorded results](verification/us-31-ip2.md). Wheel/source-distribution verification belongs to US-33 and is separate from this editable development install.
 
+## Phase and story verification
+
+This policy applies to new implementation plans. Existing approved plans keep their recorded verification requirements until an explicit revision is authorized and recorded through [manage-plan-scope](../.agents/skills/manage-plan-scope/SKILL.md). Preserve historical results and approvals. CI continues to run its complete configured checks; local test selection does not change CI configuration.
+
+### Development and intermediate phase gates
+
+Use TDD for each new behavior or bug fix: reproduce the missing behavior, implement the correction, and run the new test plus relevant existing regressions. At each phase gate, verify the changed behavior and its dependent capabilities. Select tests by affected interfaces, callers, shared resources and failure boundaries, including installed-package integration tests where those boundaries are affected. Test duration alone is not a reason to defer a relevant test. Broaden selection when the impact is uncertain.
+
+Record the following in each phase's verification section before implementation:
+
+- Selected test files, node IDs or selectors, the acceptance criteria they cover, and why they cover the affected behavior and dependencies.
+- Public test boundaries and their limits, confirmed through plan review or an explicit review; reuse confirmed boundaries while applicable.
+- Unrelated checks deferred to final verification, the reason, and the final phase/task that owns them. Write `None` when none are deferred.
+- Conditions that would require broader verification as the work changes.
+
+Use the documented locked pytest command with explicit paths, node IDs or `-k` selectors. For example, these are valid targeted commands; the plan must justify the selection for its actual change:
+
+```sh
+uv run --locked pytest tests/integration/test_cli_version.py
+uv run --locked pytest tests/integration/test_initialization.py -k 'storage_cannot_overlap or unsafe_backup'
+```
+
+Confirm that the intended cases were collected and report selected/deselected counts. Selection defers unrelated coverage; it is not a passing result for deselected tests. Keep tests enabled and assertions unchanged. A known failing regression remains unresolved and cannot be hidden by narrowing the selection.
+
+At every executable phase gate, run locked development synchronization, lock consistency, lint, formatting, strict typing and the version smoke check from the shared command table, plus `git diff --check`. Compare the lockfile hash before and after verification and explain any intentional dependency change. Complete these checks and the phase's selected tests before requesting approval. Phase approval covers the recorded verified scope; whole-story regression coverage remains pending until final verification.
+
+Run the full suite before an intermediate phase gate when changes affect dependency declarations or the lockfile, packaging/build/resource discovery, shared public schemas, or authorization/access enforcement across entrypoints. Include applicable distribution and installation checks for those changes. Also run broader tests, up to the full suite, when shared-module changes have uncertain impact or targeted results expose cross-capability regressions. These triggers take precedence over a previously narrower selection; record the expanded checks and results in the phase evidence.
+
+### Final verification before story acceptance
+
+Every new plan must assign final verification to a named task in its last implementation phase. After all implementation work is complete, run `uv run --locked pytest` across the complete repository suite without selection filters, together with the shared development checks. For distribution-affecting work, verify both the directly built wheel and a wheel rebuilt from the source distribution outside the checkout, using the [distribution and installation commands](#distribution-builds-and-installed-verification). Include other story-required installed-interface, manual and platform checks. A passing complete-suite run may supply these results when it demonstrably executes the required checks; reference that evidence instead of repeating identical checks against unchanged artifacts.
+
+Record the tested revision and working-tree changes, lockfile identity, commands, test counts, outcomes, artifact identities where applicable, platform and limitations. Reconcile all deferred checks and the acceptance-criterion matrix. Present the final phase gate only after required verification passes; request whole-story acceptance only after the gates and final verification are complete. Failing or unverified required checks remain blockers.
+
+After subsequent executable changes, rerun affected checks and renew the full-suite result against the final implementation before acceptance. Renew distribution evidence when package contents, dependencies or build inputs change. Reuse earlier evidence only when the relevant implementation and inputs are unchanged. Documentation-only or approval-record edits need appropriate document/link/whitespace checks rather than a runtime rerun; explain that choice in the evidence. For an entirely documentation-only story, record why product tests and distribution checks are inapplicable and name its required document checks.
+
 ## Configuration, credentials, and troubleshooting
 
 Tool configuration lives in `pyproject.toml`. Defaults are repository-local `.venv`, pytest discovery beneath `tests`, and Python 3.12 analysis. No `.env`, application configuration, service accounts, MLflow/DVC storage, model credentials, or agent adapter is required for development tooling or the minimal version CLI. Cloning requires repository access; private access requires your own GitHub authentication. Dependency synchronization requires package-index access. Use your organization's documented proxy/index configuration if necessary; never put tokens in committed configuration or logs.
