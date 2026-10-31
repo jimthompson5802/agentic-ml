@@ -85,6 +85,13 @@ mutate their group-local installed project and restore its contents. Cache-remov
 checks remove only their own workspace cache. Keep those isolation properties
 when adding tests. Do not point multiple runs at the same `--basetemp` directory.
 
+A scoped hardlink experiment was rolled back after its full-suite runtime
+regressed. Fixtures again use their prior installation configuration, including
+the installation-verification driver's copy mode and private cache for mutation
+tests. The [experiment report](verification/pytest-hardlink-fixtures.md) preserves
+the measurements and a replayable candidate patch; its hardlink policy is not
+active.
+
 Environment installation and MLflow initialization compete for CPU, memory and
 disk. Investigate resource constraints with a recorded worker-count comparison. Keep
 existing assertions and subprocess timeouts intact. Record worker count, suite

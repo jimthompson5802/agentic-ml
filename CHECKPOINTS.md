@@ -4,6 +4,28 @@ Last updated: 2026-10-31
 
 ## Current position
 
+**Hardlink rollback complete (2026-10-31):** Developer “do the rollback”
+authorizes removing the failed optimization while retaining its documentation.
+All four affected Python files now match `861b2db`; all 53 maintained
+source/test/build hashes match the previously verified **208-case** baseline.
+The committed nested-pytest isolation fix remains. Fresh collection: **208**;
+focused scheduling: **one passed, 1.12s**. Lint, format, strict types and version
+smoke passed again. Prior full-suite evidence is reused against identical
+executable inputs; no fresh full-suite run or new runtime claim.
+
+[Experiment/rollback evidence](docs/verification/pytest-hardlink-fixtures.md)
+retains the **210-pass but 23:54** candidate result, versus **13:06** baseline
+JUnit / **17:27** baseline terminal completion. Performance attempt 1 failed;
+no second performance correction. A replayable candidate patch is archived at
+`docs/verification/experiments/pytest-hardlink-candidate.patch`; `git apply
+--check` passed. Raw evidence remains in
+`/private/tmp/pytest-hardlink-evidence-20261031`. Developer “commit changes”
+authorizes the local documentation/archive commit; Git history records its
+result. No push, publication or US-03 IP3 work authorized.
+The earlier fixture-profiling request remains possible through temporary
+instrumentation on the restored baseline. Earlier next-work notes below are
+historical.
+
 **Test-runtime tooling (2026-10-31):** Developer “implement 1 and 2 as
 recommended” authorized nested pytest isolation and initialization profiling on
 `us-03-pytest-runtime-optimization`. See [implementation evidence](docs/verification/pytest-runtime-optimization.md)
@@ -25,7 +47,20 @@ Developer “first lets commit current changes. Then run the recommended profile
 imports” authorizes committing this verified tooling/evidence and then measuring
 individual first-use imports. No product/dependency/CI changes. Further
 optimizations, publication and US-03 IP3 remain unauthorized. Existing IP3 gate
-unchanged. Git history records the tooling commit; import profiling follows it.
+unchanged. Tooling/evidence committed as `861b2db`; no push requested.
+Individual import profiling is complete; see [import evidence](docs/verification/pytest-import-profile.md).
+Five fresh installed projects / ten probes passed. Default first/second imports
+**30.12s/4.23s**; bytecode writes disabled **27.54s/2.97s**. Native-extension
+trace self time **18.14s/0.37s** across 160 modules. First hardlink environment
+**28.46s/4.29s**; recreated hardlink environment **7.28s/4.49s**, with all 323
+native `.so` files sharing identity across the two environments. This supports
+native-file first-use caching as the primary lead; local security-service
+causality was not traced. Proposed next work: scoped hardlink installs for
+read-only initialization fixtures; keep installed-resource mutation probes
+isolated. No repository installation-mode change or full-suite speedup claimed.
+Raw evidence: `/private/tmp/pytest-import-profile-evidence-20261031`.
+Only the new report and checkpoint are uncommitted. No new maintained executable
+changes or full-suite rerun. Further optimization awaits developer direction.
 
 **Current work:** US-03 IP2-T1–T4 complete; **developer IP2 gate approved**
 by “lgtm ip2” (2026-10-31). See [owning plan](docs/plans/milestone-1-us-03.md) and
