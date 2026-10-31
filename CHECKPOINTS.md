@@ -19,7 +19,9 @@ for local verification, with recorded exceptions for focused TDD/diagnosis and
 resource comparisons. Pytest configuration remains serial without explicit flags.
 Developer subsequently requested parallel workers in GitHub Actions: automated
 tests now explicitly use four workers with `loadgroup`; workflow/documentation
-changes are ready for the local commit authorized by developer “commit changes”. Hosted Linux parallel verification
+changes committed as `16ebee2`. Developer “push” authorized publication;
+ordinary push of `US-02-experiment-init` through `16ebee2` succeeded and updates
+PR #45, including tooling commit `a593c6f`. Hosted Linux parallel verification
 remains pending. Final local complete runs: **129 passed** with
 two workers in **16m59s**, four in **12m06s**; group placement and unique case sets
 verified. New public scheduling regression caught pytest 9.2.0 silently ignoring
@@ -31,7 +33,7 @@ Evidence: [parallel tests](docs/verification/parallel-test-execution.md).
 Developer “commit change” authorizes the local commit of parallel tooling,
 four-worker local instructions and verification records. Push remains unauthorized.
 Local tooling/instructions committed as `a593c6f`. Current CI change awaits
-developer review; local commit authorized, push remains unauthorized. macOS verified; Linux/Windows parallel execution
+developer review; requested branch push completed. macOS verified; Linux/Windows parallel execution
 and cancellation descendant cleanup remain unverified.
 
 Local-command instruction update is documentation-only: no executable behavior,
