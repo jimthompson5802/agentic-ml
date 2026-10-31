@@ -6,7 +6,7 @@ The proposed harness provides reusable orchestration, experiment execution, inde
 
 **This project is in its early days.** The repository currently contains a proposed design rather than a working implementation. Its design, interfaces, directory structure, and documentation will change as development progresses.
 
-For a separate experiment project, follow the [pinned installation guide](docs/experiment-setup.md). The minimal package is available; experiment initialization and execution are planned downstream.
+For a separate experiment project, follow the [installation and initialization guide](docs/experiment-setup.md). Initialization supplies draft inputs, a synchronized environment and local storage. Managed experiment execution remains subsequent work.
 
 ## Contributor setup
 

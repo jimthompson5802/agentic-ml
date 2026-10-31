@@ -48,4 +48,9 @@ def main() -> None:
         ):
             for path in paths:
                 print(f"{label}: {path}")
-        print("Setup pending: " + ", ".join(result.setup_pending))
+        if result.setup_pending:
+            print("Setup pending: " + ", ".join(result.setup_pending))
+        else:
+            print(
+                "Initialization complete; data access, agent authentication and approval presentation remain unconfigured."
+            )

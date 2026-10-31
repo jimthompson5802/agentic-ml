@@ -39,6 +39,42 @@ def test_both_installed_wheel_paths_pass(artifacts: Path, tmp_path: Path) -> Non
     assert "PASS rebuilt-wheel" in result.stdout
 
 
+def test_complete_initialization_from_both_artifact_paths(
+    artifacts: Path, tmp_path: Path
+) -> None:
+    """AC-01–05: both artifact identities supply complete external-project setup."""
+    workspace = tmp_path / "initialization"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "tests/installation/verify_initialization.py"),
+            "--artifacts-dir",
+            str(artifacts),
+            "--workspace",
+            str(workspace),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=600,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    for label in ("direct-wheel", "rebuilt-wheel"):
+        assert f"PASS initialization {label}" in result.stdout
+        for kind in ("fresh", "existing"):
+            project = workspace / label / kind
+            assert (project / ".dvc/config").is_file()
+            assert (project / ".agentic-ml/mlflow.db").is_file()
+            assert (project / ".agentic-ml/state/project.json").is_file()
+            assert (
+                project / "experiments/initial/notebooks/04_results.ipynb"
+            ).is_file()
+        assert (
+            workspace / label / "existing/src/custom/__init__.py"
+        ).read_text() == '"""Existing project."""\nVALUE = 42\n'
+
+
 def damaged_wheel_result(
     artifacts: Path, tmp_path: Path, member: str, replacement: bytes | None
 ) -> subprocess.CompletedProcess[str]:

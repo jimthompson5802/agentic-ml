@@ -4,105 +4,44 @@ Last updated: 2026-10-31
 
 ## Current position
 
-US-02 IP1/IP2 approved and committed. Authorized IP3 T1–T3 are technically complete on `US-02-experiment-init`; [IP3 evidence](docs/verification/us-02-ip3.md) and [owning plan](docs/plans/milestone-1-us-02.md) record verification and developer approval by “i approve ip3” (2026-10-31). Next action: await IP4 execution authorization. Developer message “commit” (2026-10-31) authorizes the local IP3 commit, including this record. IP4 execution, story acceptance and publication remain unauthorized.
+US-02 IP1–IP3 are approved and committed through `0830888` on `US-02-experiment-init`. Developer message “go ahead with ip4” (2026-10-31) authorized IP4. IP4 T1–T4 are technically complete and developer-approved by “i approve ip4” (2026-10-31); [owning plan](docs/plans/milestone-1-us-02.md) and [IP4 evidence](docs/verification/us-02-ip4.md) record all five criteria and verification.
 
-Milestone 0 is complete and accepted (US-31, US-32, US-33). PR #24 squash merged as `018e9d4bb26e121c7f9274d11e0de560b7514b95`; [main CI 40995999688](https://github.com/jimthompson5802/agentic-ml/actions/runs/40995999688) passed, including both distribution paths. Subsequent planning-skill, coding-standard and issue-publication documentation is committed through `aead26e`.
-
-Developer message “i approve us-01 ip1; commit changes; execute ip2”, 2026-10-30, approved IP1 and authorized its commit and IP2. Approved IP1 changes committed as `60941af` (`feat(installation): verify pinned harness bootstrap`). IP2 T1–T3 are technically complete; all four US-01 criteria have macOS/Python 3.12 evidence. Developer message “i approve ip2; commit the changes”, 2026-10-30, approved IP2 and authorized its local commit. Both implementation gates are approved. Developer message “i approve us-01”, 2026-10-30, accepts the complete story. IP2 is committed as `2bb46cc`. [Owning plan](docs/plans/milestone-1-us-01.md), [IP1 evidence](docs/verification/us-01-ip1.md), [IP2 evidence](docs/verification/us-01-ip2.md).
-
-## Skill enhancement — 2026-10-30
-
-Updated `execute-plan` so explicit whole-story acceptance authorizes remaining story commits, ordinary push, PR creation through `create-pull-request`, and static COMMENT review through `review-pull-request`. Phase gates remain required. Publication resumption checks preserve unrelated work and avoid duplicate PRs/reviews; merging, cleanup, fixes, and next-story work remain separate. No live publication was performed for this edit.
-
-Validation: manually checked phase-only approval, accepted story with remaining or already committed work, unrelated changes, existing PR/review reuse, and uncertain publication handling. `git diff --check` passed. Skill validator could not run: both system Python and the locked project environment lack `yaml` (PyYAML). No dependencies or lockfile changed. TDD does not apply to this instruction-only change. Developer requested committing and pushing this skill and checkpoint update on the current branch (`main`); publication outcome is reported in the session.
-
-## Command approval rules — 2026-10-30
-
-Developer accepted the recommendation for repository-local GitHub reads, locked tests/verification, lint fixes and formatting edits. Expanded `.codex/rules/default.rules`, retained bootstrap rules, and added `.codex/scripts/github-read.sh` to force validated GET requests to github.com and this repository. Usage and prefix-rule limitations are in [the development guide](docs/development.md#repository-local-codex-command-approvals). Developer requested committing and pushing the rule/helper and instruction updates on main; publication outcome is reported in the session. Restart Codex with the project layer trusted to load the changes. Existing user-level grants remain effective.
-
-Verification on macOS: `codex execpolicy check --rules .codex/rules/default.rules -- COMMAND` passed 22 positive and seven negative cases. Isolated stub-GitHub subprocess checks passed seven exact GET argument cases and 14 rejected-input cases; no network used. `sh -n .codex/scripts/github-read.sh` and `git diff --check` passed. No harness behavior, Python dependencies or lockfile changed; harness TDD/full runtime checks do not apply to these development rules and shell helper. No Linux/Windows execution verified.
-
-## Instruction alignment — 2026-10-30
-
-Developer approved documentation alignment with the command rules. Added the development-guide pointer to AGENTS.md; routed five GitHub skills to working-repository read guidance with generic fallbacks; reordered read examples to match repository prefixes; documented complete issue pagination and unsupported-read fallback. Implementation gates, static-only PR reviews, publication authorization, execute-plan and runtime guidance remain unchanged. No additional command permissions added. Developer authorized committing and pushing the combined rule/helper and instruction edits on main.
-
-Documentation-only change: TDD and harness runtime checks do not apply. Validation: `git diff --check` passed; 29 local link targets and five aligned read forms passed link/policy checks. Reviewed the diff for unchanged gates and static-review restrictions. Skill validator remains unavailable because system Python lacks PyYAML; no dependencies or lockfile changed.
+**Next action:** await separate explicit US-02 whole-story acceptance. All four implementation gates are approved. Developer message “commit changes” (2026-10-31) authorizes the local IP4 commit. Story acceptance, push and publication remain unauthorized.
 
 ## Resume here
 
-US-02 [implementation plan](docs/plans/milestone-1-us-02.md): IP1/IP2 approved (implementation commits `12df741` / `265ed5b`). Developer authorized “Execute US-02 IP3.” on 2026-10-31. IP3 T1–T3 complete; gate approved by “i approve ip3” (2026-10-31). Authorize any commit or IP4 execution separately. No IP4 work started.
+- Review follow-up remains pending: P1 backup symlink/content-conflict validation and P2 storage overlap with initialization journal, lock and backup paths. These findings are not fixed by the authorized IP4 commit and qualify the earlier verification/completion statements below.
 
-US-01 implementation is complete with both implementation gates approved; published PR and static review are recorded below. Story accepted 2026-10-30; see the [completion record](docs/plans/milestone-1-us-01.md#story-completion-review). Issue #8 complete body/all comment pages refreshed before execution: stable zero-comment snapshot, updated `2026-10-30T02:06:17Z`. No new scope decision or unresolved failure.
+- Implemented configurable local DVC/cache/default remote, MLflow SQLite/artifacts/experiment and durable unconfigured JSON state. Preflight protects existing content, selected paths, permissions, exclusions and matching identities. Setup journals retain stage/exit-code evidence and safe retries; no runs or approvals are created.
+- **Clean full suite: 85 passed**, exit 0, 1829.72s (30:29). Command: `env MLFLOW_DISABLE_TELEMETRY=true DVC_NO_ANALYTICS=1 uv run --locked pytest --junitxml=/private/tmp/us-02-ip4-evidence/clean-pytest.xml`. All tests remain enabled; optional telemetry settings did not materially shorten the run.
+- Earlier full run had 84 passes and one legacy UTF-8 probe failure against SQLite. Corrected the same complete recursive source-sentinel exclusion to scan bytes; focused rerun and subsequent clean full run passed. Original/focused/clean XML files remain in `/private/tmp/us-02-ip4-evidence`. No product change or file exclusion accompanied the probe correction.
+- Shared locked synchronization, lock consistency, lint, format (78 files), strict types (20 source files), version smoke (0.1.0), local Markdown links and whitespace passed. No dependency/lock changes, suppressions, disabled checks or unresolved failures.
+- Direct and sdist-rebuilt review wheels passed normal installed checks. Artifacts: `/private/tmp/us-02-ip4-evidence/review-artifacts`; workspace `/private/var/folders/8_/h2tjc94d2y5fwx8dhbcrnbfc0000gn/T/agentic-ml-distributions-mchx6nbs`. Complete artifact-derived initialization passed for fresh CLI and existing-package API projects on both paths, with installed package bytes matched to wheels and genuine Git origin checks.
+- Clean-run installed fixtures: system temporary `pytest-of-jim/pytest-20/test_complete_initialization_f0/initialization`, full local source SHA `ad28a3e54f2314673db7c4bf253195e1c11cb471`. These are local unpublished fixture commits, not GitHub installation claims.
+- Developer manually executed the generated notebook in VS Code. Saved stdout confirms project `.venv/bin/python`, Python 3.12.15. Evidence: `/private/tmp/us-02-ip4-evidence/manual-vscode.ipynb`; VS Code 1.135.0, Python extension 2026.10.0, Jupyter 2025.9.1.
+- macOS 15.7.9 arm64/Python 3.12.15/uv 0.13.1/Git 2.54.0 verified locally. No new Linux/Windows evidence. Harness lock remains `b7ca45a27ad337812eff5555bf2a74edee3bfb637ca7c756e382fc82f867ab66`.
+- Issue #9 complete body/all comment pages refreshed at entry: stable zero-comment snapshot, updated `2026-10-31T01:15:38Z`; Milestone 1 / AC-01–05, no new scope decision. GitHub public reads succeeded; `gh auth status` still reports an invalid stored token. No publication attempted.
+- Cache/log-directory sandbox denials were retried with approved escalation. They were infrastructure failures, not behavior reds. All granular failure/correction evidence is in the IP4 report.
+- Changed source, tests, setup documentation, owning plan and checkpoint belong to IP4. No unrelated user changes were present at entry. Preserve all uncommitted work. IP4 approval records are documentation-only; whitespace validation passed and no runtime rerun was needed.
 
-## Publication and review — 2026-10-30
+## Accepted work and supporting context
 
-[PR #44](https://github.com/jimthompson5802/agentic-ml/pull/44) targets main from `US-01-pinned-installation`, published at `ce414ca54ad3f9ecdaa8fc0626f545b62f5aedec`. Selected repository PR template preserved; closes #8 on merge. [Hosted Linux/Python 3.12 CI](https://github.com/jimthompson5802/agentic-ml/actions/runs/41042255309) passed. [Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/44#pullrequestreview-5711095039) completed with no actionable findings; reviewed all 10 changed files and owning issue, no project code/checks executed during review. Review publication and empty inline-comment collection verified. PR #44 merged on 2026-10-30 at `5d662f65ed38cdca988f968164c773b3be6f84bf`; issue #8 is closed. [Post-merge main CI 41042701474](https://github.com/jimthompson5802/agentic-ml/actions/runs/41042701474) passed at that commit. Main was fast-forwarded and the saved publication checkpoint restored before this final record.
+Milestone 0 is complete and accepted (US-31, US-32, US-33), merged in PR #24 as `018e9d4bb26e121c7f9274d11e0de560b7514b95`; observed main CI passed. Subsequent development rules/skills/specification work is recorded in Git history.
 
-## Pending developer decisions
+US-01 is accepted and merged through [PR #44](https://github.com/jimthompson5802/agentic-ml/pull/44), merge `5d662f65ed38cdca988f968164c773b3be6f84bf`; issue #8 closed. Both implementation gates, installed A→B GitHub upgrade checks, hosted Linux CI and static COMMENT review passed. See [US-01 plan](docs/plans/milestone-1-us-01.md) and its linked evidence. Later observed main CI at `4477162` passed. No US-01 decision is pending.
 
-US-02 IP3 is developer-approved; local commit subsequently authorized by “commit” (2026-10-31). IP4 execution, story acceptance and publication remain pending. US-01 remains accepted/merged; no US-01 decision is pending.
+US-02 approved plan/public boundaries: developer “commit changes; i approve the plan, execute us-02 ip1” (2026-10-30). IP1 contracts/ADRs approved, committed `12df741`; IP2 approved, implementation commit `265ed5b`; IP3 approved by “i approve ip3”, then local commit authorized by “commit” (2026-10-31), committed `0830888`. IP4 gate subsequently approved by “i approve ip4” (2026-10-31); whole-story acceptance remains pending.
 
-## Handoff notes
+Notebook-editor scope decision SC-01 is recorded in the plan, issue #9 and issue #36: VS Code is installed separately; ipykernel/nbclient remain requirements. Manual kernel checking does not establish managed execution or isolation.
 
-- Checkout: `US-02-experiment-init`; approved IP3 product/dependency, test, documentation and checkpoint changes are included in the developer-authorized local commit. Working tree was clean at IP3 entry. No push or publication.
-- Current IP3 verification: full suite 62 passed; final `.venv` symlink guard verified by two focused tests (all 63 distinct current tests covered across runs). Four completion/failure regressions also passed. Final shared checks and direct/sdist-rebuilt wheel paths passed on macOS 15.7.9 arm64/Python 3.12.15/uv 0.13.1/Git 2.54.0. No new Linux/Windows/VS Code verification. Deliberate lock change to `b7ca45a27ad337812eff5555bf2a74edee3bfb637ca7c756e382fc82f867ab66`, stable through checks. Evidence: `/private/tmp/us-02-ip3-evidence`; final wheel workspace linked in report. No suppressions, disabled checks or unresolved failure. Earlier inventory mismatch and superseded IP2 metadata expectation resolved with original failures retained. The following bullets preserve prior US-01 evidence.
-- Verification: 23 tests (including both fresh wheel installation paths), lint, format, strict types, locked sync/check and smoke passed on macOS 15.7.9 arm64/Python 3.12.15/uv 0.13.1/Git 2.54.0. Harness lock SHA-256 unchanged: `ab8b6c9de02061ea788fa13a2dba162bcb963fb211ca938af3408e01bb1f5d9d`. Local Markdown targets and `git diff --check` passed. No new Linux/Windows verification.
-- Actual GitHub A→B upgrade verified in the same project: A `018e9d4bb26e121c7f9274d11e0de560b7514b95`, B `aead26e9c758878107ad72f230f9e607a9a7ecfa`; both package versions 0.1.0. Exact experiment lock hash changed from `b08e29f77524c9fd70bc57e8d792e915a357e8355e122c4e1fef8e68efb80673` to `20df20851edc6ab815a1396de63bfaf0837dddc74b2beee31188732256037ac7`. No-op locked sync preserved original identity. A/B installed interfaces passed after cache removal; original A evidence retained.
-- IP2 two red–green slices passed first green attempts; old-install substitution rejected. Raw projects/logs: `/private/tmp/us-01-ip2-evidence`. Prior IP1 raw evidence: `/private/tmp/us-01-ip1-evidence`. Sandbox Git-write restriction resolved by approved escalation; no unresolved failure.
-- Final handoff records only checkpoint documentation; `git diff --check` passed. TDD/runtime checks do not apply to this status update; prior implementation verification and successful post-merge CI remain the evidence. Developer requested committing the final record on main and previously authorized deleting local/remote story branches.
-- Milestones 1–5 issues remain published; later story implementation unauthorized. Milestone 99 deferred.
+Repository-local GitHub read and development command guidance is in [docs/development.md](docs/development.md#repository-local-codex-command-approvals), with rules in `.codex/rules/default.rules`. Tool permissions do not approve implementation gates or publication. Explicit whole-story acceptance triggers the execute-plan publication workflow only after all gates and verification pass.
 
-## Executive overview — 2026-10-30
-
-Created the requested external executive summary at `/Users/jim/Desktop/genai/agent-ml-overview.md`, covering purpose, delivered foundation, milestone roadmap, and all ten local skills with emphasis on GitHub workflows. Checked the summary against specifications, plans/checkpoint evidence, current package source, and live GitHub issue/PR/CI metadata. PR #44 remains merged; the latest main CI checked, run `41046797761` at `4477162`, passed. Product scope and next-story authorization remain unchanged. Reviewed Markdown and source links; documentation-only work requires no TDD or runtime rerun. The overview is outside the repository; only this checkpoint record changes the working tree. No commit or publication requested.
-
-## US-02 planning — 2026-10-30
-
-Created [Milestone 1 / US-02 plan](docs/plans/milestone-1-us-02.md) on local branch `US-02-experiment-init` from `4477162`. Complete issue #9 and prerequisite #8 bodies/all comment pages retrieved; both zero-comment snapshots remained stable after metadata refresh. US-01 prerequisite acceptance verified against its owning plan. Four proposed implementation phases: settle initialization contracts; conflict-safe scaffolding; synchronized dependencies; storage and complete installed-interface verification. Pending schema, dependency, storage and failure-protocol decisions belong to IP1 and block dependent implementation until its gate is approved. No new prerequisite-story implementation included.
-
-Plan review, public test-boundary confirmation, all implementation gates and story acceptance remain pending. No implementation, dependency installation, commit or publication performed. Preserved the existing executive-overview checkpoint entry. Planning validation: all local plan link targets resolve, all five criteria map to tasks/evidence, all 15 tasks start Not started, and four developer gates remain Pending; `git diff --check` passed. TDD and runtime checks do not apply to this documentation-only plan. GitHub reads succeeded after retrying a sandbox network failure with escalation; local `gh auth status` separately reported an invalid stored token, so recheck if future reads fail.
+The requested executive overview remains outside the repository at `/Users/jim/Desktop/genai/agent-ml-overview.md`. Its creation was documentation-only; no additional product scope followed. Milestones 1–5 issues remain published; other story implementation is unauthorized. Milestone 99 remains deferred.
 
 ## Maintenance rules
 
 - Keep this file a concise current handoff. Replace stale resume instructions and notes; Git history preserves earlier checkpoints.
-- Summarize overall progress and link to authoritative records. GitHub issues govern scope; implementation plans own granular tasks, verification evidence, scope changes, and developer gate decisions. Resolve discrepancies against those sources before resuming.
-- Record approval only after the developer explicitly gives it, and link to the decision recorded in the owning plan. Task completion and plan approval do not approve implementation-phase progression.
-- At each update, refresh the date, current position, progress summary, next action, pending decisions, and material working-tree or verification notes. Include failed checks, blockers, and relevant evidence links when present.
-- Commit checkpoint updates alongside the work they describe when practical. Keep credentials and sensitive environment details outside this file.
-
-## Notebook editor scope change — 2026-10-30
-
-Developer approved removing JupyterLab throughout delivery and documenting VS Code as the manual notebook editor, not a harness dependency. Updated US-02-AC-03 and US-08-AC-01, supporting design/walkthrough and US-02 plan (SC-01); GitHub issues #9 and #36 bodies updated with the scope decision. Retained ipykernel/nbclient and all authorization/isolation requirements. Added planned manual project-kernel verification. Historical review reports preserved. All US-02 implementation gates remain pending; this change authorizes no harness implementation. No dependencies or lockfile changed. Documentation validation: local links and git diff --check passed; remaining active JupyterLab mention explicitly states it is not installed. TDD/runtime tests do not apply. No commit or push requested.
-
-US-02 plan wording follow-up: removed remaining obsolete editor-name references from its scope-change record and manual-check expectation while preserving the recorded decision. Verified the plan has zero matches for the removed editor name; `git diff --check` passed. Documentation-only correction; no runtime checks required.
-
-Developer message “commit changes; i approve the plan, execute us-02 ip1” approves the plan/public test boundaries and authorizes IP1. Existing documentation changes committed before IP1; no push authorized.
-
-## US-02 IP1 handoff — 2026-10-30
-
-Approved plan/documentation committed as `3d69d0b`. Executed authorized IP1 only: T1–T4 design outputs complete in [IP1 report](docs/verification/us-02-ip1.md), linked from owning plan. Settled proposed CLI/API, template inventory, schema slice, preservation/conflict/retry protocol, dependency ownership/ranges, local DVC/SQLite MLflow/durable state setup and refined public verification boundaries. Bounded ADR proposals await developer approval; no broader isolation/recovery decision accepted. Stable complete issue snapshots: #9 zero comments updated 2026-10-31T01:15:38Z; #8 closed/zero comments updated 2026-10-30T10:42:22Z. GitHub and commit sandbox restrictions resolved by escalation.
-
-Validation: inspected installed uv 0.13.1 help and primary library docs; local links and diff whitespace passed. No runtime behavior changed: TDD/shared runtime checks do not apply; no dependencies installed or lock changes. Actual dependency resolution/library integration and platform verification remain IP2–IP4 obligations. IP1 evidence, plan progress and ADR/checkpoint changes remain uncommitted for gate review. Stop at IP1; developer approval required before IP2.
-
-## US-02 IP1 approval / IP2 authorization — 2026-10-30
-
-Developer message “i approve ip1; commit changes and I authorize ip2” approves IP1 contracts and refined public test boundaries, authorizes committing IP1 changes and executing IP2. Record committed IP1 before implementation. IP2 begins next; IP3 remains unauthorized.
-
-## US-02 IP2 handoff — 2026-10-30
-
-Executed only authorized IP2 after IP1 approval/commit `12df741`. Implemented installed init CLI/API, packaged inert templates and draft schemas, additive project build/ignore configuration, preserved custom packages/files/pin, schema-aware reruns, preflight path/permission/credential boundaries, exclusive setup lock and private setup journal/backups with interrupted-write retry. Result explicitly reports environment/storage pending; no new execution authorization or dataset access. [Owning plan](docs/plans/milestone-1-us-02.md) T1–T4 complete, gate approved; [evidence](docs/verification/us-02-ip2.md) records TDD slices, attempts and fixture deviation. Stop before IP3.
-
-macOS 15.7.9 arm64 / Python 3.12.15 / uv 0.13.1 / Git 2.54.0: 56 tests, shared lint/format/types/locked-sync/check/smoke and both direct/rebuilt wheel paths passed. Local links and diff whitespace passed. Deliberate parser/schema dependencies and dev stubs changed harness lock to `b93c4a72c77245102372e22cf56a88557a262eaccb1c897177d8289ffcfab389`, unchanged during verification. No suppressions/disabled checks. Backup fixture originally assumed uv created an ignore file; corrected explicitly and disclosed, not counted as valid behavioral red. All original assertions retained. No unresolved failed check. Raw logs/artifacts: `/private/tmp/us-02-ip2-evidence`; final distribution workspace `/private/var/folders/8_/h2tjc94d2y5fwx8dhbcrnbfc0000gn/T/agentic-ml-distributions-u_n10g7j`. No new Linux/Windows/VS Code verification. Developer subsequently requested “commit changes”; IP2 changes committed with this record. IP2 gate approved by subsequent developer message “i approve us-02 ip2”; no IP3 execution authorization or push.
-
-IP2 approval record updated in the owning plan, evidence and checkpoint. Documentation-only update: `git diff --check` passed; no runtime rerun needed. Developer subsequently requested “commit changes”, authorizing the local approval-record commit. IP3 execution and push remain unauthorized.
-
-
-## US-02 IP3 handoff — 2026-10-31
-
-Executed authorized IP3 only. Installed init now declares/intersects required experiment dependencies, resolves the experiment lock, synchronizes `.venv` inexactly with a locked sync, verifies the harness source/SHA and isolated imports, and reports storage pending. Private setup journal/backups preserve failure/retry evidence; changed interrupted metadata and external `.venv` symlinks are rejected. Revised standalone probes verify the expanded notebook/DVC/MLflow runtime closure; original corruption and origin checks remain. See [plan](docs/plans/milestone-1-us-02.md) and [report](docs/verification/us-02-ip3.md) for AC-02/03/05 evidence and limitations. IP3 gate subsequently approved by “i approve ip3” (2026-10-31); no IP4 or publication authorization.
-
-
-IP3 approval recorded in the owning plan and evidence on 2026-10-31. Changes remain uncommitted. Documentation-only approval update: `git diff --check` passed; no runtime rerun needed. IP4 execution, commit, story acceptance and publication remain unauthorized.
-
-
-Developer message “commit” (2026-10-31) authorizes committing approved IP3 implementation and approval records on the current branch. This checkpoint is included in that commit; no push or IP4 execution authorized. Pre-commit `git diff --check` passed.
+- Summarize overall progress and link to authoritative records. GitHub issues govern scope; implementation plans own granular tasks, evidence, scope changes and gate decisions. Resolve discrepancies against those sources before resuming.
+- Record approval only after the developer explicitly gives it, with the decision in the owning plan. Technical completion and plan approval do not approve progression.
+- Update the date, current position, next action, pending decisions, working-tree state and material verification notes at completed work, gates, blockers and handoff. Preserve failure evidence.
+- Commit checkpoint updates alongside their work when authorized. Keep credentials and sensitive environment details outside this file.

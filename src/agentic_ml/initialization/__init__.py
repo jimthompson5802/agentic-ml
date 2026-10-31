@@ -22,6 +22,7 @@ from .preflight import (
     validate_destinations,
 )
 from .scaffold import render
+from .storage import initialize_storage, preflight_storage
 from .validation import validate_document
 
 __all__ = ["InitOptions", "InitResult", "InitializationError", "initialize_project"]
@@ -44,6 +45,7 @@ def _initialize_project(options: InitOptions) -> InitResult:
         contents[f"experiments/{options.experiment}/search-space.yaml"], "search-space"
     )
     saved = read_journal(root)
+    preflight_storage(root, stores, saved)
     if saved is not None:
         if saved.get("schema_version") != "0.1":
             raise InitializationError("Setup journal schema conflict")
@@ -271,7 +273,7 @@ def _resume_scaffold(root: Path, saved: dict[str, Any]) -> InitResult:
 def initialize_project(options: InitOptions) -> InitResult:
     """Create draft files, preserving safe diagnostics on metadata or I/O failure."""
     try:
-        return synchronize(_initialize_project(options))
+        return initialize_storage(synchronize(_initialize_project(options)))
     except (OSError, ValueError, KeyError, TypeError) as error:
         raise InitializationError(
             "Invalid setup metadata or filesystem destination"

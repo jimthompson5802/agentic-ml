@@ -162,6 +162,11 @@ During execution use [manage-plan-scope](../../.agents/skills/manage-plan-scope/
 
 ## US-02 / Implementation Phase 4: Initialize storage and verify the complete user path
 
+Execution authorized by developer message “go ahead with ip4” (2026-10-31).
+IP3 approval and commit `0830888` verified. Issue #9 refreshed with complete
+body/all comment pages and stable zero-comment snapshot; no scope change.
+Execution evidence: [IP4 report](../verification/us-02-ip4.md).
+
 - **Outcome:** Complete safe initialization with usable configurable storage, documented setup choices, and criterion-mapped installed-package evidence.
 - **Entry conditions:** IP3 approved; IP1 storage/authority decisions remain applicable.
 - **Acceptance criteria advanced:** AC-01–05, final integrated verification.
@@ -170,30 +175,31 @@ During execution use [manage-plan-scope](../../.agents/skills/manage-plan-scope/
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-02-IP4-T1 | Not started | Add separate failing tests and minimal implementations for DVC initialization/configuration, MLflow backend/artifact setup and durable initial state in initialization modules. Exercise public storage interfaces from installed projects. | IP3 gate | Defaults create usable local stores; initial durable state can be reopened and grants no approval; existing DVC/MLflow/state content preserved. | AC-02, AC-04, AC-05 |
-| US-02-IP4-T2 | Not started | Add red–green slices for explicit storage locations (including local paths outside project), root-relative paths, pre-existing stores, invalid/credential-bearing settings, permission errors and interrupted storage setup/retry. | T1 | Explicit setup writes restricted to selected destinations; no unrelated stores changed; diagnostics and recoverable evidence preserved; secrets excluded from tracked config/output. | AC-02, AC-04, AC-05 |
-| US-02-IP4-T3 | Not started | Extend/create `tests/installation/verify_initialization.py` (proposed) and integration tests; cover fresh and existing pinned projects through complete CLI/API init with both wheel paths. Update `tests/packaging/check_installed.py` and integration coverage without removing original version/resource checks. | T1, T2 | Real CLI/API, complete inventory, notebook validity, project import, locks, stores, preservation and no implicit authorization independently verified outside checkout. | AC-01–05 |
-| US-02-IP4-T4 | Not started | Update `docs/experiment-setup.md`, `docs/development.md`, README links and relevant CI/probe invocation only as needed. Record `docs/verification/us-02-ip4.md` (proposed), final matrix, plan/checkpoint. | T3 | Reproducible setup/default/override/conflict/failure guidance; no claims that unresolved inputs or initialization authorize execution. Full checks and both wheel paths pass. | AC-01–05 |
+| US-02-IP4-T1 | Complete | Add separate failing tests and minimal implementations for DVC initialization/configuration, MLflow backend/artifact setup and durable initial state in initialization modules. Exercise public storage interfaces from installed projects. | IP3 gate | Defaults create usable local stores; initial durable state can be reopened and grants no approval; existing DVC/MLflow/state content preserved. | AC-02, AC-04, AC-05 |
+| US-02-IP4-T2 | Complete | Add red–green slices for explicit storage locations (including local paths outside project), root-relative paths, pre-existing stores, invalid/credential-bearing settings, permission errors and interrupted storage setup/retry. | T1 | Explicit setup writes restricted to selected destinations; no unrelated stores changed; diagnostics and recoverable evidence preserved; secrets excluded from tracked config/output. | AC-02, AC-04, AC-05 |
+| US-02-IP4-T3 | Complete | Extend/create `tests/installation/verify_initialization.py` (proposed) and integration tests; cover fresh and existing pinned projects through complete CLI/API init with both wheel paths. Update `tests/packaging/check_installed.py` and integration coverage without removing original version/resource checks. | T1, T2 | Real CLI/API, complete inventory, notebook validity, project import, locks, stores, preservation and no implicit authorization independently verified outside checkout. | AC-01–05 |
+| US-02-IP4-T4 | Complete | Update `docs/experiment-setup.md`, `docs/development.md`, README links and relevant CI/probe invocation only as needed. Record `docs/verification/us-02-ip4.md` (proposed), final matrix, plan/checkpoint. | T3 | Reproducible setup/default/override/conflict/failure guidance; no claims that unresolved inputs or initialization authorize execution. Full checks and both wheel paths pass. | AC-01–05 |
 
 ### Verification and review evidence
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Storage defaults/overrides/errors | Focused red–green public-interface cases and real DVC/MLflow/state probes | Usable/reopenable setup; independent paths and existing content preserved | Pending |
-| Full installed user path | New verification driver from separate fresh/existing projects, direct wheel and sdist-rebuilt wheel | Every criterion supported; declared dependencies only; no maintained checkout | Pending |
-| Setup authority and Git boundary | Inspect generated files and `git status`/ignore behavior with sentinel data, secret and store fixtures | Track source/config/lock/DVC metadata; exclude data, credentials and generated stores; no execution/approval records created | Pending |
-| Manual VS Code notebook check | Open a small notebook, select project `.venv`, execute cells and inspect `sys.executable`; record VS Code/extension versions | Interpreter belongs to project environment; no separate notebook editor package required | Pending |
-| Full regression/package checks | Commands below and criterion matrix review | All pass with actual versions/platforms and limitations recorded | Pending |
+| Storage defaults/overrides/errors | Focused red–green public-interface cases and real DVC/MLflow/state probes | Usable/reopenable setup; independent paths and existing content preserved | Passed — real public storage probes, focused red–green cases and clean 85-test suite; [IP4 evidence](../verification/us-02-ip4.md) |
+| Full installed user path | New verification driver from separate fresh/existing projects, direct wheel and sdist-rebuilt wheel | Every criterion supported; declared dependencies only; no maintained checkout | Passed — both normal wheel paths plus four matching pinned-Git CLI/API projects and byte identity checks; [IP4 evidence](../verification/us-02-ip4.md) |
+| Setup authority and Git boundary | Inspect generated files and `git status`/ignore behavior with sentinel data, secret and store fixtures | Track source/config/lock/DVC metadata; exclude data, credentials and generated stores; no execution/approval records created | Passed — unreadable raw-data sentinel, empty grants/runs, preserved source/pin and Git exclusions; [IP4 evidence](../verification/us-02-ip4.md) |
+| Manual VS Code notebook check | Open a small notebook, select project `.venv`, execute cells and inspect `sys.executable`; record VS Code/extension versions | Interpreter belongs to project environment; no separate notebook editor package required | Passed — developer executed project .venv Python 3.12.15; VS Code 1.135.0, Python 2026.10.0, Jupyter 2025.9.1; [IP4 evidence](../verification/us-02-ip4.md) |
+| Full regression/package checks | Commands below and criterion matrix review | All pass with actual versions/platforms and limitations recorded | Passed — 85/85 clean suite, shared checks and direct/rebuilt wheels; original UTF-8 probe failure and byte-scan correction preserved in [IP4 evidence](../verification/us-02-ip4.md) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete; AC-01–05 evidence, failure cases and limitations reviewed.
-- **Evidence presented:** Pending `docs/verification/us-02-ip4.md` and final matrix.
-- **Remaining limitations or blocked work:** Later semantic validation, execution/isolation, tracking runs, dataset restoration and adapters remain outside this story; record actual platform limitations.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Evidence presented:** [IP4 report](../verification/us-02-ip4.md), criterion matrix, 85/85 clean full suite, both wheel paths and developer manual VS Code execution. T1–T4 technically complete; gate approved.
+- **Remaining limitations or blocked work:** No current blocker. Verified on macOS/Python 3.12 only; no new Linux/Windows evidence. Later semantic validation, execution/isolation, tracking runs, dataset restoration and adapters remain outside this story. Original binary-probe failure was corrected without changing product behavior or excluding files; clean rerun passed.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer message “i approve ip4”, 2026-10-31.
 - **Requested changes and resolution:** None.
-- **Progression authorized:** Stop for final implementation gate approval and separate explicit whole-story acceptance; no next-story implementation authorized.
+- **Progression authorized:** IP4 gate approved; await separate explicit whole-story acceptance. Local commit authorized by developer message “commit changes” (2026-10-31); push, publication and next-story implementation remain unauthorized.
+
 
 ## Shared verification and execution rules
 
@@ -213,16 +219,17 @@ Pause affected work for scope changes and use manage-plan-scope; new prerequisit
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| [US-02-AC-01](../specs/user-stories.md#us-02-ac-01): configuration, inputs, notebooks and scaffolding | IP1-T1/T2; IP2-T1/T3/T4; IP4-T3/T4 | Planned IP2 and IP4 reports: installed inventory/content, notebook validity, project import, CLI/API equivalence | Pending |
-| [US-02-AC-02](../specs/user-stories.md#us-02-ac-02): preserve files and pin; report conflicts | IP1-T1/T2/T3; IP2-T2/T3/T4; IP3-T1/T2/T3; IP4-T1/T2/T3/T4 | Planned reports: independent original-file hashes, metadata semantics, exact pin identity, conflict/rerun/failure cases | Pending |
-| [US-02-AC-03](../specs/user-stories.md#us-02-ac-03): declared and synchronized dependencies | IP1-T3; IP3-T1/T2/T3; IP4-T3/T4 | Planned IP3/IP4 reports: real resolution/sync/imports/kernel availability, lock consistency, both wheels | Pending |
-| [US-02-AC-04](../specs/user-stories.md#us-02-ac-04): configurable DVC/MLflow/state | IP1-T4; IP4-T1/T2/T3/T4 | Planned IP4 report: real defaults/overrides, public usability/reopen probes and failures | Pending |
-| [US-02-AC-05](../specs/user-stories.md#us-02-ac-05): explicit setup; no grants or committed credentials | IP1-T2/T4; IP2-T3/T4; IP3-T2; IP4-T1/T2/T3/T4 | Planned IP2–IP4 reports: unset setup choices, no data reads/logins/grants, secret exclusion and ignore behavior | Pending |
+| [US-02-AC-01](../specs/user-stories.md#us-02-ac-01): configuration, inputs, notebooks and scaffolding | IP1-T1/T2; IP2-T1/T3/T4; IP4-T3/T4 | [IP2](../verification/us-02-ip2.md), [IP4](../verification/us-02-ip4.md): complete installed inventory, notebooks, package import and CLI/API | Verified on macOS; acceptance pending |
+| [US-02-AC-02](../specs/user-stories.md#us-02-ac-02): preserve files and pin; report conflicts | IP1-T1/T2/T3; IP2-T2/T3/T4; IP3-T1/T2/T3; IP4-T1/T2/T3/T4 | [IP2](../verification/us-02-ip2.md), [IP3](../verification/us-02-ip3.md), [IP4](../verification/us-02-ip4.md): pin/lock/file preservation, conflicts, interrupted setup and reruns | Verified on macOS; acceptance pending |
+| [US-02-AC-03](../specs/user-stories.md#us-02-ac-03): declared and synchronized dependencies | IP1-T3; IP3-T1/T2/T3; IP4-T3/T4 | [IP3](../verification/us-02-ip3.md), [IP4](../verification/us-02-ip4.md): declarations, synchronization/imports, lock checks and developer project-kernel execution | Verified on macOS; acceptance pending |
+| [US-02-AC-04](../specs/user-stories.md#us-02-ac-04): configurable DVC/MLflow/state | IP1-T4; IP4-T1/T2/T3/T4 | [IP4](../verification/us-02-ip4.md): real DVC/cache, MLflow/artifacts and durable state, defaults/overrides and failure cases | Verified on macOS; acceptance pending |
+| [US-02-AC-05](../specs/user-stories.md#us-02-ac-05): explicit setup; no grants or committed credentials | IP1-T2/T4; IP2-T3/T4; IP3-T2; IP4-T1/T2/T3/T4 | [IP2](../verification/us-02-ip2.md), [IP4](../verification/us-02-ip4.md): explicit unconfigured choices, empty approvals/runs, credential/data/store boundaries | Verified on macOS; acceptance pending |
 
-- **Remaining work:** IP3 T1–T3 complete and developer-approved. Scaffolding and environment synchronization verified; IP4 storage/final integration, whole-story acceptance and publication remain pending.
+- **Remaining work:** IP1–IP3 approved; IP4 T1–T4 technically complete. All implementation gates approved; separate explicit whole-story acceptance remains pending. Local commit authorized by “commit changes” (2026-10-31); push and publication remain unauthorized.
 - **Partial prerequisite delivery:** None newly included. Accepted US-01 reused; downstream stories remain outside scope.
 - **Developer acceptance:** Pending.
 - **Decision reference and date:** Pending; final gate also counts as story acceptance only if explicitly stated.
+
 
 ## IP2 completion record — 2026-10-30
 
@@ -249,3 +256,28 @@ IP3 approval recorded on 2026-10-31 from developer message “i approve ip3”. 
 
 
 Developer message “commit” (2026-10-31) subsequently authorizes the local commit of approved IP3 implementation and approval records, including this plan update. IP4 execution, story acceptance and publication remain unauthorized.
+
+
+## IP4 completion record — 2026-10-31
+
+Executed only IP4 under “go ahead with ip4”. T1–T4 technically complete:
+configurable local DVC/cache/remote, MLflow SQLite/artifacts/experiment and durable
+unconfigured state; preservation/preflight/retry controls; artifact-derived
+installed CLI/API verification and setup documentation. [IP4 report](../verification/us-02-ip4.md)
+maps all five criteria and preserves commands, failed probes, corrective evidence,
+versions, artifacts and platform limitations.
+
+Original full suite: 84 passed, one legacy UTF-8 scan failed on the new binary
+SQLite database. The same recursive source-exclusion assertion was corrected to
+scan bytes; focused verification passed. Clean full rerun with optional telemetry
+disabled: **85 passed**, exit 0. Shared checks and both review wheel paths passed;
+developer manual VS Code project-kernel execution verified. No dependency/lock
+change, suppression, disabled test or unresolved failure. All changes remain
+uncommitted. Stop at the final phase gate; whole-story acceptance and publication
+remain separate developer decisions.
+
+
+IP4 gate approved by developer message “i approve ip4” (2026-10-31). This is phase approval only; US-02 whole-story acceptance, commit, push and publication remain pending. Approval-record changes are documentation-only; `git diff --check` passed, and no runtime rerun is required.
+
+
+Developer message “commit changes” (2026-10-31) authorizes the local IP4 commit only. Whole-story acceptance and publication remain pending. Subsequent review identified pending backup symlink/content-conflict validation (P1) and storage overlap with initialization metadata (P2); this commit preserves the reviewed implementation without resolving those findings. Earlier verification evidence does not cover those defects.

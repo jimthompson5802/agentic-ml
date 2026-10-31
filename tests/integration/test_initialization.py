@@ -77,12 +77,313 @@ def initialize(project: Path, *args: str) -> subprocess.CompletedProcess[str]:
     return run([str(project / ".venv/bin/agentic-ml"), "init", *args], project)
 
 
+def test_initializes_usable_dvc_default_store(project: Path) -> None:
+    """AC-04: initialized DVC exposes a writable local default remote."""
+    result = initialize(project)
+    assert result.returncode == 0, result.stderr
+    dvc = str(project / ".venv/bin/dvc")
+    remote = run([dvc, "remote", "list"], project)
+    assert remote.returncode == 0, remote.stderr
+    assert "agentic-ml-store" in remote.stdout
+    assert (project / ".agentic-ml/dvc-store").is_dir()
+    default = run([dvc, "config", "core.remote"], project)
+    assert default.stdout.strip() == "agentic-ml-store"
+    relative_root = run([dvc, "root"], project)
+    assert relative_root.returncode == 0, relative_root.stderr
+    assert (project / relative_root.stdout.strip()).resolve() == project.resolve()
+    cache = project / ".dvc/cache"
+    assert cache.is_dir()
+    probe = cache / "setup-verification"
+    probe.write_bytes(b"local cache probe")
+    assert probe.read_bytes() == b"local cache probe"
+    probe.unlink()
+
+
+def test_initializes_mlflow_without_creating_runs(project: Path) -> None:
+    """AC-04/05: a project-associated experiment reopens without implicit runs."""
+    result = initialize(project)
+    assert result.returncode == 0, result.stderr
+    assert (project / ".agentic-ml/mlflow.db").is_file()
+    probe = run(
+        [
+            str(project / ".venv/bin/python"),
+            "-I",
+            "-c",
+            """
+from pathlib import Path
+from mlflow import MlflowClient
+root = Path.cwd()
+client = MlflowClient(tracking_uri="sqlite:///" + str(root / ".agentic-ml/mlflow.db"))
+experiment = client.get_experiment_by_name("agentic-ml:initial")
+assert experiment is not None
+assert experiment.artifact_location == (root / ".agentic-ml/artifacts").as_uri()
+assert client.search_runs([experiment.experiment_id]) == []
+""",
+        ],
+        project,
+    )
+    assert probe.returncode == 0, probe.stderr
+
+
+def test_initializes_durable_state_without_authority(project: Path) -> None:
+    """AC-04/05: setup state reopens with no approvals or experiment runs."""
+    result = initialize(project)
+    assert result.returncode == 0, result.stderr
+    state = project / ".agentic-ml/state/project.json"
+    assert state.is_file()
+    assert json.loads(state.read_text()) == {
+        "schema_version": "0.1",
+        "experiment": "initial",
+        "status": "unconfigured",
+        "approvals": [],
+        "runs": [],
+    }
+    journal = json.loads((project / ".agentic-ml/init.json").read_text())
+    assert journal["status"] == "complete" and journal["pending_steps"] == []
+    assert "Setup pending:" not in result.stdout
+
+
+@pytest.mark.parametrize("store", ["state", "database", "artifacts", "dvc"])
+def test_existing_unowned_stores_are_preserved_before_setup(
+    project: Path, store: str
+) -> None:
+    """AC-02/04: unrelated storage content prevents any durable setup writes."""
+    paths = {
+        "state": ".agentic-ml/state/project.json",
+        "database": ".agentic-ml/mlflow.db",
+        "artifacts": ".agentic-ml/artifacts/mine.txt",
+        "dvc": ".agentic-ml/dvc-store/mine.txt",
+    }
+    target = project / paths[store]
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(b"existing user content")
+    metadata = (project / "pyproject.toml").read_bytes()
+    result = initialize(project)
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert "conflict" in result.stderr.lower()
+    assert target.read_bytes() == b"existing user content"
+    assert (project / "pyproject.toml").read_bytes() == metadata
+    assert not (project / "project.yaml").exists()
+    assert not (project / ".agentic-ml/init.json").exists()
+
+
+def test_changed_completed_state_is_preserved_on_rerun(project: Path) -> None:
+    """AC-02: completed setup cannot reset an altered durable state file."""
+    first = initialize(project)
+    assert first.returncode == 0, first.stderr
+    state = project / ".agentic-ml/state/project.json"
+    changed = b'{"schema_version":"0.1","experiment":"initial","status":"review-required","approvals":[],"runs":[]}'
+    state.write_bytes(changed)
+    before = (project / ".agentic-ml/init.json").read_bytes()
+    second = initialize(project)
+    assert second.returncode == 1, second.stdout + second.stderr
+    assert "conflict" in second.stderr.lower()
+    assert state.read_bytes() == changed
+    assert (project / ".agentic-ml/init.json").read_bytes() == before
+
+
+def test_external_storage_reopens_with_same_explicit_options(
+    project: Path, tmp_path: Path
+) -> None:
+    """AC-04: explicit external stores are usable and preserved on retry."""
+    external = tmp_path / "external"
+    arguments = (
+        "--dvc-store",
+        str(external / "dvc"),
+        "--mlflow-backend",
+        str(external / "mlflow.db"),
+        "--artifact-store",
+        str(external / "artifacts"),
+        "--state-store",
+        str(external / "state"),
+    )
+    first = initialize(project, *arguments)
+    assert first.returncode == 0, first.stderr
+    state = external / "state/project.json"
+    assert json.loads(state.read_text())["approvals"] == []
+    marker = external / "artifacts/mine.txt"
+    marker.write_bytes(b"preserve existing artifact")
+    second = initialize(project, *arguments)
+    assert second.returncode == 0, second.stderr
+    assert marker.read_bytes() == b"preserve existing artifact"
+    assert (external / "mlflow.db").is_file()
+    assert (external / "dvc").is_dir()
+
+
+@pytest.mark.parametrize("compatible", [False, True])
+def test_preserves_existing_dvc_default(project: Path, compatible: bool) -> None:
+    """AC-02/04: reuse matching DVC configuration; reject other defaults early."""
+    dvc = str(project / ".venv/bin/dvc")
+    assert run([dvc, "init"], project).returncode == 0
+    destination = ".agentic-ml/dvc-store" if compatible else "my-existing-store"
+    added = run([dvc, "remote", "add", "--default", "existing", destination], project)
+    assert added.returncode == 0, added.stderr
+    original = (project / ".dvc/config").read_bytes()
+    metadata = (project / "pyproject.toml").read_bytes()
+    result = initialize(project)
+    assert result.returncode == (0 if compatible else 1), result.stdout + result.stderr
+    assert (project / ".dvc/config").read_bytes() == original
+    if not compatible:
+        assert "conflict" in result.stderr.lower()
+        assert (project / "pyproject.toml").read_bytes() == metadata
+        assert not (project / "project.yaml").exists()
+
+
+@pytest.mark.parametrize(
+    "stage,change_metadata",
+    [("DVC", False), ("MLflow", False), ("state", False), ("DVC", True)],
+)
+def test_storage_failure_retains_stage_and_retries_safely(
+    project: Path, stage: str, change_metadata: bool
+) -> None:
+    """AC-02/04: tool/filesystem failures retain safe evidence and reusable stores."""
+    script = r"""
+import os, subprocess, sys
+from pathlib import Path
+from unittest.mock import patch
+from agentic_ml.initialization import InitOptions, InitializationError, initialize_project
+stage = sys.argv[1]
+original_run, original_replace = subprocess.run, os.replace
+def run(command, *args, **kwargs):
+    tool = str(command[0])
+    if (stage == "DVC" and tool.endswith("/dvc") and command[1] == "remote") or (stage == "MLflow" and tool.endswith("/python") and "MlflowClient" in str(command)):
+        return subprocess.CompletedProcess(command, 73, b"", b"token=sentinel-secret")
+    return original_run(command, *args, **kwargs)
+def replace(source, target, *args, **kwargs):
+    if stage == "state" and str(target).endswith("/state/project.json"):
+        raise PermissionError("sentinel-secret")
+    return original_replace(source, target, *args, **kwargs)
+with patch("subprocess.run", run), patch("os.replace", replace):
+    try:
+        initialize_project(InitOptions(project_root=Path.cwd()))
+    except InitializationError as error:
+        assert error.stage == stage, (error.stage, str(error))
+        assert "sync" in error.completed_steps
+        print(error)
+    else:
+        raise AssertionError("setup must fail")
+"""
+    failed = run(
+        [str(project / ".venv/bin/python"), "-I", "-c", script, stage], project
+    )
+    assert failed.returncode == 0, failed.stdout + failed.stderr
+    assert "sentinel-secret" not in failed.stdout + failed.stderr
+    journal = json.loads((project / ".agentic-ml/init.json").read_text())
+    assert journal["status"] == "incomplete"
+    assert journal["storage_failure"]["stage"] == stage
+    assert journal["storage_failure"]["exit_code"] == (None if stage == "state" else 73)
+    assert stage not in journal["completed_steps"]
+    assert not (project / ".agentic-ml/init.lock").exists()
+    if change_metadata:
+        metadata = project / "pyproject.toml"
+        metadata.write_text(
+            metadata.read_text() + "\n# edit after interrupted storage\n"
+        )
+        before = (project / ".agentic-ml/init.json").read_bytes()
+    retried = initialize(project)
+    if change_metadata:
+        assert retried.returncode == 1, retried.stdout + retried.stderr
+        assert "changed" in retried.stderr.lower()
+        assert (project / ".agentic-ml/init.json").read_bytes() == before
+    else:
+        assert retried.returncode == 0, retried.stderr
+        assert "Initialization complete" in retried.stdout
+
+
+def test_replaced_mlflow_database_is_not_reinitialized(project: Path) -> None:
+    """AC-02: rerun rejects a replaced store before changing setup evidence."""
+    first = initialize(project)
+    assert first.returncode == 0, first.stderr
+    database = project / ".agentic-ml/mlflow.db"
+    database.write_bytes(b"")
+    before = (project / ".agentic-ml/init.json").read_bytes()
+    second = initialize(project)
+    assert second.returncode == 1, second.stdout + second.stderr
+    assert "conflict" in second.stderr.lower()
+    assert database.read_bytes() == b""
+    assert (project / ".agentic-ml/init.json").read_bytes() == before
+
+
+def test_environment_journal_does_not_adopt_unowned_database(
+    project: Path, tmp_path: Path
+) -> None:
+    """AC-02/04: a journal from an earlier stage grants no ownership of new stores."""
+    uv = shutil.which("uv")
+    assert uv is not None
+    tools = tmp_path / "tools"
+    tools.mkdir()
+    executable = tools / "uv"
+    executable.write_text(
+        '#!/bin/sh\nif [ "$1" = sync ]; then exit 73; fi\nexec "' + uv + '" "$@"\n'
+    )
+    executable.chmod(0o700)
+    env = dict(os.environ)
+    env["PATH"] = str(tools) + os.pathsep + env["PATH"]
+    first = subprocess.run(
+        [str(project / ".venv/bin/agentic-ml"), "init"],
+        cwd=project,
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert first.returncode == 1 and "sync" in first.stderr
+    database = project / ".agentic-ml/mlflow.db"
+    database.write_bytes(b"")
+    journal = project / ".agentic-ml/init.json"
+    before = journal.read_bytes()
+    second = initialize(project)
+    assert second.returncode == 1, second.stdout + second.stderr
+    assert "conflict" in second.stderr.lower()
+    assert database.read_bytes() == b"" and journal.read_bytes() == before
+
+
+@pytest.mark.parametrize(
+    "boundary", ["cache-symlink", "cache-config", "permission", "ignore"]
+)
+def test_storage_boundary_fails_before_setup(
+    project: Path, tmp_path: Path, boundary: str
+) -> None:
+    """AC-02/04/05: unsafe cache, inaccessible stores and exposed stores fail early."""
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    arguments: tuple[str, ...] = ()
+    restricted: Path | None = None
+    if boundary.startswith("cache"):
+        dvc = str(project / ".venv/bin/dvc")
+        assert run([dvc, "init"], project).returncode == 0
+        if boundary == "cache-symlink":
+            (project / ".dvc/cache").symlink_to(outside, target_is_directory=True)
+        else:
+            assert (
+                run([dvc, "config", "cache.dir", str(outside)], project).returncode == 0
+            )
+    elif boundary == "permission":
+        restricted = project / "store-artifacts"
+        restricted.mkdir()
+        restricted.chmod(0o500)
+        arguments = ("--artifact-store", "store-artifacts")
+    else:
+        (project / ".gitignore").write_text("!/stores/**\n")
+        arguments = ("--artifact-store", "stores/artifacts")
+    before = (project / "pyproject.toml").read_bytes()
+    try:
+        result = initialize(project, *arguments)
+        assert result.returncode == 1, result.stdout + result.stderr
+        assert not (project / "project.yaml").exists()
+        assert not (project / ".agentic-ml/init.json").exists()
+        assert (project / "pyproject.toml").read_bytes() == before
+        assert list(outside.iterdir()) == []
+    finally:
+        if restricted is not None:
+            restricted.chmod(0o700)
+
+
 def test_installed_cli_creates_inert_project_scaffolding(project: Path) -> None:
     """Initialization supplies draft inputs and valid output-free notebook files."""
     result = initialize(project)
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "Setup pending: storage" in result.stdout
-    assert "pending" in result.stdout.lower()
+    assert "Initialization complete" in result.stdout
     base = project / "experiments/initial"
     for name in ("project.yaml", "src/experiment/__init__.py"):
         assert (project / name).is_file()
@@ -108,8 +409,8 @@ def test_installed_cli_creates_inert_project_scaffolding(project: Path) -> None:
         for cell in notebook["cells"]:
             if cell["cell_type"] == "code":
                 assert cell["outputs"] == [] and cell["execution_count"] is None
-    assert not (project / ".dvc").exists()
-    assert not (project / ".agentic-ml/mlflow.db").exists()
+    assert (project / ".dvc/config").is_file()
+    assert (project / ".agentic-ml/mlflow.db").is_file()
 
 
 def test_conflicting_file_blocks_all_scaffold_writes(project: Path) -> None:
@@ -279,14 +580,14 @@ print(json.dumps({"root": str(result.project_root), "pending": result.setup_pend
     assert result.returncode == 0, result.stderr
     payload = json.loads(result.stdout)
     assert payload["root"] == str(project.resolve())
-    assert payload["pending"] == ["storage"]
+    assert payload["pending"] == []
     config = (project / "project.yaml").read_text()
     assert "stores/dvc" in config
     assert "data_access: unconfigured" in config
     assert "agent: unconfigured" in config
     assert "approval_presentation: unconfigured" in config
     assert "guidance: {}" in config
-    assert not (project / "stores").exists()
+    assert (project / "stores/dvc").is_dir()
     assert not (project / "AGENTS.md").exists()
     assert not (project / "runtime_guidance").exists()
     # Same explicit options through the installed CLI, from another cwd.
@@ -381,20 +682,19 @@ def test_setup_inventory_and_backups_are_private_and_preserve_originals(
     assert result.returncode == 0, result.stderr
     state = project / ".agentic-ml"
     journal = json.loads((state / "init.json").read_text())
-    assert journal["status"] == "incomplete"
+    assert journal["status"] == "complete"
     assert journal["completed_steps"] == [
         "preflight",
         "scaffold",
         "lock",
         "sync",
         "environment-check",
-    ]
-    assert journal["pending_steps"] == [
         "DVC",
         "MLflow",
         "state",
         "finalize",
     ]
+    assert journal["pending_steps"] == []
     assert not (state / "init.lock").exists()
     for name, content in original.items():
         backup = state / journal["backups"][name]
@@ -498,7 +798,7 @@ def test_custom_internal_storage_roots_are_ignored(project: Path) -> None:
         assert ignored.returncode == 0, ignored.stdout + ignored.stderr
     visible = run(["git", "check-ignore", "--no-index", "project.yaml"], project)
     assert visible.returncode == 1
-    assert not (project / "stores").exists()
+    assert (project / "stores/data").is_dir()
 
 
 def test_credentials_in_project_metadata_are_not_copied_to_setup_evidence(
@@ -546,7 +846,7 @@ def test_existing_project_code_is_not_copied_into_setup_journal(project: Path) -
     assert result.returncode == 0, result.stderr
     for path in (project / ".agentic-ml").rglob("*"):
         if path.is_file():
-            assert "source-sentinel" not in path.read_text()
+            assert b"source-sentinel" not in path.read_bytes()
     assert "source-sentinel" in source.read_text()
 
 
@@ -687,7 +987,7 @@ def test_sync_failure_retry_preserves_metadata(
         assert "changed" in retried.stderr
     else:
         assert retried.returncode == 0, retried.stderr
-        assert "Setup pending: storage" in retried.stdout
+        assert "Initialization complete" in retried.stdout
 
 
 def test_sync_preserves_existing_bounds_packages_and_environment_choice(

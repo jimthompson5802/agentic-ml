@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlsplit
 
+from .journal import read_journal
 from .models import InitializationError, InitOptions
 
 
@@ -134,6 +135,7 @@ def check_path(path: Path) -> None:
 def storage_paths(options: InitOptions, root: Path) -> dict[str, str]:
     """Resolve explicit local setup destinations and reject unsafe overlaps."""
     selected: dict[str, Path] = {}
+    saved = read_journal(root)
     for name, supplied, default in (
         ("dvc_store", options.dvc_store, ".agentic-ml/dvc-store"),
         ("mlflow_backend", options.mlflow_backend, ".agentic-ml/mlflow.db"),
@@ -164,7 +166,10 @@ def storage_paths(options: InitOptions, root: Path) -> dict[str, str]:
             if path == root or path.is_relative_to(other) or other.is_relative_to(path):
                 raise InitializationError("Storage overlaps protected project paths")
         if not path.is_relative_to(root) and path.exists():
-            if path.is_file() or any(path.iterdir()):
+            recorded = saved is not None and saved.get("storage", {}).get(name) == str(
+                path
+            )
+            if not recorded and (path.is_file() or any(path.iterdir())):
                 raise InitializationError("External storage contains existing content")
         selected[name] = path
     values = list(selected.values())
