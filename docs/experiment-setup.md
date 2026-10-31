@@ -4,14 +4,19 @@ These instructions are for experiment users. The harness is installed into your 
 
 The current development revision provides `agentic-ml --version`, Python imports and project initialization (see below). The published revisions in the bootstrap examples predate initialization and provide provisional resources only. Managed notebook execution remains subsequent work.
 
-US-03 input resolution is being designed; its commands are not yet available.
-The [proposed input contract](verification/us-03-ip1.md) defines separate version
+The US-03 development revision adds `plan resolve`, `plan inspect` and
+`plan verify` through the installed CLI and `agentic_ml.planning` API.
+Its [approved input contract](verification/us-03-ip1.md) defines separate version
 1.0 brief/search/execution inputs while preserving initialization's inert 0.1
-drafts. Experiment approval is planned as an explicit project-local record with
+drafts. [IP2 verification](verification/us-03-ip2.md) records delivery status;
+IP2 phase approval is recorded. Explicit inputs resolve to preserved, versioned plans;
+delegated decisions remain blocked. Execution overrides report
+`boundary_validation_pending` until IP3 introduces search narrowing.
+Experiment approval is planned as an explicit project-local record with
 a self-declared reviewer; it is unauthenticated and cannot prove who approved or
 prevent a workspace writer from fabricating records. No signing keys or separate
 accounts are required. This applies only to toolkit experiment use; development
-and testing approval gates remain unchanged. Plan readiness will not grant
+and testing approval gates remain unchanged. Plan readiness does not grant
 data access or execution permission. Follow the current initialization directions
 below until the implementation and its verification are accepted.
 

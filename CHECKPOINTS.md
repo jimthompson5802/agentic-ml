@@ -4,39 +4,48 @@ Last updated: 2026-10-31
 
 ## Current position
 
-**Current work:** US-03 IP1 design complete, **IP1 gate approved** by developer
-“i approve the changes” (2026-10-31), covering revised contracts/public test
-boundaries and SC-01. Developer
-approved scope change US-03-SC-01: unauthenticated approval only for data scientists
-using the toolkit in experiments. The subsequent clarification explicitly retains
-all existing development/testing approval gates and verification requirements.
-See [owning plan/scope history](docs/plans/milestone-1-us-03.md) and
-[revised contract report](docs/verification/us-03-ip1.md). Replaced proposed SSH
-signatures, protected `/etc` policy, separate identities and special test host
-with project-local approval/revocation records, exact plan/decision matching and
-`authentication: none`. Reviewer labels are unverified; workspace writers can
-fabricate approval or rewrite history. Authentication is deferred future assurance;
-US-23-AC-02/#40 remains future scope. Dataset/execution access controls unaffected.
+**Current work:** US-03 IP2-T1–T4 complete; **developer IP2 gate approved**
+by “lgtm ip2” (2026-10-31). See [owning plan](docs/plans/milestone-1-us-03.md) and
+[final IP2 evidence](docs/verification/us-03-ip2.md). Stop before IP3.
 
-T1–T4 reworked; updated ADR/governance/input/traceability/delivery specifications,
-setup guidance and plan verification scope. US-03 criteria unchanged: delegated
-decisions still need an approval record. Refreshed #40 body/all comment pages for
-future-scope check: stable zero comments, no discussion decisions. Earlier #10,
-#9 and #11 retrieval remains valid for this design revision. No GitHub edits or
-comments published. No executable AC claimed complete.
+Developer “ok that makes sense make that change” authorized the proposed fourth
+strict-typing correction; explicit list/dictionary narrowing passed without
+casts, suppressions or weaker assertions. Prior three failed attempts preserved.
+Final verification: 207 tests passed in the unfiltered four-worker suite (13:08).
+A later fenced-YAML diagnostic-offset correction passed all 76 planning cases;
+79 affected/installed cases were renewed, including both wheel paths and planning
+in an initialized pinned Git project. Evidence distinguishes full-run and final
+identities and justifies intermediate-phase selection; IP4-T4 must renew the full
+suite against final story code before final approval/acceptance. Both follow-up
+processes exited zero after slow pytest temporary-directory cleanup; none cancelled.
 
-Branch `US-03-experiment-boundaries`, baseline pushed plan commit `4a2882b`.
-Documentation-only working changes; no source, tests, schema resources,
-dependencies or lock edits. Renewed checks passed: 448 local links/anchors across 10 changed/new Markdown
-files, whitespace including untracked report, and manual scope consistency.
-AGENTS/skills/development checks/source/tests/CI unchanged; lock hash unchanged.
-TDD/runtime tests inapplicable to this documentation-only revision.
-SC-01 alone did not approve the gate; subsequent explicit approval is recorded
-in the owning plan/report/ADR/summary. Developer “commit and push” authorizes committing/publishing the approved IP1
-documentation on this branch. No IP2 implementation or story acceptance requested.
-The requested sandbox summary remains local under the existing sandbox ignore
-rule. Commit/push outcome is recorded in Git and the delivery response. Next
-action: explicit IP2 execution authorization.
+Shared locked sync/lock/lint/format/types/version checks and whitespace passed;
+34 document links/anchors passed before final handoff, renewed in report.
+Final executable inventory SHA-256
+`d4f0b55bd9a1e73a922c12da5ffb7e1df5bc0c734a66abbdefb17aa13ad74b8a`.
+Lock unchanged:
+`90b77d41ded3a40f047e2df636b7fd645a8e94c772caca194b7f96aa084c0fd8`.
+XML/inventories in `/private/tmp/us03-*`; final artifacts/logs retained separately
+at `/private/tmp/us03-ip2-final-evidence` to avoid pytest retention cleanup.
+
+Approved IP2 work is on `US-03-experiment-boundaries`, tested base `3c72694`.
+Developer “commit and push” authorizes committing and publishing the approved
+implementation and approval records. Git history and the delivery response record
+the resulting commit and push outcome.
+No dependencies, initialization templates/schema resources, source suppressions,
+CI or development/test approval rules changed. Six new planning schemas and
+planning CLI/API introduced; execution overrides block pending IP3, delegated
+choices block pending IP4. No whole-story acceptance or IP3 execution authorized. macOS/Python 3.12.15 verified locally; no new Linux/
+Windows or remote-filesystem evidence. Next action: explicit IP3 execution authorization.
+Manual review fixture prepared at ignored `sandbox/us03-ip2-demo/project with
+spaces` under developer request to see implemented behavior. Resolve/inspect/
+verify API and resolve/verify CLI passed with input_ready and integrity true;
+plan id saved in `sandbox/us03-ip2-demo/plan-id.txt`. This is a minimal planning
+fixture, not a full initialized environment; datasets/notebook execution are not
+involved. No maintained executable inputs changed. Subsequent “lgtm ip2”
+approves the phase; the subsequent “commit and push” authorizes publication,
+while IP3 execution still awaits separate authorization.
+
 Earlier status below is historical.
 
 **Latest outcome:** Developer “squash merge the pr” authorized PR #45 merge.

@@ -166,6 +166,18 @@ authentication change is recorded in approved US-03-SC-01 above.
 
 ## US-03 / Implementation Phase 2: Resolve explicit inputs and preserve versioned plans
 
+**Execution:** Authorized by developer “execute us-03 ip2”, 2026-10-31.
+IP2-T1–T4 complete; developer approved the phase gate with “lgtm ip2”
+on 2026-10-31. Developer
+“ok that makes sense make that change” authorized the focused fourth typing
+correction; it passed without suppressions or weaker assertions. Full suite:
+207 passed. Later diagnostic-offset correction: 76 planning and 79 affected /
+installed cases passed; shared checks renewed. The [IP2 report](../verification/us-03-ip2.md)
+distinguishes these executable identities and records selection rationale,
+artifacts and limitations. IP4-T4 owns final-story full verification. IP3 remains
+unauthorized. Earlier “IP2 awaits authorization” statements describe the IP1
+handoff before this execution request.
+
 - **Outcome:** Installed CLI/API resolves fully explicit, structurally valid inputs; preserves versioned evidence and reports pending decisions without marking them ready.
 - **Entry conditions:** IP1 gate approved; concrete contracts/test boundaries confirmed. No new unresolved schema/storage decision.
 - **Acceptance criteria advanced:** AC-01, AC-03, AC-05; explicit and unresolved portions of AC-04.
@@ -174,29 +186,29 @@ authentication change is recorded in approved US-03-SC-01 above.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-03-IP2-T1 | Not started | Add `tests/integration/test_planning.py` and input fixtures (proposed). One red–green slice at a time, implement `planning/` models/parser and installed schema resources; extend CLI. Cover required brief fields, explicit classification/regression, use/select/compare intent, delegated/TODO/missing/duplicate/conflicting values. | IP1 approval | Installed API/CLI produces expected decisions or source-located blocking diagnostics; draft input cannot become ready through defaults | AC-01, AC-04 |
-| US-03-IP2-T2 | Not started | In `planning/` implement approved root/path rules. Add cases invoked from project root, nested and unrelated cwd, roots with spaces, explicit notebook cwd, external data references and unsafe symlinks/escapes per IP1 matrix. | T1 | Identical root-relative identities across caller directories; cwd explicit; data references confer no access and no dataset reads occur | AC-05 |
-| US-03-IP2-T3 | Not started | Implement immutable plan/source manifest persistence in `planning/`; add public inspect/verify cases for exact byte checksums, changes producing new versions, old-version retention, missing/corrupt evidence, interrupted writes and concurrent resolution. Update installed resource inventory probes in `tests/packaging/check_installed.py`. | T1–T2 | Independently recomputed checksums match preserved bytes; partial/corrupt evidence never verifies as ready; unrelated project files/pin/lock preserved | AC-03, AC-04 |
-| US-03-IP2-T4 | Not started | Record TDD and phase evidence in `docs/verification/us-03-ip2.md` (proposed), update this plan/checkpoints and run checks below. | T1–T3 | Selected tests, broad-trigger checks and shared checks pass; actual limitations/counts recorded | AC-01, AC-03–05 |
+| US-03-IP2-T1 | Complete | Add `tests/integration/test_planning.py` and input fixtures (proposed). One red–green slice at a time, implement `planning/` models/parser and installed schema resources; extend CLI. Cover required brief fields, explicit classification/regression, use/select/compare intent, delegated/TODO/missing/duplicate/conflicting values. | IP1 approval | Installed API/CLI produces expected decisions or source-located blocking diagnostics; draft input cannot become ready through defaults | AC-01, AC-04 |
+| US-03-IP2-T2 | Complete | In `planning/` implement approved root/path rules. Add cases invoked from project root, nested and unrelated cwd, roots with spaces, explicit notebook cwd, external data references and unsafe symlinks/escapes per IP1 matrix. | T1 | Identical root-relative identities across caller directories; cwd explicit; data references confer no access and no dataset reads occur | AC-05 |
+| US-03-IP2-T3 | Complete | Implement immutable plan/source manifest persistence in `planning/`; add public inspect/verify cases for exact byte checksums, changes producing new versions, old-version retention, missing/corrupt evidence, interrupted writes and concurrent resolution. Update installed resource inventory probes in `tests/packaging/check_installed.py`. | T1–T2 | Independently recomputed checksums match preserved bytes; partial/corrupt evidence never verifies as ready; unrelated project files/pin/lock preserved | AC-03, AC-04 |
+| US-03-IP2-T4 | Complete | Record TDD and phase evidence in `docs/verification/us-03-ip2.md` (proposed), update this plan/checkpoints and run checks below. | T1–T3 | Selected tests, broad-trigger checks and shared checks pass; actual limitations/counts recorded | AC-01, AC-03–05 |
 
 ### Verification and review evidence
 
 - **Selected tests:** `uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_planning.py tests/integration/test_initialization.py tests/integration/test_cli_version.py`. New path is proposed. These cover new public interfaces plus initialization compatibility and CLI regression.
 - **Public boundaries:** Installed CLI/API and inspect/verify; source-checkout API tests alone do not establish installation correctness. Add `tests/installation/check_planning.py` and `tests/installation/verify_planning.py` as finalized in IP1, exercised by the distribution tests.
-- **Deferred checks:** Unrelated installation-upgrade and scheduling tests may be deferred to IP4-T4 only if no broader trigger applies.
+- **Deferred checks:** None from IP2: the broader trigger ran all unrelated installation-upgrade/scheduling cases. IP4-T4 still owns a renewed unfiltered full suite against final story code.
 - **Broader-run triggers:** Shared public schema or package resource/discovery changes in this phase require the full suite and applicable distribution/installation checks before this gate. This is expected for the planned schema/resource additions; do not rely on the narrower selection alone.
-- **Expected:** Explicit valid fixture resolves and verifies; pending/conflicting inputs block readiness; root/cwd and preservation checks pass. Actual results/evidence: Pending.
+- **Expected:** Explicit valid fixture resolves and verifies; pending/conflicting inputs block readiness; root/cwd and preservation checks pass. Actual criterion-mapped results, resolved failures and final affected renewal: [IP2 report](../verification/us-03-ip2.md).
 - Run shared checks defined below; record serial focused TDD exception only for short individual cycles, then four workers at gate.
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete; passing criterion-mapped success/failure, preservation, installed and required broader checks.
-- **Evidence presented:** Pending — IP2 report, red/green commands, artifact/source identities and counts.
+- **Evidence presented:** [IP2 report](../verification/us-03-ip2.md): 207-test full run passed; subsequent source-location correction passed 76 planning cases and 79 renewed affected/installed cases, with explicit impact rationale and source/artifact identities. Shared checks and initialization coexistence/conflict passed. Technical gate complete; developer approved IP2.
 - **Limitations:** Search narrowing and delegated approval completion remain IP3/IP4; intermediate output must report this truthfully.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved — IP2 implementation and recorded verification.
+- **Decision reference and date:** Developer “lgtm ip2”, 2026-10-31, after reviewing the plan/evidence summaries and runnable demo instructions.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending — stop before IP3.
+- **Progression authorized:** IP2 gate approved; IP3 execution awaits explicit authorization. Developer “commit and push” authorizes publishing the approved IP2 implementation and records on the current story branch; whole-story acceptance and IP3 execution remain pending.
 
 ## US-03 / Implementation Phase 3: Enforce declared search boundaries during resolution
 

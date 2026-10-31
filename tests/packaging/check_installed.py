@@ -73,6 +73,51 @@ def check_initialization_resources() -> None:
     )
 
 
+def check_planning_resources() -> None:
+    """Verify independently specified public planning schema inventory."""
+    import jsonschema
+
+    from agentic_ml.planning import (
+        ResolveRequest,
+        inspect_plan,
+        resolve_plan,
+        verify_plan,
+    )
+
+    assert callable(resolve_plan) and callable(inspect_plan) and callable(verify_plan)
+    assert ResolveRequest(Path.cwd(), Path("experiment.yaml")).experiment == Path(
+        "experiment.yaml"
+    )
+    resources = files("agentic_ml").joinpath("schemas/planning/1.0")
+    expected = {
+        "brief.json",
+        "search-space.json",
+        "experiment.json",
+        "plan.json",
+        "manifest.json",
+        "result.json",
+    }
+    assert (
+        resources.is_dir() and {entry.name for entry in resources.iterdir()} == expected
+    ), "planning resource missing"
+    for name in sorted(expected):
+        schema = json.loads(resources.joinpath(name).read_bytes())
+        jsonschema.Draft202012Validator.check_schema(schema)
+        assert schema["additionalProperties"] is False
+    experiment = json.loads(resources.joinpath("experiment.json").read_bytes())
+    assert experiment["properties"]["schema_version"] == {"const": "1.0"}
+    assert set(experiment["required"]) == {
+        "schema_version",
+        "id",
+        "brief",
+        "search_space",
+        "notebooks",
+        "working_directory",
+        "data",
+        "execution",
+    }
+
+
 def main() -> None:
     """Compare installed resources with independently specified contents."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -343,6 +388,7 @@ def main() -> None:
         "Provisional Milestone 0 runtime guidance; experiment execution is unavailable.\n"
     ), "runtime guidance contents differ"
     check_initialization_resources()
+    check_planning_resources()
 
 
 if __name__ == "__main__":

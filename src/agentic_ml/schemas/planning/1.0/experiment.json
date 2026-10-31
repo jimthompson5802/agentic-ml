@@ -1,0 +1,183 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "const": "TODO"
+      },
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+    },
+    "brief": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "const": "TODO"
+      }
+    },
+    "search_space": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "const": "TODO"
+      }
+    },
+    "notebooks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "not": {
+          "const": "TODO"
+        }
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "working_directory": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "const": "TODO"
+      }
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "not": {
+          "const": "TODO"
+        }
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "execution": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "const": "configured"
+        },
+        "algorithm_subset": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "const": "TODO"
+            }
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1,
+              "not": {
+                "const": "TODO"
+              },
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+            },
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "null"
+              ]
+            },
+            "maxProperties": 1000
+          }
+        },
+        "search_overrides": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1,
+              "not": {
+                "const": "TODO"
+              },
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+            },
+            "additionalProperties": {
+              "type": "object"
+            },
+            "maxProperties": 1000
+          }
+        },
+        "budget_overrides": {
+          "type": "object",
+          "properties": {
+            "max_trials_per_algorithm": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "max_total_trials": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "max_runtime_seconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "max_memory_mb": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "max_cost": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "brief",
+    "search_space",
+    "notebooks",
+    "working_directory",
+    "data",
+    "execution"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

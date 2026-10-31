@@ -236,3 +236,36 @@ def test_missing_initialization_schema_reports_installed_failure(
     assert result.returncode != 0
     assert "initialization resource missing" in result.stderr
     assert "PASS direct-wheel" not in result.stdout
+
+
+def test_missing_planning_schema_fails_installed_inventory(
+    artifacts: Path, tmp_path: Path
+) -> None:
+    """US-03 AC-03: neither wheel may omit the versioned planning contract."""
+    result = damaged_wheel_result(
+        artifacts, tmp_path, "agentic_ml/schemas/planning/1.0/plan.json", None
+    )
+    assert result.returncode != 0
+    assert "planning resource missing" in result.stderr
+
+
+def test_planning_from_both_artifact_paths(artifacts: Path, tmp_path: Path) -> None:
+    """US-03 AC-01/03/04/05: installed interfaces work without checkout imports."""
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "tests/installation/verify_planning.py"),
+            "--artifacts-dir",
+            str(artifacts),
+            "--workspace",
+            str(tmp_path / "planning"),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=180,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "PASS planning direct-wheel" in result.stdout
+    assert "PASS planning rebuilt-wheel" in result.stdout
