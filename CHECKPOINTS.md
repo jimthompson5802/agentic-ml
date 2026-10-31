@@ -11,8 +11,11 @@ Verified **MERGED** at 2026-10-31T13:05:48Z, squash commit
 The prior open-PR and merge-authorization notes below are historical.
 Developer “swtich to main” and “pull” authorized switching and updating the
 checkout. Local `main` is now at `77ba352`, matching `origin/main`; checkpoint
-edit was temporarily stashed and restored. Story branch was not deleted.
-This merge outcome record is an uncommitted local update.
+edit was temporarily stashed and restored. Merge record committed/pushed as
+`3e03ca2`; main matches origin/main. Developer then requested deletion of local
+and remote US-02 branches. Verified story head `7a865f4` has the same tree as
+squash merge `77ba352`, then deleted local and remote `US-02-experiment-init`.
+Branch cleanup completed; this cleanup record is an uncommitted local update.
 Next action: developer direction; next-story work remains unauthorized.
 
 US-02 accepted by “i accept us-02” (2026-10-31); all implementation gates and
