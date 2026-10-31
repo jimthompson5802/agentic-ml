@@ -4,6 +4,21 @@ Last updated: 2026-10-31
 
 ## Current position
 
+**Current planning work:** Developer requested “define plan for github user story
+us-03”. Created local `US-03-experiment-boundaries` from clean main and saved
+[US-03 plan](docs/plans/milestone-1-us-03.md). Issue #10 complete body/all comment
+pages retrieved with stable zero-comment snapshot; prerequisite #9 and adjacent
+#11 likewise checked. Four proposed implementation phases cover all five US-03
+criteria, with IP1 resolving schemas, public interfaces and authenticated delegated
+approval feasibility before dependent code. US-05 registry/candidate validation
+stays with its owning story. Developer “i approve plan; commit and push”
+(2026-10-31) approves the plan/public boundaries and authorizes committing and
+pushing this branch. All implementation gates remain pending; next action is
+explicit implementation authorization. Only plan/checkpoint documentation changed;
+no product tests apply. Links/anchors and whitespace checks passed. Commit/push
+outcome is recorded in Git and the delivery response. Earlier “next-story
+unauthorized” notes refer to implementation; plan approval does not authorize it.
+
 **Latest outcome:** Developer “squash merge the pr” authorized PR #45 merge.
 Verified **MERGED** at 2026-10-31T13:05:48Z, squash commit
 `77ba352f80a9f4f6636339f59e517deca38a908b`. Reviewed/passing head was
