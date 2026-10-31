@@ -4,6 +4,29 @@ Last updated: 2026-10-31
 
 ## Current position
 
+**Test-runtime tooling (2026-10-31):** Developer “implement 1 and 2 as
+recommended” authorized nested pytest isolation and initialization profiling on
+`us-03-pytest-runtime-optimization`. See [implementation evidence](docs/verification/pytest-runtime-optimization.md)
+and [original analysis](docs/verification/test-runtime-analysis.md).
+Public directory-containment red failed as intended; dedicated nested basetemp
+green passed with all grouping assertions and 120s timeout intact. Final
+unfiltered four-worker suite: **208 passed**, exit zero, **17:27** total;
+nested scheduling regression **1.719s**. JUnit **13:06** versus terminal
+**17:27** exposes ~**4:21** session-completion delay, with a renamed pytest
+retention-cleanup tree observed. No overall speedup claimed; outer cleanup
+remains separate from the nested fix. Fresh initialization profile **42.93s**,
+including **30.32s** import verification; rerun **7.51s**, including **2.16s**
+imports. First-use imports are the next profiling target; Linux comparison
+unverified. All shared checks, 14 local link paths and whitespace passed;
+lock unchanged at `90b77d41ded3a40f047e2df636b7fd645a8e94c772caca194b7f96aa084c0fd8`.
+All 53 executable/build input hashes stayed fixed through verification.
+Evidence retained at `/private/tmp/pytest-runtime-optimization-evidence-20261031`.
+Developer “first lets commit current changes. Then run the recommended profile
+imports” authorizes committing this verified tooling/evidence and then measuring
+individual first-use imports. No product/dependency/CI changes. Further
+optimizations, publication and US-03 IP3 remain unauthorized. Existing IP3 gate
+unchanged. Git history records the tooling commit; import profiling follows it.
+
 **Current work:** US-03 IP2-T1–T4 complete; **developer IP2 gate approved**
 by “lgtm ip2” (2026-10-31). See [owning plan](docs/plans/milestone-1-us-03.md) and
 [final IP2 evidence](docs/verification/us-03-ip2.md). Stop before IP3.

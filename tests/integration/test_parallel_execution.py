@@ -16,6 +16,10 @@ import json
 from pathlib import Path
 import pytest
 
+@pytest.fixture(scope='session', autouse=True)
+def record_temporary_base(tmp_path_factory, worker_id):
+    Path(f'temp-base-{worker_id}.txt').write_text(str(tmp_path_factory.getbasetemp()))
+
 @pytest.mark.parametrize('case', range(4))
 @pytest.mark.xdist_group('alpha')
 def test_alpha(case, worker_id):
@@ -38,6 +42,9 @@ def test_beta(case, worker_id):
             "-n",
             "4",
             "--dist=loadgroup",
+            # Keep nested pytest out of unrelated sessions' retention cleanup.
+            "--basetemp",
+            str(tmp_path / "nested-pytest"),
             "-q",
         ],
         cwd=tmp_path,
@@ -57,3 +64,6 @@ def test_beta(case, worker_id):
         assert len(workers) == 1, f"{group} split across workers: {workers}"
         group_workers.append(workers.pop())
     assert group_workers[0] != group_workers[1]
+    for worker in group_workers:
+        temporary_base = Path((tmp_path / f"temp-base-{worker}.txt").read_text())
+        assert temporary_base.is_relative_to((tmp_path / "nested-pytest").resolve())
