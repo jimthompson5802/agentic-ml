@@ -2,7 +2,7 @@
 
 These instructions are for experiment users. The harness is installed into your project's own Python environment; you do not need a harness checkout or the contributor environment. Contributor setup is described separately in [the development guide](development.md).
 
-The current package provides `agentic-ml --version`, Python imports, and provisional template/runtime guidance resources. Experiment initialization (`agentic-ml init`), notebook execution, and ML services will be added by subsequent stories. The provisional resources demonstrate packaging; they are not usable experiment initialization templates.
+The current development revision provides `agentic-ml --version`, Python imports and project initialization (see below). The published revisions in the bootstrap examples predate initialization and provide provisional resources only. Managed notebook execution remains subsequent work.
 
 ## Prerequisites
 
@@ -121,3 +121,31 @@ uv run --locked python tests/installation/verify_installation.py --repository ht
 ```
 
 The verifier preserves `identity-before-sync.json`, `pyproject-before-sync.toml`, `uv-before-sync.lock` and the original `identity.json`; upgraded metadata is recorded separately in `identity-after-upgrade.json`. A passing initial installation alone does not count as a passing upgrade. Review all three PASS stages and the original exit code. See [US-01 IP2 evidence](verification/us-01-ip2.md).
+
+## Initialize the experiment project (US-02)
+
+After installing a reviewed initialization-capable revision as a full-SHA dependency, run `uv run agentic-ml init` from the experiment Git root, or pass `--project-root /absolute/project`. Use `--experiment NAME` and `--package-name IDENTIFIER` to select names; an existing src package requires explicit selection.
+
+Initialization creates draft configuration, a brief, search/execution inputs, four inert notebooks, project-package build scaffolding and ignore rules. It declares NumPy, pandas, scikit-learn, nbclient, ipykernel, nbformat, DVC and MLflow in the experiment project, resolves its lock and synchronizes `.venv`. Existing requirement bounds remain and intersect the required ranges; unrelated installed packages are retained during setup. The harness full-SHA source stays pinned. Review and commit the deliberately updated experiment metadata and lock together.
+
+Local storage defaults are:
+
+| Store | Project-relative location | Override |
+|---|---|---|
+| DVC cache | `.dvc/cache` | No initialization override |
+| DVC default remote | `.agentic-ml/dvc-store` | `--dvc-store PATH` |
+| MLflow SQLite database | `.agentic-ml/mlflow.db` | `--mlflow-backend PATH` |
+| MLflow artifacts | `.agentic-ml/artifacts` | `--artifact-store PATH` |
+| Durable initial state | `.agentic-ml/state/project.json` | `--state-store DIRECTORY` |
+
+Relative override paths resolve against the selected project root. Absolute local paths outside the project require explicit flags. Use the same options on retries. Stores must be distinct and cannot overlap protected project paths or symlinks. Protected paths include `.agentic-ml/init.json`, `.agentic-ml/init.lock` and `.agentic-ml/backups`, as well as their ancestors and descendants. URI schemes, credential-bearing settings and unrelated occupied stores are conflicts; setup does not provision remote services or migrate existing stores. A matching existing DVC default is reused. MLflow creates or reopens `agentic-ml:NAME` with the configured artifact location, without creating runs. Initial state has no approvals or runs.
+
+For example, from any working directory:
+
+```sh
+/absolute/project/.venv/bin/agentic-ml init --project-root /absolute/project --dvc-store stores/dvc --artifact-store outputs/artifacts
+```
+
+Review and track source notebooks, briefs, configuration, project code, `pyproject.toml`, `uv.lock` and DVC metadata. Generated storage, raw data, `.venv` and local credentials remain excluded from Git. Install VS Code and its Python/Jupyter extensions separately; select the project's `.venv` kernel when opening a generated notebook. Editor selection does not configure experiment authorization.
+
+Review generated files before use. Resolve reported conflicts without deleting your work; reruns preserve compatible edited drafts. The private, ignored `.agentic-ml/init.json` and metadata backups record setup progress for interrupted scaffolding and synchronization. Before new setup writes, init rejects backup symlinks, invalid destination types and existing backups whose bytes differ from the current originals; matching backup files are compatible. A uv failure reports its stage and exit code without echoing potentially credential-bearing tool output. Resolve the underlying tool failure and rerun with the same options and unchanged intermediate metadata. Changes after a failed setup require review; init will not restore stale backups automatically. A setup record grants no data access, agent authentication or execution approval. Source notebooks, configuration and project code remain ordinary reviewable Git files.

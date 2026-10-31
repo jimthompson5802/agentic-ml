@@ -6,6 +6,8 @@ Replace placeholders with concrete work. Repeat the implementation phase block a
 
 During execution, complete the current implementation phase's tasks and verification, present review evidence, and pause for explicit developer approval before progressing. Record requested changes within that implementation phase. Plan approval and implementation gate decisions are separate; an approved plan leaves its implementation gates awaiting review. Record approvals only when explicitly given by the developer, with a reference to the decision.
 
+For new plans, follow the [phase and story verification policy](../development.md#phase-and-story-verification). Use impact-based phase checks and assign complete-suite verification to the last implementation phase before story acceptance. Existing approved plans retain their requirements unless explicitly revised. Adjust relative links for the saved plan.
+
 ---
 
 # Milestone <number> / US-<ID>: <story title>
@@ -66,9 +68,17 @@ Use `Not started` initially and `Complete` only after the work and required veri
 
 ### Verification and review evidence
 
+- **Selected tests and impact rationale:** <exact paths/node IDs/selectors; changed behavior, callers and dependent capabilities; criterion IDs>
+- **Public boundaries and limits:** <interfaces, coverage gaps, and developer confirmation reference; reuse applicable confirmed boundaries>
+- **Deferred checks:** <unrelated checks, reason, and owning final phase/task; None if none>
+- **Broader-run triggers:** <apply the development-guide triggers and any phase-specific impact conditions>
+
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
 | <behavior or requirement to verify> | <appropriate test, demonstration, or inspection> | <checkable success condition> | Pending |
+| Shared development checks (executable phases) | <locked sync/lock, lint/format/types/version and whitespace commands from development guide> | Pass; lock identity preserved or intentional change explained | Pending |
+
+Record actual selected/deselected test counts and limitations. Tests required by this phase are not deferred because they are slow. Follow early full-run triggers even if the original selection was narrower. For documentation/design-only phases, name the appropriate document checks and explain why executable checks are inapplicable.
 
 ### Developer approval gate
 
@@ -80,6 +90,18 @@ Use `Not started` initially and `Complete` only after the work and required veri
 - **Requested changes and resolution:** <record if applicable>
 - **Progression authorized:** <link to the next implementation phase in the coordinated order, possibly in another story plan, or final acceptance; pending until approved>
 
+## Final verification requirements
+
+Assign this work to a named task in the last implementation phase above; this section defines its completion evidence rather than an extra approval gate.
+
+- **Owning final phase/task:** <identifier; required before presenting the final phase gate>
+- **Final implementation identity:** <tested revision, working-tree changes and lock hash>
+- **Complete suite and shared checks:** <unfiltered locked pytest and shared commands; for a documentation-only story, explain inapplicability and list document checks>
+- **Distribution/installation and other required checks:** <direct and sdist-rebuilt wheels, installed public interfaces, manual/platform checks as applicable; justify inapplicable checks>
+- **Deferred-check reconciliation:** <every deferred check and actual result/evidence; remain Pending until verified>
+- **Evidence renewal:** <rerun affected checks and full suite after executable changes; renew artifacts when inputs change; document-only edits use document checks>
+- **Actual results and limitations:** Pending — <commands, counts, outcomes, evidence, platform and uncovered scope>
+
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
@@ -88,5 +110,6 @@ Use `Not started` initially and `Complete` only after the work and required veri
 
 - **Remaining work:** <limitations and any story portions assigned to later milestones>
 - **Partial prerequisite delivery:** <criteria advanced versus fully verified; identify remaining work in this milestone without implying full story completion>
+- **Final verification:** Pending — <evidence reference; all required checks must pass before whole-story acceptance>
 - **Developer acceptance:** Pending
 - **Decision reference and date:** <record when given; the final implementation gate may also serve as story acceptance if explicitly stated>

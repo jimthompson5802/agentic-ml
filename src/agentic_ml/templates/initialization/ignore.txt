@@ -1,0 +1,8 @@
+# BEGIN agentic-ml initialization
+/.venv/
+/.agentic-ml/
+/data/
+/.env
+/.env.*
+!/.env.example
+# END agentic-ml initialization

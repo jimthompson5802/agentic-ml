@@ -1,56 +1,133 @@
 # Development Checkpoints
 
-Last updated: 2026-10-30
+Last updated: 2026-10-31
 
 ## Current position
 
-Milestone 0 is complete and accepted (US-31, US-32, US-33). PR #24 squash merged as `018e9d4bb26e121c7f9274d11e0de560b7514b95`; [main CI 40995999688](https://github.com/jimthompson5802/agentic-ml/actions/runs/40995999688) passed, including both distribution paths. Subsequent planning-skill, coding-standard and issue-publication documentation is committed through `aead26e`.
+US-02 accepted by “i accept us-02” (2026-10-31); all implementation gates and
+original corrections approved. Accepted changes committed as `8fe0e8f` and pushed
+on `US-02-experiment-init`. [PR #45](https://github.com/jimthompson5802/agentic-ml/pull/45)
+is open against `main`; [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/45#pullrequestreview-5722316537) is published.
 
-Developer message “i approve us-01 ip1; commit changes; execute ip2”, 2026-10-30, approved IP1 and authorized its commit and IP2. Approved IP1 changes committed as `60941af` (`feat(installation): verify pinned harness bootstrap`). IP2 T1–T3 are technically complete; all four US-01 criteria have macOS/Python 3.12 evidence. Developer message “i approve ip2; commit the changes”, 2026-10-30, approved IP2 and authorized its local commit. Both implementation gates are approved. Developer message “i approve us-01”, 2026-10-30, accepts the complete story. IP2 is committed as `2bb46cc`. [Owning plan](docs/plans/milestone-1-us-01.md), [IP1 evidence](docs/verification/us-01-ip1.md), [IP2 evidence](docs/verification/us-01-ip2.md).
+**Current tooling work:** Optional parallel tests implemented and verified under
+developer “implement the change” and “yes” for the compatibility constraint.
+Development pytest-xdist 3.8.0 / pytest 9.1.1 (`>=8,<9.2`); installation and
+distribution groups stay together, initialization/CLI cases distribute individually.
+Developer subsequently requested agent instructions to use four workers locally.
+The development guide now requires `uv run --locked pytest -n 4 --dist=loadgroup`
+for local verification, with recorded exceptions for focused TDD/diagnosis and
+resource comparisons. Pytest configuration remains serial without explicit flags.
+Developer subsequently requested parallel workers in GitHub Actions: automated
+tests now explicitly use four workers with `loadgroup`; workflow/documentation
+changes committed as `16ebee2`. Developer “push” authorized publication;
+ordinary push of `US-02-experiment-init` through `16ebee2` succeeded and updates
+PR #45, including tooling commit `a593c6f`. Hosted Linux parallel verification
+remains pending. Final local complete runs: **129 passed** with
+two workers in **16m59s**, four in **12m06s**; group placement and unique case sets
+verified. New public scheduling regression caught pytest 9.2.0 silently ignoring
+groups; approved compatibility correction passed on its first attempt. Earlier
+128-case benchmarks are historical and do not establish grouping correctness.
+Shared checks passed; final lock SHA-256
+`90b77d41ded3a40f047e2df636b7fd645a8e94c772caca194b7f96aa084c0fd8`.
+Evidence: [parallel tests](docs/verification/parallel-test-execution.md).
+Developer “commit change” authorizes the local commit of parallel tooling,
+four-worker local instructions and verification records. Push remains unauthorized.
+Local tooling/instructions committed as `a593c6f`. Current CI change awaits
+developer review; requested branch push completed. macOS verified; Linux/Windows parallel execution
+and cancellation descendant cleanup remain unverified.
 
-## Skill enhancement — 2026-10-30
+Local-command instruction update is documentation-only: no executable behavior,
+dependencies, lock or CI changed in that update. TDD and runtime reruns do not
+apply. Local Markdown link/anchor and whitespace checks verify the edited guidance.
 
-Updated `execute-plan` so explicit whole-story acceptance authorizes remaining story commits, ordinary push, PR creation through `create-pull-request`, and static COMMENT review through `review-pull-request`. Phase gates remain required. Publication resumption checks preserve unrelated work and avoid duplicate PRs/reviews; merging, cleanup, fixes, and next-story work remain separate. No live publication was performed for this edit.
+**US-02 status:** temporary-path correction committed as `3a5fd84`, focused
+regressions passed. The later complete tooling runs renew TMP-T3 verification,
+including installed initialization and distribution checks. Final correction gate
+approved by developer “i approve the final corection gate” (2026-10-31).
+Developer “commit changes and push” authorizes committing and publishing the
+approval, thread-resolution and CI records. Hosted Linux CI on pushed head `be2f02b` passed:
+[run 41202139931](https://github.com/jimthompson5802/agentic-ml/actions/runs/41202139931),
+completed 2026-10-31T12:45:44Z. PR #45 is open and mergeable. Merge,
+cleanup and next-story work remain unauthorized. Historical cancellation follows:
+developer requested cancellation of the full suite
+for the approved temporary-path correction. Source guard and nine added cases
+are implemented and committed as `3a5fd84`. Focused regressions: 38 passed. Shared checks and
+both distribution/complete installed initialization paths passed. Full suite
+cancelled at developer request: 27/128 passed, 101 incomplete, exit 130;
+`/private/tmp/us-02-tmp-full.xml`. Do not restart without direction. Correction
+gate remains pending. Developer “commit changes” authorized the local correction
+commit; push remains unauthorized. See
+[correction evidence](docs/verification/us-02-temp-path-fix.md) and
+[owning plan](docs/plans/milestone-1-us-02.md).
 
-Validation: manually checked phase-only approval, accepted story with remaining or already committed work, unrelated changes, existing PR/review reuse, and uncertain publication handling. `git diff --check` passed. Skill validator could not run: both system Python and the locked project environment lack `yaml` (PyYAML). No dependencies or lockfile changed. TDD does not apply to this instruction-only change. Developer requested committing and pushing this skill and checkpoint update on the current branch (`main`); publication outcome is reported in the session.
+Original
+[Medium review finding](https://github.com/jimthompson5802/agentic-ml/pull/45#discussion_r4431369976): storage override
+`.agentic-ml/init.tmp` conflicts with the journal temporary file. The 119-test
+suite was historical and did not cover this path. Original acceptance remains
+recorded; the fix and renewed full local verification are complete. Developer
+requested a review-thread reply and resolution. Published and verified
+[fix/evidence reply](https://github.com/jimthompson5802/agentic-ml/pull/45#discussion_r4431730497);
+GitHub thread is resolved. This external review action does not authorize merge.
+No merge, cleanup or next-story work is authorized. Hosted Linux CI passed before
+this correction; it does not cover the new uncommitted source.
 
-## Command approval rules — 2026-10-30
+## Development verification policy — 2026-10-31
 
-Developer accepted the recommendation for repository-local GitHub reads, locked tests/verification, lint fixes and formatting edits. Expanded `.codex/rules/default.rules`, retained bootstrap rules, and added `.codex/scripts/github-read.sh` to force validated GET requests to github.com and this repository. Usage and prefix-rule limitations are in [the development guide](docs/development.md#repository-local-codex-command-approvals). Developer requested committing and pushing the rule/helper and instruction updates on main; publication outcome is reported in the session. Restart Codex with the project layer trusted to load the changes. Existing user-level grants remain effective.
+Developer “Ok make this change” authorized impact-based testing for future plans.
+Updated AGENTS.md, the [development policy](docs/development.md#phase-and-story-verification),
+the plan template and create-implementation-plan / execute-plan / manage-plan-scope
+skills. Intermediate gates use justified affected/dependent tests and shared
+checks; final verification requires the full suite and applicable installed
+distribution checks before final gate approval and story acceptance. Broad
+changes trigger earlier full runs. Existing approved plans, including US-02,
+retain their recorded requirements unless explicitly revised.
 
-Verification on macOS: `codex execpolicy check --rules .codex/rules/default.rules -- COMMAND` passed 22 positive and seven negative cases. Isolated stub-GitHub subprocess checks passed seven exact GET argument cases and 14 rejected-input cases; no network used. `sh -n .codex/scripts/github-read.sh` and `git diff --check` passed. No harness behavior, Python dependencies or lockfile changed; harness TDD/full runtime checks do not apply to these development rules and shell helper. No Linux/Windows execution verified.
-
-## Instruction alignment — 2026-10-30
-
-Developer approved documentation alignment with the command rules. Added the development-guide pointer to AGENTS.md; routed five GitHub skills to working-repository read guidance with generic fallbacks; reordered read examples to match repository prefixes; documented complete issue pagination and unsupported-read fallback. Implementation gates, static-only PR reviews, publication authorization, execute-plan and runtime guidance remain unchanged. No additional command permissions added. Developer authorized committing and pushing the combined rule/helper and instruction edits on main.
-
-Documentation-only change: TDD and harness runtime checks do not apply. Validation: `git diff --check` passed; 29 local link targets and five aligned read forms passed link/policy checks. Reviewed the diff for unchanged gates and static-review restrictions. Skill validator remains unavailable because system Python lacks PyYAML; no dependencies or lockfile changed.
+Documentation/workflow changes only: TDD and the product suite do not apply;
+no executable behavior changed. All three edited skills passed `quick_validate.py`
+using the existing project interpreter; 34 local Markdown links/anchors and
+`git diff --check` passed. Manual policy walkthrough covered narrow phase scope,
+slow relevant tests, broad-change triggers, known failures, existing approved
+plans, deferred-check reconciliation, and executable versus document-only
+evidence renewal. No source, tests, dependencies, lock, CI or story-plan changes.
+Developer “commit changes” authorizes the local commit of these policy edits
+and this checkpoint on `US-02-experiment-init`. Push/publication of this separate
+workflow change is not requested. The US-02 review finding above remains pending
+and is outside this change.
 
 ## Resume here
 
-US-01 implementation is complete with both implementation gates approved; published PR and static review are recorded below. Story accepted 2026-10-30; see the [completion record](docs/plans/milestone-1-us-01.md#story-completion-review). Issue #8 complete body/all comment pages refreshed before execution: stable zero-comment snapshot, updated `2026-10-30T02:06:17Z`. No new scope decision or unresolved failure.
+- P1/P2 focused regressions passed: 5 unsafe-backup cases, 28 metadata overlap cases, and installed API rejection/corrected CLI retry with matching backups. Shared sync/lock/lint/format/types/version checks passed. Full suite passed: **119 passed**, exit 0, 1898.17s (31:38), including direct/rebuilt distribution checks and full installed initialization. Retained fixtures at `/private/tmp/us-02-review-suite`; XML `/private/tmp/us-02-review-suite.xml`. Earlier evidence below is historical IP4 evidence and does not by itself cover these defects.
 
-## Publication and review — 2026-10-30
+- Implemented configurable local DVC/cache/default remote, MLflow SQLite/artifacts/experiment and durable unconfigured JSON state. Preflight protects existing content, selected paths, permissions, exclusions and matching identities. Setup journals retain stage/exit-code evidence and safe retries; no runs or approvals are created.
+- **Clean full suite: 85 passed**, exit 0, 1829.72s (30:29). Command: `env MLFLOW_DISABLE_TELEMETRY=true DVC_NO_ANALYTICS=1 uv run --locked pytest --junitxml=/private/tmp/us-02-ip4-evidence/clean-pytest.xml`. All tests remain enabled; optional telemetry settings did not materially shorten the run.
+- Earlier full run had 84 passes and one legacy UTF-8 probe failure against SQLite. Corrected the same complete recursive source-sentinel exclusion to scan bytes; focused rerun and subsequent clean full run passed. Original/focused/clean XML files remain in `/private/tmp/us-02-ip4-evidence`. No product change or file exclusion accompanied the probe correction.
+- Shared locked synchronization, lock consistency, lint, format (78 files), strict types (20 source files), version smoke (0.1.0), local Markdown links and whitespace passed. No dependency/lock changes, suppressions, disabled checks or unresolved failures.
+- Direct and sdist-rebuilt review wheels passed normal installed checks. Artifacts: `/private/tmp/us-02-ip4-evidence/review-artifacts`; workspace `/private/var/folders/8_/h2tjc94d2y5fwx8dhbcrnbfc0000gn/T/agentic-ml-distributions-mchx6nbs`. Complete artifact-derived initialization passed for fresh CLI and existing-package API projects on both paths, with installed package bytes matched to wheels and genuine Git origin checks.
+- Clean-run installed fixtures: system temporary `pytest-of-jim/pytest-20/test_complete_initialization_f0/initialization`, full local source SHA `ad28a3e54f2314673db7c4bf253195e1c11cb471`. These are local unpublished fixture commits, not GitHub installation claims.
+- Developer manually executed the generated notebook in VS Code. Saved stdout confirms project `.venv/bin/python`, Python 3.12.15. Evidence: `/private/tmp/us-02-ip4-evidence/manual-vscode.ipynb`; VS Code 1.135.0, Python extension 2026.10.0, Jupyter 2025.9.1.
+- macOS 15.7.9 arm64/Python 3.12.15/uv 0.13.1/Git 2.54.0 verified locally. No new Linux/Windows evidence. Harness lock remains `b7ca45a27ad337812eff5555bf2a74edee3bfb637ca7c756e382fc82f867ab66`.
+- Issue #9 complete body/all comment pages refreshed at entry: stable zero-comment snapshot, updated `2026-10-31T01:15:38Z`; Milestone 1 / AC-01–05, no new scope decision. GitHub public reads succeeded. Publication-time authentication succeeds outside the sandbox; the earlier invalid-token result was sandbox-specific.
+- Cache/log-directory sandbox denials were retried with approved escalation. They were infrastructure failures, not behavior reds. All granular failure/correction evidence is in the IP4 report.
+- Original IP4 implementation and approval records are committed as `b6a353c`. Accepted source, tests, correction evidence and acceptance records are committed as `8fe0e8f` and pushed. Publication outcome records are documentation-only and will be committed/pushed under acceptance authorization; no unrelated changes were present at entry.
 
-[PR #44](https://github.com/jimthompson5802/agentic-ml/pull/44) targets main from `US-01-pinned-installation`, published at `ce414ca54ad3f9ecdaa8fc0626f545b62f5aedec`. Selected repository PR template preserved; closes #8 on merge. [Hosted Linux/Python 3.12 CI](https://github.com/jimthompson5802/agentic-ml/actions/runs/41042255309) passed. [Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/44#pullrequestreview-5711095039) completed with no actionable findings; reviewed all 10 changed files and owning issue, no project code/checks executed during review. Review publication and empty inline-comment collection verified. PR #44 merged on 2026-10-30 at `5d662f65ed38cdca988f968164c773b3be6f84bf`; issue #8 is closed. [Post-merge main CI 41042701474](https://github.com/jimthompson5802/agentic-ml/actions/runs/41042701474) passed at that commit. Main was fast-forwarded and the saved publication checkpoint restored before this final record.
+## Accepted work and supporting context
 
-## Pending developer decisions
+Milestone 0 is complete and accepted (US-31, US-32, US-33), merged in PR #24 as `018e9d4bb26e121c7f9274d11e0de560b7514b95`; observed main CI passed. Subsequent development rules/skills/specification work is recorded in Git history.
 
-No US-01 implementation gate or story acceptance remains pending. No merge or post-merge verification remains pending; next-story planning awaits direction. No US-02 implementation authorized. Acceptance record committed as `ce414ca`. Developer request “push to remote; create pull request and start a pr review” authorized publication and review; branch pushed and PR #44 created. Merge completed on GitHub and was verified during main cleanup.
+US-01 is accepted and merged through [PR #44](https://github.com/jimthompson5802/agentic-ml/pull/44), merge `5d662f65ed38cdca988f968164c773b3be6f84bf`; issue #8 closed. Both implementation gates, installed A→B GitHub upgrade checks, hosted Linux CI and static COMMENT review passed. See [US-01 plan](docs/plans/milestone-1-us-01.md) and its linked evidence. Later observed main CI at `4477162` passed. No US-01 decision is pending.
 
-## Handoff notes
+US-02 approved plan/public boundaries: developer “commit changes; i approve the plan, execute us-02 ip1” (2026-10-30). IP1 contracts/ADRs approved, committed `12df741`; IP2 approved, implementation commit `265ed5b`; IP3 approved by “i approve ip3”, then local commit authorized by “commit” (2026-10-31), committed `0830888`. IP4 gate subsequently approved by “i approve ip4”, corrections approved by “i approve”, and whole story accepted by “i accept us-02” (2026-10-31).
 
-- Checkout: `main` at merged US-01 plus this documentation follow-up; story branch cleanup authorized. Implementation history: IP1 `60941af`, IP2 `2bb46cc`, acceptance `ce414ca`; squash merge `5d662f6`. IP2 changes: verification driver, three added tests (12 installation tests total), upgrade guide, report, plan and checkpoint. No product source, dependency/lock, runtime resources, CI or suppressions changed.
-- Verification: 23 tests (including both fresh wheel installation paths), lint, format, strict types, locked sync/check and smoke passed on macOS 15.7.9 arm64/Python 3.12.15/uv 0.13.1/Git 2.54.0. Harness lock SHA-256 unchanged: `ab8b6c9de02061ea788fa13a2dba162bcb963fb211ca938af3408e01bb1f5d9d`. Local Markdown targets and `git diff --check` passed. No new Linux/Windows verification.
-- Actual GitHub A→B upgrade verified in the same project: A `018e9d4bb26e121c7f9274d11e0de560b7514b95`, B `aead26e9c758878107ad72f230f9e607a9a7ecfa`; both package versions 0.1.0. Exact experiment lock hash changed from `b08e29f77524c9fd70bc57e8d792e915a357e8355e122c4e1fef8e68efb80673` to `20df20851edc6ab815a1396de63bfaf0837dddc74b2beee31188732256037ac7`. No-op locked sync preserved original identity. A/B installed interfaces passed after cache removal; original A evidence retained.
-- IP2 two red–green slices passed first green attempts; old-install substitution rejected. Raw projects/logs: `/private/tmp/us-01-ip2-evidence`. Prior IP1 raw evidence: `/private/tmp/us-01-ip1-evidence`. Sandbox Git-write restriction resolved by approved escalation; no unresolved failure.
-- Final handoff records only checkpoint documentation; `git diff --check` passed. TDD/runtime checks do not apply to this status update; prior implementation verification and successful post-merge CI remain the evidence. Developer requested committing the final record on main and previously authorized deleting local/remote story branches.
-- Milestones 1–5 issues remain published; later story implementation unauthorized. Milestone 99 deferred.
+Notebook-editor scope decision SC-01 is recorded in the plan, issue #9 and issue #36: VS Code is installed separately; ipykernel/nbclient remain requirements. Manual kernel checking does not establish managed execution or isolation.
+
+Repository-local GitHub read and development command guidance is in [docs/development.md](docs/development.md#repository-local-codex-command-approvals), with rules in `.codex/rules/default.rules`. Tool permissions do not approve implementation gates or publication. Explicit whole-story acceptance triggers the execute-plan publication workflow only after all gates and verification pass.
+
+The requested executive overview remains outside the repository at `/Users/jim/Desktop/genai/agent-ml-overview.md`. Its creation was documentation-only; no additional product scope followed. Milestones 1–5 issues remain published; other story implementation is unauthorized. Milestone 99 remains deferred.
 
 ## Maintenance rules
 
 - Keep this file a concise current handoff. Replace stale resume instructions and notes; Git history preserves earlier checkpoints.
-- Summarize overall progress and link to authoritative records. GitHub issues govern scope; implementation plans own granular tasks, verification evidence, scope changes, and developer gate decisions. Resolve discrepancies against those sources before resuming.
-- Record approval only after the developer explicitly gives it, and link to the decision recorded in the owning plan. Task completion and plan approval do not approve implementation-phase progression.
-- At each update, refresh the date, current position, progress summary, next action, pending decisions, and material working-tree or verification notes. Include failed checks, blockers, and relevant evidence links when present.
-- Commit checkpoint updates alongside the work they describe when practical. Keep credentials and sensitive environment details outside this file.
+- Summarize overall progress and link to authoritative records. GitHub issues govern scope; implementation plans own granular tasks, evidence, scope changes and gate decisions. Resolve discrepancies against those sources before resuming.
+- Record approval only after the developer explicitly gives it, with the decision in the owning plan. Technical completion and plan approval do not approve progression.
+- Update the date, current position, next action, pending decisions, working-tree state and material verification notes at completed work, gates, blockers and handoff. Preserve failure evidence.
+- Commit checkpoint updates alongside their work when authorized. Keep credentials and sensitive environment details outside this file.

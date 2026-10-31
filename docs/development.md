@@ -17,7 +17,7 @@ uv sync --locked --group dev
 uv lock --check
 ```
 
-When reviewing an implementation branch, check out the reviewed branch or commit before synchronization. If that commit is not yet pushed, Git can fetch it from a local harness clone: run `git fetch /absolute/path/to/harness REVIEWED_COMMIT_SHA`, then `git checkout --detach REVIEWED_COMMIT_SHA` before synchronization; replace the path and SHA with the reviewed source. This changes only how Git obtains the reviewed revision, not the Python setup steps. The package installs from this checkout in editable mode. For tooling-only work before product source exists, `uv sync --locked --group dev --no-install-project` installs dependencies without building the project; this was the US-31 IP1 bootstrap path. There are currently no third-party runtime dependencies. Keep `uv.lock` committed. `--locked` must reject stale metadata rather than silently regenerate the lockfile. Deliberate dependency changes require `uv lock`, review of the lock diff, and renewed verification.
+When reviewing an implementation branch, check out the reviewed branch or commit before synchronization. If that commit is not yet pushed, Git can fetch it from a local harness clone: run `git fetch /absolute/path/to/harness REVIEWED_COMMIT_SHA`, then `git checkout --detach REVIEWED_COMMIT_SHA` before synchronization; replace the path and SHA with the reviewed source. This changes only how Git obtains the reviewed revision, not the Python setup steps. The package installs from this checkout in editable mode. For tooling-only work before product source exists, `uv sync --locked --group dev --no-install-project` installs dependencies without building the project; this was the US-31 IP1 bootstrap path. US-02 IP2 adds tomlkit, PyYAML and jsonschema as runtime dependencies for initialization metadata/resources. US-02 IP3 adds nbclient, ipykernel, nbformat, DVC and MLflow runtime requirements; experiment initialization declares its own ML/notebook/storage requirements and synchronizes the separate project environment. IP4 provisions project-associated local DVC, MLflow and initial durable state. Keep `uv.lock` committed. `--locked` must reject stale metadata rather than silently regenerate the lockfile. Deliberate dependency changes require `uv lock`, review of the lock diff, and renewed verification.
 
 Bootstrap commands available now:
 
@@ -32,19 +32,109 @@ uv run --no-sync mypy --version
 
 ## Shared development commands
 
-The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. Use the following commands from the repository root; these are also the commands configured in development CI:
+The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. Use the following commands from the repository root for local verification. Development CI uses the same checks, including four-worker pytest execution with `loadgroup`.
 
 | Purpose | Command |
 |---|---|
 | Install source package and development dependencies | `uv sync --locked --group dev` |
 | Lock consistency | `uv lock --check` |
-| Automated tests | `uv run --locked pytest` |
+| Automated tests (local, four workers) | `uv run --locked pytest -n 4 --dist=loadgroup` |
 | Lint | `uv run --locked ruff check .` |
 | Formatting check | `uv run --locked ruff format --check .` |
 | Strict type checks | `uv run --locked mypy src tests` |
 | Development smoke check | `uv run --locked agentic-ml --version` |
 
 The smoke check must exit zero and print the installed package version; version tests compare it to distribution metadata. A missing command, nonzero exit, or wrong version is a failed smoke check. US-31 Implementation Phase 2 verified all shared commands from a fresh macOS checkout and a new environment; see the [recorded results](verification/us-31-ip2.md). Wheel/source-distribution verification belongs to US-33 and is separate from this editable development install.
+
+## Local parallel test execution
+
+Agents must use four workers with `loadgroup` for local pytest verification,
+including complete-suite runs and selected tests. After locked development
+synchronization, use:
+
+```sh
+uv run --locked pytest -n 4 --dist=loadgroup
+uv run --locked pytest -n 4 --dist=loadgroup --junitxml=/private/tmp/agentic-ml-parallel.xml --durations=20
+```
+
+For serial diagnosis or a short focused TDD cycle, use `uv run --locked pytest`
+with the relevant selector and record why serial execution was selected.
+Use two workers only for an explicit comparison or resource investigation.
+Pytest configuration does not add worker flags automatically; local and CI test
+commands explicitly select four workers with `loadgroup`.
+
+`pytest-xdist` is a development dependency. Pytest is constrained to `>=8,<9.2`
+because pytest 9.2.0 silently breaks group scheduling with pytest-xdist 3.8.0.
+The public subprocess regression in `test_parallel_execution.py` verifies that
+marked cases share a worker. Revisit the upper bound after an upstream-compatible
+pair passes that regression and complete-suite verification.
+
+`loadgroup` keeps the installation
+tests in one worker and the distribution tests in another scheduling group;
+each group runs sequentially, but a worker can run other tests afterward.
+Initialization and CLI cases are ungrouped and can run individually on available
+workers. Grouping does not guarantee test order. Use `loadgroup` with these
+commands so shared mutable installation fixtures stay together and expensive
+distribution fixtures are reused. Avoid `loadfile`/`loadscope`: they place the
+entire initialization module on one worker.
+
+Each worker creates its own module fixtures. Experiment projects, source Git
+fixtures, databases, storage and artifact directories use pytest temporary paths
+or independently allocated temporary workspaces. Installation probes intentionally
+mutate their group-local installed project and restore its contents. Cache-removal
+checks remove only their own workspace cache. Keep those isolation properties
+when adding tests. Do not point multiple runs at the same `--basetemp` directory.
+
+Environment installation and MLflow initialization compete for CPU, memory and
+disk. Investigate resource constraints with a recorded worker-count comparison. Keep
+existing assertions and subprocess timeouts intact. Record worker count, suite
+count, durations, diagnostics and platform with results. A complete unfiltered
+parallel run exercises the full suite; selected runs do not replace final full
+verification. Retain serial execution for diagnosis. Parallel macOS evidence
+does not establish Linux or Windows support. The Linux CI workflow now requests
+four workers; hosted parallel verification remains pending until a run is observed.
+
+The initial verified macOS benchmark passed 129 tests in 16m59s with two workers
+and 12m06s with four. Four workers reduced elapsed time by about 29%, while some
+individual tests took longer under contention. These measurements are not a
+Linux performance claim. See [parallel verification](verification/parallel-test-execution.md)
+for grouping checks, compatibility findings, commands and retained evidence.
+
+## Phase and story verification
+
+This policy applies to new implementation plans. Existing approved plans keep their recorded verification requirements until an explicit revision is authorized and recorded through [manage-plan-scope](../.agents/skills/manage-plan-scope/SKILL.md). Preserve historical results and approvals. CI continues to run its complete configured checks; local test selection does not change CI configuration.
+
+### Development and intermediate phase gates
+
+Use TDD for each new behavior or bug fix: reproduce the missing behavior, implement the correction, and run the new test plus relevant existing regressions. At each phase gate, verify the changed behavior and its dependent capabilities. Select tests by affected interfaces, callers, shared resources and failure boundaries, including installed-package integration tests where those boundaries are affected. Test duration alone is not a reason to defer a relevant test. Broaden selection when the impact is uncertain.
+
+Record the following in each phase's verification section before implementation:
+
+- Selected test files, node IDs or selectors, the acceptance criteria they cover, and why they cover the affected behavior and dependencies.
+- Public test boundaries and their limits, confirmed through plan review or an explicit review; reuse confirmed boundaries while applicable.
+- Unrelated checks deferred to final verification, the reason, and the final phase/task that owns them. Write `None` when none are deferred.
+- Conditions that would require broader verification as the work changes.
+
+Use the documented locked pytest command with explicit paths, node IDs or `-k` selectors. For example, these are valid targeted commands; the plan must justify the selection for its actual change:
+
+```sh
+uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_cli_version.py
+uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_initialization.py -k 'storage_cannot_overlap or unsafe_backup'
+```
+
+Confirm that the intended cases were collected and report selected/deselected counts. Selection defers unrelated coverage; it is not a passing result for deselected tests. Keep tests enabled and assertions unchanged. A known failing regression remains unresolved and cannot be hidden by narrowing the selection.
+
+At every executable phase gate, run locked development synchronization, lock consistency, lint, formatting, strict typing and the version smoke check from the shared command table, plus `git diff --check`. Compare the lockfile hash before and after verification and explain any intentional dependency change. Complete these checks and the phase's selected tests before requesting approval. Phase approval covers the recorded verified scope; whole-story regression coverage remains pending until final verification.
+
+Run the full suite before an intermediate phase gate when changes affect dependency declarations or the lockfile, packaging/build/resource discovery, shared public schemas, or authorization/access enforcement across entrypoints. Include applicable distribution and installation checks for those changes. Also run broader tests, up to the full suite, when shared-module changes have uncertain impact or targeted results expose cross-capability regressions. These triggers take precedence over a previously narrower selection; record the expanded checks and results in the phase evidence.
+
+### Final verification before story acceptance
+
+Every new plan must assign final verification to a named task in its last implementation phase. After all implementation work is complete, run `uv run --locked pytest -n 4 --dist=loadgroup` locally across the complete repository suite without selection filters, together with the shared development checks. For distribution-affecting work, verify both the directly built wheel and a wheel rebuilt from the source distribution outside the checkout, using the [distribution and installation commands](#distribution-builds-and-installed-verification). Include other story-required installed-interface, manual and platform checks. A passing complete-suite run may supply these results when it demonstrably executes the required checks; reference that evidence instead of repeating identical checks against unchanged artifacts.
+
+Record the tested revision and working-tree changes, lockfile identity, commands, test counts, outcomes, artifact identities where applicable, platform and limitations. Reconcile all deferred checks and the acceptance-criterion matrix. Present the final phase gate only after required verification passes; request whole-story acceptance only after the gates and final verification are complete. Failing or unverified required checks remain blockers.
+
+After subsequent executable changes, rerun affected checks and renew the full-suite result against the final implementation before acceptance. Renew distribution evidence when package contents, dependencies or build inputs change. Reuse earlier evidence only when the relevant implementation and inputs are unchanged. Documentation-only or approval-record edits need appropriate document/link/whitespace checks rather than a runtime rerun; explain that choice in the evidence. For an entirely documentation-only story, record why product tests and distribution checks are inapplicable and name its required document checks.
 
 ## Configuration, credentials, and troubleshooting
 
@@ -119,13 +209,16 @@ From the repository root, build into a fresh output directory and verify both pa
 ```sh
 uv build --out-dir dist
 uv run --locked python tests/packaging/verify_distributions.py --artifacts-dir dist
+uv run --locked python tests/installation/verify_initialization.py --artifacts-dir dist
 ```
 
 Use an empty output directory for each reviewed build. If `dist` already contains artifacts from an earlier version, use a new directory in both commands. The driver requires exactly one wheel and one `.tar.gz` source distribution and rejects missing or ambiguous candidates. These same commands are configured in hosted CI. Both hosted wheel paths and separate build/resource failure-and-correction cases passed verification; see the [IP3 report](verification/us-33-ip3.md).
 
-The driver creates a unique temporary workspace outside the checkout and prints its path. For each wheel it creates an unseeded Python 3.12 environment with `uv venv --no-project --python 3.12`, installs the wheel normally with `uv pip install --python ENV/bin/python WHEEL`, and probes it from a separate minimal experiment project. The probe uses isolated Python (`-I`) and an absolute installed `agentic-ml --version` entrypoint. It verifies CLI exit/stdout/stderr, wheel and installed version agreement, public imports, import/metadata paths, absence of editable installation and contributor dependencies, and independently specified resource contents. Currently the runtime dependency closure is only `agentic-ml`; future runtime dependencies require updating that explicit verification contract.
+The driver creates a unique temporary workspace outside the checkout and prints its path. For each wheel it creates an unseeded Python 3.12 environment with `uv venv --no-project --python 3.12`, installs the wheel normally with `uv pip install --python ENV/bin/python WHEEL`, and probes it from a separate minimal experiment project. The probe uses isolated Python (`-I`) and an absolute installed `agentic-ml --version` entrypoint. It verifies CLI exit/stdout/stderr, wheel and installed version agreement, public imports, import/metadata paths, absence of editable installation and contributor dependencies, and independently specified resource contents. The Python 3.12 runtime closure is explicitly checked against the reviewed inventory in each standalone probe, including notebook, DVC and MLflow dependencies. Distribution-name normalization includes dots, underscores and hyphens. Platform-specific dependencies have explicit conditions; only observed platforms count as verified. Contributor tools and type stubs must remain absent. Future runtime dependency changes require reviewing this verification contract.
 
 The second path validates source archive members, rejects links and traversal, and extracts with Python's `data` filter. It runs `uv build EXTRACTED_SOURCE --wheel --out-dir REBUILT_DIRECTORY` with build isolation, then installs that new wheel into another fresh environment. It never substitutes the direct wheel for the rebuilt wheel. Build dependencies remain separate from both runtime environments. Python path/home and active environment overrides are removed from child commands.
+
+The initialization driver first runs those unchanged normal-wheel checks, then uses the validated source distribution to create a temporary full-SHA Git fixture. It compares every package file in both wheels with that source and each installed pinned Git package. Separate fresh CLI and existing-package API projects exercise complete initialization and reruns, including real stores, inert notebooks, imports, lock/pin preservation, Git exclusions and absent authorization. Wheel installs retain wheel origin; pinned-project installs retain Git origin. No origin metadata is fabricated, and unpublished fixture commits are local evidence. All workspaces and logs are retained outside the checkout. The ordinary pytest suite includes this driver; no additional CI service or editor is required.
 
 Installed resources are read with `importlib.resources.files("agentic_ml")`:
 
@@ -134,7 +227,7 @@ Installed resources are read with `importlib.resources.files("agentic_ml")`:
 | `templates/provisional.txt` | `Provisional Milestone 0 template; experiment initialization is unavailable.` |
 | `runtime_guidance/provisional.md` | `Provisional Milestone 0 runtime guidance; experiment execution is unavailable.` |
 
-These provisional files do not implement initialization or guidance selection/loading. Development `AGENTS.md` files are not installed runtime resources.
+These provisional files remain packaging sentinels. US-02 IP2 adds separate `templates/initialization/` resources and versioned draft schemas; the installed probe verifies their inventory, schema properties and inert notebook content. Environment synchronization is implemented in IP3 and local storage initialization in IP4; runtime guidance selection/loading remains subsequent work. Development `AGENTS.md` files are not installed runtime resources.
 
 Diagnostics include artifact paths/SHA-256, stage commands and working directories, interpreter/platform/import paths, installed distributions and CLI output. Every subprocess also writes stdout/stderr to a named stage `.log` in its working directory beneath the printed workspace. Workspaces are retained on success and failure for inspection; remove them manually when no longer needed. A failed installation/build/probe exits nonzero and identifies its stage and artifact. A failed later path never counts as passing because the direct wheel passed. Raw logs remain outside Git.
 

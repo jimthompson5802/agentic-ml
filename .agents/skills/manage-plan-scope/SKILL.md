@@ -21,6 +21,8 @@ Assess effects on completed and remaining work, dependencies, acceptance criteri
 
 Update the existing plan with the proposed scope, tasks, dependencies, verification, and gate criteria. Preserve stable identifiers and previous decisions. Mark removed or deferred tasks explicitly rather than erasing their history. Keep completed work and evidence; flag evidence invalidated by the new scope and specify the rework or checks needed. Previous approvals remain historical facts, with affected work marked for renewed review where required.
 
+Treat a reduction of an approved plan's verification requirements as a substantive revision. Record the impact-based selection, retained phase obligations, deferred checks and final-verification ownership under the working repository's policy. A newer default policy does not itself authorize reducing an existing plan's checks or changing its historical evidence. In this repository, consult [phase and story verification](../../../docs/development.md#phase-and-story-verification).
+
 If the request changes authoritative stories, acceptance criteria, or architecture decisions, identify and prepare the corresponding revisions within the user's authorized editing scope. Preserve existing criterion IDs; identify added criteria explicitly. Record unresolved product decisions and the work they block. A narrower plan must explicitly identify deferred criteria rather than imply full story completion. A plan-only edit cannot silently redefine authoritative requirements.
 
 Record the change in the plan using its existing format, or the compact record below. Completion of this step means the scope difference, affected work, required verification, and authorization status are visible in the saved plan.

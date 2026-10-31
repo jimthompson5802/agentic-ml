@@ -1,0 +1,15 @@
+schema_version: "0.1"
+project:
+  package: __PACKAGE__
+  environment: .venv
+storage:
+  dvc_store: .agentic-ml/dvc-store
+  mlflow_backend: .agentic-ml/mlflow.db
+  artifacts: .agentic-ml/artifacts
+  state: .agentic-ml/state
+setup:
+  data_access: unconfigured
+  agent: unconfigured
+  approval_presentation: unconfigured
+guidance: {}
+components: {}

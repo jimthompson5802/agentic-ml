@@ -25,7 +25,7 @@ uv init
 uv add "git+https://github.com/OWNER/HARNESS-REPO.git" --rev FULL_COMMIT_SHA
 
 uv run agentic-ml init
-uv run jupyter lab
+# Open this project in VS Code and select its .venv notebook kernel.
 ```
 
 The repository URL and SHA are placeholders. The harness is installed as a pinned dependency; the scientist does not maintain a separate harness checkout.
@@ -97,7 +97,7 @@ Sample coding-assistant prompt:
 
 > Prepare the data-assessment notebook. Use the authorized source to create a versioned snapshot. Report missing values, distributions, target balance, anomalies, and possible leakage. Propose reproducible training, validation, and protected-test splits that respect the approved time and customer-group constraints. Present the assessment and split protocol for review.
 
-The scientist opens the notebook in JupyterLab, reads its explanations, and can execute cells for exploration.
+The scientist opens the notebook in VS Code, reads its explanations, and can execute cells for exploration.
 
 For an accepted, recorded result, the saved notebook must undergo harness-managed execution: a fresh kernel, ordered cells, explicit inputs, a locked environment, a recorded working directory, and a frozen source snapshot. Interactive execution alone does not establish acceptance.
 

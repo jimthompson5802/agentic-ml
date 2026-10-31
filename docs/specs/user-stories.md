@@ -90,7 +90,7 @@ Acceptance criteria:
 
 - <a id="us-02-ac-01"></a> **US-02-AC-01:** `uv run agentic-ml init` adds project configuration, ignore rules, an initial experiment brief, search-space and execution configuration, notebook templates, and required project-package scaffolding.
 - <a id="us-02-ac-02"></a> **US-02-AC-02:** Initialization preserves existing files and the pinned harness dependency, reporting conflicts instead of silently overwriting files.
-- <a id="us-02-ac-03"></a> **US-02-AC-03:** Required ML, notebook execution, and JupyterLab dependencies are declared and synchronized with the project environment and lockfile.
+- <a id="us-02-ac-03"></a> **US-02-AC-03:** Required ML and notebook execution dependencies are declared and synchronized with the project environment and lockfile.
 - <a id="us-02-ac-04"></a> **US-02-AC-04:** Project-associated DVC, MLflow, and durable-state storage are initialized with local defaults and configurable locations.
 - <a id="us-02-ac-05"></a> **US-02-AC-05:** Data access, agent authentication, and approval presentation remain explicit setup choices; initialization grants no execution or data-access authorization, and credentials remain outside committed configuration.
 
@@ -431,11 +431,11 @@ Architecture references: [§9 Notebook development and execution contract](desig
 
 ### US-08: Explore interactively under the same controls
 
-As a data scientist, I want to explore interactively in JupyterLab under the experiment's access rules so that exploration preserves evaluation integrity.
+As a data scientist, I want to explore interactively in VS Code under the experiment's access rules so that exploration preserves evaluation integrity.
 
 Acceptance criteria:
 
-- <a id="us-08-ac-01"></a> **US-08-AC-01:** JupyterLab launches from the project environment with the required notebook dependencies.
+- <a id="us-08-ac-01"></a> **US-08-AC-01:** Interactive notebooks use the project environment with the required notebook dependencies; VS Code is the documented editor for manual verification.
 - <a id="us-08-ac-02"></a> **US-08-AC-02:** Interactive kernels cannot access protected test data, including through arbitrary Python outside harness API calls.
 - <a id="us-08-ac-03"></a> **US-08-AC-03:** Training cells submit through managed APIs that enforce candidate boundaries, applicable approvals, budgets, and tracking.
 - <a id="us-08-ac-04"></a> **US-08-AC-04:** Interactive execution cannot establish acceptance; recorded results require managed execution of saved snapshots and independent evaluation.

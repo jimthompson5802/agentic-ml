@@ -5,11 +5,72 @@ import json
 import platform
 import subprocess
 import sys
+from dataclasses import FrozenInstanceError
 from importlib.metadata import distribution, distributions
 from importlib.resources import files
 from pathlib import Path
 
 import agentic_ml
+
+
+def check_initialization_resources() -> None:
+    """Check independently specified template inventory and schema properties."""
+    import jsonschema
+    import yaml
+
+    from agentic_ml.initialization import InitOptions, InitResult, initialize_project
+
+    assert callable(initialize_project)
+    for value in (InitOptions(Path.cwd()), InitResult(Path.cwd(), (), (), (), ())):
+        try:
+            attribute = "project_root"
+            setattr(value, attribute, Path("/"))
+        except FrozenInstanceError:
+            pass
+        else:
+            raise AssertionError("initialization value must be immutable")
+    resources = files("agentic_ml").joinpath("templates/initialization")
+    expected = {
+        "project.yaml",
+        "experiment.md",
+        "experiment.yaml",
+        "search-space.yaml",
+        "package.txt",
+        "notebook.json",
+        "ignore.txt",
+        "schemas",
+    }
+    assert {p.name for p in resources.iterdir()} == expected, (
+        "initialization resource missing"
+    )
+    for name in ("project", "experiment", "search-space", "state"):
+        resource = resources.joinpath(f"schemas/{name}.json")
+        assert resource.is_file(), "initialization resource missing"
+        schema = json.loads(resource.read_text(encoding="utf-8"))
+        jsonschema.Draft202012Validator.check_schema(schema)
+        assert schema["additionalProperties"] is False
+        assert schema["properties"]["schema_version"] == {"const": "0.1"}
+    search = yaml.safe_load(resources.joinpath("search-space.yaml").read_bytes())
+    assert search == {"schema_version": "0.1", "algorithms": {}}
+    project = yaml.safe_load(resources.joinpath("project.yaml").read_bytes())
+    assert project["setup"] == {
+        "data_access": "unconfigured",
+        "agent": "unconfigured",
+        "approval_presentation": "unconfigured",
+    }
+    assert project["components"] == {} and project["guidance"] == {}
+    notebook = json.loads(
+        resources.joinpath("notebook.json").read_text(encoding="utf-8")
+    )
+    assert (notebook["nbformat"], notebook["nbformat_minor"]) == (4, 5)
+    assert notebook["metadata"]["kernelspec"]["name"] == "python3"
+    for cell in notebook["cells"]:
+        if cell["cell_type"] == "code":
+            assert cell["outputs"] == [] and cell["execution_count"] is None
+    assert (
+        resources.joinpath("package.txt").read_text(encoding="utf-8")
+        == '"""Project-owned experiment code."""\n'
+    )
 
 
 def main() -> None:
@@ -32,13 +93,209 @@ def main() -> None:
     assert Path(str(installed.locate_file(""))).resolve().is_relative_to(environment), (
         "metadata outside environment"
     )
-    assert not (installed.requires or []), (
-        "review dependency closure when runtime dependencies change"
-    )
+    assert set(installed.requires or []) == {
+        "jsonschema<5,>=4",
+        "pyyaml<7,>=6",
+        "tomlkit<1,>=0.13",
+        "nbclient<1,>=0.10",
+        "ipykernel<8,>=6",
+        "nbformat<6,>=5",
+        "dvc<4,>=3",
+        "mlflow<4,>=3",
+    }, "unexpected declared runtime dependencies"
     inventory = sorted((d.metadata["Name"], d.version) for d in distributions())
-    assert inventory == [("agentic-ml", args.expected_version)], (
-        f"unexpected distributions: {inventory}"
-    )
+    expected_names = {
+        "colorama",
+        "pygments",
+        "cloudpickle",
+        "funcy",
+        "flask",
+        "voluptuous",
+        "matplotlib",
+        "dulwich",
+        "alembic",
+        "gto",
+        "sqlparse",
+        "vine",
+        "google-auth",
+        "amqp",
+        "opentelemetry-proto",
+        "diskcache",
+        "contourpy",
+        "click-plugins",
+        "dvc-task",
+        "ruamel.yaml",
+        "packaging",
+        "nbclient",
+        "hydra-core",
+        "shortuuid",
+        "six",
+        "jsonschema",
+        "antlr4-python3-runtime",
+        "jedi",
+        "debugpy",
+        "rpds-py",
+        "celery",
+        "annotated-types",
+        "prettytable",
+        "pyparsing",
+        "python-dotenv",
+        "configobj",
+        "filelock",
+        "pygit2",
+        "gitdb",
+        "tzlocal",
+        "anyio",
+        "aiohttp-retry",
+        "markupsafe",
+        "cycler",
+        "pydantic-core",
+        "asttokens",
+        "fsspec",
+        "itsdangerous",
+        "fastjsonschema",
+        "aiohttp",
+        "networkx",
+        "pillow",
+        "flufl.lock",
+        "numpy",
+        "entrypoints",
+        "tqdm",
+        "smmap",
+        "uvicorn",
+        "skops",
+        "pure-eval",
+        "platformdirs",
+        "aiosignal",
+        "multidict",
+        "scipy",
+        "traitlets",
+        "graphql-core",
+        "scmrepo",
+        "sqlalchemy",
+        "stack-data",
+        "typing-extensions",
+        "tornado",
+        "shtab",
+        "dvc-studio-client",
+        "pyasn1",
+        "pyasn1-modules",
+        "cachetools",
+        "mlflow-tracing",
+        "gunicorn",
+        "tabulate",
+        "dvc-data",
+        "attrs",
+        "opentelemetry-api",
+        "markdown-it-py",
+        "huey",
+        "dpath",
+        "annotated-doc",
+        "dvc-http",
+        "cffi",
+        "flatten-dict",
+        "threadpoolctl",
+        "nbformat",
+        "click-didyoumean",
+        "pyarrow",
+        "jupyter-core",
+        "executing",
+        "iterative-telemetry",
+        "protobuf",
+        "click",
+        "graphql-relay",
+        "mako",
+        "mlflow-skinny",
+        "matplotlib-inline",
+        "atpublic",
+        "fonttools",
+        "typing-inspection",
+        "propcache",
+        "databricks-sdk",
+        "pydot",
+        "distro",
+        "yarl",
+        "ipython-pygments-lexers",
+        "kombu",
+        "parso",
+        "tomlkit",
+        "omegaconf",
+        "gitpython",
+        "billiard",
+        "cryptography",
+        "pexpect",
+        "dvc",
+        "prompt-toolkit",
+        "frozenlist",
+        "appdirs",
+        "grandalf",
+        "semver",
+        "appnope",
+        "nest-asyncio2",
+        "fastapi",
+        "kiwisolver",
+        "ipython",
+        "dvc-render",
+        "click-repl",
+        "dvc-objects",
+        "werkzeug",
+        "dictdiffer",
+        "ipykernel",
+        "zc.lockfile",
+        "h11",
+        "opentelemetry-semantic-conventions",
+        "rich",
+        "mlflow",
+        "importlib-metadata",
+        "aiohappyeyeballs",
+        "python-dateutil",
+        "docker",
+        "blinker",
+        "comm",
+        "referencing",
+        "requests",
+        "mdurl",
+        "pydantic-settings",
+        "pyzmq",
+        "agentic-ml",
+        "jupyter-client",
+        "setuptools",
+        "narwhals",
+        "scikit-learn",
+        "jinja2",
+        "opentelemetry-sdk",
+        "starlette",
+        "graphene",
+        "tzdata",
+        "zipp",
+        "pygtrie",
+        "asyncssh",
+        "ptyprocess",
+        "idna",
+        "joblib",
+        "charset-normalizer",
+        "pydantic",
+        "pandas",
+        "sqltrie",
+        "wcwidth",
+        "pyyaml",
+        "jsonschema-specifications",
+        "flask-cors",
+        "orjson",
+        "urllib3",
+        "psutil",
+        "pycparser",
+        "certifi",
+    }
+    expected_names = {name.replace(".", "-") for name in expected_names} | {"pathspec"}
+    assert {
+        name.lower().replace("_", "-").replace(".", "-") for name, _ in inventory
+    } == (
+        expected_names
+        - ({"appnope", "pexpect", "ptyprocess"} if sys.platform == "win32" else set())
+        - ({"appnope"} if sys.platform != "darwin" else set())
+        | ({"pywin32", "waitress"} if sys.platform == "win32" else set())
+    ), f"unexpected runtime dependency closure: {inventory}"
     direct_url = installed.read_text("direct_url.json")
     assert direct_url is not None and not json.loads(direct_url).get(
         "dir_info", {}
@@ -85,6 +342,7 @@ def main() -> None:
     assert guidance.read_text(encoding="utf-8") == (
         "Provisional Milestone 0 runtime guidance; experiment execution is unavailable.\n"
     ), "runtime guidance contents differ"
+    check_initialization_resources()
 
 
 if __name__ == "__main__":
