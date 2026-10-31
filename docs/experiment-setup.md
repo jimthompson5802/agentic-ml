@@ -4,6 +4,17 @@ These instructions are for experiment users. The harness is installed into your 
 
 The current development revision provides `agentic-ml --version`, Python imports and project initialization (see below). The published revisions in the bootstrap examples predate initialization and provide provisional resources only. Managed notebook execution remains subsequent work.
 
+US-03 input resolution is being designed; its commands are not yet available.
+The [proposed input contract](verification/us-03-ip1.md) defines separate version
+1.0 brief/search/execution inputs while preserving initialization's inert 0.1
+drafts. Experiment approval is planned as an explicit project-local record with
+a self-declared reviewer; it is unauthenticated and cannot prove who approved or
+prevent a workspace writer from fabricating records. No signing keys or separate
+accounts are required. This applies only to toolkit experiment use; development
+and testing approval gates remain unchanged. Plan readiness will not grant
+data access or execution permission. Follow the current initialization directions
+below until the implementation and its verification are accepted.
+
 ## Prerequisites
 
 Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [uv](https://docs.astral.sh/uv/getting-started/installation/) using their official instructions for your operating system. For example, on macOS the Git guide describes installing the Xcode command line tools; the uv guide offers its standalone installer and Homebrew installation. Verify both tools are available:

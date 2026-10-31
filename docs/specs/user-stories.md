@@ -108,6 +108,13 @@ Acceptance criteria:
 - <a id="us-03-ac-04"></a> **US-03-AC-04:** Ambiguous or conflicting requirements block affected runs until resolved; delegated decisions require approval before use.
 - <a id="us-03-ac-05"></a> **US-03-AC-05:** Relative input paths resolve against the experiment repository root, with the notebook working directory recorded explicitly.
 
+Current-version approval decision (2026-10-31): Under
+[US-03-SC-01](../plans/milestone-1-us-03.md#us-03-sc-01--unauthenticated-experiment-approvals-2026-10-31),
+AC-04 uses explicit scoped unauthenticated experiment approval records. Reviewer
+identity and protection against fabricated approvals/history edits are not
+verified. Authentication is deferred; approval-before-use and all development
+and testing approval gates remain required. Criterion IDs are unchanged.
+
 Architecture references: [§8 Developer experiment inputs](design/interfaces-and-configuration.md#developer-experiment-inputs); [§8 Algorithm and hyperparameter configuration](design/interfaces-and-configuration.md#algorithm-and-hyperparameter-configuration).
 
 ### US-05: Reject invalid configurations before execution
@@ -488,6 +495,11 @@ Architecture references: [§8 AgentAdapter interface](design/interfaces-and-conf
 The developer supervises all workflow phases through durable, scoped approval decisions, recovers interrupted work, and can use another agent adapter without changing experiment contracts.
 
 ### US-23: Approve workflow phase progression and scope changes
+
+Future scope: US-23-AC-02 retains authenticated approval for Milestone 5. Current
+unauthenticated toolkit experiment records under US-03-SC-01 do not satisfy it;
+authentication is deferred beyond the current version, not claimed delivered.
+This distinction does not relax any development or testing approval gate.
 
 As a data scientist, I want to approve, revise, or reject workflow phase progression using validated evidence so that I supervise consequential decisions.
 

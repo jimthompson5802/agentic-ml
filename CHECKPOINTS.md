@@ -4,20 +4,40 @@ Last updated: 2026-10-31
 
 ## Current position
 
-**Current planning work:** Developer requested “define plan for github user story
-us-03”. Created local `US-03-experiment-boundaries` from clean main and saved
-[US-03 plan](docs/plans/milestone-1-us-03.md). Issue #10 complete body/all comment
-pages retrieved with stable zero-comment snapshot; prerequisite #9 and adjacent
-#11 likewise checked. Four proposed implementation phases cover all five US-03
-criteria, with IP1 resolving schemas, public interfaces and authenticated delegated
-approval feasibility before dependent code. US-05 registry/candidate validation
-stays with its owning story. Developer “i approve plan; commit and push”
-(2026-10-31) approves the plan/public boundaries and authorizes committing and
-pushing this branch. All implementation gates remain pending; next action is
-explicit implementation authorization. Only plan/checkpoint documentation changed;
-no product tests apply. Links/anchors and whitespace checks passed. Commit/push
-outcome is recorded in Git and the delivery response. Earlier “next-story
-unauthorized” notes refer to implementation; plan approval does not authorize it.
+**Current work:** US-03 IP1 design complete, **IP1 gate approved** by developer
+“i approve the changes” (2026-10-31), covering revised contracts/public test
+boundaries and SC-01. Developer
+approved scope change US-03-SC-01: unauthenticated approval only for data scientists
+using the toolkit in experiments. The subsequent clarification explicitly retains
+all existing development/testing approval gates and verification requirements.
+See [owning plan/scope history](docs/plans/milestone-1-us-03.md) and
+[revised contract report](docs/verification/us-03-ip1.md). Replaced proposed SSH
+signatures, protected `/etc` policy, separate identities and special test host
+with project-local approval/revocation records, exact plan/decision matching and
+`authentication: none`. Reviewer labels are unverified; workspace writers can
+fabricate approval or rewrite history. Authentication is deferred future assurance;
+US-23-AC-02/#40 remains future scope. Dataset/execution access controls unaffected.
+
+T1–T4 reworked; updated ADR/governance/input/traceability/delivery specifications,
+setup guidance and plan verification scope. US-03 criteria unchanged: delegated
+decisions still need an approval record. Refreshed #40 body/all comment pages for
+future-scope check: stable zero comments, no discussion decisions. Earlier #10,
+#9 and #11 retrieval remains valid for this design revision. No GitHub edits or
+comments published. No executable AC claimed complete.
+
+Branch `US-03-experiment-boundaries`, baseline pushed plan commit `4a2882b`.
+Documentation-only working changes; no source, tests, schema resources,
+dependencies or lock edits. Renewed checks passed: 448 local links/anchors across 10 changed/new Markdown
+files, whitespace including untracked report, and manual scope consistency.
+AGENTS/skills/development checks/source/tests/CI unchanged; lock hash unchanged.
+TDD/runtime tests inapplicable to this documentation-only revision.
+SC-01 alone did not approve the gate; subsequent explicit approval is recorded
+in the owning plan/report/ADR/summary. Developer “commit and push” authorizes committing/publishing the approved IP1
+documentation on this branch. No IP2 implementation or story acceptance requested.
+The requested sandbox summary remains local under the existing sandbox ignore
+rule. Commit/push outcome is recorded in Git and the delivery response. Next
+action: explicit IP2 execution authorization.
+Earlier status below is historical.
 
 **Latest outcome:** Developer “squash merge the pr” authorized PR #45 merge.
 Verified **MERGED** at 2026-10-31T13:05:48Z, squash commit
