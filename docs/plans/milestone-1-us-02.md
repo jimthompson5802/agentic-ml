@@ -350,3 +350,40 @@ Acceptance-record edits are documentation-only; no runtime rerun required.
   original inline thread without duplication.
 - Next action: developer direction for the new finding. Acceptance authorized
   publication, not automatic review fixes, merge, cleanup or another story.
+
+## PR #45 temporary-path correction — 2026-10-31
+
+Developer “i approve” explicitly authorizes implementation of the preceding
+temporary-path fix proposal, with verified diff review before commit or push.
+This corrects an AC-02/04 gap within issue #9 / Milestone 1; no requirement,
+acceptance criterion, architecture decision or prior approval is replaced.
+Issue body/all comment pages refreshed: stable zero-comment snapshot, updated
+2026-10-31T01:15:38Z; no new scope decision. Manage-plan-scope assessment:
+corrective implementation detail, no change to product scope or verification.
+
+Reuse approved installed CLI/API boundaries: separate full-SHA pinned projects,
+observable rejection, preserved original files, absent scaffold/journal writes,
+and successful corrected retry. These do not verify concurrent hostile mutation.
+
+| Task | Status | Work and verification |
+|---|---|---|
+| TMP-T1 | Complete | Installed red reproduced conflict; one-line preflight guard and all four exact/descendant flag cases passed. |
+| TMP-T2 | Complete | Both installed API rejection/corrected CLI retry cases passed; original metadata case retained. |
+| TMP-T3 | Incomplete | Shared checks and direct/rebuilt distribution/installed initialization passed. Developer cancelled full suite after 27/128 passed (exit 130); 101 did not complete. |
+
+TDD selects `test_storage_cannot_overlap_initialization_metadata` first for the
+exact MLflow temporary path, then all overlap cases and API retry. Full suite
+owns all remaining regression coverage; none deferred beyond TMP-T3. Existing
+plan verification requirements remain unchanged. Evidence will be recorded in
+`docs/verification/us-02-temp-path-fix.md`. Final correction gate: **Pending**.
+No commit, push, merge, cleanup or next-story execution is authorized.
+
+Evidence: [temporary-path correction](../verification/us-02-temp-path-fix.md).
+Focused regressions: 38 passed, 65 deselected. Full suite cancelled on explicit
+developer request “cancel the full suite test run”; do not restart without
+direction. Final correction gate remains pending because full verification is
+incomplete. Historical acceptance is preserved; no new gate approval is claimed.
+
+Developer “commit changes” authorizes a local commit of this correction and its
+records. Cancelled full-suite verification and the correction gate remain
+incomplete; this does not authorize push, merge or restarting the suite.

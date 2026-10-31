@@ -9,13 +9,24 @@ original corrections approved. Accepted changes committed as `8fe0e8f` and pushe
 on `US-02-experiment-init`. [PR #45](https://github.com/jimthompson5802/agentic-ml/pull/45)
 is open against `main`; [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/45#pullrequestreview-5722316537) is published.
 
-**Next action:** await developer direction on the new
+**Next action:** await developer direction after cancellation of the full suite
+for the approved temporary-path correction. Source guard and nine added cases
+are implemented, uncommitted. Focused regressions: 38 passed. Shared checks and
+both distribution/complete installed initialization paths passed. Full suite
+cancelled at developer request: 27/128 passed, 101 incomplete, exit 130;
+`/private/tmp/us-02-tmp-full.xml`. Do not restart without direction. Correction
+gate remains pending. Developer “commit changes” authorizes a local commit of
+the correction and records; push remains unauthorized. See
+[correction evidence](docs/verification/us-02-temp-path-fix.md) and
+[owning plan](docs/plans/milestone-1-us-02.md).
+
+Original
 [Medium review finding](https://github.com/jimthompson5802/agentic-ml/pull/45#discussion_r4431369976): storage override
 `.agentic-ml/init.tmp` conflicts with the journal temporary file. The 119-test
-suite passed but does not cover this additional path. Original acceptance remains
-recorded; this follow-up remains unresolved before merge. No merge, cleanup,
-next-story work or automatic review fix is authorized. Hosted Linux CI pending
-at observation. See [owning plan](docs/plans/milestone-1-us-02.md).
+suite was historical and did not cover this path. Original acceptance remains
+recorded; the follow-up is implemented but full verification/review is incomplete.
+No merge, cleanup or next-story work is authorized. Hosted Linux CI passed before
+this correction; it does not cover the new uncommitted source.
 
 ## Development verification policy — 2026-10-31
 

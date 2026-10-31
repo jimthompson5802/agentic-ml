@@ -1126,10 +1126,12 @@ def test_unsafe_backup_destinations_preserve_project_and_external_files(
     "destination",
     [
         ".agentic-ml/init.json",
+        ".agentic-ml/init.tmp",
         ".agentic-ml/init.lock",
         ".agentic-ml/backups",
         ".agentic-ml",
         ".agentic-ml/init.json/child",
+        ".agentic-ml/init.tmp/child",
         ".agentic-ml/init.lock/child",
         ".agentic-ml/backups/nested",
     ],
@@ -1150,8 +1152,10 @@ def test_storage_cannot_overlap_initialization_metadata(
         assert (project / name).read_bytes() == content
 
 
+@pytest.mark.parametrize("destination", ["init.json", "init.tmp"])
 def test_rejected_storage_override_can_retry_with_matching_backups(
     project: Path,
+    destination: str,
 ) -> None:
     """AC-02/04: API rejection leaves a fresh identity and valid backups reusable."""
     (project / ".gitignore").write_bytes(b"# preserve existing rules\n")
@@ -1164,11 +1168,11 @@ def test_rejected_storage_override_can_retry_with_matching_backups(
             str(project / ".venv/bin/python"),
             "-I",
             "-c",
-            """
+            f"""
 from pathlib import Path
 from agentic_ml.initialization import InitOptions, InitializationError, initialize_project
 try:
-    initialize_project(InitOptions(Path.cwd(), mlflow_backend=Path('.agentic-ml/init.json')))
+    initialize_project(InitOptions(Path.cwd(), mlflow_backend=Path('.agentic-ml/{destination}')))
 except InitializationError as error:
     assert 'Storage overlaps protected project paths' in str(error)
 else:

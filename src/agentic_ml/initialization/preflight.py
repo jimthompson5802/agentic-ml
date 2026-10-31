@@ -161,6 +161,7 @@ def storage_paths(options: InitOptions, root: Path) -> dict[str, str]:
             ".gitignore",
             ".dvc",
             ".agentic-ml/init.json",
+            ".agentic-ml/init.tmp",
             ".agentic-ml/init.lock",
             ".agentic-ml/backups",
         )
