@@ -160,6 +160,9 @@ def storage_paths(options: InitOptions, root: Path) -> dict[str, str]:
             "uv.lock",
             ".gitignore",
             ".dvc",
+            ".agentic-ml/init.json",
+            ".agentic-ml/init.lock",
+            ".agentic-ml/backups",
         )
         for name_protected in protected:
             other = root / name_protected
@@ -221,6 +224,25 @@ def validate_destinations(root: Path, contents: dict[str, bytes]) -> None:
                 raise InitializationError(
                     "Ignore negation conflicts with setup store exclusions"
                 )
+
+
+def validate_backups(root: Path) -> None:
+    """Reject unsafe or conflicting backups before any durable setup writes."""
+    directory = root / ".agentic-ml/backups"
+    check_path(directory)
+    if directory.exists() and not directory.is_dir():
+        raise InitializationError("Backup directory destination conflict")
+    for name in ("pyproject.toml", "uv.lock", ".gitignore"):
+        target = directory / (name.lstrip(".") + ".original")
+        check_path(target)
+        if target.exists():
+            original = root / name
+            if (
+                not target.is_file()
+                or not original.is_file()
+                or target.read_bytes() != original.read_bytes()
+            ):
+                raise InitializationError("Existing backup content conflict")
 
 
 def reject_credentials(value: object) -> None:

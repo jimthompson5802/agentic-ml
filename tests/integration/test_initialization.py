@@ -1056,3 +1056,139 @@ def test_symlink_environment_is_rejected_before_setup(
     assert "Symlink" in result.stderr
     assert not (project / "project.yaml").exists()
     assert not (project / ".agentic-ml").exists()
+
+
+@pytest.mark.parametrize(
+    "destination",
+    [
+        "directory-symlink",
+        "directory-file",
+        "file-symlink",
+        "file-directory",
+        "conflict",
+    ],
+)
+def test_unsafe_backup_destinations_preserve_project_and_external_files(
+    project: Path, tmp_path: Path, destination: str
+) -> None:
+    """AC-02/05: invalid backup destinations fail before durable setup writes."""
+    (project / ".gitignore").write_bytes(b"# existing ignore rules\n")
+    state = project / ".agentic-ml"
+    state.mkdir()
+    backups = state / "backups"
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    sentinel = outside / "pyproject.toml.original"
+    sentinel.write_bytes(b"external original")
+    if destination == "directory-symlink":
+        backups.symlink_to(outside, target_is_directory=True)
+    elif destination == "directory-file":
+        backups.write_bytes(b"existing backup path")
+    else:
+        backups.mkdir()
+        target = backups / "pyproject.toml.original"
+        if destination == "file-symlink":
+            target.symlink_to(sentinel)
+        elif destination == "file-directory":
+            target.mkdir()
+        else:
+            target.write_bytes(b"unrelated backup")
+    originals = {
+        name: (project / name).read_bytes()
+        for name in ("pyproject.toml", "uv.lock", ".gitignore")
+    }
+    result = initialize(project)
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert "Traceback" not in result.stderr
+    assert not (project / "project.yaml").exists()
+    assert not (state / "init.json").exists()
+    assert not (state / "init.lock").exists()
+    assert sentinel.read_bytes() == b"external original"
+    for name, content in originals.items():
+        assert (project / name).read_bytes() == content
+    if destination == "directory-symlink":
+        assert backups.is_symlink()
+        assert list(outside.iterdir()) == [sentinel]
+    elif destination == "directory-file":
+        assert backups.read_bytes() == b"existing backup path"
+    elif destination == "file-symlink":
+        assert (backups / "pyproject.toml.original").is_symlink()
+    elif destination == "file-directory":
+        assert (backups / "pyproject.toml.original").is_dir()
+    else:
+        assert (backups / "pyproject.toml.original").read_bytes() == b"unrelated backup"
+
+
+@pytest.mark.parametrize(
+    "flag", ["--mlflow-backend", "--dvc-store", "--artifact-store", "--state-store"]
+)
+@pytest.mark.parametrize(
+    "destination",
+    [
+        ".agentic-ml/init.json",
+        ".agentic-ml/init.lock",
+        ".agentic-ml/backups",
+        ".agentic-ml",
+        ".agentic-ml/init.json/child",
+        ".agentic-ml/init.lock/child",
+        ".agentic-ml/backups/nested",
+    ],
+)
+def test_storage_cannot_overlap_initialization_metadata(
+    project: Path, flag: str, destination: str
+) -> None:
+    """AC-02/04: reject metadata overlaps before creating a stranded journal."""
+    originals = {
+        name: (project / name).read_bytes() for name in ("pyproject.toml", "uv.lock")
+    }
+    result = initialize(project, flag, destination)
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert "Storage overlaps protected project paths" in result.stderr
+    assert not (project / "project.yaml").exists()
+    assert not (project / ".agentic-ml").exists()
+    for name, content in originals.items():
+        assert (project / name).read_bytes() == content
+
+
+def test_rejected_storage_override_can_retry_with_matching_backups(
+    project: Path,
+) -> None:
+    """AC-02/04: API rejection leaves a fresh identity and valid backups reusable."""
+    (project / ".gitignore").write_bytes(b"# preserve existing rules\n")
+    originals = {
+        name: (project / name).read_bytes()
+        for name in ("pyproject.toml", "uv.lock", ".gitignore")
+    }
+    rejected = run(
+        [
+            str(project / ".venv/bin/python"),
+            "-I",
+            "-c",
+            """
+from pathlib import Path
+from agentic_ml.initialization import InitOptions, InitializationError, initialize_project
+try:
+    initialize_project(InitOptions(Path.cwd(), mlflow_backend=Path('.agentic-ml/init.json')))
+except InitializationError as error:
+    assert 'Storage overlaps protected project paths' in str(error)
+else:
+    raise AssertionError('metadata overlap was accepted')
+""",
+        ],
+        project,
+    )
+    assert rejected.returncode == 0, rejected.stdout + rejected.stderr
+    assert not (project / ".agentic-ml").exists()
+    for name, content in originals.items():
+        assert (project / name).read_bytes() == content
+    backups = project / ".agentic-ml/backups"
+    backups.mkdir(parents=True)
+    for name, content in originals.items():
+        (backups / (name.lstrip(".") + ".original")).write_bytes(content)
+    corrected = initialize(project)
+    assert corrected.returncode == 0, corrected.stdout + corrected.stderr
+    journal = json.loads((project / ".agentic-ml/init.json").read_text())
+    assert journal["status"] == "complete"
+    assert journal["storage"]["mlflow_backend"] == ".agentic-ml/mlflow.db"
+    for name, content in originals.items():
+        assert (backups / (name.lstrip(".") + ".original")).read_bytes() == content

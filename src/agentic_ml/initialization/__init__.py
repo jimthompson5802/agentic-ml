@@ -19,6 +19,7 @@ from .preflight import (
     probe_writable,
     project_identity,
     storage_paths,
+    validate_backups,
     validate_destinations,
 )
 from .scaffold import render
@@ -127,6 +128,7 @@ def _initialize_project(options: InitOptions) -> InitResult:
         raise InitializationError(
             "File conflict: " + ", ".join(conflicts), conflicts=conflicts
         )
+    validate_backups(root)
     for name in (*contents, ".agentic-ml/init.json"):
         probe_writable(root / name)
     for store_path in stores.values():

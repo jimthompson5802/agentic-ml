@@ -219,16 +219,16 @@ Pause affected work for scope changes and use manage-plan-scope; new prerequisit
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| [US-02-AC-01](../specs/user-stories.md#us-02-ac-01): configuration, inputs, notebooks and scaffolding | IP1-T1/T2; IP2-T1/T3/T4; IP4-T3/T4 | [IP2](../verification/us-02-ip2.md), [IP4](../verification/us-02-ip4.md): complete installed inventory, notebooks, package import and CLI/API | Verified on macOS; acceptance pending |
-| [US-02-AC-02](../specs/user-stories.md#us-02-ac-02): preserve files and pin; report conflicts | IP1-T1/T2/T3; IP2-T2/T3/T4; IP3-T1/T2/T3; IP4-T1/T2/T3/T4 | [IP2](../verification/us-02-ip2.md), [IP3](../verification/us-02-ip3.md), [IP4](../verification/us-02-ip4.md): pin/lock/file preservation, conflicts, interrupted setup and reruns | Verified on macOS; acceptance pending |
-| [US-02-AC-03](../specs/user-stories.md#us-02-ac-03): declared and synchronized dependencies | IP1-T3; IP3-T1/T2/T3; IP4-T3/T4 | [IP3](../verification/us-02-ip3.md), [IP4](../verification/us-02-ip4.md): declarations, synchronization/imports, lock checks and developer project-kernel execution | Verified on macOS; acceptance pending |
-| [US-02-AC-04](../specs/user-stories.md#us-02-ac-04): configurable DVC/MLflow/state | IP1-T4; IP4-T1/T2/T3/T4 | [IP4](../verification/us-02-ip4.md): real DVC/cache, MLflow/artifacts and durable state, defaults/overrides and failure cases | Verified on macOS; acceptance pending |
-| [US-02-AC-05](../specs/user-stories.md#us-02-ac-05): explicit setup; no grants or committed credentials | IP1-T2/T4; IP2-T3/T4; IP3-T2; IP4-T1/T2/T3/T4 | [IP2](../verification/us-02-ip2.md), [IP4](../verification/us-02-ip4.md): explicit unconfigured choices, empty approvals/runs, credential/data/store boundaries | Verified on macOS; acceptance pending |
+| [US-02-AC-01](../specs/user-stories.md#us-02-ac-01): configuration, inputs, notebooks and scaffolding | IP1-T1/T2; IP2-T1/T3/T4; IP4-T3/T4 | [IP2](../verification/us-02-ip2.md), [IP4](../verification/us-02-ip4.md): complete installed inventory, notebooks, package import and CLI/API | Verified on macOS; accepted 2026-10-31 |
+| [US-02-AC-02](../specs/user-stories.md#us-02-ac-02): preserve files and pin; report conflicts | IP1-T1/T2/T3; IP2-T2/T3/T4; IP3-T1/T2/T3; IP4-T1/T2/T3/T4 | [IP2](../verification/us-02-ip2.md), [IP3](../verification/us-02-ip3.md), [IP4](../verification/us-02-ip4.md): pin/lock/file preservation, conflicts, interrupted setup and reruns | Verified on macOS; accepted 2026-10-31 |
+| [US-02-AC-03](../specs/user-stories.md#us-02-ac-03): declared and synchronized dependencies | IP1-T3; IP3-T1/T2/T3; IP4-T3/T4 | [IP3](../verification/us-02-ip3.md), [IP4](../verification/us-02-ip4.md): declarations, synchronization/imports, lock checks and developer project-kernel execution | Verified on macOS; accepted 2026-10-31 |
+| [US-02-AC-04](../specs/user-stories.md#us-02-ac-04): configurable DVC/MLflow/state | IP1-T4; IP4-T1/T2/T3/T4 | [IP4](../verification/us-02-ip4.md): real DVC/cache, MLflow/artifacts and durable state, defaults/overrides and failure cases | Verified on macOS; accepted 2026-10-31 |
+| [US-02-AC-05](../specs/user-stories.md#us-02-ac-05): explicit setup; no grants or committed credentials | IP1-T2/T4; IP2-T3/T4; IP3-T2; IP4-T1/T2/T3/T4 | [IP2](../verification/us-02-ip2.md), [IP4](../verification/us-02-ip4.md): explicit unconfigured choices, empty approvals/runs, credential/data/store boundaries | Verified on macOS; accepted 2026-10-31 |
 
-- **Remaining work:** IP1–IP3 approved; IP4 T1–T4 technically complete. All implementation gates approved; separate explicit whole-story acceptance remains pending. Local commit authorized by “commit changes” (2026-10-31); push and publication remain unauthorized.
+- **Remaining work:** All implementation phases and corrections approved. US-02 accepted; commit/push/PR/static review authorized by the execute-plan accepted-story workflow. Publication pending.
 - **Partial prerequisite delivery:** None newly included. Accepted US-01 reused; downstream stories remain outside scope.
-- **Developer acceptance:** Pending.
-- **Decision reference and date:** Pending; final gate also counts as story acceptance only if explicitly stated.
+- **Developer acceptance:** Accepted.
+- **Decision reference and date:** Developer message “i accept us-02”, 2026-10-31.
 
 
 ## IP2 completion record — 2026-10-30
@@ -281,3 +281,48 @@ IP4 gate approved by developer message “i approve ip4” (2026-10-31). This is
 
 
 Developer message “commit changes” (2026-10-31) authorizes the local IP4 commit only. Whole-story acceptance and publication remain pending. Subsequent review identified pending backup symlink/content-conflict validation (P1) and storage overlap with initialization metadata (P2); this commit preserves the reviewed implementation without resolving those findings. Earlier verification evidence does not cover those defects.
+
+
+## IP4 review corrections — 2026-10-31
+
+Authorized by developer “resolve these findings”. This is corrective work within
+issue #9 / Milestone 1 / AC-02, AC-04 and AC-05, not a scope change. Reuse the
+approved installed CLI/API boundaries: observe errors, original bytes and absent
+scaffold/journal/lock writes in separate pinned projects. These tests do not
+establish protection against concurrent hostile filesystem mutation.
+
+- P1: Reject backup-directory symlinks/non-directories and backup file symlinks,
+  non-files or conflicting bytes before durable writes; preserve matching backups.
+- P2: Reject storage paths equal to, above or below journal, lock and backup paths.
+- Work in separate red–green slices, retain original assertions and record evidence
+  in `docs/verification/us-02-review-fixes.md`. Run shared checks and both installed
+  distribution paths. Renewed IP4 correction review is approved; historical
+  approval is preserved. No commit, publication or whole-story acceptance implied.
+
+Correction status: P1/P2 implemented; 34 new installed-interface cases passed
+(5 backup rejection, 28 storage overlap, 1 API rejection/corrected CLI retry).
+Shared checks passed; full suite **119 passed**, exit 0 (1898.17s), including
+both distribution paths. IP4-T2/T4 correction verification is complete; evidence
+is in [the correction report](../verification/us-02-review-fixes.md).
+
+Renewed correction gate: **Approved** by developer message “i approve”,
+2026-10-31, in response to the correction-review request. Both review findings are
+resolved and verification is complete; historical IP4 approval remains preserved.
+Whole-story acceptance, commit, push and publication remain separate and pending.
+
+Approval-record updates are documentation-only; `git diff --check` passed. The
+119-test verification remains applicable; no executable changes followed it.
+
+
+## Whole-story acceptance — 2026-10-31
+
+Developer message “i accept us-02” accepts AC-01–05 after all four phase gates
+and the IP4 correction gate were approved. Final full verification: 119 passed;
+shared checks and both installed distribution paths passed. No executable edits
+after verification. Scope limitations remain as documented in the IP4 and
+[correction evidence](../verification/us-02-review-fixes.md).
+
+The execute-plan accepted-story workflow authorizes remaining local commits,
+ordinary push, PR creation and a static COMMENT review. Publication is in
+progress; merge, cleanup and another story remain outside this authorization.
+Acceptance-record edits are documentation-only; no runtime rerun required.

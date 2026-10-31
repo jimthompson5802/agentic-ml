@@ -4,13 +4,19 @@ Last updated: 2026-10-31
 
 ## Current position
 
-US-02 IP1–IP3 are approved and committed through `0830888` on `US-02-experiment-init`. Developer message “go ahead with ip4” (2026-10-31) authorized IP4. IP4 T1–T4 are technically complete and developer-approved by “i approve ip4” (2026-10-31); [owning plan](docs/plans/milestone-1-us-02.md) and [IP4 evidence](docs/verification/us-02-ip4.md) record all five criteria and verification.
+US-02 is accepted by developer message “i accept us-02” (2026-10-31). All
+implementation gates and IP4 correction review are approved. Final verification:
+**119 tests passed**, shared checks and both installed distribution paths passed.
+See [owning plan](docs/plans/milestone-1-us-02.md) and
+[correction evidence](docs/verification/us-02-review-fixes.md).
 
-**Next action:** await separate explicit US-02 whole-story acceptance. All four implementation gates are approved. Developer message “commit changes” (2026-10-31) authorizes the local IP4 commit. Story acceptance, push and publication remain unauthorized.
+**Next action:** commit remaining accepted-story changes, ordinary push, create
+the PR and publish a static COMMENT review under execute-plan. Publication is
+authorized and in progress. No merge, branch cleanup or next-story work authorized.
 
 ## Resume here
 
-- Review follow-up remains pending: P1 backup symlink/content-conflict validation and P2 storage overlap with initialization journal, lock and backup paths. These findings are not fixed by the authorized IP4 commit and qualify the earlier verification/completion statements below.
+- P1/P2 focused regressions passed: 5 unsafe-backup cases, 28 metadata overlap cases, and installed API rejection/corrected CLI retry with matching backups. Shared sync/lock/lint/format/types/version checks passed. Full suite passed: **119 passed**, exit 0, 1898.17s (31:38), including direct/rebuilt distribution checks and full installed initialization. Retained fixtures at `/private/tmp/us-02-review-suite`; XML `/private/tmp/us-02-review-suite.xml`. Earlier evidence below is historical IP4 evidence and does not by itself cover these defects.
 
 - Implemented configurable local DVC/cache/default remote, MLflow SQLite/artifacts/experiment and durable unconfigured JSON state. Preflight protects existing content, selected paths, permissions, exclusions and matching identities. Setup journals retain stage/exit-code evidence and safe retries; no runs or approvals are created.
 - **Clean full suite: 85 passed**, exit 0, 1829.72s (30:29). Command: `env MLFLOW_DISABLE_TELEMETRY=true DVC_NO_ANALYTICS=1 uv run --locked pytest --junitxml=/private/tmp/us-02-ip4-evidence/clean-pytest.xml`. All tests remain enabled; optional telemetry settings did not materially shorten the run.
@@ -20,9 +26,9 @@ US-02 IP1–IP3 are approved and committed through `0830888` on `US-02-experimen
 - Clean-run installed fixtures: system temporary `pytest-of-jim/pytest-20/test_complete_initialization_f0/initialization`, full local source SHA `ad28a3e54f2314673db7c4bf253195e1c11cb471`. These are local unpublished fixture commits, not GitHub installation claims.
 - Developer manually executed the generated notebook in VS Code. Saved stdout confirms project `.venv/bin/python`, Python 3.12.15. Evidence: `/private/tmp/us-02-ip4-evidence/manual-vscode.ipynb`; VS Code 1.135.0, Python extension 2026.10.0, Jupyter 2025.9.1.
 - macOS 15.7.9 arm64/Python 3.12.15/uv 0.13.1/Git 2.54.0 verified locally. No new Linux/Windows evidence. Harness lock remains `b7ca45a27ad337812eff5555bf2a74edee3bfb637ca7c756e382fc82f867ab66`.
-- Issue #9 complete body/all comment pages refreshed at entry: stable zero-comment snapshot, updated `2026-10-31T01:15:38Z`; Milestone 1 / AC-01–05, no new scope decision. GitHub public reads succeeded; `gh auth status` still reports an invalid stored token. No publication attempted.
+- Issue #9 complete body/all comment pages refreshed at entry: stable zero-comment snapshot, updated `2026-10-31T01:15:38Z`; Milestone 1 / AC-01–05, no new scope decision. GitHub public reads succeeded. Publication-time authentication succeeds outside the sandbox; the earlier invalid-token result was sandbox-specific.
 - Cache/log-directory sandbox denials were retried with approved escalation. They were infrastructure failures, not behavior reds. All granular failure/correction evidence is in the IP4 report.
-- Changed source, tests, setup documentation, owning plan and checkpoint belong to IP4. No unrelated user changes were present at entry. Preserve all uncommitted work. IP4 approval records are documentation-only; whitespace validation passed and no runtime rerun was needed.
+- Original IP4 implementation and approval records are committed as `b6a353c`. Remaining source, tests, correction evidence, plan and checkpoint belong to the accepted story; no unrelated changes were present at entry. Commit/publication authorized by acceptance.
 
 ## Accepted work and supporting context
 
@@ -30,7 +36,7 @@ Milestone 0 is complete and accepted (US-31, US-32, US-33), merged in PR #24 as 
 
 US-01 is accepted and merged through [PR #44](https://github.com/jimthompson5802/agentic-ml/pull/44), merge `5d662f65ed38cdca988f968164c773b3be6f84bf`; issue #8 closed. Both implementation gates, installed A→B GitHub upgrade checks, hosted Linux CI and static COMMENT review passed. See [US-01 plan](docs/plans/milestone-1-us-01.md) and its linked evidence. Later observed main CI at `4477162` passed. No US-01 decision is pending.
 
-US-02 approved plan/public boundaries: developer “commit changes; i approve the plan, execute us-02 ip1” (2026-10-30). IP1 contracts/ADRs approved, committed `12df741`; IP2 approved, implementation commit `265ed5b`; IP3 approved by “i approve ip3”, then local commit authorized by “commit” (2026-10-31), committed `0830888`. IP4 gate subsequently approved by “i approve ip4” (2026-10-31); whole-story acceptance remains pending.
+US-02 approved plan/public boundaries: developer “commit changes; i approve the plan, execute us-02 ip1” (2026-10-30). IP1 contracts/ADRs approved, committed `12df741`; IP2 approved, implementation commit `265ed5b`; IP3 approved by “i approve ip3”, then local commit authorized by “commit” (2026-10-31), committed `0830888`. IP4 gate subsequently approved by “i approve ip4”, corrections approved by “i approve”, and whole story accepted by “i accept us-02” (2026-10-31).
 
 Notebook-editor scope decision SC-01 is recorded in the plan, issue #9 and issue #36: VS Code is installed separately; ipykernel/nbclient remain requirements. Manual kernel checking does not establish managed execution or isolation.
 
