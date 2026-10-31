@@ -42,8 +42,13 @@ apply. Local Markdown link/anchor and whitespace checks verify the edited guidan
 
 **US-02 status:** temporary-path correction committed as `3a5fd84`, focused
 regressions passed. The later complete tooling runs renew TMP-T3 verification,
-including installed initialization and distribution checks. Correction gate
-remains pending; no push or merge authorized. Historical cancellation follows:
+including installed initialization and distribution checks. Final correction gate
+approved by developer “i approve the final corection gate” (2026-10-31).
+Developer “commit changes and push” authorizes committing and publishing the
+approval, thread-resolution and CI records. Hosted Linux CI on pushed head `be2f02b` passed:
+[run 41202139931](https://github.com/jimthompson5802/agentic-ml/actions/runs/41202139931),
+completed 2026-10-31T12:45:44Z. PR #45 is open and mergeable. Merge,
+cleanup and next-story work remain unauthorized. Historical cancellation follows:
 developer requested cancellation of the full suite
 for the approved temporary-path correction. Source guard and nine added cases
 are implemented and committed as `3a5fd84`. Focused regressions: 38 passed. Shared checks and
@@ -59,7 +64,10 @@ Original
 [Medium review finding](https://github.com/jimthompson5802/agentic-ml/pull/45#discussion_r4431369976): storage override
 `.agentic-ml/init.tmp` conflicts with the journal temporary file. The 119-test
 suite was historical and did not cover this path. Original acceptance remains
-recorded; the follow-up is implemented but full verification/review is incomplete.
+recorded; the fix and renewed full local verification are complete. Developer
+requested a review-thread reply and resolution. Published and verified
+[fix/evidence reply](https://github.com/jimthompson5802/agentic-ml/pull/45#discussion_r4431730497);
+GitHub thread is resolved. This external review action does not authorize merge.
 No merge, cleanup or next-story work is authorized. Hosted Linux CI passed before
 this correction; it does not cover the new uncommitted source.
 
