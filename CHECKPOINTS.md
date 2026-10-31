@@ -28,7 +28,7 @@ Documentation-only change: TDD and harness runtime checks do not apply. Validati
 
 ## Resume here
 
-US-02 [implementation plan](docs/plans/milestone-1-us-02.md) approved; developer authorized IP1 and committing existing changes. IP1 in progress on `US-02-experiment-init`; all implementation gates remain pending.
+US-02 [implementation plan](docs/plans/milestone-1-us-02.md) approved; developer authorized IP1 and committing existing changes. IP1 T1–T4 technically complete on `US-02-experiment-init`; [contracts/evidence](docs/verification/us-02-ip1.md) await IP1 gate approval. IP2 is not authorized; all implementation gates remain pending.
 
 US-01 implementation is complete with both implementation gates approved; published PR and static review are recorded below. Story accepted 2026-10-30; see the [completion record](docs/plans/milestone-1-us-01.md#story-completion-review). Issue #8 complete body/all comment pages refreshed before execution: stable zero-comment snapshot, updated `2026-10-30T02:06:17Z`. No new scope decision or unresolved failure.
 
@@ -38,7 +38,7 @@ US-01 implementation is complete with both implementation gates approved; publis
 
 ## Pending developer decisions
 
-No US-01 implementation gate or story acceptance remains pending. No merge or post-merge verification remains pending. US-02 planning requested 2026-10-30; draft plan review is pending. No US-02 implementation authorized. Acceptance record committed as `ce414ca`. Developer request “push to remote; create pull request and start a pr review” authorized publication and review; branch pushed and PR #44 created. Merge completed on GitHub and was verified during main cleanup.
+No US-01 implementation gate or story acceptance remains pending. No merge or post-merge verification remains pending. US-02 plan approved and IP1 authorized; IP1 design tasks technically complete, developer gate pending. IP2 is not authorized. Acceptance record committed as `ce414ca`. Developer request “push to remote; create pull request and start a pr review” authorized publication and review; branch pushed and PR #44 created. Merge completed on GitHub and was verified during main cleanup.
 
 ## Handoff notes
 
@@ -74,3 +74,13 @@ Developer approved removing JupyterLab throughout delivery and documenting VS Co
 US-02 plan wording follow-up: removed remaining obsolete editor-name references from its scope-change record and manual-check expectation while preserving the recorded decision. Verified the plan has zero matches for the removed editor name; `git diff --check` passed. Documentation-only correction; no runtime checks required.
 
 Developer message “commit changes; i approve the plan, execute us-02 ip1” approves the plan/public test boundaries and authorizes IP1. Existing documentation changes committed before IP1; no push authorized.
+
+## US-02 IP1 handoff — 2026-10-30
+
+Approved plan/documentation committed as `3d69d0b`. Executed authorized IP1 only: T1–T4 design outputs complete in [IP1 report](docs/verification/us-02-ip1.md), linked from owning plan. Settled proposed CLI/API, template inventory, schema slice, preservation/conflict/retry protocol, dependency ownership/ranges, local DVC/SQLite MLflow/durable state setup and refined public verification boundaries. Bounded ADR proposals await developer approval; no broader isolation/recovery decision accepted. Stable complete issue snapshots: #9 zero comments updated 2026-10-31T01:15:38Z; #8 closed/zero comments updated 2026-10-30T10:42:22Z. GitHub and commit sandbox restrictions resolved by escalation.
+
+Validation: inspected installed uv 0.13.1 help and primary library docs; local links and diff whitespace passed. No runtime behavior changed: TDD/shared runtime checks do not apply; no dependencies installed or lock changes. Actual dependency resolution/library integration and platform verification remain IP2–IP4 obligations. IP1 evidence, plan progress and ADR/checkpoint changes remain uncommitted for gate review. Stop at IP1; developer approval required before IP2.
+
+## US-02 IP1 approval / IP2 authorization — 2026-10-30
+
+Developer message “i approve ip1; commit changes and I authorize ip2” approves IP1 contracts and refined public test boundaries, authorizes committing IP1 changes and executing IP2. Record committed IP1 before implementation. IP2 begins next; IP3 remains unauthorized.
