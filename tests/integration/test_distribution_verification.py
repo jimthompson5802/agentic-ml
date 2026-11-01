@@ -41,6 +41,7 @@ def test_both_installed_wheel_paths_pass(artifacts: Path, tmp_path: Path) -> Non
     assert "PASS rebuilt-wheel" in result.stdout
 
 
+@pytest.mark.milestone_acceptance
 def test_complete_initialization_from_both_artifact_paths(
     artifacts: Path, tmp_path: Path
 ) -> None:

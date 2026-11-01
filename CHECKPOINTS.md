@@ -4,6 +4,22 @@ Last updated: 2026-10-31
 
 ## Current position
 
+**Local milestone acceptance selection (2026-10-31):** Implemented the developer-approved
+plan to mark only `test_complete_initialization_from_both_artifact_paths` as
+`milestone_acceptance`. Default local pytest deselects it; CI explicitly uses
+`-m ""` to include all tests. Final local milestone acceptance uses the same
+override. Local phase/story verification may defer this single test.
+Collection verified: routine 207/208, marker-only 1/208 (the intended test),
+all-tests override 208/208. Locked sync, lock check, Ruff lint/format, strict mypy,
+version smoke (0.1.0), and diff whitespace checks passed on macOS. Lock unchanged.
+This is test scheduling and documentation only; product behavior, assertions and
+timeouts are unchanged, so no product red/green cycle applies. Routine four-worker
+suite passed: `uv run --locked pytest -n 4 --dist=loadgroup`, **207 passed**
+in **1478.98s (24:38)**, exit zero. The excluded milestone test was not rerun.
+Pytest reached 100% several minutes before process exit; shutdown cause was not
+confirmed. No commit or publication performed.
+
+
 **Branch integration:** Developer authorized switching to
 `US-03-experiment-boundaries` and merging `us-03-pytest-runtime-optimization`.
 Fast-forward from `ca4eb98` to `1b7b156` completed without conflicts.

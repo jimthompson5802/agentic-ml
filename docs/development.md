@@ -46,6 +46,26 @@ The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. U
 
 The smoke check must exit zero and print the installed package version; version tests compare it to distribution metadata. A missing command, nonzero exit, or wrong version is a failed smoke check. US-31 Implementation Phase 2 verified all shared commands from a fresh macOS checkout and a new environment; see the [recorded results](verification/us-31-ip2.md). Wheel/source-distribution verification belongs to US-33 and is separate from this editable development install.
 
+## Local milestone acceptance selection
+
+Normal local pytest runs exclude the single `milestone_acceptance` test,
+`test_complete_initialization_from_both_artifact_paths`. Run it at final milestone
+acceptance. CI overrides the default selection and runs every test on each run.
+
+```sh
+# Final milestone acceptance: every test
+uv run --locked pytest -n 4 --dist=loadgroup -m ""
+# Only the milestone acceptance test
+uv run --locked pytest -n 4 --dist=loadgroup -m milestone_acceptance
+```
+
+Local phase and story verification may defer this test until final milestone
+acceptance, including under existing plans. This developer-authorized exception
+changes only this test's local scheduling; preserve its assertions and historical
+evidence. All other required distribution and installation checks still apply.
+Record this deferral in verification evidence. Default runs cover the routine
+suite; only the explicit all-tests command establishes complete-suite coverage.
+
 ## Local parallel test execution
 
 Agents must use four workers with `loadgroup` for local pytest verification,
@@ -95,8 +115,7 @@ active.
 Environment installation and MLflow initialization compete for CPU, memory and
 disk. Investigate resource constraints with a recorded worker-count comparison. Keep
 existing assertions and subprocess timeouts intact. Record worker count, suite
-count, durations, diagnostics and platform with results. A complete unfiltered
-parallel run exercises the full suite; selected runs do not replace final full
+count, durations, diagnostics and platform with results. A parallel run with `-m ""` exercises the full suite; selected runs do not replace final full
 verification. Retain serial execution for diagnosis. Parallel macOS evidence
 does not establish Linux or Windows support. The Linux CI workflow now requests
 four workers; hosted parallel verification remains pending until a run is observed.
@@ -137,7 +156,7 @@ Run the full suite before an intermediate phase gate when changes affect depende
 
 ### Final verification before story acceptance
 
-Every new plan must assign final verification to a named task in its last implementation phase. After all implementation work is complete, run `uv run --locked pytest -n 4 --dist=loadgroup` locally across the complete repository suite without selection filters, together with the shared development checks. For distribution-affecting work, verify both the directly built wheel and a wheel rebuilt from the source distribution outside the checkout, using the [distribution and installation commands](#distribution-builds-and-installed-verification). Include other story-required installed-interface, manual and platform checks. A passing complete-suite run may supply these results when it demonstrably executes the required checks; reference that evidence instead of repeating identical checks against unchanged artifacts.
+Every new plan must assign final verification to a named task in its last implementation phase. After all implementation work is complete, run `uv run --locked pytest -n 4 --dist=loadgroup` locally across the routine repository suite (the milestone acceptance exception above applies), together with the shared development checks. For distribution-affecting work, verify both the directly built wheel and a wheel rebuilt from the source distribution outside the checkout, using the [distribution and installation commands](#distribution-builds-and-installed-verification). Include other story-required installed-interface, manual and platform checks. A passing complete-suite run may supply these results when it demonstrably executes the required checks; reference that evidence instead of repeating identical checks against unchanged artifacts.
 
 Record the tested revision and working-tree changes, lockfile identity, commands, test counts, outcomes, artifact identities where applicable, platform and limitations. Reconcile all deferred checks and the acceptance-criterion matrix. Present the final phase gate only after required verification passes; request whole-story acceptance only after the gates and final verification are complete. Failing or unverified required checks remain blockers.
 
