@@ -18,7 +18,10 @@ Final verification: **58 direct tests passed in 419.99s**, four workers; one res
 milestone case deselected. All shared checks passed, lock/input hashes unchanged.
 The exact baseline workload passed for all four commands, reducing retained
 environments from 1/2/6/2 to zero; source/project files and records survive.
-US-35 acceptance is recorded; branch publication and static PR review are in progress.
+US-35 is published in [PR #48](https://github.com/jimthompson5802/agentic-ml/pull/48).
+The [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/48#pullrequestreview-5730710831)
+found no actionable issues; final publication-record changes receive a follow-up
+review on their published head. Hosted Linux CI was pending at handoff.
 
 Development-guide reorganization remains approved and committed; see its
 [plan](docs/plans/development-guide-reorganization.md) and
@@ -48,9 +51,8 @@ backup responsibility, and cleanup protection; `.gitignore` excludes the directo
 Installation-driver adoption is complete in US-35 Phase 1; the other three
 drivers are complete and approved in Phase 2. No historical records were moved.
 
-**Next action:** publish accepted US-35, create its PR and publish a static COMMENT
-review under execute-plan. Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY
-deferrals in their owning plans. No merge or next-story work is authorized.
+**Next action:** await developer direction on PR #48. No merge or next-story
+work is authorized. Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals.
 
 ## Checkout and working tree
 
@@ -62,8 +64,9 @@ deferrals in their owning plans. No merge or next-story work is authorized.
 - Preserve baseline `.dev-records/verification/us-35-baseline-bac0e9c/`, all
   historical workspaces and Phase 1 evidence. Phase 2 raw records are in
   `us-35-ip2-checks/`, `us-35-ip2-workload/` and per-invocation record directories.
-- Implementation and phase approvals are committed. Acceptance records are the
-  only new changes; publication/review outcomes will be recorded after verification.
+- Implementation and phase approvals are committed; acceptance is `49e3065`.
+  PR/review links and this handoff are committed as documentation-only publication
+  records and pushed on the story branch. See the plan for verified outcomes.
 
 ## Verification and outstanding obligation
 
