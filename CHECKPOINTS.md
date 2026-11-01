@@ -59,6 +59,14 @@ M50-ACCEPT-VERIFY deferrals.
 
 ## Checkout and working tree
 
+- Current checkout: `test-devcontainers`. Developer requested merging the latest
+  `main`; fetched `origin` and merged `origin/main` without conflicts as `57fdeae`.
+  The merge is local and has not been pushed. Existing `.dev-records/` contents
+  are now ignored by the incoming `.gitignore`. No tests were run for this merge.
+  Merge-diff whitespace inspection reports existing trailing blank lines in
+  `docs/development/{ci,command-approvals,setup,verification}.md` from `main`.
+  This checkpoint update records the handoff; prior main-branch records follow.
+
 - Branch: `main`; pulled squash merge `3cfa431` from `origin/main`. Both
   implementation phases and whole-story acceptance are recorded.
 - Phase 2 changes: distribution/initialization/planning drivers, shared helper,
