@@ -54,7 +54,7 @@ Installation-driver adoption is complete in US-35 Phase 1; the other three
 drivers are complete and approved in Phase 2. No historical records were moved.
 
 **Next action:** await developer direction. US-35 is accepted and merged; no
-next-story work or branch deletion is authorized. Preserve M1-ACCEPT-VERIFY and
+next-story work is authorized. Preserve M1-ACCEPT-VERIFY and
 M50-ACCEPT-VERIFY deferrals.
 
 ## Checkout and working tree
@@ -71,8 +71,13 @@ M50-ACCEPT-VERIFY deferrals.
   PR/review links and this handoff are committed as documentation-only publication
   records and pushed on the story branch as `6411db8`. Merge outcome and checkout
   updates to this checkpoint and the owning plan are committed on `main` under
-  “switch to main and pull and commit the recent updates”. No push was requested;
-  the local and remote story branches are retained.
+  “switch to main and pull and commit the recent updates” as `853171e`, then
+  pushed at the developer’s request. `main` matches `origin/main`.
+- Developer authorized deletion of the local and remote PR #48 branch. Both
+  `US-35-verification-cleanup` copies were deleted after verifying tip `6411db8`
+  and tree equality with squash merge `3cfa431`. Other branches remain intact.
+  Branch-cleanup records are committed and pushed on `main` under the developer’s
+  explicit “commit and push” instruction.
 
 ## Verification and outstanding obligation
 

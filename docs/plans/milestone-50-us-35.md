@@ -199,9 +199,14 @@ Consumer/child protocol and focused red–green evidence: [Phase 2 report](../ve
   Development CI passed ([run](https://github.com/jimthompson5802/agentic-ml/actions/runs/41360636508)).
 - **Local follow-up:** Switched to `main` and pulled `3cfa431` with `--ff-only`.
   Developer authorized committing merge/checkout records: “switch to main and
-  pull and commit the recent updates”. No push or branch deletion requested.
+  pull and commit the recent updates”. Commit `853171e` was subsequently pushed
+  at the developer’s explicit request.
+- **Branch cleanup:** Developer requested deletion of the local and remote
+  branches for the merged PR. Verified tip `6411db8` and tree equality with squash
+  merge `3cfa431`; deleted both `US-35-verification-cleanup` copies. Other branches
+  were preserved.
 - **Remaining obligations:** No publication blocker or review finding. Await
-  developer direction; next-story work and branch deletion are not authorized.
+  developer direction; next-story work is not authorized.
   `M50-ACCEPT-VERIFY` and existing `M1-ACCEPT-VERIFY` deferrals remain intact.
 
 Publication/acceptance records change no executable behavior. Reuse the final
