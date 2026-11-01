@@ -1,5 +1,25 @@
 # Milestone 1 / US-03: Define experiment objectives and boundaries
 
+## Current status
+
+US-03 is accepted and merged in [PR #46](https://github.com/jimthompson5802/agentic-ml/pull/46);
+issue #10 is closed. IP1–IP4 and the SC-03 cost/currency correction are approved.
+The review finding is resolved. Merge `1e28ae8` and merge-record commit `442e3b2`
+are on `main`; the local and remote story branches were subsequently deleted under
+explicit developer authorization. See [merge outcome](#merge-outcome-2026-10-31-local).
+
+Required direct evidence passed. The local full suite and other deferred checks
+remain owned by **M1-ACCEPT-VERIFY**; Milestone 1 is not accepted. The
+[effective verification requirements](#effective-verification-requirements)
+and [story completion review](#story-completion-review) state the current outcome.
+Next action is developer direction; no next-story implementation is authorized.
+
+The source snapshot, proposal, phase gates and dated publication records below
+preserve what was known or authorized at each step. Their pending/open states and
+next-action statements are historical; use this status and the final outcome
+records for resumption. Approved verification revisions supersede the original
+requirements explicitly retained below.
+
 ## Scope and outcome
 
 - **Milestone:** 1 — Run and record a reproducible experiment. The issue body assigns this milestone; GitHub's milestone metadata is unset.
@@ -11,7 +31,7 @@
 - **Supporting design:** [Reading map](../specs/agentic-ml-harness-design.md#reading-map-and-document-authority), [developer inputs](../specs/design/interfaces-and-configuration.md#developer-experiment-inputs), [search boundaries](../specs/design/interfaces-and-configuration.md#algorithm-and-hyperparameter-configuration), [governance](../specs/design/execution-and-governance.md#governance), [delivery dependencies](../specs/design/milestone-delivery.md#milestone-1-dependencies-and-delivery-order), [acceptance fixtures](../specs/design/acceptance-traceability.md#reference-acceptance-test-datasets), [architecture decisions](../specs/design/architecture-decisions.md).
 - **Coordinated execution index:** None. This plan owns only US-03 work; it consumes accepted US-02 capabilities and defines a handoff to US-05 without implementing that story.
 
-## Source snapshot and current implementation
+## Source snapshot and implementation at plan creation
 
 Retrieved issue #10's complete body and all comment pages on 2026-10-31; zero unique comments equals the reported count. Final metadata refresh was stable: `updated_at=2026-10-30T02:06:20Z`. No recorded discussion decisions. Issue and repository acceptance criteria agree.
 
@@ -319,7 +339,34 @@ unchanged dependent/full-suite checks remain with M1-ACCEPT-VERIFY.
 - **Requested changes and resolution:** None recorded.
 - **Progression authorized:** All implementation phase gates approved. Await explicit whole-story acceptance before the accepted-story publication workflow; no commit or push authorized by this phase approval.
 
-## Shared and final verification requirements
+## Effective verification requirements
+
+The approved [local verification revision](#scope-change-record-local-verification-policy-2026-10-31)
+and [SC-02](#us-03-sc-02--acceptance-with-additional-full-suite-run-deferred-2026-10-31)
+govern IP3/IP4 and story acceptance. Apply the repository's
+[verification policy](../development.md#phase-and-story-verification): direct phase
+tests and shared checks, reuse or renew valid direct evidence at story acceptance,
+and full local verification before milestone acceptance. The original broad-run
+triggers and story-final full-suite requirements below are historical.
+
+- **US-03-IP4-T4:** Complete with 165 direct tests, shared checks, both wheel paths
+  and installed examples; see [IP4 evidence](../verification/us-03-ip4.md).
+- **SC-03 renewal:** Complete with 183 direct tests, both-wheel budget probes and
+  shared checks; see [correction evidence](../verification/us-03-cost-currency-correction.md).
+- **M1-ACCEPT-VERIFY:** Outstanding. Owns the full local suite with
+  `uv run --locked pytest -n 4 --dist=loadgroup -m ""`, reserved milestone test,
+  unchanged caller/initialization, upgrade/scheduling and remaining artifact
+  regressions, shared checks and applicable installed/manual/platform verification.
+  Reconcile all deferrals and renew evidence against final milestone inputs before
+  milestone acceptance. Hosted CI success remains separate observed evidence.
+- **Documentation cleanup:** Check local links/anchors, consistency and whitespace.
+  No executable behavior or verification requirement changes; TDD does not apply.
+
+## Shared and final verification requirements (original, superseded)
+
+Historical requirements at plan creation follow. The effective section above and
+approved scope records govern execution; these statements are retained to preserve
+the original plan, not as pending work or current verification instructions.
 
 - **Owning final task:** US-03-IP4-T4; before final gate and story acceptance.
 - At every executable gate run `uv sync --locked --group dev`, `uv lock --check`, `uv run --locked ruff check .`, `uv run --locked ruff format --check .`, `uv run --locked mypy src tests`, `uv run --locked agentic-ml --version` and `git diff --check`. Record lock SHA-256 before/after and explain intentional dependency changes. No dependency change is assumed; a required change triggers broader verification.
@@ -329,7 +376,7 @@ unchanged dependent/full-suite checks remain with M1-ACCEPT-VERIFY.
 - Record revision plus working-tree changes, lock/artifact hashes, OS/architecture/Python/uv/library versions, commands/outcomes, selected/deselected and final totals. macOS evidence does not establish Linux/Windows support; record hosted evidence if observed and distinguish unverified platforms. Manual walkthrough uses installed CLI/API; editor/kernel execution is outside this story.
 - **Deferred-check reconciliation:** IP2/IP3 unrelated upgrade/scheduling regressions and all artifact checks must be accounted for by final full suite and installed evidence. No unresolved failure or missing required proof at acceptance.
 - **Evidence renewal:** Executable changes after verification require affected reruns and renewed full-suite evidence; changed package/dependency/build inputs require renewed artifacts. Documentation/approval-record-only edits need document/link/whitespace checks with rationale.
-- **Actual final results:** Pending. Commands here are planned, not passing evidence.
+- **Original results placeholder:** Pending at plan creation. Actual completed story evidence is linked in the effective verification requirements and story completion review above; the original commands here are not evidence.
 
 ## Execution rules
 
@@ -349,7 +396,7 @@ Follow the [scope-change procedure](../../.agents/skills/manage-plan-scope/SKILL
 | US-03-AC-04 — conflicts block; delegated choices approved | IP1-T1/T3; IP2-T1/T3; IP3-T1/T2; IP4-T1/T2/T4 | Conflict/unresolved diagnostics, explicit unauthenticated matching approval and independent missing/malformed/stale/revoked/scope readiness checks; reviewer identity unverified under SC-01 | Direct evidence passed; phase gates approved |
 | US-03-AC-05 — root-relative inputs and notebook cwd | IP1-T2; IP2-T2; IP4-T3/T4 | Same identities from multiple caller directories; explicit cwd and safe path-boundary cases | Direct evidence passed; phase gates approved |
 
-- **Remaining work:** Implementation tasks complete with required direct evidence. All implementation phase gates are approved; developer accepted US-03. Commit/push and accepted-story publication are authorized. Deferred regressions are assigned to M1-ACCEPT-VERIFY.
+- **Remaining work:** US-03 implementation, correction, publication, merge and story-branch cleanup are complete. All implementation gates and whole-story acceptance are approved. Only deferred milestone verification remains, assigned to M1-ACCEPT-VERIFY.
 - **Partial prerequisite delivery:** None. US-05 registry/candidate behavior remains its owning story; downstream entrypoints must wire this plan's readiness and boundary contracts before shipping.
 - **Final verification:** IP4-T4 complete under the approved local verification scope revision: [IP4 evidence](../verification/us-03-ip4.md).
 - **Developer acceptance:** Accepted — US-03, with the additional full-suite run deferred for now.
@@ -417,4 +464,24 @@ Follow the [scope-change procedure](../../.agents/skills/manage-plan-scope/SKILL
 - **Pre-merge verification:** PR #46 open/non-draft, base main, MERGEABLE/CLEAN; head `220436c0bcc31cc4905d10ea061a0dfe0d71bee3`; sole review thread resolved; Linux/Python 3.12 Development CI SUCCESS, completed `2026-11-01T03:35:28Z`.
 - **Action:** `gh pr merge --repo jimthompson5802/agentic-ml 46 --squash --match-head-commit 220436c0bcc31cc4905d10ea061a0dfe0d71bee3`.
 - **Verified result:** MERGED at `2026-11-01T03:39:35Z`; squash commit `1e28ae8efe1f4989408a08c76c91ddd46ea273f1`.
-- **Main checkout and final records:** Developer “switch main; pull changes and then commit the last changes and push back” authorized switching to main, fast-forward pulling `origin/main` to squash commit `1e28ae8`, and committing/pushing these documentation records. Temporary stash/restoration preserved the two files without conflicts. No branch deletion or next-story work performed. Documentation links/whitespace checked; no fresh local tests required for recording the verified outcome.
+- **Main checkout and final records:** Developer “switch main; pull changes and then commit the last changes and push back” authorized switching to main, fast-forward pulling `origin/main` to squash commit `1e28ae8`, and committing/pushing these documentation records. Temporary stash/restoration preserved the two files without conflicts. No branch deletion or next-story work was performed in that step. Documentation links/whitespace checked; no fresh local tests required for recording the verified outcome.
+- **Subsequent branch cleanup:** Developer “delete local and remote branches from the recent pr” authorized deletion of `US-03-experiment-boundaries`. Local and remote tips were verified at `220436c`, with tree equality to squash merge `1e28ae8`, before both copies were deleted. Other branches retained; checkout remains main. Merge records committed/pushed as `442e3b2` before this cleanup.
+
+
+## Handoff reconciliation (2026-10-31 local)
+
+- **Decision:** Developer “make your recommended changes” authorized the checkpoint
+  cleanup and reconciliation of this plan's superseded status/verification prose.
+- **Change:** Added current status and effective verification pointers; marked the
+  original requirements and earlier pending/publication states as historical;
+  recorded completed branch cleanup. Existing task IDs, criteria, approval/failure
+  evidence and scope-change records are preserved.
+- **Impact:** Documentation clarification only. No new scope, verification deferral,
+  evidence invalidation, gate approval or implementation authorization. M1-ACCEPT-VERIFY
+  retains its existing obligations. No new scope-change approval is required.
+- **Verification:** Local links/anchors, consistency and whitespace checks; product
+  TDD and runtime reruns do not apply. All 44 local links/anchors across this plan
+  and CHECKPOINTS.md passed; consistency review and `git diff --check` passed.
+  Next work awaits developer direction.
+- **Publication authorization:** Developer “commit and push” authorizes committing
+  this documentation cleanup with CHECKPOINTS.md and pushing `main`.
