@@ -4,7 +4,28 @@ Last updated: 2026-11-01 (America/New_York)
 
 ## Current position and next action
 
-Development-guide reorganization is complete; the developer approved its final documentation gate on 2026-11-01 (“I approve”). See the [plan](docs/plans/development-guide-reorganization.md) and [evidence](docs/verification/development-guide-reorganization.md). No maintenance gate remains pending; await developer direction on the next work item. No executable behavior or milestone obligations changed. Working changes include the core guide, six references, navigation, three local skills, plan and report.
+US-35 is accepted on 2026-11-01: “i accept us-35”. Both implementation phases
+are approved and committed: `2e3bf2d` (IP1), `8ffa7d4` (IP2).
+The [plan](docs/plans/milestone-50-us-35.md) owns progress and gates;
+[Phase 2 evidence](docs/verification/us-35-ip2.md) records the consumer protocol,
+TDD, final checks and same-input disk comparison. Issue #47 was retrieved again:
+complete body, zero comments, metadata refresh unchanged. Scope is unchanged.
+
+All four drivers now preserve durable records and remove only newly owned
+environments/private caches after final consumers. Failure and explicit retention
+keep environments; composed parents link child records and control final cleanup.
+Final verification: **58 direct tests passed in 419.99s**, four workers; one reserved
+milestone case deselected. All shared checks passed, lock/input hashes unchanged.
+The exact baseline workload passed for all four commands, reducing retained
+environments from 1/2/6/2 to zero; source/project files and records survive.
+US-35 is published in [PR #48](https://github.com/jimthompson5802/agentic-ml/pull/48).
+The [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/48#pullrequestreview-5730710831)
+found no actionable issues; final publication-record changes receive a follow-up
+review on their published head. Hosted Linux CI was pending at handoff.
+
+Development-guide reorganization remains approved and committed; see its
+[plan](docs/plans/development-guide-reorganization.md) and
+[evidence](docs/verification/development-guide-reorganization.md).
 
 Milestone 0 is accepted. Milestone 1 is in progress: US-01, US-02 and US-03
 are accepted and merged; issues #8, #9 and #10 are closed. Milestone 99 remains
@@ -21,29 +42,31 @@ Milestone 50 now records ongoing technical environment improvements outside
 the product delivery sequence. US-35–US-38 cover successful-environment cleanup,
 pytest workspace ownership, compatible installed-environment reuse, and sequential
 wheel-environment release in [user stories](docs/specs/user-stories.md#milestone-50-improve-the-technical-environment).
-The developer requested local documentation only; no GitHub issues or milestone
-were created, and no implementation is authorized by these additions.
+The original request covered local documentation only. The developer subsequently
+authorized creation of US-35 issue #47; US-36–US-38 remain local stories. No GitHub
+milestone was created, and no implementation is authorized by these additions.
 US-35-AC-02 now specifies `.dev-records/verification/` for raw evidence retained
 for the lifetime of agentic-ml development. The development guide defines layout,
 backup responsibility, and cleanup protection; `.gitignore` excludes the directory.
-Driver adoption remains future US-35 work; no historical records were moved.
+Installation-driver adoption is complete in US-35 Phase 1; the other three
+drivers are complete and approved in Phase 2. No historical records were moved.
 
-**Next action:** await developer direction on the next work item. Before story
-implementation, retrieve its owning issue and follow applicable plan and approval
-gates. No US-03 implementation gate or review finding remains pending.
+**Next action:** await developer direction on PR #48. No merge or next-story
+work is authorized. Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals.
 
 ## Checkout and working tree
 
-- Branch: `main`; pre-commit HEAD `fa66fa7`. Developer authorized committing and
-  pushing the approved guide reorganization on 2026-11-01. Remote state has not
-  yet been revalidated.
-- Developer authorized deletion of local and remote `US-03-experiment-boundaries`
-  after verifying tip `220436c` and tree equality with squash merge `1e28ae8`.
-  Both copies were deleted; other branches were retained.
-- Milestone 50 documentation was committed and pushed as `41c4b86`.
-- Changes included in this commit: development-guide reorganization, active navigation,
-  three local skills, checkpoint, plan and verification report. The retained-record
-  policy is already in HEAD. No executable behavior changed. Developer subsequently authorized commit and push (“commit change and push”).
+- Branch: `US-35-verification-cleanup`; Phase 2 follows approved Phase 1 commit
+  `2e3bf2d`. Both implementation phases are approved.
+- Phase 2 changes: distribution/initialization/planning drivers, shared helper,
+  direct lifecycle/distribution tests, retention documentation, plan/evidence and
+  checkpoint. Product source, dependencies and lock unchanged.
+- Preserve baseline `.dev-records/verification/us-35-baseline-bac0e9c/`, all
+  historical workspaces and Phase 1 evidence. Phase 2 raw records are in
+  `us-35-ip2-checks/`, `us-35-ip2-workload/` and per-invocation record directories.
+- Implementation and phase approvals are committed; acceptance is `49e3065`.
+  PR/review links and this handoff are committed as documentation-only publication
+  records and pushed on the story branch. See the plan for verified outcomes.
 
 ## Verification and outstanding obligation
 
@@ -73,10 +96,9 @@ markers, exit 130, without final summary/XML. It is incomplete evidence, not a
 passing run. Preserve its [interruption record](docs/verification/us-03-ip4.md#additional-full-suite-run-requested-after-phase-approval)
 and approved deferral; no local full-suite success is claimed for final US-03.
 
-This handoff changes documentation only. TDD and product test reruns do not
-apply because no executable behavior changed. Retained-record policy validation
-covers the new section link, preserved US-35 criterion ID, Git ignore matching,
-and `git diff --check`; these checks passed. Driver tests were not rerun.
+US-35 is an executable maintenance change. Its report owns current TDD and
+verification evidence; do not substitute the historical US-03 checks above.
+Full-suite and unchanged caller regressions remain deferred to their named owners.
 
 ## Supporting records
 
