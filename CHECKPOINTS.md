@@ -1,8 +1,33 @@
 # Development Checkpoints
 
-Last updated: 2026-10-31 (America/New_York)
+Last updated: 2026-11-01 (America/New_York)
 
 ## Current position and next action
+
+US-35 is accepted on 2026-11-01: “i accept us-35”. Both implementation phases
+are approved and committed: `2e3bf2d` (IP1), `8ffa7d4` (IP2).
+The [plan](docs/plans/milestone-50-us-35.md) owns progress and gates;
+[Phase 2 evidence](docs/verification/us-35-ip2.md) records the consumer protocol,
+TDD, final checks and same-input disk comparison. Issue #47 was retrieved again:
+complete body, zero comments, metadata refresh unchanged. Scope is unchanged.
+
+All four drivers now preserve durable records and remove only newly owned
+environments/private caches after final consumers. Failure and explicit retention
+keep environments; composed parents link child records and control final cleanup.
+Final verification: **58 direct tests passed in 419.99s**, four workers; one reserved
+milestone case deselected. All shared checks passed, lock/input hashes unchanged.
+The exact baseline workload passed for all four commands, reducing retained
+environments from 1/2/6/2 to zero; source/project files and records survive.
+US-35 was squash merged in [PR #48](https://github.com/jimthompson5802/agentic-ml/pull/48)
+at `2026-11-01T23:18:45Z`, commit `3cfa4310482bff5eadff35d5432d48bfc56c38be`,
+authorized by “squash merge pr #48”.
+The [final-head static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/48#pullrequestreview-5730714898)
+found no actionable issues, covering publication head `6411db8`. Final-head hosted Linux/Python 3.12 CI passed
+([run](https://github.com/jimthompson5802/agentic-ml/actions/runs/41360636508)).
+
+Development-guide reorganization remains approved and committed; see its
+[plan](docs/plans/development-guide-reorganization.md) and
+[evidence](docs/verification/development-guide-reorganization.md).
 
 Milestone 0 is accepted. Milestone 1 is in progress: US-01, US-02 and US-03
 are accepted and merged; issues #8, #9 and #10 are closed. Milestone 99 remains
@@ -15,23 +40,44 @@ accepted, published and its review thread resolved before merge. All US-03
 implementation gates and whole-story acceptance are recorded in the
 [owning plan](docs/plans/milestone-1-us-03.md#current-status).
 
-**Next action:** await developer direction on the next work item. Retrieve its
-owning issue and follow the applicable plan and approval gates before implementation.
-No US-03 implementation gate or review finding remains pending.
+Milestone 50 now records ongoing technical environment improvements outside
+the product delivery sequence. US-35–US-38 cover successful-environment cleanup,
+pytest workspace ownership, compatible installed-environment reuse, and sequential
+wheel-environment release in [user stories](docs/specs/user-stories.md#milestone-50-improve-the-technical-environment).
+The original request covered local documentation only. The developer subsequently
+authorized creation of US-35 issue #47; US-36–US-38 remain local stories. No GitHub
+milestone was created, and no implementation is authorized by these additions.
+US-35-AC-02 now specifies `.dev-records/verification/` for raw evidence retained
+for the lifetime of agentic-ml development. The development guide defines layout,
+backup responsibility, and cleanup protection; `.gitignore` excludes the directory.
+Installation-driver adoption is complete in US-35 Phase 1; the other three
+drivers are complete and approved in Phase 2. No historical records were moved.
+
+**Next action:** await developer direction. US-35 is accepted and merged; no
+next-story work is authorized. Preserve M1-ACCEPT-VERIFY and
+M50-ACCEPT-VERIFY deferrals.
 
 ## Checkout and working tree
 
-- Branch: `main`, HEAD `442e3b2` (merge-record documentation commit), matching
-  the cached `origin/main` ref at this handoff.
-- Developer authorized deletion of local and remote `US-03-experiment-boundaries`
-  after verifying tip `220436c` and tree equality with squash merge `1e28ae8`.
-  Both copies were deleted; other branches were retained.
-- Entry state for this cleanup: only `CHECKPOINTS.md` modified, recording that
-  branch deletion. This edit preserves that record.
-- Handoff changes: `CHECKPOINTS.md` and `docs/plans/milestone-1-us-03.md` contain
-  documentation cleanup. No executable inputs changed. Developer “commit and push”
-  authorizes committing these records and pushing `main`; Git history records
-  the resulting commit. Verify checkout and publication state before resuming.
+- Branch: `main`; pulled squash merge `3cfa431` from `origin/main`. Both
+  implementation phases and whole-story acceptance are recorded.
+- Phase 2 changes: distribution/initialization/planning drivers, shared helper,
+  direct lifecycle/distribution tests, retention documentation, plan/evidence and
+  checkpoint. Product source, dependencies and lock unchanged.
+- Preserve baseline `.dev-records/verification/us-35-baseline-bac0e9c/`, all
+  historical workspaces and Phase 1 evidence. Phase 2 raw records are in
+  `us-35-ip2-checks/`, `us-35-ip2-workload/` and per-invocation record directories.
+- Implementation and phase approvals are committed; acceptance is `49e3065`.
+  PR/review links and this handoff are committed as documentation-only publication
+  records and pushed on the story branch as `6411db8`. Merge outcome and checkout
+  updates to this checkpoint and the owning plan are committed on `main` under
+  “switch to main and pull and commit the recent updates” as `853171e`, then
+  pushed at the developer’s request. `main` matches `origin/main`.
+- Developer authorized deletion of the local and remote PR #48 branch. Both
+  `US-35-verification-cleanup` copies were deleted after verifying tip `6411db8`
+  and tree equality with squash merge `3cfa431`. Other branches remain intact.
+  Branch-cleanup records are committed and pushed on `main` under the developer’s
+  explicit “commit and push” instruction.
 
 ## Verification and outstanding obligation
 
@@ -61,10 +107,9 @@ markers, exit 130, without final summary/XML. It is incomplete evidence, not a
 passing run. Preserve its [interruption record](docs/verification/us-03-ip4.md#additional-full-suite-run-requested-after-phase-approval)
 and approved deferral; no local full-suite success is claimed for final US-03.
 
-This handoff cleanup changes documentation only. TDD and product test reruns do
-not apply; validation covers local links/anchors, document consistency and
-`git diff --check`. All 44 local links/anchors across the two edited documents
-passed validation; consistency review and whitespace checks passed.
+US-35 is an executable maintenance change. Its report owns current TDD and
+verification evidence; do not substitute the historical US-03 checks above.
+Full-suite and unchanged caller regressions remain deferred to their named owners.
 
 ## Supporting records
 

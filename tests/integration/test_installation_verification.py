@@ -71,7 +71,16 @@ def test_pinned_project_runs_without_checkout_or_cache(
     assert result.returncode == 0, result.stdout + result.stderr
     assert "PASS pinned installation" in result.stdout
     assert not (workspace / "cache").exists()
-    identity = json.loads((workspace / "identity.json").read_text())
+    assert not (workspace / "experiment/.venv").exists()
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in result.stdout.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    assert records.is_relative_to(ROOT / ".dev-records/verification")
+    identity = json.loads((records / "identities/identity.json").read_text())
     assert identity["resolved_revision"] == revision
     assert identity["repository"] == repository
     assert len(identity["lock_sha256"]) == 64
@@ -93,6 +102,7 @@ def installed_project(
         [
             sys.executable,
             str(DRIVER),
+            "--keep-workspace",
             "--repository",
             repository,
             "--revision",
@@ -106,6 +116,7 @@ def installed_project(
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
+    assert (workspace / "experiment/.venv/bin/python").is_file()
     return workspace / "experiment", repository, revision
 
 
@@ -232,7 +243,17 @@ def test_unknown_commit_fails_at_install(
     assert result.returncode != 0
     assert "FAIL install" in result.stderr
     assert "not our ref" in result.stderr or "couldn't find remote ref" in result.stderr
-    assert (workspace / "install.log").is_file()
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in result.stdout.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    commands = json.loads((records / "commands.json").read_text())
+    install = next(command for command in commands if command["stage"] == "install")
+    assert (records / install["log"]).is_file()
+    assert json.loads((records / "summary.json").read_text())["cleanup"] == "retained"
     assert "PASS pinned installation" not in result.stdout
 
 
@@ -405,3 +426,73 @@ def test_retained_old_install_cannot_pass_as_upgrade(
     finally:
         declaration.write_bytes(original_declaration)
         lock.write_bytes(original_lock)
+
+
+def test_failed_installed_probe_retains_available_environment(
+    source_repository: tuple[str, str], tmp_path: Path
+) -> None:
+    """A real post-installation failure preserves the environment and durable logs."""
+    repository, _ = source_repository
+    source = tmp_path / "damaged-source"
+    subprocess.run(
+        ["git", "clone", "--no-hardlinks", repository, str(source)],
+        check=True,
+        capture_output=True,
+    )
+    (source / "src/agentic_ml/templates/provisional.txt").unlink()
+    subprocess.run(["git", "add", "-u"], cwd=source, check=True)
+    subprocess.run(
+        [
+            "git",
+            "-c",
+            "commit.gpgsign=false",
+            "-c",
+            "user.name=Fixture",
+            "-c",
+            "user.email=fixture@example.invalid",
+            "commit",
+            "-m",
+            "damaged resource fixture",
+        ],
+        cwd=source,
+        check=True,
+        capture_output=True,
+    )
+    revision = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=source, text=True
+    ).strip()
+    workspace = tmp_path / "failed-verification"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(DRIVER),
+            "--repository",
+            source.as_uri(),
+            "--revision",
+            revision,
+            "--workspace",
+            str(workspace),
+        ],
+        cwd=tmp_path,
+        text=True,
+        capture_output=True,
+        timeout=120,
+        check=False,
+    )
+    assert result.returncode != 0
+    assert "FAIL before-sync-probe" in result.stderr
+    assert "template resource missing" in result.stderr
+    assert (workspace / "experiment/.venv/bin/python").is_file()
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in result.stdout.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    summary = json.loads((records / "summary.json").read_text())
+    assert summary["verification_exit_code"] == 1
+    assert summary["cleanup"] == "retained"
+    commands = json.loads((records / "commands.json").read_text())
+    assert commands[-1]["stage"] == "before-sync-probe"
+    assert "template resource missing" in (records / commands[-1]["log"]).read_text()

@@ -6,7 +6,7 @@ Replace placeholders with concrete work. Repeat the implementation phase block a
 
 During execution, complete the current implementation phase's tasks and verification, present review evidence, and pause for explicit developer approval before progressing. Record requested changes within that implementation phase. Plan approval and implementation gate decisions are separate; an approved plan leaves its implementation gates awaiting review. Record approvals only when explicitly given by the developer, with a reference to the decision.
 
-For new plans, follow the [phase and story verification policy](../development.md#phase-and-story-verification). Run direct tests of modules created or modified in each phase. Reuse valid phase evidence at story acceptance. Assign deferred regressions and full-suite verification to milestone acceptance; revise unfinished approved plans explicitly. Adjust relative links for the saved plan.
+For new plans, follow the [phase and story verification policy](../development/verification.md#phase-and-story-verification). Run direct tests of modules created or modified in each phase. Reuse valid phase evidence at story acceptance. Assign deferred regressions and full-suite verification to milestone acceptance; revise unfinished approved plans explicitly. Adjust relative links for the saved plan.
 
 ---
 
