@@ -409,3 +409,12 @@ Follow the [scope-change procedure](../../.agents/skills/manage-plan-scope/SKILL
 - **PR summary:** [Fix summary and verification reply](https://github.com/jimthompson5802/agentic-ml/pull/46#discussion_r4434259600), verified author/body and parent finding `4434227411`.
 - **Thread resolution:** Developer-authorized resolution of thread `PRRT_kwDOVZ7kv86yW3rx`; API confirmed `isResolved: true`. Earlier unresolved-finding notes above are historical and superseded by this correction.
 - **Next action:** Await developer direction/CI assessment before any merge; no cleanup or next-story work authorized.
+
+
+## Merge outcome (2026-10-31 local)
+
+- **Authorization:** Developer “I accept us-03; squash merge”.
+- **Pre-merge verification:** PR #46 open/non-draft, base main, MERGEABLE/CLEAN; head `220436c0bcc31cc4905d10ea061a0dfe0d71bee3`; sole review thread resolved; Linux/Python 3.12 Development CI SUCCESS, completed `2026-11-01T03:35:28Z`.
+- **Action:** `gh pr merge --repo jimthompson5802/agentic-ml 46 --squash --match-head-commit 220436c0bcc31cc4905d10ea061a0dfe0d71bee3`.
+- **Verified result:** MERGED at `2026-11-01T03:39:35Z`; squash commit `1e28ae8efe1f4989408a08c76c91ddd46ea273f1`.
+- **Main checkout and final records:** Developer “switch main; pull changes and then commit the last changes and push back” authorized switching to main, fast-forward pulling `origin/main` to squash commit `1e28ae8`, and committing/pushing these documentation records. Temporary stash/restoration preserved the two files without conflicts. No branch deletion or next-story work performed. Documentation links/whitespace checked; no fresh local tests required for recording the verified outcome.

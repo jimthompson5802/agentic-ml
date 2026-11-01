@@ -4,6 +4,22 @@ Last updated: 2026-10-31
 
 ## Current position
 
+**US-03 accepted and squash merged in PR #46 (2026-10-31 local).**
+Developer “I accept us-03; squash merge” authorized the merge. Verified MERGED at
+`2026-11-01T03:39:35Z`, squash commit `1e28ae8efe1f4989408a08c76c91ddd46ea273f1`.
+Reviewed head `220436c0bcc31cc4905d10ea061a0dfe0d71bee3` had passing hosted
+Linux/Python 3.12 Development CI and the sole review thread resolved before merge.
+Merge matched that exact head. Existing local full-suite deferral remains historical;
+hosted CI success is separate observed evidence, not a completed local full run.
+
+Developer “switch main; pull changes and then commit the last changes and push
+back” authorized switching to `main`, fast-forward pulling `origin/main` to
+`1e28ae8`, then committing/pushing the final merge records. The two documentation
+updates were temporarily stashed and restored without conflicts. Git history
+records the resulting documentation commit. No branch deletion or next-story work
+performed. **Next action:** developer direction. Milestone 1 remains in progress.
+Earlier publication/next-action notes below are historical and superseded here.
+
 **US-03 cost/currency correction accepted, pushed and review thread resolved (2026-10-31).**
 Developer “i accept the fix, commit and push to remote; summarize the fix to PR
 comment and mark as resolved.” approves the correction and authorizes those actions.
@@ -31,8 +47,8 @@ Branch `US-03-experiment-boundaries`: accepted correction committed/pushed as
 posted/verified under the original finding. Thread resolution confirmed
 `isResolved: true` at the developer's request. Outcome-only records are
 committed/pushed under the same authorization; executable evidence is unchanged.
-**Next action:** await developer direction/CI assessment. No merge, cleanup or
-next-story work authorized.
+Earlier next action was developer direction/CI assessment; the subsequent
+explicit merge instruction and successful merge above supersede it.
 
 Earlier accepted implementation `63aa346`, acceptance records `2c9522d` and
 publication records `d4ce70c` were pushed. Original static review:
