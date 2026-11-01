@@ -61,5 +61,8 @@ Thumbs.db
 # Generated project-associated harness state is not source.
 .agentic-ml/
 
+# Retained development evidence; preserve during cleanup and back up separately.
+/.dev-records/
+
 # agentic work area
 sandbox/

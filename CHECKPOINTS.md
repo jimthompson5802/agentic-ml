@@ -21,6 +21,10 @@ pytest workspace ownership, compatible installed-environment reuse, and sequenti
 wheel-environment release in [user stories](docs/specs/user-stories.md#milestone-50-improve-the-technical-environment).
 The developer requested local documentation only; no GitHub issues or milestone
 were created, and no implementation is authorized by these additions.
+US-35-AC-02 now specifies `.dev-records/verification/` for raw evidence retained
+for the lifetime of agentic-ml development. The development guide defines layout,
+backup responsibility, and cleanup protection; `.gitignore` excludes the directory.
+Driver adoption remains future US-35 work; no historical records were moved.
 
 **Next action:** await developer direction on the next work item. Before story
 implementation, retrieve its owning issue and follow applicable plan and approval
@@ -28,17 +32,16 @@ gates. No US-03 implementation gate or review finding remains pending.
 
 ## Checkout and working tree
 
-- Branch: `main`, HEAD `5bdc1e6` at this documentation handoff. The working tree
-  was clean before the Milestone 50 edits; remote state was not revalidated.
+- Branch: `main`, HEAD `41c4b86` at this documentation handoff. The working tree
+  was clean before the retained-record policy edits; remote state was not revalidated.
 - Developer authorized deletion of local and remote `US-03-experiment-boundaries`
   after verifying tip `220436c` and tree equality with squash merge `1e28ae8`.
   Both copies were deleted; other branches were retained.
-- Handoff changes: `docs/specs/user-stories.md` defines Milestone 50 and four
-  stories with stable acceptance IDs and implementation notes; `README.md`
-  aligns the terminology; `CHECKPOINTS.md` records this work. No executable inputs
-  changed. Developer approved the documentation and authorized commit and push
-  to `main`; Git history records the resulting commit. GitHub issue and milestone
-  creation remain outside the requested scope.
+- Milestone 50 documentation was committed and pushed as `41c4b86`.
+- Handoff changes: `docs/specs/user-stories.md`, `docs/development.md`,
+  `.gitignore`, and `CHECKPOINTS.md` document the retained-record policy. No driver
+  behavior changed. Developer authorized a local commit; Git history records the
+  resulting commit. Push and GitHub issue or milestone creation are outside scope.
 
 ## Verification and outstanding obligation
 
@@ -69,10 +72,9 @@ passing run. Preserve its [interruption record](docs/verification/us-03-ip4.md#a
 and approved deferral; no local full-suite success is claimed for final US-03.
 
 This handoff changes documentation only. TDD and product test reruns do not
-apply because no executable behavior changed. Validation covers the new story
-IDs, local links/anchors, document consistency, and `git diff --check`. All four
-story headings, 20 new unique acceptance IDs, milestone order, and 119 local
-links/anchors passed validation; whitespace checks passed.
+apply because no executable behavior changed. Retained-record policy validation
+covers the new section link, preserved US-35 criterion ID, Git ignore matching,
+and `git diff --check`; these checks passed. Driver tests were not rerun.
 
 ## Supporting records
 
