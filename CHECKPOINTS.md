@@ -4,6 +4,32 @@ Last updated: 2026-10-31
 
 ## Current position
 
+**Installer concurrency profile complete (2026-10-31):** Developer “go ahead”
+authorized the clone-mode default/1/2 installer-thread comparison under four
+pytest workers and conditional full validation. See
+[concurrency evidence](docs/verification/pytest-installer-concurrency.md).
+All **48 benchmark invocations passed** with matching dependency maps. Default
+project medians **15.94s/17.76s**, one thread **12.45s/11.98s**, two threads
+**12.72s/12.17s**; pooled one-thread fixture median improved approximately 27%.
+The complete **208-case suite passed**, exit zero, with temporary
+`UV_CONCURRENT_INSTALLS=1`: **1229.288s JUnit / 1229.717s outer (20:30)**.
+Last-teardown-to-process-exit **0.101s**; no multi-minute completion delay.
+Historical default outer **17:27**, JUnit **13:06**: this run is approximately
+17% slower overall, so it does not establish a full-suite improvement. Different
+cache/system/retention states prevent assigning the entire difference to the
+thread limit; no fresh paired default full run was performed.
+Recommendation: **retain the default command; do not adopt a permanent thread
+limit**. Hardlink rollback and nested-pytest isolation remain. Performance
+attempt 1 (hardlinks) failed; attempt 2 (temporary thread limit) passed correctness
+but did not establish the required full-suite reduction. No third corrective
+attempt applied. All 53 maintained source/test/build hashes and all 208 case
+identities match the restored baseline; lock unchanged. Only the report and this
+checkpoint changed. Raw scripts, events/logs/XML and aggregate results:
+`/private/tmp/pytest-installer-concurrency-tvjkoiu6`.
+All processes exited; further investigation/configuration adoption awaits
+review. Developer “commit” authorizes the local report/checkpoint commit;
+Git history records its result. No push or US-03 IP3 work authorized.
+
 **Fixture profiling (2026-10-31):** Developer “do the profile” authorizes
 temporary measurement on the restored `4207086` baseline. See
 [fixture profile](docs/verification/pytest-fixture-profile.md). Four batches of
