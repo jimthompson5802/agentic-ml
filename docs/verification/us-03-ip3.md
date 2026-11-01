@@ -164,6 +164,8 @@ Lock before and after shared verification:
 IP3-T1–T3 complete and developer approved by “i approve ip3” (2026-10-31), after
 implementation, evidence, stalled-process termination and status review. IP4
 execution awaits explicit authorization. Developer “commit changes” authorizes
-the local IP3 commit; Git history records its result. No push, PR, whole-story
-acceptance or publication authorized. Approval-record-only updates preserve the
+the local IP3 commit `3ad0c0a`. Subsequent developer “push” authorized its
+successful ordinary push to `origin/US-03-experiment-boundaries`, followed by
+committing/pushing these publication records. No PR or whole-story acceptance
+authorized. Approval-record-only updates preserve the
 verified executable/artifact identities; no product test rerun is needed.

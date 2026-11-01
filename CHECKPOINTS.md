@@ -29,7 +29,9 @@ tests, setup guide, plan/evidence and this checkpoint are included in the local
 commit authorized by developer “commit changes”; Git history records its result.
 Developer “i approve ip3” after the implementation/status summary approves the
 completed phase and evidence. **Next action:** await IP4 execution authorization.
-No push or whole-story acceptance authorized. Earlier IP3-unapproved
+Developer “push” authorized publication; ordinary push of IP3 commit `3ad0c0a`
+to `origin/US-03-experiment-boundaries` succeeded. This publication record is
+committed/pushed under that instruction. No whole-story acceptance authorized. Earlier IP3-unapproved
 notes below are historical and superseded by the execution instruction and approval.
 
 ### Earlier checkpoint history

@@ -276,7 +276,9 @@ handoff before this execution request.
 - **Requested changes and resolution:** None recorded.
 - **Progression authorized:** IP3 gate approved; IP4 execution awaits explicit
   authorization. Developer “commit changes” authorizes the local IP3 commit;
-  no push or whole-story acceptance authorized.
+  developer “push” subsequently authorized publication. IP3 commit `3ad0c0a`
+  pushed successfully to `origin/US-03-experiment-boundaries`; publication records
+  are committed/pushed under that instruction. Whole-story acceptance remains pending.
 
 ## US-03 / Implementation Phase 4: Verify delegated decisions and complete installed acceptance
 
