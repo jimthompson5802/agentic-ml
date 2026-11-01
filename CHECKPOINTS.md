@@ -4,6 +4,16 @@ Last updated: 2026-11-01 (America/New_York)
 
 ## Current position and next action
 
+US-35 implementation plan is approved by the developer on 2026-11-01
+(“i approve the plan; commit the changes”). See
+[Milestone 50 / US-35 plan](docs/plans/milestone-50-us-35.md), based on the full
+[issue #47](https://github.com/jimthompson5802/agentic-ml/issues/47) body and a
+complete zero-comment snapshot verified on 2026-11-01. Two implementation phases
+cover installation lifecycle/records, then composed-driver cleanup and disk evidence.
+Plan review and proposed public test boundaries are approved. Both implementation
+gates and story acceptance remain pending. Committing the plan and checkpoint is
+authorized; executable implementation and publication require separate direction.
+
 Development-guide reorganization is complete; the developer approved its final documentation gate on 2026-11-01 (“I approve”). See the [plan](docs/plans/development-guide-reorganization.md) and [evidence](docs/verification/development-guide-reorganization.md). No maintenance gate remains pending; await developer direction on the next work item. No executable behavior or milestone obligations changed. Working changes include the core guide, six references, navigation, three local skills, plan and report.
 
 Milestone 0 is accepted. Milestone 1 is in progress: US-01, US-02 and US-03
@@ -21,22 +31,27 @@ Milestone 50 now records ongoing technical environment improvements outside
 the product delivery sequence. US-35–US-38 cover successful-environment cleanup,
 pytest workspace ownership, compatible installed-environment reuse, and sequential
 wheel-environment release in [user stories](docs/specs/user-stories.md#milestone-50-improve-the-technical-environment).
-The developer requested local documentation only; no GitHub issues or milestone
-were created, and no implementation is authorized by these additions.
+The original request covered local documentation only. The developer subsequently
+authorized creation of US-35 issue #47; US-36–US-38 remain local stories. No GitHub
+milestone was created, and no implementation is authorized by these additions.
 US-35-AC-02 now specifies `.dev-records/verification/` for raw evidence retained
 for the lifetime of agentic-ml development. The development guide defines layout,
 backup responsibility, and cleanup protection; `.gitignore` excludes the directory.
 Driver adoption remains future US-35 work; no historical records were moved.
 
-**Next action:** await developer direction on the next work item. Before story
-implementation, retrieve its owning issue and follow applicable plan and approval
-gates. No US-03 implementation gate or review finding remains pending.
+**Next action:** await developer direction to execute US-35 Implementation Phase 1.
+The plan and proposed public boundaries are approved; both implementation gates
+remain pending. Preserve the existing M1-ACCEPT-VERIFY obligation.
 
 ## Checkout and working tree
 
-- Branch: `main`; pre-commit HEAD `fa66fa7`. Developer authorized committing and
-  pushing the approved guide reorganization on 2026-11-01. Remote state has not
-  yet been revalidated.
+- Planning branch: `US-35-verification-cleanup`, created from `main` at `2527034`.
+  Verified branch switch; the pre-existing `CHECKPOINTS.md` edit was preserved.
+- Approved planning commit includes `docs/plans/milestone-50-us-35.md` and this checkpoint.
+  No source/test code changed. Issue metadata refresh was stable; no comments.
+- Planning validation: local plan links resolve; `git diff --check` passes.
+  TDD/product tests and benchmarks do not apply to this documentation-only handoff;
+  all executable verification and before/after measurements remain planned.
 - Developer authorized deletion of local and remote `US-03-experiment-boundaries`
   after verifying tip `220436c` and tree equality with squash merge `1e28ae8`.
   Both copies were deleted; other branches were retained.
