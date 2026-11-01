@@ -32,7 +32,7 @@ When writing pull request bodies, use the target repository's selected pull requ
 
 Use Python 3.12 or newer and `uv` with the committed lockfile. Keep dependency declarations and the lockfile consistent. Verification must not silently update the lockfile.
 
-Before implementing or modifying Python code, read the [development guide](docs/development.md), including its Python conventions, suppression rules, and shared verification commands. Follow those conventions for naming, typing, docstrings, imports, and error handling.
+Before implementing or modifying Python code, read the [development guide](docs/development.md), including its Python conventions, suppression rules, and shared verification commands. Load every additional reference whose task trigger in the reading map applies. Follow those conventions for naming, typing, docstrings, imports, and error handling.
 
 Record a specific justification for each rule suppression or check exclusion.
 
@@ -56,7 +56,7 @@ For documentation-only changes or refactoring that preserves behavior, use appro
 
 ## Verification during implementation
 
-Follow the development guide's [phase and story verification policy](docs/development.md#phase-and-story-verification). At every local implementation-phase gate, run only direct tests for modules created or modified by that phase's tasks. Record changed modules, selectors, mapping rationale, results, limits and checks deferred to a named milestone acceptance task. Keep shared non-test checks and TDD obligations. At story acceptance, reuse valid phase evidence and renew invalidated direct-test evidence. Run the full local suite only before milestone acceptance; CI continues running all tests. Apply this policy to unfinished approved-plan work through recorded scope revisions. Preserve historical evidence, approvals, assertions, timeouts and known failures.
+Before planning verification, conducting TDD, running tests, or preparing an approval gate, read and follow the [phase and story verification policy](docs/development/verification.md#phase-and-story-verification). Preserve existing approvals and historical evidence; this pointer does not change their requirements.
 
 ## Problem-solving attempt limit
 

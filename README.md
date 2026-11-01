@@ -13,7 +13,7 @@ For a separate experiment project, follow the [installation and initialization g
 
 ## Contributor setup
 
-Start with the [development guide](docs/development.md) for Python 3.12, uv, locked dependencies, coding conventions, and local checks. Development tooling, the minimal package, and `agentic-ml --version` are available. Fresh-checkout macOS verification passed; see the [evidence](docs/verification/us-31-ip2.md). The [development CI workflow](.github/workflows/ci.yml) is configured for Linux/Python 3.12; the [first hosted PR run passed](docs/verification/us-32-ip2.md). Failure/correction cases are verified; the [default-branch push run passed](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975472618). See [CI checks and logs](docs/development.md#development-ci-and-diagnostic-logs).
+Start with the [development guide](docs/development.md) for Python 3.12, uv, locked dependencies, coding conventions, and local checks. Development tooling, the minimal package, and `agentic-ml --version` are available. Fresh-checkout macOS verification passed; see the [evidence](docs/verification/us-31-ip2.md). The [development CI workflow](.github/workflows/ci.yml) is configured for Linux/Python 3.12; the [first hosted PR run passed](docs/verification/us-32-ip2.md). Failure/correction cases are verified; the [default-branch push run passed](https://github.com/jimthompson5802/agentic-ml/actions/runs/40975472618). See [CI checks and logs](docs/development/ci.md#development-ci-and-diagnostic-logs).
 
 ## Repository contents
 
@@ -43,4 +43,4 @@ Each implementation phase specifies its tasks, required review evidence, and app
 
 The installation commands and repository layouts in the design document describe the intended implementation; they are not yet a runnable setup guide.
 
-Build and check distributable packages using the [distribution verification commands](docs/development.md#distribution-builds-and-installed-verification). Both wheel paths pass locally on macOS and in hosted Linux/Python 3.12 CI, including verified build/resource failure diagnostics; see [US-33 evidence](docs/verification/us-33-ip3.md). US-33 is complete and developer-accepted.
+Build and check distributable packages using the [distribution verification commands](docs/development/distribution.md#distribution-builds-and-installed-verification). Both wheel paths pass locally on macOS and in hosted Linux/Python 3.12 CI, including verified build/resource failure diagnostics; see [US-33 evidence](docs/verification/us-33-ip3.md). US-33 is complete and developer-accepted.

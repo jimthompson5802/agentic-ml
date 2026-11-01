@@ -4,6 +4,8 @@ Last updated: 2026-11-01 (America/New_York)
 
 ## Current position and next action
 
+Development-guide reorganization is complete; the developer approved its final documentation gate on 2026-11-01 (“I approve”). See the [plan](docs/plans/development-guide-reorganization.md) and [evidence](docs/verification/development-guide-reorganization.md). No maintenance gate remains pending; await developer direction on the next work item. No executable behavior or milestone obligations changed. Working changes include the core guide, six references, navigation, three local skills, plan and report.
+
 Milestone 0 is accepted. Milestone 1 is in progress: US-01, US-02 and US-03
 are accepted and merged; issues #8, #9 and #10 are closed. Milestone 99 remains
 deferred. No next-story implementation has been authorized.
@@ -32,16 +34,16 @@ gates. No US-03 implementation gate or review finding remains pending.
 
 ## Checkout and working tree
 
-- Branch: `main`, HEAD `41c4b86` at this documentation handoff. The working tree
-  was clean before the retained-record policy edits; remote state was not revalidated.
+- Branch: `main`; pre-commit HEAD `fa66fa7`. Developer authorized committing and
+  pushing the approved guide reorganization on 2026-11-01. Remote state has not
+  yet been revalidated.
 - Developer authorized deletion of local and remote `US-03-experiment-boundaries`
   after verifying tip `220436c` and tree equality with squash merge `1e28ae8`.
   Both copies were deleted; other branches were retained.
 - Milestone 50 documentation was committed and pushed as `41c4b86`.
-- Handoff changes: `docs/specs/user-stories.md`, `docs/development.md`,
-  `.gitignore`, and `CHECKPOINTS.md` document the retained-record policy. No driver
-  behavior changed. Developer authorized a local commit; Git history records the
-  resulting commit. Push and GitHub issue or milestone creation are outside scope.
+- Changes included in this commit: development-guide reorganization, active navigation,
+  three local skills, checkpoint, plan and verification report. The retained-record
+  policy is already in HEAD. No executable behavior changed. Developer subsequently authorized commit and push (“commit change and push”).
 
 ## Verification and outstanding obligation
 
