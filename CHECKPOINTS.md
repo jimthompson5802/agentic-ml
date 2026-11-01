@@ -4,39 +4,33 @@ Last updated: 2026-10-31
 
 ## Current position
 
-**US-03 IP4 complete and developer approved (2026-10-31).**
-Developer “i approve ip4” approves the final phase and recorded evidence.
-Developer “excute ip4” authorized this phase after IP3 approval. IP4-T1–T4 are
-complete in the [owning plan](docs/plans/milestone-1-us-03.md); see
-[IP4 evidence](docs/verification/us-03-ip4.md). Scoped unauthenticated
-approval/revocation CLI/API and independent readiness verification now support
-complete delegated proposals, including explicit null. Matching current records
-can make a plan input-ready without changing its immutable identity; missing,
-malformed, revoked, wrong-scope and stale evidence blocks. Reviewer identity and
-history remain unprotected under approved SC-01. No execution permission granted.
+**US-03 accepted; publication in progress (2026-10-31).** Developer “i accept
+us-03; we can bypass the full-suite test for now; commit; push” accepts the story
+and authorizes the accepted-story publication workflow. All IP1–IP4 gates are
+approved; [owning plan](docs/plans/milestone-1-us-03.md) and
+[IP4 evidence](docs/verification/us-03-ip4.md) record all five ACs with passing
+direct evidence. IP4 implementation/approval is committed as `63aa346`.
 
-Final direct phase run: **165 passed**, four workers, **30.63s**, both directly
-built and genuinely sdist-rebuilt wheel paths. Both installed example walkthroughs
-passed. Collection: **295/296**, one reserved milestone test deselected. Shared
-locked sync/lock/lint/format/types/version and document/whitespace checks passed;
-lock unchanged. M1-ACCEPT-VERIFY owns 131 unselected tests and all deferred
-caller/initialization, upgrade/scheduling, remaining artifact and full-suite checks.
-No full-suite claim. TDD failures/corrections and limitations are retained in report.
-macOS 15.7.9 arm64/Python 3.12.15 verified; no new Linux/Windows evidence.
+Final direct phase verification: **165 passed**, four workers, **30.63s**, both
+wheel paths and installed examples passed. Shared locked sync/lock/lint/format/
+types/version checks passed; lock unchanged. macOS 15.7.9 arm64/Python 3.12.15
+verified. Unauthenticated approval scope and limitations remain unchanged.
 
-Working branch `US-03-experiment-boundaries`, base `8ea1a82`; IP4 source, schemas,
-tests, examples, docs, plan/evidence and this checkpoint are included in the local
-commit authorized by developer “commit changes”; Git history records its result.
-No push, PR or whole-story acceptance authorized. **Next action:** finish the
-developer-requested full suite, then await explicit whole-story US-03 acceptance.
-All implementation phase gates are approved.
-The IP4 approval record changes documentation only; executable evidence is reused.
+Additional full run collected all 296 tests, including milestone acceptance.
+Developer “stop the test” stopped session 93414 with Ctrl-C / exit 130 after
+120 observed completion markers, with no reported failure but no final summary
+or JUnit XML. No completed full-suite/milestone-test claim. No matching test
+workers remained. Available evidence/basetemp preserved. Developer subsequently
+authorized bypassing this additional run for story publication; US-03-SC-02
+records that decision. M1-ACCEPT-VERIFY retains all deferred regressions, the
+reserved milestone test and full-suite verification before milestone acceptance.
+CI remains unchanged and runs every test.
 
-Developer “run full test suite including the milestone_acceptance test” authorized
-an additional full run with four workers, `-m ""`, basetemp
-`/private/tmp/us03-full-20261031`, JUnit `/private/tmp/us03-full-20261031.xml`.
-All 296 tests collected; run is in progress at commit time. No passing full-suite
-claim yet. Developer requested remaining-test counts every two minutes.
+Branch `US-03-experiment-boundaries`, target `origin/main`. Acceptance and test-
+interruption records are being committed/pushed under the explicit instruction.
+Next: verify publication, create the PR and publish a static COMMENT review under
+the execute-plan workflow. No merge, branch cleanup or next-story work authorized.
+Milestone 1 remains in progress; this decision accepts US-03 only.
 
 ### Earlier checkpoint history
 

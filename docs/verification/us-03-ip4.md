@@ -1,7 +1,7 @@
 # US-03 IP4 — Delegated experiment approvals
 
 Status: IP4-T1–T4 complete; developer IP4 gate approved by “i approve ip4”
-on 2026-10-31. Whole-story acceptance remains pending.
+on 2026-10-31. Developer accepted US-03 by “i accept us-03; we can bypass the full-suite test for now; commit; push” on 2026-10-31.
 
 Authorized by developer “excute ip4” on 2026-10-31. IP3 approval and clean
 `US-03-experiment-boundaries` checkout confirmed at entry. Issue #10 complete
@@ -142,8 +142,8 @@ fabrication or history rewriting. Verification establishes present record scope
 and integrity, not who approved. Input readiness grants no access/execution
 permission or scientific acceptance. Development/testing approvals remain
 separate. **Developer approved the final IP4 gate by “i approve ip4” on
-2026-10-31. All phase gates are approved; explicit whole-story acceptance remains
-pending.** Approval-record-only documentation changes preserve the verified
+2026-10-31. All phase gates are approved; US-03 was
+accepted on 2026-10-31 with the additional full-suite run deferred.** Approval-record-only documentation changes preserve the verified
 executable inputs; document/whitespace checks apply instead of another test run.
 
 
@@ -156,6 +156,25 @@ uv run --locked pytest -n 4 --dist=loadgroup -m "" --basetemp=/private/tmp/us03-
 ```
 
 All 296 tests collected, including the reserved milestone acceptance test.
-**In progress at commit time; no final result claimed.** Developer “commit changes”
-authorizes committing approved IP4 work while this run continues. Executable
-inputs are unchanged; whole-story acceptance and publication remain pending.
+The run was in progress when approved IP4 work was committed as `63aa346` under
+developer “commit changes”. Developer subsequently directed “stop the test”.
+Ctrl-C stopped session 93414 with **exit 130 / KeyboardInterrupt**. A total of
+120 completion markers were observed (176 tests had not reported completion),
+with no reported failures. There was no final pytest summary, and the requested
+JUnit XML was not written. This is an interrupted run, not passing full-suite
+evidence; the milestone acceptance test's completion is not independently known.
+Existing basetemp/output evidence is preserved. An escalated `pgrep` check for the
+basetemp, execnet workers and initialization/planning verification drivers returned
+no matching processes. No test code or executable inputs changed; phase evidence
+remains valid. US-03 acceptance and commit/push/publication were subsequently authorized;
+publication outcomes are recorded in the owning plan and checkpoint.
+
+
+## Story acceptance
+
+Developer “i accept us-03; we can bypass the full-suite test for now; commit; push”
+(2026-10-31) accepts the story and authorizes publication. US-03-SC-02 in the
+owning plan records the temporary full-suite deferral. All five acceptance
+criteria have passing direct evidence, and all phase gates are approved. The
+interrupted full run is preserved without a success claim. M1-ACCEPT-VERIFY and
+CI retain their full-suite obligations; Milestone 1 is not accepted by this decision.

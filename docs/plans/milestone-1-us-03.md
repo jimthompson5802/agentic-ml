@@ -349,11 +349,11 @@ Follow the [scope-change procedure](../../.agents/skills/manage-plan-scope/SKILL
 | US-03-AC-04 — conflicts block; delegated choices approved | IP1-T1/T3; IP2-T1/T3; IP3-T1/T2; IP4-T1/T2/T4 | Conflict/unresolved diagnostics, explicit unauthenticated matching approval and independent missing/malformed/stale/revoked/scope readiness checks; reviewer identity unverified under SC-01 | Direct evidence passed; phase gates approved |
 | US-03-AC-05 — root-relative inputs and notebook cwd | IP1-T2; IP2-T2; IP4-T3/T4 | Same identities from multiple caller directories; explicit cwd and safe path-boundary cases | Direct evidence passed; phase gates approved |
 
-- **Remaining work:** Implementation tasks complete with required direct evidence. All implementation phase gates are approved; explicit whole-story acceptance remains pending. Deferred regressions are assigned to M1-ACCEPT-VERIFY.
+- **Remaining work:** Implementation tasks complete with required direct evidence. All implementation phase gates are approved; developer accepted US-03. Commit/push and accepted-story publication are authorized. Deferred regressions are assigned to M1-ACCEPT-VERIFY.
 - **Partial prerequisite delivery:** None. US-05 registry/candidate behavior remains its owning story; downstream entrypoints must wire this plan's readiness and boundary contracts before shipping.
 - **Final verification:** IP4-T4 complete under the approved local verification scope revision: [IP4 evidence](../verification/us-03-ip4.md).
-- **Developer acceptance:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer acceptance:** Accepted — US-03, with the additional full-suite run deferred for now.
+- **Decision reference and date:** Developer “i accept us-03; we can bypass the full-suite test for now; commit; push”, 2026-10-31.
 
 
 ## Scope-change record: local verification policy (2026-10-31)
@@ -363,3 +363,13 @@ Follow the [scope-change procedure](../../.agents/skills/manage-plan-scope/SKILL
 - **Story verification:** IP4-T4 reuses valid phase evidence and renews invalidated direct tests. Caller/dependent regressions, unrelated upgrade/scheduling tests and the full suite transfer to **Milestone 1 acceptance verification**, task **M1-ACCEPT-VERIFY**. Artifact checks remain direct phase checks when they test changed modules; remaining artifact checks transfer to that milestone task.
 - **Milestone ownership:** M1-ACCEPT-VERIFY must run all tests with `-m ""`, shared checks, applicable direct/rebuilt distribution and installation checks, required manual/platform checks, and reconcile all deferrals before milestone acceptance.
 - **Preservation:** Completed IP1/IP2 evidence and approvals remain historical facts. Product scope and acceptance criteria are unchanged. CI still runs all tests. This revision does not authorize IP3 execution or gate progression.
+
+
+## US-03-SC-02 — Acceptance with additional full-suite run deferred (2026-10-31)
+
+- **Request and decision:** Approved by developer “i accept us-03; we can bypass the full-suite test for now; commit; push”.
+- **Scope difference:** Do not restart the developer-requested additional full-suite run, including the milestone acceptance case, before story publication. The interrupted run remains exit 130 with 120 observed completion markers and no final summary/XML; it is not passing evidence.
+- **Impact:** No product scope, acceptance criterion, assertion, timeout or CI change. All implementation gates are approved; all five criteria retain passing direct evidence. The 165-pass phase result, both wheel paths, installed examples and shared checks remain valid.
+- **Verification ownership:** M1-ACCEPT-VERIFY retains the full `-m ""` suite, reserved milestone test, dependent regressions and other deferred checks before milestone acceptance. This is a temporary publication deferral, not a permanent waiver or milestone acceptance. CI still runs the full suite.
+- **Evidence renewal:** Acceptance/interruption records change documentation only. Verify links/whitespace and unchanged executable hashes; do not rerun project tests for these records.
+- **Resume point:** Record acceptance, commit remaining story records, ordinary push, create the PR and publish a static COMMENT review under execute-plan. No merge, branch cleanup or next-story authorization.
