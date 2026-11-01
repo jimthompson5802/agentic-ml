@@ -140,7 +140,7 @@ Consumer/child protocol and focused red–green evidence: [Phase 2 report](../ve
 - **Developer decision:** Approved.
 - **Decision reference and date:** Developer message, 2026-11-01: “i approve ip2; commit”.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Commit Phase 2 changes. Whole-story acceptance and publication remain pending.
+- **Progression authorized:** Phase 2 committed as `8ffa7d4`. Whole-story acceptance subsequently recorded below.
 
 ## Final verification requirements
 
@@ -162,14 +162,23 @@ Consumer/child protocol and focused red–green evidence: [Phase 2 report](../ve
 | US-35-AC-04: ownership and cleanup errors | IP1-T1–T4; IP2-T1–T4, T6 | Sentinels, symlink/overlap rejection, shared-cache preservation and independent outcome checks | Verified; [Phase 2 evidence](../verification/us-35-ip2.md) |
 | US-35-AC-05: automation and before/after disk evidence | IP1-T1–T4; IP2-T2–T3, T5–T6 | Direct test results and fixed-workload environment/disk comparison with limits | Verified; [Phase 2 evidence](../verification/us-35-ip2.md) |
 
-- **Remaining work:** Both implementation phases approved. Await explicit whole-story acceptance. US-36–US-38 remain separate backlog work.
+- **Remaining work:** Both implementation phases approved; US-35 accepted on 2026-11-01. Complete authorized publication and static PR review. US-36–US-38 remain separate backlog work.
 - **Partial prerequisite delivery:** None claimed for another story.
 - **Final verification:** Required phase/direct/shared checks and fixed-workload comparison passed; milestone deferrals retain their named owner.
-- **Developer acceptance:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer acceptance:** Accepted.
+- **Decision reference and date:** Developer message, 2026-11-01: “i accept us-35”.
 
 ## Milestone acceptance handoff
 
 - **Owner:** `M50-ACCEPT-VERIFY` — Milestone 50 acceptance verification task; Not started. This record owns this story's deferrals until a milestone execution plan supplies the corresponding task.
 - **Deferred checks:** All unchanged caller regressions, full suite and existing marked initialization test; remaining platform/manual checks reported explicitly.
 - **Required evidence:** `uv run --locked pytest -n 4 --dist=loadgroup -m ""`, shared checks, applicable direct/rebuilt-wheel and installation checks against final milestone inputs. Reconcile every deferral and actual counts/results before milestone acceptance; later executable work invalidates full-suite evidence. Milestone 50 is ongoing; story acceptance does not imply milestone acceptance.
+
+## Publication
+
+Acceptance authorizes ordinary branch publication, PR creation and static COMMENT
+review under the execute-plan workflow. Implementation commits: `2e3bf2d` (IP1)
+and `8ffa7d4` (IP2); planning commit `bac0e9c`. Acceptance-record commit, PR and
+review links will be recorded after their outcomes are verified. No merge or
+next-story implementation is authorized. Milestone verification deferrals remain
+with `M50-ACCEPT-VERIFY` and the existing `M1-ACCEPT-VERIFY` owner.

@@ -173,7 +173,7 @@ reserved milestone acceptance test. Existing `M1-ACCEPT-VERIFY` obligations rema
 in their owning plan. No full-suite or milestone acceptance claim is made.
 
 Phase 2 gate approved on 2026-11-01: “i approve ip2; commit”. Whole-story
-developer acceptance remains pending. No scope change,
+developer acceptance recorded on 2026-11-01: “i accept us-35”. No scope change,
 suppression, skipped test, assertion relaxation or timeout change was introduced.
 
 ## Phase outcome
@@ -184,6 +184,7 @@ corrective attempt; no unresolved failed problem or scope deviation remains.
 Final-input JUnit, shared command outputs, an invocation index and hash audit are
 retained in the checks directory. This is selected phase verification, not a full
 local suite. Developer approved Phase 2 and authorized its commit on 2026-11-01:
-“i approve ip2; commit”. Whole-story acceptance and publication remain pending.
+“i approve ip2; commit”. Whole-story acceptance recorded on 2026-11-01: “i accept us-35”. Publication
+and static PR review are authorized; their outcomes are recorded in the plan.
 Approval-record edits change no executable behavior; existing test evidence is
 reused, with local link and whitespace checks renewed.

@@ -4,8 +4,8 @@ Last updated: 2026-11-01 (America/New_York)
 
 ## Current position and next action
 
-US-35 Implementation Phase 2 is complete and approved on 2026-11-01:
-“i approve ip2; commit”. Phase 1 is approved and committed as `2e3bf2d`.
+US-35 is accepted on 2026-11-01: “i accept us-35”. Both implementation phases
+are approved and committed: `2e3bf2d` (IP1), `8ffa7d4` (IP2).
 The [plan](docs/plans/milestone-50-us-35.md) owns progress and gates;
 [Phase 2 evidence](docs/verification/us-35-ip2.md) records the consumer protocol,
 TDD, final checks and same-input disk comparison. Issue #47 was retrieved again:
@@ -18,7 +18,7 @@ Final verification: **58 direct tests passed in 419.99s**, four workers; one res
 milestone case deselected. All shared checks passed, lock/input hashes unchanged.
 The exact baseline workload passed for all four commands, reducing retained
 environments from 1/2/6/2 to zero; source/project files and records survive.
-Phase 2 is approved; whole-story acceptance remains pending.
+US-35 acceptance is recorded; branch publication and static PR review are in progress.
 
 Development-guide reorganization remains approved and committed; see its
 [plan](docs/plans/development-guide-reorganization.md) and
@@ -48,8 +48,9 @@ backup responsibility, and cleanup protection; `.gitignore` excludes the directo
 Installation-driver adoption is complete in US-35 Phase 1; the other three
 drivers are complete and approved in Phase 2. No historical records were moved.
 
-**Next action:** await explicit US-35 whole-story acceptance. Do not publish before acceptance. Preserve M1-ACCEPT-VERIFY and
-M50-ACCEPT-VERIFY deferrals in their owning plans.
+**Next action:** publish accepted US-35, create its PR and publish a static COMMENT
+review under execute-plan. Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY
+deferrals in their owning plans. No merge or next-story work is authorized.
 
 ## Checkout and working tree
 
@@ -61,9 +62,8 @@ M50-ACCEPT-VERIFY deferrals in their owning plans.
 - Preserve baseline `.dev-records/verification/us-35-baseline-bac0e9c/`, all
   historical workspaces and Phase 1 evidence. Phase 2 raw records are in
   `us-35-ip2-checks/`, `us-35-ip2-workload/` and per-invocation record directories.
-- Phase 2 implementation, documentation and approval records are committed
-  together under the developer’s 2026-11-01 authorization. Whole-story acceptance
-  and publication remain pending.
+- Implementation and phase approvals are committed. Acceptance records are the
+  only new changes; publication/review outcomes will be recorded after verification.
 
 ## Verification and outstanding obligation
 
