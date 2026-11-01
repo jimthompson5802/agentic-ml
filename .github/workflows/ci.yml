@@ -21,6 +21,19 @@ jobs:
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           persist-credentials: false
+      - name: Display runner hardware
+        run: |
+          echo "Architecture:"
+          uname -m
+
+          echo "CPU details:"
+          lscpu
+
+          echo "Available processors:"
+          nproc
+
+          echo "Memory:"
+          free -h
       - name: Record initial lock checksum
         id: lock
         run: |
