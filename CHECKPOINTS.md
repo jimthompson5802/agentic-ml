@@ -4,7 +4,7 @@ Last updated: 2026-10-31
 
 ## Current position
 
-**US-03 accepted; publication in progress (2026-10-31).** Developer “i accept
+**US-03 accepted and published in PR #46; one static finding pending (2026-10-31).** Developer “i accept
 us-03; we can bypass the full-suite test for now; commit; push” accepts the story
 and authorizes the accepted-story publication workflow. All IP1–IP4 gates are
 approved; [owning plan](docs/plans/milestone-1-us-03.md) and
@@ -27,10 +27,17 @@ reserved milestone test and full-suite verification before milestone acceptance.
 CI remains unchanged and runs every test.
 
 Branch `US-03-experiment-boundaries`, target `origin/main`. Acceptance and test-
-interruption records are being committed/pushed under the explicit instruction.
-Next: verify publication, create the PR and publish a static COMMENT review under
-the execute-plan workflow. No merge, branch cleanup or next-story work authorized.
-Milestone 1 remains in progress; this decision accepts US-03 only.
+interruption records committed as `2c9522d` and pushed with IP4 `63aa346`.
+[PR #46](https://github.com/jimthompson5802/agentic-ml/pull/46) is open/non-draft.
+[Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/46#pullrequestreview-5726207741)
+verified at `2c9522d`: one Medium finding, complete delegated cost/currency
+proposals bypass pair consistency and can become ready after approval. This
+case was not covered by passing direct tests. No fix authorized or performed;
+review was static only. Linux/Python 3.12 CI pending when inspected. Publication
+records are committed/pushed under acceptance authorization; subsequent
+documentation-only head receives supplemental static review.
+Next: developer review/direction on the finding and CI. No merge, branch cleanup
+or next-story work authorized. Milestone 1 remains in progress; US-03 only accepted.
 
 ### Earlier checkpoint history
 

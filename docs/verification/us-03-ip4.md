@@ -178,3 +178,16 @@ owning plan records the temporary full-suite deferral. All five acceptance
 criteria have passing direct evidence, and all phase gates are approved. The
 interrupted full run is preserved without a success claim. M1-ACCEPT-VERIFY and
 CI retain their full-suite obligations; Milestone 1 is not accepted by this decision.
+
+
+## Publication and subsequent static finding
+
+Accepted implementation `63aa346` and acceptance records `2c9522d` were pushed.
+[PR #46](https://github.com/jimthompson5802/agentic-ml/pull/46) is open against main.
+The required [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/46#pullrequestreview-5726207741)
+identified one Medium issue: cost/currency consistency is skipped for complete
+delegated proposals, so matching approval can make a conflicting budget ready.
+This case was not covered by the passing phase evidence. No reproduction or
+implementation correction was performed during static review. The finding is
+unresolved and requires separate developer direction. CI was pending when read.
+The owning plan records publication/review scope and the follow-up handoff.

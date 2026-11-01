@@ -373,3 +373,14 @@ Follow the [scope-change procedure](../../.agents/skills/manage-plan-scope/SKILL
 - **Verification ownership:** M1-ACCEPT-VERIFY retains the full `-m ""` suite, reserved milestone test, dependent regressions and other deferred checks before milestone acceptance. This is a temporary publication deferral, not a permanent waiver or milestone acceptance. CI still runs the full suite.
 - **Evidence renewal:** Acceptance/interruption records change documentation only. Verify links/whitespace and unchanged executable hashes; do not rerun project tests for these records.
 - **Resume point:** Record acceptance, commit remaining story records, ordinary push, create the PR and publish a static COMMENT review under execute-plan. No merge, branch cleanup or next-story authorization.
+
+
+## Accepted-story publication and static review (2026-10-31)
+
+- **Accepted implementation:** IP4 `63aa346`; acceptance/full-suite-deferral records `2c9522d`. Ordinary push to `origin/US-03-experiment-boundaries` succeeded.
+- **Pull request:** [#46 — feat(planning): resolve versioned experiment plans and scoped approvals](https://github.com/jimthompson5802/agentic-ml/pull/46), open/non-draft against `main` (`4b3387f5bd83533f155cd065ab7bfb951826331d`). Template, head owner/branch and body verified.
+- **Static review:** [COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/46#pullrequestreview-5726207741), reviewed head `2c9522db34e8ea8fa10990cd952373a691f6207a`. Planning/approval runtime, schemas, CLI, relevant public/installed tests and verification-policy changes inspected; historical benchmark evidence was not reproduced. No project code or checks executed for the review.
+- **Finding:** One **Medium**, unresolved: complete delegated cost/currency proposals bypass pair-consistency validation in `planning/parsing.py`, allowing a positive approved cost with null currency (or the reverse) to become input-ready. This conflicts with the approved IP1 pair contract and AC-04. Inline review is the authoritative observation; fixing it requires separate developer authorization. Acceptance/earlier passing evidence remain historical records, not proof against this newly identified case.
+- **CI:** Linux/Python 3.12 pending when inspected; no hosted success claimed. Full local run remains explicitly deferred under SC-02. No merge authorized.
+- **Publication records:** This documentation-only follow-up records publication and review outcomes under acceptance authorization. It preserves executable inputs. After ordinary push, supplement static review to cover the updated documentation head without duplicating the inline finding.
+- **Next action:** Developer review of the finding and CI; no fixes, merge, cleanup or next-story work performed.
