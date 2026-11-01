@@ -1,6 +1,6 @@
 # Development Checkpoints
 
-Last updated: 2026-10-31 (America/New_York)
+Last updated: 2026-11-01 (America/New_York)
 
 ## Current position and next action
 
@@ -15,23 +15,30 @@ accepted, published and its review thread resolved before merge. All US-03
 implementation gates and whole-story acceptance are recorded in the
 [owning plan](docs/plans/milestone-1-us-03.md#current-status).
 
-**Next action:** await developer direction on the next work item. Retrieve its
-owning issue and follow the applicable plan and approval gates before implementation.
-No US-03 implementation gate or review finding remains pending.
+Milestone 50 now records ongoing technical environment improvements outside
+the product delivery sequence. US-35–US-38 cover successful-environment cleanup,
+pytest workspace ownership, compatible installed-environment reuse, and sequential
+wheel-environment release in [user stories](docs/specs/user-stories.md#milestone-50-improve-the-technical-environment).
+The developer requested local documentation only; no GitHub issues or milestone
+were created, and no implementation is authorized by these additions.
+
+**Next action:** await developer direction on the next work item. Before story
+implementation, retrieve its owning issue and follow applicable plan and approval
+gates. No US-03 implementation gate or review finding remains pending.
 
 ## Checkout and working tree
 
-- Branch: `main`, HEAD `442e3b2` (merge-record documentation commit), matching
-  the cached `origin/main` ref at this handoff.
+- Branch: `main`, HEAD `5bdc1e6` at this documentation handoff. The working tree
+  was clean before the Milestone 50 edits; remote state was not revalidated.
 - Developer authorized deletion of local and remote `US-03-experiment-boundaries`
   after verifying tip `220436c` and tree equality with squash merge `1e28ae8`.
   Both copies were deleted; other branches were retained.
-- Entry state for this cleanup: only `CHECKPOINTS.md` modified, recording that
-  branch deletion. This edit preserves that record.
-- Handoff changes: `CHECKPOINTS.md` and `docs/plans/milestone-1-us-03.md` contain
-  documentation cleanup. No executable inputs changed. Developer “commit and push”
-  authorizes committing these records and pushing `main`; Git history records
-  the resulting commit. Verify checkout and publication state before resuming.
+- Handoff changes: `docs/specs/user-stories.md` defines Milestone 50 and four
+  stories with stable acceptance IDs and implementation notes; `README.md`
+  aligns the terminology; `CHECKPOINTS.md` records this work. No executable inputs
+  changed. Developer approved the documentation and authorized commit and push
+  to `main`; Git history records the resulting commit. GitHub issue and milestone
+  creation remain outside the requested scope.
 
 ## Verification and outstanding obligation
 
@@ -61,10 +68,11 @@ markers, exit 130, without final summary/XML. It is incomplete evidence, not a
 passing run. Preserve its [interruption record](docs/verification/us-03-ip4.md#additional-full-suite-run-requested-after-phase-approval)
 and approved deferral; no local full-suite success is claimed for final US-03.
 
-This handoff cleanup changes documentation only. TDD and product test reruns do
-not apply; validation covers local links/anchors, document consistency and
-`git diff --check`. All 44 local links/anchors across the two edited documents
-passed validation; consistency review and whitespace checks passed.
+This handoff changes documentation only. TDD and product test reruns do not
+apply because no executable behavior changed. Validation covers the new story
+IDs, local links/anchors, document consistency, and `git diff --check`. All four
+story headings, 20 new unique acceptance IDs, milestone order, and 119 local
+links/anchors passed validation; whitespace checks passed.
 
 ## Supporting records
 

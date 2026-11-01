@@ -17,14 +17,14 @@ Start with the [development guide](docs/development.md) for Python 3.12, uv, loc
 
 ## Repository contents
 
-- [User stories](docs/specs/user-stories.md): Authoritative product requirements and acceptance criteria, covering the development foundation (Milestone 0), product increments (Milestones 1–6), and deferred enhancements (Milestone 99), with stable story and criterion IDs.
+- [User stories](docs/specs/user-stories.md): Authoritative product and technical environment requirements and acceptance criteria, covering the development foundation (Milestone 0), product increments (Milestones 1–6), ongoing technical environment improvements (Milestone 50), and deferred enhancements (Milestone 99), with stable story and criterion IDs.
 - [Harness design](docs/specs/agentic-ml-harness-design.md): Supporting architecture, workflow phases, custom component support, execution and approval contracts, acceptance-criteria traceability, milestone delivery, and architecture decisions. Start with its reading map to find the detailed topic documents.
 - [Example walkthrough](docs/specs/example-walkthrough.md): A data scientist's end-to-end model-building workflow, including example commands, coding-assistant prompts, notebooks, and approval gates.
 - [Reviews](docs/reviews/): Reconciliation findings and documentation dispositions assessing alignment between the user stories and design.
 
 ## Planning terminology
 
-- **Milestone:** A cumulative, usable product increment comprising user stories. A target date is optional. Milestones 0–6 define the delivery sequence. Milestone 99 groups deferred enhancements without committing their order.
+- **Milestone:** A group of user stories. A target date is optional. Milestones 0–6 define cumulative, usable product increments in delivery order. Milestone 50 collects ongoing technical environment improvements as they are identified, outside the product delivery sequence. Milestone 99 groups deferred enhancements without committing their order.
 - **Implementation phase:** A group of granular tasks within a user story's implementation plan, ending with an explicit developer approval gate.
 - **Workflow phase:** A stage of an ML experiment run through the harness, such as feature engineering or final evaluation.
 - **Approval gate:** A developer decision permitting progression after reviewing the required evidence.

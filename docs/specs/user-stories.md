@@ -1,4 +1,4 @@
-Planning terms follow the [repository terminology](../../README.md#planning-terminology): milestones group user stories into usable product increments, implementation phases group tasks within a story with developer approval gates, and workflow phases describe ML experiment execution.
+Planning terms follow the [repository terminology](../../README.md#planning-terminology): delivery milestones group user stories into usable product increments, Milestone 50 groups ongoing technical environment improvements, implementation phases group tasks within a story with developer approval gates, and workflow phases describe ML experiment execution.
 
 | Milestone | User-visible outcome | Stories |
 |---|---|---|
@@ -9,13 +9,14 @@ Planning terms follow the [repository terminology](../../README.md#planning-term
 | **4. Let an agent improve an experiment** | Generate reviewable notebooks and improve a model using development feedback within an approved workflow phase. | US-04, US-07, US-08, US-17, US-22; first-adapter portion of US-30 |
 | **5. Supervise and resume the complete workflow** | Run the workflow spanning multiple ML workflow phases with durable approvals, interruption recovery, and interchangeable agents. | US-23, US-25; second-adapter portion of US-30; audit portion of US-26 |
 | **6. Improve the dataset through authorized acquisition** | Diagnose a data limitation, authorize acquisition, version the resulting data, and measure the effect of retraining. | US-28, US-29 |
+| **50. Improve the technical environment** | Reduce development and verification overhead while preserving test isolation, coverage, and diagnostic evidence. Add stories as improvement areas are identified. | US-35, US-36, US-37, US-38 |
 | **99. Future enhancements** | Capture improvements deferred because they are not critical to current functionality. | US-34 |
 
-This document is the authoritative source of product requirements and acceptance criteria. The stories originated from version 0.10 of the [Agentic ML Development Harness design document](agentic-ml-harness-design.md); the design document now describes the supporting design and references the criteria defined here. These requirements describe proposed behavior, not implemented capabilities or finalized interfaces.
+This document is the authoritative source of product and technical environment requirements and acceptance criteria. The original stories originated from version 0.10 of the [Agentic ML Development Harness design document](agentic-ml-harness-design.md); the design document now describes the supporting design and references the criteria defined here. Technical environment stories are added as improvement areas are identified. These requirements describe proposed behavior, not implemented capabilities or finalized interfaces.
 
 Acceptance criteria use stable IDs of the form `US-<story>-AC-<criterion>`, such as `US-01-AC-01`. Criterion numbers are unique within a story and continue across milestones. Preserve IDs when wording changes or criteria move; assign the next unused number to a new criterion and never reuse a retired ID. Architecture references identify supporting design sections rather than defining another set of requirements.
 
-Milestones are cumulative. Repeated story identifiers describe incremental delivery of the same user outcome. Access controls, applicable approvals, budget enforcement, independent validation, and provenance accompany each capability when introduced; Milestone 5 completes their durable orchestration across workflow phases. The acceptance criteria below define verifiable outcomes without settling its pending API, configuration-schema, or isolation-design decisions.
+Milestones 0–6 are cumulative. Repeated story identifiers describe incremental delivery of the same user outcome. Access controls, applicable approvals, budget enforcement, independent validation, and provenance accompany each capability when introduced; Milestone 5 completes their durable orchestration across workflow phases. The acceptance criteria below define verifiable outcomes without settling its pending API, configuration-schema, or isolation-design decisions. Milestone 50 is an ongoing technical improvement backlog outside that product delivery sequence; its number does not prescribe when its stories are implemented.
 
 ## Milestone 0: Establish the harness development foundation
 
@@ -584,6 +585,68 @@ Acceptance criteria:
 - <a id="us-29-ac-07"></a> **US-29-AC-07:** Resumption after acquisition retains approvals, budget usage, dataset lineage, and completed-run identities; advanced acquisition strategies remain deferred according to the design's [milestone delivery plan](design/milestone-delivery.md#11-milestone-delivery-plan).
 
 Architecture references: [§6 Data Extraction and Iterative Acquisition](design/data-and-features.md#6-data-extraction-and-iterative-acquisition); [§4 Scope changes and stopping conditions](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§9 Governance](design/execution-and-governance.md#governance).
+
+## Milestone 50: Improve the technical environment
+
+This milestone contains ongoing improvements to the repository's development, testing, and verification environment. It is separate from the product delivery sequence in Milestones 0–6. Add user stories as improvement areas are identified; inclusion does not authorize implementation or establish a completion date for the milestone. Each story retains the repository's implementation planning, developer approval, and verification requirements.
+
+The initial stories address the number of test environments created, retained disk usage, and peak disk usage. They preserve existing acceptance criteria, assertions, timeouts, package provenance, and installed-package isolation. They do not authorize deleting historical verification evidence or existing workspaces. Cleanup ownership and retention are separate from fixture reuse and sequential environment lifetime.
+
+### US-35: Clean up successful verification environments
+
+As a contributor, I want successful verification runs to remove disposable environments while preserving diagnostic records so that repeated checks do not accumulate unnecessary disk usage.
+
+Acceptance criteria:
+
+- <a id="us-35-ac-01"></a> **US-35-AC-01:** Successful standalone installation, distribution, initialization, and planning verification removes environments and disposable installer caches created by the invocation after all dependent checks complete.
+- <a id="us-35-ac-02"></a> **US-35-AC-02:** Commands, logs, artifact identities, environment identity manifests, and verification results remain available after successful cleanup, with their retained locations reported.
+- <a id="us-35-ac-03"></a> **US-35-AC-03:** Failed verification retains available diagnostic records and environments for inspection. A documented option preserves successful workspaces when explicitly requested.
+- <a id="us-35-ac-04"></a> **US-35-AC-04:** Cleanup is limited to disposable paths created and owned by the invocation. Existing environments, caller-owned files, shared caches, source checkouts, and historical evidence remain intact; cleanup failure is reported without concealing the original verification outcome.
+- <a id="us-35-ac-05"></a> **US-35-AC-05:** Automated checks cover default successful cleanup, failure retention, explicit retention, ownership boundaries, and cleanup failure. Before-and-after evidence records retained environment counts and disk usage for the same verification workload, including platform and filesystem measurement limits.
+
+Notes: The verification drivers currently retain workspaces on success and failure, as documented in the [development guide](../development.md#distribution-builds-and-installed-verification). Revise that retention contract as part of implementation. Keep logs and identity manifests separate from disposable environments. US-36 governs pytest workspace placement; US-38 governs releasing environments before an entire invocation finishes.
+
+### US-36: Give pytest ownership of verification workspaces
+
+As a contributor, I want verification launched by pytest to create its temporary workspaces beneath the owning test directory so that pytest retention can bound disk usage across test runs.
+
+Acceptance criteria:
+
+- <a id="us-36-ac-01"></a> **US-36-AC-01:** Verification drivers invoked by pytest accept an explicit workspace location, and all nested verification workspaces are descendants of the owning test's temporary directory rather than independently allocated system temporary directories.
+- <a id="us-36-ac-02"></a> **US-36-AC-02:** Documented pytest retention settings retain failed-test directories for one invocation and remove successful-test directories. The documentation distinguishes per-test paths, shared fixture paths, standalone workspaces, and interrupted runs where automatic cleanup is not guaranteed.
+- <a id="us-36-ac-03"></a> **US-36-AC-03:** Concurrent workers, concurrent test sessions, and nested pytest runs use distinct workspace paths. Cleanup from one invocation cannot remove another active invocation's files.
+- <a id="us-36-ac-04"></a> **US-36-AC-04:** Standalone verification remains usable outside pytest, and failed-test diagnostics identify the owning workspace. Callers can explicitly retain successful workspaces using the documented retention controls.
+- <a id="us-36-ac-05"></a> **US-36-AC-05:** Automated checks verify nested workspace containment, successful and failed retention across repeated invocations, and concurrent-run isolation. Evidence records workspace counts and retained disk usage without changing verification assertions or timeouts.
+
+Notes: Merely setting pytest retention does not affect driver workspaces created independently with `tempfile.mkdtemp()`. Preserve the nested-pytest directory isolation recorded in the [runtime optimization report](../verification/pytest-runtime-optimization.md). Coordinate with US-35 so that driver cleanup and pytest retention have explicit ownership and do not conflict. US-36 can be delivered independently of environment reuse.
+
+### US-37: Reuse installed environments across compatible tests
+
+As a contributor, I want compatible tests to reuse an installed harness environment while keeping project state isolated so that verification creates fewer full dependency environments.
+
+Acceptance criteria:
+
+- <a id="us-37-ac-01"></a> **US-37-AC-01:** A reviewed inventory maps affected tests to their public interfaces and acceptance criteria, identifies candidates for environment reuse, and records which tests require fresh environments and why before fixture changes are implemented.
+- <a id="us-37-ac-02"></a> **US-37-AC-02:** Compatible tests reuse an installed environment containing the intended harness revision and dependencies while retaining independent project files, configuration, stores, and durable state. Installed-package tests continue to run outside the harness checkout without editable installs or contributor dependency leakage.
+- <a id="us-37-ac-03"></a> **US-37-AC-03:** Tests that install, synchronize, upgrade, damage, or otherwise mutate an environment retain independent environments. Clean installation, cache independence, lock/pin preservation, and genuine direct-wheel and source-distribution-rebuilt-wheel coverage remain verified.
+- <a id="us-37-ac-04"></a> **US-37-AC-04:** Reuse does not introduce test-order dependence, cross-project state leakage, or concurrent mutation of a shared environment. Automated checks exercise the selected tests in differing orders and under the supported parallel scheduling configuration.
+- <a id="us-37-ac-05"></a> **US-37-AC-05:** Before-and-after runs of the same selected test cases demonstrate fewer environment creations and record peak and retained disk usage, elapsed time, package identities, platform, and filesystem limitations. Existing assertions and timeouts remain unchanged, and runtime regressions are reported.
+
+Notes: Initialization currently uses a fresh installed project for each test. Reuse candidates must preserve each test's actual public interface and project/environment association; fixture scope must not be broadened blindly. Share only where these boundaries permit it. Reuse does not authorize replacing installed-package verification with source-only tests. Previous hardlink and installer concurrency experiments are recorded in the [fixture profile](../verification/pytest-fixture-profile.md) and [concurrency report](../verification/pytest-installer-concurrency.md); changing those policies is outside this story.
+
+### US-38: Release wheel environments between verification paths
+
+As a contributor, I want each completed wheel verification environment released before the next independent path starts so that package verification needs less peak disk space.
+
+Acceptance criteria:
+
+- <a id="us-38-ac-01"></a> **US-38-AC-01:** Distribution verification completes all checks for the direct wheel, preserves its diagnostic records, and removes its disposable environment before installing the wheel genuinely rebuilt from the source distribution.
+- <a id="us-38-ac-02"></a> **US-38-AC-02:** Initialization and planning verification identify every consumer of each installed environment and release it after its final dependent check, before starting the next independent artifact path. An environment is never removed while a downstream probe still needs it.
+- <a id="us-38-ac-03"></a> **US-38-AC-03:** Both artifact paths retain fresh independent installations, declared runtime dependencies, correct origin metadata, and the same required installed-package checks. Success in the direct-wheel path cannot substitute for or conceal failure in the rebuilt-wheel path.
+- <a id="us-38-ac-04"></a> **US-38-AC-04:** Failed paths retain available environments and diagnostics; explicit workspace retention preserves completed environments when requested. Normal cleanup removes only invocation-owned disposable paths and preserves logs and identity manifests.
+- <a id="us-38-ac-05"></a> **US-38-AC-05:** Automated checks verify environment lifetime across downstream consumers, both successful paths, later-path failure, and explicit retention. Before-and-after evidence demonstrates fewer simultaneously retained full environments for the same workload and records peak disk usage and measurement limits.
+
+Notes: This story reduces peak usage within one invocation; US-35 reduces retained usage after completion. Coordinate their cleanup and retention behavior. The initialization and planning drivers currently invoke distribution verification and then consume its installed environments, so cleanup must follow the complete consumer lifecycle rather than occur immediately after an intermediate probe.
 
 ## Milestone 99: Future enhancements
 
