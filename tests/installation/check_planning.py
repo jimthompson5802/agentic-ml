@@ -12,7 +12,14 @@ from typing import cast
 import yaml
 
 import agentic_ml
-from agentic_ml.planning import ResolveRequest, inspect_plan, resolve_plan, verify_plan
+from agentic_ml.planning import (
+    ResolveRequest,
+    SearchSelection,
+    inspect_plan,
+    resolve_plan,
+    validate_boundaries,
+    verify_plan,
+)
 from agentic_ml.planning.models import JSONValue
 
 
@@ -93,6 +100,200 @@ def create_project(tmp_path: Path, project_root: Path | None = None) -> Path:
     return root
 
 
+def check_boundaries(root: Path, workspace: Path) -> None:
+    """Check IP3 success and adversarial selections through installed interfaces."""
+    search_path, config_path = root / "search.yaml", root / "experiment.yaml"
+    search_original, config_original = (
+        search_path.read_bytes(),
+        config_path.read_bytes(),
+    )
+    declared: dict[str, JSONValue] = {
+        "schema_version": "1.0",
+        "algorithms": {
+            "logistic_regression": {
+                "fixed": {"seed": 42},
+                "search": {
+                    "C": {
+                        "type": "float",
+                        "min": 0.1,
+                        "max": 10,
+                        "scale": "logarithmic",
+                    },
+                    "count": {
+                        "type": "integer",
+                        "min": 1,
+                        "max": 10,
+                        "scale": "linear",
+                    },
+                    "kind": {
+                        "type": "categorical",
+                        "choices": [None, True, 1, 1.0, "1"],
+                    },
+                },
+            },
+            "other": {"fixed": {}, "search": {}},
+        },
+    }
+    accepted = validate_boundaries(
+        declared,
+        SearchSelection(
+            mode="use",
+            allowed=["logistic_regression"],
+            execution={"parameters": {"logistic_regression": {"C": 10}}},
+        ),
+    )
+    assert not accepted.diagnostics and accepted.effective_search is not None
+    rejected = validate_boundaries(
+        declared,
+        SearchSelection(
+            mode="use",
+            allowed=["logistic_regression"],
+            execution={"parameters": {"logistic_regression": {"C": 10.01}}},
+        ),
+    )
+    assert rejected.effective_search is None and rejected.diagnostics
+    search_path.write_text(yaml.safe_dump(declared))
+    cli = str(Path(sys.executable).parent / "agentic-ml")
+    # Independently chosen endpoints, expansions, unknown names and type changes.
+    cases: list[tuple[dict[str, JSONValue], bool]] = [
+        ({}, True),
+        (
+            {
+                "parameters": {
+                    "logistic_regression": {"C": 0.1, "count": 1, "kind": None}
+                }
+            },
+            True,
+        ),
+        (
+            {
+                "parameters": {
+                    "logistic_regression": {"C": 10, "count": 10, "kind": 1.0}
+                }
+            },
+            True,
+        ),
+        ({"parameters": {"logistic_regression": {"seed": 42.0}}}, False),
+        ({"parameters": {"logistic_regression": {"C": 10.01}}}, False),
+        ({"parameters": {"logistic_regression": {"C": True}}}, False),
+        ({"parameters": {"logistic_regression": {"count": 1.0}}}, False),
+        ({"parameters": {"logistic_regression": {"new": 1}}}, False),
+        ({"parameters": {"other": {}}}, False),
+        ({"algorithm_subset": ["other"]}, False),
+        (
+            {
+                "search_overrides": {
+                    "logistic_regression": {
+                        "C": {
+                            "type": "float",
+                            "min": 1,
+                            "max": 2,
+                            "scale": "logarithmic",
+                        }
+                    }
+                }
+            },
+            True,
+        ),
+        (
+            {
+                "search_overrides": {
+                    "logistic_regression": {
+                        "C": {
+                            "type": "float",
+                            "min": 0.01,
+                            "max": 2,
+                            "scale": "logarithmic",
+                        }
+                    }
+                }
+            },
+            False,
+        ),
+        (
+            {
+                "search_overrides": {
+                    "logistic_regression": {
+                        "kind": {"type": "categorical", "choices": [False]}
+                    }
+                }
+            },
+            False,
+        ),
+        ({"budget_overrides": {"max_runtime_seconds": 30}}, True),
+        ({"budget_overrides": {"max_runtime_seconds": 61}}, False),
+        ({"budget_overrides": {"max_memory_mb": 1}}, False),
+    ]
+    baseline_id = None
+    for overrides, ready in cases:
+        config = yaml.safe_load(config_original)
+        config["execution"].update(overrides)
+        config_path.write_text(yaml.safe_dump(config))
+        result = resolve_plan(ResolveRequest(root, Path("experiment.yaml")))
+        assert result.status == ("input_ready" if ready else "blocked"), result
+        completed = subprocess.run(
+            [
+                cli,
+                "plan",
+                "resolve",
+                "--project-root",
+                str(root),
+                "--experiment",
+                "experiment.yaml",
+            ],
+            cwd=workspace,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        assert completed.returncode == (0 if ready else 2), (
+            completed.stdout + completed.stderr
+        )
+        response = json.loads(completed.stdout)
+        assert response["plan_id"] == result.plan_id
+        if ready:
+            assert result.plan_id is not None
+            assert verify_plan(project_root=root, plan_id=result.plan_id).integrity
+            plan = inspect_plan(project_root=root, plan_id=result.plan_id).plan
+            assert plan is not None and plan["declared_search"] == declared
+            if not overrides:
+                baseline_id = result.plan_id
+                assert plan["effective_search"] == {
+                    "schema_version": "1.0",
+                    "algorithms": {
+                        "logistic_regression": {
+                            "fixed": {"seed": 42},
+                            "search": {
+                                "C": {
+                                    "type": "float",
+                                    "min": 0.1,
+                                    "max": 10,
+                                    "scale": "logarithmic",
+                                },
+                                "count": {
+                                    "type": "integer",
+                                    "min": 1,
+                                    "max": 10,
+                                    "scale": "linear",
+                                },
+                                "kind": {
+                                    "type": "categorical",
+                                    "choices": [None, True, 1, 1.0, "1"],
+                                },
+                            },
+                        }
+                    },
+                }
+        else:
+            assert result.plan_id is None
+            assert response["diagnostics"][0]["code"] == result.diagnostics[0].code
+    assert baseline_id is not None
+    assert verify_plan(project_root=root, plan_id=baseline_id).integrity
+    search_path.write_bytes(search_original)
+    config_path.write_bytes(config_original)
+    print("PASS installed boundaries (16 CLI/API cases and public checker)", flush=True)
+
+
 def main() -> None:
     """Exercise installed CLI/API, preservation and blocking without source imports."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -171,6 +372,7 @@ def main() -> None:
         command(["resolve", "--experiment", "experiment.yaml"], 0, drafts)["plan_id"]
         == result.plan_id
     )
+    check_boundaries(root, args.workspace)
     brief = root / "brief.md"
     original = brief.read_bytes()
     for task, mode in (

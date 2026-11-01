@@ -8,10 +8,36 @@ The US-03 development revision adds `plan resolve`, `plan inspect` and
 `plan verify` through the installed CLI and `agentic_ml.planning` API.
 Its [approved input contract](verification/us-03-ip1.md) defines separate version
 1.0 brief/search/execution inputs while preserving initialization's inert 0.1
-drafts. [IP2 verification](verification/us-03-ip2.md) records delivery status;
-IP2 phase approval is recorded. Explicit inputs resolve to preserved, versioned plans;
-delegated decisions remain blocked. Execution overrides report
-`boundary_validation_pending` until IP3 introduces search narrowing.
+drafts. [IP2 verification](verification/us-03-ip2.md) records input capture;
+[IP3 verification](verification/us-03-ip3.md) records structural boundary checks.
+Explicit inputs resolve to preserved, versioned plans; delegated decisions remain
+blocked pending IP4. Execution can narrow the brief's allowed algorithms in
+`select` mode; `use` and `compare` preserve their full brief selection. All brief
+algorithms must occur in the declared search YAML.
+
+`execution.parameters` fixes declared tunables to allowed scalar values or repeats
+an identical fixed value. `execution.search_overrides` narrows declared choices or
+inclusive ranges without changing their type or scale. The same parameter cannot
+be both fixed and tunable. Omitted overrides inherit the declared domain; omitted
+parameters do not become tunable. Categories distinguish JSON scalar types,
+including `true`, `1`, `1.0` and `"1"`. Numeric ranges exclude booleans and require
+finite ordered endpoints; logarithmic endpoints must be positive.
+`execution.budget_overrides` can lower an explicit finite ceiling; it cannot fill
+an undeclared/null ceiling or remove a limit. These are plan checks; no budget is
+consumed here. Plans preserve declared and effective search spaces separately,
+and record override sources and structural inheritance.
+
+Python callers can use `validate_boundaries(declared, SearchSelection(...))` from
+`agentic_ml.planning`; `declared` is the version 1.0 search mapping. `SearchSelection`
+contains resolved `mode`, `allowed`, `execution` and `budgets`. `BoundaryResult`
+contains `effective_search`, `effective_budgets` and blocking `diagnostics`.
+The checker copies inputs and has no project/registry access. Its diagnostic paths
+are logical input names; the resolver maps them to selected file locations.
+An empty `SearchSelection()` validates the declaration alone. A checker result
+does not establish plan readiness or approval. Consumers must use `verify_plan`
+for preserved plan integrity/readiness. US-05 will add registry/task/parameter
+compatibility, recorded defaults and candidate validation before training.
+
 Experiment approval is planned as an explicit project-local record with
 a self-declared reviewer; it is unauthenticated and cannot prove who approved or
 prevent a workspace writer from fabricating records. No signing keys or separate

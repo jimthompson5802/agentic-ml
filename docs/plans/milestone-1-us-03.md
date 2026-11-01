@@ -212,6 +212,21 @@ handoff before this execution request.
 
 ## US-03 / Implementation Phase 3: Enforce declared search boundaries during resolution
 
+- **Execution authorization:** Developer “start executing ip3”, 2026-10-31.
+  IP3 gate approval remains pending; stop before IP4.
+- **Entry verification:** Issue #10 body and all comment pages refreshed; zero
+  comments, stable `updated_at=2026-10-30T02:06:20Z`. Working tree clean on
+  `US-03-experiment-boundaries`; IP1/IP2 approvals retained.
+- **Direct-test mapping:** `planning/boundaries.py` (new), public exports and
+  `planning/resolution.py` → `tests/integration/test_planning.py`; installed
+  `check_planning.py` → `test_planning_from_both_artifact_paths` in
+  `tests/integration/test_distribution_verification.py`. These test the approved
+  public checker, resolver, preservation/reverification and CLI/API on both wheel
+  paths. No training/registry enforcement is claimed. Unchanged initialization,
+  packaging-driver, upgrade and scheduling regressions defer to M1-ACCEPT-VERIFY.
+  Shared non-test checks remain required. Serial focused TDD is used for short
+  individual red/green cycles; phase verification uses four workers.
+
 - **Outcome:** Brief and execution selections can narrow declared YAML boundaries; no input can widen algorithms, fixed parameters or permitted search values.
 - **Entry conditions:** IP2 approved; US-05 handoff and structural rules accepted at IP1.
 - **Acceptance criteria advanced:** AC-02 and conflict portion of AC-04; source/plan evidence extends AC-03.
@@ -220,28 +235,48 @@ handoff before this execution request.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-03-IP3-T1 | Not started | Add boundary cases in `tests/integration/test_planning.py`; implement public structural checker in `planning/` (proposed). Cover fixed/search overlap, empty choices, categorical type distinctions, finite inclusive integer/float bounds, boolean-as-number rejection, positive logarithmic limits and unknown schema fields. | IP2 approval | Well-defined spaces accepted; invalid space rejected with source/parameter diagnostics; one behavior per red–green slice | AC-02, AC-04 |
-| US-03-IP3-T2 | Not started | Apply one shared checker to CLI/API resolution. Test use/select/compare, brief narrowing, fixed-value changes, extra algorithm/parameter, category/range widening, incompatible narrowing and omitted parameters. Preserve source and effective boundary separately. | T1 | Execution configuration cannot expand YAML; omission cannot create tunability; effective decisions and reasons for rejection independently verified | AC-01–04 |
-| US-03-IP3-T3 | Not started | Extend isolated installed planning probe to both wheel paths; document public validation handoff to US-05 in IP3 report and setup guide. Run selected/shared checks and update evidence/checkpoints. | T1–T2 | CLI/API agree from outside checkout; no registry implementation or training implied; required broader checks pass | AC-02–04 |
+| US-03-IP3-T1 | Complete | Add boundary cases in `tests/integration/test_planning.py`; implement public structural checker in `planning/` (proposed). Cover fixed/search overlap, empty choices, categorical type distinctions, finite inclusive integer/float bounds, boolean-as-number rejection, positive logarithmic limits and unknown schema fields. | IP2 approval | Well-defined spaces accepted; invalid space rejected with source/parameter diagnostics; one behavior per red–green slice | AC-02, AC-04 |
+| US-03-IP3-T2 | Complete | Apply one shared checker to CLI/API resolution. Test use/select/compare, brief narrowing, fixed-value changes, extra algorithm/parameter, category/range widening, incompatible narrowing and omitted parameters. Preserve source and effective boundary separately. | T1 | Execution configuration cannot expand YAML; omission cannot create tunability; effective decisions and reasons for rejection independently verified | AC-01–04 |
+| US-03-IP3-T3 | Complete | Extend isolated installed planning probe to both wheel paths; document public validation handoff to US-05 in IP3 report and setup guide. Run selected/shared checks and update evidence/checkpoints. | T1–T2 | CLI/API agree from outside checkout; no registry implementation or training implied; required broader checks pass | AC-02–04 |
 
 ### Verification and review evidence
 
-- **Selected tests:** `uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_planning.py tests/integration/test_distribution_verification.py tests/integration/test_initialization.py`. Exercises resolver, packaged schemas and preservation compatibility.
-- **Public boundaries:** Installed resolver and public structural checker; registry name/type/default/combination validation and candidate admission are US-05 obligations. No claim that these tests enforce training entrypoints that do not exist.
-- **Deferred checks:** Unrelated pinned-upgrade/scheduling checks to IP4-T4, only when broader triggers do not require them now.
-- **Broader-run triggers:** Full suite and applicable artifact checks if shared schemas/resources change, dependency changes, access enforcement changes or uncertain shared impact. Do not defer a relevant failure.
-- **Cases:** Equality at bounds and just-outside rejection; null/string/boolean distinctions; all three modes; independent effective boundary expectations; CLI/API same outcomes. Expected pass; actual results Pending in `docs/verification/us-03-ip3.md` (proposed).
-- Shared checks required before gate; preserve every red/green outcome and selected/deselected count.
+- **Evidence:** [IP3 report](../verification/us-03-ip3.md), including ten vertical
+  TDD cycles, intermediate failures/corrections and criterion mapping.
+- **Direct phase command:** `uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_planning.py tests/integration/test_distribution_verification.py::test_planning_from_both_artifact_paths --basetemp=/private/tmp/us03-ip3-phase-verification-1 --junitxml=/private/tmp/us03-ip3-phase-verification-1.xml`.
+- **Actual result:** 135 selected/passed, exit 0, 47.09s; 134 resolver/checker
+  cases plus one installed orchestrator covering both real wheel paths, each
+  with 16 CLI/API boundary cases and the public checker. Complete collection:
+  265/266, one reserved milestone test deselected; no full-suite execution claimed.
+- **Shared checks:** Locked sync/lock, lint, format, strict types, version smoke
+  passed. Lock unchanged. Documentation/whitespace checks recorded in report.
+- **Public boundaries:** Public checker, resolver, standalone inspect/verify,
+  installed CLI/API. Registry/task/parameter/default compatibility and candidate
+  admission are US-05 obligations. No training, execution or budget-consumption
+  enforcement claimed; delegated approval remains IP4.
+- **Deferred checks:** Under the approved local verification policy, unchanged
+  caller/dependent initialization, packaging-driver, upgrade/scheduling and full
+  suite coverage belong to **M1-ACCEPT-VERIFY**, including the reserved milestone
+  test. IP4-T4 reuses valid direct evidence and renews invalidated checks.
+- **Changes to historical checks:** IP2's temporary pending-diagnostic regression
+  now expects exact IP3 parameter rejection while retaining blocked/no-plan
+  behavior. No assertions, timeouts or acceptance criteria weakened.
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete; no widening bypass through either introduced entrypoint; evidence and compatibility reviewed.
-- **Evidence presented:** Pending — IP3 report and downstream contract.
-- **Limitations:** Registry/model semantics and future candidate submission remain US-05/later execution capabilities; delegated approval remains IP4.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Evidence presented:** [IP3 report](../verification/us-03-ip3.md), 135 direct
+  tests and shared checks passing. Technical work complete; developer approved IP3.
+- **Limitations:** Registry/model semantics and future candidate submission remain US-05/later execution capabilities; delegated approval remains IP4. Local macOS verification only.
+- **Developer decision:** Approved — IP3 implementation and recorded verification.
+- **Decision reference and date:** Developer “i approve ip3”, 2026-10-31, after
+  implementation, evidence, stalled-process termination and status summary.
+  The earlier pre-implementation message was clarified by “start executing ip3”
+  as execution authorization; this subsequent message approves the completed gate.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending — stop before IP4.
+- **Progression authorized:** IP3 gate approved; IP4 execution awaits explicit
+  authorization. Developer “commit changes” authorizes the local IP3 commit;
+  no push or whole-story acceptance authorized.
 
 ## US-03 / Implementation Phase 4: Verify delegated decisions and complete installed acceptance
 

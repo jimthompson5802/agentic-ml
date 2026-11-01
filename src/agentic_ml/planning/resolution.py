@@ -10,6 +10,7 @@ from typing import cast
 
 from jsonschema import Draft202012Validator
 
+from agentic_ml.planning.boundaries import SearchSelection, validate_boundaries
 from agentic_ml.planning.models import (
     Diagnostic,
     JSONValue,
@@ -68,20 +69,55 @@ def prepare(
         brief, brief_path, positions
     )
     execution = mapping(config["execution"])
-    if any(
-        execution.get(key)
-        for key in (
-            "algorithm_subset",
-            "parameters",
-            "search_overrides",
-            "budget_overrides",
-        )
-    ):
-        fail(
-            "boundary_validation_pending", "execution", experiment, *marks["execution"]
-        )
     search_raw, search_marks = strict_yaml(sources["search-space.yaml"], search_path)
     validate(search_raw, "search-space", search_path, search_marks)
+    algorithms = mapping(effective["algorithms"])
+    boundary = validate_boundaries(
+        mapping(search_raw),
+        SearchSelection(
+            mode=algorithms["mode"],
+            allowed=algorithms["allowed"],
+            execution=execution,
+            budgets=mapping(effective["budget"]),
+        ),
+    )
+    if boundary.diagnostics:
+        diagnostic = boundary.diagnostics[0]
+        source, locations = {
+            "search-space.yaml": (search_path, search_marks),
+            "experiment.md": (brief_path, positions),
+            "experiment.yaml": (experiment, marks),
+        }[diagnostic.source_path]
+        fail(
+            diagnostic.code,
+            diagnostic.field,
+            source,
+            *locations.get(diagnostic.field, (1, 1)),
+        )
+    effective["budget"] = boundary.effective_budgets
+    if algorithms["allowed"] is not None and boundary.effective_search is not None:
+        algorithms["allowed"] = list(mapping(boundary.effective_search["algorithms"]))
+    for key in (
+        "algorithm_subset",
+        "parameters",
+        "search_overrides",
+        "budget_overrides",
+    ):
+        if key in execution:
+            field = "execution." + key
+            decisions.append(
+                {
+                    "field": field,
+                    "origin": "explicit",
+                    "source_path": experiment,
+                    "line": marks[field][0],
+                    "column": marks[field][1],
+                    "original": execution[key],
+                    "effective": execution[key],
+                    "proposed": None,
+                    "rationale": None,
+                }
+            )
     notebooks = [relative_path(str(path)) for path in sequence(config["notebooks"])]
     if len(set(notebooks)) != len(notebooks):
         fail("duplicate_path", "notebooks", experiment)
@@ -146,7 +182,7 @@ def prepare(
         "inputs": inputs,
         "effective": effective,
         "declared_search": search_raw,
-        "effective_search": search_raw,
+        "effective_search": boundary.effective_search,
         "decisions": decisions,
         "defaults": [
             {
@@ -160,6 +196,7 @@ def prepare(
                 ("search_overrides", {}),
                 ("budget_overrides", {}),
             )
+            if key not in execution
         ],
         "pending_decisions": pending,
         "diagnostics": cast(

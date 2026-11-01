@@ -4,6 +4,36 @@ Last updated: 2026-10-31
 
 ## Current position
 
+**US-03 IP3 implemented and developer approved (2026-10-31).** Developer
+“start executing ip3” authorized this phase. IP3-T1–T3 are complete in the
+[owning plan](docs/plans/milestone-1-us-03.md); see
+[IP3 evidence](docs/verification/us-03-ip3.md). Public structural checker and
+CLI/API resolver enforce declared domains, mode-specific algorithm narrowing,
+fixed values, categorical/numeric subsets and lowered budget ceilings. Original
+and effective spaces, override provenance and immutable versions are preserved.
+Delegated decisions remain blocked; US-05 registry/training validation is deferred.
+
+Direct phase verification: **135 passed**, four workers, **47.09s**, including
+both direct and genuinely sdist-rebuilt wheels. Each installed probe includes
+16 CLI/API boundary cases and the public checker. Collection: **265/266**,
+one reserved milestone test deselected. Shared locked sync/lock/lint/format/types/
+version checks passed; lock unchanged. M1-ACCEPT-VERIFY owns the full suite and
+unchanged dependent regressions. TDD failures/corrections are preserved in report.
+Initial red reported failure then remained in pytest shutdown; developer “kill
+that pid” subsequently authorized killing PID 75114. Kill succeeded; pytest and
+uv parent 75086 are gone, original session exit 137. Later unique basetemp cycles
+and the passing phase run exited normally. macOS 15.7.9 arm64/Python 3.12.15 verified.
+
+Working branch `US-03-experiment-boundaries`, base `103cdf8`; implementation,
+tests, setup guide, plan/evidence and this checkpoint are included in the local
+commit authorized by developer “commit changes”; Git history records its result.
+Developer “i approve ip3” after the implementation/status summary approves the
+completed phase and evidence. **Next action:** await IP4 execution authorization.
+No push or whole-story acceptance authorized. Earlier IP3-unapproved
+notes below are historical and superseded by the execution instruction and approval.
+
+### Earlier checkpoint history
+
 **Local verification policy revised (2026-10-31):** Implemented developer-approved
 local phase selection of direct tests for changed modules; story acceptance reuses
 valid phase evidence. Full-suite coverage moves to milestone acceptance. Shared

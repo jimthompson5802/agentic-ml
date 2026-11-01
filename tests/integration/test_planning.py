@@ -7,6 +7,438 @@ import pytest
 import yaml
 
 from agentic_ml.planning import ResolveRequest, resolve_plan
+from agentic_ml.planning.models import JSONValue
+
+
+@pytest.mark.parametrize(
+    "mode,subset,ready",
+    [
+        ("use", ["logistic_regression"], True),
+        ("compare", ["logistic_regression"], False),
+        ("compare", ["logistic_regression", "other"], True),
+        ("select", ["logistic_regression"], True),
+        ("select", ["outside"], False),
+    ],
+)
+def test_algorithm_selection_obeys_brief_mode(
+    planning_project: Path, mode: str, subset: list[str], ready: bool
+) -> None:
+    """AC-01/02/04: only select mode permits dropping an allowed member."""
+    brief = planning_project / "brief.md"
+    brief.write_text(
+        brief.read_text()
+        .replace("mode: use", "mode: " + mode)
+        .replace(
+            "- logistic_regression",
+            "- logistic_regression\n- other"
+            if mode != "use"
+            else "- logistic_regression",
+        )
+    )
+    (planning_project / "search.yaml").write_text(
+        'schema_version: "1.0"\nalgorithms:\n  logistic_regression: {fixed: {}, search: {}}\n  other: {fixed: {}, search: {}}\n'
+    )
+    config_path = planning_project / "experiment.yaml"
+    config = yaml.safe_load(config_path.read_bytes())
+    config["execution"]["algorithm_subset"] = subset
+    config_path.write_text(yaml.safe_dump(config))
+    result = resolve_plan(ResolveRequest(planning_project, Path("experiment.yaml")))
+    assert result.status == ("input_ready" if ready else "blocked")
+    if ready:
+        from agentic_ml.planning import inspect_plan, verify_plan
+
+        assert result.plan_id is not None
+        plan = inspect_plan(project_root=planning_project, plan_id=result.plan_id).plan
+        assert plan is not None
+        effective = plan["effective_search"]
+        assert isinstance(effective, dict)
+        algorithms = effective["algorithms"]
+        assert isinstance(algorithms, dict)
+        assert list(algorithms) == sorted(subset)
+        effective_decisions = plan["effective"]
+        assert isinstance(effective_decisions, dict)
+        algorithm_decisions = effective_decisions["algorithms"]
+        assert isinstance(algorithm_decisions, dict)
+        allowed = algorithm_decisions["allowed"]
+        assert isinstance(allowed, list)
+        assert sorted(str(name) for name in allowed) == sorted(subset)
+        assert verify_plan(
+            project_root=planning_project, plan_id=result.plan_id
+        ).integrity
+    else:
+        assert result.plan_id is None
+        assert result.diagnostics[0].field == "execution.algorithm_subset"
+
+
+def test_resolution_preserves_declared_and_narrows_effective_space(
+    planning_project: Path,
+) -> None:
+    """AC-02/03: selections fix allowed values and retain omitted tunables."""
+    from agentic_ml.planning import inspect_plan, verify_plan
+
+    declared = {
+        "schema_version": "1.0",
+        "algorithms": {
+            "logistic_regression": {
+                "fixed": {"seed": 42},
+                "search": {
+                    "C": {
+                        "type": "float",
+                        "min": 0.1,
+                        "max": 10,
+                        "scale": "logarithmic",
+                    },
+                    "count": {
+                        "type": "integer",
+                        "min": 1,
+                        "max": 10,
+                        "scale": "linear",
+                    },
+                    "kind": {
+                        "type": "categorical",
+                        "choices": [None, True, 1, 1.0, "1"],
+                    },
+                },
+            }
+        },
+    }
+    (planning_project / "search.yaml").write_text(yaml.safe_dump(declared))
+    path = planning_project / "experiment.yaml"
+    original = path.read_bytes()
+    config = yaml.safe_load(original)
+    config["execution"]["parameters"] = {"logistic_regression": {"C": 0.1, "seed": 42}}
+    config["execution"]["search_overrides"] = {
+        "logistic_regression": {
+            "count": {"type": "integer", "min": 2, "max": 10, "scale": "linear"},
+            "kind": {"type": "categorical", "choices": [True, 1.0]},
+        }
+    }
+    before = resolve_plan(ResolveRequest(planning_project, Path("experiment.yaml")))
+    assert before.plan_id is not None
+    path.write_text(yaml.safe_dump(config))
+    result = resolve_plan(ResolveRequest(planning_project, Path("experiment.yaml")))
+    assert result.status == "input_ready"
+    assert result.plan_id is not None and result.plan_id != before.plan_id
+    plan = inspect_plan(project_root=planning_project, plan_id=result.plan_id).plan
+    assert plan is not None
+    assert plan["declared_search"] == declared
+    assert plan["effective_search"] == {
+        "schema_version": "1.0",
+        "algorithms": {
+            "logistic_regression": {
+                "fixed": {"seed": 42, "C": 0.1},
+                "search": {
+                    "count": {
+                        "type": "integer",
+                        "min": 2,
+                        "max": 10,
+                        "scale": "linear",
+                    },
+                    "kind": {"type": "categorical", "choices": [True, 1.0]},
+                },
+            }
+        },
+    }
+    assert verify_plan(project_root=planning_project, plan_id=result.plan_id).integrity
+    assert verify_plan(project_root=planning_project, plan_id=before.plan_id).integrity
+
+
+@pytest.mark.parametrize(
+    "section,parameter,value",
+    [
+        ("parameters", "seed", 43),
+        ("parameters", "seed", 42.0),
+        ("parameters", "new", 1),
+        ("parameters", "C", 0.09),
+        ("parameters", "C", 10.01),
+        ("parameters", "C", True),
+        ("parameters", "count", 1.0),
+        ("parameters", "kind", 1),
+        ("search_overrides", "seed", {"type": "categorical", "choices": [42]}),
+        ("search_overrides", "new", {"type": "categorical", "choices": [1]}),
+        ("search_overrides", "kind", {"type": "categorical", "choices": [True, 1]}),
+        (
+            "search_overrides",
+            "C",
+            {"type": "float", "min": 0.01, "max": 10, "scale": "logarithmic"},
+        ),
+        (
+            "search_overrides",
+            "C",
+            {"type": "float", "min": 0.1, "max": 11, "scale": "logarithmic"},
+        ),
+        (
+            "search_overrides",
+            "C",
+            {"type": "float", "min": 0.1, "max": 10, "scale": "linear"},
+        ),
+        (
+            "search_overrides",
+            "count",
+            {"type": "float", "min": 1, "max": 10, "scale": "linear"},
+        ),
+        (
+            "search_overrides",
+            "count",
+            {"type": "integer", "min": 5, "max": 1, "scale": "linear"},
+        ),
+    ],
+)
+def test_execution_cannot_widen_parameter_boundaries(
+    planning_project: Path, section: str, parameter: str, value: JSONValue
+) -> None:
+    """AC-02/04: reject fixed changes, unknown names and domain expansions."""
+    (planning_project / "search.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": "1.0",
+                "algorithms": {
+                    "logistic_regression": {
+                        "fixed": {"seed": 42},
+                        "search": {
+                            "C": {
+                                "type": "float",
+                                "min": 0.1,
+                                "max": 10,
+                                "scale": "logarithmic",
+                            },
+                            "count": {
+                                "type": "integer",
+                                "min": 1,
+                                "max": 10,
+                                "scale": "linear",
+                            },
+                            "kind": {
+                                "type": "categorical",
+                                "choices": [True, "1", None],
+                            },
+                        },
+                    }
+                },
+            }
+        )
+    )
+    path = planning_project / "experiment.yaml"
+    config = yaml.safe_load(path.read_bytes())
+    config["execution"][section] = {"logistic_regression": {parameter: value}}
+    path.write_text(yaml.safe_dump(config))
+    result = resolve_plan(ResolveRequest(planning_project, Path("experiment.yaml")))
+    assert result.status == "blocked"
+    assert result.plan_id is None
+    assert result.diagnostics[0].code == "invalid_boundary"
+    assert (
+        result.diagnostics[0].field
+        == f"execution.{section}.logistic_regression.{parameter}"
+    )
+    assert result.diagnostics[0].source_path == "experiment.yaml"
+    assert result.diagnostics[0].line is not None
+
+
+@pytest.mark.parametrize(
+    "override,ready",
+    [
+        ({"max_runtime_seconds": 30}, True),
+        ({"max_runtime_seconds": 60, "max_total_trials": 1}, True),
+        ({"max_runtime_seconds": 61}, False),
+        ({"max_memory_mb": 10}, False),
+        ({"max_cost": 1.0}, False),
+        ({"max_runtime_seconds": None}, False),
+    ],
+)
+def test_execution_budget_only_lowers_explicit_ceiling(
+    planning_project: Path, override: dict[str, JSONValue], ready: bool
+) -> None:
+    """AC-01/04: execution cannot invent, remove or increase budget authority."""
+    from agentic_ml.planning import inspect_plan
+
+    path = planning_project / "experiment.yaml"
+    config = yaml.safe_load(path.read_bytes())
+    config["execution"]["budget_overrides"] = override
+    path.write_text(yaml.safe_dump(config))
+    result = resolve_plan(ResolveRequest(planning_project, Path("experiment.yaml")))
+    assert result.status == ("input_ready" if ready else "blocked")
+    if ready:
+        assert result.plan_id is not None
+        plan = inspect_plan(project_root=planning_project, plan_id=result.plan_id).plan
+        assert plan is not None
+        effective = plan["effective"]
+        assert isinstance(effective, dict)
+        budget = effective["budget"]
+        assert isinstance(budget, dict)
+        for key, value in override.items():
+            assert budget[key] == value
+        decisions = plan["decisions"]
+        assert isinstance(decisions, list)
+        assert any(
+            isinstance(item, dict)
+            and item["field"] == "execution.budget_overrides"
+            and item["origin"] == "explicit"
+            and item["effective"] == override
+            for item in decisions
+        )
+        defaults = plan["defaults"]
+        assert isinstance(defaults, list)
+        assert not any(
+            isinstance(item, dict) and item["field"] == "execution.budget_overrides"
+            for item in defaults
+        )
+    else:
+        assert result.plan_id is None
+        assert result.diagnostics[0].source_path == "experiment.yaml"
+
+
+@pytest.mark.parametrize(
+    "execution",
+    [
+        {"unknown": True},
+        {"parameters": {"outside": {"C": 1}}},
+        {"parameters": {"model": {"C": []}}},
+        {"parameters": []},
+        {"search_overrides": {"model": {"C": {"type": "categorical", "choices": []}}}},
+        {"budget_overrides": {"currency": 1}},
+        {"budget_overrides": {"max_runtime_seconds": True}},
+        {"budget_overrides": {"max_total_trials": 1.5}},
+        {"algorithm_subset": []},
+    ],
+)
+def test_public_checker_rejects_invalid_execution_shape(
+    execution: dict[str, JSONValue],
+) -> None:
+    """AC-02/04: direct Python use cannot bypass execution shape validation."""
+    from agentic_ml.planning import SearchSelection, validate_boundaries
+
+    declared: dict[str, JSONValue] = {
+        "schema_version": "1.0",
+        "algorithms": {
+            "model": {
+                "fixed": {},
+                "search": {
+                    "C": {"type": "float", "min": 0.1, "max": 1, "scale": "linear"}
+                },
+            }
+        },
+    }
+    result = validate_boundaries(
+        declared,
+        SearchSelection(
+            mode="use",
+            allowed=["model"],
+            execution=execution,
+            budgets={"max_total_trials": 2, "max_runtime_seconds": 60},
+        ),
+    )
+    assert result.effective_search is None
+    assert result.diagnostics
+    assert result.diagnostics[0].source_path == "experiment.yaml"
+
+
+@pytest.mark.parametrize("value", [float("inf"), float("nan"), 9007199254740992])
+def test_public_checker_rejects_non_json_fixed_values(value: JSONValue) -> None:
+    """AC-02: direct checker applies the parser's finite numeric contract."""
+    from agentic_ml.planning import SearchSelection, validate_boundaries
+
+    declared: dict[str, JSONValue] = {
+        "schema_version": "1.0",
+        "algorithms": {"model": {"fixed": {"seed": value}, "search": {}}},
+    }
+    result = validate_boundaries(declared, SearchSelection())
+    assert result.effective_search is None
+    assert result.diagnostics[0].field == "algorithms.model.fixed.seed"
+
+
+def test_public_checker_preserves_type_distinct_categories() -> None:
+    """AC-02: public structural checking accepts distinct JSON scalar types."""
+    from agentic_ml.planning import SearchSelection, validate_boundaries
+
+    declared: dict[str, JSONValue] = {
+        "schema_version": "1.0",
+        "algorithms": {
+            "model": {
+                "fixed": {"seed": 42},
+                "search": {
+                    "choice": {
+                        "type": "categorical",
+                        "choices": [None, True, 1, 1.0, "1"],
+                    },
+                    "count": {"type": "integer", "min": 1, "max": 1, "scale": "linear"},
+                    "rate": {
+                        "type": "float",
+                        "min": 1,
+                        "max": 2.5,
+                        "scale": "logarithmic",
+                    },
+                },
+            }
+        },
+    }
+    result = validate_boundaries(declared, SearchSelection())
+    assert result.diagnostics == ()
+    assert result.effective_search == declared
+    assert result.effective_search is not declared
+    invalid = validate_boundaries(
+        {"schema_version": "1.0", "algorithms": {}}, SearchSelection()
+    )
+    assert invalid.effective_search is None
+    assert invalid.diagnostics[0].source_path == "search-space.yaml"
+
+
+@pytest.mark.parametrize(
+    "space",
+    [
+        {},
+        {"type": "categorical", "choices": []},
+        {"type": "categorical", "choices": [1, 1]},
+        {"type": "categorical", "choices": [[1]]},
+        {"type": "categorical", "choices": [1], "extra": True},
+        {"type": "integer", "min": 2, "max": 1, "scale": "linear"},
+        {"type": "integer", "min": 1.0, "max": 2, "scale": "linear"},
+        {"type": "integer", "min": True, "max": 2, "scale": "linear"},
+        {"type": "float", "min": False, "max": 2, "scale": "linear"},
+        {"type": "float", "min": 1, "max": 2, "scale": "unknown"},
+        {"type": "float", "min": 0, "max": 2, "scale": "logarithmic"},
+        {"type": "integer", "min": -1, "max": 2, "scale": "logarithmic"},
+        {"type": "float", "min": 1, "max": float("inf"), "scale": "linear"},
+        {"type": "float", "min": 1, "max": float("nan"), "scale": "linear"},
+        {"type": "float", "min": 1, "max": 2},
+        {"type": "conditional", "choices": [1]},
+    ],
+)
+def test_invalid_search_definitions_block(
+    planning_project: Path, space: JSONValue
+) -> None:
+    """AC-02/04: malformed tuning domains cannot produce a usable plan."""
+    (planning_project / "search.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "schema_version": "1.0",
+                "algorithms": {
+                    "logistic_regression": {"fixed": {}, "search": {"C": space}}
+                },
+            }
+        )
+    )
+    result = resolve_plan(ResolveRequest(planning_project, Path("experiment.yaml")))
+    assert result.status == "blocked"
+    assert result.plan_id is None
+    assert result.diagnostics[0].source_path == "search.yaml"
+    assert "algorithms.logistic_regression.search.C" in result.diagnostics[0].field
+
+
+def test_fixed_parameter_cannot_also_be_tunable(planning_project: Path) -> None:
+    """AC-02/04: declared fixed/search overlap blocks with parameter location."""
+    (planning_project / "search.yaml").write_text(
+        'schema_version: "1.0"\nalgorithms:\n  logistic_regression:\n'
+        "    fixed: {seed: 42}\n"
+        "    search:\n      seed: {type: integer, min: 1, max: 100, scale: linear}\n"
+    )
+    result = resolve_plan(ResolveRequest(planning_project, Path("experiment.yaml")))
+    assert result.status == "blocked"
+    assert result.plan_id is None
+    diagnostic = result.diagnostics[0]
+    assert diagnostic.code == "invalid_boundary"
+    assert diagnostic.field == "algorithms.logistic_regression.search.seed"
+    assert diagnostic.source_path == "search.yaml"
+    assert diagnostic.line == 6
 
 
 @pytest.fixture
@@ -375,17 +807,19 @@ def test_cli_resolves_and_verifies_from_independent_working_directories(
         assert json.loads(discovered.stdout)["plan_id"] == api.plan_id
 
 
-def test_unimplemented_search_overrides_cannot_be_silently_ignored(
+def test_undeclared_parameter_cannot_be_silently_accepted(
     planning_project: Path,
 ) -> None:
-    """IP2 readiness cannot silently discard requests owned by IP3."""
+    """AC-02/04: omission never authorizes selecting an undeclared parameter."""
     path = planning_project / "experiment.yaml"
     config = yaml.safe_load(path.read_bytes())
     config["execution"]["parameters"] = {"logistic_regression": {"C": 999}}
     path.write_text(yaml.safe_dump(config))
     result = resolve_plan(ResolveRequest(planning_project, Path("experiment.yaml")))
     assert result.status == "blocked"
-    assert result.diagnostics[0].code == "boundary_validation_pending"
+    assert result.plan_id is None
+    assert result.diagnostics[0].code == "invalid_boundary"
+    assert result.diagnostics[0].field == "execution.parameters.logistic_regression.C"
 
 
 @pytest.mark.parametrize(
