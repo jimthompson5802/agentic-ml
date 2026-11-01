@@ -37,7 +37,7 @@ Proposed command contract, subject to plan review:
 | Plan review and public boundaries | Confirm proposed command flags, ownership, failure status and test boundaries below | All executable work | Approved with plan on 2026-11-01; execution requires separate direction |
 | Existing package verification | Preserve genuine direct and sdist-rebuilt installations, pinned origins, isolated probes and all assertions/timeouts | Both implementation phases | Existing scripts and tests inspected; no prerequisite story slice needed |
 | Consumer and fixture inventory | Enumerate every command caller, returned path and environment consumer before adapting it | Driver cleanup | US-35-IP1-T1 / IP2-T1 |
-| Baseline availability | Record unchanged workload before changing drivers | Final disk comparison | US-35-IP1-T1; not yet measured |
+| Baseline availability | Record unchanged workload before changing drivers | Final disk comparison | Complete: US-35-IP1-T1; [Phase 1 report](../verification/us-35-ip1.md) retains fixed inputs and four passing command measurements |
 | Evidence destination writable | Durable records outside disposable roots with unique IDs | Any cleanup | Fail closed and retain workspaces if unavailable |
 | Related stories | Preserve seams for future ownership and early release without implementing them | None | US-36–US-38 excluded |
 
@@ -61,17 +61,17 @@ Stop at every implementation phase gate, including the final gate. Present tasks
 ## US-35 / Implementation Phase 1: Durable records and installation cleanup
 
 - **Outcome:** Installation verification demonstrates the complete safe lifecycle and leaves inspectable records after successful cleanup.
-- **Entry conditions:** Plan/public-boundary approval and separate instruction to execute.
+- **Entry conditions:** Satisfied. Plan/public-boundary approval on 2026-11-01; execution authorized by developer message “execute implementaton plan for us-35”.
 - **Acceptance criteria advanced:** US-35-AC-01–05, installation slice; no whole-story completion claim.
 
 ### Granular tasks
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-35-IP1-T1 | Not started | Inventory all four scripts, `tests/installation/check_*.py`, `tests/packaging/check_installed.py`, their callers and `.github/workflows/`; save inventory, fixed baseline protocol and results in proposed `docs/verification/us-35-ip1.md`. Record helper import arrangement and owned path categories. | Plan approval | Consumer map includes nested allocations and private/shared caches. Run each unchanged standalone command once against the same fixed artifacts/local Git fixture; capture exact args, environment counts and disk sizes before any driver changes. Copy required raw evidence into unique `.dev-records/verification/` baseline records; never delete historical paths. | AC-01, AC-04, AC-05 |
-| US-35-IP1-T2 | Not started | Create proposed `tests/verification_support.py` and `tests/integration/test_verification_lifecycle.py`; integrate `tests/installation/verify_installation.py` in vertical TDD slices. | T1 | Unique absolute records, ownership registry, successful cleanup, explicit retention and failed/incomplete retention work. Record identity/log failures before safe finalization; test record-write failure and cleanup failure as distinct outcomes. | AC-01–04 |
-| US-35-IP1-T3 | Not started | Update `tests/integration/test_installation_verification.py` callers that need surviving environments to explicitly retain them; redirect evidence-only assertions to records. Add default-cleanup and failure cases without removing original pin/cache/upgrade assertions. | T2 | Existing installed-project mutation fixtures remain usable; default standalone success removes its environments, identities survive, invalid revision/install failure retains available diagnostics. | AC-01–05 |
-| US-35-IP1-T4 | Not started | Complete direct checks, shared checks, report and checkpoint. | T2, T3 | Exact selectors, counts, red/green results, lock hashes, platform, limitations and deferrals recorded; present gate. | AC-01–05 |
+| US-35-IP1-T1 | Complete | Inventory all four scripts, `tests/installation/check_*.py`, `tests/packaging/check_installed.py`, their callers and `.github/workflows/`; save inventory, fixed baseline protocol and results in proposed `docs/verification/us-35-ip1.md`. Record helper import arrangement and owned path categories. | Plan approval | Consumer map includes nested allocations and private/shared caches. Run each unchanged standalone command once against the same fixed artifacts/local Git fixture; capture exact args, environment counts and disk sizes before any driver changes. Copy required raw evidence into unique `.dev-records/verification/` baseline records; never delete historical paths. | AC-01, AC-04, AC-05 |
+| US-35-IP1-T2 | Complete | Create proposed `tests/verification_support.py` and `tests/integration/test_verification_lifecycle.py`; integrate `tests/installation/verify_installation.py` in vertical TDD slices. | T1 | Unique absolute records, ownership registry, successful cleanup, explicit retention and failed/incomplete retention work. Record identity/log failures before safe finalization; test record-write failure and cleanup failure as distinct outcomes. | AC-01–04 |
+| US-35-IP1-T3 | Complete | Update `tests/integration/test_installation_verification.py` callers that need surviving environments to explicitly retain them; redirect evidence-only assertions to records. Add default-cleanup and failure cases without removing original pin/cache/upgrade assertions. | T2 | Existing installed-project mutation fixtures remain usable; default standalone success removes its environments, identities survive, invalid revision/install failure retains available diagnostics. | AC-01–05 |
+| US-35-IP1-T4 | Complete | Complete direct checks, shared checks, report and checkpoint. | T2, T3 | Exact selectors, counts, red/green results, lock hashes, platform, limitations and deferrals recorded; present gate. | AC-01–05 |
 
 ### Verification and review evidence
 
@@ -82,19 +82,19 @@ Stop at every implementation phase gate, including the final gate. Present tasks
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Installation lifecycle | Direct selection above; serial `uv run --locked pytest <node-id>` permitted for short TDD diagnosis with reason recorded | Correct pass/fail retention and ownership; real pinned install checks preserved | Pending |
-| Shared checks | `uv sync --locked --group dev`; `uv lock --check`; `uv run --locked ruff check .`; `uv run --locked ruff format --check .`; `uv run --locked mypy src tests`; `uv run --locked agentic-ml --version`; `git diff --check` | Pass; record SHA-256 of `uv.lock` before/after, unchanged unless reviewed | Pending |
-| Baseline | T1 fixed workload and filesystem protocol | Comparable per-driver environment counts and retained bytes with identities | Pending |
+| Installation lifecycle | Direct selection above; serial `uv run --locked pytest <node-id>` permitted for short TDD diagnosis with reason recorded | Correct pass/fail retention and ownership; real pinned install checks preserved | 36 passed in 148.28s, four workers; 23 helper + 13 installed-command/probe cases; [report](../verification/us-35-ip1.md) |
+| Shared checks | `uv sync --locked --group dev`; `uv lock --check`; `uv run --locked ruff check .`; `uv run --locked ruff format --check .`; `uv run --locked mypy src tests`; `uv run --locked agentic-ml --version`; `git diff --check` | Pass; record SHA-256 of `uv.lock` before/after, unchanged unless reviewed | All passed; lock unchanged; [report](../verification/us-35-ip1.md#phase-gate-verification) |
+| Baseline | T1 fixed workload and filesystem protocol | Comparable per-driver environment counts and retained bytes with identities | All four baseline commands passed; retained counts 1 / 2 / 6 / 2; [report](../verification/us-35-ip1.md#baseline-protocol) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete; installation slice and helper boundaries verified; baseline retained; direct and shared checks pass.
-- **Evidence presented:** Pending — proposed `docs/verification/us-35-ip1.md` and absolute raw record links.
+- **Evidence presented:** [Phase 1 report](../verification/us-35-ip1.md), including baseline, red/green cycles, final direct/shared results and absolute raw record links. Tasks T1–T4 technically complete on 2026-11-01; developer approved the gate on 2026-11-01.
 - **Remaining limitations:** Other three commands not yet delivered; macOS evidence establishes only observed platform behavior.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer message, 2026-11-01: “i approve ip1; commit changes”.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Implementation Phase 2 only after explicit approval.
+- **Progression authorized:** Phase 1 gate satisfied. Current instruction authorizes committing Phase 1; Phase 2 remains unstarted pending direction to execute.
 
 ## US-35 / Implementation Phase 2: Composed driver cleanup and story acceptance
 
@@ -148,7 +148,7 @@ Stop at every implementation phase gate, including the final gate. Present tasks
 - **Distribution/installation:** Real direct-wheel and sdist-rebuilt-wheel commands are required because their drivers change. Probe existing installed public interfaces outside checkout with declared runtime dependencies; no editable installs or contributor dependency leakage. No product distribution change is planned, but driver evidence must cover both artifact paths.
 - **Deferred-check reconciliation:** Enumerate caller/full-suite deferrals for `M50-ACCEPT-VERIFY`; this reconciliation assigns ownership, not a passing result. Keep unrelated M1 acceptance obligations intact.
 - **Evidence renewal:** Later executable changes renew invalidated direct evidence; artifact input changes renew artifact probes; documentation-only approval edits use link/whitespace checks and explain why TDD is inapplicable.
-- **Actual results and limitations:** Pending. Planning ran no product tests, builds, benchmarks or shared executable checks; it changed documentation only.
+- **Actual results and limitations:** Phase 1: 36 direct tests and shared checks passed; unchanged four-command baseline captured. See [Phase 1 report](../verification/us-35-ip1.md). Whole-story final verification remains pending Phase 2; no full-suite or cross-platform verification claimed.
 
 ## Story completion review
 
@@ -160,7 +160,7 @@ Stop at every implementation phase gate, including the final gate. Present tasks
 | US-35-AC-04: ownership and cleanup errors | IP1-T1–T4; IP2-T1–T4, T6 | Sentinels, symlink/overlap rejection, shared-cache preservation and independent outcome checks | Pending |
 | US-35-AC-05: automation and before/after disk evidence | IP1-T1–T4; IP2-T2–T3, T5–T6 | Direct test results and fixed-workload environment/disk comparison with limits | Pending |
 
-- **Remaining work:** Every task is not started; no implementation authorized. US-36–US-38 remain separate backlog work.
+- **Remaining work:** Phase 1 complete and approved on 2026-11-01; Phase 2 remains unstarted pending execution direction. US-36–US-38 remain separate backlog work.
 - **Partial prerequisite delivery:** None claimed for another story.
 - **Final verification:** Pending.
 - **Developer acceptance:** Pending.

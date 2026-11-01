@@ -1,31 +1,16 @@
 """Verify full-SHA Git installation in a disposable separate experiment project."""
 
 import argparse
+import importlib.util
 import json
 import os
 import re
 import shutil
-import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 PROBE = Path(__file__).with_name("check_project.py").resolve()
 CHECKOUT = PROBE.parents[2]
-
-
-def run(stage: str, command: list[str], cwd: Path, env: dict[str, str]) -> str:
-    """Run a stage and retain stdout/stderr before propagating failure."""
-    print(f"STAGE {stage}: {command!r} cwd={cwd}", flush=True)
-    result = subprocess.run(command, cwd=cwd, env=env, capture_output=True, text=True)
-    (cwd.parent / f"{stage}.log").write_text(
-        f"{command!r}\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
-    )
-    if result.returncode:
-        raise RuntimeError(
-            f"{stage}: exit {result.returncode}\n{result.stdout}{result.stderr}"
-        )
-    return result.stdout
 
 
 def main() -> None:
@@ -35,6 +20,11 @@ def main() -> None:
     parser.add_argument("--revision", required=True)
     parser.add_argument("--workspace", type=Path)
     parser.add_argument("--upgrade-revision")
+    parser.add_argument(
+        "--keep-workspace",
+        action="store_true",
+        help="Preserve successful environments and workspace for inspection.",
+    )
     args = parser.parse_args()
     if not re.fullmatch(r"[0-9a-f]{40}", args.revision):
         parser.error("revision must be a full lowercase 40-character commit SHA")
@@ -45,15 +35,21 @@ def main() -> None:
             )
         if args.upgrade_revision == args.revision:
             parser.error("upgrade revision must differ from the initial revision")
-    if args.workspace is None:
-        workspace = Path(tempfile.mkdtemp(prefix="agentic-ml-installation-")).resolve()
-    else:
-        workspace = args.workspace.resolve()
-        workspace.mkdir(parents=True, exist_ok=False)
-    print(f"WORKSPACE {workspace}", flush=True)
+    spec = importlib.util.spec_from_file_location(
+        "verification_support", CHECKOUT / "tests/verification_support.py"
+    )
+    assert spec is not None and spec.loader is not None
+    support = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(support)
+    invocation = support.Invocation(
+        checkout=CHECKOUT, workspace=args.workspace, keep_workspace=args.keep_workspace
+    )
+    workspace = invocation.workspace
+    run = invocation.run
     project = workspace / "experiment"
     project.mkdir()
-    cache = workspace / "cache"
+    invocation.create_disposable("experiment/.venv", create=False)
+    cache = invocation.create_disposable("cache", create=False)
     env = dict(os.environ)
     for name in (
         "PYTHONPATH",
@@ -98,10 +94,17 @@ def main() -> None:
         stage = "before-sync-probe"
         before = run(stage, probe_command, project, env)
         (workspace / "identity-before-sync.json").write_text(before)
+        invocation.preserve(
+            workspace / "identity-before-sync.json", "identity-before-sync.json"
+        )
         declaration = (project / "pyproject.toml").read_bytes()
         lock = (project / "uv.lock").read_bytes()
         (workspace / "pyproject-before-sync.toml").write_bytes(declaration)
         (workspace / "uv-before-sync.lock").write_bytes(lock)
+        invocation.preserve(workspace / "uv-before-sync.lock", "uv-before-sync.lock")
+        invocation.preserve(
+            workspace / "pyproject-before-sync.toml", "pyproject-before-sync.toml"
+        )
         stage = "locked-sync"
         run(stage, ["uv", "sync", "--locked"], project, env)
         assert (project / "uv.lock").read_bytes() == lock, "locked sync changed lock"
@@ -109,12 +112,13 @@ def main() -> None:
             "locked sync changed declaration"
         )
         # This cache was created only inside this newly allocated workspace.
-        shutil.rmtree(cache)
+        invocation.remove_disposable(cache)
         stage = "installed-probe"
         output = run(stage, probe_command, project, env)
         assert output == before, "locked sync changed environment identity"
         print("PASS stable synchronization", flush=True)
         (workspace / "identity.json").write_text(output)
+        invocation.preserve(workspace / "identity.json", "identity.json")
         stage = "offline-cli"
         run(
             stage,
@@ -124,7 +128,7 @@ def main() -> None:
         )
         # uv may create an empty cache root even without synchronizing.
         if cache.exists():
-            shutil.rmtree(cache)
+            invocation.remove_disposable(cache)
         print(output, end="")
         print("PASS pinned installation", flush=True)
         if args.upgrade_revision is not None:
@@ -149,7 +153,7 @@ def main() -> None:
             assert (project / "pyproject.toml").read_bytes() != declaration, (
                 "upgrade did not change declaration"
             )
-            shutil.rmtree(cache)
+            invocation.remove_disposable(cache)
             upgrade_probe = [
                 args.upgrade_revision if value == args.revision else value
                 for value in probe_command
@@ -160,6 +164,9 @@ def main() -> None:
                 json.loads(upgraded)["lock_sha256"] != json.loads(before)["lock_sha256"]
             ), "upgrade did not change environment identity"
             (workspace / "identity-after-upgrade.json").write_text(upgraded)
+            invocation.preserve(
+                workspace / "identity-after-upgrade.json", "identity-after-upgrade.json"
+            )
             stage = "upgrade-offline-cli"
             run(
                 stage,
@@ -168,12 +175,13 @@ def main() -> None:
                 env,
             )
             if cache.exists():
-                shutil.rmtree(cache)
+                invocation.remove_disposable(cache)
             print(upgraded, end="")
             print("PASS explicit upgrade", flush=True)
-    except (OSError, RuntimeError, AssertionError) as error:
+    except (OSError, RuntimeError, ValueError, AssertionError) as error:
         print(f"FAIL {stage}: {error}; diagnostics={workspace}", file=sys.stderr)
-        raise SystemExit(1) from error
+        raise SystemExit(invocation.finish(1)) from error
+    raise SystemExit(invocation.finish(0))
 
 
 if __name__ == "__main__":
