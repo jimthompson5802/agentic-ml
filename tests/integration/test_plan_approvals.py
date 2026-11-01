@@ -11,6 +11,125 @@ from test_planning import planning_project as planning_project
 from agentic_ml.planning import ResolveRequest, resolve_plan, verify_plan
 
 
+def test_delegated_cost_cannot_hide_a_missing_currency(planning_project: Path) -> None:
+    """AC-04: a complete cost proposal must obey the explicit pair contract."""
+    path = planning_project / "brief.md"
+    path.write_text(
+        path.read_text().replace(
+            "max_cost: null",
+            'max_cost: {delegate: "Choose cost", proposal: 10, rationale: "Trial budget"}',
+        )
+    )
+    result = resolve_plan(ResolveRequest(planning_project, Path("experiment.yaml")))
+    assert result.status == "blocked" and result.plan_id is None
+    assert result.diagnostics[0].code == "conflicting_budget"
+    assert result.diagnostics[0].source_path == "brief.md"
+
+
+@pytest.mark.parametrize("delegated", ["cost", "currency", "both"])
+@pytest.mark.parametrize(
+    "cost,currency,conflict",
+    [(10, "USD", False), (None, None, False), (10, None, True), (None, "USD", True)],
+)
+def test_cost_currency_pair_contract_applies_to_complete_proposals(
+    planning_project: Path,
+    delegated: str,
+    cost: int | None,
+    currency: str | None,
+    conflict: bool,
+) -> None:
+    """AC-01/03/04: approval cannot turn a complete conflicting pair ready."""
+    from agentic_ml.approvals import ApprovalRequest, approve_plan
+    from agentic_ml.planning import inspect_plan
+
+    cost_value = json.dumps(
+        {"delegate": "Choose cost", "proposal": cost, "rationale": "Trial budget"}
+        if delegated in ("cost", "both")
+        else cost
+    )
+    currency_value = json.dumps(
+        {
+            "delegate": "Choose currency",
+            "proposal": currency,
+            "rationale": "Accounting unit",
+        }
+        if delegated in ("currency", "both")
+        else currency
+    )
+    path = planning_project / "brief.md"
+    path.write_text(
+        path.read_text()
+        .replace("max_cost: null", "max_cost: " + cost_value)
+        .replace("currency: null", "currency: " + currency_value)
+    )
+    result = resolve_plan(ResolveRequest(planning_project, Path("experiment.yaml")))
+    assert result.status == "blocked"
+    if conflict:
+        assert result.plan_id is None
+        assert result.diagnostics[0].code == "conflicting_budget"
+        assert result.diagnostics[0].field == "budget.max_cost"
+        return
+    assert result.plan_id is not None
+    record = approve_plan(
+        ApprovalRequest(planning_project, result.plan_id, "Scientist", "Reviewed pair")
+    )
+    checked = verify_plan(project_root=planning_project, plan_id=result.plan_id)
+    assert checked.status == "input_ready" and checked.integrity
+    assert checked.approval_ids == (record.approval_id,)
+    inspection = inspect_plan(project_root=planning_project, plan_id=result.plan_id)
+    assert inspection.plan is not None
+    effective = inspection.plan["effective"]
+    assert isinstance(effective, dict)
+    budget = effective["budget"]
+    assert isinstance(budget, dict)
+    assert budget["max_cost"] == cost and budget["currency"] == currency
+
+
+@pytest.mark.parametrize(
+    "cost,currency",
+    [
+        ('{delegate: "Choose cost"}', "USD"),
+        ('{delegate: "Choose cost"}', "null"),
+        ("10", '{delegate: "Choose currency"}'),
+        ("null", '{delegate: "Choose currency"}'),
+        (
+            '{delegate: "Choose cost"}',
+            '{delegate: "Choose currency", proposal: null, rationale: "No cost"}',
+        ),
+        (
+            '{delegate: "Choose cost", proposal: null, rationale: "No cost"}',
+            '{delegate: "Choose currency"}',
+        ),
+    ],
+)
+def test_unresolved_cost_or_currency_remains_pending(
+    planning_project: Path,
+    cost: str,
+    currency: str,
+) -> None:
+    """AC-04: missing proposals are not confused with explicit null proposals."""
+    from agentic_ml.approvals import ApprovalError, ApprovalRequest, approve_plan
+
+    path = planning_project / "brief.md"
+    path.write_text(
+        path.read_text()
+        .replace("max_cost: null", "max_cost: " + cost)
+        .replace("currency: null", "currency: " + currency)
+    )
+    result = resolve_plan(ResolveRequest(planning_project, Path("experiment.yaml")))
+    assert result.status == "blocked" and result.plan_id is not None
+    assert any(item.code == "pending_decision" for item in result.diagnostics)
+    with pytest.raises(ApprovalError) as raised:
+        approve_plan(
+            ApprovalRequest(planning_project, result.plan_id, "Scientist", "Reviewed")
+        )
+    assert raised.value.code == "pending_decision"
+    assert (
+        verify_plan(project_root=planning_project, plan_id=result.plan_id).status
+        == "blocked"
+    )
+
+
 def test_approval_store_cannot_overlap_configured_storage(
     planning_project: Path,
 ) -> None:

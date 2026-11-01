@@ -308,11 +308,10 @@ def derive_decisions(
     budget = mapping(effective["budget"])
     cost_raw = mapping(brief["budget"])["max_cost"]
     currency_raw = mapping(brief["budget"])["currency"]
-    if (
-        not isinstance(cost_raw, dict)
-        and not isinstance(currency_raw, dict)
-        and (budget["max_cost"] is None) != (budget["currency"] is None)
-    ):
+    if all(
+        not isinstance(value, dict) or "proposal" in value
+        for value in (cost_raw, currency_raw)
+    ) and (budget["max_cost"] is None) != (budget["currency"] is None):
         fail("conflicting_budget", "budget.max_cost", source, *marks["budget.max_cost"])
     algorithms = mapping(effective["algorithms"])
     if (

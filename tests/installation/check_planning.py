@@ -5,6 +5,7 @@ import hashlib
 import json
 import subprocess
 import sys
+from collections.abc import Callable
 from importlib.resources import files
 from pathlib import Path
 from typing import cast
@@ -294,6 +295,107 @@ def check_boundaries(root: Path, workspace: Path) -> None:
     print("PASS installed boundaries (16 CLI/API cases and public checker)", flush=True)
 
 
+def check_cost_currency_pairs(
+    workspace: Path,
+    command: Callable[[list[str], int, Path], dict[str, JSONValue]],
+) -> None:
+    """Verify resolved and pending budget pairs through installed CLI and API."""
+    parent = workspace / "cost-pair-cases"
+    parent.mkdir()
+    root = create_project(parent)
+    brief = root / "brief.md"
+    original = brief.read_text()
+    cases: list[tuple[str, str, str]] = []
+    for delegated in ("cost", "currency", "both"):
+        for cost, currency, outcome in (
+            (10, "USD", "ready"),
+            (None, None, "ready"),
+            (10, None, "conflict"),
+            (None, "USD", "conflict"),
+        ):
+            cost_text = json.dumps(
+                {
+                    "delegate": "Choose cost",
+                    "proposal": cost,
+                    "rationale": "Trial budget",
+                }
+                if delegated in ("cost", "both")
+                else cost
+            )
+            currency_text = json.dumps(
+                {
+                    "delegate": "Choose currency",
+                    "proposal": currency,
+                    "rationale": "Accounting unit",
+                }
+                if delegated in ("currency", "both")
+                else currency
+            )
+            cases.append((cost_text, currency_text, outcome))
+    cases.extend(
+        [
+            ('{delegate: "Choose cost"}', "USD", "pending"),
+            ('{delegate: "Choose cost"}', "null", "pending"),
+            ("10", '{delegate: "Choose currency"}', "pending"),
+            ("null", '{delegate: "Choose currency"}', "pending"),
+            (
+                '{delegate: "Choose cost"}',
+                '{delegate: "Choose currency", proposal: null, rationale: "No cost"}',
+                "pending",
+            ),
+            (
+                '{delegate: "Choose cost", proposal: null, rationale: "No cost"}',
+                '{delegate: "Choose currency"}',
+                "pending",
+            ),
+        ]
+    )
+    for cost_text, currency_text, outcome in cases:
+        brief.write_text(
+            original.replace("max_cost: null", "max_cost: " + cost_text).replace(
+                "currency: null", "currency: " + currency_text
+            )
+        )
+        result = resolve_plan(ResolveRequest(root, Path("experiment.yaml")))
+        assert result.status == "blocked", (cost_text, currency_text, result)
+        resolved = command(
+            ["resolve", "--project-root", str(root), "--experiment", "experiment.yaml"],
+            2,
+            workspace,
+        )
+        assert resolved["plan_id"] == result.plan_id
+        if outcome == "conflict":
+            assert result.plan_id is None
+            assert result.diagnostics[0].code == "conflicting_budget"
+            assert result.diagnostics[0].source_path == "brief.md"
+            continue
+        assert result.plan_id is not None
+        command(
+            [
+                "approve",
+                "--project-root",
+                str(root),
+                "--plan",
+                result.plan_id,
+                "--reviewer",
+                "Scientist",
+                "--reason",
+                "Reviewed pair",
+            ],
+            0 if outcome == "ready" else 2,
+            workspace,
+        )
+        checked = verify_plan(project_root=root, plan_id=result.plan_id)
+        assert checked.status == ("input_ready" if outcome == "ready" else "blocked")
+        assert checked.integrity
+        command(
+            ["verify", "--project-root", str(root), "--plan", result.plan_id],
+            0 if outcome == "ready" else 2,
+            workspace,
+        )
+    print("PASS installed cost/currency pairs (18 CLI/API cases)", flush=True)
+
+
 def main() -> None:
     """Exercise installed CLI/API, preservation and blocking without source imports."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -355,6 +457,8 @@ def main() -> None:
         )
         assert completed.returncode == expected, completed.stdout + completed.stderr
         return cast(dict[str, JSONValue], json.loads(completed.stdout))
+
+    check_cost_currency_pairs(args.workspace, command)
 
     for cwd in (root, drafts, args.workspace):
         captured = command(

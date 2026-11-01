@@ -4,40 +4,42 @@ Last updated: 2026-10-31
 
 ## Current position
 
-**US-03 accepted and published in PR #46; one static finding pending (2026-10-31).** Developer “i accept
-us-03; we can bypass the full-suite test for now; commit; push” accepts the story
-and authorizes the accepted-story publication workflow. All IP1–IP4 gates are
-approved; [owning plan](docs/plans/milestone-1-us-03.md) and
-[IP4 evidence](docs/verification/us-03-ip4.md) record all five ACs with passing
-direct evidence. IP4 implementation/approval is committed as `63aa346`.
+**US-03 cost/currency correction accepted; publication in progress (2026-10-31).**
+Developer “i accept the fix, commit and push to remote; summarize the fix to PR
+comment and mark as resolved.” approves the correction and authorizes those actions.
+Developer “I accept the recommendation.” authorizes fixing the Medium delegated
+budget finding in [PR #46](https://github.com/jimthompson5802/agentic-ml/pull/46).
+[Owning plan](docs/plans/milestone-1-us-03.md), SC-03/C1-T1–T3, and
+[correction evidence](docs/verification/us-03-cost-currency-correction.md) record
+scope, confirmed boundaries, TDD and the correction review gate.
 
-Final direct phase verification: **165 passed**, four workers, **30.63s**, both
-wheel paths and installed examples passed. Shared locked sync/lock/lint/format/
-types/version checks passed; lock unchanged. macOS 15.7.9 arm64/Python 3.12.15
-verified. Unauthenticated approval scope and limitations remain unchanged.
+Complete explicit/delegated cost/currency pairs now share validation: both set or
+both null. Missing proposals remain blocked. Reproduced the original approved
+invalid plan becoming input-ready; after the fix its independent verification
+rejects `conflicting_budget`. No monetary accounting/enforcement added.
 
-Additional full run collected all 296 tests, including milestone acceptance.
-Developer “stop the test” stopped session 93414 with Ctrl-C / exit 130 after
-120 observed completion markers, with no reported failure but no final summary
-or JUnit XML. No completed full-suite/milestone-test claim. No matching test
-workers remained. Available evidence/basetemp preserved. Developer subsequently
-authorized bypassing this additional run for story publication; US-03-SC-02
-records that decision. M1-ACCEPT-VERIFY retains all deferred regressions, the
-reserved milestone test and full-suite verification before milestone acceptance.
-CI remains unchanged and runs every test.
+Final direct verification: **183 passed**, four workers, **45.72s**; both direct
+and genuine sdist-rebuilt wheel probes each pass 18 new CLI/API budget cases.
+Shared locked sync/lock/lint/format/types/version and whitespace checks passed;
+lock unchanged. Collection **314/315**, one reserved milestone test deselected.
+132 unselected cases and full-suite verification remain with M1-ACCEPT-VERIFY
+under the developer-approved deferral. No full-suite run. macOS 15.7.9 arm64 /
+Python 3.12.15 verified; no new Linux/Windows evidence.
 
-Branch `US-03-experiment-boundaries`, target `origin/main`. Acceptance and test-
-interruption records committed as `2c9522d` and pushed with IP4 `63aa346`.
-[PR #46](https://github.com/jimthompson5802/agentic-ml/pull/46) is open/non-draft.
-[Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/46#pullrequestreview-5726207741)
-verified at `2c9522d`: one Medium finding, complete delegated cost/currency
-proposals bypass pair consistency and can become ready after approval. This
-case was not covered by passing direct tests. No fix authorized or performed;
-review was static only. Linux/Python 3.12 CI pending when inspected. Publication
-records are committed/pushed under acceptance authorization; subsequent
-documentation-only head receives supplemental static review.
-Next: developer review/direction on the finding and CI. No merge, branch cleanup
-or next-story work authorized. Milestone 1 remains in progress; US-03 only accepted.
+Branch `US-03-experiment-boundaries`, correction base `d4ce70c`. Parser, public
+regression tests, installed probe and correction docs/plan/checkpoint are being
+committed/pushed under the explicit approval. **Next action:** verify push, reply
+with the fix summary to PR #46's existing review thread and resolve it, then record
+outcomes. Prior acceptance/evidence retained. No merge, cleanup or next-story
+work authorized.
+
+Earlier accepted implementation `63aa346`, acceptance records `2c9522d` and
+publication records `d4ce70c` were pushed. Original static review:
+[Medium finding](https://github.com/jimthompson5802/agentic-ml/pull/46#discussion_r4434227411).
+The additional 296-case full run was stopped by the developer at 120 completion
+markers (exit 130, no summary/XML, no failures reported); acceptance explicitly
+deferred that run. Its evidence is preserved without a success claim. Milestone 1
+remains in progress; only US-03 was accepted.
 
 ### Earlier checkpoint history
 

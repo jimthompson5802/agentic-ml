@@ -384,3 +384,25 @@ Follow the [scope-change procedure](../../.agents/skills/manage-plan-scope/SKILL
 - **CI:** Linux/Python 3.12 pending when inspected; no hosted success claimed. Full local run remains explicitly deferred under SC-02. No merge authorized.
 - **Publication records:** This documentation-only follow-up records publication and review outcomes under acceptance authorization. It preserves executable inputs. After ordinary push, supplement static review to cover the updated documentation head without duplicating the inline finding.
 - **Next action:** Developer review of the finding and CI; no fixes, merge, cleanup or next-story work performed.
+
+
+## US-03-SC-03 — Correct delegated cost/currency validation (2026-10-31)
+
+- **Request and decision:** Developer “I accept the recommendation.” authorizes keeping optional cost fields, validating resolved cost/currency together for explicit and delegated inputs, and public API/CLI regression coverage. This follows the recommendation explaining complete valid/null pairs, conflicting pairs, and unresolved delegation.
+- **Scope:** Correct the Medium [review finding](https://github.com/jimthompson5802/agentic-ml/pull/46#discussion_r4434227411); no monetary accounting/enforcement, field removal, schema expansion or criterion change. Issue #10 complete body/all comments refreshed: zero unique comments and stable updated_at `2026-10-30T02:06:20Z`; Milestone 1 / AC-01, AC-03 and AC-04 govern the correction.
+- **Impact:** Reopen the affected IP4-T2 conflict evidence for this correction. Prior phase approvals, story acceptance and passing evidence remain historical facts. Renew direct parsing/resolution/approval and installed-wheel evidence; previously approved invalid budget pairs must fail independent verification.
+- **Confirmed public boundaries:** Reuse IP1-approved planning resolve/inspect/verify and approval API, CLI from an unrelated cwd, both direct and sdist-rebuilt installed wheel probes. User accepted explicit coverage of delegated cost, delegated currency and both delegated, with valid/non-null, both-null, conflicting and missing-proposal cases. Tests observe public outcomes and safe source diagnostics; they do not prove spending controls, authenticated reviewers or runtime execution.
+- **Verification mapping:** `planning/parsing.py` → `tests/integration/test_planning.py` and `tests/integration/test_plan_approvals.py` via public resolver and readiness/approval paths. Installed parsing/approval behavior → `test_planning_from_both_artifact_paths` and its installed probe. Run shared locked sync/lock/lint/format/types/version and whitespace checks. Serial focused red/green cycles are permitted for immediate feedback; final direct run uses four workers.
+- **Deferrals:** Full suite, reserved milestone test and unchanged caller/initialization/upgrade/scheduling/other artifact regressions remain with M1-ACCEPT-VERIFY under SC-02. No full-suite rerun.
+- **Correction gate:** Prior IP4 approval is retained; this follow-up correction requires explicit developer review/approval after its tasks and verification complete. No commit, push, merge or thread-resolution action is part of this implementation instruction.
+
+| Task ID | Status | Action | Completion evidence | Criteria |
+|---|---|---|---|---|
+| US-03-IP4-C1-T1 | Complete | Reproduce delegated cost/currency conflict through a public-interface regression; implement the minimal resolved-pair check in a red–green cycle | Original failure and corrected behavior recorded | AC-01, AC-04 |
+| US-03-IP4-C1-T2 | Complete | Cover delegated cost/currency/both, valid/non-null and null pairs, conflict rejection and unresolved blocking through public API/CLI; renew both-wheel probes | Independent expected outcomes and installed checks pass | AC-01, AC-03, AC-04 |
+| US-03-IP4-C1-T3 | Complete | Complete direct/shared checks, preserve failure evidence and update plan/checkpoint | Correction report, selectors/counts/platform/hash evidence | AC-01, AC-03, AC-04 |
+
+- **Evidence:** [Correction report](../verification/us-03-cost-currency-correction.md) records original red, before/after approval/readiness reproduction, green and verification renewal.
+- **Developer correction approval:** Accepted — developer “i accept the fix, commit and push to remote; summarize the fix to PR comment and mark as resolved.”, 2026-10-31. This approves the correction and authorizes commit/push, a PR summary reply and resolution of the finding.
+- **Final evidence:** 183 direct tests passed, four workers, 45.72s; both-wheel probes each include 18 new CLI/API budget cases. Shared checks passed; lock unchanged. Parser/probe regression evidence and artifacts renewed; full suite deferred.
+- **Next action:** Commit and ordinary push of the accepted correction, summarize it in the existing PR #46 review thread, then resolve that thread. No merge or next-story authorization.

@@ -191,3 +191,10 @@ This case was not covered by the passing phase evidence. No reproduction or
 implementation correction was performed during static review. The finding is
 unresolved and requires separate developer direction. CI was pending when read.
 The owning plan records publication/review scope and the follow-up handoff.
+
+
+Subsequent developer-authorized correction is technically complete locally; see
+[correction evidence](us-03-cost-currency-correction.md) and US-03-SC-03. The
+developer accepted the correction and authorized publication, a PR summary and
+resolution of the inline thread. The owning plan records final outcomes.
+Historical acceptance and verification results above are preserved.
