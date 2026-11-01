@@ -1,28 +1,36 @@
 """Run isolated planning probes against direct and sdist-rebuilt installed wheels."""
 
 import argparse
+import importlib.util
 import os
 import shutil
-import subprocess
 import sys
-import tempfile
 from pathlib import Path
+from uuid import uuid4
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 def main() -> None:
-    """Reuse distribution validation, then exercise both installed environments."""
+    """Retain child environments until both installed planning probes finish."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--artifacts-dir", type=Path, required=True)
     parser.add_argument("--workspace", type=Path)
+    parser.add_argument("--keep-workspace", action="store_true")
     args = parser.parse_args()
-    workspace = (
-        args.workspace.resolve()
-        if args.workspace
-        else Path(tempfile.mkdtemp(prefix="agentic-ml-planning-")).resolve()
+    spec = importlib.util.spec_from_file_location(
+        "verification_support", ROOT / "tests/verification_support.py"
     )
-    workspace.mkdir(parents=True, exist_ok=True)
+    assert spec is not None and spec.loader is not None
+    support = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(support)
+    requested = args.workspace
+    if requested is not None and requested.exists():
+        requested = requested / ("verification-" + uuid4().hex)
+    invocation = support.Invocation(
+        checkout=ROOT, workspace=requested, keep_workspace=args.keep_workspace
+    )
+    workspace = invocation.workspace
     env = dict(os.environ)
     for name in (
         "PYTHONPATH",
@@ -33,51 +41,42 @@ def main() -> None:
         "UV_WORKING_DIR",
     ):
         env.pop(name, None)
-    print(f"WORKSPACE {workspace}", flush=True)
-    result = subprocess.run(
-        [
-            sys.executable,
-            str(ROOT / "tests/packaging/verify_distributions.py"),
-            "--artifacts-dir",
-            str(args.artifacts_dir.resolve()),
-        ],
-        cwd=workspace,
-        env=env,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    (workspace / "distributions.log").write_text(result.stdout + result.stderr)
-    if result.returncode:
-        raise RuntimeError(
-            f"Distribution validation failed; see {workspace / 'distributions.log'}"
+    env["UV_CACHE_DIR"] = str(invocation.create_disposable("cache", create=False))
+    artifact_work = workspace / "distributions"
+    for relative in ("direct-wheel", "rebuilt-wheel", "cache"):
+        invocation.create_disposable("distributions/" + relative, create=False)
+    try:
+        invocation.run(
+            "distributions",
+            [
+                sys.executable,
+                str(ROOT / "tests/packaging/verify_distributions.py"),
+                "--artifacts-dir",
+                str(args.artifacts_dir.resolve()),
+                "--workspace",
+                str(artifact_work),
+                "--keep-workspace",
+                "--parent-records",
+                str(invocation.records),
+            ],
+            workspace,
+            env,
         )
-    print(result.stdout, end="", flush=True)
-    artifact_work = Path(
-        next(
-            line.removeprefix("WORKSPACE ")
-            for line in result.stdout.splitlines()
-            if line.startswith("WORKSPACE ")
-        )
-    )
-    probe = workspace / "check_planning.py"
-    shutil.copy(Path(__file__).with_name("check_planning.py"), probe)
-    for label in ("direct-wheel", "rebuilt-wheel"):
-        python = artifact_work / label / "bin/python"
-        completed = subprocess.run(
-            [str(python), "-I", str(probe), "--workspace", str(workspace / label)],
-            cwd=workspace,
-            env=env,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        (workspace / (label + ".log")).write_text(completed.stdout + completed.stderr)
-        if completed.returncode:
-            raise RuntimeError(
-                f"Installed planning failed; see {workspace / (label + '.log')}"
+        probe = workspace / "check_planning.py"
+        shutil.copy(Path(__file__).with_name("check_planning.py"), probe)
+        for label in ("direct-wheel", "rebuilt-wheel"):
+            python = artifact_work / label / "bin/python"
+            invocation.run(
+                label + " planning",
+                [str(python), "-I", str(probe), "--workspace", str(workspace / label)],
+                workspace,
+                env,
             )
-        print(f"PASS planning {label}", flush=True)
+            print(f"PASS planning {label}", flush=True)
+    except (OSError, RuntimeError, ValueError) as error:
+        print(f"FAIL planning: {error}; workspace={workspace}", file=sys.stderr)
+        raise SystemExit(invocation.finish(1)) from error
+    raise SystemExit(invocation.finish(0))
 
 
 if __name__ == "__main__":

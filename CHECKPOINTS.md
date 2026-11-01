@@ -4,21 +4,21 @@ Last updated: 2026-11-01 (America/New_York)
 
 ## Current position and next action
 
-US-35 Implementation Phase 1 is complete and approved on 2026-11-01
-(“i approve ip1; commit changes”), following the developer's execution
-instruction “execute implementaton plan for us-35”. The approved
-[plan](docs/plans/milestone-50-us-35.md) owns task progress and gates;
-[Phase 1 evidence](docs/verification/us-35-ip1.md) records the unchanged four-command
-baseline, lifecycle TDD and direct/shared checks. Issue #47 was retrieved again:
-complete body, zero comments, stable metadata; scope unchanged.
+US-35 Implementation Phase 2 is complete and approved on 2026-11-01:
+“i approve ip2; commit”. Phase 1 is approved and committed as `2e3bf2d`.
+The [plan](docs/plans/milestone-50-us-35.md) owns progress and gates;
+[Phase 2 evidence](docs/verification/us-35-ip2.md) records the consumer protocol,
+TDD, final checks and same-input disk comparison. Issue #47 was retrieved again:
+complete body, zero comments, metadata refresh unchanged. Scope is unchanged.
 
-Installation verification now preserves durable records, supports
-`--keep-workspace`, retains failures and removes only invocation-owned environments
-and private caches after successful checks. The existing real pinned-install test
-verified creation through installed probes, then environment removal and surviving
-identity records. Final Phase 1 verification passed: 36 direct tests in 148.28s with four workers,
-plus all shared checks. Phase 2 has not begun.
-Phase 1 gate is approved; Phase 2 gate and story acceptance remain pending.
+All four drivers now preserve durable records and remove only newly owned
+environments/private caches after final consumers. Failure and explicit retention
+keep environments; composed parents link child records and control final cleanup.
+Final verification: **58 direct tests passed in 419.99s**, four workers; one reserved
+milestone case deselected. All shared checks passed, lock/input hashes unchanged.
+The exact baseline workload passed for all four commands, reducing retained
+environments from 1/2/6/2 to zero; source/project files and records survive.
+Phase 2 is approved; whole-story acceptance remains pending.
 
 Development-guide reorganization remains approved and committed; see its
 [plan](docs/plans/development-guide-reorganization.md) and
@@ -46,23 +46,24 @@ US-35-AC-02 now specifies `.dev-records/verification/` for raw evidence retained
 for the lifetime of agentic-ml development. The development guide defines layout,
 backup responsibility, and cleanup protection; `.gitignore` excludes the directory.
 Installation-driver adoption is complete in US-35 Phase 1; the other three
-drivers await Phase 2. No historical records were moved.
+drivers are complete and approved in Phase 2. No historical records were moved.
 
-**Next action:** await direction to execute Phase 2; the Phase 1 gate is approved
-and its changes are authorized for commit. See the owning plan and Phase 1 evidence. Preserve M1-ACCEPT-VERIFY and the new
+**Next action:** await explicit US-35 whole-story acceptance. Do not publish before acceptance. Preserve M1-ACCEPT-VERIFY and
 M50-ACCEPT-VERIFY deferrals in their owning plans.
 
 ## Checkout and working tree
 
-- Branch: `US-35-verification-cleanup`; HEAD `bac0e9c` is the approved planning commit.
-- Approved Phase 1 commit contents: installation driver and direct test callers, new
-  `tests/verification_support.py`, new lifecycle tests, Phase 1 report, plan and
-  checkpoint. Product source, dependencies, lockfile and other drivers unchanged.
-- Baseline raw records: `.dev-records/verification/us-35-baseline-bac0e9c/`;
-  current direct-check XML/identity records: `.dev-records/verification/us-35-ip1-checks/`.
-  These ignored records and all baseline workspaces must be preserved.
-- Phase 1 commit is authorized. Phase 2 remains unstarted; story acceptance and
-  publication are pending.
+- Branch: `US-35-verification-cleanup`; Phase 2 follows approved Phase 1 commit
+  `2e3bf2d`. Both implementation phases are approved.
+- Phase 2 changes: distribution/initialization/planning drivers, shared helper,
+  direct lifecycle/distribution tests, retention documentation, plan/evidence and
+  checkpoint. Product source, dependencies and lock unchanged.
+- Preserve baseline `.dev-records/verification/us-35-baseline-bac0e9c/`, all
+  historical workspaces and Phase 1 evidence. Phase 2 raw records are in
+  `us-35-ip2-checks/`, `us-35-ip2-workload/` and per-invocation record directories.
+- Phase 2 implementation, documentation and approval records are committed
+  together under the developer’s 2026-11-01 authorization. Whole-story acceptance
+  and publication remain pending.
 
 ## Verification and outstanding obligation
 

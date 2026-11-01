@@ -362,3 +362,231 @@ def test_unfinished_invocation_has_an_incomplete_durable_summary(
     assert summary["cleanup"] == "not attempted"
     assert environment.is_dir()
     assert invocation.finish(4) == 4
+
+
+def test_child_record_locations_survive_child_failure(tmp_path: Path) -> None:
+    """A failed subprocess reports linked records without transferring path ownership."""
+    import os
+    import sys
+
+    invocation = support().Invocation(checkout=tmp_path / "checkout")
+    child_records = invocation.checkout / ".dev-records/verification/child"
+    child_records.mkdir()
+    with pytest.raises(RuntimeError, match="exit 4"):
+        invocation.run(
+            "child",
+            [
+                sys.executable,
+                "-c",
+                f"print('RECORDS {child_records}'); raise SystemExit(4)",
+            ],
+            invocation.workspace,
+            dict(os.environ),
+        )
+    assert invocation.finish(1) == 1
+    summary = json.loads((invocation.records / "summary.json").read_text())
+    assert summary["child_records"] == [str(child_records)]
+    assert child_records.is_dir()
+
+
+@pytest.fixture(scope="module")
+def lifecycle_artifacts(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    """Build real artifacts for direct parent lifecycle commands."""
+    import subprocess
+
+    destination = tmp_path_factory.mktemp("lifecycle-artifacts")
+    subprocess.run(["uv", "build", "--out-dir", str(destination)], cwd=ROOT, check=True)
+    return destination
+
+
+@pytest.mark.parametrize("keep", [False, True])
+def test_initialization_cleans_after_final_consumer(
+    lifecycle_artifacts: Path, tmp_path: Path, keep: bool
+) -> None:
+    """All six installed environments survive their probes and are then removed."""
+    import subprocess
+    import sys
+
+    workspace = tmp_path / "initialization"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "tests/installation/verify_initialization.py"),
+            "--artifacts-dir",
+            str(lifecycle_artifacts),
+            "--workspace",
+            str(workspace),
+            *(["--keep-workspace"] if keep else []),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=600,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    for label in ("direct-wheel", "rebuilt-wheel"):
+        assert f"PASS initialization {label}" in result.stdout
+    assert len(list(workspace.rglob("pyvenv.cfg"))) == (6 if keep else 0)
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in result.stdout.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    summary = json.loads((records / "summary.json").read_text())
+    assert summary["cleanup"] == ("retained" if keep else "complete")
+    assert len(summary["child_records"]) == 1
+    for label in ("direct-wheel", "rebuilt-wheel"):
+        for kind in ("fresh", "existing"):
+            identity = json.loads(
+                (records / "identities" / f"{label}-{kind}.json").read_text()
+            )
+            assert identity["origin"]["vcs_info"]["commit_id"]
+            assert (workspace / label / kind / "uv.lock").is_file()
+    assert (workspace / "source/.git").is_dir()
+
+
+@pytest.mark.parametrize("driver", ["verify_initialization.py", "verify_planning.py"])
+def test_parent_failure_after_child_success_retains_child_environments(
+    lifecycle_artifacts: Path, tmp_path: Path, driver: str
+) -> None:
+    """A filesystem conflict after child validation leaves its evidence and interpreters."""
+    import os
+    import subprocess
+    import sys
+
+    process = subprocess.Popen(
+        [
+            sys.executable,
+            str(ROOT / "tests/installation" / driver),
+            "--artifacts-dir",
+            str(lifecycle_artifacts),
+        ],
+        cwd=tmp_path,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    assert process.stdout is not None
+    # Read bytes without TextIO read-ahead, so communicate retains all record lines.
+    first_bytes = bytearray()
+    while not first_bytes.endswith(b"\n"):
+        byte = os.read(process.stdout.fileno(), 1)
+        assert byte, "driver exited before reporting its workspace"
+        first_bytes.extend(byte)
+    first = first_bytes.decode()
+    assert first.startswith("WORKSPACE "), first
+    workspace = Path(first.removeprefix("WORKSPACE ").strip())
+    # Inject only at the filesystem boundary, without changing any probe or package.
+    if driver == "verify_initialization.py":
+        (workspace / "source").write_text("conflicting caller sentinel")
+    else:
+        (workspace / "check_planning.py").mkdir()
+    output, error = process.communicate(timeout=180)
+    assert process.returncode != 0, output + error
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in output.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    summary = json.loads((records / "summary.json").read_text())
+    assert summary["verification_exit_code"] == 1
+    assert summary["cleanup"] == "retained"
+    child_records = Path(summary["child_records"][0])
+    child = json.loads((child_records / "summary.json").read_text())
+    assert child["verification_exit_code"] == 0
+    assert child["parent_records"] == str(records)
+    for label in ("direct-wheel", "rebuilt-wheel"):
+        assert (workspace / "distributions" / label / "bin/python").is_file()
+    assert (child_records / "identities/artifacts.json").is_file()
+
+
+@pytest.mark.parametrize("driver", ["verify_initialization.py", "verify_planning.py"])
+def test_parent_early_failure_preserves_linked_diagnostics(
+    tmp_path: Path, driver: str
+) -> None:
+    """Missing artifacts keep separate original child and parent failure records."""
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "tests/installation" / driver),
+            "--artifacts-dir",
+            str(tmp_path),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    assert result.returncode != 0
+    assert "artifact selection" in result.stderr
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in result.stdout.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    summary = json.loads((records / "summary.json").read_text())
+    assert summary["cleanup"] == "retained"
+    child = Path(summary["child_records"][0])
+    assert (
+        json.loads((child / "summary.json").read_text())["verification_exit_code"] == 1
+    )
+
+
+def test_planning_retention_preserves_caller_directory_and_shared_cache(
+    lifecycle_artifacts: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Existing directories get a unique child; shared caches and sources survive."""
+    import subprocess
+    import sys
+
+    caller = tmp_path / "caller"
+    caller.mkdir()
+    (caller / "sentinel").write_text("caller-owned")
+    existing = caller / ".venv"
+    existing.mkdir()
+    (existing / "sentinel").write_text("existing environment")
+    shared = tmp_path / "shared-cache"
+    shared.mkdir()
+    (shared / "sentinel").write_text("shared cache")
+    monkeypatch.setenv("UV_CACHE_DIR", str(shared))
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "tests/installation/verify_planning.py"),
+            "--artifacts-dir",
+            str(lifecycle_artifacts),
+            "--workspace",
+            str(caller),
+            "--keep-workspace",
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=180,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    workspace = Path(
+        next(
+            line.removeprefix("WORKSPACE ")
+            for line in result.stdout.splitlines()
+            if line.startswith("WORKSPACE ")
+        )
+    )
+    assert workspace.parent == caller
+    assert (caller / "sentinel").read_text() == "caller-owned"
+    assert (existing / "sentinel").read_text() == "existing environment"
+    assert list(shared.iterdir()) == [shared / "sentinel"]
+    assert (shared / "sentinel").read_text() == "shared cache"
+    assert len(list(workspace.rglob("pyvenv.cfg"))) == 2

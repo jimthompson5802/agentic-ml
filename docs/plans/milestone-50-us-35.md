@@ -94,7 +94,7 @@ Stop at every implementation phase gate, including the final gate. Present tasks
 - **Developer decision:** Approved.
 - **Decision reference and date:** Developer message, 2026-11-01: “i approve ip1; commit changes”.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Phase 1 gate satisfied. Current instruction authorizes committing Phase 1; Phase 2 remains unstarted pending direction to execute.
+- **Progression authorized:** Phase 1 gate satisfied. Current instruction authorizes committing Phase 1; Phase 2 execution authorized 2026-11-01: “you can start ip2”.
 
 ## US-35 / Implementation Phase 2: Composed driver cleanup and story acceptance
 
@@ -106,14 +106,16 @@ Stop at every implementation phase gate, including the final gate. Present tasks
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-35-IP2-T1 | Not started | Refine Phase 1 consumer map for `tests/packaging/verify_distributions.py`, initialization/planning drivers, probes and every successful-workspace consumer. Record proposed child protocol and any new direct-test selectors before tests. | IP1 gate | Explicit final-consumer points cover extracted source, rebuilt wheel, both interpreters and probe-created environments. No source/checkouts or caller paths classified as disposable environments. | AC-01, AC-04 |
-| US-35-IP2-T2 | Not started | Adapt distribution driver to the lifecycle helper; add explicit child workspace plumbing and retention flag; record all stage logs, wheel/sdist/rebuilt checksums and installed identities. Add direct cases in `tests/integration/test_distribution_verification.py` and new lifecycle module tests. | T1 | Standalone success cleans owned environments after both paths; malformed artifact and later rebuilt-path failures retain available environments and records. Retained child succeeds without deleting resources needed by its parent. | AC-01–05 |
-| US-35-IP2-T3 | Not started | Adapt initialization and planning drivers to parent ownership and linked child records; extend proposed `tests/integration/test_verification_lifecycle.py` with direct command cases for both parents. Adjust existing distribution-driver callers for explicit retention where needed. | T2 | Both parents finish every real downstream probe before cleanup. Failure after child success retains child environments. Explicit retention preserves both paths. Existing planning workspace sentinel is untouched; probes do not write durable evidence into disposable-only storage. | AC-01–05 |
-| US-35-IP2-T4 | Not started | Update `docs/development/distribution.md`, `docs/development/records.md` and relevant command guidance with default cleanup, `--keep-workspace`, records lookup, child ownership, cleanup status, failure/interruption limits and backup duty. | T2, T3 | Retention contract matches all four commands; documentation says no historical deletion and no guarantee after forced process termination. | AC-02–04 |
-| US-35-IP2-T5 | Not started | Repeat T1 baseline workload using identical artifacts/source fixtures and args except required new flags; write proposed `docs/verification/us-35-ip2.md`. | T2, T3 | Per-driver before/after retained environment counts and disk sizes, record sizes and elapsed observations with platform/measurement limits; no unsupported peak-usage or speed claim. | AC-05 |
-| US-35-IP2-T6 | Not started | Reconcile all five criteria, renew invalidated direct evidence, run shared checks, update this plan and `CHECKPOINTS.md`, present final gate/story review. | T4, T5 | All required direct checks pass, every deferred regression has an owner, raw records exist after cleanup, review report links evidence; no full-suite success claimed. | AC-01–05 |
+| US-35-IP2-T1 | Complete | Refine Phase 1 consumer map for `tests/packaging/verify_distributions.py`, initialization/planning drivers, probes and every successful-workspace consumer. Record proposed child protocol and any new direct-test selectors before tests. | IP1 gate | Explicit final-consumer points cover extracted source, rebuilt wheel, both interpreters and probe-created environments. No source/checkouts or caller paths classified as disposable environments. | AC-01, AC-04 |
+| US-35-IP2-T2 | Complete | Adapt distribution driver to the lifecycle helper; add explicit child workspace plumbing and retention flag; record all stage logs, wheel/sdist/rebuilt checksums and installed identities. Add direct cases in `tests/integration/test_distribution_verification.py` and new lifecycle module tests. | T1 | Standalone success cleans owned environments after both paths; malformed artifact and later rebuilt-path failures retain available environments and records. Retained child succeeds without deleting resources needed by its parent. | AC-01–05 |
+| US-35-IP2-T3 | Complete | Adapt initialization and planning drivers to parent ownership and linked child records; extend proposed `tests/integration/test_verification_lifecycle.py` with direct command cases for both parents. Adjust existing distribution-driver callers for explicit retention where needed. | T2 | Both parents finish every real downstream probe before cleanup. Failure after child success retains child environments. Explicit retention preserves both paths. Existing planning workspace sentinel is untouched; probes do not write durable evidence into disposable-only storage. | AC-01–05 |
+| US-35-IP2-T4 | Complete | Update `docs/development/distribution.md`, `docs/development/records.md` and relevant command guidance with default cleanup, `--keep-workspace`, records lookup, child ownership, cleanup status, failure/interruption limits and backup duty. | T2, T3 | Retention contract matches all four commands; documentation says no historical deletion and no guarantee after forced process termination. | AC-02–04 |
+| US-35-IP2-T5 | Complete | Repeat T1 baseline workload using identical artifacts/source fixtures and args except required new flags; write proposed `docs/verification/us-35-ip2.md`. | T2, T3 | Per-driver before/after retained environment counts and disk sizes, record sizes and elapsed observations with platform/measurement limits; no unsupported peak-usage or speed claim. | AC-05 |
+| US-35-IP2-T6 | Complete | Reconcile all five criteria, renew invalidated direct evidence, run shared checks, update this plan and `CHECKPOINTS.md`, present final gate/story review. | T4, T5 | All required direct checks pass, every deferred regression has an owner, raw records exist after cleanup, review report links evidence; no full-suite success claimed. | AC-01–05 |
 
 ### Verification and review evidence
+
+Consumer/child protocol and focused red–green evidence: [Phase 2 report](../verification/us-35-ip2.md). Distribution task T2 complete after real default/retained/later-failure CLI checks; final combined phase verification passed: 58 tests and all shared checks.
 
 - **Changed modules/direct tests:** distribution, initialization and planning drivers plus lifecycle helper. Select `uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_verification_lifecycle.py tests/integration/test_distribution_verification.py`. If helper/installation behavior changes, renew `tests/integration/test_installation_verification.py` too.
 - **Public boundaries:** Four subprocess CLIs with independently built wheel/sdist artifacts and local Git source fixture; independent cwd; installed interpreters, original probe assertions, reported path/output/status and durable manifests. Public helper tests provide deterministic ownership/cleanup-failure cases. No private collaboration mocks substitute for installed verification.
@@ -123,22 +125,22 @@ Stop at every implementation phase gate, including the final gate. Present tasks
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Direct lifecycle/distribution/parent commands | Four-worker direct selection above, including new real parent command cases | Pass; exact selected/deselected counts, AC mappings and platform recorded | Pending |
-| Real standalone workload | Existing `uv run --locked python tests/installation/verify_installation.py --repository <local-fixture-url> --revision <full-sha>` and `uv run --locked python <driver> --artifacts-dir <fixed-artifacts>` for each other driver; resolve actual literal args in T1 | Both package paths/consumers pass, zero owned retained environments on default success; private caches removed and records intact | Pending |
-| Retention/ownership/failure matrix | Public CLI tests and helper boundary cases | Available failure environments retained; caller sentinels/shared caches/source/evidence unchanged; cleanup errors visible | Pending |
-| Before/after measurement | Same T1 workload, enumerate owned `pyvenv.cfg` environments and private caches; record logical bytes and `du -sk` allocated usage before/after completion separately from durable records | Reduced retained environment count/usage; report APFS clones/compression, sparse files, shared cache and allocation rounding limits; no fixed unsupported byte threshold | Pending |
-| Shared checks | All Phase 1 shared commands, lock hashes and whitespace check | Pass; no silent lock update | Pending |
-| Documentation | Resolve local links, inspect help/examples and `git diff --check` | Consistent retention contract; planned versus actual evidence distinguished | Pending |
+| Direct lifecycle/distribution/parent commands | Four-worker direct selection above, including installation renewal for helper changes | Pass; exact selected/deselected counts, AC mappings and platform recorded | 58 passed in 419.99s; 59 collected, 1 reserved case deselected; [report](../verification/us-35-ip2.md#phase-gate-verification) |
+| Real standalone workload | Exact original commands/cwd and fixed inputs replayed; see [report](../verification/us-35-ip2.md#fixed-workload-comparison) | Both package paths/consumers pass, zero owned retained environments on default success; private caches removed and records intact | All four commands passed; retained environments 1/2/6/2 → 0/0/0/0; private caches absent, durable identities/checksums verified |
+| Retention/ownership/failure matrix | Public CLI tests and helper boundary cases | Available failure environments retained; caller sentinels/shared caches/source/evidence unchanged; cleanup errors visible | Passed in final direct selection; all four commands have default/retained/failure evidence; [report](../verification/us-35-ip2.md) |
+| Before/after measurement | Exact original T1 inputs/commands, environment enumeration, logical bytes and `du -sk`; separate records | Reduced retained environment count/usage with filesystem limits | All four passed; 1/2/6/2 → zero environments; [comparison](../verification/us-35-ip2.md#fixed-workload-comparison) |
+| Shared checks | All Phase 1 shared commands, lock hashes and whitespace check | Pass; no silent lock update | All passed; lock and executable/test hashes unchanged; [report](../verification/us-35-ip2.md#phase-gate-verification) |
+| Documentation | Resolve local links, inspect help/examples and `git diff --check` | Consistent retention contract; planned versus actual evidence distinguished | Retention contract updated; local links, CLI help and final whitespace checks passed |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T6 complete; all criteria verified with real command and boundary evidence; documentation and measurements reviewed; required direct/shared checks pass.
-- **Evidence presented:** Pending — proposed `docs/verification/us-35-ip2.md`, phase 1 report and absolute retained record paths.
+- **Evidence presented:** [Phase 2 report](../verification/us-35-ip2.md), Phase 1 report and absolute raw record paths. T1–T6 technically complete on 2026-11-01; 58 direct tests and shared checks passed, fixed-input replay retained zero environments for all four commands. Developer approved this gate on 2026-11-01.
 - **Remaining limitations:** Report actual macOS/tool versions; Linux/Windows unverified unless observed. Full suite and reserved test deferred to milestone acceptance. Interruption may leave disposable workspaces; never claim automatic forced-termination cleanup.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer message, 2026-11-01: “i approve ip2; commit”.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Final acceptance only after explicit developer approval; gate can also accept the story if explicitly stated.
+- **Progression authorized:** Commit Phase 2 changes. Whole-story acceptance and publication remain pending.
 
 ## Final verification requirements
 
@@ -148,21 +150,21 @@ Stop at every implementation phase gate, including the final gate. Present tasks
 - **Distribution/installation:** Real direct-wheel and sdist-rebuilt-wheel commands are required because their drivers change. Probe existing installed public interfaces outside checkout with declared runtime dependencies; no editable installs or contributor dependency leakage. No product distribution change is planned, but driver evidence must cover both artifact paths.
 - **Deferred-check reconciliation:** Enumerate caller/full-suite deferrals for `M50-ACCEPT-VERIFY`; this reconciliation assigns ownership, not a passing result. Keep unrelated M1 acceptance obligations intact.
 - **Evidence renewal:** Later executable changes renew invalidated direct evidence; artifact input changes renew artifact probes; documentation-only approval edits use link/whitespace checks and explain why TDD is inapplicable.
-- **Actual results and limitations:** Phase 1: 36 direct tests and shared checks passed; unchanged four-command baseline captured. See [Phase 1 report](../verification/us-35-ip1.md). Whole-story final verification remains pending Phase 2; no full-suite or cross-platform verification claimed.
+- **Actual results and limitations:** Phase 1: 36 direct tests and shared checks passed; unchanged four-command baseline captured. See [Phase 1 report](../verification/us-35-ip1.md). Phase 2: 58 direct tests in 419.99s and all shared checks passed; fixed-input four-command replay passed. See [Phase 2 report](../verification/us-35-ip2.md). No full-suite or cross-platform verification claimed.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-35-AC-01: all four commands clean after final consumers | IP1-T2–T4; IP2-T1–T3, T6 | Real four-command success and composed-consumer cases | Pending |
-| US-35-AC-02: retained complete records and absolute locations | IP1-T2–T4; IP2-T2–T4, T6 | Manifest/log/identity/checksum assertions after cleanup; unique parent/child records | Pending |
-| US-35-AC-03: failure and explicit successful retention | IP1-T2–T4; IP2-T2–T4, T6 | Per-command success retention and early/later/downstream failure matrix | Pending |
-| US-35-AC-04: ownership and cleanup errors | IP1-T1–T4; IP2-T1–T4, T6 | Sentinels, symlink/overlap rejection, shared-cache preservation and independent outcome checks | Pending |
-| US-35-AC-05: automation and before/after disk evidence | IP1-T1–T4; IP2-T2–T3, T5–T6 | Direct test results and fixed-workload environment/disk comparison with limits | Pending |
+| US-35-AC-01: all four commands clean after final consumers | IP1-T2–T4; IP2-T1–T3, T6 | Real four-command success and composed-consumer cases | Verified; [Phase 2 evidence](../verification/us-35-ip2.md) |
+| US-35-AC-02: retained complete records and absolute locations | IP1-T2–T4; IP2-T2–T4, T6 | Manifest/log/identity/checksum assertions after cleanup; unique parent/child records | Verified; [Phase 2 evidence](../verification/us-35-ip2.md) |
+| US-35-AC-03: failure and explicit successful retention | IP1-T2–T4; IP2-T2–T4, T6 | Per-command success retention and early/later/downstream failure matrix | Verified; [Phase 2 evidence](../verification/us-35-ip2.md) |
+| US-35-AC-04: ownership and cleanup errors | IP1-T1–T4; IP2-T1–T4, T6 | Sentinels, symlink/overlap rejection, shared-cache preservation and independent outcome checks | Verified; [Phase 2 evidence](../verification/us-35-ip2.md) |
+| US-35-AC-05: automation and before/after disk evidence | IP1-T1–T4; IP2-T2–T3, T5–T6 | Direct test results and fixed-workload environment/disk comparison with limits | Verified; [Phase 2 evidence](../verification/us-35-ip2.md) |
 
-- **Remaining work:** Phase 1 complete and approved on 2026-11-01; Phase 2 remains unstarted pending execution direction. US-36–US-38 remain separate backlog work.
+- **Remaining work:** Both implementation phases approved. Await explicit whole-story acceptance. US-36–US-38 remain separate backlog work.
 - **Partial prerequisite delivery:** None claimed for another story.
-- **Final verification:** Pending.
+- **Final verification:** Required phase/direct/shared checks and fixed-workload comparison passed; milestone deferrals retain their named owner.
 - **Developer acceptance:** Pending.
 - **Decision reference and date:** Pending.
 

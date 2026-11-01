@@ -4,9 +4,11 @@ import base64
 import csv
 import hashlib
 import io
+import json
 import shutil
 import subprocess
 import sys
+import tarfile
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -39,6 +41,27 @@ def test_both_installed_wheel_paths_pass(artifacts: Path, tmp_path: Path) -> Non
     assert result.returncode == 0, result.stdout + result.stderr
     assert "PASS direct-wheel" in result.stdout
     assert "PASS rebuilt-wheel" in result.stdout
+    workspace = Path(
+        next(
+            line.removeprefix("WORKSPACE ")
+            for line in result.stdout.splitlines()
+            if line.startswith("WORKSPACE ")
+        )
+    )
+    assert not (workspace / "direct-wheel").exists()
+    assert not (workspace / "rebuilt-wheel").exists()
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in result.stdout.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    assert json.loads((records / "summary.json").read_text())["cleanup"] == "complete"
+    for label in ("direct-wheel", "rebuilt-wheel"):
+        identity = json.loads((records / "identities" / (label + ".json")).read_text())
+        assert identity
+    assert (workspace / "source").is_dir()
 
 
 @pytest.mark.milestone_acceptance
@@ -270,6 +293,24 @@ def test_planning_from_both_artifact_paths(artifacts: Path, tmp_path: Path) -> N
     assert result.returncode == 0, result.stdout + result.stderr
     assert "PASS planning direct-wheel" in result.stdout
     assert "PASS planning rebuilt-wheel" in result.stdout
+    workspace = tmp_path / "planning"
+    assert not list(workspace.rglob("pyvenv.cfg"))
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in result.stdout.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    summary = json.loads((records / "summary.json").read_text())
+    assert summary["cleanup"] == "complete"
+    assert len(summary["child_records"]) == 1
+    child = Path(summary["child_records"][0])
+    assert json.loads((child / "summary.json").read_text())["parent_records"] == str(
+        records
+    )
+    for label in ("direct-wheel", "rebuilt-wheel"):
+        assert not (workspace / "distributions" / label).exists()
 
 
 def test_missing_approval_schema_fails_installed_inventory(
@@ -281,3 +322,97 @@ def test_missing_approval_schema_fails_installed_inventory(
     )
     assert result.returncode != 0
     assert "PASS direct-wheel" not in result.stdout
+
+
+def test_explicit_distribution_retention_keeps_both_interpreters(
+    artifacts: Path, tmp_path: Path
+) -> None:
+    """A parent can consume both wheel paths and their persistent identities."""
+    workspace = tmp_path / "retained"
+    parent_records = tmp_path / "parent-records"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(DRIVER),
+            "--artifacts-dir",
+            str(artifacts),
+            "--workspace",
+            str(workspace),
+            "--keep-workspace",
+            "--parent-records",
+            str(parent_records),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in result.stdout.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    summary = json.loads((records / "summary.json").read_text())
+    assert summary["parent_records"] == str(parent_records)
+    assert summary["cleanup"] == "retained"
+    for label in ("direct-wheel", "rebuilt-wheel"):
+        assert (workspace / label / "bin/python").is_file()
+        identity = json.loads((records / "identities" / (label + ".json")).read_text())
+        assert identity["prefix"] == str(workspace / label)
+    assert len(json.loads((records / "identities/artifacts.json").read_text())) == 3
+
+
+def test_rebuilt_probe_failure_retains_both_environments(
+    artifacts: Path, tmp_path: Path
+) -> None:
+    """A late failure retains the successful direct environment and failed rebuilt one."""
+    damaged = tmp_path / "late-failure"
+    damaged.mkdir()
+    shutil.copy(next(artifacts.glob("*.whl")), damaged)
+    with tarfile.open(next(artifacts.glob("*.tar.gz")), "r:gz") as original:
+        with tarfile.open(damaged / "damaged.tar.gz", "w:gz") as target:
+            for member in original.getmembers():
+                data = original.extractfile(member) if member.isfile() else None
+                if member.name.endswith("runtime_guidance/provisional.md"):
+                    replacement = b"Damaged rebuilt guidance.\n"
+                    member.size = len(replacement)
+                    data = io.BytesIO(replacement)
+                target.addfile(member, data)
+    result = subprocess.run(
+        [sys.executable, str(DRIVER), "--artifacts-dir", str(damaged)],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    assert result.returncode != 0
+    assert "PASS direct-wheel" in result.stdout
+    assert "PASS rebuilt-wheel" not in result.stdout
+    assert "runtime guidance contents differ" in result.stderr
+    workspace = Path(
+        next(
+            line.removeprefix("WORKSPACE ")
+            for line in result.stdout.splitlines()
+            if line.startswith("WORKSPACE ")
+        )
+    )
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in result.stdout.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    assert (workspace / "direct-wheel/bin/python").is_file()
+    assert (workspace / "rebuilt-wheel/bin/python").is_file()
+    summary = json.loads((records / "summary.json").read_text())
+    assert summary["verification_exit_code"] == 1
+    assert summary["cleanup"] == "retained"
+    identity = json.loads((records / "identities/rebuilt-wheel.json").read_text())
+    assert identity["status"] == "unavailable"
+    assert (records / "commands.json").is_file()

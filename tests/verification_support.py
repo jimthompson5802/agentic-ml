@@ -70,6 +70,8 @@ class Invocation:
         print(f"RECORDS {self.records}", flush=True)
         (self.records / "logs").mkdir()
         (self.records / "identities").mkdir()
+        self.child_records: list[str] = []
+        self.identity["child_records"] = self.child_records
         self.commands: list[dict[str, object]] = []
         (self.records / "commands.json").write_text("[]\n")
         (self.records / "summary.json").write_text(
@@ -153,6 +155,19 @@ class Invocation:
         log = f"logs/{len(self.commands):03d}.log"
         stdout = result.stdout if result is not None else ""
         stderr = result.stderr if result is not None else str(spawn_error)
+        for line in stdout.splitlines():
+            if line.startswith("RECORDS "):
+                record = Path(line.removeprefix("RECORDS "))
+                if (
+                    record.is_absolute()
+                    and record.is_relative_to(
+                        self.checkout / ".dev-records/verification"
+                    )
+                    and record != self.records
+                    and str(record) not in self.child_records
+                ):
+                    self.child_records.append(str(record))
+                    print(f"RECORDS {record}", flush=True)
         (self.records / log).write_text(
             f"{command!r} cwd={cwd}\nstdout:\n{stdout}\nstderr:\n{stderr}",
             encoding="utf-8",

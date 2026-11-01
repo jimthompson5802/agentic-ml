@@ -2,32 +2,17 @@
 
 import argparse
 import hashlib
+import importlib.util
+import json
 import os
 import shutil
-import subprocess
 import sys
-import tempfile
+from collections.abc import Callable
 from pathlib import Path
 from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[2]
 PROBE = Path(__file__).with_name("check_initialization.py")
-
-
-def run(stage: str, command: list[str], cwd: Path, env: dict[str, str]) -> str:
-    """Preserve each external command's output and original failure."""
-    print(f"STAGE {stage}: {command!r} cwd={cwd}", flush=True)
-    completed = subprocess.run(
-        command, cwd=cwd, env=env, capture_output=True, text=True
-    )
-    (cwd / f"{stage}.log").write_text(
-        f"{command!r}\nstdout:\n{completed.stdout}\nstderr:\n{completed.stderr}"
-    )
-    if completed.returncode:
-        raise RuntimeError(
-            f"{stage}: exit {completed.returncode}; see {cwd / (stage + '.log')}"
-        )
-    return completed.stdout
 
 
 def verify_project(
@@ -37,6 +22,7 @@ def verify_project(
     revision: str,
     wheel: Path,
     env: dict[str, str],
+    run: Callable[[str, list[str], Path, dict[str, str]], str],
 ) -> None:
     """Initialize a fresh or existing project and probe its installed interfaces."""
     project.mkdir(parents=True)
@@ -136,15 +122,22 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--artifacts-dir", type=Path, required=True)
     parser.add_argument("--workspace", type=Path)
+    parser.add_argument("--keep-workspace", action="store_true")
     args = parser.parse_args()
-    work = (
-        args.workspace.resolve()
-        if args.workspace
-        else Path(tempfile.mkdtemp(prefix="agentic-ml-initialization-")).resolve()
+    spec = importlib.util.spec_from_file_location(
+        "verification_support", ROOT / "tests/verification_support.py"
     )
-    if args.workspace:
-        work.mkdir(parents=True, exist_ok=False)
-    print(f"WORKSPACE {work}", flush=True)
+    assert spec is not None and spec.loader is not None
+    support = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(support)
+    invocation = support.Invocation(
+        checkout=ROOT, workspace=args.workspace, keep_workspace=args.keep_workspace
+    )
+    work = invocation.workspace
+    run = invocation.run
+    artifact_work = work / "distributions"
+    for relative in ("direct-wheel", "rebuilt-wheel", "cache"):
+        invocation.create_disposable("distributions/" + relative, create=False)
     env = dict(os.environ)
     for name in (
         "PYTHONPATH",
@@ -155,29 +148,28 @@ def main() -> None:
         "UV_WORKING_DIR",
     ):
         env.pop(name, None)
+    env["UV_CACHE_DIR"] = str(invocation.create_disposable("cache", create=False))
     env.update(
         DVC_NO_ANALYTICS="1",
         MLFLOW_DISABLE_TELEMETRY="true",
         MLFLOW_DISABLE_AGENT_HINT="1",
     )
     try:
-        output = run(
+        run(
             "distributions",
             [
                 sys.executable,
                 str(ROOT / "tests/packaging/verify_distributions.py"),
                 "--artifacts-dir",
                 str(args.artifacts_dir.resolve()),
+                "--workspace",
+                str(artifact_work),
+                "--keep-workspace",
+                "--parent-records",
+                str(invocation.records),
             ],
             work,
             env,
-        )
-        artifact_work = Path(
-            next(
-                line.removeprefix("WORKSPACE ")
-                for line in output.splitlines()
-                if line.startswith("WORKSPACE ")
-            )
         )
         source = next((artifact_work / "source").iterdir())
         repository = work / "source"
@@ -219,6 +211,18 @@ def main() -> None:
                 flush=True,
             )
             for kind in ("fresh", "existing"):
+                invocation.create_disposable(f"{label}/{kind}/.venv", create=False)
+                manifest = work / f"{label}-{kind}.json"
+                manifest.write_text(
+                    json.dumps(
+                        {
+                            "status": "unavailable",
+                            "reason": "initialization incomplete",
+                            "environment": str(work / label / kind / ".venv"),
+                        }
+                    )
+                )
+                invocation.preserve(manifest, manifest.name)
                 verify_project(
                     work / label / kind,
                     kind == "existing",
@@ -226,11 +230,34 @@ def main() -> None:
                     revision,
                     wheel,
                     env,
+                    run,
                 )
+                project = work / label / kind
+                output = run(
+                    f"{label}-{kind}-identity",
+                    [
+                        str(project / ".venv/bin/python"),
+                        "-I",
+                        "-c",
+                        "import json, sys, platform; from importlib.metadata import distribution, distributions; "
+                        "d = distribution('agentic-ml'); "
+                        "print(json.dumps({'python': sys.version, 'prefix': sys.prefix, "
+                        "'platform': platform.platform(), 'package': str(d.locate_file('agentic_ml')), "
+                        "'origin': json.loads(d.read_text('direct_url.json') or '{}'), "
+                        "'distributions': sorted((p.metadata['Name'], p.version) for p in distributions())}))",
+                    ],
+                    project,
+                    env,
+                )
+                manifest.write_text(output)
+                invocation.preserve(manifest, manifest.name)
+                for name in ("uv.lock", "pyproject.toml"):
+                    invocation.preserve(project / name, f"{label}-{kind}-{name}")
             print(f"PASS initialization {label}", flush=True)
     except (OSError, RuntimeError, ValueError, AssertionError, StopIteration) as error:
         print(f"FAIL initialization: {error}; workspace={work}", file=sys.stderr)
-        raise SystemExit(1) from error
+        raise SystemExit(invocation.finish(1)) from error
+    raise SystemExit(invocation.finish(0))
 
 
 if __name__ == "__main__":
