@@ -311,3 +311,12 @@ Follow the [scope-change procedure](../../.agents/skills/manage-plan-scope/SKILL
 - **Final verification:** Pending — IP4-T4.
 - **Developer acceptance:** Pending.
 - **Decision reference and date:** Pending.
+
+
+## Scope-change record: local verification policy (2026-10-31)
+
+- **Decision:** Approved by developer instruction “Implement the plan” following the local phase-test policy plan.
+- **Scope difference:** For unfinished IP3/IP4 work, local gates run only direct tests of modules created or modified by that phase, plus shared checks. This supersedes earlier full-suite triggers and story-final full-suite requirements above. Record exact module/test mappings before phase execution.
+- **Story verification:** IP4-T4 reuses valid phase evidence and renews invalidated direct tests. Caller/dependent regressions, unrelated upgrade/scheduling tests and the full suite transfer to **Milestone 1 acceptance verification**, task **M1-ACCEPT-VERIFY**. Artifact checks remain direct phase checks when they test changed modules; remaining artifact checks transfer to that milestone task.
+- **Milestone ownership:** M1-ACCEPT-VERIFY must run all tests with `-m ""`, shared checks, applicable direct/rebuilt distribution and installation checks, required manual/platform checks, and reconcile all deferrals before milestone acceptance.
+- **Preservation:** Completed IP1/IP2 evidence and approvals remain historical facts. Product scope and acceptance criteria are unchanged. CI still runs all tests. This revision does not authorize IP3 execution or gate progression.

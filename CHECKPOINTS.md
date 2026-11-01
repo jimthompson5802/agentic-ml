@@ -4,6 +4,16 @@ Last updated: 2026-10-31
 
 ## Current position
 
+**Local verification policy revised (2026-10-31):** Implemented developer-approved
+local phase selection of direct tests for changed modules; story acceptance reuses
+valid phase evidence. Full-suite coverage moves to milestone acceptance. Shared
+non-test checks and full CI remain. Updated policy, template, workflow skills,
+and unfinished US-03 IP3/IP4 requirements via scope-change record.
+M1-ACCEPT-VERIFY owns deferred coverage. Product behavior is unchanged; TDD and
+runtime tests are inapplicable to this documentation-only change. No phase
+progression, commit or publication performed.
+
+
 **Local milestone acceptance selection (2026-10-31):** Implemented the developer-approved
 plan to mark only `test_complete_initialization_from_both_artifact_paths` as
 `milestone_acceptance`. Default local pytest deselects it; CI explicitly uses
