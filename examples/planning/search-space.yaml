@@ -1,0 +1,11 @@
+schema_version: "1.0"
+algorithms:
+  logistic_regression:
+    fixed:
+      random_state: 42
+    search:
+      C:
+        type: float
+        min: 0.1
+        max: 10.0
+        scale: logarithmic

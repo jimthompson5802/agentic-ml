@@ -4,6 +4,225 @@ Last updated: 2026-10-31
 
 ## Current position
 
+**US-03 cost/currency correction accepted, pushed and review thread resolved (2026-10-31).**
+Developer “i accept the fix, commit and push to remote; summarize the fix to PR
+comment and mark as resolved.” approves the correction and authorizes those actions.
+Developer “I accept the recommendation.” authorizes fixing the Medium delegated
+budget finding in [PR #46](https://github.com/jimthompson5802/agentic-ml/pull/46).
+[Owning plan](docs/plans/milestone-1-us-03.md), SC-03/C1-T1–T3, and
+[correction evidence](docs/verification/us-03-cost-currency-correction.md) record
+scope, confirmed boundaries, TDD and the correction review gate.
+
+Complete explicit/delegated cost/currency pairs now share validation: both set or
+both null. Missing proposals remain blocked. Reproduced the original approved
+invalid plan becoming input-ready; after the fix its independent verification
+rejects `conflicting_budget`. No monetary accounting/enforcement added.
+
+Final direct verification: **183 passed**, four workers, **45.72s**; both direct
+and genuine sdist-rebuilt wheel probes each pass 18 new CLI/API budget cases.
+Shared locked sync/lock/lint/format/types/version and whitespace checks passed;
+lock unchanged. Collection **314/315**, one reserved milestone test deselected.
+132 unselected cases and full-suite verification remain with M1-ACCEPT-VERIFY
+under the developer-approved deferral. No full-suite run. macOS 15.7.9 arm64 /
+Python 3.12.15 verified; no new Linux/Windows evidence.
+
+Branch `US-03-experiment-boundaries`: accepted correction committed/pushed as
+`ff1db21`, PR #46 head verified. [Fix summary reply](https://github.com/jimthompson5802/agentic-ml/pull/46#discussion_r4434259600)
+posted/verified under the original finding. Thread resolution confirmed
+`isResolved: true` at the developer's request. Outcome-only records are
+committed/pushed under the same authorization; executable evidence is unchanged.
+**Next action:** await developer direction/CI assessment. No merge, cleanup or
+next-story work authorized.
+
+Earlier accepted implementation `63aa346`, acceptance records `2c9522d` and
+publication records `d4ce70c` were pushed. Original static review:
+[Medium finding](https://github.com/jimthompson5802/agentic-ml/pull/46#discussion_r4434227411).
+The additional 296-case full run was stopped by the developer at 120 completion
+markers (exit 130, no summary/XML, no failures reported); acceptance explicitly
+deferred that run. Its evidence is preserved without a success claim. Milestone 1
+remains in progress; only US-03 was accepted.
+
+### Earlier checkpoint history
+
+**Local verification policy revised (2026-10-31):** Implemented developer-approved
+local phase selection of direct tests for changed modules; story acceptance reuses
+valid phase evidence. Full-suite coverage moves to milestone acceptance. Shared
+non-test checks and full CI remain. Updated policy, template, workflow skills,
+and unfinished US-03 IP3/IP4 requirements via scope-change record.
+M1-ACCEPT-VERIFY owns deferred coverage. Product behavior is unchanged; TDD and
+runtime tests are inapplicable to this documentation-only change. No phase
+progression, commit or publication performed.
+
+
+**Local milestone acceptance selection (2026-10-31):** Implemented the developer-approved
+plan to mark only `test_complete_initialization_from_both_artifact_paths` as
+`milestone_acceptance`. Default local pytest deselects it; CI explicitly uses
+`-m ""` to include all tests. Final local milestone acceptance uses the same
+override. Local phase/story verification may defer this single test.
+Collection verified: routine 207/208, marker-only 1/208 (the intended test),
+all-tests override 208/208. Locked sync, lock check, Ruff lint/format, strict mypy,
+version smoke (0.1.0), and diff whitespace checks passed on macOS. Lock unchanged.
+This is test scheduling and documentation only; product behavior, assertions and
+timeouts are unchanged, so no product red/green cycle applies. Routine four-worker
+suite passed: `uv run --locked pytest -n 4 --dist=loadgroup`, **207 passed**
+in **1478.98s (24:38)**, exit zero. The excluded milestone test was not rerun.
+Pytest reached 100% several minutes before process exit; shutdown cause was not
+confirmed. No commit or publication performed.
+
+
+**Branch integration:** Developer authorized switching to
+`US-03-experiment-boundaries` and merging `us-03-pytest-runtime-optimization`.
+Fast-forward from `ca4eb98` to `1b7b156` completed without conflicts.
+The merged tree is identical to the verified runtime branch; no new executable
+changes or test rerun required. No push or US-03 IP3 work authorized.
+
+**Installer concurrency profile complete (2026-10-31):** Developer “go ahead”
+authorized the clone-mode default/1/2 installer-thread comparison under four
+pytest workers and conditional full validation. See
+[concurrency evidence](docs/verification/pytest-installer-concurrency.md).
+All **48 benchmark invocations passed** with matching dependency maps. Default
+project medians **15.94s/17.76s**, one thread **12.45s/11.98s**, two threads
+**12.72s/12.17s**; pooled one-thread fixture median improved approximately 27%.
+The complete **208-case suite passed**, exit zero, with temporary
+`UV_CONCURRENT_INSTALLS=1`: **1229.288s JUnit / 1229.717s outer (20:30)**.
+Last-teardown-to-process-exit **0.101s**; no multi-minute completion delay.
+Historical default outer **17:27**, JUnit **13:06**: this run is approximately
+17% slower overall, so it does not establish a full-suite improvement. Different
+cache/system/retention states prevent assigning the entire difference to the
+thread limit; no fresh paired default full run was performed.
+Recommendation: **retain the default command; do not adopt a permanent thread
+limit**. Hardlink rollback and nested-pytest isolation remain. Performance
+attempt 1 (hardlinks) failed; attempt 2 (temporary thread limit) passed correctness
+but did not establish the required full-suite reduction. No third corrective
+attempt applied. All 53 maintained source/test/build hashes and all 208 case
+identities match the restored baseline; lock unchanged. Only the report and this
+checkpoint changed. Raw scripts, events/logs/XML and aggregate results:
+`/private/tmp/pytest-installer-concurrency-tvjkoiu6`.
+All processes exited; further investigation/configuration adoption awaits
+review. Developer “commit” authorizes the local report/checkpoint commit;
+Git history records its result. No push or US-03 IP3 work authorized.
+
+**Fixture profiling (2026-10-31):** Developer “do the profile” authorizes
+temporary measurement on the restored `4207086` baseline. See
+[fixture profile](docs/verification/pytest-fixture-profile.md). Four batches of
+eight existing rejection cases, clone/hardlink/hardlink/clone, four workers:
+**32 valid runs passed**. Initial scratch-plugin scope error preserved/excluded;
+one correction then passed. Clone project medians **16.60s/15.51s**, hardlink
+**44.82s/45.10s**. uv's package-installation phase dominates: clone medians
+**14.12s/13.07s**, hardlink **43.41s/43.25s**. Median child system CPU per uv
+add **~3s clone versus 131–134s hardlink** (CPU seconds across threads).
+Resolution/preparation and Git setup are much smaller. Precise filesystem
+contention mechanism unverified. All 32 dependency maps and 53 maintained
+source/test/build hashes matched. Raw events/logs/XML/scripts and aggregate
+comparison: `/private/tmp/pytest-fixture-profile-1262ov7g`.
+Repository executable/configuration inputs unchanged; no second performance
+correction or reactivation of the rolled-back policy. Next proposed diagnostic:
+clone-mode installer thread limits under four pytest workers; not applied or
+measured. Developer “commit” authorizes the local report/checkpoint commit;
+Git history records its result. No push authorized.
+
+**Hardlink rollback complete (2026-10-31):** Developer “do the rollback”
+authorizes removing the failed optimization while retaining its documentation.
+All four affected Python files now match `861b2db`; all 53 maintained
+source/test/build hashes match the previously verified **208-case** baseline.
+The committed nested-pytest isolation fix remains. Fresh collection: **208**;
+focused scheduling: **one passed, 1.12s**. Lint, format, strict types and version
+smoke passed again. Prior full-suite evidence is reused against identical
+executable inputs; no fresh full-suite run or new runtime claim.
+
+[Experiment/rollback evidence](docs/verification/pytest-hardlink-fixtures.md)
+retains the **210-pass but 23:54** candidate result, versus **13:06** baseline
+JUnit / **17:27** baseline terminal completion. Performance attempt 1 failed;
+no second performance correction. A replayable candidate patch is archived at
+`docs/verification/experiments/pytest-hardlink-candidate.patch`; `git apply
+--check` passed. Raw evidence remains in
+`/private/tmp/pytest-hardlink-evidence-20261031`. Developer “commit changes”
+authorizes the local documentation/archive commit; Git history records its
+result. No push, publication or US-03 IP3 work authorized.
+The earlier fixture-profiling request remains possible through temporary
+instrumentation on the restored baseline. Earlier next-work notes below are
+historical.
+
+**Test-runtime tooling (2026-10-31):** Developer “implement 1 and 2 as
+recommended” authorized nested pytest isolation and initialization profiling on
+`us-03-pytest-runtime-optimization`. See [implementation evidence](docs/verification/pytest-runtime-optimization.md)
+and [original analysis](docs/verification/test-runtime-analysis.md).
+Public directory-containment red failed as intended; dedicated nested basetemp
+green passed with all grouping assertions and 120s timeout intact. Final
+unfiltered four-worker suite: **208 passed**, exit zero, **17:27** total;
+nested scheduling regression **1.719s**. JUnit **13:06** versus terminal
+**17:27** exposes ~**4:21** session-completion delay, with a renamed pytest
+retention-cleanup tree observed. No overall speedup claimed; outer cleanup
+remains separate from the nested fix. Fresh initialization profile **42.93s**,
+including **30.32s** import verification; rerun **7.51s**, including **2.16s**
+imports. First-use imports are the next profiling target; Linux comparison
+unverified. All shared checks, 14 local link paths and whitespace passed;
+lock unchanged at `90b77d41ded3a40f047e2df636b7fd645a8e94c772caca194b7f96aa084c0fd8`.
+All 53 executable/build input hashes stayed fixed through verification.
+Evidence retained at `/private/tmp/pytest-runtime-optimization-evidence-20261031`.
+Developer “first lets commit current changes. Then run the recommended profile
+imports” authorizes committing this verified tooling/evidence and then measuring
+individual first-use imports. No product/dependency/CI changes. Further
+optimizations, publication and US-03 IP3 remain unauthorized. Existing IP3 gate
+unchanged. Tooling/evidence committed as `861b2db`; no push requested.
+Individual import profiling is complete; see [import evidence](docs/verification/pytest-import-profile.md).
+Five fresh installed projects / ten probes passed. Default first/second imports
+**30.12s/4.23s**; bytecode writes disabled **27.54s/2.97s**. Native-extension
+trace self time **18.14s/0.37s** across 160 modules. First hardlink environment
+**28.46s/4.29s**; recreated hardlink environment **7.28s/4.49s**, with all 323
+native `.so` files sharing identity across the two environments. This supports
+native-file first-use caching as the primary lead; local security-service
+causality was not traced. Proposed next work: scoped hardlink installs for
+read-only initialization fixtures; keep installed-resource mutation probes
+isolated. No repository installation-mode change or full-suite speedup claimed.
+Raw evidence: `/private/tmp/pytest-import-profile-evidence-20261031`.
+Only the new report and checkpoint are uncommitted. No new maintained executable
+changes or full-suite rerun. Further optimization awaits developer direction.
+
+**Current work:** US-03 IP2-T1–T4 complete; **developer IP2 gate approved**
+by “lgtm ip2” (2026-10-31). See [owning plan](docs/plans/milestone-1-us-03.md) and
+[final IP2 evidence](docs/verification/us-03-ip2.md). Stop before IP3.
+
+Developer “ok that makes sense make that change” authorized the proposed fourth
+strict-typing correction; explicit list/dictionary narrowing passed without
+casts, suppressions or weaker assertions. Prior three failed attempts preserved.
+Final verification: 207 tests passed in the unfiltered four-worker suite (13:08).
+A later fenced-YAML diagnostic-offset correction passed all 76 planning cases;
+79 affected/installed cases were renewed, including both wheel paths and planning
+in an initialized pinned Git project. Evidence distinguishes full-run and final
+identities and justifies intermediate-phase selection; IP4-T4 must renew the full
+suite against final story code before final approval/acceptance. Both follow-up
+processes exited zero after slow pytest temporary-directory cleanup; none cancelled.
+
+Shared locked sync/lock/lint/format/types/version checks and whitespace passed;
+34 document links/anchors passed before final handoff, renewed in report.
+Final executable inventory SHA-256
+`d4f0b55bd9a1e73a922c12da5ffb7e1df5bc0c734a66abbdefb17aa13ad74b8a`.
+Lock unchanged:
+`90b77d41ded3a40f047e2df636b7fd645a8e94c772caca194b7f96aa084c0fd8`.
+XML/inventories in `/private/tmp/us03-*`; final artifacts/logs retained separately
+at `/private/tmp/us03-ip2-final-evidence` to avoid pytest retention cleanup.
+
+Approved IP2 work is on `US-03-experiment-boundaries`, tested base `3c72694`.
+Developer “commit and push” authorizes committing and publishing the approved
+implementation and approval records. Git history and the delivery response record
+the resulting commit and push outcome.
+No dependencies, initialization templates/schema resources, source suppressions,
+CI or development/test approval rules changed. Six new planning schemas and
+planning CLI/API introduced; execution overrides block pending IP3, delegated
+choices block pending IP4. No whole-story acceptance or IP3 execution authorized. macOS/Python 3.12.15 verified locally; no new Linux/
+Windows or remote-filesystem evidence. Next action: explicit IP3 execution authorization.
+Manual review fixture prepared at ignored `sandbox/us03-ip2-demo/project with
+spaces` under developer request to see implemented behavior. Resolve/inspect/
+verify API and resolve/verify CLI passed with input_ready and integrity true;
+plan id saved in `sandbox/us03-ip2-demo/plan-id.txt`. This is a minimal planning
+fixture, not a full initialized environment; datasets/notebook execution are not
+involved. No maintained executable inputs changed. Subsequent “lgtm ip2”
+approves the phase; the subsequent “commit and push” authorizes publication,
+while IP3 execution still awaits separate authorization.
+
+Earlier status below is historical.
+
 **Latest outcome:** Developer “squash merge the pr” authorized PR #45 merge.
 Verified **MERGED** at 2026-10-31T13:05:48Z, squash commit
 `77ba352f80a9f4f6636339f59e517deca38a908b`. Reviewed/passing head was

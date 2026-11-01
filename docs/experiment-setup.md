@@ -4,6 +4,105 @@ These instructions are for experiment users. The harness is installed into your 
 
 The current development revision provides `agentic-ml --version`, Python imports and project initialization (see below). The published revisions in the bootstrap examples predate initialization and provide provisional resources only. Managed notebook execution remains subsequent work.
 
+The US-03 development revision adds `plan resolve`, `plan inspect` and
+`plan verify` through the installed CLI and `agentic_ml.planning` API.
+Its [approved input contract](verification/us-03-ip1.md) defines separate version
+1.0 brief/search/execution inputs while preserving initialization's inert 0.1
+drafts. [IP2 verification](verification/us-03-ip2.md) records input capture;
+[IP3 verification](verification/us-03-ip3.md) records structural boundary checks.
+Explicit inputs resolve to preserved, versioned plans; delegated decisions require
+complete proposals and explicit scoped approval records. Execution can narrow the brief's allowed algorithms in
+`select` mode; `use` and `compare` preserve their full brief selection. All brief
+algorithms must occur in the declared search YAML.
+
+`execution.parameters` fixes declared tunables to allowed scalar values or repeats
+an identical fixed value. `execution.search_overrides` narrows declared choices or
+inclusive ranges without changing their type or scale. The same parameter cannot
+be both fixed and tunable. Omitted overrides inherit the declared domain; omitted
+parameters do not become tunable. Categories distinguish JSON scalar types,
+including `true`, `1`, `1.0` and `"1"`. Numeric ranges exclude booleans and require
+finite ordered endpoints; logarithmic endpoints must be positive.
+`execution.budget_overrides` can lower an explicit finite ceiling; it cannot fill
+an undeclared/null ceiling or remove a limit. These are plan checks; no budget is
+consumed here. Plans preserve declared and effective search spaces separately,
+and record override sources and structural inheritance.
+
+Python callers can use `validate_boundaries(declared, SearchSelection(...))` from
+`agentic_ml.planning`; `declared` is the version 1.0 search mapping. `SearchSelection`
+contains resolved `mode`, `allowed`, `execution` and `budgets`. `BoundaryResult`
+contains `effective_search`, `effective_budgets` and blocking `diagnostics`.
+The checker copies inputs and has no project/registry access. Its diagnostic paths
+are logical input names; the resolver maps them to selected file locations.
+An empty `SearchSelection()` validates the declaration alone. A checker result
+does not establish plan readiness or approval. Consumers must use `verify_plan`
+for preserved plan integrity/readiness. US-05 will add registry/task/parameter
+compatibility, recorded defaults and candidate validation before training.
+
+Experiment approval uses an explicit project-local record with
+a self-declared reviewer; it is unauthenticated and cannot prove who approved or
+prevent a workspace writer from fabricating records. No signing keys or separate
+accounts are required. This applies only to toolkit experiment use; development
+and testing approval gates remain unchanged. Plan readiness does not grant
+data access or execution permission. [IP4 evidence](verification/us-03-ip4.md)
+records implementation verification and its developer approval status.
+
+## Resolve and approve experiment inputs
+
+After initialization, supply version 1.0 inputs at separate paths; the generated
+0.1 TODO drafts remain inert and are not migrated automatically. Use the complete
+[brief, search and execution examples](../examples/planning/README.md). Copy them
+into your experiment project as directed there. Relative brief/search/notebook
+paths and the working directory resolve against the explicit project root,
+regardless of caller cwd. Data references are recorded without opening datasets;
+notebooks are checked as files without executing them. Inputs and planning stores
+must not traverse symlinks. An external data reference is not permission to read it.
+
+```sh
+uv run --locked agentic-ml plan resolve --project-root /absolute/project --experiment planning/experiment.yaml
+uv run --locked agentic-ml plan inspect --project-root /absolute/project --plan sha256:HEX
+uv run --locked agentic-ml plan verify --project-root /absolute/project --plan sha256:HEX --check-current
+```
+
+Replace `sha256:HEX` with the returned `plan_id`. Explicit-only examples return
+`input_ready`. For a delegated metric, replace `metric: f1_macro` in the brief:
+
+```yaml
+metric: {delegate: "Choose a classification metric", proposal: f1_macro, rationale: "Equal weight to both classes"}
+```
+
+Resolve again to preserve a new plan; it remains `blocked` (CLI exit 2). Missing
+proposals remain blocked and cannot be approved. Review all preserved decisions,
+then record approval of the exact plan:
+
+```sh
+uv run --locked agentic-ml plan approve --project-root /absolute/project --plan sha256:HEX --reviewer "Scientist" --reason "Reviewed all delegated choices"
+uv run --locked agentic-ml plan verify --project-root /absolute/project --plan sha256:HEX
+uv run --locked agentic-ml plan revoke-approval --project-root /absolute/project --plan sha256:HEX --approval APPROVAL_UUID --reviewer "Scientist" --reason "Reconsider choices"
+```
+
+Approval returns JSON containing `approval_id`; use it as `APPROVAL_UUID` to
+revoke that record. Approval covers every delegated field/value/rationale in
+order, with `authentication: none`. Reviewer names are unverified labels. A new
+approval after revocation creates a new ID. Readiness requires at least one
+matching unrevoked record; malformed final records block. Operations append under
+`.agentic-ml/plan-approvals/`, separately from immutable `.agentic-ml/plans/`
+bundles. Private staging is ignored; stale locks require operator review.
+
+Python callers use `ApprovalRequest`, `RevocationRequest`, `approve_plan` and
+`revoke_approval` from `agentic_ml.approvals`; `inspect_plan` and `verify_plan`
+from `agentic_ml.planning` expose current `approval_ids` and `authentication`.
+Both verification interfaces recompute preserved integrity and current records.
+Default verification uses preserved source bytes; `--check-current` also rejects
+source drift. Editing a metric, budget, search source or other captured input
+creates a new plan ID that requires its own approval. Missing/corrupt evidence
+fails closed. CLI exit 0 means input-ready/success, 2 means blocked/invalid input,
+and 3 means an operational I/O or lock failure.
+
+Downstream capabilities must reverify readiness and apply their own access,
+execution and budget controls. US-05 will add registry compatibility and candidate
+validation. These records do not establish scientific validity, model quality,
+reviewer identity or tamper-resistant history.
+
 ## Prerequisites
 
 Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [uv](https://docs.astral.sh/uv/getting-started/installation/) using their official instructions for your operating system. For example, on macOS the Git guide describes installing the Xcode command line tools; the uv guide offers its standalone installer and Homebrew installation. Verify both tools are available:

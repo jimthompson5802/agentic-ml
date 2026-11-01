@@ -276,6 +276,15 @@ Run at most 50 hyperparameter trials per algorithm.
 
 Before integrated agent support, developers supply experiment decisions through the brief and configuration files, optionally prepared with an external coding assistant. The harness validates these inputs and records the effective, versioned plan, including supplied decisions, defaults, source references, input checksums, and approval evidence, before dependent execution. Unresolved delegated choices and ambiguous or conflicting requirements block affected execution; delegated decisions require approval before use. The resolved plan identifies the allowed algorithm set, selected features, metric and direction, split protocol, and budgets as those capabilities are introduced.
 
+For this toolkit version, experiment approvals use explicit scoped
+unauthenticated records under
+[US-03-SC-01](../../plans/milestone-1-us-03.md#us-03-sc-01--unauthenticated-experiment-approvals-2026-10-31).
+Reviewer labels are self-declared; workspace writers can fabricate records or
+rewrite approval history. Authentication is deferred. Existing harness development
+and testing approval gates remain unchanged. Plan/decision matching and missing,
+stale or revoked record checks still apply; a record grants no implicit execution
+or data access.
+
 Milestone 4 adds harness-managed agent proposals and iteration. The agent proposes delegated decisions and records its reasoning; those proposals use the same harness validation, plan recording, and applicable problem-definition and evaluation approval gates before use.
 
 ### Development and runtime agent instructions

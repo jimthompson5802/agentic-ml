@@ -8,6 +8,14 @@ Part of the [harness design](../agentic-ml-harness-design.md). Scope: Milestone 
 
 Use the [repository planning terminology](../../../README.md#planning-terminology). Milestones 0–6 correspond to the authoritative delivery sequence; Milestone 99 groups deferred enhancements without committing their order. Detailed plans divide each user story into implementation phases with granular tasks, required evidence, and an explicit developer approval gate at the end of each implementation phase. Label them with the story ID and local phase number, plus the milestone when a story spans milestones. Workflow phases in [Sections 4–5](../agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow) describe ML experiment execution.
 
+Current-version experiment approval scope follows
+[US-03-SC-01](../../plans/milestone-1-us-03.md#us-03-sc-01--unauthenticated-experiment-approvals-2026-10-31):
+use explicit scoped unauthenticated records, without reviewer authentication or
+protection against fabricated approval/history. Authenticated approval remains
+future work (US-23-AC-02); no separate signing identity or protected-policy host
+is a current-version prerequisite. Other access/budget/evaluation controls and
+all harness development/testing verification and approval gates remain required.
+
 Each milestone delivers the controls required by its assigned user stories before the capability they govern becomes available. Early approvals may be developer-driven, but must be recorded, scoped, and enforced. Milestone 1 includes execution/extraction authorization, access restrictions, budget enforcement, and independent artifact checks. Milestone 2 adds dataset-assessment and split-protocol approval, approval of the baseline feature set and fixed reference estimator/settings and metric, training-only preprocessing/estimator fitting, independent validation scoring, and enforced protected-test isolation for predictive feature comparison. Milestone 3 adds approval of broader model baselines, authorized final evaluation using independently enforced protected-test access, and developer approval of successful final evaluation. Milestone 4 applies these controls to agent work, including component permissions, parameter boundaries, and stopping conditions. Milestone 5 completes durable coordination across workflow phases and recovery using the controls delivered earlier.
 
 | Milestone | Deliverables | Exit criteria |

@@ -41,7 +41,8 @@ packages = ["src/agentic_ml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--strict-config --strict-markers"
+addopts = "--strict-config --strict-markers -m 'not milestone_acceptance'"
+markers = ["milestone_acceptance: expensive verification required for final milestone acceptance locally and every CI run"]
 
 [tool.ruff]
 target-version = "py312"

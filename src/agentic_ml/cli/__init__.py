@@ -5,6 +5,7 @@ import sys
 from importlib.metadata import version
 from pathlib import Path
 
+from agentic_ml.cli.planning import add_commands, dispatch
 from agentic_ml.initialization import (
     InitializationError,
     InitOptions,
@@ -17,6 +18,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="agentic-ml")
     parser.add_argument("--version", action="version", version=version("agentic-ml"))
     commands = parser.add_subparsers(dest="command")
+    add_commands(commands)
     init = commands.add_parser("init", help="Create draft experiment scaffolding")
     init.add_argument("--project-root", type=Path, default=Path.cwd())
     init.add_argument("--experiment", default="initial")
@@ -24,7 +26,9 @@ def main() -> None:
     for flag in ("dvc-store", "mlflow-backend", "artifact-store", "state-store"):
         init.add_argument("--" + flag, type=Path)
     args = parser.parse_args()
-    if args.command == "init":
+    if args.command == "plan":
+        dispatch(args)
+    elif args.command == "init":
         try:
             result = initialize_project(
                 InitOptions(

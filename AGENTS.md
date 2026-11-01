@@ -56,9 +56,7 @@ For documentation-only changes or refactoring that preserves behavior, use appro
 
 ## Verification during implementation
 
-For new implementation plans, follow the development guide's [phase and story verification policy](docs/development.md#phase-and-story-verification). Use impact-based test selection during development and at intermediate phase gates. Each plan must identify selected tests, dependent behavior, selection rationale, and checks deferred to final verification. Verify all behavior required by the current phase before requesting its approval; deferred unrelated regression checks do not establish whole-story correctness.
-
-For executable changes, require full-suite and applicable distribution/installation verification of the final implementation before presenting the final phase for approval and requesting whole-story acceptance. Follow the guide's early full-run triggers, evidence-renewal rules and documentation-only exceptions. Keep all tests enabled and assertions intact. Existing approved plans retain their verification requirements unless explicitly revised through the scope-change procedure; this policy does not retroactively change completed evidence or approvals.
+Follow the development guide's [phase and story verification policy](docs/development.md#phase-and-story-verification). At every local implementation-phase gate, run only direct tests for modules created or modified by that phase's tasks. Record changed modules, selectors, mapping rationale, results, limits and checks deferred to a named milestone acceptance task. Keep shared non-test checks and TDD obligations. At story acceptance, reuse valid phase evidence and renew invalidated direct-test evidence. Run the full local suite only before milestone acceptance; CI continues running all tests. Apply this policy to unfinished approved-plan work through recorded scope revisions. Preserve historical evidence, approvals, assertions, timeouts and known failures.
 
 ## Problem-solving attempt limit
 

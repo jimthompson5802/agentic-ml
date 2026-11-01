@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "algorithms": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 100,
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "not": {
+          "const": "TODO"
+        },
+        "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "fixed": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1,
+              "not": {
+                "const": "TODO"
+              },
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+            },
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "null"
+              ]
+            },
+            "maxProperties": 1000
+          },
+          "search": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1,
+              "not": {
+                "const": "TODO"
+              },
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+            },
+            "additionalProperties": {
+              "type": "object"
+            },
+            "maxProperties": 1000
+          }
+        },
+        "required": [
+          "fixed",
+          "search"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "algorithms"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

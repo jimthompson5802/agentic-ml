@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "authentication",
+    "reviewer",
+    "reason",
+    "project_root",
+    "experiment_id",
+    "plan_id",
+    "recorded_at",
+    "approval_id",
+    "purpose",
+    "decision",
+    "decisions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "authentication": {
+      "const": "none"
+    },
+    "reviewer": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "project_root": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "approval_id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "purpose": {
+      "const": "delegated_input_decisions"
+    },
+    "decision": {
+      "const": "approve"
+    },
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "field",
+          "value",
+          "rationale"
+        ],
+        "properties": {
+          "field": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "value": {},
+          "rationale": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      }
+    }
+  }
+}

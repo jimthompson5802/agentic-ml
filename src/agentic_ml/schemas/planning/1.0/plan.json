@@ -1,0 +1,386 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "root": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "const": "TODO"
+          }
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "const": "TODO"
+          }
+        }
+      },
+      "required": [
+        "root",
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "const": "TODO"
+      },
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "const": "TODO"
+            }
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "const": "TODO"
+            }
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "name",
+          "path",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "effective": {
+      "type": "object"
+    },
+    "declared_search": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "algorithms": {
+          "type": "object",
+          "minProperties": 1,
+          "maxProperties": 100,
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "const": "TODO"
+            },
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "fixed": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string",
+                  "minLength": 1,
+                  "not": {
+                    "const": "TODO"
+                  },
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+                },
+                "additionalProperties": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "maxProperties": 1000
+              },
+              "search": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string",
+                  "minLength": 1,
+                  "not": {
+                    "const": "TODO"
+                  },
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+                },
+                "additionalProperties": {
+                  "type": "object"
+                },
+                "maxProperties": 1000
+              }
+            },
+            "required": [
+              "fixed",
+              "search"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "algorithms"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "effective_search": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "algorithms": {
+          "type": "object",
+          "minProperties": 1,
+          "maxProperties": 100,
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "const": "TODO"
+            },
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "fixed": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string",
+                  "minLength": 1,
+                  "not": {
+                    "const": "TODO"
+                  },
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+                },
+                "additionalProperties": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "maxProperties": 1000
+              },
+              "search": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string",
+                  "minLength": 1,
+                  "not": {
+                    "const": "TODO"
+                  },
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+                },
+                "additionalProperties": {
+                  "type": "object"
+                },
+                "maxProperties": 1000
+              }
+            },
+            "required": [
+              "fixed",
+              "search"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "algorithms"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "const": "TODO"
+            }
+          },
+          "origin": {
+            "enum": [
+              "explicit",
+              "delegated",
+              "inherited"
+            ]
+          },
+          "source_path": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "const": "TODO"
+            }
+          },
+          "line": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "column": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "original": {},
+          "proposed": {},
+          "effective": {},
+          "rationale": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "field",
+          "origin",
+          "source_path",
+          "line",
+          "column",
+          "original",
+          "proposed",
+          "effective",
+          "rationale"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "defaults": {
+      "type": "array"
+    },
+    "pending_decisions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "not": {
+          "const": "TODO"
+        }
+      },
+      "uniqueItems": true
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "const": "TODO"
+            }
+          },
+          "field": {
+            "type": "string"
+          },
+          "source_path": {
+            "type": "string"
+          },
+          "line": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "column": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "const": "TODO"
+            }
+          }
+        },
+        "required": [
+          "code",
+          "field",
+          "source_path",
+          "line",
+          "column",
+          "message"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "harness": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "const": "TODO"
+          }
+        },
+        "origin": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "version",
+        "origin"
+      ],
+      "additionalProperties": false
+    },
+    "capabilities": {
+      "const": [
+        "input_resolution"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "project",
+    "experiment_id",
+    "inputs",
+    "effective",
+    "declared_search",
+    "effective_search",
+    "decisions",
+    "defaults",
+    "pending_decisions",
+    "diagnostics",
+    "harness",
+    "capabilities"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

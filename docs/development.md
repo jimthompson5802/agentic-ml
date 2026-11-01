@@ -46,6 +46,26 @@ The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. U
 
 The smoke check must exit zero and print the installed package version; version tests compare it to distribution metadata. A missing command, nonzero exit, or wrong version is a failed smoke check. US-31 Implementation Phase 2 verified all shared commands from a fresh macOS checkout and a new environment; see the [recorded results](verification/us-31-ip2.md). Wheel/source-distribution verification belongs to US-33 and is separate from this editable development install.
 
+## Local milestone acceptance selection
+
+Normal local pytest runs exclude the single `milestone_acceptance` test,
+`test_complete_initialization_from_both_artifact_paths`. Run it at final milestone
+acceptance. CI overrides the default selection and runs every test on each run.
+
+```sh
+# Final milestone acceptance: every test
+uv run --locked pytest -n 4 --dist=loadgroup -m ""
+# Only the milestone acceptance test
+uv run --locked pytest -n 4 --dist=loadgroup -m milestone_acceptance
+```
+
+Local phase and story verification may defer this test until final milestone
+acceptance, including under existing plans. This developer-authorized exception
+changes only this test's local scheduling; preserve its assertions and historical
+evidence. All other required distribution and installation checks still apply.
+Record this deferral in verification evidence. Default runs cover the routine
+suite; only the explicit all-tests command establishes complete-suite coverage.
+
 ## Local parallel test execution
 
 Agents must use four workers with `loadgroup` for local pytest verification,
@@ -85,11 +105,17 @@ mutate their group-local installed project and restore its contents. Cache-remov
 checks remove only their own workspace cache. Keep those isolation properties
 when adding tests. Do not point multiple runs at the same `--basetemp` directory.
 
+A scoped hardlink experiment was rolled back after its full-suite runtime
+regressed. Fixtures again use their prior installation configuration, including
+the installation-verification driver's copy mode and private cache for mutation
+tests. The [experiment report](verification/pytest-hardlink-fixtures.md) preserves
+the measurements and a replayable candidate patch; its hardlink policy is not
+active.
+
 Environment installation and MLflow initialization compete for CPU, memory and
 disk. Investigate resource constraints with a recorded worker-count comparison. Keep
 existing assertions and subprocess timeouts intact. Record worker count, suite
-count, durations, diagnostics and platform with results. A complete unfiltered
-parallel run exercises the full suite; selected runs do not replace final full
+count, durations, diagnostics and platform with results. A parallel run with `-m ""` exercises the full suite; selected runs do not replace final full
 verification. Retain serial execution for diagnosis. Parallel macOS evidence
 does not establish Linux or Windows support. The Linux CI workflow now requests
 four workers; hosted parallel verification remains pending until a run is observed.
@@ -102,39 +128,66 @@ for grouping checks, compatibility findings, commands and retained evidence.
 
 ## Phase and story verification
 
-This policy applies to new implementation plans. Existing approved plans keep their recorded verification requirements until an explicit revision is authorized and recorded through [manage-plan-scope](../.agents/skills/manage-plan-scope/SKILL.md). Preserve historical results and approvals. CI continues to run its complete configured checks; local test selection does not change CI configuration.
+This policy governs local verification, including unfinished work in approved plans.
+Record revisions to those plans through [manage-plan-scope](../.agents/skills/manage-plan-scope/SKILL.md).
+Preserve completed evidence and approvals. CI continues running all tests.
 
-### Development and intermediate phase gates
+### Implementation phase gates
 
-Use TDD for each new behavior or bug fix: reproduce the missing behavior, implement the correction, and run the new test plus relevant existing regressions. At each phase gate, verify the changed behavior and its dependent capabilities. Select tests by affected interfaces, callers, shared resources and failure boundaries, including installed-package integration tests where those boundaries are affected. Test duration alone is not a reason to defer a relevant test. Broaden selection when the impact is uncertain.
-
-Record the following in each phase's verification section before implementation:
-
-- Selected test files, node IDs or selectors, the acceptance criteria they cover, and why they cover the affected behavior and dependencies.
-- Public test boundaries and their limits, confirmed through plan review or an explicit review; reuse confirmed boundaries while applicable.
-- Unrelated checks deferred to final verification, the reason, and the final phase/task that owns them. Write `None` when none are deferred.
-- Conditions that would require broader verification as the work changes.
-
-Use the documented locked pytest command with explicit paths, node IDs or `-k` selectors. For example, these are valid targeted commands; the plan must justify the selection for its actual change:
+Use TDD for new behavior and bug fixes. At every phase gate, including the last
+phase of a story, run only direct tests of modules created or modified by that
+phase's tasks. Select by the public behavior tested, whether the test lives in a
+unit or integration directory. Exclude tests selected solely because an unchanged
+caller depends on a changed module. Use explicit paths, node IDs or selectors:
 
 ```sh
 uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_cli_version.py
-uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_initialization.py -k 'storage_cannot_overlap or unsafe_backup'
 ```
 
-Confirm that the intended cases were collected and report selected/deselected counts. Selection defers unrelated coverage; it is not a passing result for deselected tests. Keep tests enabled and assertions unchanged. A known failing regression remains unresolved and cannot be hidden by narrowing the selection.
+Record changed modules, exact selectors, module-to-test mappings, acceptance
+criteria, public boundaries and limits, selected/deselected counts, results and
+platform. Manual selection is sufficient. Record missing direct coverage and
+uncertain impact explicitly. Preserve assertions, timeouts and known failures;
+selection must not conceal a failing check. Documentation-only work uses document,
+link and whitespace checks with a rationale instead of product tests.
 
-At every executable phase gate, run locked development synchronization, lock consistency, lint, formatting, strict typing and the version smoke check from the shared command table, plus `git diff --check`. Compare the lockfile hash before and after verification and explain any intentional dependency change. Complete these checks and the phase's selected tests before requesting approval. Phase approval covers the recorded verified scope; whole-story regression coverage remains pending until final verification.
+Keep locked synchronization, lock consistency, lint, formatting, strict typing,
+CLI version smoke and `git diff --check` at executable phase gates. Record the
+lock hash before and after verification and explain intentional changes.
 
-Run the full suite before an intermediate phase gate when changes affect dependency declarations or the lockfile, packaging/build/resource discovery, shared public schemas, or authorization/access enforcement across entrypoints. Include applicable distribution and installation checks for those changes. Also run broader tests, up to the full suite, when shared-module changes have uncertain impact or targeted results expose cross-capability regressions. These triggers take precedence over a previously narrower selection; record the expanded checks and results in the phase evidence.
+Defer caller/dependent regressions and the full local suite to milestone
+acceptance. Packaging, dependencies, schemas, security controls and uncertain
+impact do not trigger an earlier full local run. Direct distribution/installation
+tests remain phase checks when they directly test changed modules; the existing
+`milestone_acceptance` test remains reserved for milestone acceptance locally.
+Record each deferral and its owning milestone acceptance task before the gate.
 
-### Final verification before story acceptance
+### Story acceptance
 
-Every new plan must assign final verification to a named task in its last implementation phase. After all implementation work is complete, run `uv run --locked pytest -n 4 --dist=loadgroup` locally across the complete repository suite without selection filters, together with the shared development checks. For distribution-affecting work, verify both the directly built wheel and a wheel rebuilt from the source distribution outside the checkout, using the [distribution and installation commands](#distribution-builds-and-installed-verification). Include other story-required installed-interface, manual and platform checks. A passing complete-suite run may supply these results when it demonstrably executes the required checks; reference that evidence instead of repeating identical checks against unchanged artifacts.
+Reuse valid phase evidence. Rerun direct tests when later changes invalidate it;
+renew affected artifact evidence when its inputs change. Reconcile acceptance
+criteria and identify deferred regression coverage without claiming full-suite
+verification. Keep developer approval gates and explicit story acceptance.
+Unresolved required direct tests or known failures remain blockers.
 
-Record the tested revision and working-tree changes, lockfile identity, commands, test counts, outcomes, artifact identities where applicable, platform and limitations. Reconcile all deferred checks and the acceptance-criterion matrix. Present the final phase gate only after required verification passes; request whole-story acceptance only after the gates and final verification are complete. Failing or unverified required checks remain blockers.
+### Milestone acceptance
 
-After subsequent executable changes, rerun affected checks and renew the full-suite result against the final implementation before acceptance. Renew distribution evidence when package contents, dependencies or build inputs change. Reuse earlier evidence only when the relevant implementation and inputs are unchanged. Documentation-only or approval-record edits need appropriate document/link/whitespace checks rather than a runtime rerun; explain that choice in the evidence. For an entirely documentation-only story, record why product tests and distribution checks are inapplicable and name its required document checks.
+Assign a named milestone acceptance verification task before requesting acceptance.
+That task owns every deferred check from the milestone's stories. Run:
+
+```sh
+uv run --locked pytest -n 4 --dist=loadgroup -m ""
+```
+
+Include shared checks, applicable direct-wheel and sdist-rebuilt-wheel distribution
+and installation verification, and required manual/platform checks. Reconcile
+all deferrals with actual results; reuse identical artifact checks only when the
+suite demonstrably performed them against unchanged inputs. Record revision,
+working-tree changes, lock hash, artifacts, commands, counts, outcomes and limits.
+Full-suite evidence and required checks must pass before milestone acceptance.
+After later executable changes, renew full-suite evidence against the final
+milestone implementation; renew artifacts when their inputs change. Document-only
+or approval-record edits require document checks with a rationale.
 
 ## Configuration, credentials, and troubleshooting
 

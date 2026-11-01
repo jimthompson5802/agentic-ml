@@ -89,9 +89,9 @@ Every implementation phase must end with a developer approval gate, including th
 
 ### Plan verification by impact
 
-Read the working repository's verification policy before choosing phase checks. For this repository, use [phase and story verification](../../../docs/development.md#phase-and-story-verification). New plans must specify selected test commands, affected behavior and dependencies, acceptance-criterion coverage, confirmed public boundaries, and unrelated checks deferred to a named final task. Follow early full-run triggers; duration alone does not justify deferral. Preserve stronger requirements in an existing approved plan unless an explicit revision is authorized and recorded through the scope-change procedure.
+Read the working repository's verification policy before choosing phase checks. For this repository, use [phase and story verification](../../../docs/development.md#phase-and-story-verification). New plans must specify selected test commands, changed modules and direct behavior, acceptance-criterion coverage, confirmed public boundaries, and caller regressions deferred to a named milestone acceptance task. Keep local phase checks limited to direct tests of changed modules. Preserve stronger requirements in an existing approved plan unless an explicit revision is authorized and recorded through the scope-change procedure.
 
-Assign final verification to a task in the last implementation phase, before its approval gate and whole-story acceptance. Require the complete unfiltered suite, shared checks and applicable distribution/installation, manual and platform evidence against the final implementation. Resolve every deferred check there. Record evidence-renewal conditions after later changes; document-only work uses appropriate document checks with a rationale. Approval of an intermediate phase covers only its verified scope.
+Follow the repository verification policy: local phase gates run only direct tests of modules created or modified in that phase, plus shared non-test checks. At story acceptance reuse valid phase evidence and renew invalidated direct tests. Assign all deferred regressions and full-suite verification to a named milestone acceptance task. CI still runs all tests. Preserve acceptance criteria, known failures and explicit approval gates.
 
 ## Define granular tasks
 

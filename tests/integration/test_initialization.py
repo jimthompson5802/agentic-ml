@@ -1196,3 +1196,34 @@ else:
     assert journal["storage"]["mlflow_backend"] == ".agentic-ml/mlflow.db"
     for name, content in originals.items():
         assert (backups / (name.lstrip(".") + ".original")).read_bytes() == content
+
+
+def test_versioned_planning_inputs_coexist_with_initialization(
+    project: Path, tmp_path: Path
+) -> None:
+    """US-03 AC-03/05: planning retains installed pins, drafts and init reruns."""
+    initial = initialize(project)
+    assert initial.returncode == 0, initial.stdout + initial.stderr
+    probe = ROOT / "tests/installation/check_planning.py"
+    result = run(
+        [
+            str(project / ".venv/bin/python"),
+            "-I",
+            str(probe),
+            "--workspace",
+            str(tmp_path / "planning-probe"),
+            "--project",
+            str(project),
+        ],
+        tmp_path,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    rerun = initialize(project)
+    assert rerun.returncode == 0, rerun.stdout + rerun.stderr
+    replaced = project / "experiments/initial/experiment.yaml"
+    reviewed_bytes = (project / "experiment.yaml").read_bytes()
+    replaced.write_bytes(reviewed_bytes)
+    conflict = initialize(project)
+    assert conflict.returncode != 0
+    assert "conflict" in conflict.stderr.lower()
+    assert replaced.read_bytes() == reviewed_bytes

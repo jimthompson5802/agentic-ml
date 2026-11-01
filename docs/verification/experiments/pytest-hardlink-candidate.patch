@@ -1,0 +1,149 @@
+diff --git a/tests/installation/verify_initialization.py b/tests/installation/verify_initialization.py
+index e4a9aad..903e20f 100644
+--- a/tests/installation/verify_initialization.py
++++ b/tests/installation/verify_initialization.py
+@@ -39,6 +39,8 @@ def verify_project(
+     env: dict[str, str],
+ ) -> None:
+     """Initialize a fresh or existing project and probe its installed interfaces."""
++    # These projects only read installed dependencies and own their mutable state.
++    env = dict(env, UV_LINK_MODE="hardlink")
+     project.mkdir(parents=True)
+     run("git-init", ["git", "init"], project, env)
+     run("uv-init", ["uv", "init", "--no-package", "--python", "3.12"], project, env)
+diff --git a/tests/integration/test_distribution_verification.py b/tests/integration/test_distribution_verification.py
+index cc63a47..9b8c847 100644
+--- a/tests/integration/test_distribution_verification.py
++++ b/tests/integration/test_distribution_verification.py
+@@ -66,6 +66,13 @@ def test_complete_initialization_from_both_artifact_paths(
+         assert f"PASS initialization {label}" in result.stdout
+         for kind in ("fresh", "existing"):
+             project = workspace / label / kind
++            native_files = list(
++                (project / ".venv/lib/python3.12/site-packages/numpy/_core").glob(
++                    "_multiarray_umath*.so"
++                )
++            )
++            assert len(native_files) == 1
++            assert native_files[0].stat().st_nlink > 1
+             assert (project / ".dvc/config").is_file()
+             assert (project / ".agentic-ml/mlflow.db").is_file()
+             assert (project / ".agentic-ml/state/project.json").is_file()
+diff --git a/tests/integration/test_initialization.py b/tests/integration/test_initialization.py
+index b1e1de2..bd3880d 100644
+--- a/tests/integration/test_initialization.py
++++ b/tests/integration/test_initialization.py
+@@ -16,6 +16,8 @@ def run(command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
+     env = dict(os.environ)
+     for key in ("VIRTUAL_ENV", "UV_PROJECT_ENVIRONMENT", "PYTHONPATH", "PYTHONHOME"):
+         env.pop(key, None)
++    # These projects only read installed dependencies; mutation probes use copies.
++    env["UV_LINK_MODE"] = "hardlink"
+     return subprocess.run(
+         command,
+         cwd=cwd,
+@@ -77,6 +79,17 @@ def initialize(project: Path, *args: str) -> subprocess.CompletedProcess[str]:
+     return run([str(project / ".venv/bin/agentic-ml"), "init", *args], project)
+
+
++def test_initialization_dependencies_reuse_cached_files(project: Path) -> None:
++    """Read-only initialization dependencies retain shared native-file identity."""
++    native_files = list(
++        (project / ".venv/lib/python3.12/site-packages/numpy/_core").glob(
++            "_multiarray_umath*.so"
++        )
++    )
++    assert len(native_files) == 1
++    assert native_files[0].stat().st_nlink > 1
++
++
+ def test_initializes_usable_dvc_default_store(project: Path) -> None:
+     """AC-04: initialized DVC exposes a writable local default remote."""
+     result = initialize(project)
+diff --git a/tests/integration/test_installation_verification.py b/tests/integration/test_installation_verification.py
+index 1b8c9b6..9b08a49 100644
+--- a/tests/integration/test_installation_verification.py
++++ b/tests/integration/test_installation_verification.py
+@@ -1,6 +1,7 @@
+ """Exercise pinned installation verification through subprocess interfaces."""
+
+ import json
++import os
+ import shutil
+ import subprocess
+ import sys
+@@ -100,6 +101,7 @@ def installed_project(
+             "--workspace",
+             str(workspace),
+         ],
++        env=dict(os.environ, UV_LINK_MODE="hardlink"),
+         capture_output=True,
+         text=True,
+         timeout=120,
+@@ -175,6 +177,66 @@ def test_altered_guidance_is_rejected(installed_project: tuple[Path, str, str])
+         guidance.write_bytes(content)
+
+
++def test_mutating_installed_guidance_preserves_peers_and_cache(
++    installed_project: tuple[Path, str, str], tmp_path: Path
++) -> None:
++    """Copy-isolated corruption leaves hardlinked peers and future installs intact."""
++    project, repository, revision = installed_project
++    relative = Path(
++        ".venv/lib/python3.12/site-packages/agentic_ml/runtime_guidance/provisional.md"
++    )
++    expected = (
++        b"Provisional Milestone 0 runtime guidance; experiment execution "
++        b"is unavailable.\n"
++    )
++
++    def install_peer(name: str) -> Path:
++        """Install a read-only peer through the public full-SHA uv interface."""
++        target = tmp_path / name
++        target.mkdir()
++        env = dict(os.environ, UV_LINK_MODE="hardlink")
++        for key in (
++            "VIRTUAL_ENV",
++            "UV_PROJECT_ENVIRONMENT",
++            "PYTHONPATH",
++            "PYTHONHOME",
++        ):
++            env.pop(key, None)
++        for command in (
++            ["git", "init"],
++            ["uv", "init", "--no-package", "--python", "3.12"],
++            ["uv", "add", "git+" + repository, "--rev", revision],
++        ):
++            result = subprocess.run(
++                command,
++                cwd=target,
++                env=env,
++                capture_output=True,
++                text=True,
++                timeout=120,
++                check=False,
++            )
++            assert result.returncode == 0, result.stdout + result.stderr
++        return target / relative
++
++    guidance = project / relative
++    first_peer = install_peer("first-peer")
++    assert guidance.read_bytes() == first_peer.read_bytes() == expected
++    assert guidance.stat().st_nlink == 1
++    assert not guidance.samefile(first_peer)
++    try:
++        guidance.write_text("Unexpected guidance.\n")
++        result = probe_project(project, repository, revision)
++        assert result.returncode != 0
++        assert "runtime guidance contents differ" in result.stderr
++        assert first_peer.read_bytes() == expected
++        second_peer = install_peer("second-peer")
++        assert second_peer.read_bytes() == expected
++        assert first_peer.samefile(second_peer)
++    finally:
++        guidance.write_bytes(expected)
++
++
+ def test_missing_metadata_is_rejected(installed_project: tuple[Path, str, str]) -> None:
+     """A package directory cannot substitute for installed distribution metadata."""
+     project, repository, revision = installed_project
