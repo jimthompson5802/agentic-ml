@@ -73,6 +73,17 @@
         "object",
         "null"
       ]
+    },
+    "authentication": {
+      "const": "none"
+    },
+    "approval_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "uniqueItems": true
     }
   },
   "required": [

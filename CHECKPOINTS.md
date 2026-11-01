@@ -4,35 +4,39 @@ Last updated: 2026-10-31
 
 ## Current position
 
-**US-03 IP3 implemented and developer approved (2026-10-31).** Developer
-“start executing ip3” authorized this phase. IP3-T1–T3 are complete in the
-[owning plan](docs/plans/milestone-1-us-03.md); see
-[IP3 evidence](docs/verification/us-03-ip3.md). Public structural checker and
-CLI/API resolver enforce declared domains, mode-specific algorithm narrowing,
-fixed values, categorical/numeric subsets and lowered budget ceilings. Original
-and effective spaces, override provenance and immutable versions are preserved.
-Delegated decisions remain blocked; US-05 registry/training validation is deferred.
+**US-03 IP4 complete and developer approved (2026-10-31).**
+Developer “i approve ip4” approves the final phase and recorded evidence.
+Developer “excute ip4” authorized this phase after IP3 approval. IP4-T1–T4 are
+complete in the [owning plan](docs/plans/milestone-1-us-03.md); see
+[IP4 evidence](docs/verification/us-03-ip4.md). Scoped unauthenticated
+approval/revocation CLI/API and independent readiness verification now support
+complete delegated proposals, including explicit null. Matching current records
+can make a plan input-ready without changing its immutable identity; missing,
+malformed, revoked, wrong-scope and stale evidence blocks. Reviewer identity and
+history remain unprotected under approved SC-01. No execution permission granted.
 
-Direct phase verification: **135 passed**, four workers, **47.09s**, including
-both direct and genuinely sdist-rebuilt wheels. Each installed probe includes
-16 CLI/API boundary cases and the public checker. Collection: **265/266**,
-one reserved milestone test deselected. Shared locked sync/lock/lint/format/types/
-version checks passed; lock unchanged. M1-ACCEPT-VERIFY owns the full suite and
-unchanged dependent regressions. TDD failures/corrections are preserved in report.
-Initial red reported failure then remained in pytest shutdown; developer “kill
-that pid” subsequently authorized killing PID 75114. Kill succeeded; pytest and
-uv parent 75086 are gone, original session exit 137. Later unique basetemp cycles
-and the passing phase run exited normally. macOS 15.7.9 arm64/Python 3.12.15 verified.
+Final direct phase run: **165 passed**, four workers, **30.63s**, both directly
+built and genuinely sdist-rebuilt wheel paths. Both installed example walkthroughs
+passed. Collection: **295/296**, one reserved milestone test deselected. Shared
+locked sync/lock/lint/format/types/version and document/whitespace checks passed;
+lock unchanged. M1-ACCEPT-VERIFY owns 131 unselected tests and all deferred
+caller/initialization, upgrade/scheduling, remaining artifact and full-suite checks.
+No full-suite claim. TDD failures/corrections and limitations are retained in report.
+macOS 15.7.9 arm64/Python 3.12.15 verified; no new Linux/Windows evidence.
 
-Working branch `US-03-experiment-boundaries`, base `103cdf8`; implementation,
-tests, setup guide, plan/evidence and this checkpoint are included in the local
+Working branch `US-03-experiment-boundaries`, base `8ea1a82`; IP4 source, schemas,
+tests, examples, docs, plan/evidence and this checkpoint are included in the local
 commit authorized by developer “commit changes”; Git history records its result.
-Developer “i approve ip3” after the implementation/status summary approves the
-completed phase and evidence. **Next action:** await IP4 execution authorization.
-Developer “push” authorized publication; ordinary push of IP3 commit `3ad0c0a`
-to `origin/US-03-experiment-boundaries` succeeded. This publication record is
-committed/pushed under that instruction. No whole-story acceptance authorized. Earlier IP3-unapproved
-notes below are historical and superseded by the execution instruction and approval.
+No push, PR or whole-story acceptance authorized. **Next action:** finish the
+developer-requested full suite, then await explicit whole-story US-03 acceptance.
+All implementation phase gates are approved.
+The IP4 approval record changes documentation only; executable evidence is reused.
+
+Developer “run full test suite including the milestone_acceptance test” authorized
+an additional full run with four workers, `-m ""`, basetemp
+`/private/tmp/us03-full-20261031`, JUnit `/private/tmp/us03-full-20261031.xml`.
+All 296 tests collected; run is in progress at commit time. No passing full-suite
+claim yet. Developer requested remaining-test counts every two minutes.
 
 ### Earlier checkpoint history
 

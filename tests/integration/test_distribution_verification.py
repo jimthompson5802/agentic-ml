@@ -270,3 +270,14 @@ def test_planning_from_both_artifact_paths(artifacts: Path, tmp_path: Path) -> N
     assert result.returncode == 0, result.stdout + result.stderr
     assert "PASS planning direct-wheel" in result.stdout
     assert "PASS planning rebuilt-wheel" in result.stdout
+
+
+def test_missing_approval_schema_fails_installed_inventory(
+    artifacts: Path, tmp_path: Path
+) -> None:
+    """US-03 AC-04: installed approval schemas are required on both wheel paths."""
+    result = damaged_wheel_result(
+        artifacts, tmp_path, "agentic_ml/schemas/approvals/1.0/approval.json", None
+    )
+    assert result.returncode != 0
+    assert "PASS direct-wheel" not in result.stdout

@@ -4,7 +4,10 @@ An early-stage project exploring an agent-agnostic harness for machine learning 
 
 The proposed harness provides reusable orchestration, experiment execution, independent evaluation, and reproducible evidence tracking. Developers can use it interactively through coding assistants or delegate work to managed agents. It supports notebook-centered workflows, user-supplied models and preprocessing, and developer approvals at workflow phase boundaries. The harness is installed as a Python dependency in separate, user-owned experiment repositories.
 
-**This project is in its early days.** The repository currently contains a proposed design rather than a working implementation. Its design, interfaces, directory structure, and documentation will change as development progresses.
+**This project is in its early days.** Initialization, versioned experiment planning,
+search-boundary validation and scoped unauthenticated decision approvals are
+implemented. Managed experiment execution and broader orchestration remain
+subsequent work. Interfaces will change as development progresses.
 
 For a separate experiment project, follow the [installation and initialization guide](docs/experiment-setup.md). Initialization supplies draft inputs, a synchronized environment and local storage. Managed experiment execution remains subsequent work.
 

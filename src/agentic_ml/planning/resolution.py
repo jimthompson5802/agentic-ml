@@ -225,6 +225,8 @@ def resolve_plan(request: ResolveRequest) -> PlanResult:
         plan = prepare(access, experiment, sources)
         plan_id = publish(access, plan, sources)
         diagnostics = plan_diagnostics(plan)
+        if plan["pending_decisions"]:
+            return verify_plan(project_root=request.project_root, plan_id=plan_id)
         return PlanResult(
             plan_id,
             "blocked" if plan["pending_decisions"] else "input_ready",
@@ -275,7 +277,7 @@ def plan_diagnostics(plan: dict[str, JSONValue]) -> tuple[Diagnostic, ...]:
 
 
 def verify_evidence(
-    access: ProjectAccess, plan_id: str, check_current: bool
+    access: ProjectAccess, plan_id: str, check_current: bool, *, approvals: bool = True
 ) -> tuple[VerificationResult, dict[str, JSONValue] | None]:
     """Recompute the preserved plan and its current-source requirements."""
     from agentic_ml.planning.storage import read_bundle
@@ -303,8 +305,39 @@ def verify_evidence(
                 fail("stale_source", str(entry["name"]), str(entry["path"]))
     access.recheck()
     diagnostics = plan_diagnostics(plan)
+    ids: tuple[str, ...] = ()
+    if (
+        approvals
+        and diagnostics
+        and all(d.code == "approval_required" for d in diagnostics)
+    ):
+        from agentic_ml.approvals.models import ApprovalError
+        from agentic_ml.approvals.verification import approval_ids
+
+        try:
+            ids = approval_ids(access, plan_id, plan)
+            if ids:
+                diagnostics = ()
+        except (ApprovalError, ValueError, TypeError, KeyError) as error:
+            if isinstance(error, ApprovalError) and error.operational:
+                raise PlanningError(error.code, str(error)) from error
+            diagnostics = (
+                Diagnostic(
+                    "invalid_approval",
+                    "approvals",
+                    ".agentic-ml/plan-approvals",
+                    1,
+                    1,
+                    "Approval evidence is invalid.",
+                ),
+            )
     return VerificationResult(
-        plan_id, "blocked" if diagnostics else "input_ready", diagnostics, True
+        plan_id,
+        "blocked" if diagnostics else "input_ready",
+        diagnostics,
+        True,
+        "none",
+        ids,
     ), plan
 
 
@@ -361,5 +394,11 @@ def inspect_plan(*, project_root: Path, plan_id: str) -> PlanInspection:
     """Return verified preserved evidence without trusting a stored readiness flag."""
     result, plan = checked_evidence(project_root, plan_id, False)
     return PlanInspection(
-        plan_id, result.status, result.integrity, plan, result.diagnostics
+        plan_id,
+        result.status,
+        result.integrity,
+        plan,
+        result.diagnostics,
+        result.authentication,
+        result.approval_ids,
     )

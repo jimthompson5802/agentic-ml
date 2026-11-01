@@ -1,0 +1,9 @@
+schema_version: "1.0"
+id: churn
+brief: planning/brief.md
+search_space: planning/search-space.yaml
+notebooks: [experiments/initial/notebooks/01_data_assessment.ipynb]
+working_directory: .
+data: [data/churn.csv]
+execution:
+  status: configured

@@ -53,6 +53,8 @@ class VerificationResult(PlanResult):
     """Report recomputed integrity and preserved-input readiness."""
 
     integrity: bool
+    authentication: str = "none"
+    approval_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -64,3 +66,5 @@ class PlanInspection:
     integrity: bool
     plan: dict[str, JSONValue] | None
     diagnostics: tuple[Diagnostic, ...]
+    authentication: str = "none"
+    approval_ids: tuple[str, ...] = ()

@@ -408,6 +408,124 @@ def main() -> None:
         2,
         args.workspace,
     )
+    from agentic_ml.approvals import (
+        ApprovalRequest,
+        RevocationRequest,
+        approve_plan,
+        revoke_approval,
+    )
+
+    approval = approve_plan(
+        ApprovalRequest(root, proposed.plan_id, "Scientist", "Reviewed metric")
+    )
+    assert approval.authentication == "none"
+    assert approval.decisions == (
+        {
+            "field": "evaluation.metric",
+            "value": "f1_macro",
+            "rationale": "Class balance",
+        },
+    )
+    verified = command(
+        ["verify", "--project-root", str(root), "--plan", proposed.plan_id],
+        0,
+        args.workspace,
+    )
+    assert verified["authentication"] == "none" and verified["approval_ids"] == [
+        approval.approval_id
+    ]
+    revoke_approval(
+        RevocationRequest(
+            root, proposed.plan_id, approval.approval_id, "Scientist", "Reconsider"
+        )
+    )
+    assert verify_plan(project_root=root, plan_id=proposed.plan_id).status == "blocked"
+    cli_approval = command(
+        [
+            "approve",
+            "--project-root",
+            str(root),
+            "--plan",
+            proposed.plan_id,
+            "--reviewer",
+            "Self-declared scientist",
+            "--reason",
+            "Reviewed",
+        ],
+        0,
+        args.workspace,
+    )
+    assert cli_approval["authentication"] == "none"
+    command(
+        [
+            "revoke-approval",
+            "--project-root",
+            str(root),
+            "--plan",
+            proposed.plan_id,
+            "--approval",
+            str(cli_approval["approval_id"]),
+            "--reviewer",
+            "Scientist",
+            "--reason",
+            "Reconsider",
+        ],
+        0,
+        args.workspace,
+    )
+    command(
+        ["verify", "--project-root", str(root), "--plan", proposed.plan_id],
+        2,
+        args.workspace,
+    )
+    record_dir = root / ".agentic-ml/plan-approvals" / proposed.plan_id[7:]
+    record_path = record_dir / "approvals" / (approval.approval_id + ".json")
+    saved_record = record_path.read_bytes()
+    for key, value in (
+        ("project_root", "/other"),
+        ("experiment_id", "other"),
+        ("plan_id", "sha256:" + "0" * 64),
+        ("recorded_at", "2026-02-30T00:00:00Z"),
+        ("decisions", []),
+        ("extra", True),
+    ):
+        payload = json.loads(saved_record)
+        payload[key] = value
+        record_path.write_text(
+            json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n"
+        )
+        checked = verify_plan(project_root=root, plan_id=proposed.plan_id)
+        assert (
+            checked.status == "blocked"
+            and checked.diagnostics[0].code == "invalid_approval"
+        )
+        command(
+            ["verify", "--project-root", str(root), "--plan", proposed.plan_id],
+            2,
+            args.workspace,
+        )
+        record_path.write_bytes(saved_record)
+    fresh = approve_plan(
+        ApprovalRequest(root, proposed.plan_id, "Scientist", "Reviewed again")
+    )
+    assert verify_plan(project_root=root, plan_id=proposed.plan_id).approval_ids == (
+        fresh.approval_id,
+    )
+    # A new source identity cannot reuse old records, while the old bundle remains inspectable.
+    brief.write_bytes(
+        brief.read_bytes().replace(b"proposal: f1_macro", b"proposal: accuracy")
+    )
+    revised = resolve_plan(ResolveRequest(root, Path("experiment.yaml")))
+    assert revised.plan_id != proposed.plan_id and revised.status == "blocked"
+    assert (
+        verify_plan(project_root=root, plan_id=proposed.plan_id).status == "input_ready"
+    )
+    assert (
+        verify_plan(
+            project_root=root, plan_id=proposed.plan_id, check_current=True
+        ).status
+        == "blocked"
+    )
     brief.write_bytes(original.replace(b"metric: f1_macro", b"metric: TODO"))
     invalid = resolve_plan(ResolveRequest(root, Path("experiment.yaml")))
     assert invalid.status == "blocked" and invalid.plan_id is None

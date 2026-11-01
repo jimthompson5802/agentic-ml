@@ -282,6 +282,12 @@ handoff before this execution request.
 
 ## US-03 / Implementation Phase 4: Verify delegated decisions and complete installed acceptance
 
+Execution authorized by developer “excute ip4”, 2026-10-31. IP3 approval
+verified. Work and TDD evidence are recorded in [IP4 report](../verification/us-03-ip4.md).
+The approved final scope-change record below governs local verification:
+direct planning/approval/CLI tests and both-wheel installed planning probes;
+unchanged dependent/full-suite checks remain with M1-ACCEPT-VERIFY.
+
 - **Outcome:** Only proposed delegated decisions with matching unrevoked unauthenticated experiment approval records become input-ready; final installed behavior meets all US-03 criteria.
 - **Entry conditions:** IP3 approved; revised IP1 unauthenticated experiment approval contract approved. No special account/host provisioning required. Any changed mechanism requires scope review before dependent work.
 - **Acceptance criteria advanced:** AC-04 completed; AC-01–05 integrated and verified.
@@ -290,28 +296,28 @@ handoff before this execution request.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-03-IP4-T1 | Not started | Implement SC-01 unauthenticated experiment approval/revocation interface and record verifier in proposed `src/agentic_ml/approvals/`, integrated with `planning/` readiness; extend CLI and installed probe. Add regression one slice at a time for unresolved delegation, proposal without approval, approved proposal, declared reviewer label, authentication:none and scoped plan/decision matching. | IP3 approval; accepted IP1 mechanism | Ready plan records effective choice, reason/source and matching unauthenticated approval evidence; approval is distinct from execution permission and story acceptance | AC-01, AC-03, AC-04 |
-| US-03-IP4-T2 | Not started | Test missing/malformed/wrong-project/wrong-decision/stale/revoked approval records, source corruption, changed budgets/metric/search and retained prior version. Verify reviewer identity is explicitly unverified; do not claim protection against deliberate approval fabrication or history rewriting. Exercise the public readiness verifier independently of resolve via CLI/API. | T1 | Every invalid binding blocks affected use and leaves reviewable evidence; accepted old evidence is never rebound to revised configuration | AC-03, AC-04 |
-| US-03-IP4-T3 | Not started | Update `docs/experiment-setup.md`, README capability wording and example inputs (proposed under `examples/` if needed); document draft transition, public commands, path semantics, unauthenticated approval usage and limitations, US-05/future execution integration and limitations. | T1–T2 | Runnable explicit and delegated walkthroughs through installed package; no claim of training/execution isolation or automatic agent decisions | AC-01–05 |
-| US-03-IP4-T4 | Not started | Run final verification below; record criterion matrix, artifact identities and actual platform/limitations in `docs/verification/us-03-ip4.md` (proposed). Reconcile all deferred checks, plan statuses and CHECKPOINTS.md. | T1–T3 | Complete suite, shared checks, both wheel paths and installed success/adversarial fixtures pass on final implementation before final gate | AC-01–05 |
+| US-03-IP4-T1 | Complete | Implement SC-01 unauthenticated experiment approval/revocation interface and record verifier in proposed `src/agentic_ml/approvals/`, integrated with `planning/` readiness; extend CLI and installed probe. Add regression one slice at a time for unresolved delegation, proposal without approval, approved proposal, declared reviewer label, authentication:none and scoped plan/decision matching. | IP3 approval; accepted IP1 mechanism | Ready plan records effective choice, reason/source and matching unauthenticated approval evidence; approval is distinct from execution permission and story acceptance | AC-01, AC-03, AC-04 |
+| US-03-IP4-T2 | Complete | Test missing/malformed/wrong-project/wrong-decision/stale/revoked approval records, source corruption, changed budgets/metric/search and retained prior version. Verify reviewer identity is explicitly unverified; do not claim protection against deliberate approval fabrication or history rewriting. Exercise the public readiness verifier independently of resolve via CLI/API. | T1 | Every invalid binding blocks affected use and leaves reviewable evidence; accepted old evidence is never rebound to revised configuration | AC-03, AC-04 |
+| US-03-IP4-T3 | Complete | Update `docs/experiment-setup.md`, README capability wording and example inputs (proposed under `examples/` if needed); document draft transition, public commands, path semantics, unauthenticated approval usage and limitations, US-05/future execution integration and limitations. | T1–T2 | Runnable explicit and delegated walkthroughs through installed package; no claim of training/execution isolation or automatic agent decisions | AC-01–05 |
+| US-03-IP4-T4 | Complete | Run final verification below; record criterion matrix, artifact identities and actual platform/limitations in `docs/verification/us-03-ip4.md` (proposed). Reconcile all deferred checks, plan statuses and CHECKPOINTS.md. | T1–T3 | Complete suite, shared checks, both wheel paths and installed success/adversarial fixtures pass on final implementation before final gate | AC-01–05 |
 
 ### Verification and review evidence
 
 - **Selected tests during development:** `uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_planning.py` plus `tests/integration/test_plan_approvals.py` and approval cases in `tests/installation/check_planning.py` / `tests/installation/verify_planning.py`. SC-01 removes the separate-principal driver; ordinary project fixtures verify record semantics, not authentication.
 - **Public boundaries:** Installed CLI/API, project-local approval/revocation records and standalone readiness verification. Explicitly record authentication:none and unverified reviewer; no identity-isolation claim. Development/testing gates remain separate and enforced as before.
-- **Deferred checks:** None at gate. IP4-T4 resolves all earlier deferrals.
+- **Deferred checks:** M1-ACCEPT-VERIFY owns unchanged caller/initialization, upgrade/scheduling, remaining artifact and full-suite checks under the approved scope revision below. Required direct phase checks pass; see the IP4 report.
 - **Broader-run triggers:** Cross-entrypoint authorization/access changes require full suite and applicable installed artifact verification; final verification is mandatory regardless.
-- **Expected:** Valid approved decision works; missing/malformed/stale/revoked/mismatched records block, without claiming rejection of a fabricated schema-valid matching record; final complete regression suite passes. Actual: Pending.
+- **Expected:** Valid approved decision works; missing/malformed/stale/revoked/mismatched records block, without claiming rejection of a fabricated schema-valid matching record; final complete regression suite passes. Actual: 165 direct tests passed in 30.63s; shared checks and both installed wheel paths passed. See [IP4 report](../verification/us-03-ip4.md).
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete, all five ACs verified, unauthenticated approval limitations explicit and required final evidence passing.
-- **Evidence presented:** Pending — IP4 report, complete verification and criterion matrix.
+- **Evidence presented:** [IP4 report](../verification/us-03-ip4.md): IP4-T1–T4 technically complete; 165 direct tests, both wheel paths, installed examples and shared checks passed. Criterion matrix reconciled; developer approved IP4.
 - **Remaining limitations:** Runtime execution, dataset acceptance, scientific validity, model quality and full workflow governance remain separate outcomes.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved — IP4 implementation and recorded verification.
+- **Decision reference and date:** Developer “i approve ip4”, 2026-10-31, after the plan, acceptance-criterion, verification-report and pending-task summaries.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending — stop; whole-story acceptance requires an explicit developer decision after final verification and gate approval.
+- **Progression authorized:** All implementation phase gates approved. Await explicit whole-story acceptance before the accepted-story publication workflow; no commit or push authorized by this phase approval.
 
 ## Shared and final verification requirements
 
@@ -337,15 +343,15 @@ Follow the [scope-change procedure](../../.agents/skills/manage-plan-scope/SKILL
 
 | Acceptance criterion | Implementation phases / tasks | Required verification evidence | Result |
 |---|---|---|---|
-| US-03-AC-01 — brief fields and explicit delegation | IP1-T1; IP2-T1; IP3-T2; IP4-T1/T3/T4 | Classification/regression, complete fields, use/select/compare, missing/ambiguous/delegated cases through installed CLI/API | Pending |
-| US-03-AC-02 — hard search boundary | IP1-T2; IP3-T1–T3; IP4-T4 | Independently defined fixed/categorical/integer/float boundaries; narrowing accepted and expansion rejected through CLI/API | Pending |
-| US-03-AC-03 — versioned effective plan and source checksums | IP1-T2; IP2-T3; IP3-T2; IP4-T1/T2/T4 | Exact preserved bytes/hashes, immutable revisions, approvals/source references, missing/corrupt/partial-write rejection and readiness contract | Pending |
-| US-03-AC-04 — conflicts block; delegated choices approved | IP1-T1/T3; IP2-T1/T3; IP3-T1/T2; IP4-T1/T2/T4 | Conflict/unresolved diagnostics, explicit unauthenticated matching approval and independent missing/malformed/stale/revoked/scope readiness checks; reviewer identity unverified under SC-01 | Pending |
-| US-03-AC-05 — root-relative inputs and notebook cwd | IP1-T2; IP2-T2; IP4-T3/T4 | Same identities from multiple caller directories; explicit cwd and safe path-boundary cases | Pending |
+| US-03-AC-01 — brief fields and explicit delegation | IP1-T1; IP2-T1; IP3-T2; IP4-T1/T3/T4 | Classification/regression, complete fields, use/select/compare, missing/ambiguous/delegated cases through installed CLI/API | Direct evidence passed; phase gates approved |
+| US-03-AC-02 — hard search boundary | IP1-T2; IP3-T1–T3; IP4-T4 | Independently defined fixed/categorical/integer/float boundaries; narrowing accepted and expansion rejected through CLI/API | Direct evidence passed; phase gates approved |
+| US-03-AC-03 — versioned effective plan and source checksums | IP1-T2; IP2-T3; IP3-T2; IP4-T1/T2/T4 | Exact preserved bytes/hashes, immutable revisions, approvals/source references, missing/corrupt/partial-write rejection and readiness contract | Direct evidence passed; phase gates approved |
+| US-03-AC-04 — conflicts block; delegated choices approved | IP1-T1/T3; IP2-T1/T3; IP3-T1/T2; IP4-T1/T2/T4 | Conflict/unresolved diagnostics, explicit unauthenticated matching approval and independent missing/malformed/stale/revoked/scope readiness checks; reviewer identity unverified under SC-01 | Direct evidence passed; phase gates approved |
+| US-03-AC-05 — root-relative inputs and notebook cwd | IP1-T2; IP2-T2; IP4-T3/T4 | Same identities from multiple caller directories; explicit cwd and safe path-boundary cases | Direct evidence passed; phase gates approved |
 
-- **Remaining work:** All implementation tasks; no AC claimed complete by this plan.
+- **Remaining work:** Implementation tasks complete with required direct evidence. All implementation phase gates are approved; explicit whole-story acceptance remains pending. Deferred regressions are assigned to M1-ACCEPT-VERIFY.
 - **Partial prerequisite delivery:** None. US-05 registry/candidate behavior remains its owning story; downstream entrypoints must wire this plan's readiness and boundary contracts before shipping.
-- **Final verification:** Pending — IP4-T4.
+- **Final verification:** IP4-T4 complete under the approved local verification scope revision: [IP4 evidence](../verification/us-03-ip4.md).
 - **Developer acceptance:** Pending.
 - **Decision reference and date:** Pending.
 

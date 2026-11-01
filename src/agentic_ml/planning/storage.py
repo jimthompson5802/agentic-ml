@@ -63,11 +63,13 @@ def checked_json(content: bytes) -> JSONValue:
     return value
 
 
-def check_store(access: ProjectAccess, project_bytes: bytes) -> None:
+def check_store(
+    access: ProjectAccess, project_bytes: bytes, *, store: str = STORE
+) -> None:
     """Reject planning storage overlapping configured stores or selected sources."""
     raw, _ = strict_yaml(project_bytes, "project.yaml")
     storage = mapping(mapping(raw)["storage"])
-    destination = access.root / STORE
+    destination = access.root / store
     protected = [
         Path(os.path.abspath(access.root / str(value))) for value in storage.values()
     ]
@@ -80,7 +82,7 @@ def check_store(access: ProjectAccess, project_bytes: bytes) -> None:
         raise PlanningError(
             "storage_conflict", "Planning store overlaps a configured project store."
         )
-    if any(path == STORE or path.startswith(STORE + "/") for path in access.snapshots):
+    if any(path == store or path.startswith(store + "/") for path in access.snapshots):
         raise PlanningError(
             "storage_conflict", "Planning store overlaps selected inputs."
         )

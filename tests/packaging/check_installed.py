@@ -77,6 +77,37 @@ def check_planning_resources() -> None:
     """Verify independently specified public planning schema inventory."""
     import jsonschema
 
+    from agentic_ml.approvals import (
+        ApprovalRequest,
+        RevocationRequest,
+        approve_plan,
+        revoke_approval,
+    )
+
+    assert callable(approve_plan) and callable(revoke_approval)
+    assert (
+        ApprovalRequest(
+            Path.cwd(), "sha256:" + "0" * 64, "Reviewer", "Reviewed"
+        ).reviewer
+        == "Reviewer"
+    )
+    assert (
+        RevocationRequest(
+            Path.cwd(), "sha256:" + "0" * 64, "approval", "Reviewer", "Reconsider"
+        ).approval_id
+        == "approval"
+    )
+    approval_resources = files("agentic_ml").joinpath("schemas/approvals/1.0")
+    assert {entry.name for entry in approval_resources.iterdir()} == {
+        "approval.json",
+        "revocation.json",
+    }
+    for name in ("approval.json", "revocation.json"):
+        schema = json.loads(approval_resources.joinpath(name).read_bytes())
+        jsonschema.Draft202012Validator.check_schema(schema)
+        assert schema["additionalProperties"] is False
+        assert schema["properties"]["authentication"] == {"const": "none"}
+
     from agentic_ml.planning import (
         ResolveRequest,
         inspect_plan,

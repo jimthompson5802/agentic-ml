@@ -263,7 +263,9 @@ def derive_decisions(
                 pending.append(field)
                 diagnostics.append(
                     Diagnostic(
-                        "pending_decision" if selected is None else "approval_required",
+                        "approval_required"
+                        if isinstance(value, dict) and "proposal" in value
+                        else "pending_decision",
                         field,
                         source,
                         line,
