@@ -58,3 +58,8 @@ convention = "google"
 python_version = "3.12"
 strict = true
 show_error_codes = true
+
+[tool.uv.workspace]
+members = [
+    ".pytest-tmp/run/popen-gw1/test_invalid_project_is_reject0/experiment",
+]
