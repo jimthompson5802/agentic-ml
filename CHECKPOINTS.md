@@ -4,7 +4,7 @@ Last updated: 2026-10-31
 
 ## Current position
 
-**US-03 cost/currency correction accepted; publication in progress (2026-10-31).**
+**US-03 cost/currency correction accepted, pushed and review thread resolved (2026-10-31).**
 Developer “i accept the fix, commit and push to remote; summarize the fix to PR
 comment and mark as resolved.” approves the correction and authorizes those actions.
 Developer “I accept the recommendation.” authorizes fixing the Medium delegated
@@ -26,12 +26,13 @@ lock unchanged. Collection **314/315**, one reserved milestone test deselected.
 under the developer-approved deferral. No full-suite run. macOS 15.7.9 arm64 /
 Python 3.12.15 verified; no new Linux/Windows evidence.
 
-Branch `US-03-experiment-boundaries`, correction base `d4ce70c`. Parser, public
-regression tests, installed probe and correction docs/plan/checkpoint are being
-committed/pushed under the explicit approval. **Next action:** verify push, reply
-with the fix summary to PR #46's existing review thread and resolve it, then record
-outcomes. Prior acceptance/evidence retained. No merge, cleanup or next-story
-work authorized.
+Branch `US-03-experiment-boundaries`: accepted correction committed/pushed as
+`ff1db21`, PR #46 head verified. [Fix summary reply](https://github.com/jimthompson5802/agentic-ml/pull/46#discussion_r4434259600)
+posted/verified under the original finding. Thread resolution confirmed
+`isResolved: true` at the developer's request. Outcome-only records are
+committed/pushed under the same authorization; executable evidence is unchanged.
+**Next action:** await developer direction/CI assessment. No merge, cleanup or
+next-story work authorized.
 
 Earlier accepted implementation `63aa346`, acceptance records `2c9522d` and
 publication records `d4ce70c` were pushed. Original static review:

@@ -405,4 +405,7 @@ Follow the [scope-change procedure](../../.agents/skills/manage-plan-scope/SKILL
 - **Evidence:** [Correction report](../verification/us-03-cost-currency-correction.md) records original red, before/after approval/readiness reproduction, green and verification renewal.
 - **Developer correction approval:** Accepted — developer “i accept the fix, commit and push to remote; summarize the fix to PR comment and mark as resolved.”, 2026-10-31. This approves the correction and authorizes commit/push, a PR summary reply and resolution of the finding.
 - **Final evidence:** 183 direct tests passed, four workers, 45.72s; both-wheel probes each include 18 new CLI/API budget cases. Shared checks passed; lock unchanged. Parser/probe regression evidence and artifacts renewed; full suite deferred.
-- **Next action:** Commit and ordinary push of the accepted correction, summarize it in the existing PR #46 review thread, then resolve that thread. No merge or next-story authorization.
+- **Publication:** Accepted correction committed as `ff1db21859ade5f8056b3a3e090e5d243f1206a9` (`fix(planning): validate delegated cost and currency together`) and ordinary push succeeded. PR #46 head verified at that commit.
+- **PR summary:** [Fix summary and verification reply](https://github.com/jimthompson5802/agentic-ml/pull/46#discussion_r4434259600), verified author/body and parent finding `4434227411`.
+- **Thread resolution:** Developer-authorized resolution of thread `PRRT_kwDOVZ7kv86yW3rx`; API confirmed `isResolved: true`. Earlier unresolved-finding notes above are historical and superseded by this correction.
+- **Next action:** Await developer direction/CI assessment before any merge; no cleanup or next-story work authorized.

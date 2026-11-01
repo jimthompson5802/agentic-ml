@@ -137,7 +137,10 @@ complete conflicts reject, valid proposed pairs require approval, and absent
 proposals remain pending. Existing unaffected phase evidence is retained.
 
 Developer accepted the correction and authorized commit/push, a summary reply in
-PR #46 and resolution of the finding. Publication and thread outcomes will be
-recorded in the owning plan and checkpoint. All 132 unselected cases and full-suite
+PR #46 and resolution of the finding. Correction committed as `ff1db21` and pushed; PR head verified. The
+[fix summary reply](https://github.com/jimthompson5802/agentic-ml/pull/46#discussion_r4434259600)
+was posted and verified in the original review thread, which was resolved at the
+developer's explicit request (`isResolved: true`). Publication outcome records
+change documentation only; verified executable inputs remain unchanged. All 132 unselected cases and full-suite
 obligations remain with M1-ACCEPT-VERIFY.
 
