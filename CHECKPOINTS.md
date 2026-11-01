@@ -4,6 +4,12 @@ Last updated: 2026-10-31
 
 ## Current position
 
+**Branch integration:** Developer authorized switching to
+`US-03-experiment-boundaries` and merging `us-03-pytest-runtime-optimization`.
+Fast-forward from `ca4eb98` to `1b7b156` completed without conflicts.
+The merged tree is identical to the verified runtime branch; no new executable
+changes or test rerun required. No push or US-03 IP3 work authorized.
+
 **Installer concurrency profile complete (2026-10-31):** Developer “go ahead”
 authorized the clone-mode default/1/2 installer-thread comparison under four
 pytest workers and conditional full validation. See
