@@ -162,7 +162,7 @@ Consumer/child protocol and focused red–green evidence: [Phase 2 report](../ve
 | US-35-AC-04: ownership and cleanup errors | IP1-T1–T4; IP2-T1–T4, T6 | Sentinels, symlink/overlap rejection, shared-cache preservation and independent outcome checks | Verified; [Phase 2 evidence](../verification/us-35-ip2.md) |
 | US-35-AC-05: automation and before/after disk evidence | IP1-T1–T4; IP2-T2–T3, T5–T6 | Direct test results and fixed-workload environment/disk comparison with limits | Verified; [Phase 2 evidence](../verification/us-35-ip2.md) |
 
-- **Remaining work:** Both implementation phases approved; US-35 accepted on 2026-11-01. Publication and static COMMENT review complete; no merge performed. US-36–US-38 remain separate backlog work.
+- **Remaining work:** Both implementation phases approved; US-35 accepted on 2026-11-01. Publication and static COMMENT review complete; PR #48 squash merged on 2026-11-01. US-36–US-38 remain separate backlog work.
 - **Partial prerequisite delivery:** None claimed for another story.
 - **Final verification:** Required phase/direct/shared checks and fixed-workload comparison passed; milestone deferrals retain their named owner.
 - **Developer acceptance:** Accepted.
@@ -178,23 +178,30 @@ Consumer/child protocol and focused red–green evidence: [Phase 2 report](../ve
 
 - **Accepted:** 2026-11-01, developer message “i accept us-35”.
 - **Commits:** `bac0e9c` planning; `2e3bf2d` IP1; `8ffa7d4` IP2;
-  `49e3065` acceptance records. Publication records follow in a documentation-only
-  commit; executable inputs are unchanged from verified phase evidence.
+  `49e3065` acceptance records; `6411db8` publication records. Executable
+  inputs are unchanged from verified phase evidence.
 - **Pull request:** [#48 — feat(dev): clean successful verification environments (US-35)](https://github.com/jimthompson5802/agentic-ml/pull/48),
   `US-35-verification-cleanup` → `main`, standard PR, published and verified.
 - **Static review:** [COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/48#pullrequestreview-5730710831)
   of head `49e3065d0cf70b0de36515126fe5ba450d4c474d` against base
   `2527034b52febed207dcdcd8dab61dd9fc4b8624`; all 14 changed files and issue
   #47 inspected. No actionable findings; zero inline comments. No project code
-  or checks ran during static review. A follow-up COMMENT review covers the final
-  documentation-only publication commit; its head and review remain visible in
-  the PR reviews.
+  or checks ran during static review. The [final-head COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/48#pullrequestreview-5730714898)
+  covers documentation-only head `6411db8b51884365917d13abcd807156bb443343`;
+  no actionable findings and zero inline comments.
 - **CI observation:** Hosted Linux/Python 3.12 was pending when publication was
   recorded ([initial run](https://github.com/jimthompson5802/agentic-ml/actions/runs/41360436033)).
   This observation does not claim a passing hosted result; the publication-record
   push can start another run.
+- **Merge:** Developer authorized “squash merge pr #48”. Verified MERGED at
+  `2026-11-01T23:18:45Z`, squash commit
+  `3cfa4310482bff5eadff35d5432d48bfc56c38be`. Final-head Linux/Python 3.12
+  Development CI passed ([run](https://github.com/jimthompson5802/agentic-ml/actions/runs/41360636508)).
+- **Local follow-up:** Switched to `main` and pulled `3cfa431` with `--ff-only`.
+  Developer authorized committing merge/checkout records: “switch to main and
+  pull and commit the recent updates”. No push or branch deletion requested.
 - **Remaining obligations:** No publication blocker or review finding. Await
-  developer direction; merging and next-story work are not authorized.
+  developer direction; next-story work and branch deletion are not authorized.
   `M50-ACCEPT-VERIFY` and existing `M1-ACCEPT-VERIFY` deferrals remain intact.
 
 Publication/acceptance records change no executable behavior. Reuse the final

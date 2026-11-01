@@ -18,10 +18,12 @@ Final verification: **58 direct tests passed in 419.99s**, four workers; one res
 milestone case deselected. All shared checks passed, lock/input hashes unchanged.
 The exact baseline workload passed for all four commands, reducing retained
 environments from 1/2/6/2 to zero; source/project files and records survive.
-US-35 is published in [PR #48](https://github.com/jimthompson5802/agentic-ml/pull/48).
-The [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/48#pullrequestreview-5730710831)
-found no actionable issues; final publication-record changes receive a follow-up
-review on their published head. Hosted Linux CI was pending at handoff.
+US-35 was squash merged in [PR #48](https://github.com/jimthompson5802/agentic-ml/pull/48)
+at `2026-11-01T23:18:45Z`, commit `3cfa4310482bff5eadff35d5432d48bfc56c38be`,
+authorized by “squash merge pr #48”.
+The [final-head static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/48#pullrequestreview-5730714898)
+found no actionable issues, covering publication head `6411db8`. Final-head hosted Linux/Python 3.12 CI passed
+([run](https://github.com/jimthompson5802/agentic-ml/actions/runs/41360636508)).
 
 Development-guide reorganization remains approved and committed; see its
 [plan](docs/plans/development-guide-reorganization.md) and
@@ -51,13 +53,14 @@ backup responsibility, and cleanup protection; `.gitignore` excludes the directo
 Installation-driver adoption is complete in US-35 Phase 1; the other three
 drivers are complete and approved in Phase 2. No historical records were moved.
 
-**Next action:** await developer direction on PR #48. No merge or next-story
-work is authorized. Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals.
+**Next action:** await developer direction. US-35 is accepted and merged; no
+next-story work or branch deletion is authorized. Preserve M1-ACCEPT-VERIFY and
+M50-ACCEPT-VERIFY deferrals.
 
 ## Checkout and working tree
 
-- Branch: `US-35-verification-cleanup`; Phase 2 follows approved Phase 1 commit
-  `2e3bf2d`. Both implementation phases are approved.
+- Branch: `main`; pulled squash merge `3cfa431` from `origin/main`. Both
+  implementation phases and whole-story acceptance are recorded.
 - Phase 2 changes: distribution/initialization/planning drivers, shared helper,
   direct lifecycle/distribution tests, retention documentation, plan/evidence and
   checkpoint. Product source, dependencies and lock unchanged.
@@ -66,7 +69,10 @@ work is authorized. Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals.
   `us-35-ip2-checks/`, `us-35-ip2-workload/` and per-invocation record directories.
 - Implementation and phase approvals are committed; acceptance is `49e3065`.
   PR/review links and this handoff are committed as documentation-only publication
-  records and pushed on the story branch. See the plan for verified outcomes.
+  records and pushed on the story branch as `6411db8`. Merge outcome and checkout
+  updates to this checkpoint and the owning plan are committed on `main` under
+  “switch to main and pull and commit the recent updates”. No push was requested;
+  the local and remote story branches are retained.
 
 ## Verification and outstanding obligation
 
