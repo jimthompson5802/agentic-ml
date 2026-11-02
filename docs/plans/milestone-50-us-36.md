@@ -235,8 +235,11 @@ None. End-of-test deletion is part of the initial authoritative scope, not a lat
   covered `e9fbcb4` with no actionable findings. Hosted Linux/Python 3.12
   [CI run](https://github.com/jimthompson5802/agentic-ml/actions/runs/41377467477)
   passed at that head before merge. This does not close local milestone deferrals.
-- Publication and merge are complete. Branch cleanup and further implementation
-  require separate authorization. Local merge records remain uncommitted.
+- Publication and merge are complete. Merge records committed/pushed as `2aff40d`.
+  Developer “commit and push; delete local and remote branches” authorized deletion
+  of both `US-36-pytest-workspaces` branches. Both were deleted after verifying
+  tip `e9fbcb4` has an identical tree to squash merge `26da686`. Further
+  implementation requires separate authorization.
 
 ## Milestone acceptance handoff
 

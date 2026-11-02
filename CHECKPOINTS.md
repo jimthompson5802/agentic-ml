@@ -117,15 +117,16 @@ technical work and gate are complete as recorded above; IP2 is authorized.
 
 **Next action:** await developer direction. US-36
 [PR #50](https://github.com/jimthompson5802/agentic-ml/pull/50) is squash merged.
-Current checkout is `main`, fast-forwarded to squash merge `26da686` under
-developer “switch main and pull”. Local merge-outcome records are uncommitted.
-Branch cleanup has not been requested.
+Current checkout is `main`; merge records were committed as `2aff40d` and pushed.
+Developer “commit and push; delete local and remote branches” authorized cleanup.
+Both local and remote `US-36-pytest-workspaces` branches were deleted after
+verifying tip `e9fbcb4` has the same tree as squash merge `26da686`.
 Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals.
 No next-story implementation is authorized.
 
 ## Checkout and working tree
 
-- Current checkout: `main`, matching `origin/main` at squash merge `26da686`.
+- Current checkout: `main`; merge records `2aff40d` are pushed to `origin/main`.
   Acceptance/publication-record edits affect only this checkpoint and the owning plan.
   Product source, four drivers, helper, dependencies and lock remain unchanged.
   Documentation/approval-only edits do not invalidate final direct evidence.
