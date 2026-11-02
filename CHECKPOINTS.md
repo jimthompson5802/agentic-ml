@@ -4,10 +4,17 @@ Last updated: 2026-11-02 (America/New_York)
 
 ## Current position and next action
 
-Current checkout is `main`, synchronized with the locally recorded `origin/main`
-at `b2917ce` before this documentation cleanup. The cleanup changes only
-`CHECKPOINTS.md`; the developer authorized committing and pushing it on `main`.
-No tests are running from this session.
+Current checkout is `main`. Added the requested
+[development workflow summary and Mermaid diagram](docs/development-workflow.md).
+Expanded the implementation section and diagram with the red, green, refactoring,
+evidence-recording and repeat steps, including the documentation-only path.
+Named the behavior-change loop as closed-loop agentic TDD in the description and
+diagram, explaining its feedback and autonomy boundaries.
+This documentation task changes that file and `CHECKPOINTS.md`; the pre-existing
+`.devcontainer/devcontainer.json` modification is unrelated and remains untouched.
+Relative document links and whitespace checks passed. TDD and product tests do
+not apply because this change adds no executable behavior. Mermaid rendering was
+not verified. No tests are running from this session.
 
 **Next action:** await developer direction on subsequent work.
 No next-story implementation is authorized. No completed-story
