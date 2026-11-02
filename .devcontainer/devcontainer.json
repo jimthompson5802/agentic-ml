@@ -1,0 +1,43 @@
+
+{
+  "name": "Agentic ML + Codex",
+
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+
+  "remoteUser": "vscode",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "24"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "containerEnv": {
+    "UV_LINK_MODE": "copy"
+  },
+
+  "mounts": [
+    "source=agentic-ml-codex-home,target=/home/vscode/.codex,type=volume",
+    "source=agentic-ml-pytest-tmp,target=/pytest-tmp,type=volume"
+  ],
+
+  "postCreateCommand": "bash -lc 'source /usr/local/share/nvm/nvm.sh && nvm use default && npm install -g @openai/codex' && uv sync --locked",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python",
+        "python.testing.pytestEnabled": true,
+        "python.testing.unittestEnabled": false
+      }
+    }
+  }
+}

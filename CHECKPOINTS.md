@@ -117,7 +117,10 @@ technical work and gate are complete as recorded above; IP2 is authorized.
 
 **Next action:** await developer direction. US-36
 [PR #50](https://github.com/jimthompson5802/agentic-ml/pull/50) is squash merged.
-Current checkout is `main`; merge records were committed as `2aff40d` and pushed.
+Merge records were committed on `main` as `2aff40d` and pushed.
+Current checkout is `test-devcontainers`; latest `origin/main` (`93e7c45`)
+is merged at the developer’s request. The only conflict was this checkpoint;
+current US-36 records from main replace the older branch status.
 Developer “commit and push; delete local and remote branches” authorized cleanup.
 Both local and remote `US-36-pytest-workspaces` branches were deleted after
 verifying tip `e9fbcb4` has the same tree as squash merge `26da686`.
@@ -126,10 +129,12 @@ No next-story implementation is authorized.
 
 ## Checkout and working tree
 
-- Current checkout: `main`; merge records `2aff40d` are pushed to `origin/main`.
-  Acceptance/publication-record edits affect only this checkpoint and the owning plan.
-  Product source, four drivers, helper, dependencies and lock remain unchanged.
-  Documentation/approval-only edits do not invalidate final direct evidence.
+- Current checkout: `test-devcontainers`. Latest `origin/main` (`93e7c45`)
+  merged under “bring latest changes from main into this branch”. Devcontainer
+  changes are preserved. Resolved the checkpoint conflict using current main
+  story records and this branch-specific handoff. No executable code was changed
+  during conflict resolution; existing main evidence is preserved. Tests were
+  not rerun for this branch merge. No push was requested.
 
 - Branch: `main`; pulled squash merge `3cfa431` from `origin/main`. Both
   implementation phases and whole-story acceptance are recorded.
