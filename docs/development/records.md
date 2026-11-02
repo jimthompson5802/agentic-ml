@@ -44,4 +44,16 @@ status writes or child output capture; incomplete records and workspaces need
 inspection. Earlier drivers stored evidence only in temporary workspaces; copy
 historical evidence needed for lifetime retention into this layout manually,
 preserving its original location and source identity. Pytest-owned workspaces
-under US-36 must keep durable records outside pytest retention paths.
+under US-36 keep durable records outside pytest retention paths. Successful
+test/shared trees can disappear before session exit, including source/project
+files that standalone drivers normally preserve. Driver `RECORDS` locations,
+linked manifests and logs remain in the checkout's durable records directory.
+Fixture projects that intentionally model records for a regression test are
+temporary test data; they do not replace retained development evidence.
+
+Pytest `--keep-test-workspaces` preserves successful test trees for inspection;
+driver `--keep-workspace` alone only preserves them for remaining test consumers.
+Explicitly retained and interrupted trees need deliberate review and cleanup.
+Do not migrate or remove historical evidence as part of that cleanup. Consult
+[pytest retention](verification.md#pytest-workspace-ownership-and-retention) for
+shared-fixture lifetimes, one-invocation failure retention and isolated bases.
