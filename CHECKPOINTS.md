@@ -115,11 +115,21 @@ as `b10bf69`. The developer subsequently requested an implementation plan; its
 approved plan is linked above. IP1 execution was subsequently authorized and its
 technical work and gate are complete as recorded above; IP2 is authorized.
 
-**Next action:** await developer direction. US-36
+**Next action:** await developer direction. [PR #51](https://github.com/jimthompson5802/agentic-ml/pull/51),
+`chore: add contributor development container`, was squash merged at the developer's
+request at `2026-11-02T04:55:51Z`, commit `3a967e2ee1d5c735cdb2b87acf0e4921002f5366`.
+Merged state verified. Final-head Linux/Python 3.12 Development CI passed
+(run 41389834925). At the developer's request, switched to `main` and pulled
+`origin/main` with a fast-forward to `3a967e2`. Preserved this local checkpoint
+update across checkout; no branch deletion requested. Diff whitespace check passed; container build,
+startup and development checks remain unverified. The PR flags the committed uv
+workspace member referencing a generated pytest directory as a known limitation.
+Developer authorized committing and pushing this publication handoff on `main`.
+US-36
 [PR #50](https://github.com/jimthompson5802/agentic-ml/pull/50) is squash merged.
 Merge records were committed on `main` as `2aff40d` and pushed.
-Current checkout is `test-devcontainers`; latest `origin/main` (`93e7c45`)
-is merged at the developer’s request. The only conflict was this checkpoint;
+Previously, `origin/main` (`93e7c45`) was merged into `test-devcontainers`
+at the developer’s request. The only conflict was this checkpoint;
 current US-36 records from main replace the older branch status.
 Developer “commit and push; delete local and remote branches” authorized cleanup.
 Both local and remote `US-36-pytest-workspaces` branches were deleted after
@@ -129,12 +139,14 @@ No next-story implementation is authorized.
 
 ## Checkout and working tree
 
-- Current checkout: `test-devcontainers`. Latest `origin/main` (`93e7c45`)
+- Current checkout: `main`, fast-forwarded to PR #51 squash merge `3a967e2`.
+  Only the publication checkpoint changed after pulling; developer authorized
+  committing and pushing it. Previously, `origin/main` (`93e7c45`) was
   merged under “bring latest changes from main into this branch”. Devcontainer
   changes are preserved. Resolved the checkpoint conflict using current main
   story records and this branch-specific handoff. No executable code was changed
   during conflict resolution; existing main evidence is preserved. Tests were
-  not rerun for this branch merge. No push was requested.
+  not rerun for that branch merge. PR #51 publication and merge are recorded above.
 
 - Branch: `main`; pulled squash merge `3cfa431` from `origin/main`. Both
   implementation phases and whole-story acceptance are recorded.
