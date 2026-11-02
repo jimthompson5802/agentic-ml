@@ -66,13 +66,11 @@ M50-ACCEPT-VERIFY deferrals.
 
 ## Checkout and working tree
 
-- Current checkout: `test-devcontainers`. Developer requested merging the latest
-  `main`; fetched `origin` and merged `origin/main` without conflicts as `57fdeae`.
-  The developer authorized pushing this merge with the US-36 publication checkpoint. Existing `.dev-records/` contents
-  are now ignored by the incoming `.gitignore`. No tests were run for this merge.
-  Merge-diff whitespace inspection reports existing trailing blank lines in
-  `docs/development/{ci,command-approvals,setup,verification}.md` from `main`.
-  This checkpoint update records the handoff; prior main-branch records follow.
+- Current checkout: `main`, matching `origin/main` at `91a22e6` before this
+  documentation edit. The developer requested bringing only `CHECKPOINTS.md`
+  from `test-devcontainers`; that update was committed as `91a22e6` and pushed.
+  This correction to the checkout entry is the only uncommitted change.
+  No executable behavior changed; verification is a diff whitespace check.
 
 - Branch: `main`; pulled squash merge `3cfa431` from `origin/main`. Both
   implementation phases and whole-story acceptance are recorded.
