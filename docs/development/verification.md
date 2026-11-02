@@ -54,8 +54,8 @@ distribution fixtures are reused. Avoid `loadfile`/`loadscope`: they place the
 entire initialization module on one worker.
 
 Each worker creates its own module fixtures. Experiment projects, source Git
-fixtures, databases, storage and artifact directories use pytest temporary paths
-or independently allocated temporary workspaces. Installation probes intentionally
+fixtures, databases, storage and artifact directories use explicitly owned pytest
+temporary paths. Installation probes intentionally
 mutate their group-local installed project and restore its contents. Cache-removal
 checks remove only their own workspace cache. Keep those isolation properties
 when adding tests. Do not point multiple runs at the same `--basetemp` directory.
@@ -81,6 +81,71 @@ individual tests took longer under contention. These measurements are not a
 Linux performance claim. See [parallel verification](../verification/parallel-test-execution.md)
 for grouping checks, compatibility findings, commands and retained evidence.
 
+
+## Pytest workspace ownership and retention
+
+Repository `tests/conftest.py` loads contributor workspace support. Tests that
+request `tmp_path` receive an exclusive root. Pass a fresh child to verification
+drivers, for example `--workspace str(tmp_path / "verification")`; let the driver
+create that child. Composed drivers pass fresh descendants to their children.
+Standalone default allocation is tested with a controlled `TMPDIR` beneath the
+owning test root, an unrelated cwd and pytest context removed.
+
+By default, a successful test's entire owned tree is removed after every fixture
+finalizer has finished, before its completed teardown report is delivered. This
+includes nested workspaces and driver-retained environments. Setup, call and
+teardown failures preserve available diagnostics and report
+`WORKSPACE <absolute-path>`. A cleanup error fails teardown and reports the
+remaining path. Original test failures remain visible.
+
+Shared fixtures use `owned_workspace(request, tmp_path_factory, name)` from
+`pytest_workspace_support` at their existing scope. Their paths remain available
+until the last consumer and fixture finalizer finish. Failed consumers or shared
+finalizers retain the available tree. A direct `tmp_path_factory.mktemp` allocation
+does not register this ownership; use the helper for maintained shared fixtures.
+Keep existing fixture scopes, mutable-probe restoration and scheduling groups.
+
+Default numbered-session retention is one completed invocation:
+`tmp_path_retention_count = 1`, requested policy `failed`. A failed tree survives
+its invocation and is eligible for eviction when the next numbered invocation
+completes. Native pytest session locks protect active invocations. Empty session
+containers may remain to advance numbered retention even though successful test
+trees are already gone. The support routes native container retention separately
+from test-tree retention; effective native configuration can therefore show `all`.
+Its public `Config.inicfg` compatibility mapping is deprecated in locked pytest
+9.1.1; revisit that routing before a toolchain upgrade. The
+[US-36 IP1 report](../verification/us-36-ip1.md) records the reason and limits.
+
+| Retention control | Effect |
+|---|---|
+| No override | Remove successful test/shared trees during teardown; retain failures for one numbered invocation |
+| `-o tmp_path_retention_policy=all` | Retain successful trees within ordinary numbered-session retention |
+| `--keep-test-workspaces` | Retain test/shared trees; without an explicit base, use a unique unnumbered root outside later numbered-session eviction |
+| Driver `--keep-workspace` | Retain driver environments for remaining test consumers; outer pytest cleanup still applies |
+
+To inspect successful pytest workspaces, run, for example:
+
+```sh
+uv run --locked pytest -n 4 --dist=loadgroup --keep-test-workspaces tests/integration/test_distribution_verification.py
+```
+
+An explicit `--basetemp` must name a new, exclusively owned directory. Existing
+bases, symlinks and overlap with the harness checkout or durable records are
+rejected before pytest clears files. Explicit bases do not have numbered-session
+eviction semantics. Retained explicit bases and `--keep-test-workspaces` roots
+need deliberate contributor cleanup; subsequent invocations must use new paths.
+
+Use a dedicated child base for nested pytest, such as
+`tmp_path / "nested-pytest"`. Never supply an active parent's or sibling's base.
+Workers, independent sessions and nested runs must not share workspace roots.
+Interrupted runs may leave incomplete trees and records; forced termination cannot
+guarantee fixture finalizers or cleanup. Preserve available diagnostics when
+investigating them. These lifecycle rules do not change standalone driver
+cleanup, which preserves source/project files after removing owned environments.
+
+Raw verification records belong in checkout `.dev-records/verification/`, outside
+disposable pytest paths. Never use that directory as a temporary base. Follow the
+[records policy](records.md) for lifetime retention and backups.
 
 ## Phase and story verification
 

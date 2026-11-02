@@ -6,6 +6,7 @@ from pathlib import Path
 from types import ModuleType
 
 import pytest
+from pytest_workspace_support import owned_workspace
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -333,10 +334,16 @@ def test_concurrent_invocations_do_not_share_records_or_cleanup(tmp_path: Path) 
     with ThreadPoolExecutor(max_workers=2) as pool:
         invocations = list(
             pool.map(
-                lambda _: module.Invocation(checkout=tmp_path / "checkout"), range(2)
+                lambda index: module.Invocation(
+                    checkout=tmp_path / "checkout",
+                    workspace=tmp_path / f"work-{index}",
+                ),
+                range(2),
             )
         )
     first, second = invocations
+    assert first.workspace.is_relative_to(tmp_path)
+    assert second.workspace.is_relative_to(tmp_path)
     first_environment = first.create_disposable("environment")
     second_environment = second.create_disposable("environment")
     assert first.records != second.records
@@ -369,7 +376,10 @@ def test_child_record_locations_survive_child_failure(tmp_path: Path) -> None:
     import os
     import sys
 
-    invocation = support().Invocation(checkout=tmp_path / "checkout")
+    invocation = support().Invocation(
+        checkout=tmp_path / "checkout", workspace=tmp_path / "work"
+    )
+    assert invocation.workspace.is_relative_to(tmp_path)
     child_records = invocation.checkout / ".dev-records/verification/child"
     child_records.mkdir()
     with pytest.raises(RuntimeError, match="exit 4"):
@@ -390,11 +400,13 @@ def test_child_record_locations_survive_child_failure(tmp_path: Path) -> None:
 
 
 @pytest.fixture(scope="module")
-def lifecycle_artifacts(tmp_path_factory: pytest.TempPathFactory) -> Path:
+def lifecycle_artifacts(
+    request: pytest.FixtureRequest, tmp_path_factory: pytest.TempPathFactory
+) -> Path:
     """Build real artifacts for direct parent lifecycle commands."""
     import subprocess
 
-    destination = tmp_path_factory.mktemp("lifecycle-artifacts")
+    destination = owned_workspace(request, tmp_path_factory, "lifecycle-artifacts")
     subprocess.run(["uv", "build", "--out-dir", str(destination)], cwd=ROOT, check=True)
     return destination
 
@@ -463,6 +475,8 @@ def test_parent_failure_after_child_success_retains_child_environments(
             str(ROOT / "tests/installation" / driver),
             "--artifacts-dir",
             str(lifecycle_artifacts),
+            "--workspace",
+            str(tmp_path / "verification"),
         ],
         cwd=tmp_path,
         stdout=subprocess.PIPE,
@@ -479,6 +493,7 @@ def test_parent_failure_after_child_success_retains_child_environments(
     first = first_bytes.decode()
     assert first.startswith("WORKSPACE "), first
     workspace = Path(first.removeprefix("WORKSPACE ").strip())
+    assert workspace == tmp_path / "verification"
     # Inject only at the filesystem boundary, without changing any probe or package.
     if driver == "verify_initialization.py":
         (workspace / "source").write_text("conflicting caller sentinel")
@@ -519,6 +534,8 @@ def test_parent_early_failure_preserves_linked_diagnostics(
             str(ROOT / "tests/installation" / driver),
             "--artifacts-dir",
             str(tmp_path),
+            "--workspace",
+            str(tmp_path / "verification"),
         ],
         cwd=tmp_path,
         capture_output=True,

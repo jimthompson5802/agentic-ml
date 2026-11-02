@@ -4,6 +4,54 @@ Last updated: 2026-11-01 (America/New_York)
 
 ## Current position and next action
 
+US-36 is accepted: developer “I accept us-36”, 2026-11-01
+(America/New_York). Both implementation gates are accepted. Accepted executable
+work and phase approvals are committed as `2a566d1` on
+`US-36-pytest-workspaces`; the working tree was clean at story acceptance.
+The [plan](docs/plans/milestone-50-us-36.md) owns acceptance and publication;
+the [IP2 report](docs/verification/us-36-ip2.md) owns verification and limits.
+Issue #49's complete body and all comment pages were refreshed: zero comments,
+unchanged `updated_at=2026-11-02T00:58:23Z`; scope is unchanged.
+Whole-story acceptance authorizes acceptance records, ordinary push, PR creation
+and static COMMENT review through execute-plan. The developer subsequently
+authorized merge: “squash merger the pr”. PR #50 was squash merged at
+`2026-11-02T03:47:31Z`, commit `26da686f74126957b866f3c49e13ca6a6cc8f259`.
+Final-head Linux/Python 3.12 CI passed (run 41377467477); the final-head static
+review found no actionable issues.
+
+All T1–T6 tasks are complete. Verification callers use explicit owned descendants;
+existing shared fixtures retain their scopes and survive until final consumers.
+Real four-driver probes verify cleanup at completed teardown while a later test
+remains active, outer failure retention, explicit retention and standalone
+commands without pytest context. Documentation/help and local links pass.
+
+**Final direct evidence:** 104 selected cases / 1 reserved milestone case
+deselected. Main run: **103 passed, 1 failed in 852.01s**. The new shared-install
+case exceeded its unchanged 45s first-report wait while the separate four-worker
+comparison ran. Corrective attempt 1 isolated verification resources; the exact
+node passed unchanged at four workers in **23.08s**. All 104 cases have passing
+evidence across the main run and renewal; no single all-passing 104-case run is
+claimed. Preserve `final.xml`, `renew-shared.xml`, the original failure log and
+retained failed outer root documented in the report. No assertions/timeouts,
+skips or suppressions changed. Shared sync/lock/lint/format/type/version/whitespace
+checks pass; lock unchanged. Local evidence is macOS 15.7.9 / Python 3.12.15.
+
+**Fixed-input comparison:** same wheel/sdist hashes and preserved Git revision,
+six cases passed in **491.46s** (493.31s launcher). Successful test roots remaining
+at completed teardown fell from six to zero; session-exit retained file bytes
+fell from 1,729,629,402 to zero and environments from two to zero. Raw records:
+`.dev-records/verification/us-36-ip2/fixed-8ced511a200a44c09f81db0cdf76c067/`.
+Failure/explicit-retention/concurrent/repeated metrics are exported in final XML
+and `identities/final.json`. Baseline and historical evidence remain intact.
+
+**Both implementation gates and whole-story acceptance are complete.** No tests
+remain running. Publication is complete under the acceptance workflow.
+Preserve
+the deprecated public pytest
+`Config.inicfg` compatibility-mapping limitation and overlapping-workload timing
+limitation. M50-ACCEPT-VERIFY owns 289 deferred selectors from 393 collected cases,
+including the reserved milestone test; M1-ACCEPT-VERIFY remains independent.
+
 US-35 is accepted on 2026-11-01: “i accept us-35”. Both implementation phases
 are approved and committed: `2e3bf2d` (IP1), `8ffa7d4` (IP2).
 The [plan](docs/plans/milestone-50-us-35.md) owns progress and gates;
@@ -56,23 +104,37 @@ drivers are complete and approved in Phase 2. No historical records were moved.
 US-36 feature issue [#49](https://github.com/jimthompson5802/agentic-ml/issues/49)
 was created at the developer's request using the user-story template and
 `enhancement` label. Published title, complete body, and label were verified; all
-five source acceptance criteria are preserved. No implementation plan or
-implementation was authorized. The developer authorized committing this checkpoint
-update and pushing `test-devcontainers`, including its existing local merge.
+five acceptance criteria are recorded. The developer subsequently required
+successful-test workspace deletion at the end of each test. Issue #49 and the
+local US-36-AC-02/05 now require teardown cleanup after final consumers, with
+automated evidence while the session remains active. Failed-test retention and
+explicit successful-workspace retention remain applicable. The full issue and
+zero comments were retrieved with a stable metadata refresh before editing; the
+published body was verified afterward. The requirements were committed and pushed
+as `b10bf69`. The developer subsequently requested an implementation plan; its
+approved plan is linked above. IP1 execution was subsequently authorized and its
+technical work and gate are complete as recorded above; IP2 is authorized.
 
-**Next action:** await developer direction. US-35 is accepted and merged; no
-next-story work is authorized. Preserve M1-ACCEPT-VERIFY and
-M50-ACCEPT-VERIFY deferrals.
+**Next action:** await developer direction. US-36
+[PR #50](https://github.com/jimthompson5802/agentic-ml/pull/50) is squash merged.
+Merge records were committed on `main` as `2aff40d` and pushed.
+Current checkout is `test-devcontainers`; latest `origin/main` (`93e7c45`)
+is merged at the developer’s request. The only conflict was this checkpoint;
+current US-36 records from main replace the older branch status.
+Developer “commit and push; delete local and remote branches” authorized cleanup.
+Both local and remote `US-36-pytest-workspaces` branches were deleted after
+verifying tip `e9fbcb4` has the same tree as squash merge `26da686`.
+Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals.
+No next-story implementation is authorized.
 
 ## Checkout and working tree
 
-- Current checkout: `test-devcontainers`. Developer requested merging the latest
-  `main`; fetched `origin` and merged `origin/main` without conflicts as `57fdeae`.
-  The developer authorized pushing this merge with the US-36 publication checkpoint. Existing `.dev-records/` contents
-  are now ignored by the incoming `.gitignore`. No tests were run for this merge.
-  Merge-diff whitespace inspection reports existing trailing blank lines in
-  `docs/development/{ci,command-approvals,setup,verification}.md` from `main`.
-  This checkpoint update records the handoff; prior main-branch records follow.
+- Current checkout: `test-devcontainers`. Latest `origin/main` (`93e7c45`)
+  merged under “bring latest changes from main into this branch”. Devcontainer
+  changes are preserved. Resolved the checkpoint conflict using current main
+  story records and this branch-specific handoff. No executable code was changed
+  during conflict resolution; existing main evidence is preserved. Tests were
+  not rerun for this branch merge. No push was requested.
 
 - Branch: `main`; pulled squash merge `3cfa431` from `origin/main`. Both
   implementation phases and whole-story acceptance are recorded.

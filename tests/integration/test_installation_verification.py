@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 import pytest
+from pytest_workspace_support import owned_workspace
 
 pytestmark = pytest.mark.xdist_group("installation")
 
@@ -16,9 +17,11 @@ PROBE = ROOT / "tests/installation/check_project.py"
 
 
 @pytest.fixture(scope="module")
-def source_repository(tmp_path_factory: pytest.TempPathFactory) -> tuple[str, str]:
+def source_repository(
+    request: pytest.FixtureRequest, tmp_path_factory: pytest.TempPathFactory
+) -> tuple[str, str]:
     """Create an independent local Git source for repeatable driver tests."""
-    source = tmp_path_factory.mktemp("installation-source")
+    source = owned_workspace(request, tmp_path_factory, "installation-source")
     shutil.copytree(ROOT / "src", source / "src")
     for name in ("pyproject.toml", "README.md"):
         shutil.copy(ROOT / name, source)
@@ -93,11 +96,15 @@ def test_pinned_project_runs_without_checkout_or_cache(
 
 @pytest.fixture(scope="module")
 def installed_project(
-    source_repository: tuple[str, str], tmp_path_factory: pytest.TempPathFactory
+    source_repository: tuple[str, str],
+    request: pytest.FixtureRequest,
+    tmp_path_factory: pytest.TempPathFactory,
 ) -> tuple[Path, str, str]:
     """Install once for independent public-probe rejection scenarios."""
     repository, revision = source_repository
-    workspace = tmp_path_factory.mktemp("probe-parent") / "verification"
+    workspace = (
+        owned_workspace(request, tmp_path_factory, "probe-parent") / "verification"
+    )
     result = subprocess.run(
         [
             sys.executable,

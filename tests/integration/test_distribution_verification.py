@@ -13,6 +13,7 @@ from pathlib import Path
 from zipfile import ZipFile
 
 import pytest
+from pytest_workspace_support import owned_workspace
 
 pytestmark = pytest.mark.xdist_group("distribution")
 
@@ -21,9 +22,11 @@ DRIVER = ROOT / "tests/packaging/verify_distributions.py"
 
 
 @pytest.fixture(scope="module")
-def artifacts(tmp_path_factory: pytest.TempPathFactory) -> Path:
+def artifacts(
+    request: pytest.FixtureRequest, tmp_path_factory: pytest.TempPathFactory
+) -> Path:
     """Build real distribution fixtures independently of the driver."""
-    destination = tmp_path_factory.mktemp("artifacts")
+    destination = owned_workspace(request, tmp_path_factory, "artifacts")
     subprocess.run(["uv", "build", "--out-dir", str(destination)], cwd=ROOT, check=True)
     return destination
 
@@ -31,7 +34,14 @@ def artifacts(tmp_path_factory: pytest.TempPathFactory) -> Path:
 def test_both_installed_wheel_paths_pass(artifacts: Path, tmp_path: Path) -> None:
     """Real wheels pass from separate experiment projects outside the checkout."""
     result = subprocess.run(
-        [sys.executable, str(DRIVER), "--artifacts-dir", str(artifacts)],
+        [
+            sys.executable,
+            str(DRIVER),
+            "--artifacts-dir",
+            str(artifacts),
+            "--workspace",
+            str(tmp_path / "verification"),
+        ],
         cwd=tmp_path,
         capture_output=True,
         text=True,
@@ -48,6 +58,7 @@ def test_both_installed_wheel_paths_pass(artifacts: Path, tmp_path: Path) -> Non
             if line.startswith("WORKSPACE ")
         )
     )
+    assert workspace.is_relative_to(tmp_path)
     assert not (workspace / "direct-wheel").exists()
     assert not (workspace / "rebuilt-wheel").exists()
     records = Path(
@@ -132,7 +143,14 @@ def damaged_wheel_result(
             archive.writestr(name, data)
     shutil.copy(next(artifacts.glob("*.tar.gz")), damaged)
     result = subprocess.run(
-        [sys.executable, str(DRIVER), "--artifacts-dir", str(damaged)],
+        [
+            sys.executable,
+            str(DRIVER),
+            "--artifacts-dir",
+            str(damaged),
+            "--workspace",
+            str(tmp_path / "verification"),
+        ],
         cwd=tmp_path,
         capture_output=True,
         text=True,
@@ -191,7 +209,14 @@ def test_wrong_cli_version_reports_installed_failure(
 def test_missing_artifacts_fail_with_selection_diagnostic(tmp_path: Path) -> None:
     """An empty artifact directory fails before any installation."""
     result = subprocess.run(
-        [sys.executable, str(DRIVER), "--artifacts-dir", str(tmp_path)],
+        [
+            sys.executable,
+            str(DRIVER),
+            "--artifacts-dir",
+            str(tmp_path),
+            "--workspace",
+            str(tmp_path / "verification"),
+        ],
         cwd=tmp_path,
         capture_output=True,
         text=True,
@@ -214,7 +239,14 @@ def test_ambiguous_artifacts_fail_before_install(
     original = next(artifacts.glob("*.whl" if kind == "wheel" else "*.tar.gz"))
     shutil.copy(original, tmp_path / ("duplicate-" + original.name))
     result = subprocess.run(
-        [sys.executable, str(DRIVER), "--artifacts-dir", str(tmp_path)],
+        [
+            sys.executable,
+            str(DRIVER),
+            "--artifacts-dir",
+            str(tmp_path),
+            "--workspace",
+            str(tmp_path / "verification"),
+        ],
         cwd=tmp_path,
         capture_output=True,
         text=True,
@@ -234,7 +266,14 @@ def test_corrupted_sdist_cannot_reuse_direct_success(
     shutil.copy(next(artifacts.glob("*.whl")), tmp_path)
     (tmp_path / "corrupt.tar.gz").write_bytes(b"This is not an archive.")
     result = subprocess.run(
-        [sys.executable, str(DRIVER), "--artifacts-dir", str(tmp_path)],
+        [
+            sys.executable,
+            str(DRIVER),
+            "--artifacts-dir",
+            str(tmp_path),
+            "--workspace",
+            str(tmp_path / "verification"),
+        ],
         cwd=tmp_path,
         capture_output=True,
         text=True,
@@ -383,7 +422,14 @@ def test_rebuilt_probe_failure_retains_both_environments(
                     data = io.BytesIO(replacement)
                 target.addfile(member, data)
     result = subprocess.run(
-        [sys.executable, str(DRIVER), "--artifacts-dir", str(damaged)],
+        [
+            sys.executable,
+            str(DRIVER),
+            "--artifacts-dir",
+            str(damaged),
+            "--workspace",
+            str(tmp_path / "verification"),
+        ],
         cwd=tmp_path,
         capture_output=True,
         text=True,

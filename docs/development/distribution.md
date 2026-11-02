@@ -44,6 +44,16 @@ distribution and initialization require a new path. Planning allocates a unique
 child when given an existing directory, preserving caller files. These flags do
 not change pytest retention policy.
 
+When pytest launches a driver, its workspace is beneath the owning test or
+active shared-fixture root. The successful outer test removes that whole tree
+after its finalizers finish, including source/project files and environments
+retained by a driver's `--keep-workspace`. Add pytest `--keep-test-workspaces`
+for post-test inspection. Failed outer tests retain available trees for one
+numbered invocation; shared paths wait for their last consumer. Standalone
+commands retain their existing source/project preservation behavior. See
+[pytest workspace ownership and retention](verification.md#pytest-workspace-ownership-and-retention)
+for overrides, explicit bases, concurrent/nested runs and interruption limits.
+
 Initialization and planning invoke distribution verification with an explicit
 new child workspace and `--keep-workspace`. Child records link to parent records;
 the parent reports both locations. The parent owns cleanup of the known child
