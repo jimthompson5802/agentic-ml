@@ -48,9 +48,16 @@ Uncontained calls remain in `test_distribution_verification.py` and `test_verifi
 ## Plan review
 
 - **Status:** Approved
-- **Developer decision:** Approved, including proposed public test boundaries and lifecycle/retention decisions. Implementation gates remain pending.
+- **Developer decision:** Approved, including proposed public test boundaries and lifecycle/retention decisions. Implementation gates were pending at plan review; later gate decisions are recorded below.
 - **Decision reference and date:** 2026-11-01 (America/New_York), developer: “i approve plan; commit”
 - **Requested plan changes:** None recorded.
+- **Execution authorization:** Developer “start ip1”, 2026-11-01
+  (America/New_York), authorizes Implementation Phase 1. The earlier “i approve
+  us-36 ip1” did not approve an unimplemented gate; the developer clarified
+  execution intent. IP1 technical work is complete and its gate was accepted
+  on 2026-11-01: “i accept ip1”, responding to the request to approve IP1 to
+  proceed to IP2. This authorizes IP2 progression, not whole-story acceptance
+  or publication.
 
 ## Scope-change history
 
@@ -66,11 +73,11 @@ None. End-of-test deletion is part of the initial authoritative scope, not a lat
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-36-IP1-T1 | Not started | Inventory all pytest driver/helper allocations and shared fixture owners in `tests/integration/`, `tests/verification_support.py` and four driver scripts. Save exact selectors, input hashes, proposed ownership and a reproducible pre-change workload in proposed `docs/verification/us-36-ip1.md`; raw records under `.dev-records/verification/`. | Plan review and execution authorization | Each independent allocation has a test/shared/standalone owner and planned action. Baseline workspace counts and disk measurements captured without changing assertions, timeouts or existing workspaces. | AC-01–05 |
-| US-36-IP1-T2 | Not started | Add one failing subprocess test at a time in proposed `tests/integration/test_pytest_workspaces.py`; implement proposed `tests/conftest.py` and optional `tests/pytest_workspace_support.py` in red–green slices. Start with successful-test deletion after finalizers while a later case in the same session is blocked on a parent-controlled signal. | T1; confirmed public boundaries | The parent observes the first test's completed teardown report and absent owned/nested paths before releasing the later case. Add setup, call and teardown failures; available diagnostic trees survive each failure and cleanup failures are reported. Each red fails for missing behavior, not plugin/setup failure. | AC-02, AC-04, AC-05 |
-| US-36-IP1-T3 | Not started | Add retention settings to `pyproject.toml`, implement explicit pytest retention control and minimal shared-fixture lifecycle using the same support. Extend direct subprocess tests incrementally for repeated default numbered-root sessions, explicit retention, shared final consumers and ownership boundaries. | T2 | One-invocation failure retention proved with isolated temporary roots; `--keep-test-workspaces` protects successful roots beyond session exit. Setup/teardown failure, shared-finalizer failure, caller sentinel, redirected/replaced root and durable-record sentinels covered. | AC-02–05 |
-| US-36-IP1-T4 | Not started | Extend `test_pytest_workspaces.py` with synchronized concurrent sessions and four-worker cases, plus nested pytest with dedicated child bases; record hook-order feasibility in IP1 report. Preserve `test_parallel_execution.py` assertions and timeout. | T2–T3 | Distinct paths and no removal of another active invocation while cleanup occurs. No sleeps used as proof of ordering; use events/files or pipe handshakes with bounded waits. If complete-outcome cleanup cannot meet AC-02, stop and revise the approach before migration. | AC-01, AC-03, AC-05 |
-| US-36-IP1-T5 | Not started | Run direct tests and shared checks below; record lock/input identity, TDD commands/results, counts, failure attempts and limitations in IP1 report; update this plan and `CHECKPOINTS.md`. | T1–T4 | Required checks pass; raw evidence outside cleanup roots, review report complete, technical progress separate from pending gate. | AC-01–05, partial until adoption |
+| US-36-IP1-T1 | Complete | Inventory all pytest driver/helper allocations and shared fixture owners in `tests/integration/`, `tests/verification_support.py` and four driver scripts. Save exact selectors, input hashes, proposed ownership and a reproducible pre-change workload in proposed `docs/verification/us-36-ip1.md`; raw records under `.dev-records/verification/`. | Plan review and execution authorization | Each independent allocation has a test/shared/standalone owner and planned action. Baseline workspace counts and disk measurements captured without changing assertions, timeouts or existing workspaces. | AC-01–05 |
+| US-36-IP1-T2 | Complete | Add one failing subprocess test at a time in proposed `tests/integration/test_pytest_workspaces.py`; implement proposed `tests/conftest.py` and optional `tests/pytest_workspace_support.py` in red–green slices. Start with successful-test deletion after finalizers while a later case in the same session is blocked on a parent-controlled signal. | T1; confirmed public boundaries | The parent observes the first test's completed teardown report and absent owned/nested paths before releasing the later case. Add setup, call and teardown failures; available diagnostic trees survive each failure and cleanup failures are reported. Each red fails for missing behavior, not plugin/setup failure. | AC-02, AC-04, AC-05 |
+| US-36-IP1-T3 | Complete | Add retention settings to `pyproject.toml`, implement explicit pytest retention control and minimal shared-fixture lifecycle using the same support. Extend direct subprocess tests incrementally for repeated default numbered-root sessions, explicit retention, shared final consumers and ownership boundaries. | T2 | One-invocation failure retention proved with isolated temporary roots; `--keep-test-workspaces` protects successful roots beyond session exit. Setup/teardown failure, shared-finalizer failure, caller sentinel, redirected/replaced root and durable-record sentinels covered. | AC-02–05 |
+| US-36-IP1-T4 | Complete | Extend `test_pytest_workspaces.py` with synchronized concurrent sessions and four-worker cases, plus nested pytest with dedicated child bases; record hook-order feasibility in IP1 report. Preserve `test_parallel_execution.py` assertions and timeout. | T2–T3 | Distinct paths and no removal of another active invocation while cleanup occurs. No sleeps used as proof of ordering; use events/files or pipe handshakes with bounded waits. If complete-outcome cleanup cannot meet AC-02, stop and revise the approach before migration. | AC-01, AC-03, AC-05 |
+| US-36-IP1-T5 | Complete | Run direct tests and shared checks below; record lock/input identity, TDD commands/results, counts, failure attempts and limitations in IP1 report; update this plan and `CHECKPOINTS.md`. | T1–T4 | Required checks pass; raw evidence outside cleanup roots, review report complete, technical progress separate from pending gate. | AC-01–05, partial until adoption |
 
 ### Verification and review evidence
 
@@ -81,19 +88,27 @@ None. End-of-test deletion is part of the initial authoritative scope, not a lat
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Lifecycle and timing | Four-worker direct command above; serial `uv run --locked pytest tests/integration/test_pytest_workspaces.py::<node>` only for recorded short red–green cycles/diagnosis | Complete-outcome cleanup, failure/retention and concurrency tests pass; exact counts recorded | Pending |
-| Shared development checks | Before/after `shasum -a 256 uv.lock`; `uv sync --locked --group dev`; `uv lock --check`; `uv run --locked ruff check .`; `uv run --locked ruff format --check .`; `uv run --locked mypy src tests`; `uv run --locked agentic-ml --version`; `git diff --check` | All pass, CLI reports installed metadata version, lock unchanged | Pending |
-| Review records | Inspect proposed `docs/verification/us-36-ip1.md`, raw records, relative links and task status | AC mappings, feasible ownership protocol and pending gate accurately recorded | Pending |
+| Lifecycle and timing | Four-worker direct command above; serial `uv run --locked pytest tests/integration/test_pytest_workspaces.py::<node>` only for recorded short red–green cycles/diagnosis | Complete-outcome cleanup, failure/retention and concurrency tests pass; exact counts recorded | [IP1 report](../verification/us-36-ip1.md): 25 collected/selected, 0 deselected, 25 passed in 2.98s; XML/raw records outside disposable roots |
+| Shared development checks | Before/after `shasum -a 256 uv.lock`; `uv sync --locked --group dev`; `uv lock --check`; `uv run --locked ruff check .`; `uv run --locked ruff format --check .`; `uv run --locked mypy src tests`; `uv run --locked agentic-ml --version`; `git diff --check` | All pass, CLI reports installed metadata version, lock unchanged | Passed; lock SHA-256 `90b77d41…84c0fd8`, CLI `0.1.0`; see IP1 report for sandbox retries and initial lint/format corrections |
+| Review records | Inspect proposed `docs/verification/us-36-ip1.md`, raw records, relative links and task status | AC mappings, feasible ownership protocol and pending gate accurately recorded | [IP1 report](../verification/us-36-ip1.md) records baseline, TDD, hook-order feasibility, native-container retention refinement, deprecated public compatibility mapping and IP2 limits; final local links/whitespace checked |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T5 complete with direct timing/failure/concurrency evidence and shared checks. Review complete-outcome hook behavior, explicit retention and shared-path ownership. No weakened tests, suppressed failures, changed timeouts or unresolved direct failures.
-- **Evidence presented:** Pending — proposed IP1 report and raw-record locations.
+- **Evidence presented:** [IP1 report](../verification/us-36-ip1.md), complete
+  direct XML and raw evidence under `.dev-records/verification/us-36-ip1/`.
+  T1–T5 complete; baseline six tests passed in 307.72s and final 25 direct cases
+  passed in 2.98s with four workers. Shared checks passed, lock unchanged.
 - **Remaining limitations or blocked work:** Real driver call-site migration and disk comparison remain in Implementation Phase 2; platform coverage recorded from actual runs.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Accepted.
+- **Decision reference and date:** Developer “i accept ip1”, 2026-11-01
+  (America/New_York), after the verification summary and request to approve IP1
+  to proceed to IP2.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending. Stop here and await explicit developer approval before US-36 Implementation Phase 2.
+- **Progression authorized:** US-36 IP2; stop at its final implementation gate.
+  Preserve IP1 evidence and its pytest 9.1 compatibility/baseline limitations.
+  After approval-workflow/status discussion, the developer explicitly resumed:
+  “you can continue ip2”, 2026-11-01 (America/New_York).
 
 ## US-36 / Implementation Phase 2: Adopt test-owned paths across verification and prove retention
 
@@ -105,12 +120,12 @@ None. End-of-test deletion is part of the initial authoritative scope, not a lat
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-36-IP2-T1 | Not started | In red–green slices, add explicit fresh `--workspace` children to all uncontained pytest calls in `tests/integration/test_distribution_verification.py` and `test_verification_lifecycle.py`; audit `test_installation_verification.py`, `test_initialization.py` and other driver callers. Supply explicit paths to helper `Invocation` tests currently relying on allocation defaults. Preserve standalone default allocation in helper/driver source. | IP1 gate; IP1 inventory | Every nested driver `WORKSPACE` output descends from the owning test root or documented active shared fixture root. Existing success/failure/provenance assertions still run before test cleanup. Real installation, distribution, initialization and planning paths covered, including composed children and negative cases. | AC-01, AC-03–05 |
-| US-36-IP2-T2 | Not started | Adopt shared-fixture ownership at existing scopes for `installed_project`/source fixtures in `test_installation_verification.py`, artifact fixtures in `test_distribution_verification.py` and `test_verification_lifecycle.py`, and any additional owners identified in T1. Update `test_parallel_execution.py` only if needed to record direct ownership behavior. Add direct shared-consumer regressions in `test_pytest_workspaces.py`. | T1; approved IP1 shared protocol | No active consumer loses files; mutable fixture scopes/grouping/restoration unchanged. Last successful consumer/finalizer releases shared paths; failed consumer/finalizer retains diagnostics. Nested grouping/isolation assertions and timeout intact. | AC-01–03, AC-05 |
-| US-36-IP2-T3 | Not started | Extend direct lifecycle coverage to observe real four-driver workspace trees after the owning test's completed teardown but before session exit, and to exercise standalone allocation/flags from an unrelated cwd. Use installed artifacts/local Git fixture with independent expectations; preserve existing parent failure and retention tests. | T1–T2 | Successful owned trees absent at completion; failed outer tests/explicitly retained roots survive; driver diagnostic output identifies absolute workspace/records. Both actual wheel paths and parent consumers remain genuine, outside the checkout. | AC-01–05 |
-| US-36-IP2-T4 | Not started | Update `docs/development/verification.md`, `distribution.md` and `records.md` for default teardown timing, one-invocation failure retention, shared-path lifetimes, per-test/driver retention flags, interrupted runs, nested bases, active-session protection and durable evidence. | T1–T3 | Documented commands match implemented public help/configuration; no claim that standalone driver cleanup removes all source/project files. Preserve historical reports and records. | AC-02, AC-04 |
-| US-36-IP2-T5 | Not started | Replay the IP1 fixed workload with the same selected tests/artifacts, worker count, assertions and timeouts; save raw measurements under `.dev-records/verification/` and proposed `docs/verification/us-36-ip2.md`. | T1–T3; IP1 baseline | Record workspace counts, environment counts, logical bytes and allocated disk (`du -sk`) at test completion, session completion and across repeated invocations. Include successful, failed, explicit-retention and concurrent cases. Record elapsed time, platform/filesystem limits, artifacts and input identities; distinguish shared/active paths from leaks. Delete only newly owned measurement roots. | AC-05 |
-| US-36-IP2-T6 | Not started | Complete final direct/shared verification, reconcile all ACs, renew invalidated IP1 evidence, update plan/checkpoint and IP2 report; hand off every deferred check to `M50-ACCEPT-VERIFY`. | T1–T5 | Final tested identity and lock hash recorded, direct tests/shared checks pass, all five ACs have evidence, limitations and deferrals explicit before final gate. | AC-01–05 |
+| US-36-IP2-T1 | Complete | In red–green slices, add explicit fresh `--workspace` children to all uncontained pytest calls in `tests/integration/test_distribution_verification.py` and `test_verification_lifecycle.py`; audit `test_installation_verification.py`, `test_initialization.py` and other driver callers. Supply explicit paths to helper `Invocation` tests currently relying on allocation defaults. Preserve standalone default allocation in helper/driver source. | IP1 gate; IP1 inventory | Every nested driver `WORKSPACE` output descends from the owning test root or documented active shared fixture root. Existing success/failure/provenance assertions still run before test cleanup. Real installation, distribution, initialization and planning paths covered, including composed children and negative cases. | AC-01, AC-03–05 |
+| US-36-IP2-T2 | Complete | Adopt shared-fixture ownership at existing scopes for `installed_project`/source fixtures in `test_installation_verification.py`, artifact fixtures in `test_distribution_verification.py` and `test_verification_lifecycle.py`, and any additional owners identified in T1. Update `test_parallel_execution.py` only if needed to record direct ownership behavior. Add direct shared-consumer regressions in `test_pytest_workspaces.py`. | T1; approved IP1 shared protocol | No active consumer loses files; mutable fixture scopes/grouping/restoration unchanged. Last successful consumer/finalizer releases shared paths; failed consumer/finalizer retains diagnostics. Nested grouping/isolation assertions and timeout intact. | AC-01–03, AC-05 |
+| US-36-IP2-T3 | Complete | Extend direct lifecycle coverage to observe real four-driver workspace trees after the owning test's completed teardown but before session exit, and to exercise standalone allocation/flags from an unrelated cwd. Use installed artifacts/local Git fixture with independent expectations; preserve existing parent failure and retention tests. | T1–T2 | Successful owned trees absent at completion; failed outer tests/explicitly retained roots survive; driver diagnostic output identifies absolute workspace/records. Both actual wheel paths and parent consumers remain genuine, outside the checkout. | AC-01–05 |
+| US-36-IP2-T4 | Complete | Update `docs/development/verification.md`, `distribution.md` and `records.md` for default teardown timing, one-invocation failure retention, shared-path lifetimes, per-test/driver retention flags, interrupted runs, nested bases, active-session protection and durable evidence. | T1–T3 | Documented commands match implemented public help/configuration; no claim that standalone driver cleanup removes all source/project files. Preserve historical reports and records. | AC-02, AC-04 |
+| US-36-IP2-T5 | Complete | Replay the IP1 fixed workload with the same selected tests/artifacts, worker count, assertions and timeouts; save raw measurements under `.dev-records/verification/` and proposed `docs/verification/us-36-ip2.md`. | T1–T3; IP1 baseline | Record workspace counts, environment counts, logical bytes and allocated disk (`du -sk`) at test completion, session completion and across repeated invocations. Include successful, failed, explicit-retention and concurrent cases. Record elapsed time, platform/filesystem limits, artifacts and input identities; distinguish shared/active paths from leaks. Delete only newly owned measurement roots. | AC-05 |
+| US-36-IP2-T6 | Complete | Complete final direct/shared verification, reconcile all ACs, renew invalidated IP1 evidence, update plan/checkpoint and IP2 report; hand off every deferred check to `M50-ACCEPT-VERIFY`. | T1–T5 | Final tested identity and lock hash recorded, direct tests/shared checks pass, all five ACs have evidence, limitations and deferrals explicit before final gate. | AC-01–05 |
 
 ### Verification and review evidence
 
@@ -122,21 +137,28 @@ None. End-of-test deletion is part of the initial authoritative scope, not a lat
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Final direct behavior | Four-worker selection above, plus exact changed-fixture nodes | All required direct cases pass with selected/deselected counts and AC mapping | Pending |
-| Driver containment and installed contracts | Public four-driver cases in T1/T3, independent cwd, actual direct wheel and genuinely sdist-rebuilt wheel | Correct containment, preserved origins and independent probes; records survive teardown | Pending |
-| Timing and retention comparison | T5 replay of IP1 workload, synchronized live-session observations and repeated/concurrent invocations | Successful owned trees removed at test completion; expected failures/retention/shared activity explained; measured counts/bytes recorded | Pending |
-| Shared development checks | Same complete shared command list as Implementation Phase 1, before/after lock hashes | Pass; unchanged lock/dependencies and correct CLI version | Pending |
-| Documentation and final evidence | Resolve changed local links, inspect CLI/help/examples and `git diff --check` | Instructions agree with actual lifecycle; no fabricated results or acceptance | Pending |
+| Final direct behavior | Four-worker selection above, plus exact changed-fixture nodes | All required direct cases pass with selected/deselected counts and AC mapping | 104 selected / 1 reserved case deselected: 103 passed in 852.01s; one 45s completion-event timeout renewed unchanged at four workers, 1 passed in 23.08s. See IP2 report; no single all-passing 104-case invocation claimed. |
+| Driver containment and installed contracts | Public four-driver cases in T1/T3, independent cwd, actual direct wheel and genuinely sdist-rebuilt wheel | Correct containment, preserved origins and independent probes; records survive teardown | Passed: real four-driver installed probes, both genuine wheel paths, live teardown observation and shared-fixture cases; final XML properties and identities in IP2 records. |
+| Timing and retention comparison | T5 replay of IP1 workload, synchronized live-session observations and repeated/concurrent invocations | Successful owned trees removed at test completion; expected failures/retention/shared activity explained; measured counts/bytes recorded | Passed: same wheel/sdist hashes and preserved Git source; six replay tests passed, zero retained file bytes/environments; failure/keep/repeat/concurrent metrics exported in final XML. |
+| Shared development checks | Same complete shared command list as Implementation Phase 1, before/after lock hashes | Pass; unchanged lock/dependencies and correct CLI version | All passed; lock SHA-256 unchanged, CLI 0.1.0; IP2 report records commands, output and sandbox retries. |
+| Documentation and final evidence | Resolve changed local links, inspect CLI/help/examples and `git diff --check` | Instructions agree with actual lifecycle; no fabricated results or acceptance | Passed: CLI help, 53 local links/anchors across 32 files and diff whitespace; record-only edits checked at handoff. |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T6 complete, all five ACs mapped to passing direct evidence, fixed-workload measurements and shared checks pass; required tests/failures unresolved means this gate remains blocked.
-- **Evidence presented:** Pending — IP1/IP2 reports, raw locations and final identity.
+- **Evidence presented:** [IP2 report](../verification/us-36-ip2.md), T1–T6
+  complete. Records under `.dev-records/verification/us-36-ip2/`: final XML,
+  isolated renewal XML, exported measurements, final identity and preserved
+  original failure. Fixed-input comparison passed six cases with zero retained
+  file bytes/environments; all shared checks passed.
 - **Remaining limitations or blocked work:** Record actual macOS/Python/tool versions; Linux/Windows remain unverified by local evidence. Milestone deferrals remain explicitly owned.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
-- **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending. Stop here for explicit final implementation-phase approval; whole-story acceptance remains separate unless the developer explicitly grants both.
+- **Developer decision:** Accepted.
+- **Decision reference and date:** Developer “i accept ip2; commit the changes”,
+  2026-11-01 (America/New_York).
+- **Requested changes and resolution:** No implementation changes requested;
+  commit accepted IP1/IP2 changes and approval records.
+- **Progression authorized:** Local commit authorized. Whole-story acceptance
+  remains separate and pending; no push or publication authorized.
 
 ## Execution rules
 
@@ -150,26 +172,42 @@ None. End-of-test deletion is part of the initial authoritative scope, not a lat
 ## Final verification requirements
 
 - **Owning final phase/task:** US-36-IP2-T6, required before the final gate.
-- **Final implementation identity:** Pending — revision, working-tree inputs, lock SHA-256 and artifact identities; record macOS/tool/Python versions and filesystem limits.
+- **Final implementation identity:** HEAD `6b66d45` plus uncommitted story work;
+  executable hashes and macOS/Python/tool identities in IP2
+  `identities/final.json`. Lock SHA-256 `90b77d41…84c0fd8` unchanged. Fixed replay
+  verifies byte-identical original artifacts and Git revision; normal direct
+  tests also build and probe final checkout artifacts.
 - **Direct tests and shared checks:** Reuse valid IP1 evidence; renew lifecycle/configuration evidence after migration changes it. Run the final direct selection and complete shared command list. No story-level automatic full suite.
 - **Distribution/installation and other required checks:** T3 direct tests must demonstrate the four drivers, direct wheel and wheel genuinely rebuilt from the source distribution with declared runtime dependencies, public CLI/import/resources and actual origin identities. Installed probes remain outside checkout, without editable installs/contributor dependency leakage. If these checks are already performed by selected tests against identical final inputs, link that evidence rather than duplicate costly standalone runs. Changes to build/resource/dependency inputs require rebuilding affected artifacts and renewed probes. Product runtime changes are outside scope.
-- **Deferred-check reconciliation:** Pending — record exact deferred selectors and owner `M50-ACCEPT-VERIFY`. Story acceptance requires no unresolved direct failure; deferring caller regressions does not claim they passed.
+- **Deferred-check reconciliation:** 393 total collected, 104 direct cases
+  covered; 289 selectors (including the reserved milestone case) saved in IP2
+  `deferred-selectors.txt`, owner `M50-ACCEPT-VERIFY`. See IP2 report for module
+  counts. Preserve independent M1 ownership; no full-suite success claimed.
 - **Evidence renewal:** Later executable changes renew affected direct evidence; later milestone changes renew full-suite evidence at milestone acceptance. Documentation/approval-only edits use document/link/whitespace checks with rationale.
-- **Actual results and limitations:** Pending. No implementation tests or measurements have been run during planning.
+- **Actual results and limitations:** [IP2 report](../verification/us-36-ip2.md)
+  records all commands, baseline comparison, live/failure/retention metrics and
+  the original overlapping-run timeout plus unchanged isolated renewal. All
+  selected cases have passing evidence; no single all-passing 104-case invocation
+  claimed. macOS 15.7.9/Python 3.12.15 only; Linux/Windows and other pytest
+  versions unverified locally. Deprecated public compatibility mapping remains.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-36-AC-01: explicit contained workspace trees | IP1-T1/T4; IP2-T1–T3/T6 | Allocation inventory, four real driver paths and nested/concurrent containment | Pending |
-| US-36-AC-02: end-of-test cleanup and retention distinctions | IP1-T2–T5; IP2-T2–T4/T6 | Live-session completion observation, setup/call/teardown failures, final consumers and documentation | Pending |
-| US-36-AC-03: worker/session/nested isolation | IP1-T4/T5; IP2-T1–T3/T6 | Concurrent active-session sentinels and distinct roots under four workers | Pending |
-| US-36-AC-04: standalone use, diagnostics and explicit retention | IP1-T2/T3/T5; IP2-T1/T3/T4/T6 | Unrelated-cwd standalone commands, retained paths, published diagnostics and help | Pending |
-| US-36-AC-05: automation, counts and retained disk usage | IP1-T1–T5; IP2-T3/T5/T6 | Red–green records, repeated-session automation and fixed-workload measurements | Pending |
+| US-36-AC-01: explicit contained workspace trees | IP1-T1/T4; IP2-T1–T3/T6 | Allocation inventory, four real driver paths and nested/concurrent containment | Verified; both phases accepted, whole-story acceptance pending |
+| US-36-AC-02: end-of-test cleanup and retention distinctions | IP1-T2–T5; IP2-T2–T4/T6 | Live-session completion observation, setup/call/teardown failures, final consumers and documentation | Verified; both phases accepted, whole-story acceptance pending |
+| US-36-AC-03: worker/session/nested isolation | IP1-T4/T5; IP2-T1–T3/T6 | Concurrent active-session sentinels and distinct roots under four workers | Verified; both phases accepted, whole-story acceptance pending |
+| US-36-AC-04: standalone use, diagnostics and explicit retention | IP1-T2/T3/T5; IP2-T1/T3/T4/T6 | Unrelated-cwd standalone commands, retained paths, published diagnostics and help | Verified; both phases accepted, whole-story acceptance pending |
+| US-36-AC-05: automation, counts and retained disk usage | IP1-T1–T5; IP2-T3/T5/T6 | Red–green records, repeated-session automation and fixed-workload measurements | Verified; both phases accepted, whole-story acceptance pending |
 
-- **Remaining work:** All implementation tasks and gates; full story is planned, none delivered by this document.
+- **Remaining work:** Separate whole-story acceptance. Both implementation
+  phases are accepted; technical tasks and verification are complete. Developer
+  “i accept ip2; commit the changes” authorizes the local story commit, including
+  approval records. No push or publication was requested.
 - **Partial prerequisite delivery:** None. US-35 evidence is reused as an existing capability, not duplicated or reopened.
-- **Final verification:** Pending — US-36-IP2-T6 evidence required.
+- **Final verification:** US-36-IP2-T6 complete; IP2 report owns reused/renewed
+  direct evidence, shared checks, all five ACs and exact milestone deferrals.
 - **Developer acceptance:** Pending.
 - **Decision reference and date:** Pending.
 

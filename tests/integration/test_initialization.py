@@ -7,6 +7,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
+from pytest_workspace_support import owned_workspace
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -28,9 +29,11 @@ def run(command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
 
 
 @pytest.fixture(scope="module")
-def source_repository(tmp_path_factory: pytest.TempPathFactory) -> tuple[str, str]:
+def source_repository(
+    request: pytest.FixtureRequest, tmp_path_factory: pytest.TempPathFactory
+) -> tuple[str, str]:
     """Commit the reviewed source to an isolated Git dependency fixture."""
-    source = tmp_path_factory.mktemp("init-source")
+    source = owned_workspace(request, tmp_path_factory, "init-source")
     shutil.copytree(ROOT / "src", source / "src")
     for name in ("pyproject.toml", "README.md"):
         shutil.copy(ROOT / name, source)

@@ -4,17 +4,50 @@ Last updated: 2026-11-01 (America/New_York)
 
 ## Current position and next action
 
-US-36 implementation plan is approved on
-`US-36-pytest-workspaces`, based on `b10bf69`. The
-[plan](docs/plans/milestone-50-us-36.md) proposes two implementation phases:
-prove complete-outcome pytest cleanup, then migrate verification callers and
-measure workspace retention. Issue #49 and prerequisite #47 were retrieved with
-complete bodies, zero comments and stable metadata refreshes. All five US-36
-criteria, including end-of-test teardown deletion, are mapped to tasks/evidence.
-The developer approved the plan, public test boundaries and lifecycle/retention
-decisions on 2026-11-01: “i approve plan; commit”. Execution authorization, both
-implementation gates and whole-story acceptance remain pending. No implementation
-began. The developer authorized committing the plan and checkpoint.
+US-36 IP2 is accepted on `US-36-pytest-workspaces`: developer
+“i accept ip2; commit the changes”, 2026-11-01 (America/New_York). Local commit
+of both accepted phases and approval records is authorized. Tested inputs were
+`6b66d45` plus the story changes identified by saved executable hashes. The
+[plan](docs/plans/milestone-50-us-36.md) owns tasks/gates; the
+[IP2 report](docs/verification/us-36-ip2.md) owns final evidence, measurements,
+corrective attempts and deferrals. IP1 was accepted on 2026-11-01: “i accept ip1”.
+After workflow/status discussion, the developer explicitly resumed IP2:
+“you can continue ip2”. Issue #49's complete body and every comment page were
+retrieved with zero comments and stable refresh
+`updated_at=2026-11-02T00:58:23Z`; scope is unchanged.
+
+All T1–T6 tasks are complete. Verification callers use explicit owned descendants;
+existing shared fixtures retain their scopes and survive until final consumers.
+Real four-driver probes verify cleanup at completed teardown while a later test
+remains active, outer failure retention, explicit retention and standalone
+commands without pytest context. Documentation/help and local links pass.
+
+**Final direct evidence:** 104 selected cases / 1 reserved milestone case
+deselected. Main run: **103 passed, 1 failed in 852.01s**. The new shared-install
+case exceeded its unchanged 45s first-report wait while the separate four-worker
+comparison ran. Corrective attempt 1 isolated verification resources; the exact
+node passed unchanged at four workers in **23.08s**. All 104 cases have passing
+evidence across the main run and renewal; no single all-passing 104-case run is
+claimed. Preserve `final.xml`, `renew-shared.xml`, the original failure log and
+retained failed outer root documented in the report. No assertions/timeouts,
+skips or suppressions changed. Shared sync/lock/lint/format/type/version/whitespace
+checks pass; lock unchanged. Local evidence is macOS 15.7.9 / Python 3.12.15.
+
+**Fixed-input comparison:** same wheel/sdist hashes and preserved Git revision,
+six cases passed in **491.46s** (493.31s launcher). Successful test roots remaining
+at completed teardown fell from six to zero; session-exit retained file bytes
+fell from 1,729,629,402 to zero and environments from two to zero. Raw records:
+`.dev-records/verification/us-36-ip2/fixed-8ced511a200a44c09f81db0cdf76c067/`.
+Failure/explicit-retention/concurrent/repeated metrics are exported in final XML
+and `identities/final.json`. Baseline and historical evidence remain intact.
+
+**Both implementation gates are accepted; separate whole-story acceptance
+remains pending.** No tests remain running. Commit the accepted changes under
+the explicit instruction above; no push or publication was requested. Preserve
+the deprecated public pytest
+`Config.inicfg` compatibility-mapping limitation and overlapping-workload timing
+limitation. M50-ACCEPT-VERIFY owns 289 deferred selectors from 393 collected cases,
+including the reserved milestone test; M1-ACCEPT-VERIFY remains independent.
 
 US-35 is accepted on 2026-11-01: “i accept us-35”. Both implementation phases
 are approved and committed: `2e3bf2d` (IP1), `8ffa7d4` (IP2).
@@ -76,21 +109,27 @@ explicit successful-workspace retention remain applicable. The full issue and
 zero comments were retrieved with a stable metadata refresh before editing; the
 published body was verified afterward. The requirements were committed and pushed
 as `b10bf69`. The developer subsequently requested an implementation plan; its
-approved plan is linked above. Implementation remains unauthorized.
+approved plan is linked above. IP1 execution was subsequently authorized and its
+technical work and gate are complete as recorded above; IP2 is authorized.
 
-**Next action:** await authorization to execute US-36 Implementation Phase 1.
-The plan is approved; do not implement until authorized. Stop at
-each subsequent implementation-phase gate. Preserve M1-ACCEPT-VERIFY and
-M50-ACCEPT-VERIFY deferrals.
+**Next action:** after the authorized local commit, await explicit US-36
+whole-story acceptance. No implementation or publication is authorized by phase
+acceptance alone.
+Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals. The plan/report own
+the completed phase's evidence and compatibility limitation.
 
 ## Checkout and working tree
 
-- Current checkout: `US-36-pytest-workspaces`, created from clean `main` at
-  `b10bf69` for planning. Local changes are the new US-36 implementation plan and
-  this checkpoint. No source, dependency or test changes; no tests run for this
-  documentation-only task. Plan links, task/AC coverage and diff whitespace were
-  checked. The developer authorized committing the planning and approval records; no push
-  was requested.
+- Current checkout: `US-36-pytest-workspaces`, tested parent `6b66d45` (approved
+  planning records). Accepted IP1/IP2 work included with this checkpoint:
+  pytest-only `pyproject.toml` settings, new
+  `tests/conftest.py`, `tests/pytest_workspace_support.py`, direct subprocess
+  module `tests/integration/test_pytest_workspaces.py`, IP1 report, owning plan
+  and this checkpoint, four caller/fixture modules and three development guides.
+  Product source, four drivers, verification helper,
+  dependencies and lock are unchanged. The developer explicitly authorized the
+  local commit: “i accept ip2; commit the changes”. No push authorized.
+  Documentation/approval-only edits do not invalidate final direct evidence.
 
 - Branch: `main`; pulled squash merge `3cfa431` from `origin/main`. Both
   implementation phases and whole-story acceptance are recorded.
