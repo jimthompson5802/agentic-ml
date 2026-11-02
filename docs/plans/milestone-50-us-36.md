@@ -195,21 +195,31 @@ None. End-of-test deletion is part of the initial authoritative scope, not a lat
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-36-AC-01: explicit contained workspace trees | IP1-T1/T4; IP2-T1–T3/T6 | Allocation inventory, four real driver paths and nested/concurrent containment | Verified; both phases accepted, whole-story acceptance pending |
-| US-36-AC-02: end-of-test cleanup and retention distinctions | IP1-T2–T5; IP2-T2–T4/T6 | Live-session completion observation, setup/call/teardown failures, final consumers and documentation | Verified; both phases accepted, whole-story acceptance pending |
-| US-36-AC-03: worker/session/nested isolation | IP1-T4/T5; IP2-T1–T3/T6 | Concurrent active-session sentinels and distinct roots under four workers | Verified; both phases accepted, whole-story acceptance pending |
-| US-36-AC-04: standalone use, diagnostics and explicit retention | IP1-T2/T3/T5; IP2-T1/T3/T4/T6 | Unrelated-cwd standalone commands, retained paths, published diagnostics and help | Verified; both phases accepted, whole-story acceptance pending |
-| US-36-AC-05: automation, counts and retained disk usage | IP1-T1–T5; IP2-T3/T5/T6 | Red–green records, repeated-session automation and fixed-workload measurements | Verified; both phases accepted, whole-story acceptance pending |
+| US-36-AC-01: explicit contained workspace trees | IP1-T1/T4; IP2-T1–T3/T6 | Allocation inventory, four real driver paths and nested/concurrent containment | Verified; developer accepted US-36 |
+| US-36-AC-02: end-of-test cleanup and retention distinctions | IP1-T2–T5; IP2-T2–T4/T6 | Live-session completion observation, setup/call/teardown failures, final consumers and documentation | Verified; developer accepted US-36 |
+| US-36-AC-03: worker/session/nested isolation | IP1-T4/T5; IP2-T1–T3/T6 | Concurrent active-session sentinels and distinct roots under four workers | Verified; developer accepted US-36 |
+| US-36-AC-04: standalone use, diagnostics and explicit retention | IP1-T2/T3/T5; IP2-T1/T3/T4/T6 | Unrelated-cwd standalone commands, retained paths, published diagnostics and help | Verified; developer accepted US-36 |
+| US-36-AC-05: automation, counts and retained disk usage | IP1-T1–T5; IP2-T3/T5/T6 | Red–green records, repeated-session automation and fixed-workload measurements | Verified; developer accepted US-36 |
 
-- **Remaining work:** Separate whole-story acceptance. Both implementation
-  phases are accepted; technical tasks and verification are complete. Developer
-  “i accept ip2; commit the changes” authorizes the local story commit, including
-  approval records. No push or publication was requested.
+- **Remaining work:** Publish the accepted story branch, create a PR and publish
+  a static COMMENT review under the execute-plan acceptance workflow. Accepted
+  implementation and phase records are committed as `2a566d1`.
 - **Partial prerequisite delivery:** None. US-35 evidence is reused as an existing capability, not duplicated or reopened.
 - **Final verification:** US-36-IP2-T6 complete; IP2 report owns reused/renewed
   direct evidence, shared checks, all five ACs and exact milestone deferrals.
-- **Developer acceptance:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer acceptance:** Accepted.
+- **Decision reference and date:** Developer “I accept us-36”, 2026-11-01
+  (America/New_York). Both implementation gates and required direct verification
+  are complete. Approval-only edits preserve executable input identity; reuse
+  the phase evidence and retain all milestone deferrals and platform limits.
+  Issue #49 was refreshed with its complete body and all comment pages: zero
+  comments, unchanged `updated_at=2026-11-02T00:58:23Z`.
+
+## Publication
+
+- Acceptance authorizes commit, ordinary push, PR creation and static COMMENT
+  review through the execute-plan workflow. Merge and branch cleanup remain
+  separate actions. Publication outcome will be recorded here.
 
 ## Milestone acceptance handoff
 

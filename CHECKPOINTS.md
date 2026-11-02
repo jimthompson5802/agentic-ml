@@ -4,17 +4,16 @@ Last updated: 2026-11-01 (America/New_York)
 
 ## Current position and next action
 
-US-36 IP2 is accepted on `US-36-pytest-workspaces`: developer
-“i accept ip2; commit the changes”, 2026-11-01 (America/New_York). Local commit
-of both accepted phases and approval records is authorized. Tested inputs were
-`6b66d45` plus the story changes identified by saved executable hashes. The
-[plan](docs/plans/milestone-50-us-36.md) owns tasks/gates; the
-[IP2 report](docs/verification/us-36-ip2.md) owns final evidence, measurements,
-corrective attempts and deferrals. IP1 was accepted on 2026-11-01: “i accept ip1”.
-After workflow/status discussion, the developer explicitly resumed IP2:
-“you can continue ip2”. Issue #49's complete body and every comment page were
-retrieved with zero comments and stable refresh
-`updated_at=2026-11-02T00:58:23Z`; scope is unchanged.
+US-36 is accepted: developer “I accept us-36”, 2026-11-01
+(America/New_York). Both implementation gates are accepted. Accepted executable
+work and phase approvals are committed as `2a566d1` on
+`US-36-pytest-workspaces`; the working tree was clean at story acceptance.
+The [plan](docs/plans/milestone-50-us-36.md) owns acceptance and publication;
+the [IP2 report](docs/verification/us-36-ip2.md) owns verification and limits.
+Issue #49's complete body and all comment pages were refreshed: zero comments,
+unchanged `updated_at=2026-11-02T00:58:23Z`; scope is unchanged.
+Whole-story acceptance authorizes acceptance records, ordinary push, PR creation
+and static COMMENT review through execute-plan. Merge remains separate.
 
 All T1–T6 tasks are complete. Verification callers use explicit owned descendants;
 existing shared fixtures retain their scopes and survive until final consumers.
@@ -41,9 +40,9 @@ fell from 1,729,629,402 to zero and environments from two to zero. Raw records:
 Failure/explicit-retention/concurrent/repeated metrics are exported in final XML
 and `identities/final.json`. Baseline and historical evidence remain intact.
 
-**Both implementation gates are accepted; separate whole-story acceptance
-remains pending.** No tests remain running. Commit the accepted changes under
-the explicit instruction above; no push or publication was requested. Preserve
+**Both implementation gates and whole-story acceptance are complete.** No tests
+remain running. Publication is in progress under the acceptance workflow.
+Preserve
 the deprecated public pytest
 `Config.inicfg` compatibility-mapping limitation and overlapping-workload timing
 limitation. M50-ACCEPT-VERIFY owns 289 deferred selectors from 393 collected cases,
@@ -112,23 +111,15 @@ as `b10bf69`. The developer subsequently requested an implementation plan; its
 approved plan is linked above. IP1 execution was subsequently authorized and its
 technical work and gate are complete as recorded above; IP2 is authorized.
 
-**Next action:** after the authorized local commit, await explicit US-36
-whole-story acceptance. No implementation or publication is authorized by phase
-acceptance alone.
-Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals. The plan/report own
-the completed phase's evidence and compatibility limitation.
+**Next action:** publish the accepted US-36 branch, create a PR and publish a
+static COMMENT review. Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals.
+No next-story implementation or merge is authorized.
 
 ## Checkout and working tree
 
-- Current checkout: `US-36-pytest-workspaces`, tested parent `6b66d45` (approved
-  planning records). Accepted IP1/IP2 work included with this checkpoint:
-  pytest-only `pyproject.toml` settings, new
-  `tests/conftest.py`, `tests/pytest_workspace_support.py`, direct subprocess
-  module `tests/integration/test_pytest_workspaces.py`, IP1 report, owning plan
-  and this checkpoint, four caller/fixture modules and three development guides.
-  Product source, four drivers, verification helper,
-  dependencies and lock are unchanged. The developer explicitly authorized the
-  local commit: “i accept ip2; commit the changes”. No push authorized.
+- Current checkout: `US-36-pytest-workspaces`, implementation commit `2a566d1`.
+  Acceptance-record edits affect only this checkpoint and the owning plan.
+  Product source, four drivers, helper, dependencies and lock remain unchanged.
   Documentation/approval-only edits do not invalidate final direct evidence.
 
 - Branch: `main`; pulled squash merge `3cfa431` from `origin/main`. Both
