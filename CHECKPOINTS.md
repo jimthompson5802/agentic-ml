@@ -45,13 +45,20 @@ the product delivery sequence. US-35–US-38 cover successful-environment cleanu
 pytest workspace ownership, compatible installed-environment reuse, and sequential
 wheel-environment release in [user stories](docs/specs/user-stories.md#milestone-50-improve-the-technical-environment).
 The original request covered local documentation only. The developer subsequently
-authorized creation of US-35 issue #47; US-36–US-38 remain local stories. No GitHub
-milestone was created, and no implementation is authorized by these additions.
+authorized creation of US-35 issue #47 and US-36 issue #49; US-37–US-38 remain
+local stories. No GitHub milestone was created, and no implementation is authorized by these additions.
 US-35-AC-02 now specifies `.dev-records/verification/` for raw evidence retained
 for the lifetime of agentic-ml development. The development guide defines layout,
 backup responsibility, and cleanup protection; `.gitignore` excludes the directory.
 Installation-driver adoption is complete in US-35 Phase 1; the other three
 drivers are complete and approved in Phase 2. No historical records were moved.
+
+US-36 feature issue [#49](https://github.com/jimthompson5802/agentic-ml/issues/49)
+was created at the developer's request using the user-story template and
+`enhancement` label. Published title, complete body, and label were verified; all
+five source acceptance criteria are preserved. No implementation plan or
+implementation was authorized. The developer authorized committing this checkpoint
+update and pushing `test-devcontainers`, including its existing local merge.
 
 **Next action:** await developer direction. US-35 is accepted and merged; no
 next-story work is authorized. Preserve M1-ACCEPT-VERIFY and
@@ -61,7 +68,7 @@ M50-ACCEPT-VERIFY deferrals.
 
 - Current checkout: `test-devcontainers`. Developer requested merging the latest
   `main`; fetched `origin` and merged `origin/main` without conflicts as `57fdeae`.
-  The merge is local and has not been pushed. Existing `.dev-records/` contents
+  The developer authorized pushing this merge with the US-36 publication checkpoint. Existing `.dev-records/` contents
   are now ignored by the incoming `.gitignore`. No tests were run for this merge.
   Merge-diff whitespace inspection reports existing trailing blank lines in
   `docs/development/{ci,command-approvals,setup,verification}.md` from `main`.
