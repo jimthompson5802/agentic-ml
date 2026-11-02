@@ -4,6 +4,18 @@ Last updated: 2026-11-01 (America/New_York)
 
 ## Current position and next action
 
+US-36 implementation plan is approved on
+`US-36-pytest-workspaces`, based on `b10bf69`. The
+[plan](docs/plans/milestone-50-us-36.md) proposes two implementation phases:
+prove complete-outcome pytest cleanup, then migrate verification callers and
+measure workspace retention. Issue #49 and prerequisite #47 were retrieved with
+complete bodies, zero comments and stable metadata refreshes. All five US-36
+criteria, including end-of-test teardown deletion, are mapped to tasks/evidence.
+The developer approved the plan, public test boundaries and lifecycle/retention
+decisions on 2026-11-01: “i approve plan; commit”. Execution authorization, both
+implementation gates and whole-story acceptance remain pending. No implementation
+began. The developer authorized committing the plan and checkpoint.
+
 US-35 is accepted on 2026-11-01: “i accept us-35”. Both implementation phases
 are approved and committed: `2e3bf2d` (IP1), `8ffa7d4` (IP2).
 The [plan](docs/plans/milestone-50-us-35.md) owns progress and gates;
@@ -62,23 +74,23 @@ local US-36-AC-02/05 now require teardown cleanup after final consumers, with
 automated evidence while the session remains active. Failed-test retention and
 explicit successful-workspace retention remain applicable. The full issue and
 zero comments were retrieved with a stable metadata refresh before editing; the
-published body was verified afterward. No implementation plan or
-implementation was authorized. The developer authorized committing this checkpoint
-update and pushing `test-devcontainers`, including its existing local merge.
+published body was verified afterward. The requirements were committed and pushed
+as `b10bf69`. The developer subsequently requested an implementation plan; its
+approved plan is linked above. Implementation remains unauthorized.
 
-**Next action:** await developer direction. US-35 is accepted and merged; no
-next-story work is authorized. Preserve M1-ACCEPT-VERIFY and
+**Next action:** await authorization to execute US-36 Implementation Phase 1.
+The plan is approved; do not implement until authorized. Stop at
+each subsequent implementation-phase gate. Preserve M1-ACCEPT-VERIFY and
 M50-ACCEPT-VERIFY deferrals.
 
 ## Checkout and working tree
 
-- Current checkout: `main`, matching `origin/main` at `91a22e6` before this
-  documentation edit. The developer requested bringing only `CHECKPOINTS.md`
-  from `test-devcontainers`; that update was committed as `91a22e6` and pushed.
-  The checkout correction was committed and pushed as `fcb36f0`. Current local
-  changes update the US-36 requirements and this checkpoint for per-test teardown
-  deletion. No executable behavior changed; TDD does not apply. Verification
-  checks the published issue body and diff whitespace.
+- Current checkout: `US-36-pytest-workspaces`, created from clean `main` at
+  `b10bf69` for planning. Local changes are the new US-36 implementation plan and
+  this checkpoint. No source, dependency or test changes; no tests run for this
+  documentation-only task. Plan links, task/AC coverage and diff whitespace were
+  checked. The developer authorized committing the planning and approval records; no push
+  was requested.
 
 - Branch: `main`; pulled squash merge `3cfa431` from `origin/main`. Both
   implementation phases and whole-story acceptance are recorded.
