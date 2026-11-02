@@ -201,9 +201,8 @@ None. End-of-test deletion is part of the initial authoritative scope, not a lat
 | US-36-AC-04: standalone use, diagnostics and explicit retention | IP1-T2/T3/T5; IP2-T1/T3/T4/T6 | Unrelated-cwd standalone commands, retained paths, published diagnostics and help | Verified; developer accepted US-36 |
 | US-36-AC-05: automation, counts and retained disk usage | IP1-T1–T5; IP2-T3/T5/T6 | Red–green records, repeated-session automation and fixed-workload measurements | Verified; developer accepted US-36 |
 
-- **Remaining work:** Publish the accepted story branch, create a PR and publish
-  a static COMMENT review under the execute-plan acceptance workflow. Accepted
-  implementation and phase records are committed as `2a566d1`.
+- **Remaining work:** No story implementation work. Publication and review
+  records are below; milestone acceptance verification remains separately owned.
 - **Partial prerequisite delivery:** None. US-35 evidence is reused as an existing capability, not duplicated or reopened.
 - **Final verification:** US-36-IP2-T6 complete; IP2 report owns reused/renewed
   direct evidence, shared checks, all five ACs and exact milestone deferrals.
@@ -217,9 +216,20 @@ None. End-of-test deletion is part of the initial authoritative scope, not a lat
 
 ## Publication
 
-- Acceptance authorizes commit, ordinary push, PR creation and static COMMENT
-  review through the execute-plan workflow. Merge and branch cleanup remain
-  separate actions. Publication outcome will be recorded here.
+- Accepted implementation commit: `2a566d1`; acceptance records: `030c883`.
+  Both are pushed on `origin/US-36-pytest-workspaces`.
+- [PR #50](https://github.com/jimthompson5802/agentic-ml/pull/50):
+  `test: give pytest ownership of verification workspaces`, standard PR to
+  `main`, closes #49. Published body/head/base/ownership verified.
+- [Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/50#pullrequestreview-5731480753)
+  covers `030c883`: no actionable findings. Complete 15-file diff, requirements,
+  lifecycle code, direct coverage and evidence inspected; no project code/checks
+  run during review. Record-only publication edits receive final-head follow-up.
+- Acceptance/publication edits pass whitespace and document-link inspection;
+  no executable inputs changed, so valid phase evidence is reused. CI outcome
+  remains separate from local verification; no hosted success is claimed here.
+- Publication is complete; merge, branch cleanup and further implementation
+  require separate authorization. Named milestone deferrals remain open.
 
 ## Milestone acceptance handoff
 

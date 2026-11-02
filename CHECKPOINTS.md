@@ -41,7 +41,7 @@ Failure/explicit-retention/concurrent/repeated metrics are exported in final XML
 and `identities/final.json`. Baseline and historical evidence remain intact.
 
 **Both implementation gates and whole-story acceptance are complete.** No tests
-remain running. Publication is in progress under the acceptance workflow.
+remain running. Publication is complete under the acceptance workflow.
 Preserve
 the deprecated public pytest
 `Config.inicfg` compatibility-mapping limitation and overlapping-workload timing
@@ -111,14 +111,18 @@ as `b10bf69`. The developer subsequently requested an implementation plan; its
 approved plan is linked above. IP1 execution was subsequently authorized and its
 technical work and gate are complete as recorded above; IP2 is authorized.
 
-**Next action:** publish the accepted US-36 branch, create a PR and publish a
-static COMMENT review. Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals.
-No next-story implementation or merge is authorized.
+**Next action:** await developer direction on the published
+[PR #50](https://github.com/jimthompson5802/agentic-ml/pull/50).
+[Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/50#pullrequestreview-5731480753)
+found no actionable issues at `030c883`; final record-only head receives follow-up.
+Acceptance `030c883` and implementation `2a566d1` are pushed. Hosted CI status is
+not claimed. Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals.
+No next-story implementation, merge or branch cleanup is authorized.
 
 ## Checkout and working tree
 
 - Current checkout: `US-36-pytest-workspaces`, implementation commit `2a566d1`.
-  Acceptance-record edits affect only this checkpoint and the owning plan.
+  Acceptance/publication-record edits affect only this checkpoint and the owning plan.
   Product source, four drivers, helper, dependencies and lock remain unchanged.
   Documentation/approval-only edits do not invalidate final direct evidence.
 
