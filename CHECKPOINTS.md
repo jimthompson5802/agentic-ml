@@ -13,7 +13,11 @@ the [IP2 report](docs/verification/us-36-ip2.md) owns verification and limits.
 Issue #49's complete body and all comment pages were refreshed: zero comments,
 unchanged `updated_at=2026-11-02T00:58:23Z`; scope is unchanged.
 Whole-story acceptance authorizes acceptance records, ordinary push, PR creation
-and static COMMENT review through execute-plan. Merge remains separate.
+and static COMMENT review through execute-plan. The developer subsequently
+authorized merge: “squash merger the pr”. PR #50 was squash merged at
+`2026-11-02T03:47:31Z`, commit `26da686f74126957b866f3c49e13ca6a6cc8f259`.
+Final-head Linux/Python 3.12 CI passed (run 41377467477); the final-head static
+review found no actionable issues.
 
 All T1–T6 tasks are complete. Verification callers use explicit owned descendants;
 existing shared fixtures retain their scopes and survive until final consumers.
@@ -111,17 +115,17 @@ as `b10bf69`. The developer subsequently requested an implementation plan; its
 approved plan is linked above. IP1 execution was subsequently authorized and its
 technical work and gate are complete as recorded above; IP2 is authorized.
 
-**Next action:** await developer direction on the published
-[PR #50](https://github.com/jimthompson5802/agentic-ml/pull/50).
-[Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/50#pullrequestreview-5731480753)
-found no actionable issues at `030c883`; final record-only head receives follow-up.
-Acceptance `030c883` and implementation `2a566d1` are pushed. Hosted CI status is
-not claimed. Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals.
-No next-story implementation, merge or branch cleanup is authorized.
+**Next action:** await developer direction. US-36
+[PR #50](https://github.com/jimthompson5802/agentic-ml/pull/50) is squash merged.
+Current checkout is `main`, fast-forwarded to squash merge `26da686` under
+developer “switch main and pull”. Local merge-outcome records are uncommitted.
+Branch cleanup has not been requested.
+Preserve M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY deferrals.
+No next-story implementation is authorized.
 
 ## Checkout and working tree
 
-- Current checkout: `US-36-pytest-workspaces`, implementation commit `2a566d1`.
+- Current checkout: `main`, matching `origin/main` at squash merge `26da686`.
   Acceptance/publication-record edits affect only this checkpoint and the owning plan.
   Product source, four drivers, helper, dependencies and lock remain unchanged.
   Documentation/approval-only edits do not invalidate final direct evidence.

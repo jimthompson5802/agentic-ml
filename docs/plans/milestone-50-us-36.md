@@ -228,8 +228,15 @@ None. End-of-test deletion is part of the initial authoritative scope, not a lat
 - Acceptance/publication edits pass whitespace and document-link inspection;
   no executable inputs changed, so valid phase evidence is reused. CI outcome
   remains separate from local verification; no hosted success is claimed here.
-- Publication is complete; merge, branch cleanup and further implementation
-  require separate authorization. Named milestone deferrals remain open.
+- Developer “squash merger the pr” authorized squash merge. PR #50 merged at
+  `2026-11-02T03:47:31Z`, squash commit
+  `26da686f74126957b866f3c49e13ca6a6cc8f259`.
+- Final-head [static review](https://github.com/jimthompson5802/agentic-ml/pull/50#pullrequestreview-5731483694)
+  covered `e9fbcb4` with no actionable findings. Hosted Linux/Python 3.12
+  [CI run](https://github.com/jimthompson5802/agentic-ml/actions/runs/41377467477)
+  passed at that head before merge. This does not close local milestone deferrals.
+- Publication and merge are complete. Branch cleanup and further implementation
+  require separate authorization. Local merge records remain uncommitted.
 
 ## Milestone acceptance handoff
 
