@@ -121,7 +121,11 @@ request at `2026-11-02T04:55:51Z`, commit `3a967e2ee1d5c735cdb2b87acf0e4921002f5
 Merged state verified. Final-head Linux/Python 3.12 Development CI passed
 (run 41389834925). At the developer's request, switched to `main` and pulled
 `origin/main` with a fast-forward to `3a967e2`. Preserved this local checkpoint
-update across checkout; no branch deletion requested. Diff whitespace check passed; container build,
+update across checkout. Developer subsequently authorized deleting PR #51's local
+and remote branches. Both `test-devcontainers` copies were deleted after verifying
+tip `adf65ff` has the same tree as squash merge `3a967e2`; remote absence verified.
+Developer authorized committing and pushing these branch deletion records on `main`.
+Diff whitespace check passed; container build,
 startup and development checks remain unverified. The PR flags the committed uv
 workspace member referencing a generated pytest directory as a known limitation.
 Developer authorized committing and pushing this publication handoff on `main`.
