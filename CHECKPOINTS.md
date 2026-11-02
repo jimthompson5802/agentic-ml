@@ -56,7 +56,13 @@ drivers are complete and approved in Phase 2. No historical records were moved.
 US-36 feature issue [#49](https://github.com/jimthompson5802/agentic-ml/issues/49)
 was created at the developer's request using the user-story template and
 `enhancement` label. Published title, complete body, and label were verified; all
-five source acceptance criteria are preserved. No implementation plan or
+five acceptance criteria are recorded. The developer subsequently required
+successful-test workspace deletion at the end of each test. Issue #49 and the
+local US-36-AC-02/05 now require teardown cleanup after final consumers, with
+automated evidence while the session remains active. Failed-test retention and
+explicit successful-workspace retention remain applicable. The full issue and
+zero comments were retrieved with a stable metadata refresh before editing; the
+published body was verified afterward. No implementation plan or
 implementation was authorized. The developer authorized committing this checkpoint
 update and pushing `test-devcontainers`, including its existing local merge.
 
@@ -69,8 +75,10 @@ M50-ACCEPT-VERIFY deferrals.
 - Current checkout: `main`, matching `origin/main` at `91a22e6` before this
   documentation edit. The developer requested bringing only `CHECKPOINTS.md`
   from `test-devcontainers`; that update was committed as `91a22e6` and pushed.
-  This correction to the checkout entry is the only uncommitted change.
-  No executable behavior changed; verification is a diff whitespace check.
+  The checkout correction was committed and pushed as `fcb36f0`. Current local
+  changes update the US-36 requirements and this checkpoint for per-test teardown
+  deletion. No executable behavior changed; TDD does not apply. Verification
+  checks the published issue body and diff whitespace.
 
 - Branch: `main`; pulled squash merge `3cfa431` from `origin/main`. Both
   implementation phases and whole-story acceptance are recorded.
