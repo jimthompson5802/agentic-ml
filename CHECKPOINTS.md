@@ -2,6 +2,27 @@
 
 Last updated: 2026-11-03 (UTC)
 
+## Temporary three-test skips — 2026-11-03
+
+On `main`, the developer explicitly requested temporary skips for the three
+Linux full-suite timeout cases named below. Added individual `pytest.mark.skip`
+decorators to those tests in the installation/distribution integration modules,
+with a reason identifying the developer request and unresolved 120-second
+timeouts. Registered the exclusions and removal condition in
+`docs/development.md`. Test bodies, assertions and timeouts remain unchanged.
+This changes test selection only; TDD does not apply because no harness behavior
+is introduced or corrected.
+
+Verification: `uv run --locked pytest -n 4 --dist=loadgroup -m "" -rs` with
+the three explicit selectors reported 3 skipped in 1.02s on Linux/Python
+3.12.16, exit 0. Targeted Ruff lint and formatting checks and
+`git diff --check` passed. The full suite was not rerun; skipped coverage does
+not close existing milestone verification obligations or resolve the timeouts.
+The developer authorized committing and pushing these four files on 2026-11-03.
+This publication supersedes earlier pending-publication instructions for these
+changes. Next action: re-enable when the timeout cause is resolved or the
+developer directs it; milestone verification obligations remain open.
+
 ## Requested three-test rerun — 2026-11-03
 
 On `main`, the developer requested renewal of the three timeout failures from

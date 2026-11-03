@@ -300,6 +300,9 @@ def test_missing_initialization_schema_reports_installed_failure(
     assert "PASS direct-wheel" not in result.stdout
 
 
+@pytest.mark.skip(
+    reason="Temporarily skipped at developer request pending diagnosis of 120s timeouts."
+)
 def test_missing_planning_schema_fails_installed_inventory(
     artifacts: Path, tmp_path: Path
 ) -> None:
@@ -404,6 +407,9 @@ def test_explicit_distribution_retention_keeps_both_interpreters(
     assert len(json.loads((records / "identities/artifacts.json").read_text())) == 3
 
 
+@pytest.mark.skip(
+    reason="Temporarily skipped at developer request pending diagnosis of 120s timeouts."
+)
 def test_rebuilt_probe_failure_retains_both_environments(
     artifacts: Path, tmp_path: Path
 ) -> None:

@@ -85,6 +85,18 @@ Prefer correcting code or configuration over adding an exception. An exception i
 
 No source-rule suppressions or custom checker exclusions exist. Tools retain their default generated-directory exclusions; `.gitignore` excludes reproducible environments/caches/build products, local secrets and generated runtime state because those are not maintained source. Review reports in `docs/verification/` remain tracked; raw diagnostic `*.log` files stay local to avoid accidental sensitive-output commits. Add future exceptions here and beside the affected code/configuration.
 
+Temporary pytest skips authorized by the developer on 2026-11-03 apply only to
+`test_failed_installed_probe_retains_available_environment` in
+`tests/integration/test_installation_verification.py` and
+`test_missing_planning_schema_fails_installed_inventory` and
+`test_rebuilt_probe_failure_retains_both_environments` in
+`tests/integration/test_distribution_verification.py`. Each exceeded its
+120-second subprocess timeout in the Linux full-suite run and passed on the
+selected retry; the cause remains unresolved. Remove these skips when the
+timeout cause is resolved or the developer directs re-enablement. Assertions
+and timeouts remain unchanged. Skipped coverage does not satisfy the existing
+story or milestone verification obligations.
+
 
 ## Development CI and diagnostic logs
 

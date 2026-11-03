@@ -435,6 +435,9 @@ def test_retained_old_install_cannot_pass_as_upgrade(
         lock.write_bytes(original_lock)
 
 
+@pytest.mark.skip(
+    reason="Temporarily skipped at developer request pending diagnosis of 120s timeouts."
+)
 def test_failed_installed_probe_retains_available_environment(
     source_repository: tuple[str, str], tmp_path: Path
 ) -> None:
