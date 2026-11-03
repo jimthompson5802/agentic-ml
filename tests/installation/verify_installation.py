@@ -67,6 +67,7 @@ def main() -> None:
     env["UV_PYTHON_DOWNLOADS"] = "never"
     probe = workspace / "check_project.py"
     shutil.copy(PROBE, probe)
+    shutil.copy(PROBE.with_name("dependency_inventory.py"), workspace)
     stage = "initialize"
     try:
         run("git-init", ["git", "init"], project, env)

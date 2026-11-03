@@ -2,6 +2,40 @@
 
 Last updated: 2026-11-03 (UTC)
 
+## Current correction and next action — 2026-11-03
+
+On `main`, completed the developer-requested dependency-inventory correction.
+Both isolated probes now validate installed requirement metadata with platform
+markers, extras and version constraints, rather than fixed transitive lists.
+Direct harness requirements, provenance, resource checks and developer-tool
+exclusions remain enforced. Universal lock validation checks reachability and
+installed versions; the copied Git probe includes its shared contributor helper.
+Added 18 probe/lock regressions and strengthened the approval-schema failure
+check with its own diagnostic. Existing three temporary skips remain unchanged.
+
+Verification: original two failures reproduced and passed after correction;
+approval diagnostic and lock-root injection each have red/green evidence.
+Phase group: 289 passed in 157.87s. The first full-suite run recorded 337 passes,
+70 failures, 5 errors and 3 skips after the checkout `.venv` Python symlink
+changed to an unavailable macOS Homebrew path. Preserved its XML and grouped
+failure evidence; the process responsible is unconfirmed. Renewed the complete
+suite with `UV_PROJECT_ENVIRONMENT=/tmp/agentic-ml-linux-dependency-checks-20261103`:
+**412 passed, 3 skipped in 418.34s**, exit 0, Linux/Python 3.12.16. The isolated
+Linux environment avoids changing the shared checkout `.venv`. Locked sync,
+lock consistency, lint, formatting, strict typing, CLI smoke and whitespace
+checks passed; lock hash unchanged. macOS/Windows remain unverified by this run.
+
+Evidence and scope: [dependency correction](docs/verification/dependency-inventory-correction.md),
+covering US-33 AC-02–05 and US-01 AC-02–04 while preserving US-35 driver
+contracts. Raw XML is retained under
+`.dev-records/verification/20261103-dependency-closure/`.
+Working-tree changes: both probes, installation driver, new dependency helper,
+the two integration test modules, distribution guide, correction report and
+this checkpoint. The developer authorized committing and pushing this correction
+on 2026-11-03. Publication is proceeding on `main`; existing milestone
+obligations and skipped coverage remain open.
+
+
 ## Temporary three-test skips — 2026-11-03
 
 On `main`, the developer explicitly requested temporary skips for the three

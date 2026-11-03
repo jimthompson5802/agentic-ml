@@ -4,6 +4,7 @@ import json
 import shutil
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
 import pytest
@@ -158,6 +159,169 @@ def test_wrong_revision_is_rejected(installed_project: tuple[Path, str, str]) ->
     result = probe_project(project, repository, "f" * 40)
     assert result.returncode != 0
     assert "revision mismatch" in result.stderr
+
+
+@pytest.mark.parametrize("probe", ["project", "wheel"])
+@pytest.mark.parametrize(
+    "scenario,diagnostic",
+    [
+        ("inactive", None),
+        ("unconditional", None),
+        ("missing", "kombu requires probe-clock>=1"),
+        ("incompatible", "kombu requires packaging>9999; installed"),
+        ("unexpected", "unexpected=['probe-clock']"),
+        ("extra", "packaging requires probe-clock>=1"),
+        ("development", "development=['pytest']"),
+    ],
+)
+def test_dependency_inventory_uses_active_runtime_requirements(
+    installed_project: tuple[Path, str, str],
+    probe: str,
+    scenario: str,
+    diagnostic: str | None,
+) -> None:
+    """Both isolated probes honor markers, versions, extras and runtime isolation."""
+    project, repository, revision = installed_project
+    site = project / ".venv/lib/python3.12/site-packages"
+    kombu = next(site.glob("kombu-*.dist-info/METADATA"))
+    packaging = next(site.glob("packaging-*.dist-info/METADATA"))
+    originals = {path: path.read_bytes() for path in (kombu, packaging)}
+    lock = project / "uv.lock"
+    original_lock = lock.read_bytes()
+    synthetic = site / (
+        "pytest-1.0.dist-info"
+        if scenario == "development"
+        else "probe_clock-1.0.dist-info"
+    )
+    requirements = {
+        "inactive": 'probe-clock>=1; python_version < "0"',
+        "missing": "probe-clock>=1",
+        "unconditional": "probe-clock>=1",
+        "incompatible": "packaging>9999",
+        "extra": "packaging[probe-clock]>=0",
+        "development": "pytest>=1",
+    }
+    try:
+        if scenario in requirements:
+            text = originals[kombu].decode()
+            kombu.write_text(
+                text.replace(
+                    "\n\n", f"\nRequires-Dist: {requirements[scenario]}\n\n", 1
+                )
+            )
+        if scenario == "extra":
+            text = originals[packaging].decode()
+            packaging.write_text(
+                text.replace(
+                    "\n\n",
+                    "\nProvides-Extra: probe-clock\n"
+                    'Requires-Dist: probe-clock>=1; extra == "probe-clock"\n\n',
+                    1,
+                )
+            )
+        if scenario in {"unexpected", "development", "unconditional"}:
+            synthetic.mkdir()
+            name = "pytest" if scenario == "development" else "probe-clock"
+            (synthetic / "METADATA").write_text(
+                f"Metadata-Version: 2.4\nName: {name}\nVersion: 1.0\n\n"
+            )
+        if scenario == "unconditional":
+            before, kombu_lock = original_lock.decode().split(
+                '[[package]]\nname = "kombu"', 1
+            )
+            kombu_lock = kombu_lock.replace(
+                "dependencies = [\n",
+                'dependencies = [\n    { name = "probe-clock" },\n',
+                1,
+            )
+            lock.write_text(
+                before
+                + '[[package]]\nname = "kombu"'
+                + kombu_lock
+                + '\n[[package]]\nname = "probe-clock"\nversion = "1.0"\n'
+                + 'source = { registry = "https://pypi.org/simple" }\n'
+            )
+        if probe == "project":
+            result = probe_project(project, repository, revision)
+        else:
+            result = subprocess.run(
+                [
+                    str(project / ".venv/bin/python"),
+                    "-I",
+                    str(ROOT / "tests/packaging/check_installed.py"),
+                    "--expected-version",
+                    "0.1.0",
+                    "--environment",
+                    str(project / ".venv"),
+                ],
+                cwd=project,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+        if diagnostic is None:
+            assert result.returncode == 0, result.stdout + result.stderr
+        else:
+            assert result.returncode != 0
+            assert diagnostic in result.stderr
+    finally:
+        for path, content in originals.items():
+            path.write_bytes(content)
+        lock.write_bytes(original_lock)
+        if synthetic.exists():
+            shutil.rmtree(synthetic)
+
+
+@pytest.mark.parametrize(
+    "scenario", ["missing", "incompatible", "unexpected", "injected"]
+)
+def test_runtime_lock_matches_dependency_graph(
+    installed_project: tuple[Path, str, str], scenario: str
+) -> None:
+    """A universal lock must contain reachable packages at installed versions."""
+    project, repository, revision = installed_project
+    lock = project / "uv.lock"
+    original = lock.read_bytes()
+    before, entry = original.decode().split('[[package]]\nname = "packaging"', 1)
+    package, after = entry.split("[[package]]", 1)
+    try:
+        if scenario == "missing":
+            changed = before + "[[package]]" + after
+        elif scenario == "incompatible":
+            version = package.split('version = "', 1)[1].split('"', 1)[0]
+            changed = (
+                before
+                + '[[package]]\nname = "packaging"'
+                + package.replace(f'version = "{version}"', 'version = "0.0"', 1)
+                + "[[package]]"
+                + after
+            )
+        else:
+            changed = original.decode() + (
+                '\n[[package]]\nname = "unrelated-package"\nversion = "1.0"\n'
+                'source = { registry = "https://pypi.org/simple" }\n'
+            )
+            if scenario == "injected":
+                name = tomllib.loads((project / "pyproject.toml").read_text())[
+                    "project"
+                ]["name"]
+                start, root = changed.split(f'[[package]]\nname = "{name}"', 1)
+                root = root.replace(
+                    "dependencies = [\n",
+                    'dependencies = [\n    { name = "unrelated-package" },\n',
+                    1,
+                )
+                changed = start + f'[[package]]\nname = "{name}"' + root
+        lock.write_text(changed)
+        result = probe_project(project, repository, revision)
+        assert result.returncode != 0
+        assert "invalid locked dependencies" in result.stderr
+        label = "unexpected" if scenario == "injected" else scenario
+        assert f"{label}=[" in result.stderr
+        name = "unrelated-package" if label == "unexpected" else "packaging"
+        assert name in result.stderr
+    finally:
+        lock.write_bytes(original)
 
 
 def test_missing_template_is_rejected(installed_project: tuple[Path, str, str]) -> None:

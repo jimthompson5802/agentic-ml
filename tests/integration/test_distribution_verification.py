@@ -362,6 +362,7 @@ def test_missing_approval_schema_fails_installed_inventory(
         artifacts, tmp_path, "agentic_ml/schemas/approvals/1.0/approval.json", None
     )
     assert result.returncode != 0
+    assert "approval resource missing" in result.stderr
     assert "PASS direct-wheel" not in result.stdout
 
 
