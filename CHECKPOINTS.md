@@ -27,7 +27,9 @@ They explicitly authorized committing and pushing all pending changes, including
 the recorded devcontainer follow-up. This supersedes the pending-direction and
 no-publication statements below. No single all-passing complete suite or resolved
 timeout cause is claimed. Existing milestone obligations remain open. Publication
-is in progress; see the scheduling report for the final verification record.
+completed: commit `e52b800` was pushed to `origin/main`. Final whitespace and
+shell syntax checks passed. Next action: developer direction; see the scheduling
+report for the final verification record.
 
 Current checkout is `main`. Completed the developer-requested test scheduling
 change: 289 phase cases and 108 acceptance cases (397 total). Default collection
