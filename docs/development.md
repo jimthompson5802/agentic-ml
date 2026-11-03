@@ -31,7 +31,8 @@ The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. U
 |---|---|
 | Install source package and development dependencies | `uv sync --locked --group dev` |
 | Lock consistency | `uv lock --check` |
-| Automated tests (local, four workers) | `uv run --locked pytest -n 4 --dist=loadgroup` |
+| Phase tests (local, four workers) | `uv run --locked pytest -n 4 --dist=loadgroup` |
+| Complete suite (story and milestone acceptance) | `uv run --locked pytest -n 4 --dist=loadgroup -m ""` |
 | Lint | `uv run --locked ruff check .` |
 | Formatting check | `uv run --locked ruff format --check .` |
 | Strict type checks | `uv run --locked mypy src tests` |
@@ -40,9 +41,9 @@ The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. U
 The smoke check must exit zero and print the installed package version; version tests compare it to distribution metadata. A missing command, nonzero exit, or wrong version is a failed smoke check. US-31 Implementation Phase 2 verified all shared commands from a fresh macOS checkout and a new environment; see the [recorded results](verification/us-31-ip2.md). Wheel/source-distribution verification belongs to US-33 and is separate from this editable development install.
 
 
-## Local milestone acceptance selection
+## Verification schedule
 
-See [Local milestone acceptance selection](development/verification.md#local-milestone-acceptance-selection).
+See [Verification schedule](development/verification.md#verification-schedule).
 
 ## Local parallel test execution
 

@@ -2,9 +2,15 @@
 
 import json
 import os
+import shutil
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
+
+import pytest
+
+pytestmark = pytest.mark.story_acceptance
 
 
 def test_loadgroup_keeps_each_marked_group_on_one_worker(tmp_path: Path) -> None:
@@ -67,3 +73,99 @@ def test_beta(case, worker_id):
     for worker in group_workers:
         temporary_base = Path((tmp_path / f"temp-base-{worker}.txt").read_text())
         assert temporary_base.is_relative_to((tmp_path / "nested-pytest").resolve())
+
+
+@pytest.mark.parametrize(
+    "selector,expected",
+    [
+        (None, "1 passed, 1 deselected"),
+        ("story_acceptance", "1 passed, 1 deselected"),
+        ("", "2 passed"),
+    ],
+)
+def test_verification_schedule_selects_expected_group(
+    tmp_path: Path, selector: str | None, expected: str
+) -> None:
+    """Real pytest honors the repository schedule for new and acceptance tests."""
+    root = Path(__file__).resolve().parents[2]
+    configuration = tomllib.loads((root / "pyproject.toml").read_text())
+    options = configuration["tool"]["pytest"]["ini_options"]
+    (tmp_path / "pytest.ini").write_text(
+        "[pytest]\naddopts = "
+        + options["addopts"]
+        + "\nmarkers =\n"
+        + "".join("    " + marker + "\n" for marker in options["markers"])
+    )
+    shutil.copyfile(root / "tests/conftest.py", tmp_path / "conftest.py")
+    (tmp_path / "test_schedule.py").write_text(
+        "import pytest\n"
+        "def test_new_phase():\n    pass\n"
+        "@pytest.mark.story_acceptance\n"
+        "def test_acceptance():\n    pass\n"
+    )
+    command = [
+        sys.executable,
+        "-m",
+        "pytest",
+        "-v",
+        "--basetemp",
+        str(tmp_path / "nested-pytest"),
+    ]
+    if selector is not None:
+        command.extend(["-m", selector])
+    env = dict(os.environ)
+    for key in ("PYTEST_ADDOPTS", "PYTEST_XDIST_WORKER", "PYTEST_XDIST_WORKER_COUNT"):
+        env.pop(key, None)
+    env["PYTHONPATH"] = str(root / "tests")
+    result = subprocess.run(
+        command,
+        cwd=tmp_path,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert expected in result.stdout
+    if selector is None:
+        # Ensure the selected case is the new phase test, not the acceptance test.
+        assert "test_new_phase PASSED" in result.stdout
+    elif selector == "story_acceptance":
+        assert "test_acceptance PASSED" in result.stdout
+
+
+def test_verification_schedule_rejects_conflicting_groups(tmp_path: Path) -> None:
+    """Conflicting module and function schedules fail even with a selector."""
+    root = Path(__file__).resolve().parents[2]
+    shutil.copyfile(root / "tests/conftest.py", tmp_path / "conftest.py")
+    (tmp_path / "pytest.ini").write_text(
+        "[pytest]\nmarkers =\n    phase\n    story_acceptance\n"
+    )
+    (tmp_path / "test_conflict.py").write_text(
+        "import pytest\npytestmark = pytest.mark.story_acceptance\n"
+        "@pytest.mark.phase\ndef test_conflict():\n    pass\n"
+    )
+    env = dict(os.environ)
+    for key in ("PYTEST_ADDOPTS", "PYTEST_XDIST_WORKER", "PYTEST_XDIST_WORKER_COUNT"):
+        env.pop(key, None)
+    env["PYTHONPATH"] = str(root / "tests")
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "pytest",
+            "-m",
+            "phase",
+            "--basetemp",
+            str(tmp_path / "nested-pytest"),
+        ],
+        cwd=tmp_path,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    assert result.returncode == 4, result.stdout + result.stderr
+    assert "Conflicting verification groups" in result.stderr

@@ -21,10 +21,13 @@
 
   "mounts": [
     "source=agentic-ml-codex-home,target=/home/vscode/.codex,type=volume",
+    "source=${localEnv:HOME}/.codex/config.toml,target=/tmp/host-codex/config.toml,type=bind,readonly",
+    "source=${localEnv:HOME}/.codex/skills,target=/tmp/host-codex/skills,type=bind,readonly",
+    "source=${localEnv:HOME}/.codex/rules,target=/tmp/host-codex/rules,type=bind,readonly",
     "source=agentic-ml-pytest-tmp,target=/pytest-tmp,type=volume"
   ],
 
-  "postCreateCommand": "bash -lc 'source /usr/local/share/nvm/nvm.sh && nvm use default && npm install -g @openai/codex' && uv sync --locked",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
 
   "customizations": {
     "vscode": {

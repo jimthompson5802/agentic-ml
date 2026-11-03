@@ -1,25 +1,24 @@
 # Development verification
 
-## Local milestone acceptance selection
+## Verification schedule
 
-Normal local pytest runs exclude the single `milestone_acceptance` test,
-`test_complete_initialization_from_both_artifact_paths`. Run it at final milestone
-acceptance. CI overrides the default selection and runs every test on each run.
+Default pytest runs select the `phase` group: CLI smoke checks, initialization,
+planning and plan approvals. Run this entire group at every implementation phase
+end, regardless of changed modules. New tests default to this group; all new
+Milestone 2–6 tests must belong to it.
+
+Installation, distribution, verification lifecycle, pytest workspace and parallel
+scheduling modules carry `story_acceptance`. Run both groups at every user-story
+acceptance and milestone acceptance:
 
 ```sh
-# Final milestone acceptance: every test
+uv run --locked pytest -n 4 --dist=loadgroup
 uv run --locked pytest -n 4 --dist=loadgroup -m ""
-# Only the milestone acceptance test
-uv run --locked pytest -n 4 --dist=loadgroup -m milestone_acceptance
 ```
 
-Local phase and story verification may defer this test until final milestone
-acceptance, including under existing plans. This developer-authorized exception
-changes only this test's local scheduling; preserve its assertions and historical
-evidence. All other required distribution and installation checks still apply.
-Record this deferral in verification evidence. Default runs cover the routine
-suite; only the explicit all-tests command establishes complete-suite coverage.
-
+The former milestone-only initialization test now runs at story acceptance.
+Use `-m story_acceptance` only for diagnosis, not complete acceptance evidence.
+Conflicting group markers fail collection. Existing xdist groups remain intact.
 
 ## Local parallel test execution
 
@@ -126,7 +125,7 @@ Its public `Config.inicfg` compatibility mapping is deprecated in locked pytest
 To inspect successful pytest workspaces, run, for example:
 
 ```sh
-uv run --locked pytest -n 4 --dist=loadgroup --keep-test-workspaces tests/integration/test_distribution_verification.py
+uv run --locked pytest -n 4 --dist=loadgroup -m story_acceptance --keep-test-workspaces tests/integration/test_distribution_verification.py
 ```
 
 An explicit `--basetemp` must name a new, exclusively owned directory. Existing
@@ -155,41 +154,48 @@ Preserve completed evidence and approvals. CI continues running all tests.
 
 ### Implementation phase gates
 
-Use TDD for new behavior and bug fixes. At every phase gate, including the last
-phase of a story, run only direct tests of modules created or modified by that
-phase's tasks. Select by the public behavior tested, whether the test lives in a
-unit or integration directory. Exclude tests selected solely because an unchanged
-caller depends on a changed module. Use explicit paths, node IDs or selectors:
+Use TDD for new behavior and bug fixes. At every executable phase gate,
+including the last phase of a story, run the entire phase group:
 
 ```sh
-uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_cli_version.py
+uv run --locked pytest -n 4 --dist=loadgroup
 ```
 
-Record changed modules, exact selectors, module-to-test mappings, acceptance
-criteria, public boundaries and limits, selected/deselected counts, results and
-platform. Manual selection is sufficient. Record missing direct coverage and
-uncertain impact explicitly. Preserve assertions, timeouts and known failures;
-selection must not conceal a failing check. Documentation-only work uses document,
-link and whitespace checks with a rationale instead of product tests.
+Use focused tests for red–green cycles and diagnosis; these do not replace the
+phase group at the gate. Run direct acceptance-group tests during development
+when needed to verify changed infrastructure, using an explicit marker override.
+Acceptance-group tests become mandatory together at story acceptance.
+
+Record changed modules, public boundaries, applicable acceptance criteria, exact
+commands, selected/deselected counts, outcomes and platform. Preserve assertions,
+timeouts and known failures. Record missing coverage and uncertain impact.
+Documentation-only phases use document, link and whitespace checks with a
+rationale instead of product tests.
 
 Keep locked synchronization, lock consistency, lint, formatting, strict typing,
 CLI version smoke and `git diff --check` at executable phase gates. Record the
 lock hash before and after verification and explain intentional changes.
 
-Defer caller/dependent regressions and the full local suite to milestone
-acceptance. Packaging, dependencies, schemas, security controls and uncertain
-impact do not trigger an earlier full local run. Direct distribution/installation
-tests remain phase checks when they directly test changed modules; the existing
-`milestone_acceptance` test remains reserved for milestone acceptance locally.
-Record each deferral and its owning milestone acceptance task before the gate.
+Record acceptance-group deferrals with the owning story acceptance task.
+Milestone acceptance retains its separate full-suite, artifact, manual and
+platform obligations.
 
 ### Story acceptance
 
-Reuse valid phase evidence. Rerun direct tests when later changes invalidate it;
-renew affected artifact evidence when its inputs change. Reconcile acceptance
-criteria and identify deferred regression coverage without claiming full-suite
-verification. Keep developer approval gates and explicit story acceptance.
-Unresolved required direct tests or known failures remain blockers.
+Run the complete suite against the final story changes:
+
+```sh
+uv run --locked pytest -n 4 --dist=loadgroup -m ""
+```
+
+Both groups must pass, including initialization from both artifact paths.
+Reconcile acceptance criteria and every deferred check; retain shared checks and
+applicable distribution, installation, manual and platform checks. Reuse artifact
+evidence only when inputs are unchanged and the required checks demonstrably ran.
+Renew full-suite evidence after later executable changes and artifact evidence
+when its inputs change. Documentation-only stories use document checks with a
+rationale. Keep developer phase gates and explicit story acceptance. Known
+failures or unresolved required checks block acceptance.
 
 ### Milestone acceptance
 
@@ -210,3 +216,12 @@ After later executable changes, renew full-suite evidence against the final
 milestone implementation; renew artifacts when their inputs change. Document-only
 or approval-record edits require document checks with a rationale.
 
+
+## Scheduling policy revision — 2026-11-02
+
+The developer approved two-group scheduling and complete-suite story acceptance.
+This schedule supersedes direct-tests-only phase selection and deferral of the
+full suite until milestone acceptance in existing plans.
+Preserve historical approvals, evidence and unresolved milestone obligations.
+Shared checks and developer approval gates remain required. At story acceptance,
+renew the complete suite against the final executable changes.

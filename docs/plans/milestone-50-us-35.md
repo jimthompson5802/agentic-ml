@@ -211,3 +211,26 @@ Consumer/child protocol and focused red–green evidence: [Phase 2 report](../ve
 
 Publication/acceptance records change no executable behavior. Reuse the final
 phase evidence; document links and whitespace were checked for the record edits.
+
+## Scope-change record: two-group verification schedule (2026-11-02)
+
+- **Change ID:** TEST-SCHEDULE-2026-11-02.
+- **Request and decision:** Approved by the developer's instruction “Implement
+  the plan,” followed by “continue.” Phase checks cover CLI, initialization,
+  planning and approvals; story acceptance runs the complete suite, including
+  the former milestone-only initialization case.
+- **Scope difference:** Future executable phase gates run the entire phase
+  group; future story acceptance runs both groups. All new Milestone 2–6 tests
+  join the phase group. See the [verification policy](../development/verification.md#phase-and-story-verification).
+- **Impact:** Historical completed tasks, story acceptance and approvals remain
+  valid records. Earlier counts and direct-only selections remain historical
+  evidence, not evidence of the new schedule. No product criterion changes.
+- **Verification ownership:** Existing M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY
+  deferrals remain with their recorded owners until explicitly reconciled;
+  this policy revision neither closes nor transfers them. Future story plans
+  must name their complete-suite acceptance task. The old milestone-only marker
+  is retired, but its test and assertions remain required.
+- **Gates and resume point:** No completed gate reopens solely because scheduling
+  changed. Resume outstanding milestone verification under its existing owner;
+  report final-input evidence before requesting acceptance. No acceptance or
+  publication is authorized by this record.

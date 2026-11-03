@@ -32,7 +32,7 @@ Accept a Markdown plan path supplied by the user. Execute the authorized impleme
 
 At the end of **every implementation phase, including the final one**, save progress and stop. Complete authorized tasks and verification before requesting approval; report incomplete work as blocked or partial rather than declaring the implementation phase complete.
 
-Follow the repository verification policy: local phase gates run only direct tests of modules created or modified in that phase, plus shared non-test checks. At story acceptance reuse valid phase evidence and renew invalidated direct tests. Assign all deferred regressions and full-suite verification to a named milestone acceptance task. CI still runs all tests. Preserve acceptance criteria, known failures and explicit approval gates.
+Before selecting verification, read and follow the repository [phase and story verification policy](../../../docs/development/verification.md#phase-and-story-verification). Record exact commands, group selections, acceptance criteria, results and deferred-check owners in the plan. Preserve historical evidence, known failures and explicit approval gates.
 
 Present the plan link, completed tasks, checks and results, evidence, deviations, blockers, and remaining limitations. Use the plan's existing gate fields and statuses. Record technical completion separately from `developer approval pending`, leaving developer acceptance unchecked or pending until explicitly given.
 

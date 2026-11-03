@@ -15,7 +15,7 @@ from zipfile import ZipFile
 import pytest
 from pytest_workspace_support import owned_workspace
 
-pytestmark = pytest.mark.xdist_group("distribution")
+pytestmark = [pytest.mark.xdist_group("distribution"), pytest.mark.story_acceptance]
 
 ROOT = Path(__file__).resolve().parents[2]
 DRIVER = ROOT / "tests/packaging/verify_distributions.py"
@@ -75,7 +75,6 @@ def test_both_installed_wheel_paths_pass(artifacts: Path, tmp_path: Path) -> Non
     assert (workspace / "source").is_dir()
 
 
-@pytest.mark.milestone_acceptance
 def test_complete_initialization_from_both_artifact_paths(
     artifacts: Path, tmp_path: Path
 ) -> None:

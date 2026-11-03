@@ -23,7 +23,7 @@ flowchart TD
         HRecord --> HDone{All phase tasks complete?}
         HDone -- No --> H
     end
-    HDone -- Yes --> I[Run direct tests and shared checks; record evidence and deferrals]
+    HDone -- Yes --> I[Run phase group and shared checks; record evidence and deferrals]
     I --> J{Phase work and required checks complete?}
     J -- No --> K[Correct within scope; stop for direction after three failed attempts]
     K --> H
@@ -33,7 +33,7 @@ flowchart TD
     M -- Rejected --> N[Record decision and stop progression]
     M -- Approved --> O{More implementation phases?}
     O -- Yes --> G
-    O -- No --> P[Reconcile story criteria and valid verification evidence]
+    O -- No --> P[Run complete suite; reconcile story criteria and evidence]
     P --> Q{Explicit whole-story acceptance?}
     Q -- Pending --> R[Await developer decision]
     R --> Q
@@ -90,7 +90,7 @@ The [verification policy](development/verification.md#phase-and-story-verificati
 
 Shared executable checks cover locked synchronization, lock consistency, lint, formatting, strict typing, CLI version output, and whitespace. Record lock hashes before and after verification. Use the [documented commands](development.md#shared-development-commands). Documentation-only work uses document, link, and whitespace checks with a rationale instead of product tests.
 
-At phase gates, record exact test selectors, changed-module mappings, acceptance criteria, public boundaries, selected/deselected counts, outcomes, and platform limitations. Assign deferred caller regressions and full-suite verification to a named milestone acceptance task. Unresolved required direct tests and known failures remain blockers. [CI](development/ci.md) runs the full suite on PRs and pushes to `main`; hosted success does not replace required local milestone verification.
+At phase gates, record exact test selectors, changed-module mappings, acceptance criteria, public boundaries, selected/deselected counts, outcomes, and platform limitations. Run the entire phase group at each executable phase gate and both groups at user-story acceptance. Assign acceptance-group deferrals to a named story acceptance task; preserve separate milestone verification obligations. Known failures remain blockers. [CI](development/ci.md) runs the full suite on PRs and pushes to `main`; hosted success does not replace required local milestone verification.
 
 Keep reviewed reports in `docs/verification/` and durable raw evidence in `.dev-records/verification/`. Follow the [records policy](development/records.md) for identities, logs, lifetime retention, and backup responsibility. Distinguish macOS evidence from separately verified Linux results and unverified platforms.
 

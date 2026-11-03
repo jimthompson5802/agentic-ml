@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 from pytest_workspace_support import owned_workspace
 
-pytestmark = pytest.mark.xdist_group("installation")
+pytestmark = [pytest.mark.xdist_group("installation"), pytest.mark.story_acceptance]
 
 ROOT = Path(__file__).resolve().parents[2]
 DRIVER = ROOT / "tests/installation/verify_installation.py"

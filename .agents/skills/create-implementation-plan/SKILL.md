@@ -89,9 +89,9 @@ Every implementation phase must end with a developer approval gate, including th
 
 ### Plan verification by impact
 
-Read the working repository's verification policy before choosing phase checks. For this repository, use [phase and story verification](../../../docs/development/verification.md#phase-and-story-verification). New plans must specify selected test commands, changed modules and direct behavior, acceptance-criterion coverage, confirmed public boundaries, and caller regressions deferred to a named milestone acceptance task. Keep local phase checks limited to direct tests of changed modules. Preserve stronger requirements in an existing approved plan unless an explicit revision is authorized and recorded through the scope-change procedure.
+Read the working repository's verification policy before choosing phase checks. For this repository, use [phase and story verification](../../../docs/development/verification.md#phase-and-story-verification). New plans must specify the complete phase-group command at phase gates, the complete-suite command at story acceptance, changed modules and public behavior, acceptance-criterion coverage, confirmed public boundaries, and acceptance-group checks deferred to a named story acceptance task. Preserve separate milestone verification obligations. Preserve stronger requirements in an existing approved plan unless an explicit revision is authorized and recorded through the scope-change procedure.
 
-Follow the repository verification policy: local phase gates run only direct tests of modules created or modified in that phase, plus shared non-test checks. At story acceptance reuse valid phase evidence and renew invalidated direct tests. Assign all deferred regressions and full-suite verification to a named milestone acceptance task. CI still runs all tests. Preserve acceptance criteria, known failures and explicit approval gates.
+Before selecting verification, read and follow the repository [phase and story verification policy](../../../docs/development/verification.md#phase-and-story-verification). Record exact commands, group selections, acceptance criteria, results and deferred-check owners in the plan. Preserve historical evidence, known failures and explicit approval gates.
 
 ## Define granular tasks
 

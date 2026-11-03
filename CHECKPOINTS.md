@@ -1,24 +1,56 @@
 # Development Checkpoints
 
-Last updated: 2026-11-02 (America/New_York)
+Last updated: 2026-11-03 (UTC)
+
+## Requested three-test rerun — 2026-11-03
+
+On `main`, the developer requested renewal of the three timeout failures from
+the supplied Linux full-suite output. Ran `uv run --locked pytest -n 4
+--dist=loadgroup -m ""` with the explicit selectors
+`test_failed_installed_probe_retains_available_environment`,
+`test_missing_planning_schema_fails_installed_inventory`, and
+`test_rebuilt_probe_failure_retains_both_environments` in their integration
+modules. All three passed in 54.64s on Linux / Python 3.12.16; exit 0.
+JUnit output: `/tmp/agentic-ml-three-retry.xml`. No test code, assertions or
+timeouts changed. This selected rerun does not establish a passing complete
+suite or explain the earlier timeouts. Existing uncommitted scheduling,
+development guidance, test and devcontainer changes remain; this rerun adds
+only this checkpoint entry. Next action: developer direction; milestone
+verification obligations below remain open.
 
 ## Current position and next action
 
-Current checkout is `main`. Added the requested
-[development workflow summary and Mermaid diagram](docs/development-workflow.md).
-Expanded the implementation section and diagram with the red, green, refactoring,
-evidence-recording and repeat steps, including the documentation-only path.
-Named the behavior-change loop as closed-loop agentic TDD in the description and
-diagram, explaining its feedback and autonomy boundaries.
-This documentation task changes that file and `CHECKPOINTS.md`; the pre-existing
-`.devcontainer/devcontainer.json` modification is unrelated and remains untouched.
-Relative document links and whitespace checks passed. TDD and product tests do
-not apply because this change adds no executable behavior. Mermaid rendering was
-not verified. No tests are running from this session.
+2026-11-03 publication decision: the developer accepted the current changes
+after supplying a completed Linux run (394 passed, three 120-second timeouts
+in 581.14s) and observing all three selected retries pass in 54.64s.
+They explicitly authorized committing and pushing all pending changes, including
+the recorded devcontainer follow-up. This supersedes the pending-direction and
+no-publication statements below. No single all-passing complete suite or resolved
+timeout cause is claimed. Existing milestone obligations remain open. Publication
+is in progress; see the scheduling report for the final verification record.
 
-**Next action:** await developer direction on subsequent work.
-No next-story implementation is authorized. No completed-story
-implementation gates remain pending.
+Current checkout is `main`. Completed the developer-requested test scheduling
+change: 289 phase cases and 108 acceptance cases (397 total). Default collection
+selects CLI, initialization, planning and approval tests; other tests carry
+`story_acceptance`. New tests default to phase; new Milestone 2–6 tests must stay
+there. Story acceptance runs both groups, including the former milestone-only
+initialization case. CI remains all-tests. Policy, template, workflow, skills
+and owning historical plans have been reconciled; approvals remain intact.
+
+Verification: five scheduling regressions and all shared checks passed. The full
+macOS run finished with 394 passes and three failures. The isolated host renewal
+completed one pass before developer-requested interruption; the two outstanding
+distribution cases then passed in devcontainer aa2f61daec0c (Linux/Python 3.12.16),
+2 passed in 150.59s. No single all-passing full suite is claimed; macOS timeout
+causes remain unresolved. Lock checksum unchanged. See [evidence](docs/verification/test-scheduling-groups.md)
+and retained `.dev-records/verification/20261102-test-schedule/` logs/XML.
+
+**Next action:** developer direction. The complete-suite devcontainer invocation
+was stopped at the developer's request (exit 130). The interrupted run recorded 93 passes and 8 errors (101 reported cases),
+leaving 296 cases incomplete; this is not a completed suite. Logs are retained in `logs/devcontainer-full-suite.log`. Do not
+restart tests without direction. Scheduling changes remain uncommitted; existing
+milestone verification obligations remain open. No publication requested.
+
 
 Milestone 0 is accepted. Milestone 1 is in progress; US-01–US-03 are accepted
 and merged. Milestone 50 tracks ongoing technical environment improvements;
@@ -111,3 +143,39 @@ substitute historical story checks for current or milestone verification.
   Preserve failure evidence and attempt counts in linked records.
 - Commit checkpoint updates alongside their work when authorized. Keep credentials
   and sensitive environment details outside this file.
+
+## Pre-existing development container follow-up
+
+Current checkout is `main`. Updated `.devcontainer/devcontainer.json` so
+`postCreateCommand` copies host Codex config, skills and rules from read-only
+staging mounts into the persistent container Codex directory. Matching files are
+overwritten; container-only files are retained. Ordinary restarts do not copy.
+The pre-existing devcontainer edits were incorporated and their missing comma fixed.
+
+Verification: a Python standard-library fixture probe parsed the JSON, ran
+`bash -n -c` on the complete creation command, and executed its copy prefix
+against temporary directories twice. Config replacement, nested/hidden files,
+updated host contents and retained container-only files passed.
+`git diff --check` passed. Container creation/restart and Linux copy behavior
+remain unverified; verification ran on macOS. No harness Python behavior changed,
+so harness TDD and product checks do not apply to this environment configuration
+change. Working-tree changes are the devcontainer configuration and this checkpoint.
+
+Follow-up refactor: moved the same sequential creation steps into
+`.devcontainer/post-create.sh`, invoked with Bash by `postCreateCommand`.
+The script stops on errors. JSON parsing, script-reference validation,
+`bash -n .devcontainer/post-create.sh` and `git diff --check` passed.
+This preserves behavior, so no new TDD cycle applies. The additional working-tree
+file is `.devcontainer/post-create.sh`; container lifecycle remains unverified.
+
+Container diagnosis follow-up: VS Code rebuild and reload did not invoke the
+lifecycle script in the supplied logs. Direct invocation of the installed
+Dev Containers CLI 0.89.0 `run-user-commands` against container `aa2f61daec0c`
+ran `postCreateCommand`, installed Codex and completed locked uv sync with
+`{"outcome":"success","result":"done"}`. This verifies the lifecycle runner
+and script together, but does not resolve why VS Code omitted the handoff.
+A host extension PendingMigrationError was observed; causality is unproven.
+No corrective repository change was made during this diagnosis.
+
+Container follow-up remains: investigate the VS Code extension lifecycle handoff
+on the next rebuild; automatic creation setup is not established. No publication performed.

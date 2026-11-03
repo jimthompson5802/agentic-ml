@@ -11,6 +11,9 @@ from pytest_workspace_support import owned_workspace
 ROOT = Path(__file__).resolve().parents[2]
 
 
+pytestmark = pytest.mark.story_acceptance
+
+
 def support() -> ModuleType:
     """Load contributor support explicitly without changing product import paths."""
     spec = importlib.util.spec_from_file_location(

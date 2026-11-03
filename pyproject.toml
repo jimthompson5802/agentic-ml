@@ -41,10 +41,10 @@ packages = ["src/agentic_ml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--strict-config --strict-markers -m 'not milestone_acceptance'"
+addopts = "--strict-config --strict-markers -m phase"
 tmp_path_retention_count = 1
 tmp_path_retention_policy = "failed"
-markers = ["milestone_acceptance: expensive verification required for final milestone acceptance locally and every CI run"]
+markers = ["phase: run at every implementation phase gate", "story_acceptance: run with the complete suite at every story acceptance"]
 
 [tool.ruff]
 target-version = "py312"

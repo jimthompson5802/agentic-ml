@@ -56,7 +56,7 @@ For documentation-only changes or refactoring that preserves behavior, use appro
 
 ## Verification during implementation
 
-Before planning verification, conducting TDD, running tests, or preparing an approval gate, read and follow the [phase and story verification policy](docs/development/verification.md#phase-and-story-verification). Preserve existing approvals and historical evidence; this pointer does not change their requirements.
+Before planning verification, conducting TDD, running tests, or preparing an approval gate, read and follow the [phase and story verification policy](docs/development/verification.md#phase-and-story-verification). Run the complete phase group at every executable phase gate and the complete suite at every user-story acceptance. All new Milestone 2–6 tests belong to the phase group. Preserve historical approvals and evidence; record revisions to unfinished verification obligations in their owning plans.
 
 ## Problem-solving attempt limit
 
