@@ -20,6 +20,20 @@ verification obligations below remain open.
 
 ## Current position and next action
 
+2026-11-03 container security follow-up: current checkout is `main`.
+The latest `.devcontainer/devcontainer.json` change adds top-level `runArgs`
+with `--security-opt=seccomp=unconfined`; the AppArmor option remains commented
+out and is inactive. The file uses JSON with comments. In the current Linux
+container, a sandboxed `pwd` command succeeded (exit 0) and returned
+`/workspaces/agentic-ml`. This verifies basic sandbox command execution;
+container rebuild behavior and broader sandbox operations remain unverified.
+This configuration-only change does not require harness TDD. Pending changes:
+the devcontainer configuration and this checkpoint. The developer authorized
+committing and pushing this follow-up on 2026-11-03; `git diff --check` passed
+before publication. Next action: publish the authorized commit, then await
+developer direction. Existing milestone verification obligations remain open.
+Earlier publication and verification records below describe prior work.
+
 2026-11-03 publication decision: the developer accepted the current changes
 after supplying a completed Linux run (394 passed, three 120-second timeouts
 in 581.14s) and observing all three selected retries pass in 54.64s.

@@ -8,6 +8,11 @@
 
   "remoteUser": "vscode",
 
+  "runArgs": [
+    "--security-opt=seccomp=unconfined"
+    // "--security-opt=apparmor=unconfined"
+  ],
+
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "version": "24"
