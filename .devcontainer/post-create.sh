@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Configure commit attribution for the container user.
+git config --global user.name 'Jim Thompson'
+git config --global user.email 'jimthompson5802@gmail.com'
+
 # Seed the persistent Codex home while preserving container-only files.
 mkdir -p /home/vscode/.codex/skills /home/vscode/.codex/rules
 cp /tmp/host-codex/config.toml /home/vscode/.codex/config.toml

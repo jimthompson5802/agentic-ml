@@ -20,6 +20,30 @@ verification obligations below remain open.
 
 ## Current position and next action
 
+2026-11-03 container commit-signing diagnosis: recent commits `1024918`,
+`bc8ed5d` and `e52b800` have no signatures (`git log` reports `N`). Container
+Git configuration has author identity but no `commit.gpgsign` or
+`user.signingkey`. Earlier commit `2100c74` contains a GPG signature using
+fingerprint `062B6663BE256CD6C7BCD421514503114FA7366E`. Container GPG home
+contains an agent socket but no public keyring; local verification cannot
+check that earlier signature. Signing through the host agent has not been
+verified. Next action for this follow-up: configure signing and make the host
+public key available before validating a signed temporary commit. No signing
+configuration, commits or remote history changed. Pre-existing script and
+checkpoint edits remain. This diagnosis changes no executable harness behavior;
+TDD and harness tests do not apply.
+
+2026-11-03 Git identity follow-up: updated `.devcontainer/post-create.sh` at
+the developer's request to set container-user global Git identity to
+`Jim Thompson <jimthompson5802@gmail.com>` during creation. Shell syntax,
+an isolated temporary Git-config probe of the exact added commands, and
+`git diff --check` passed. The probe confirmed both identity values and
+repeat execution. Full container creation remains unverified. This is
+environment setup with no new harness behavior, so harness TDD does not apply.
+Pending changes are the script and this checkpoint; no publication requested
+for this follow-up. Next action: developer review or container recreation to
+apply the setup. Existing milestone verification obligations remain open.
+
 2026-11-03 container security follow-up: current checkout is `main`.
 The latest `.devcontainer/devcontainer.json` change adds top-level `runArgs`
 with `--security-opt=seccomp=unconfined`; the AppArmor option remains commented
@@ -30,8 +54,8 @@ container rebuild behavior and broader sandbox operations remain unverified.
 This configuration-only change does not require harness TDD. Pending changes:
 the devcontainer configuration and this checkpoint. The developer authorized
 committing and pushing this follow-up on 2026-11-03; `git diff --check` passed
-before publication. Next action: publish the authorized commit, then await
-developer direction. Existing milestone verification obligations remain open.
+before publication. Published as `1024918` to `origin/main`; the working tree
+was clean afterward. Existing milestone verification obligations remain open.
 Earlier publication and verification records below describe prior work.
 
 2026-11-03 publication decision: the developer accepted the current changes
