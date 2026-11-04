@@ -6,7 +6,7 @@ FROM mcr.microsoft.com/devcontainers/python:3.12-bookworm
 
 # Install core utilities, including sleep
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends coreutils \
+    && apt-get install -y --no-install-recommends coreutils gnupg2\
     && rm -rf /var/lib/apt/lists/*
 
 

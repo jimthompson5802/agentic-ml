@@ -1,6 +1,28 @@
 # Development Checkpoints
 
-Last updated: 2026-11-03 (UTC)
+Last updated: 2026-11-04 (UTC)
+
+## Devcontainer setup commit — 2026-11-04
+
+The developer authorized committing `.devcontainer/Dockerfile` and
+`.devcontainer/post-create.sh`, together with this checkpoint. Changes add
+`gnupg2` to the container utilities and the Codex terminal reminder below.
+Linux verification: `bash -n .devcontainer/post-create.sh` and
+`git diff --check` passed. Container build and creation remain unverified.
+No harness behavior changes; harness TDD and product tests do not apply.
+Next action: commit these changes locally; no push requested. Existing milestone
+obligations remain open. This supersedes the reminder's pending-review status.
+
+## Devcontainer Codex reminder — 2026-11-03
+
+On `main`, added the developer-requested echo as the final command in
+`.devcontainer/post-create.sh`: start Codex with `codex --no-alt-screen`
+for terminal scrollback and copying text. Shell syntax (`bash -n`), isolated
+execution of the final echo, and `git diff --check` passed on macOS.
+Full container creation was not run. This informational setup message changes
+no harness behavior, so harness TDD and product tests do not apply.
+Working-tree changes are the script and this checkpoint; no publication requested.
+Next action: developer review. Existing milestone obligations remain open.
 
 ## Workflow diagram update — 2026-11-03
 

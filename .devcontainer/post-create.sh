@@ -13,3 +13,5 @@ cp -R /tmp/host-codex/rules/. /home/vscode/.codex/rules/
 
 bash -lc 'source /usr/local/share/nvm/nvm.sh && nvm use default && npm install -g @openai/codex'
 uv sync --locked
+
+echo 'Start Codex with: codex --no-alt-screen (for terminal scrollback and copying text).'
