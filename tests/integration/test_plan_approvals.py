@@ -10,6 +10,8 @@ from test_planning import planning_project as planning_project
 
 from agentic_ml.planning import ResolveRequest, resolve_plan, verify_plan
 
+pytestmark = pytest.mark.milestone_1
+
 
 def test_delegated_cost_cannot_hide_a_missing_currency(planning_project: Path) -> None:
     """AC-04: a complete cost proposal must obey the explicit pair contract."""

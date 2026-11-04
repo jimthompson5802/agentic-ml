@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SUPPORT = ROOT / "tests/pytest_workspace_support.py"
 
 
-pytestmark = pytest.mark.story_acceptance
+pytestmark = pytest.mark.milestone_50
 
 
 def workspace_measurement(path: Path) -> dict[str, int]:

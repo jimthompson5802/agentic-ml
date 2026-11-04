@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 from pytest_workspace_support import owned_workspace
 
-pytestmark = [pytest.mark.xdist_group("installation"), pytest.mark.story_acceptance]
+pytestmark = pytest.mark.xdist_group("installation")
 
 ROOT = Path(__file__).resolve().parents[2]
 DRIVER = ROOT / "tests/installation/verify_installation.py"
@@ -49,6 +49,8 @@ def source_repository(
     return source.as_uri(), revision
 
 
+@pytest.mark.milestone_1
+@pytest.mark.milestone_50
 def test_pinned_project_runs_without_checkout_or_cache(
     source_repository: tuple[str, str], tmp_path: Path
 ) -> None:
@@ -153,6 +155,7 @@ def probe_project(
     )
 
 
+@pytest.mark.milestone_1
 def test_wrong_revision_is_rejected(installed_project: tuple[Path, str, str]) -> None:
     """A successful install cannot count as the independently expected revision."""
     project, repository, _ = installed_project
@@ -161,7 +164,13 @@ def test_wrong_revision_is_rejected(installed_project: tuple[Path, str, str]) ->
     assert "revision mismatch" in result.stderr
 
 
-@pytest.mark.parametrize("probe", ["project", "wheel"])
+@pytest.mark.parametrize(
+    "probe",
+    [
+        pytest.param("project", marks=pytest.mark.milestone_1),
+        pytest.param("wheel", marks=pytest.mark.milestone_0),
+    ],
+)
 @pytest.mark.parametrize(
     "scenario,diagnostic",
     [
@@ -272,6 +281,7 @@ def test_dependency_inventory_uses_active_runtime_requirements(
             shutil.rmtree(synthetic)
 
 
+@pytest.mark.milestone_1
 @pytest.mark.parametrize(
     "scenario", ["missing", "incompatible", "unexpected", "injected"]
 )
@@ -324,6 +334,7 @@ def test_runtime_lock_matches_dependency_graph(
         lock.write_bytes(original)
 
 
+@pytest.mark.milestone_1
 def test_missing_template_is_rejected(installed_project: tuple[Path, str, str]) -> None:
     """Installed imports alone do not establish that packaged templates exist."""
     project, repository, revision = installed_project
@@ -339,6 +350,7 @@ def test_missing_template_is_rejected(installed_project: tuple[Path, str, str]) 
         template.write_bytes(content)
 
 
+@pytest.mark.milestone_1
 def test_altered_guidance_is_rejected(installed_project: tuple[Path, str, str]) -> None:
     """Installed runtime guidance must match independently specified contents."""
     project, repository, revision = installed_project
@@ -357,6 +369,7 @@ def test_altered_guidance_is_rejected(installed_project: tuple[Path, str, str]) 
         guidance.write_bytes(content)
 
 
+@pytest.mark.milestone_1
 def test_missing_metadata_is_rejected(installed_project: tuple[Path, str, str]) -> None:
     """A package directory cannot substitute for installed distribution metadata."""
     project, repository, revision = installed_project
@@ -372,6 +385,7 @@ def test_missing_metadata_is_rejected(installed_project: tuple[Path, str, str]) 
         hidden.rename(metadata)
 
 
+@pytest.mark.milestone_1
 def test_locked_revision_mismatch_is_rejected(
     installed_project: tuple[Path, str, str],
 ) -> None:
@@ -388,6 +402,7 @@ def test_locked_revision_mismatch_is_rejected(
         lock.write_bytes(original)
 
 
+@pytest.mark.milestone_1
 def test_unknown_commit_fails_at_install(
     source_repository: tuple[str, str], tmp_path: Path
 ) -> None:
@@ -428,6 +443,7 @@ def test_unknown_commit_fails_at_install(
     assert "PASS pinned installation" not in result.stdout
 
 
+@pytest.mark.milestone_1
 def test_stale_lock_is_rejected_without_rewrite(
     installed_project: tuple[Path, str, str],
 ) -> None:
@@ -455,6 +471,7 @@ def test_stale_lock_is_rejected_without_rewrite(
         declaration.write_bytes(original)
 
 
+@pytest.mark.milestone_1
 def test_source_mapping_without_dependency_is_rejected(
     installed_project: tuple[Path, str, str],
 ) -> None:
@@ -471,6 +488,7 @@ def test_source_mapping_without_dependency_is_rejected(
         declaration.write_bytes(original)
 
 
+@pytest.mark.milestone_1
 def test_locked_sync_preserves_environment_identity(
     source_repository: tuple[str, str], tmp_path: Path
 ) -> None:
@@ -507,6 +525,7 @@ def test_locked_sync_preserves_environment_identity(
     assert "PASS stable synchronization" in result.stdout
 
 
+@pytest.mark.milestone_1
 def test_explicit_upgrade_changes_pin_lock_and_identity(
     source_repository: tuple[str, str], tmp_path: Path
 ) -> None:
@@ -576,6 +595,7 @@ def test_explicit_upgrade_changes_pin_lock_and_identity(
     assert "PASS explicit upgrade" in result.stdout
 
 
+@pytest.mark.milestone_1
 def test_retained_old_install_cannot_pass_as_upgrade(
     installed_project: tuple[Path, str, str],
 ) -> None:
@@ -599,6 +619,7 @@ def test_retained_old_install_cannot_pass_as_upgrade(
         lock.write_bytes(original_lock)
 
 
+@pytest.mark.milestone_50
 @pytest.mark.skip(
     reason="Temporarily skipped at developer request pending diagnosis of 120s timeouts."
 )

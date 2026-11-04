@@ -6,7 +6,7 @@ Replace placeholders with concrete work. Repeat the implementation phase block a
 
 During execution, complete the current implementation phase's tasks and verification, present review evidence, and pause for explicit developer approval before progressing. Record requested changes within that implementation phase. Plan approval and implementation gate decisions are separate; an approved plan leaves its implementation gates awaiting review. Record approvals only when explicitly given by the developer, with a reference to the decision.
 
-For new plans, follow the [phase and story verification policy](../development/verification.md#phase-and-story-verification). Run the entire phase group at every executable phase gate. Run both groups as the complete suite at story acceptance. Assign acceptance-group deferrals to the story acceptance task; preserve separate milestone obligations and revise unfinished approved plans explicitly. Adjust relative links for the saved plan.
+For new plans, follow the [phase and story verification policy](../development/verification.md#phase-and-story-verification). Run the current milestone at every executable phase gate. Run M1–6 at every story acceptance. Broader local pytest runs and standalone artifact verification require an explicit developer command. Assign excluded coverage to the story acceptance task; preserve separate milestone obligations and revise unfinished approved plans explicitly. Adjust relative links for the saved plan.
 
 ---
 
@@ -68,17 +68,17 @@ Use `Not started` initially and `Complete` only after the work and required veri
 
 ### Verification and review evidence
 
-- **Selected tests and impact rationale:** <complete phase-group command, focused checks and selectors; changed modules, public behavior and criterion IDs>
+- **Selected tests and impact rationale:** <current-milestone command, focused checks and selectors; changed modules, public behavior and criterion IDs>
 - **Public boundaries and limits:** <interfaces, coverage gaps, and developer confirmation reference; reuse applicable confirmed boundaries>
-- **Deferred checks:** <acceptance-group checks and owning story acceptance task; separate milestone/manual/platform obligations; None if none>
-- **Acceptance schedule:** <complete suite at story acceptance; focused acceptance-group checks during development as needed>
+- **Deferred checks:** <excluded checks and owning story acceptance task; separate milestone/manual/platform obligations; None if none>
+- **Acceptance schedule:** <M1–6 selection at story acceptance; other local selections only on explicit developer command>
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
 | <behavior or requirement to verify> | <appropriate test, demonstration, or inspection> | <checkable success condition> | Pending |
 | Shared development checks (executable phases) | <locked sync/lock, lint/format/types/version and whitespace commands from development guide> | Pass; lock identity preserved or intentional change explained | Pending |
 
-Record actual selected/deselected test counts and limitations. Tests required by this phase are not deferred because they are slow. Run the entire phase group at phase gates; run the complete suite at story acceptance. For documentation/design-only phases, name the appropriate document checks and explain why executable checks are inapplicable.
+Record actual selected/deselected test counts and limitations. Tests required by this phase are not deferred because they are slow. Run the current milestone at phase gates; run the M1–6 selection at story acceptance. For documentation/design-only phases, name the appropriate document checks and explain why executable checks are inapplicable.
 
 ### Developer approval gate
 
@@ -96,10 +96,10 @@ Assign this work to a named task in the last implementation phase above; this se
 
 - **Owning final phase/task:** <identifier; required before presenting the final phase gate>
 - **Final implementation identity:** <tested revision, working-tree changes and lock hash>
-- **Complete suite and shared checks:** <run both groups against final story changes; record counts and outcomes; for a documentation-only story, explain inapplicability and list document checks>
-- **Distribution/installation and other required checks:** <direct and sdist-rebuilt wheels, installed public interfaces, manual/platform checks as applicable; justify inapplicable checks>
+- **M1–6 and shared checks:** <run M1–6 against final story changes; record counts and outcomes; for a documentation-only story, explain inapplicability and list document checks>
+- **Distribution/installation and other required checks:** <standalone artifacts or broader local tests only on explicit developer command; identify selected tests that invoke artifact drivers and manual/platform limits>
 - **Deferred-check reconciliation:** <every deferred check and actual result/evidence; remain Pending until verified>
-- **Evidence renewal:** <renew full-suite evidence after executable changes; renew artifacts when inputs change; document-only edits use document checks>
+- **Evidence renewal:** <renew M1–6 evidence after executable changes; renew explicitly requested artifact evidence when inputs change; document-only edits use document checks>
 - **Actual results and limitations:** Pending — <commands, counts, outcomes, evidence, platform and uncovered scope>
 
 ## Story completion review

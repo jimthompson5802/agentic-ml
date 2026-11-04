@@ -6,6 +6,10 @@ import sys
 from importlib.metadata import distribution
 from pathlib import Path
 
+import pytest
+
+pytestmark = pytest.mark.milestone_0
+
 
 def test_version_reports_installed_distribution_version(tmp_path: Path) -> None:
     """The version command exits successfully and prints installed metadata."""

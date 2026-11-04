@@ -12,6 +12,9 @@ from pytest_workspace_support import owned_workspace
 ROOT = Path(__file__).resolve().parents[2]
 
 
+pytestmark = pytest.mark.milestone_1
+
+
 def run(command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
     """Run a public command without inheriting harness environment overrides."""
     env = dict(os.environ)

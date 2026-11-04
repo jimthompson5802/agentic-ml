@@ -1,4 +1,4 @@
-"""Load contributor workspace support and assign verification schedules."""
+"""Load contributor workspace support and validate test classification."""
 
 import pytest
 
@@ -6,11 +6,16 @@ pytest_plugins = ["pytest_workspace_support"]
 
 
 def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
-    """Assign new tests to phase checks and reject ambiguous schedules."""
-    for item in items:
-        phase = item.get_closest_marker("phase") is not None
-        acceptance = item.get_closest_marker("story_acceptance") is not None
-        if phase and acceptance:
-            raise pytest.UsageError(f"Conflicting verification groups: {item.nodeid}")
-        if not acceptance:
-            item.add_marker(pytest.mark.phase)
+    """Require explicit milestone or infrastructure classification before selection."""
+    classifications = {f"milestone_{n}" for n in (0, 1, 2, 3, 4, 5, 6, 50, 99)}
+    classifications.add("infrastructure")
+    missing = [
+        item.nodeid
+        for item in items
+        if not any(mark.name in classifications for mark in item.iter_markers())
+    ]
+    if missing:
+        raise pytest.UsageError(
+            "Missing test classification; add milestone_N or infrastructure markers:\n"
+            + "\n".join(missing)
+        )

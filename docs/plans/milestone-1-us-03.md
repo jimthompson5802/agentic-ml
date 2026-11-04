@@ -508,3 +508,23 @@ Follow the [scope-change procedure](../../.agents/skills/manage-plan-scope/SKILL
   changed. Resume outstanding milestone verification under its existing owner;
   report final-input evidence before requesting acceptance. No acceptance or
   publication is authorized by this record.
+
+## Scope-change record: milestone test selection (2026-11-04)
+
+- **Change ID:** TEST-MILESTONES-2026-11-04.
+- **Decision:** Approved scope revision by the developer's supplied “Stratify
+  tests by milestone” implementation request on 2026-11-04.
+- **Scope difference:** Current milestone only at phase gates; M1–6 at every
+  story acceptance. Broader local pytest selections and standalone artifact
+  drivers require an explicit developer command, including milestone acceptance.
+  CI retains its complete suite and artifact verification.
+- **Impact and ownership:** Supersedes unfinished automatic full-suite/artifact
+  requirements above. M1-ACCEPT-VERIFY and M50-ACCEPT-VERIFY keep their existing
+  owners for reconciliation of excluded coverage, known failures, reserved tests,
+  and manual/platform limitations. This change neither resolves nor verifies them.
+- **Evidence and gates:** Preserve completed evidence, approvals, failed attempts
+  and temporary skips. Shared checks, TDD and explicit developer gates remain.
+  No product criterion or historical acceptance changes. See the
+  [effective policy](../development/verification.md#phase-and-story-verification).
+- **Resume point:** Await explicit commands for broader local verification;
+  no publication or milestone acceptance is authorized.
