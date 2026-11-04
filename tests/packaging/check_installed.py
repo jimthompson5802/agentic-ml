@@ -78,6 +78,31 @@ def check_planning_resources() -> None:
     """Verify independently specified public planning schema inventory."""
     import jsonschema
 
+    from agentic_ml.validation import validate_registry
+
+    validation = files("agentic_ml").joinpath("schemas/validation/1.0")
+    assert validation.is_dir() and {entry.name for entry in validation.iterdir()} == {
+        "registry.json",
+        "configuration.json",
+        "candidate.json",
+        "manifest.json",
+        "result.json",
+    }, "validation resource missing"
+    for entry in validation.iterdir():
+        jsonschema.Draft202012Validator.check_schema(json.loads(entry.read_bytes()))
+    registry = validate_registry()
+    assert registry.status == "valid" and registry.registry is not None
+    algorithms = registry.registry["algorithms"]
+    assert isinstance(algorithms, list)
+    identifiers = set()
+    for item in algorithms:
+        assert isinstance(item, dict)
+        identifiers.add(item["id"])
+    assert identifiers == {
+        "dummy_classifier",
+        "dummy_regressor",
+    }
+
     from agentic_ml.approvals import (
         ApprovalRequest,
         RevocationRequest,

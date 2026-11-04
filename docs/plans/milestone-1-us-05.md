@@ -39,7 +39,7 @@ Accepted US-03-SC-01 unauthenticated experiment approval semantics remain applic
 ## Plan review
 
 - **Status:** Approved.
-- **Developer decision:** Plan approved; IP1/IP2 subsequently approved; IP3 gate remains pending.
+- **Developer decision:** Plan approved; IP1/IP2/IP3 subsequently approved; whole story accepted on 2026-11-04.
 - **Decision reference and date:** Developer message “i approve plan, commit”, 2026-11-04.
 - **Requested plan changes:** None recorded.
 - Plan approval confirms the proposed investigation scope. IP1 must produce and obtain approval of the concrete public test boundaries before executable tests are written.
@@ -58,6 +58,19 @@ skip, 218.29s; all shared checks passed and lock unchanged. See the
 [IP2 report](../verification/us-05-ip2.md) and retained JUnit records. IP2 approved by developer “i approve ip2; commit; do not strt ip3 yet”,
 2026-11-04. Local commit authorized; IP3 progression explicitly withheld and story
 acceptance remains pending.
+
+## IP3 execution record
+
+Authorized by developer “start ip3”, 2026-11-04, superseding the prior
+IP3 hold. Baseline clean `US-05-configuration-validation` at `3eefd55`.
+Refreshed issue #11 metadata, full body and all comment pages: zero comments,
+stable `updated_at=2026-10-30T02:06:23Z`; no changed scope. Approved D7 public
+boundaries remain applicable. Installed probe and documentation work are in
+progress; final M1 and M1–6 passed (each 371 passed, one existing skip); final developer gate approved by “i approve ip3”, 2026-11-04; whole-story acceptance remains pending.
+Evidence: [IP3 report](../verification/us-05-ip3.md).
+Developer-requested acceptance rerun subsequently stopped at developer request
+“stop the tests”, exit 130; incomplete, no replacement result. Earlier completed
+acceptance evidence remains applicable. Do not restart without direction.
 
 ## Scope-change history
 
@@ -162,9 +175,9 @@ T1–T4 describe outcomes, not a license to batch test writing. Complete each be
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-05-IP3-T1 | Not started | Extend `tests/installation/check_planning.py`, `verify_planning.py`, `tests/packaging/check_installed.py` and `tests/integration/test_distribution_verification.py` as needed; add focused installed probe cases through TDD | IP2 approval | Direct wheel and wheel rebuilt from sdist independently expose validation API/CLI/resources outside checkout with declared runtime dependencies; separate project/custom helper verifies valid and invalid tasks, types, combinations, defaults, bounds and stale evidence; no source imports or development dependencies; preserve identity, retention and group isolation | AC-01–05 |
-| US-05-IP3-T2 | Not started | Update `README.md`, `docs/development/distribution.md` and applicable public usage docs; record API/runner handoff in proposed `docs/verification/us-05-ip3.md` | T1 | Reproducible configuration/candidate validation examples, supported registry inventory and versions, diagnostics, default evidence and no-authority semantics; explicitly state future submission revalidation and unrestricted-kernel limits | AC-01–05 |
-| US-05-IP3-T3 | Not started | Run final M1 gate and M1–6 acceptance/shared checks; reconcile criteria, all phase deferrals, temporary skips, final tested identity and checkpoint | T1/T2 | Final results and known limitations recorded; no skipped test treated as passing; both artifact paths evidenced through selected integration test; final gate ready | AC-01–05 |
+| US-05-IP3-T1 | Complete | Extend `tests/installation/check_planning.py`, `verify_planning.py`, `tests/packaging/check_installed.py` and `tests/integration/test_distribution_verification.py` as needed; add focused installed probe cases through TDD | IP2 approval | Direct wheel and wheel rebuilt from sdist independently expose validation API/CLI/resources outside checkout with declared runtime dependencies; separate project/custom helper verifies valid and invalid tasks, types, combinations, defaults, bounds and stale evidence; no source imports or development dependencies; preserve identity, retention and group isolation | AC-01–05 |
+| US-05-IP3-T2 | Complete | Update `README.md`, `docs/development/distribution.md` and applicable public usage docs; record API/runner handoff in proposed `docs/verification/us-05-ip3.md` | T1 | Reproducible configuration/candidate validation examples, supported registry inventory and versions, diagnostics, default evidence and no-authority semantics; explicitly state future submission revalidation and unrestricted-kernel limits | AC-01–05 |
+| US-05-IP3-T3 | Complete | Run final M1 gate and M1–6 acceptance/shared checks; reconcile criteria, all phase deferrals, temporary skips, final tested identity and checkpoint | T1/T2 | Final results and known limitations recorded; no skipped test treated as passing; both artifact paths evidenced through selected integration test; final gate ready | AC-01–05 |
 
 ### Verification and review evidence
 
@@ -175,20 +188,20 @@ T1–T4 describe outcomes, not a license to batch test writing. Complete each be
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Installed validation | Extended M1 `test_planning_from_both_artifact_paths` via M1 selection; independent probe expectations | Both installed paths pass all required success/failure cases with real identities | Pending |
-| M1 gate | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Passing selected cases, documented skips and counts | Pending |
-| M1–6 story acceptance | `uv run --locked pytest -n 4 --dist=loadgroup` | Passing final selected cases, deferred coverage reconciled | Pending |
-| Shared checks and docs | Commands below, relative-link/anchor and example review | Pass; final lock and working-tree identity recorded | Pending |
+| Installed validation | Extended M1 `test_planning_from_both_artifact_paths` via M1 selection; independent probe expectations | Both installed paths pass all required success/failure cases with real identities | Passed — [IP3 report](../verification/us-05-ip3.md), M1 installed probe records |
+| M1 gate | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Passing selected cases, documented skips and counts | Passed — 371 passed, one existing skip; 372/474 selected, 102 deselected; 234.20s |
+| M1–6 story acceptance | `uv run --locked pytest -n 4 --dist=loadgroup` | Passing final selected cases, deferred coverage reconciled | Passed — 371 passed, one existing skip in 226.43s; 372/474 selected, 102 deselected; [IP3 report](../verification/us-05-ip3.md) |
+| Shared checks and docs | Commands below, relative-link/anchor and example review | Pass; final lock and working-tree identity recorded | Passed — shared checks, document links, unchanged lock and final probe hashes in [IP3 report](../verification/us-05-ip3.md) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete; all in-scope criteria have evidence, installed checks cover both artifacts, final M1/M1–6/shared checks pass and limitations are explicit.
-- **Evidence presented:** Pending — IP3 report, final implementation identity, criterion matrix and checkpoint.
+- **Evidence presented:** [IP3 report](../verification/us-05-ip3.md), final probe/test identities, criterion matrix and checkpoint. T1–T3 technically complete; M1 and M1–6 each 371 passed/one existing skip; shared checks pass. Developer approved IP3 on 2026-11-04.
 - **Remaining limitations or blocked work:** Future training/kernel enforcement and independent milestone acceptance remain separate; platform limits and historical skips explicitly retained.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer “i approve ip3”, 2026-11-04.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Stop for final developer approval. Story acceptance requires an explicit decision, which may be combined with this gate if stated. Publication requires separate authorization.
+- **Progression authorized:** IP3 gate closed. Await explicit whole-story acceptance. No commit or publication requested.
 
 ## Shared verification
 
@@ -209,30 +222,42 @@ No dependency change is presumed. If IP1 establishes a necessary runtime depende
 ## Final verification requirements
 
 - **Owning final phase/task:** US-05-IP3-T3; required before final gate presentation.
-- **Final implementation identity:** Pending — tested revision, working-tree diff, source/package identities and lock hash.
+- **Final implementation identity:** Baseline `3eefd55` plus IP3 probe/test changes; exact SHA-256 in `.dev-records/verification/us-05-ip3/final-identities.json`, direct/rebuilt installed manifests in linked driver records; lock unchanged.
 - **M1–6 and shared checks:** Commands above against final story changes; renew after executable changes. Documentation-only follow-ups use document checks when executable evidence remains applicable.
 - **Distribution/installation:** Both direct and sdist-rebuilt wheel validation through selected M1 integration checks. Broader local tests and standalone artifact drivers run only on explicit developer command.
 - **Deferred-check reconciliation:** IP2 installed checks resolve in IP3-T1; IP2 final acceptance resolves in IP3-T3. Record excluded milestone associations, the three existing temporary skips and their relevance without changing or claiming resolution of them.
-- **Actual results and limitations:** Pending. Report OS/Python/tool versions and observed platforms; do not infer macOS/Windows verification from Linux results.
+- **Actual results and limitations:** Linux/Python 3.12.16 only; M1 371 passed/one existing skip in 234.20s, M1–6 same counts in 226.43s. No macOS/Windows, full suite or standalone artifacts run; historical skips and milestone acceptance remain open.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-05-AC-01: registered algorithms/tasks/parameter names/types/defaults/combinations | IP1-T2/T3; IP2-T1/T2/T3; IP3-T1/T3 | Public config/candidate matrix and both installed probes | Pending |
-| US-05-AC-02: categories and numeric/integer/logarithmic boundaries | IP1-T3; IP2-T2/T3; IP3-T1/T3 | Empty/type-sensitive categories; inclusive/equal/reversed/nonfinite numeric bounds; integer and positive-log cases | Pending |
-| US-05-AC-03: fixed values and recorded untunable defaults | IP1-T2/T3; IP2-T3/T4; IP3-T1/T3 | Explicit effective/default parameters and version identities; reject undeclared tuning and stale registry evidence | Pending |
-| US-05-AC-04: actionable rejection before training | IP1-T1/T3; IP2-T1–T4; IP3-T1/T2/T3 | Installed CLI/API diagnostics; validation remains inert and grants no authority; future submission obligation documented | Pending |
-| US-05-AC-05: shared checks across introduced entrypoints | IP1-T3; IP2-T3/T4; IP3-T1/T2/T3 | Same candidate matrix via CLI/API/project helper; no introduced training entrypoint; later Python/notebook/custom training must revalidate before execution | Pending |
+| US-05-AC-01: registered algorithms/tasks/parameter names/types/defaults/combinations | IP1-T2/T3; IP2-T1/T2/T3; IP3-T1/T3 | Public config/candidate matrix and both installed probes | Verified for delivered interfaces — [IP3](../verification/us-05-ip3.md) |
+| US-05-AC-02: categories and numeric/integer/logarithmic boundaries | IP1-T3; IP2-T2/T3; IP3-T1/T3 | Empty/type-sensitive categories; inclusive/equal/reversed/nonfinite numeric bounds; integer and positive-log cases | Verified for delivered interfaces — [IP3](../verification/us-05-ip3.md) |
+| US-05-AC-03: fixed values and recorded untunable defaults | IP1-T2/T3; IP2-T3/T4; IP3-T1/T3 | Explicit effective/default parameters and version identities; reject undeclared tuning and stale registry evidence | Verified for delivered interfaces — [IP3](../verification/us-05-ip3.md) |
+| US-05-AC-04: actionable rejection before training | IP1-T1/T3; IP2-T1–T4; IP3-T1/T2/T3 | Installed CLI/API diagnostics; validation remains inert and grants no authority; future submission obligation documented | Verified for delivered interfaces — [IP3](../verification/us-05-ip3.md) |
+| US-05-AC-05: shared checks across introduced entrypoints | IP1-T3; IP2-T3/T4; IP3-T1/T2/T3 | Same candidate matrix via CLI/API/project helper; no introduced training entrypoint; later Python/notebook/custom training must revalidate before execution | Verified for delivered interfaces — [IP3](../verification/us-05-ip3.md) |
 
-- **Remaining work:** IP1 approved; IP2 approved and committed locally; IP3 tasks remain unstarted and require explicit authorization. New training entrypoints must consume current validation contracts and independently enforce authorization, access and budgets; this story cannot establish arbitrary-code isolation.
+- **Remaining work:** IP1 approved; IP2 approved and committed locally; IP3 complete and approved; whole story accepted on 2026-11-04. New training entrypoints must consume current validation contracts and independently enforce authorization, access and budgets; this story cannot establish arbitrary-code isolation.
 - **Partial prerequisite delivery:** None planned. Existing US-02/03 contracts are consumed without reopening accepted story tasks.
-- **Final verification:** Pending — US-05-IP3-T3.
-- **Developer acceptance:** Pending.
-- **Decision reference and date:** Pending.
+- **Final verification:** Complete — US-05-IP3-T3; M1/M1–6 and shared checks passed, with explicit limitations in IP3 report.
+- **Developer acceptance:** Accepted.
+- **Decision reference and date:** Developer “i accept user story”, 2026-11-04.
+- **Publication:** Accepted-story commit, push, PR and static review authorized by the execute-plan workflow. Publication in progress; no merge authorized.
 
 ## Milestone acceptance handoff
 
 - **Owner:** Existing M1-ACCEPT-VERIFY, recorded in [CHECKPOINTS.md](../../CHECKPOINTS.md) and the [US-03 owning plan](milestone-1-us-03.md).
 - **Deferred checks:** Preserve historical artifact/manual/platform obligations, three unresolved temporary timeout skips and all acceptance evidence qualifications. US-05 story acceptance does not close milestone acceptance.
 - **Required evidence:** Reconcile criterion coverage, input identities, historical deferrals and current counts under the [verification policy](../development/verification.md#milestone-acceptance). Any complete-suite `-m ""` or standalone artifact/platform command requires explicit developer direction; existing CI does not replace unperformed local checks.
+
+
+## Story acceptance and publication record
+
+Developer “i accept user story” accepted US-05 on 2026-11-04 after approving IP3.
+All three implementation gates are approved; prior M1–6 evidence remains valid.
+The requested repeat was stopped at developer direction and is not a passing run.
+Only approval/acceptance records changed since final verification; no tests were
+restarted. Acceptance authorizes the execute-plan publication sequence. Prepare
+accepted-story changes on `US-05-configuration-validation` for a PR into `main`.
+GitHub authentication/publication and static review outcomes will be recorded here.

@@ -326,6 +326,18 @@ def test_missing_planning_schema_fails_installed_inventory(
 
 
 @pytest.mark.milestone_1
+def test_missing_validation_schema_fails_installed_inventory(
+    artifacts: Path, tmp_path: Path
+) -> None:
+    """US-05 AC-01/04: installed validation requires its versioned schemas."""
+    result = damaged_wheel_result(
+        artifacts, tmp_path, "agentic_ml/schemas/validation/1.0/candidate.json", None
+    )
+    assert result.returncode != 0
+    assert "validation resource missing" in result.stderr
+
+
+@pytest.mark.milestone_1
 def test_planning_from_both_artifact_paths(artifacts: Path, tmp_path: Path) -> None:
     """US-03 AC-01/03/04/05: installed interfaces work without checkout imports."""
     result = subprocess.run(

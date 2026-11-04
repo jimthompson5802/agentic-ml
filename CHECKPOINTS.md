@@ -2,7 +2,37 @@
 
 Last updated: 2026-11-04 (UTC)
 
-## Current US-05 IP2 approved — 2026-11-04
+## Current US-05 accepted — publication in progress — 2026-11-04
+
+On `US-05-configuration-validation`, baseline `3eefd55`, developer “start ip3”
+authorized the final phase, superseding the earlier hold. All IP3 tasks are
+technically complete in the [owning plan](docs/plans/milestone-1-us-05.md) and
+[IP3 report](docs/verification/us-05-ip3.md). Issue #11 full body/all comment pages
+refreshed; unchanged, zero comments. Approved public test boundaries reused.
+
+Added installed semantic CLI/API/project-helper checks for direct and sdist-rebuilt
+wheels, schema inventory and damaged-wheel regression, usage guide and evidence.
+M1: **371 passed, one existing skip in 234.20s**. M1–6: **371 passed, one existing
+skip in 226.43s**. Each selected 372/474, excluding 102. Shared checks, document
+links and whitespace pass; lock unchanged. Linux/Python 3.12.16 only. Original
+failed probe diagnostic expectation and corrective evidence preserved in report;
+no product Python/dependency changes or new exclusions.
+
+Working tree: probes/regression, README/usage/distribution docs, plan/report and
+this checkpoint. Developer approved IP3 with “i approve ip3” on 2026-11-04.
+Approval records updated; `git diff --check` passed, existing executable evidence
+remains applicable. Developer “i accept user story” accepted US-05 on 2026-11-04.
+**Next action:** execute accepted-story commit, push, PR and static review under
+the execute-plan workflow; no merge authorized. Earlier no-publication statements
+are historical. No executable changes or renewed tests in acceptance recording.
+Developer-requested M1–6 repeat run was stopped by “stop the tests”, exit 130.
+No completed renewal claimed; earlier passing evidence remains valid. Do not
+restart tests without direction.
+Preserve M1-ACCEPT-VERIFY, M50-ACCEPT-VERIFY and the three historical temporary skips;
+no broader suite or standalone artifact driver run. IP2 installed/final verification
+deferrals resolved by IP3 evidence; historical timeout/platform limits remain open.
+
+## Historical US-05 IP2 approved — 2026-11-04
 
 On `US-05-configuration-validation`, baseline `55c03b6`, developer “i approve”
 after the interface review approved IP1/D1–D7/public boundaries and accepted the

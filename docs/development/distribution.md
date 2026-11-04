@@ -73,3 +73,20 @@ finalization or capture of a running child's buffered output. Raw records remain
 outside Git and require contributor backup.
 
 The complete `uv run --locked pytest -n 4 --dist=loadgroup -m ""` suite builds a small real artifact fixture and checks success plus malformed wheels (missing template, altered guidance, wrong CLI version), missing/ambiguous artifacts and corrupted source archives. Source-checkout CLI regressions remain separate. Verification currently uses POSIX `bin/python` and `bin/agentic-ml` paths; Windows remains unverified. See [US-33 IP2 evidence](../verification/us-33-ip2.md) for actual local results; hosted Linux/Python 3.12 package results and failure diagnostics passed in the [IP3 report](../verification/us-33-ip3.md). A default-branch package run remains post-merge follow-up.
+
+
+## Installed semantic validation
+
+The M1 `test_planning_from_both_artifact_paths` selection extends the planning
+probe with US-05 configuration/candidate checks on the direct wheel and the wheel
+rebuilt from the source distribution. Each runs isolated Python in an independent
+experiment project with an unrelated cwd. A project-owned helper imports only
+`agentic_ml.validation`. The installed inventory checks all five validation 1.0
+schemas and the built-in registry; a damaged-wheel regression removes the
+candidate schema and requires rejection. Existing identity manifests, runtime
+requirement checks, retention and cleanup apply to both artifact paths.
+
+See the [usage guide](../configuration-validation.md) and
+[IP3 evidence](../verification/us-05-ip3.md). These checks validate metadata and
+candidates without starting training or a kernel. Future runners must enforce
+the documented submission contract before side effects.
