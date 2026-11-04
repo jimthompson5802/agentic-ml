@@ -2,6 +2,20 @@
 
 Last updated: 2026-11-03 (UTC)
 
+## Workflow diagram update — 2026-11-03
+
+Replaced the opening development-workflow diagram with a five-stage overview
+and five detail diagrams. Each detail uses a matching named subgraph with
+before/after context nodes. Correction loops, scope decisions, phase approval,
+story acceptance and milestone checks are preserved.
+
+Verification: all six diagrams rendered successfully with Mermaid CLI on macOS
+using an approved browser invocation outside the sandbox; the sandbox browser
+launch failed. Whitespace checks passed. This documentation-only presentation
+change requires no harness TDD or product tests. The developer approved the diagrams and authorized commit and push on
+2026-11-03. Publication includes `docs/development-workflow.md` and this
+checkpoint on `main`. Existing milestone obligations remain open.
+
 ## Current correction and next action — 2026-11-03
 
 On `main`, completed the developer-requested dependency-inventory correction.

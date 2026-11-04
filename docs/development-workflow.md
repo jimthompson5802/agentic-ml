@@ -4,62 +4,66 @@ The repository follows an **issue-driven workflow with explicit developer approv
 
 ```mermaid
 flowchart TD
-    A[Read checkpoints and inspect current work] --> B[Retrieve GitHub issue body and all comments]
-    B --> C[Identify milestone, story, acceptance criteria and scope decisions]
-    C --> D[Read relevant requirements and design contracts; resolve conflicts]
-    D --> E[Create implementation plan with tasks, test boundaries and approval gates]
-    E --> F[Developer reviews plan]
-    F --> G[Obtain authorization for next eligible implementation phase]
-    G --> H
-    subgraph Implementation[Implement authorized phase: closed-loop agentic TDD for behavior changes]
-        H[Select next task or behavior within approved scope] --> HType{New behavior or bug fix?}
-        HType -- Yes --> HRed[Red: write one public-interface test from acceptance criteria]
-        HRed --> HFail[Run test; confirm failure is caused by missing or incorrect behavior]
-        HFail --> HGreen[Green: implement minimum behavior; run test and relevant existing tests]
-        HGreen --> HRefactor[Review refactoring while keeping tests passing]
-        HType -- No --> HOther[Use appropriate document checks or existing regression tests]
-        HRefactor --> HRecord[Record commands and results in phase evidence]
-        HOther --> HRecord
-        HRecord --> HDone{All phase tasks complete?}
-        HDone -- No --> H
-    end
-    HDone -- Yes --> I[Run phase group and shared checks; record evidence and deferrals]
-    I --> J{Phase work and required checks complete?}
-    J -- No --> K[Correct within scope; stop for direction after three failed attempts]
-    K --> H
-    J -- Yes --> L[Update plan and checkpoints; present evidence]
-    L --> M{Developer phase decision}
-    M -- Changes requested --> H
-    M -- Rejected --> N[Record decision and stop progression]
-    M -- Approved --> O{More implementation phases?}
-    O -- Yes --> G
-    O -- No --> P[Run complete suite; reconcile story criteria and evidence]
-    P --> Q{Explicit whole-story acceptance?}
-    Q -- Pending --> R[Await developer decision]
-    R --> Q
-    Q -- Changes requested --> H
-    Q -- Accepted --> S[Commit accepted work, push, create PR and publish static review]
-    S --> T[Record publication results and hand off deferred checks]
-    T --> U[At milestone acceptance: run full suite and all applicable deferred checks]
-    U --> V{Required checks pass and deferrals reconciled?}
-    V -- No --> W[Record blockers and resolve within authorized scope]
-    W --> U
-    V -- Yes --> X[Present milestone evidence for developer acceptance]
-    H -. Scope change or new prerequisite .-> Y[Record impact and obtain scope decision]
-    Y --> G
+    A[Establish scope] --> B[Plan the work]
+    B --> C[Implement a phase]
+    C --> D[Verify and approve a phase]
+    D -- Additional phase or changes requested --> C
+    D -- All phases approved --> E[Complete and publish]
 ```
+
 
 The diagram shows progression through the gates. Plan approval alone does not authorize implementation. A phase approval authorizes further work only when its progression decision or existing authorization covers that work. Corrective work also remains subject to the three-attempt limit described below.
 
 ## 1. Establish scope and resume state
 
+```mermaid
+flowchart TD
+    Start([Start]) --> A
+    subgraph Scope[Establish scope]
+        A[Read checkpoints and inspect current work] --> B[Retrieve issue body and all comments]
+        B --> C[Identify milestone, story, acceptance criteria and scope decisions]
+        C --> D[Read requirements and design contracts; resolve conflicts]
+    end
+    D --> Next[Plan the work]
+```
+
 Read [CHECKPOINTS.md](../CHECKPOINTS.md), then retrieve the GitHub issue's complete body and all comments using the [retrieve-github-issue skill](../.agents/skills/retrieve-github-issue/SKILL.md). The issue governs implementation scope; [user stories](specs/user-stories.md) provide milestone context, and the [harness design](specs/agentic-ml-harness-design.md) supplies supporting contracts through its reading map. Resolve conflicts before implementing affected behavior. If no issue is supplied or identifiable, request it before user-story implementation.
 
 ## 2. Create a reviewable implementation plan
 
+```mermaid
+flowchart TD
+    Before[Establish scope] --> A
+    subgraph Plan[Plan the work]
+        A[Create tasks, test boundaries and approval gates] --> B[Developer reviews plan]
+        B --> C[Obtain authorization for next eligible phase]
+    end
+    C --> After[Implement a phase]
+```
+
 Follow **milestone → user story → implementation phases → granular tasks**. Each phase identifies acceptance criteria, dependencies, public test boundaries, verification evidence, and an approval gate. Use the [plan template](templates/user-story-implementation-plan.md) and [planning terminology](../README.md#planning-terminology). Plan approval does **not** approve implementation gates or, by itself, authorize execution.
 
 ## 3. Implement one authorized phase at a time
+
+```mermaid
+flowchart TD
+    Before[Plan the work] --> A
+    subgraph Implement[Implement a phase]
+        A[Select next task within approved scope] --> B{New behavior or bug fix?}
+        B -- Yes --> C[Red: write one public-interface test from acceptance criteria]
+        C --> D[Run test; confirm expected failure]
+        D --> E[Green: implement minimum behavior; run test and relevant tests]
+        E --> F[Review refactoring while keeping tests passing]
+        B -- No --> G[Use document checks or existing regression tests]
+        F --> H[Record commands and results]
+        G --> H
+        H --> I{All phase tasks complete?}
+        I -- No --> A
+        A -. Scope change or new prerequisite .-> J[Record impact and obtain scope decision]
+    end
+    J --> Before
+    I -- Yes --> After[Verify and approve a phase]
+```
 
 Use Python 3.12 or newer, `uv`, and the committed lockfile. Follow the [development guide](development.md), including its task-specific reading map. Verification must not silently update the lockfile.
 
@@ -79,6 +83,24 @@ For documentation-only changes or behavior-preserving refactoring, appropriate d
 Once the implementation phase's tasks are complete, move to **phase verification**, followed by the developer approval gate.
 
 ## 4. Verify and preserve evidence
+
+```mermaid
+flowchart TD
+    Before[Implement a phase] --> A
+    subgraph Verify[Verify and approve a phase]
+        A[Run phase group and shared checks; record evidence and deferrals] --> B{Work and required checks complete?}
+        B -- No --> C[Correct within scope; stop for direction after three failed attempts]
+        B -- Yes --> D[Update plan and checkpoints; present evidence]
+        D --> E{Developer phase decision}
+        E -- Rejected --> F[Record decision and stop progression]
+        E -- Approved --> G{More implementation phases?}
+    end
+    C --> Before
+    E -- Changes requested --> Before
+    G -- Yes --> Plan[Plan the work]
+    Plan -- Obtain next phase authorization --> Before
+    G -- No --> After[Complete and publish]
+```
 
 The [verification policy](development/verification.md#phase-and-story-verification) distinguishes three levels:
 
@@ -101,6 +123,25 @@ Complete the phase's work and verification, present evidence and limitations, up
 Story acceptance is also explicit; it does not imply milestone acceptance. The final implementation gate may serve as story acceptance only when the developer explicitly says so. Development **implementation phases** are separate from the ML experiment **workflow phases** enforced by the harness.
 
 ## 6. Publish accepted work
+
+```mermaid
+flowchart TD
+    Before[Verify and approve a phase] --> A
+    subgraph Complete[Complete and publish]
+        A[Run complete suite; reconcile story criteria and evidence] --> B{Explicit whole-story acceptance?}
+        B -- Pending --> C[Await developer decision]
+        C --> B
+        B -- Accepted --> D[Commit accepted work, push, create PR and publish static review]
+        D --> E[Record publication results and hand off deferred checks]
+        E --> F[At milestone acceptance: run full suite and applicable deferred checks]
+        F --> G{Required checks pass and deferrals reconciled?}
+        G -- No --> H[Record blockers and resolve within authorized scope]
+        H --> F
+        G -- Yes --> I[Present milestone evidence for developer acceptance]
+    end
+    B -- Changes requested --> Implement[Implement a phase]
+    I --> End([End])
+```
 
 The [execute-plan workflow](../.agents/skills/execute-plan/SKILL.md#publish-and-review-an-accepted-story) treats explicit whole-story acceptance as authorization to commit accepted work using Conventional Commits, push, create a PR using the repository's selected template, and publish a static review, unless the user limits authorization. Record publication results in the plan and checkpoints. Merging, branch cleanup, review fixes, and another story's implementation require separate authorization.
 
