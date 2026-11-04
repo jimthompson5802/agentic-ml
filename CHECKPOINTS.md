@@ -2,7 +2,7 @@
 
 Last updated: 2026-11-04 (UTC)
 
-## Current US-05 accepted — publication in progress — 2026-11-04
+## Current US-05 accepted — PR #53 published — 2026-11-04
 
 On `US-05-configuration-validation`, baseline `3eefd55`, developer “start ip3”
 authorized the final phase, superseding the earlier hold. All IP3 tasks are
@@ -22,9 +22,14 @@ Working tree: probes/regression, README/usage/distribution docs, plan/report and
 this checkpoint. Developer approved IP3 with “i approve ip3” on 2026-11-04.
 Approval records updated; `git diff --check` passed, existing executable evidence
 remains applicable. Developer “i accept user story” accepted US-05 on 2026-11-04.
-**Next action:** execute accepted-story commit, push, PR and static review under
-the execute-plan workflow; no merge authorized. Earlier no-publication statements
-are historical. No executable changes or renewed tests in acceptance recording.
+Published commit `e4b5acf` on `origin/US-05-configuration-validation` and opened
+[PR #53](https://github.com/jimthompson5802/agentic-ml/pull/53) into `main`.
+[Verified static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/53#pullrequestreview-5762797927)
+found no actionable findings. Publication records are documentation only; final-head
+confirmation will appear in PR review history. **Next action:** await developer
+review/merge direction after publishing these records; no merge authorized.
+Earlier no-publication statements are historical. No executable changes or
+renewed tests in acceptance/publication recording.
 Developer-requested M1–6 repeat run was stopped by “stop the tests”, exit 130.
 No completed renewal claimed; earlier passing evidence remains valid. Do not
 restart tests without direction.
