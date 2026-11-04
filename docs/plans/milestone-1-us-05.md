@@ -271,3 +271,20 @@ executable evidence remains valid. Publish these records, then review the final
 head's record-only delta and retain that confirmation in the PR review history.
 No merge, branch cleanup or other story work authorized. Authentication succeeded
 outside the network sandbox; no credential changes required.
+
+
+## Squash merge record
+
+Developer “squash merge pr #53” authorized the merge on 2026-11-04. Final PR head
+`5b4a90badfbecfb2c01819207b17df33eb774941` was MERGEABLE/CLEAN with successful
+Linux/Python 3.12 CI. Squash merged with `--match-head-commit` binding that head.
+GitHub confirms MERGED at `2026-11-04T03:40:36Z`; squash commit
+`05ad81f68bbd3197f7b0f7345719df6993e08ee4`. Branches retained; checkout unchanged.
+Local documentation records only; no tests restarted. Milestone acceptance
+obligations remain open. Earlier no-merge statements record historical boundaries.
+
+
+Developer “switch main; pull; commit and push”, 2026-11-04, authorized final-record
+publication. Switched to `main`, pulled the squash merge and restored merge records
+without conflicts. Commit and push this documentation-only follow-up; whitespace
+checks pass, previous executable evidence remains applicable and no tests restart.

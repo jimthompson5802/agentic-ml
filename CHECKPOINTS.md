@@ -2,7 +2,7 @@
 
 Last updated: 2026-11-04 (UTC)
 
-## Current US-05 accepted — PR #53 published — 2026-11-04
+## Current US-05 accepted — PR #53 squash merged — 2026-11-04
 
 On `US-05-configuration-validation`, baseline `3eefd55`, developer “start ip3”
 authorized the final phase, superseding the earlier hold. All IP3 tasks are
@@ -26,8 +26,16 @@ Published commit `e4b5acf` on `origin/US-05-configuration-validation` and opened
 [PR #53](https://github.com/jimthompson5802/agentic-ml/pull/53) into `main`.
 [Verified static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/53#pullrequestreview-5762797927)
 found no actionable findings. Publication records are documentation only; final-head
-confirmation will appear in PR review history. **Next action:** await developer
-review/merge direction after publishing these records; no merge authorized.
+confirmation is recorded in the
+[final-head review](https://github.com/jimthompson5802/agentic-ml/pull/53#pullrequestreview-5762803501).
+Developer “squash merge pr #53” authorized the merge on 2026-11-04. Final-head
+Linux/Python 3.12 CI passed; GitHub confirms MERGED at 03:40:36 UTC as
+`05ad81f68bbd3197f7b0f7345719df6993e08ee4`. **Next action:** await developer
+direction after the requested final-record publication. Developer “switch main;
+pull; commit and push” authorized checkout synchronization and publication on
+2026-11-04. Switched to `main`, pulled the squash merge and restored these merge
+records. Branches retained. Publishing this documentation-only update; whitespace
+checks pass and existing executable evidence remains valid.
 Earlier no-publication statements are historical. No executable changes or
 renewed tests in acceptance/publication recording.
 Developer-requested M1–6 repeat run was stopped by “stop the tests”, exit 130.
