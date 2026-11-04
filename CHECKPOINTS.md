@@ -2,6 +2,20 @@
 
 Last updated: 2026-11-04 (UTC)
 
+## Devcontainer GPG configuration — 2026-11-04
+
+Added the requested global Git signing configuration to
+`.devcontainer/post-create.sh`: OpenPGP, `/usr/bin/gpg`, automatic commit
+signing, and the existing signing-key fingerprint recorded in the diagnosis
+below. This supersedes that diagnosis's pending Git-configuration action;
+host-agent access and public-key availability still require container validation.
+`bash -n .devcontainer/post-create.sh` and `git diff --check` passed on macOS.
+No harness behavior changed, so harness TDD and product tests do not apply.
+The developer authorized commit and push on 2026-11-04. Linux shell syntax
+and whitespace checks also passed before publication on `main`. Next action:
+recreate the container and verify signing with the forwarded host agent.
+Existing milestone obligations remain open.
+
 ## Devcontainer setup commit — 2026-11-04
 
 The developer authorized committing `.devcontainer/Dockerfile` and

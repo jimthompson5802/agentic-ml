@@ -5,6 +5,12 @@ set -euo pipefail
 git config --global user.name 'Jim Thompson'
 git config --global user.email 'jimthompson5802@gmail.com'
 
+# Use the existing GPG signing key through VS Code's host-agent forwarding.
+git config --global gpg.format openpgp
+git config --global gpg.program /usr/bin/gpg
+git config --global user.signingkey '514503114FA7366E'
+git config --global commit.gpgsign true
+
 # Seed the persistent Codex home while preserving container-only files.
 mkdir -p /home/vscode/.codex/skills /home/vscode/.codex/rules
 cp /tmp/host-codex/config.toml /home/vscode/.codex/config.toml
