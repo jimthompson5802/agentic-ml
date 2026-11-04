@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "algorithms": [
+    {
+      "interface_version": "1.0",
+      "adapter": {
+        "id": "sklearn_dummy_scalar",
+        "version": "1.0"
+      },
+      "library": {
+        "distribution": "scikit-learn",
+        "reference_version": "1.7.2"
+      },
+      "id": "dummy_classifier",
+      "tasks": [
+        "classification"
+      ],
+      "parameters": {
+        "strategy": {
+          "types": [
+            "string"
+          ],
+          "default": "prior",
+          "choices": [
+            "most_frequent",
+            "prior",
+            "stratified",
+            "uniform",
+            "constant"
+          ]
+        },
+        "random_state": {
+          "types": [
+            "null",
+            "integer"
+          ],
+          "default": null,
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "constant": {
+          "types": [
+            "null",
+            "string",
+            "integer",
+            "float"
+          ],
+          "default": null
+        }
+      },
+      "requires_non_null": [
+        {
+          "if_parameter": "strategy",
+          "equals": "constant",
+          "then_parameter": "constant"
+        }
+      ]
+    },
+    {
+      "interface_version": "1.0",
+      "adapter": {
+        "id": "sklearn_dummy_scalar",
+        "version": "1.0"
+      },
+      "library": {
+        "distribution": "scikit-learn",
+        "reference_version": "1.7.2"
+      },
+      "id": "dummy_regressor",
+      "tasks": [
+        "regression"
+      ],
+      "parameters": {
+        "strategy": {
+          "types": [
+            "string"
+          ],
+          "default": "mean",
+          "choices": [
+            "mean",
+            "median",
+            "quantile",
+            "constant"
+          ]
+        },
+        "constant": {
+          "types": [
+            "null",
+            "integer",
+            "float"
+          ],
+          "default": null
+        },
+        "quantile": {
+          "types": [
+            "null",
+            "float"
+          ],
+          "default": null,
+          "minimum": 0.0,
+          "maximum": 1.0
+        }
+      },
+      "requires_non_null": [
+        {
+          "if_parameter": "strategy",
+          "equals": "constant",
+          "then_parameter": "constant"
+        },
+        {
+          "if_parameter": "strategy",
+          "equals": "quantile",
+          "then_parameter": "quantile"
+        }
+      ]
+    }
+  ]
+}

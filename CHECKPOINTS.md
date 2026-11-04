@@ -2,27 +2,34 @@
 
 Last updated: 2026-11-04 (UTC)
 
-## Current US-05 planning — 2026-11-04
+## Current US-05 IP2 approved — 2026-11-04
 
-On local branch `US-05-configuration-validation`, created the developer-requested
-[US-05 implementation plan](docs/plans/milestone-1-us-05.md) from clean `main`
-`4602fa6`. Retrieved complete issue #11 and prerequisite issues #9/#10 with all
-comment pages and stable final metadata; all have zero comments. US-05 remains
-open; US-02/03 are accepted and merged. The approved plan defines three implementation
-phases: registry/API/test contracts, shared semantic/candidate validation, and
-both-wheel installed verification plus final story review. Every gate and story
-acceptance remains pending. The developer approved the plan and authorized a
-local commit with “i approve plan, commit” on 2026-11-04. Implementation and push
-remain unauthorized.
+On `US-05-configuration-validation`, baseline `55c03b6`, developer “i approve”
+after the interface review approved IP1/D1–D7/public boundaries and accepted the
+presented IP2 progression request. IP2 tasks are complete and the developer approved the gate with
+“i approve ip2; commit; do not strt ip3 yet” on 2026-11-04. The local commit
+contains the approved IP1/IP2 work and approval records. IP3 remains unstarted
+and explicitly not authorized.
+The [owning plan](docs/plans/milestone-1-us-05.md) and
+[IP2 evidence](docs/verification/us-05-ip2.md) record progress and verification.
 
-The local planning commit contains this checkpoint and the approved plan. Planning validation:
-relative file links resolve and `git diff --check` passes. No executable behavior
-changed, so TDD, harness tests and shared executable checks do not apply to this
-planning-only handoff. **Next action:** await explicit IP1 authorization. Registry inventory, compatibility/default evidence, combination
-policy and concrete public test boundaries must be settled and approved at IP1
-before executable work. Existing M1-ACCEPT-VERIFY, M50-ACCEPT-VERIFY, temporary
-skips and historical failures remain open. The following publication next-action
-record is historical and does not authorize work on this planning branch.
+Implemented the four semantic validation APIs and CLI bindings, packaged scalar
+registry metadata/schemas, immutable validation evidence and public behavior
+regressions. Twelve focused red–green cycles and additional public coverage
+recorded 57 passing cases. Lint, formatting, strict typing, lock consistency and
+version smoke checks passed. Final M1: **370 passed, one existing skip in
+218.29s**, exit 0; 473 collected, 371 selected, 102 deselected. Preliminary M1
+369-pass evidence is retained separately; final evidence includes the
+type-sensitive replay correction. No executable/resource/test identities changed
+after final gate launch; lock SHA-256 unchanged. No full-story or milestone acceptance claimed. No dependencies or
+lock changes; no standalone artifact command or broader suite run.
+
+The approved local commit includes IP1 documentation, IP2 package/CLI,
+registry/schema resources, tests, report and progress records. Approval-record
+updates pass document/whitespace checks; existing executable evidence remains
+applicable. **Next action:** await explicit IP3 authorization. No push requested.
+Preserve M1-ACCEPT-VERIFY, M50-ACCEPT-VERIFY, three temporary skips and historical
+failures. The following publication next-action record is historical.
 
 ## Milestone test selection publication record — 2026-11-04
 

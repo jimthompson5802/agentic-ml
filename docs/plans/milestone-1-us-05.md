@@ -12,7 +12,7 @@
 
 ## Source snapshot and current implementation
 
-Planning date: 2026-11-04. Started from clean `main` at `4602fa6`; created and verified local branch `US-05-configuration-validation` before requirements analysis. This request authorizes planning only, without implementation, commit, push or issue changes.
+Planning date: 2026-11-04. Started from clean `main` at `4602fa6`; created and verified local branch `US-05-configuration-validation` before requirements analysis. The original request authorized planning only. The developer subsequently approved and committed the plan, then authorized IP1 with “start ip1” on 2026-11-04; IP1 and its public test boundaries were then approved by developer “i approve” after the review discussion on 2026-11-04, accepting the presented request to approve IP1 and authorize IP2. Publication remains unauthorized.
 
 Retrieved issue #11's complete metadata/body and all comment pages using the repository GitHub read helper. It is an open enhancement by jimthompson5802, unassigned, with no GitHub milestone object; its body assigns Milestone 1. Zero unique comments match its reported count; final refresh remained `updated_at=2026-10-30T02:06:23Z`. No discussion scope decisions. Issue and repository criteria agree.
 
@@ -28,10 +28,10 @@ There is no algorithm registry, registry-default resolver, candidate validator o
 |---|---|---|---|
 | US-02 project/environment | Installed project-root configuration and explicit setup semantics | IP2 onward | Accepted and merged; [US-02 plan](milestone-1-us-02.md), approved IP1–IP4 and story acceptance |
 | US-03 declared boundaries and preserved plans | Versioned inputs, effective narrowing, source identity and approval verification | IP2 onward | Accepted and merged; [US-03 plan](milestone-1-us-03.md), approved IP1–IP4, [contract evidence](../verification/us-03-ip1.md) |
-| Registry contract and initial inventory | Exact supported IDs/tasks, parameter specs/defaults, allowed combinations, registry/interface/library version semantics | IP2 registry implementation | Proposed; settle in US-05-IP1-T1/T2 and approve IP1 |
-| Semantic validation integration | Add a distinct validation layer without changing structural plan identity/readiness or reinterpreting 0.1 drafts | IP2/API integration | Proposed; settle schemas, compatibility and diagnostics in IP1 |
-| Compatible search combinations | Conservative preflight policy for independent ranges/choices and cross-parameter constraints without exhaustive enumeration | IP2 search validation | Unresolved; IP1 must choose an implementable policy with rejection examples, including defaults |
-| Project component metadata | Define how future supplied registrations use the same metadata validator; reject duplicate IDs/unsupported interface versions without importing user code | Any registration exposure | IP1 decides bounded metadata scope; full component loaders/training stay with US-16 |
+| Registry contract and initial inventory | Exact supported IDs/tasks, parameter specs/defaults, allowed combinations, registry/interface/library version semantics | IP2 registry implementation | Defined in [IP1 D2/D3](../verification/us-05-ip1.md#d2--registry-schema-and-bounded-registration); Approved at IP1, 2026-11-04 |
+| Semantic validation integration | Add a distinct validation layer without changing structural plan identity/readiness or reinterpreting 0.1 drafts | IP2/API integration | Defined in [IP1 D1/D6](../verification/us-05-ip1.md#d1--public-interfaces-and-observable-states); Approved at IP1, 2026-11-04 |
+| Compatible search combinations | Conservative preflight policy for independent ranges/choices and cross-parameter constraints without exhaustive enumeration | IP2 search validation | Conservative universal-domain checks selected in [IP1 D4](../verification/us-05-ip1.md#d4--configuration-preflight-and-combination-policy); Approved at IP1, 2026-11-04 |
+| Project component metadata | Define how future supplied registrations use the same metadata validator; reject duplicate IDs/unsupported interface versions without importing user code | Any registration exposure | Explicit additive metadata only, [IP1 D2](../verification/us-05-ip1.md#d2--registry-schema-and-bounded-registration); loaders/training stay with US-16; Approved at IP1, 2026-11-04 |
 | Future training integration | Revalidate current candidate, plan and registry at submission before any training side effect | Future execution capabilities | Handoff to US-10/US-09 and training stories; no executable runner introduced here |
 
 Accepted US-03-SC-01 unauthenticated experiment approval semantics remain applicable. Validation cannot create approvals or turn approval into execution authorization. No execution, acquisition or kernel-isolation decision is required to perform pure configuration validation. Any proposal to invoke supplied code or start work requires scope review and resolution of applicable ADR-004/006 mechanisms first.
@@ -39,10 +39,25 @@ Accepted US-03-SC-01 unauthenticated experiment approval semantics remain applic
 ## Plan review
 
 - **Status:** Approved.
-- **Developer decision:** Plan approved; implementation gates remain pending.
+- **Developer decision:** Plan approved; IP1/IP2 subsequently approved; IP3 gate remains pending.
 - **Decision reference and date:** Developer message “i approve plan, commit”, 2026-11-04.
 - **Requested plan changes:** None recorded.
 - Plan approval confirms the proposed investigation scope. IP1 must produce and obtain approval of the concrete public test boundaries before executable tests are written.
+
+## IP1 execution record
+
+Authorized by developer “start ip1”, 2026-11-04; baseline clean branch at `55c03b6`. IP1 technical work is complete in the [contract report](../verification/us-05-ip1.md); IP1 and public test boundaries approved by developer “i approve”, 2026-11-04, following the explicit IP1/IP2 progression request. IP2 authorized; no IP2 gate approval or publication authorization implied.
+
+## IP2 execution record
+
+IP2 authorized by developer “i approve”, 2026-11-04, accepting the IP1 gate request
+after interface review. Tests use the approved D7 public boundaries. Registry,
+configuration and candidate behavior has focused red/green evidence; currentness
+review passed after the cycle-12 correction. Final M1: 370 passed, one existing
+skip, 218.29s; all shared checks passed and lock unchanged. See the
+[IP2 report](../verification/us-05-ip2.md) and retained JUnit records. IP2 approved by developer “i approve ip2; commit; do not strt ip3 yet”,
+2026-11-04. Local commit authorized; IP3 progression explicitly withheld and story
+acceptance remains pending.
 
 ## Scope-change history
 
@@ -50,7 +65,7 @@ None. During execution use the [manage-plan-scope procedure](../../.agents/skill
 
 ## Execution and evidence rules
 
-Mark tasks Complete only after their work and required verification pass and actual evidence is recorded. All tasks below start Not started. Reopen invalidated work and renew evidence. Preserve existing approvals and failures.
+Mark tasks Complete only after their work and required verification pass and actual evidence is recorded. Unstarted implementation tasks remain Not started; completed IP1 tasks have their evidence linked below. Reopen invalidated work and renew evidence. Preserve existing approvals and failures.
 
 Use small vertical red–green TDD slices, one behavior-focused failing test followed by minimal implementation and relevant regressions. Keep independently specified expectations and public outcomes. Record exact red/green commands, intended failure diagnostics and actual results in the owning implementation-phase report. Focused serial TDD is permitted with a recorded short-cycle rationale; milestone gates use four workers. Do not batch all tests before implementation.
 
@@ -68,10 +83,10 @@ Reports are proposed `docs/verification/us-05-ip1.md`, `us-05-ip2.md` and `us-05
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-05-IP1-T1 | Not started | Inspect planning interfaces/schemas and existing fixtures; write proposed `docs/verification/us-05-ip1.md`; inventory affected installed API/CLI paths | Plan approval | State exact input/output/error contracts and preserve US-03 structural API, version 1.0 bundles and 0.1 drafts; propose `agentic_ml.validation` and `agentic-ml config validate` / `candidate validate` commands | AC-01–05 |
-| US-05-IP1-T2 | Not started | In the contract report and bounded additions to `docs/specs/design/architecture-decisions.md`, specify registry metadata and semantic validation evidence | T1 | Choose initial built-in IDs/tasks, complete supported parameter specs/defaults, adapter/library identity and compatibility policy; cover classification and regression; decide project metadata scope, duplicates, unsupported versions, source binding and defaults under environment changes; no callable loading | AC-01, AC-03, AC-04 |
-| US-05-IP1-T3 | Not started | Define public test matrix and proposed schema/files for configuration and candidates; refine IP2/IP3 tasks with settled names | T2 | Approve typed equality, null/bool/int/float handling, finite numerics, range endpoints, nonempty choices, compatible combinations, immutable default evidence, candidate materialization and diagnostics; include fail-closed stale/corrupt evidence and a documented future submission contract | AC-01–05 |
-| US-05-IP1-T4 | Not started | Validate contract links, criterion mapping and decisions; record report and checkpoint | T3 | No unresolved decision blocks executable tasks; identify every assurance limit and present IP1 review evidence | AC-01–05 |
+| US-05-IP1-T1 | Complete | Inspect planning interfaces/schemas and existing fixtures; write proposed `docs/verification/us-05-ip1.md`; inventory affected installed API/CLI paths | Plan approval | State exact input/output/error contracts and preserve US-03 structural API, version 1.0 bundles and 0.1 drafts; propose `agentic_ml.validation` and `agentic-ml config validate` / `candidate validate` commands | AC-01–05 |
+| US-05-IP1-T2 | Complete | In the contract report and bounded additions to `docs/specs/design/architecture-decisions.md`, specify registry metadata and semantic validation evidence | T1 | Choose initial built-in IDs/tasks, complete supported parameter specs/defaults, adapter/library identity and compatibility policy; cover classification and regression; decide project metadata scope, duplicates, unsupported versions, source binding and defaults under environment changes; no callable loading | AC-01, AC-03, AC-04 |
+| US-05-IP1-T3 | Complete | Define public test matrix and proposed schema/files for configuration and candidates; refine IP2/IP3 tasks with settled names | T2 | Approve typed equality, null/bool/int/float handling, finite numerics, range endpoints, nonempty choices, compatible combinations, immutable default evidence, candidate materialization and diagnostics; include fail-closed stale/corrupt evidence and a documented future submission contract | AC-01–05 |
+| US-05-IP1-T4 | Complete | Validate contract links, criterion mapping and decisions; record report and checkpoint | T3 | No unresolved decision blocks executable tasks; identify every assurance limit and present IP1 review evidence | AC-01–05 |
 
 ### Verification and review evidence
 
@@ -84,34 +99,34 @@ Document/link and whitespace checks only; TDD and executable checks do not apply
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Contracts and coverage | Review report against issue #11 and accepted US-02/03 contracts | All five criteria mapped; proposed APIs, inventory and boundary limitations explicit | Pending |
-| Document integrity | Resolve relative links/anchors; `git diff --check` | Valid links and clean whitespace | Pending |
+| Contracts and coverage | Review report against issue #11 and accepted US-02/03 contracts | All five criteria mapped; proposed APIs, inventory and boundary limitations explicit | Passed — [IP1 D1–D7](../verification/us-05-ip1.md); manual criterion/task/gate review, 2026-11-04 |
+| Document integrity | Resolve relative links/anchors; `git diff --check` | Valid links and clean whitespace | Passed — local link/anchor checks and `git diff --check`, 2026-11-04; [IP1 report](../verification/us-05-ip1.md#task-refinement-and-verification) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete; concrete inventory, combination policy, compatibility/evidence semantics and public test boundaries approved before tests.
-- **Evidence presented:** Pending — `docs/verification/us-05-ip1.md`, bounded ADR changes, refined plan and checkpoint.
-- **Remaining limitations or blocked work:** Registry inventory and schema decisions block IP2 until approved.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Evidence presented:** [IP1 contract report](../verification/us-05-ip1.md), [bounded ADR proposal](../specs/design/architecture-decisions.md#us-05-ip1--semantic-configuration-and-candidate-validation-proposals), refined plan and checkpoint. T1–T4 technically complete; document checks passed; no executable checks applicable.
+- **Remaining limitations or blocked work:** IP1 contracts and public test boundaries approved. Static metadata validation does not provide training adapters, dataset-dependent checks or kernel isolation; see report D3/D7.
+- **Developer decision:** Approved, including public test boundaries.
+- **Decision reference and date:** Developer “i approve”, 2026-11-04, after the IP1 review and interface explanations.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** IP2 only after explicit approval and authorization.
+- **Progression authorized:** IP2, accepting the presented IP1 approval and IP2 authorization request.
 
 ## US-05 / Implementation Phase 2: Implement shared semantic and candidate validation
 
 - **Outcome:** Reusable typed validation with registry identity/default evidence and equivalent public Python/CLI behavior.
-- **Entry conditions:** Approved IP1 contracts and confirmed public boundaries; task paths below refined if IP1 changes proposals.
+- **Entry conditions:** Approved [IP1 contracts and public boundaries](../verification/us-05-ip1.md); paths below are refined by report D2/D7. IP1 gate approved and IP2 authorized on 2026-11-04.
 - **Acceptance criteria advanced:** US-05-AC-01–05 for introduced validation interfaces.
 
 ### Granular tasks
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-05-IP2-T1 | Not started | Add proposed `src/agentic_ml/validation/{__init__,models,registry}.py` and `tests/integration/test_configuration_validation.py` through vertical TDD | IP1 approval | Versioned registry accepts valid declarations; rejects unknown IDs/tasks/parameters, duplicate IDs and unsupported versions; library/version mismatch fails as specified; no user code import | AC-01, AC-04 |
-| US-05-IP2-T2 | Not started | Add proposed `validation/configuration.py` and packaged `schemas/validation/1.0/`; reuse `planning/boundaries.py` through its public contract | T1 | Validate parameter types/defaults/combinations and every declared domain; reject empty choices, nonfinite or reversed bounds, fractional integer bounds, nonpositive logarithmic limits; endpoints and equal bounds follow approved contract; existing structural tests pass unchanged | AC-01, AC-02, AC-04 |
-| US-05-IP2-T3 | Not started | Add proposed `validation/candidates.py` and independent candidate cases in new test module | T2 | Materialize all fixed/default values without widening search; reject fixed/default changes, extra parameters, type-confused choices, unsupported algorithms and range violations; valid integer-range candidates remain integers; cross-parameter combinations include omitted defaults | AC-01–05 |
-| US-05-IP2-T4 | Not started | Add proposed `validation/storage.py`, `src/agentic_ml/cli/validation.py` and CLI registration in `cli/__init__.py`; extend tests | T2/T3 | CLI/API return equivalent effective parameters/diagnostics; preserve source/plan, effective configuration, registry checksum and adapter/library versions; stale, corrupted, unsupported or wrong-plan evidence blocks; reads/writes use explicit project paths; errors never start training or grant authority | AC-01, AC-03–05 |
-| US-05-IP2-T5 | Not started | Record TDD and gate evidence in proposed `docs/verification/us-05-ip2.md`; run required checks; update checkpoint | T1–T4 | Full M1 and shared checks pass, lock identity recorded, unresolved/skipped coverage explained; developer review packet complete | AC-01–05 |
+| US-05-IP2-T1 | Complete | Add proposed `src/agentic_ml/validation/{__init__,models,registry}.py` and `tests/integration/test_configuration_validation.py` through vertical TDD | IP1 approval | Implement report D2/D3 and packaged `registry/validation/1.0/builtins.json`: two complete scalar profiles plus additive metadata, strict versions/defaults/rules, no code imports; observed library drift blocks reuse under D6 | AC-01, AC-04 |
+| US-05-IP2-T2 | Complete | Add proposed `validation/configuration.py` and the five report D2 schemas under `schemas/validation/1.0/`; reuse `planning/boundaries.py` through its public contract | T1 | Validate parameter types/defaults/combinations and every declared domain; reject empty choices, nonfinite or reversed bounds, fractional integer bounds, nonpositive logarithmic limits; endpoints and equal bounds follow approved contract; existing structural tests pass unchanged | AC-01, AC-02, AC-04 |
+| US-05-IP2-T3 | Complete | Add proposed `validation/candidates.py` and independent candidate cases in new test module | T2 | Materialize all fixed/default values without widening search; reject fixed/default changes, extra parameters, type-confused choices, unsupported algorithms and range violations; valid integer-range candidates remain integers; cross-parameter combinations include omitted defaults | AC-01–05 |
+| US-05-IP2-T4 | Complete | Add proposed `validation/storage.py`, `src/agentic_ml/cli/validation.py` and CLI registration in `cli/__init__.py`; extend tests | T2/T3 | CLI/API return equivalent effective parameters/diagnostics; preserve source/plan, effective configuration, registry checksum and adapter/library versions; stale, corrupted, unsupported or wrong-plan evidence blocks; reads/writes use explicit project paths; errors never start training or grant authority | AC-01, AC-03–05 |
+| US-05-IP2-T5 | Complete | Record TDD and gate evidence in proposed `docs/verification/us-05-ip2.md`; run required checks; update checkpoint | T1–T4 | Full M1 and shared checks pass, lock identity recorded, unresolved/skipped coverage explained; developer review packet complete | AC-01–05 |
 
 T1–T4 describe outcomes, not a license to batch test writing. Complete each behavior's red–green cycle before the next. Proposed registry fixtures must have independently defined parameter expectations rather than deriving expected results from the registry under test.
 
@@ -123,19 +138,19 @@ T1–T4 describe outcomes, not a license to batch test writing. Complete each be
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Focused red–green | `uv run --locked pytest tests/integration/test_configuration_validation.py::<approved_test>` (new selector; short serial TDD rationale recorded) | First fails for missing required behavior, then passes with relevant public regressions | Pending |
-| M1 implementation-phase gate | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | All selected tests pass; skips/deselections explicitly reconciled | Pending |
-| Shared checks | Commands in Shared verification below | Pass; committed lock unchanged unless an intentional dependency decision was approved | Pending |
+| Focused red–green | `uv run --locked pytest tests/integration/test_configuration_validation.py::<approved_test>` (new selector; short serial TDD rationale recorded) | First fails for missing required behavior, then passes with relevant public regressions | Passed — 12 red/green cycles; final focused 57 passed; [IP2 evidence](../verification/us-05-ip2.md#tdd-evidence) |
+| M1 implementation-phase gate | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | All selected tests pass; skips/deselections explicitly reconciled | Passed — 370 passed, one existing skip; 473 collected / 371 selected / 102 deselected, 218.29s; [IP2 evidence](../verification/us-05-ip2.md#verification-and-identities) |
+| Shared checks | Commands in Shared verification below | Pass; committed lock unchanged unless an intentional dependency decision was approved | Passed — sync, lock, lint, format, strict types, version and whitespace; lock SHA-256 unchanged; [IP2 evidence](../verification/us-05-ip2.md#verification-and-identities) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T5 complete, criterion-mapped red/green evidence, M1/shared checks and no unresolved implementation defects.
-- **Evidence presented:** Pending — implementation diff, IP2 report, lock/input identities and checkpoint.
+- **Evidence presented:** Implementation diff, [IP2 report](../verification/us-05-ip2.md), retained command/JUnit/source identities under `.dev-records/verification/us05-ip2/`, and checkpoint. T1–T5 complete; IP2 approved on 2026-11-04.
 - **Remaining limitations or blocked work:** Installed semantic checks and final story verification remain IP3 work; no managed training/kernel enforcement claimed.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved; local commit authorized, IP3 explicitly not authorized.
+- **Decision reference and date:** Developer “i approve ip2; commit; do not strt ip3 yet”, 2026-11-04.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** IP3 only after explicit approval and authorization.
+- **Progression authorized:** None. Await a new explicit instruction before starting IP3.
 
 ## US-05 / Implementation Phase 3: Verify installed use and complete story review
 
@@ -210,7 +225,7 @@ No dependency change is presumed. If IP1 establishes a necessary runtime depende
 | US-05-AC-04: actionable rejection before training | IP1-T1/T3; IP2-T1–T4; IP3-T1/T2/T3 | Installed CLI/API diagnostics; validation remains inert and grants no authority; future submission obligation documented | Pending |
 | US-05-AC-05: shared checks across introduced entrypoints | IP1-T3; IP2-T3/T4; IP3-T1/T2/T3 | Same candidate matrix via CLI/API/project helper; no introduced training entrypoint; later Python/notebook/custom training must revalidate before execution | Pending |
 
-- **Remaining work:** All implementation tasks pending. New training entrypoints must consume current validation contracts and independently enforce authorization, access and budgets; this story cannot establish arbitrary-code isolation.
+- **Remaining work:** IP1 approved; IP2 approved and committed locally; IP3 tasks remain unstarted and require explicit authorization. New training entrypoints must consume current validation contracts and independently enforce authorization, access and budgets; this story cannot establish arbitrary-code isolation.
 - **Partial prerequisite delivery:** None planned. Existing US-02/03 contracts are consumed without reopening accepted story tasks.
 - **Final verification:** Pending — US-05-IP3-T3.
 - **Developer acceptance:** Pending.

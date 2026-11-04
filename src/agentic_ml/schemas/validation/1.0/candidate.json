@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "algorithm": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "null",
+          "boolean",
+          "integer",
+          "number",
+          "string"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "algorithm",
+    "parameters"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
