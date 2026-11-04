@@ -1,16 +1,16 @@
 # Example scenario: Build a customer churn model
 
-The intended experience is a notebook-centered ML project in the data scientist's own repository. A coding assistant helps write and improve the experiment. The harness controls execution, tracking, independent evaluation, and approvals.
+The intended experience is a notebook-centered ML project in the data scientist's own repository. A coding assistant helps write and improve the experiment. The toolkit controls execution, tracking, independent evaluation, and approvals.
 
-This walkthrough follows the [user stories](user-stories.md) and [harness design](agentic-ml-harness-design.md). The project currently contains a proposed design, not a working tool. The setup commands below describe the intended interface; other CLI/API signatures remain undecided.
+This walkthrough follows the [user stories](user-stories.md) and [toolkit design](agentic-ml-harness-design.md). The project currently contains a proposed design, not a working tool. The setup commands below describe the intended interface; other CLI/API signatures remain undecided.
 
 ## How to read the sample prompts
 
 **Blockquotes beginning with `>` are sample natural-language prompts that the data scientist types into a coding assistant**, such as Codex, Claude Code, or GitHub Copilot, with the experiment repository open. They are not terminal commands or defined `agentic-ml` syntax.
 
-The assistant reads the project's brief and configuration, creates or revises notebooks and supporting code, and invokes the public harness CLI/API where available. No agent adapter is required for this interactive use.
+The assistant reads the project's brief and configuration, creates or revises notebooks and supporting code, and invokes the public toolkit CLI/API where available. No agent adapter is required for this interactive use.
 
-A prompt asking the assistant to present work for approval does not itself grant approval. The scientist must record the actual decision through the harness's developer approval mechanism. That interface remains undecided; an assistant cannot approve its own work or scope expansions.
+A prompt asking the assistant to present work for approval does not itself grant approval. The scientist must record the actual decision through the toolkit's developer approval mechanism. That interface remains undecided; an assistant cannot approve its own work or scope expansions.
 
 ## 1. Create the experiment project
 
@@ -28,7 +28,7 @@ uv run agentic-ml init
 # Open this project in VS Code and select its .venv notebook kernel.
 ```
 
-The repository URL and SHA are placeholders. The harness is installed as a pinned dependency; the scientist does not maintain a separate harness checkout.
+The repository URL and SHA are placeholders. The toolkit is installed as a pinned dependency; the scientist does not maintain a separate toolkit checkout.
 
 Initialization creates configuration, notebook templates, project-package scaffolding, and local defaults for DVC, MLflow, and workflow state. An illustrative project includes:
 
@@ -87,7 +87,7 @@ algorithms:
 
 This excerpt covers one algorithm; the complete configuration would also declare the approved random forest search space. The YAML is a hard boundary: the assistant cannot introduce another algorithm or extend a parameter range during the experiment. Omitted parameters use recorded registry defaults and do not become tunable.
 
-The harness validates and records the effective, versioned plan. The scientist resolves ambiguities and approves delegated choices, access scope, evaluation protocol, and budgets before dependent execution. The exact command for submitting or approving the plan is still unspecified.
+The toolkit validates and records the effective, versioned plan. The scientist resolves ambiguities and approves delegated choices, access scope, evaluation protocol, and budgets before dependent execution. The exact command for submitting or approving the plan is still unspecified.
 
 ## 3. Assess the data and approve the splits
 
@@ -99,7 +99,7 @@ Sample coding-assistant prompt:
 
 The scientist opens the notebook in VS Code, reads its explanations, and can execute cells for exploration.
 
-For an accepted, recorded result, the saved notebook must undergo harness-managed execution: a fresh kernel, ordered cells, explicit inputs, a locked environment, a recorded working directory, and a frozen source snapshot. Interactive execution alone does not establish acceptance.
+For an accepted, recorded result, the saved notebook must undergo toolkit-managed execution: a fresh kernel, ordered cells, explicit inputs, a locked environment, a recorded working directory, and a frozen source snapshot. Interactive execution alone does not establish acceptance.
 
 The scientist reviews the assessment and approves the split protocol before dependent feature or modeling work. Protected-test data remains inaccessible to exploratory notebooks and the assistant.
 
@@ -127,7 +127,7 @@ If the scientist already has preprocessing or model code, the assistant can regi
 
 Sample model-development prompt:
 
-> Compare the approved logistic regression and random forest candidates against the accepted baseline. Use only the declared algorithms and parameters. Diagnose errors using development data, record each candidate through the harness, and summarize the evidence at the model-development approval gate.
+> Compare the approved logistic regression and random forest candidates against the accepted baseline. Use only the declared algorithms and parameters. Diagnose errors using development data, record each candidate through the toolkit, and summarize the evidence at the model-development approval gate.
 
 After reviewing the evidence and approving progression to optimization, the scientist could prompt:
 
@@ -135,7 +135,7 @@ After reviewing the evidence and approving progression to optimization, the scie
 
 The assistant can revise and rerun work within the currently approved workflow phase without approval for every trial. Moving to another workflow phase, expanding the search space, or changing permissions requires authorization.
 
-Training cells submit through harness APIs so candidate validation, budgets, tracking, and approvals apply. Concrete API calls and training/tuning CLI commands remain undecided; this walkthrough does not prescribe executable syntax for them.
+Training cells submit through toolkit APIs so candidate validation, budgets, tracking, and approvals apply. Concrete API calls and training/tuning CLI commands remain undecided; this walkthrough does not prescribe executable syntax for them.
 
 Notebook-to-notebook dependencies use recorded, versioned artifact references rather than variables retained in another notebook's kernel.
 
@@ -155,7 +155,7 @@ The resulting evidence includes the selected model and preprocessing artifacts, 
 
 ## 7. Inspect, reproduce, or resume work
 
-The scientist inspects readable notebooks alongside MLflow records containing metrics, parameters, model artifacts, logs, and executed notebook snapshots. DVC versions datasets and pipeline outputs. Harness manifests connect those records to source, configuration, environment, approvals, and data lineage.
+The scientist inspects readable notebooks alongside MLflow records containing metrics, parameters, model artifacts, logs, and executed notebook snapshots. DVC versions datasets and pipeline outputs. Toolkit manifests connect those records to source, configuration, environment, approvals, and data lineage.
 
 A reproduction request to the coding assistant could be:
 
@@ -167,18 +167,18 @@ With managed orchestration, a resume request could be:
 
 > Resume this experiment from its durable state. Reconcile existing runs before submitting work, preserve consumed budgets, and stop at the next developer approval gate.
 
-Completed work with sufficient verified evidence is reused; active work is reattached. Uncertain execution status requires review rather than automatic duplicate submission. Durable harness state, rather than assistant conversation memory, determines where work resumes.
+Completed work with sufficient verified evidence is reused; active work is reattached. Uncertain execution status requires review rather than automatic duplicate submission. Durable toolkit state, rather than assistant conversation memory, determines where work resumes.
 
 ## Interactive and managed operation
 
 | Interaction mode | Scientist's experience |
 |---|---|
-| Interactive assistant | Prompt an external coding assistant, review its edits, and have it invoke the public harness CLI/API. No agent adapter is required. The harness does not own the assistant session. |
+| Interactive assistant | Prompt an external coding assistant, review its edits, and have it invoke the public toolkit CLI/API. No agent adapter is required. The toolkit does not own the assistant session. |
 | Managed agent | Configure a verified adapter, approve bounded work, and let the orchestrator delegate revisions and execution until a gate or stopping condition. |
 
 Both modes use the same experiment evidence, boundaries, budgets, and approval controls. Reviewing every notebook edit is optional unless configured as an additional gate; workflow phase approvals remain mandatory.
 
-The notebooks are the scientist's working interface. The harness supplies reproducible execution and independent evidence for assessing the resulting model.
+The notebooks are the scientist's working interface. The toolkit supplies reproducible execution and independent evidence for assessing the resulting model.
 
 ## Delivery expectations
 

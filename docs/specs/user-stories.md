@@ -2,7 +2,7 @@ Planning terms follow the [repository terminology](../../README.md#planning-term
 
 | Milestone | User-visible outcome | Stories |
 |---|---|---|
-| **0. Establish the harness development foundation** | Set up this repository, run the harness from source, and verify contributor changes and distributable packages locally and in CI. | US-31, US-32, US-33 |
+| **0. Establish the toolkit development foundation** | Set up this repository, run the toolkit from source, and verify contributor changes and distributable packages locally and in CI. | US-31, US-32, US-33 |
 | **1. Run and record a reproducible experiment** | Initialize a separate project, extract and validate data, execute a notebook, inspect its recorded results, and reproduce the run. | US-01, US-02, US-03, US-05, US-09, US-10, US-11, validation portion of US-12, US-13; initial US-26 and US-27 |
 | **2. Assess data and build reproducible feature pipelines** | Profile data, approve versioned splits, restore fitted feature pipelines and outputs, and compare predictive performance using a fixed approved reference estimator. | assessment/split portion of US-12; US-14, US-15; preprocessing portion of US-16; pipeline portion of US-27 |
 | **3. Train, tune, and independently evaluate models** | Compare baselines and candidate models within declared boundaries and obtain an independent assessment. | US-06, US-18, US-19, US-20, US-21, US-24; model portion of US-16; reporting portion of US-26 |
@@ -12,27 +12,31 @@ Planning terms follow the [repository terminology](../../README.md#planning-term
 | **50. Improve the technical environment** | Reduce development and verification overhead while preserving test isolation, coverage, and diagnostic evidence. Add stories as improvement areas are identified. | US-35, US-36, US-37, US-38 |
 | **99. Future enhancements** | Capture improvements deferred because they are not critical to current functionality. | US-34 |
 
-This document is the authoritative source of product and technical environment requirements and acceptance criteria. The original stories originated from version 0.10 of the [Agentic ML Development Harness design document](agentic-ml-harness-design.md); the design document now describes the supporting design and references the criteria defined here. Technical environment stories are added as improvement areas are identified. These requirements describe proposed behavior, not implemented capabilities or finalized interfaces.
+This document is the authoritative source of product and technical environment requirements and acceptance criteria. The original stories originated from version 0.10 of the [Agentic ML Development Toolkit design document](agentic-ml-harness-design.md); the design document now describes the supporting design and references the criteria defined here. Technical environment stories are added as improvement areas are identified. These requirements describe proposed behavior, not implemented capabilities or finalized interfaces.
 
 Acceptance criteria use stable IDs of the form `US-<story>-AC-<criterion>`, such as `US-01-AC-01`. Criterion numbers are unique within a story and continue across milestones. Preserve IDs when wording changes or criteria move; assign the next unused number to a new criterion and never reuse a retired ID. Architecture references identify supporting design sections rather than defining another set of requirements.
 
 Milestones 0–6 are cumulative. Repeated story identifiers describe incremental delivery of the same user outcome. Access controls, applicable approvals, budget enforcement, independent validation, and provenance accompany each capability when introduced; Milestone 5 completes their durable orchestration across workflow phases. The acceptance criteria below define verifiable outcomes without settling its pending API, configuration-schema, or isolation-design decisions. Milestone 50 is an ongoing technical improvement backlog outside that product delivery sequence; its number does not prescribe when its stories are implemented.
 
-## Milestone 0: Establish the harness development foundation
+<a id="milestone-0-establish-the-harness-development-foundation"></a>
 
-Contributors set up this repository for harness development, run the CLI from the local source checkout, and verify changes using documented checks. Automated CI checks verify changes, and clean-environment package checks verify distributable artifacts. This milestone establishes the development foundation for the experiment-user capabilities introduced in Milestone 1.
+## Milestone 0: Establish the toolkit development foundation
+
+Contributors set up this repository for toolkit development, run the CLI from the local source checkout, and verify changes using documented checks. Automated CI checks verify changes, and clean-environment package checks verify distributable artifacts. This milestone establishes the development foundation for the experiment-user capabilities introduced in Milestone 1.
 
 See the design's [Milestone 0 dependencies and delivery order](design/milestone-delivery.md#milestone-0-dependencies-and-delivery-order) for capability dependencies between these stories and recommended implementation sequencing.
 
-### US-31: Set up the harness development environment
+<a id="us-31-set-up-the-harness-development-environment"></a>
+
+### US-31: Set up the toolkit development environment
 
 As a contributor, I want documented steps to set up this repository for local development so that I can make changes and verify them consistently.
 
 Acceptance criteria:
 
 - <a id="us-31-ac-01"></a> **US-31-AC-01:** Documented prerequisites specify Python 3.12 or newer and required tools, and identify the Python versions verified by CI. macOS is the initial verified development platform; Linux and Windows remain eligible for future verification, and platform-specific requirements and known limitations are documented.
-- <a id="us-31-ac-02"></a> **US-31-AC-02:** Instructions cover cloning the harness repository and installing runtime and development dependencies using `uv` and the committed lockfile.
-- <a id="us-31-ac-03"></a> **US-31-AC-03:** Contributors can run the harness CLI from the local source checkout.
+- <a id="us-31-ac-02"></a> **US-31-AC-02:** Instructions cover cloning the toolkit repository and installing runtime and development dependencies using `uv` and the committed lockfile.
+- <a id="us-31-ac-03"></a> **US-31-AC-03:** Contributors can run the toolkit CLI from the local source checkout.
 - <a id="us-31-ac-04"></a> **US-31-AC-04:** Documented commands run automated tests, linting, formatting checks, and type checks.
 - <a id="us-31-ac-05"></a> **US-31-AC-05:** A documented smoke check confirms that the environment is ready for development.
 - <a id="us-31-ac-06"></a> **US-31-AC-06:** Setup identifies required configuration and credentials and provides local defaults where practical.
@@ -52,9 +56,11 @@ Acceptance criteria:
 - <a id="us-32-ac-03"></a> **US-32-AC-03:** CI runs automated tests, linting, formatting checks, type checks, and the development smoke check using the same documented commands available locally under US-31.
 - <a id="us-32-ac-04"></a> **US-32-AC-04:** Failed checks produce a failing CI result, and contributors can inspect check results and diagnostic logs from the pull request.
 
-### US-33: Build and verify the harness package
+<a id="us-33-build-and-verify-the-harness-package"></a>
 
-As a contributor, I want to build and verify distributable packages with a minimal CLI that reports its version so that I can confirm the harness installs and runs outside the source checkout.
+### US-33: Build and verify the toolkit package
+
+As a contributor, I want to build and verify distributable packages with a minimal CLI that reports its version so that I can confirm the toolkit installs and runs outside the source checkout.
 
 Acceptance criteria:
 
@@ -68,18 +74,20 @@ Acceptance criteria:
 
 ## Milestone 1: Run and record a reproducible experiment
 
-Starting with Python and local raw data, the developer creates a separate experiment repository and completes an extraction-to-recorded-notebook run without requiring an agent or a manually maintained harness checkout. Developers may use an external coding assistant to prepare inputs and code and invoke the public harness CLI/API without an agent adapter; the harness must validate, record, and execute supplied inputs without an agent dependency. This milestone covers extraction, snapshots, basic validation and review, recorded execution, and restoration. Detailed profiling and train/validation/protected-test splits are introduced in Milestone 2; Milestone 1 versioning and restoration cover the source dataset and recorded run inputs.
+Starting with Python and local raw data, the developer creates a separate experiment repository and completes an extraction-to-recorded-notebook run without requiring an agent or a manually maintained toolkit checkout. Developers may use an external coding assistant to prepare inputs and code and invoke the public toolkit CLI/API without an agent adapter; the toolkit must validate, record, and execute supplied inputs without an agent dependency. This milestone covers extraction, snapshots, basic validation and review, recorded execution, and restoration. Detailed profiling and train/validation/protected-test splits are introduced in Milestone 2; Milestone 1 versioning and restoration cover the source dataset and recorded run inputs.
 
-### US-01: Install a pinned harness version
+<a id="us-01-install-a-pinned-harness-version"></a>
 
-As a developer, I want to install a pinned harness version into my own experiment repository so that my project has a reproducible environment.
+### US-01: Install a pinned toolkit version
+
+As a developer, I want to install a pinned toolkit version into my own experiment repository so that my project has a reproducible environment.
 
 Acceptance criteria:
 
-- <a id="us-01-ac-01"></a> **US-01-AC-01:** Documented bootstrap instructions cover installing `uv` and Git, creating the user Git/Python project, and installing the harness from GitHub at a full commit SHA.
-- <a id="us-01-ac-02"></a> **US-01-AC-02:** The harness is a normal installed dependency; runtime use requires no manually maintained harness checkout or installer cache.
-- <a id="us-01-ac-03"></a> **US-01-AC-03:** The project lockfile records the resolved harness revision and dependencies; the installed package exposes `agentic-ml`, `agentic_ml`, templates, and runtime guidance.
-- <a id="us-01-ac-04"></a> **US-01-AC-04:** An explicit harness upgrade changes the commit pin and lockfile, producing a new environment identity.
+- <a id="us-01-ac-01"></a> **US-01-AC-01:** Documented bootstrap instructions cover installing `uv` and Git, creating the user Git/Python project, and installing the toolkit from GitHub at a full commit SHA.
+- <a id="us-01-ac-02"></a> **US-01-AC-02:** The toolkit is a normal installed dependency; runtime use requires no manually maintained toolkit checkout or installer cache.
+- <a id="us-01-ac-03"></a> **US-01-AC-03:** The project lockfile records the resolved toolkit revision and dependencies; the installed package exposes `agentic-ml`, `agentic_ml`, templates, and runtime guidance.
+- <a id="us-01-ac-04"></a> **US-01-AC-04:** An explicit toolkit upgrade changes the commit pin and lockfile, producing a new environment identity.
 
 Architecture references: [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation); [§9 Execution](design/execution-and-governance.md#execution).
 
@@ -90,7 +98,7 @@ As a developer, I want to initialize configuration, notebooks, dependencies, and
 Acceptance criteria:
 
 - <a id="us-02-ac-01"></a> **US-02-AC-01:** `uv run agentic-ml init` adds project configuration, ignore rules, an initial experiment brief, search-space and execution configuration, notebook templates, and required project-package scaffolding.
-- <a id="us-02-ac-02"></a> **US-02-AC-02:** Initialization preserves existing files and the pinned harness dependency, reporting conflicts instead of silently overwriting files.
+- <a id="us-02-ac-02"></a> **US-02-AC-02:** Initialization preserves existing files and the pinned toolkit dependency, reporting conflicts instead of silently overwriting files.
 - <a id="us-02-ac-03"></a> **US-02-AC-03:** Required ML and notebook execution dependencies are declared and synchronized with the project environment and lockfile.
 - <a id="us-02-ac-04"></a> **US-02-AC-04:** Project-associated DVC, MLflow, and durable-state storage are initialized with local defaults and configurable locations.
 - <a id="us-02-ac-05"></a> **US-02-AC-05:** Data access, agent authentication, and approval presentation remain explicit setup choices; initialization grants no execution or data-access authorization, and credentials remain outside committed configuration.
@@ -152,7 +160,7 @@ As a data scientist, I want to submit, monitor, cancel, and inspect runs so that
 
 Acceptance criteria:
 
-- <a id="us-10-ac-01"></a> **US-10-AC-01:** The local runner supports submission, status inspection, cancellation, logs, and artifact retrieval through the harness interfaces.
+- <a id="us-10-ac-01"></a> **US-10-AC-01:** The local runner supports submission, status inspection, cancellation, logs, and artifact retrieval through the toolkit interfaces.
 - <a id="us-10-ac-02"></a> **US-10-AC-02:** Runs record completion, failure, timeout, or cancellation outcomes with available diagnostic evidence.
 - <a id="us-10-ac-03"></a> **US-10-AC-03:** Runtime and experiment-count limits prevent further unauthorized work; supported resource limits are enforced.
 - <a id="us-10-ac-04"></a> **US-10-AC-04:** Unsuccessful model performance is distinguishable from execution failure when modeling is added.
@@ -204,9 +212,9 @@ As a data scientist, I want recorded runs linked to their exact inputs, code, an
 
 Acceptance criteria:
 
-- <a id="us-26-ac-01"></a> **US-26-AC-01:** MLflow records run status, effective parameters, available metrics, outputs, and artifact references, linked to the harness run identifier.
+- <a id="us-26-ac-01"></a> **US-26-AC-01:** MLflow records run status, effective parameters, available metrics, outputs, and artifact references, linked to the toolkit run identifier.
 - <a id="us-26-ac-02"></a> **US-26-AC-02:** Each run links to the exact DVC dataset state, experiment Git revision, source snapshots including uncommitted changes, and configuration checksums.
-- <a id="us-26-ac-03"></a> **US-26-AC-03:** Provenance includes the harness repository URL, full commit SHA, package version, build identity where available, and project lockfile/environment identity.
+- <a id="us-26-ac-03"></a> **US-26-AC-03:** Provenance includes the toolkit repository URL, full commit SHA, package version, build identity where available, and project lockfile/environment identity.
 - <a id="us-26-ac-04"></a> **US-26-AC-04:** Source snapshots include notebooks, imported helpers, project code, configuration, and applicable runtime guidance; later milestones extend these records to components, pipelines, and approvals.
 - <a id="us-26-ac-05"></a> **US-26-AC-05:** Basic execution correctness is independently checked against expected artifacts; notebook completion alone does not establish experiment acceptance.
 
@@ -218,7 +226,7 @@ As a collaborating data scientist, I want to reproduce an experiment on another 
 
 Acceptance criteria:
 
-- <a id="us-27-ac-01"></a> **US-27-AC-01:** An experiment checkout, recorded source snapshots, lockfile, and dataset metadata restore the pinned harness commit and required inputs without a maintained harness checkout.
+- <a id="us-27-ac-01"></a> **US-27-AC-01:** An experiment checkout, recorded source snapshots, lockfile, and dataset metadata restore the pinned toolkit commit and required inputs without a maintained toolkit checkout.
 - <a id="us-27-ac-02"></a> **US-27-AC-02:** Reproduction executes the recorded source, including preserved uncommitted changes, rather than assuming the Git revision alone identifies it.
 - <a id="us-27-ac-03"></a> **US-27-AC-03:** Declared output checks or tolerances determine whether the basic run reproduces successfully; metric tolerances apply when modeling is introduced.
 - <a id="us-27-ac-04"></a> **US-27-AC-04:** Missing source, dependencies, or dataset content is reported explicitly instead of silently substituted.
@@ -248,7 +256,7 @@ As a data scientist, I want agents to generate and compare feature pipelines on 
 Acceptance criteria:
 
 - <a id="us-14-ac-01"></a> **US-14-AC-01:** Feature plans identify ordered components, effective parameters, input/output schemas, fitting scope, and modification permissions.
-- <a id="us-14-ac-02"></a> **US-14-AC-02:** The harness executes candidate transformations and records their definitions, dependencies, outputs, and lineage.
+- <a id="us-14-ac-02"></a> **US-14-AC-02:** The toolkit executes candidate transformations and records their definitions, dependencies, outputs, and lineage.
 - <a id="us-14-ac-03"></a> **US-14-AC-03:** Candidate feature sets are compared for predictive performance against a fixed approved baseline feature set using the same fixed approved reference estimator, estimator settings, metric, and split protocol. Improvement follows the declared metric direction; comparisons record gains, ties, or regressions. Milestone 2 includes the minimal training/evaluation capability needed for this comparison; broader model experimentation remains in Milestone 3.
 - <a id="us-14-ac-04"></a> **US-14-AC-04:** Feature artifacts trace back to their source datasets and are independently validated before workflow phase advancement.
 - <a id="us-14-ac-05"></a> **US-14-AC-05:** This milestone supports supplied or explicitly authored candidates; agent generation is exercised when agent integration arrives in Milestone 4.
@@ -270,7 +278,7 @@ Architecture references: [§7 Feature Engineering](design/data-and-features.md#7
 
 ### US-16: Register supplied preprocessing components
 
-As a data scientist, I want to register my existing preprocessors without changing the harness so that I can reuse domain-specific implementations.
+As a data scientist, I want to register my existing preprocessors without changing the toolkit so that I can reuse domain-specific implementations.
 
 Acceptance criteria:
 
@@ -289,7 +297,7 @@ As a data scientist, I want reproducible pipeline stages and valid output reuse 
 Acceptance criteria:
 
 - <a id="us-27-ac-05"></a> **US-27-AC-05:** DVC pipeline definitions record stage dependencies, parameters, and outputs, with resolved hashes preserved in `dvc.lock`.
-- <a id="us-27-ac-06"></a> **US-27-AC-06:** Stage working directories and paths are explicit and consistent with harness execution.
+- <a id="us-27-ac-06"></a> **US-27-AC-06:** Stage working directories and paths are explicit and consistent with toolkit execution.
 - <a id="us-27-ac-07"></a> **US-27-AC-07:** Reproducing declared stages restores or generates the expected outputs under the recorded configuration.
 - <a id="us-27-ac-08"></a> **US-27-AC-08:** Reused outputs retain producer provenance and remain subject to current authorization and evaluation checks.
 - <a id="us-27-ac-09"></a> **US-27-AC-09:** Cache reuse alone does not establish experiment acceptance or bypass a gate.
@@ -315,11 +323,11 @@ Architecture references: [§8 Developer experiment inputs](design/interfaces-and
 
 ### US-16: Register supplied models
 
-As a data scientist, I want to register my existing model implementations without changing the harness so that I can reuse domain-specific training code.
+As a data scientist, I want to register my existing model implementations without changing the toolkit so that I can reuse domain-specific training code.
 
 Acceptance criteria:
 
-- <a id="us-16-ac-06"></a> **US-16-AC-06:** Project-local or pinned-dependency models register through the public component interface without harness modifications.
+- <a id="us-16-ac-06"></a> **US-16-AC-06:** Project-local or pinned-dependency models register through the public component interface without toolkit modifications.
 - <a id="us-16-ac-07"></a> **US-16-AC-07:** Models support training on approved inputs, evaluator-compatible prediction, and fitted-model persistence/restoration.
 - <a id="us-16-ac-08"></a> **US-16-AC-08:** Before training, validation rejects unsupported tasks, invalid parameters, incompatible interfaces, and prediction outputs incompatible with the approved metrics.
 - <a id="us-16-ac-09"></a> **US-16-AC-09:** Supplied models can be tuned within approved boundaries and independently evaluated after restoration.
@@ -431,11 +439,11 @@ As a data scientist, I want agents to generate readable notebooks and project co
 Acceptance criteria:
 
 - <a id="us-07-ac-01"></a> **US-07-AC-01:** Generated notebooks include explanatory Markdown covering objectives, assumptions, code, results, and proposed next steps, with explicit parameter cells.
-- <a id="us-07-ac-02"></a> **US-07-AC-02:** Notebooks import generic capabilities from the installed harness and shared project logic from the experiment package without paths into a harness checkout.
+- <a id="us-07-ac-02"></a> **US-07-AC-02:** Notebooks import generic capabilities from the installed toolkit and shared project logic from the experiment package without paths into a toolkit checkout.
 - <a id="us-07-ac-03"></a> **US-07-AC-03:** Saved notebooks support interactive use and fresh-kernel managed execution without hidden state.
-- <a id="us-07-ac-04"></a> **US-07-AC-04:** Generated notebooks, helpers, and project code stay within the experiment repository and authorized storage; the harness installation/source remain unchanged.
+- <a id="us-07-ac-04"></a> **US-07-AC-04:** Generated notebooks, helpers, and project code stay within the experiment repository and authorized storage; the toolkit installation/source remain unchanged.
 
-Architecture references: [§9 Notebook development and execution contract](design/execution-and-governance.md#notebook-development-and-execution-contract); [§3 Harness and experiment project boundary](agentic-ml-harness-design.md#harness-and-experiment-project-boundary).
+Architecture references: [§9 Notebook development and execution contract](design/execution-and-governance.md#notebook-development-and-execution-contract); [§3 Toolkit and experiment project boundary](agentic-ml-harness-design.md#harness-and-experiment-project-boundary).
 
 ### US-08: Explore interactively under the same controls
 
@@ -444,7 +452,7 @@ As a data scientist, I want to explore interactively in VS Code under the experi
 Acceptance criteria:
 
 - <a id="us-08-ac-01"></a> **US-08-AC-01:** Interactive notebooks use the project environment with the required notebook dependencies; VS Code is the documented editor for manual verification.
-- <a id="us-08-ac-02"></a> **US-08-AC-02:** Interactive kernels cannot access protected test data, including through arbitrary Python outside harness API calls.
+- <a id="us-08-ac-02"></a> **US-08-AC-02:** Interactive kernels cannot access protected test data, including through arbitrary Python outside toolkit API calls.
 - <a id="us-08-ac-03"></a> **US-08-AC-03:** Training cells submit through managed APIs that enforce candidate boundaries, applicable approvals, budgets, and tracking.
 - <a id="us-08-ac-04"></a> **US-08-AC-04:** Interactive execution cannot establish acceptance; recorded results require managed execution of saved snapshots and independent evaluation.
 
@@ -483,10 +491,10 @@ As a data scientist, I want an agent adapter with explicit, preserved runtime gu
 
 Acceptance criteria:
 
-- <a id="us-30-ac-01"></a> **US-30-AC-01:** The first managed coding-assistant adapter verifies a concrete product/interface/version and supports capability discovery, structured task/result exchange, and documented task cancellation through the common contract. Interactive assistants can use the public harness CLI/API without an adapter. Acceptance demonstrates task receipt, project-code/notebook revision, managed execution, development-feedback consumption, and stopping at a developer approval boundary.
+- <a id="us-30-ac-01"></a> **US-30-AC-01:** The first managed coding-assistant adapter verifies a concrete product/interface/version and supports capability discovery, structured task/result exchange, and documented task cancellation through the common contract. Interactive assistants can use the public toolkit CLI/API without an adapter. Acceptance demonstrates task receipt, project-code/notebook revision, managed execution, development-feedback consumption, and stopping at a developer approval boundary.
 - <a id="us-30-ac-02"></a> **US-30-AC-02:** Runtime loading explicitly selects packaged shared guidance, relevant task-specific guidance, and configured project guidance, recording ownership and order.
-- <a id="us-30-ac-03"></a> **US-30-AC-03:** Development `AGENTS.md` files from either repository are excluded from automatic loading by the harness runtime loader. Instructions independently loaded by an external assistant are outside this guarantee; observable additional context and capture limitations are recorded.
-- <a id="us-30-ac-04"></a> **US-30-AC-04:** The plan snapshots harness-supplied guidance contents, paths, versions/checksums, and load order; subsequent tasks reference the preserved bundle, with managed adapters demonstrating delivery. This records harness-supplied guidance, not the assistant's complete instruction context.
+- <a id="us-30-ac-03"></a> **US-30-AC-03:** Development `AGENTS.md` files from either repository are excluded from automatic loading by the toolkit runtime loader. Instructions independently loaded by an external assistant are outside this guarantee; observable additional context and capture limitations are recorded.
+- <a id="us-30-ac-04"></a> **US-30-AC-04:** The plan snapshots toolkit-supplied guidance contents, paths, versions/checksums, and load order; subsequent tasks reference the preserved bundle, with managed adapters demonstrating delivery. This records toolkit-supplied guidance, not the assistant's complete instruction context.
 - <a id="us-30-ac-05"></a> **US-30-AC-05:** Conflicting guidance or attempts to expand experiment constraints block affected execution; adopting changed guidance requires a new versioned configuration and applicable approvals.
 
 Architecture references: [§8 AgentAdapter interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts); [§8 Development and runtime agent instructions](design/interfaces-and-configuration.md#development-and-runtime-agent-instructions).
@@ -535,7 +543,7 @@ Acceptance criteria:
 
 - <a id="us-30-ac-06"></a> **US-30-AC-06:** Two adapters successfully execute tasks using the same versioned task/result contract.
 - <a id="us-30-ac-07"></a> **US-30-AC-07:** Capability discovery identifies which tasks each adapter supports before delegation.
-- <a id="us-30-ac-08"></a> **US-30-AC-08:** Both managed adapters meet the common cancellation, harness-guidance delivery, developer-approval, access, and harness-run budget requirements, including boundaries for assistant tools/workspaces. Agent-task cancellation is recorded separately from experiment-run cancellation; assistant usage measurement/control capabilities and limitations are explicit. Resumption uses durable task/run evidence and consumed budgets rather than assistant memory.
+- <a id="us-30-ac-08"></a> **US-30-AC-08:** Both managed adapters meet the common cancellation, toolkit-guidance delivery, developer-approval, access, and toolkit-run budget requirements, including boundaries for assistant tools/workspaces. Agent-task cancellation is recorded separately from experiment-run cancellation; assistant usage measurement/control capabilities and limitations are explicit. Resumption uses durable task/run evidence and consumed budgets rather than assistant memory.
 - <a id="us-30-ac-09"></a> **US-30-AC-09:** Agent selection does not alter independent evaluation or the experiment's allowed boundaries.
 
 Architecture references: [§8 AgentAdapter interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts); [§8 Development and runtime agent instructions](design/interfaces-and-configuration.md#development-and-runtime-agent-instructions).
@@ -546,9 +554,9 @@ As a reviewer, I want run lineage connected to workflow decisions so that I can 
 
 Acceptance criteria:
 
-- <a id="us-26-ac-10"></a> **US-26-AC-10:** Harness manifests connect runs, MLflow records, DVC state, configuration versions, runtime bundles, and approval records.
+- <a id="us-26-ac-10"></a> **US-26-AC-10:** Toolkit manifests connect runs, MLflow records, DVC state, configuration versions, runtime bundles, and approval records.
 - <a id="us-26-ac-11"></a> **US-26-AC-11:** The audit trail identifies the scope authorizing each workflow phase, approved scope changes, and the evidence used for each decision.
-- <a id="us-26-ac-12"></a> **US-26-AC-12:** Bidirectional run references allow lookup from a harness result to its MLflow run and from the tracking record to harness provenance.
+- <a id="us-26-ac-12"></a> **US-26-AC-12:** Bidirectional run references allow lookup from a toolkit result to its MLflow run and from the tracking record to toolkit provenance.
 - <a id="us-26-ac-13"></a> **US-26-AC-13:** Resumption and reuse preserve original producer provenance and the decisions authorizing subsequent use.
 
 Architecture references: [§3 Component responsibilities](agentic-ml-harness-design.md#component-responsibilities); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
@@ -599,7 +607,7 @@ As a contributor, I want successful verification runs to remove disposable envir
 Acceptance criteria:
 
 - <a id="us-35-ac-01"></a> **US-35-AC-01:** Successful standalone installation, distribution, initialization, and planning verification removes environments and disposable installer caches created by the invocation after all dependent checks complete.
-- <a id="us-35-ac-02"></a> **US-35-AC-02:** Commands, logs, artifact identities, environment identity manifests, and verification results are preserved beneath the harness repository's `.dev-records/verification/` directory, separately from disposable environments and workspaces. Records are retained for the lifetime of agentic-ml development, and each verification invocation reports its absolute record location. Successful cleanup preserves these records.
+- <a id="us-35-ac-02"></a> **US-35-AC-02:** Commands, logs, artifact identities, environment identity manifests, and verification results are preserved beneath the toolkit repository's `.dev-records/verification/` directory, separately from disposable environments and workspaces. Records are retained for the lifetime of agentic-ml development, and each verification invocation reports its absolute record location. Successful cleanup preserves these records.
 - <a id="us-35-ac-03"></a> **US-35-AC-03:** Failed verification retains available diagnostic records and environments for inspection. A documented option preserves successful workspaces when explicitly requested.
 - <a id="us-35-ac-04"></a> **US-35-AC-04:** Cleanup is limited to disposable paths created and owned by the invocation. Existing environments, caller-owned files, shared caches, source checkouts, and historical evidence remain intact; cleanup failure is reported without concealing the original verification outcome.
 - <a id="us-35-ac-05"></a> **US-35-AC-05:** Automated checks cover default successful cleanup, failure retention, explicit retention, ownership boundaries, and cleanup failure. Before-and-after evidence records retained environment counts and disk usage for the same verification workload, including platform and filesystem measurement limits.
@@ -622,12 +630,12 @@ Notes: Merely setting pytest retention does not affect driver workspaces created
 
 ### US-37: Reuse installed environments across compatible tests
 
-As a contributor, I want compatible tests to reuse an installed harness environment while keeping project state isolated so that verification creates fewer full dependency environments.
+As a contributor, I want compatible tests to reuse an installed toolkit environment while keeping project state isolated so that verification creates fewer full dependency environments.
 
 Acceptance criteria:
 
 - <a id="us-37-ac-01"></a> **US-37-AC-01:** A reviewed inventory maps affected tests to their public interfaces and acceptance criteria, identifies candidates for environment reuse, and records which tests require fresh environments and why before fixture changes are implemented.
-- <a id="us-37-ac-02"></a> **US-37-AC-02:** Compatible tests reuse an installed environment containing the intended harness revision and dependencies while retaining independent project files, configuration, stores, and durable state. Installed-package tests continue to run outside the harness checkout without editable installs or contributor dependency leakage.
+- <a id="us-37-ac-02"></a> **US-37-AC-02:** Compatible tests reuse an installed environment containing the intended toolkit revision and dependencies while retaining independent project files, configuration, stores, and durable state. Installed-package tests continue to run outside the toolkit checkout without editable installs or contributor dependency leakage.
 - <a id="us-37-ac-03"></a> **US-37-AC-03:** Tests that install, synchronize, upgrade, damage, or otherwise mutate an environment retain independent environments. Clean installation, cache independence, lock/pin preservation, and genuine direct-wheel and source-distribution-rebuilt-wheel coverage remain verified.
 - <a id="us-37-ac-04"></a> **US-37-AC-04:** Reuse does not introduce test-order dependence, cross-project state leakage, or concurrent mutation of a shared environment. Automated checks exercise the selected tests in differing orders and under the supported parallel scheduling configuration.
 - <a id="us-37-ac-05"></a> **US-37-AC-05:** Before-and-after runs of the same selected test cases demonstrate fewer environment creations and record peak and retained disk usage, elapsed time, package identities, platform, and filesystem limitations. Existing assertions and timeouts remain unchanged, and runtime regressions are reported.

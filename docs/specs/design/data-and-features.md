@@ -1,6 +1,6 @@
 # Data and Features
 
-Part of the [harness design](../agentic-ml-harness-design.md). Scope: Data Extraction and Iterative Acquisition, Feature Engineering.
+Part of the [toolkit design](../agentic-ml-harness-design.md). Scope: Data Extraction and Iterative Acquisition, Feature Engineering.
 
 **Related contracts:** Read [interfaces and configuration](interfaces-and-configuration.md); [execution and governance](execution-and-governance.md); [acceptance traceability](acceptance-traceability.md) when changing behavior that crosses these boundaries. Consult the [reading map and authority rules](../agentic-ml-harness-design.md#reading-map-and-document-authority) and [architecture decisions](architecture-decisions.md) before implementation.
 
@@ -64,7 +64,7 @@ The feature engineering engine must:
 
 Milestone 2 supplies the minimal estimator training, prediction, and independent validation-metric computation needed for feature comparison. Approve and record the baseline feature set, reference estimator/settings, metric/direction, and split protocol before candidate comparison. Fit preprocessing and the estimator only on approved training partitions, score only on approved validation partitions, and enforce protected-test isolation for experiment code and exploratory kernels. Apply execution authorization, resource budgets, independent leakage/result checks, and existing run-evidence contracts to these runs. Preserve baseline/candidate feature identities, estimator code/dependency identities and settings, fitted artifacts, predictions, scores, and data/split lineage so comparisons can be reviewed and reproduced. A candidate need not improve to produce a valid comparison; an improvement claim must follow the recorded metric direction. Algorithm selection and hyperparameter search remain in Milestone 3.
 
-Experiment-specific transformations belong in the experiment repository's notebooks or helper modules. Code shared across experiments in that repository belongs in its own Python package. Generic feature-engineering capabilities belong in the harness package; promoting project code into the harness is a separate development change.
+Experiment-specific transformations belong in the experiment repository's notebooks or helper modules. Code shared across experiments in that repository belongs in its own Python package. Generic feature-engineering capabilities belong in the toolkit package; promoting project code into the toolkit is a separate development change.
 
 Feature preparation supports user-supplied stateless transformations and stateful preprocessors. Stateful preprocessors expose separate fitting and transformation operations: fitting receives only the approved training partition, and the fitted state is reused unchanged for validation, test, and inference.
 

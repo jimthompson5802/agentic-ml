@@ -2,11 +2,13 @@
 
 ## Audience and requirements
 
-This file guides agents building, testing, and maintaining the agentic-ml harness in this repository. Maintain instructions for agents conducting experiments separately as packaged runtime guidance. Product behavior described below is an implementation and verification obligation for harness developers.
+In this repository, “toolkit” and “harness” refer to the same agentic-ml software and may be used interchangeably. New documentation generally uses “toolkit”; existing documents may use “harness.”
+
+This file guides agents building, testing, and maintaining the agentic-ml toolkit in this repository. Maintain instructions for agents conducting experiments separately as packaged runtime guidance. Product behavior described below is an implementation and verification obligation for toolkit developers.
 
 Before implementing a user story, retrieve its GitHub issue, including the complete body and all comments, using the [retrieve-github-issue skill](.agents/skills/retrieve-github-issue/SKILL.md). Identify the milestone, story ID, acceptance criteria, and recorded scope decisions that govern the work.
 
-Use the GitHub issue as the implementation scope. Consult [user stories](docs/specs/user-stories.md) for milestone context and the [harness design](docs/specs/agentic-ml-harness-design.md) for supporting design. Resolve conflicts between the issue and repository specifications before implementing affected behavior. Design examples describe proposed interfaces unless explicitly settled. Before implementing a capability, use the design’s [reading map](docs/specs/agentic-ml-harness-design.md#reading-map-and-document-authority) to read the relevant topic documents, follow related-contract links for affected behavior, and check the applicable milestone, acceptance traceability, and architecture decisions.
+Use the GitHub issue as the implementation scope. Consult [user stories](docs/specs/user-stories.md) for milestone context and the [toolkit design](docs/specs/agentic-ml-harness-design.md) for supporting design. Resolve conflicts between the issue and repository specifications before implementing affected behavior. Design examples describe proposed interfaces unless explicitly settled. Before implementing a capability, use the design’s [reading map](docs/specs/agentic-ml-harness-design.md#reading-map-and-document-authority) to read the relevant topic documents, follow related-contract links for affected behavior, and check the applicable milestone, acceptance traceability, and architecture decisions.
 
 Reference the issue and applicable acceptance criterion IDs in the implementation plan and verification evidence. For stories spanning milestones, identify the criteria covered by the current implementation. Record unresolved design decisions before dependent implementation.
 
@@ -40,7 +42,7 @@ Use documented repository commands for tests, linting, formatting checks, type c
 
 ## Test-driven development
 
-Use TDD for new harness behavior and bug fixes. Derive test cases from the GitHub issue's acceptance criteria. Before writing tests, record the public interfaces under test and what each test boundary covers or misses; confirm these boundaries with the developer through the implementation plan or an explicit review. Reuse confirmed boundaries while they remain applicable.
+Use TDD for new toolkit behavior and bug fixes. Derive test cases from the GitHub issue's acceptance criteria. Before writing tests, record the public interfaces under test and what each test boundary covers or misses; confirm these boundaries with the developer through the implementation plan or an explicit review. Reuse confirmed boundaries while they remain applicable.
 
 Work in small vertical slices:
 
@@ -75,7 +77,7 @@ Keep the original test and acceptance criteria intact while fixing a problem. Ne
 
 ## Package and project boundaries
 
-Implement reusable harness capabilities in the installable package. Verify the boundary with separate experiment-project fixtures: experiment-specific notebooks, configuration, and custom code must work through the installed public interfaces without modifying or importing from a harness checkout.
+Implement reusable toolkit capabilities in the installable package. Verify the boundary with separate experiment-project fixtures: experiment-specific notebooks, configuration, and custom code must work through the installed public interfaces without modifying or importing from a toolkit checkout.
 
 Preserve `agentic-ml` as the CLI name and `agentic_ml` as the Python import name. Load templates and runtime guidance through installed-package resources.
 
@@ -83,9 +85,11 @@ Verify distribution changes outside the source checkout, using declared runtime 
 
 Keep development instructions separate from packaged experiment runtime guidance. Add component-level `AGENTS.md` files only when distinct instructions are needed.
 
-## Harness implementation contracts
+<a id="harness-implementation-contracts"></a>
 
-For each changed capability, derive implementation and test obligations from the GitHub issue and relevant [harness design](docs/specs/agentic-ml-harness-design.md) contracts. Keep detailed product rules in those sources. Apply the following checks to the affected components as their capabilities are introduced:
+## Toolkit implementation contracts
+
+For each changed capability, derive implementation and test obligations from the GitHub issue and relevant [toolkit design](docs/specs/agentic-ml-harness-design.md) contracts. Keep detailed product rules in those sources. Apply the following checks to the affected components as their capabilities are introduced:
 
 - **Execution and initialization:** Implement CLI/API use without an agent adapter, conflict-safe initialization, configuration validation before execution, explicit path/working-directory handling, and reproducible execution of saved notebooks. Verify these behaviors through installed-package integration tests.
 - **Policy enforcement:** Implement shared validation and executable authorization, access, search-boundary, and budget controls across supported entrypoints. Test bypass attempts from custom code and interactive kernels; Markdown guidance alone does not enforce a boundary.
@@ -97,7 +101,7 @@ For each changed capability, derive implementation and test obligations from the
 
 ## Runtime guidance development
 
-When implementing packaged runtime guidance or its loader, follow the design's development/runtime instruction boundary. Verify explicit selection mappings, exclusion of development `AGENTS.md` files from automatic harness loading, and preservation of selected contents, ownership, paths, versions/checksums, and load order.
+When implementing packaged runtime guidance or its loader, follow the design's development/runtime instruction boundary. Verify explicit selection mappings, exclusion of development `AGENTS.md` files from automatic toolkit loading, and preservation of selected contents, ownership, paths, versions/checksums, and load order.
 
 Test conflicting guidance, approved version changes, and restoration of preserved bundles. Document observable external context and capture limitations. Write experiment-use directions in the runtime resources rather than this development file.
 
@@ -107,6 +111,6 @@ Verify changed behavior against the applicable acceptance criteria. Include rele
 
 Use separate experiment-project fixtures for installation, initialization, execution, tracking, and restoration checks. Verify reproduction against declared output checks or tolerances.
 
-Select tests from the affected implementation contracts above and the harness design's reference acceptance-test datasets. The GitHub issue defines required coverage. Record which acceptance criteria the evidence verifies and identify any verification limitations.
+Select tests from the affected implementation contracts above and the toolkit design's reference acceptance-test datasets. The GitHub issue defines required coverage. Record which acceptance criteria the evidence verifies and identify any verification limitations.
 
 Use small, controlled test datasets and isolated temporary storage for verification. Keep credentials, generated run storage, and external dataset content outside Git; track DVC metadata and manifests where required by the test scenario.

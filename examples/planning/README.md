@@ -6,7 +6,7 @@ The example refers to the initialization notebook
 `experiments/initial/notebooks/01_data_assessment.ipynb`; if you initialized a different
 experiment name, update that path in the copied execution file.
 
-Run from your experiment project with its installed harness dependency:
+Run from your experiment project with its installed toolkit dependency:
 
 ```sh
 uv run --locked agentic-ml plan resolve --project-root "$PWD" --experiment planning/experiment.yaml

@@ -1,12 +1,14 @@
 # Repository Layout
 
-Part of the [harness design](../agentic-ml-harness-design.md). Scope: Proposed Repository Layout.
+Part of the [toolkit design](../agentic-ml-harness-design.md). Scope: Proposed Repository Layout.
 
 **Related contracts:** Read [interfaces and configuration](interfaces-and-configuration.md); [execution and governance](execution-and-governance.md) when changing behavior that crosses these boundaries. Consult the [reading map and authority rules](../agentic-ml-harness-design.md#reading-map-and-document-authority) and [architecture decisions](architecture-decisions.md) before implementation.
 
 ## 12. Proposed Repository Layout
 
-### Harness product repository
+<a id="harness-product-repository"></a>
+
+### Toolkit product repository
 
 This repository contains the installable product, templates, examples, and product tests. Example projects and fixtures demonstrate usage; user experiment repositories are created separately.
 
@@ -65,7 +67,7 @@ agentic-ml-harness/
 
 ### Separate user experiment repository
 
-The following is an illustrative initialized project, not a directory inside the harness repository. Its project package name and experiment names are user-selected.
+The following is an illustrative initialized project, not a directory inside the toolkit repository. Its project package name and experiment names are user-selected.
 
 ```text
 customer-churn/
@@ -95,7 +97,7 @@ customer-churn/
         └── helpers/          # Optional experiment-specific Python
 ```
 
-Project configuration and experiment-input paths resolve against the user repository root. DVC stage paths follow DVC's declared stage working-directory semantics; pipeline templates must make those paths explicit and consistent with harness execution. Raw sources may remain outside the repository under approved access rules; `data/` represents versioned project snapshots.
+Project configuration and experiment-input paths resolve against the user repository root. DVC stage paths follow DVC's declared stage working-directory semantics; pipeline templates must make those paths explicit and consistent with toolkit execution. Raw sources may remain outside the repository under approved access rules; `data/` represents versioned project snapshots.
 
 Executed notebook snapshots, model artifacts, DVC content/cache, and durable workflow state live in configured project-associated storage and are excluded from Git when stored beneath the project root. Track source notebooks, generated Python, briefs, configuration, project dependency lockfiles, DVC metadata/pipeline definitions, and artifact references in the experiment repository. Preserve immutable source snapshots for runs even when the working tree has uncommitted changes.
 

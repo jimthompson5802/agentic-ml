@@ -1,4 +1,6 @@
-# Agentic ML Development Harness — Design
+<a id="agentic-ml-development-harness--design"></a>
+
+# Agentic ML Development Toolkit — Design
 
 **Version:** 0.13
 **Status:** Proposed specification; ADR-001 accepted; ADR-007 installation decisions accepted
@@ -24,9 +26,9 @@ Each detailed section has one authoritative location. Section numbers are retain
 
 ## 1. Executive Summary
 
-Build an agent-independent machine learning development harness for tabular ML and deep learning. Coding assistants can invoke the harness interactively through its public CLI/API, while a workflow orchestrator within the installed package can delegate tasks through managed agent adapters; distinct execution and evaluation components independently execute, validate, and track experiments. Development is supervised: agents may iterate within approved workflow phases and budgets, while developers approve workflow phase transitions and expanded data-access scope.
+Build an agent-independent machine learning development toolkit for tabular ML and deep learning. Coding assistants can invoke the toolkit interactively through its public CLI/API, while a workflow orchestrator within the installed package can delegate tasks through managed agent adapters; distinct execution and evaluation components independently execute, validate, and track experiments. Development is supervised: agents may iterate within approved workflow phases and budgets, while developers approve workflow phase transitions and expanded data-access scope.
 
-The harness is a versioned Python dependency installed into a separate user experiment repository. That repository is the unit users own, review, version, and share: it contains experiment briefs, configuration, agent-generated notebooks and Python code, and data-versioning metadata. Notebooks are the primary user interface for inspecting, running, and refining experiments; the harness provides reusable capabilities and independent execution and evaluation controls.
+The toolkit is a versioned Python dependency installed into a separate user experiment repository. That repository is the unit users own, review, version, and share: it contains experiment briefs, configuration, agent-generated notebooks and Python code, and data-versioning metadata. Notebooks are the primary user interface for inspecting, running, and refining experiments; the toolkit provides reusable capabilities and independent execution and evaluation controls.
 
 A central design principle is **hierarchical closed-loop ML development**:
 
@@ -37,14 +39,14 @@ A central design principle is **hierarchical closed-loop ML development**:
 
 | Dimension | Decision |
 |---|---|
-| Orchestration | Distinct orchestration and execution/evaluation components within the installed harness package |
-| Agent integrations | Interactive coding-assistant use through the public CLI/API as the basic path; standardized managed adapters for harness-invoked coding assistants and specialized agents |
+| Orchestration | Distinct orchestration and execution/evaluation components within the installed toolkit package |
+| Agent integrations | Interactive coding-assistant use through the public CLI/API as the basic path; standardized managed adapters for toolkit-invoked coding assistants and specialized agents |
 | ML frameworks | Initial scikit-learn, LightGBM, and PyTorch; extensible |
 | Package management | Use `uv` for Python dependency management, lockfiles, and virtual environments |
 | Initial distribution | Install the Python package directly from its GitHub repository using `uv`, pinned to a full Git commit SHA; package-registry distribution is future work |
 | CLI and Python imports | Use `agentic-ml` as the installed CLI name and retain `agentic_ml` as the Python import/package directory name |
-| Repository boundary | Separate harness product repository and user experiment repositories; consume the harness as a versioned Python dependency through its public API and CLI |
-| Jupyter notebooks | Agent-generated notebooks in the user experiment repository are the primary experiment interface; support interactive use and automatic harness-managed execution |
+| Repository boundary | Separate toolkit product repository and user experiment repositories; consume the toolkit as a versioned Python dependency through its public API and CLI |
+| Jupyter notebooks | Agent-generated notebooks in the user experiment repository are the primary experiment interface; support interactive use and automatic toolkit-managed execution |
 | Model types | Tabular classification/regression and deep learning |
 | Autonomy | Supervised with developer approvals at workflow phase boundaries |
 | Data | Extraction, EDA, feature engineering, and iterative acquisition are first-class |
@@ -112,9 +114,9 @@ flowchart TB
     D -. Dataset and pipeline references .-> M
 ```
 
-The installed harness package supplies orchestration, agent integration, approval handling, execution, and evaluation. Separation of orchestration from execution/evaluation means distinct component responsibilities within the package, rather than separate installations or repositories. Agent adapters connect to coding assistants or external agent services; those external systems need not run inside the package. Package boundaries show implementation ownership, not process or deployment boundaries.
+The installed toolkit package supplies orchestration, agent integration, approval handling, execution, and evaluation. Separation of orchestration from execution/evaluation means distinct component responsibilities within the package, rather than separate installations or repositories. Agent adapters connect to coding assistants or external agent services; those external systems need not run inside the package. Package boundaries show implementation ownership, not process or deployment boundaries.
 
-These capabilities operate in the selected experiment project's environment using its configuration and project-associated state/storage. The orchestrator coordinates approved work; execution independently enforces boundaries, and evaluation assesses results. Project-owned models and preprocessors run through harness interfaces alongside built-in components. Interactive notebook use follows the same access rules and cannot establish acceptance by itself. Protected holdout access is reserved for independent final evaluation; its feedback cannot drive development iterations. Harness manifests link DVC and MLflow records to project snapshots, component identities, approvals, and durable project-associated workflow state.
+These capabilities operate in the selected experiment project's environment using its configuration and project-associated state/storage. The orchestrator coordinates approved work; execution independently enforces boundaries, and evaluation assesses results. Project-owned models and preprocessors run through toolkit interfaces alongside built-in components. Interactive notebook use follows the same access rules and cannot establish acceptance by itself. Protected holdout access is reserved for independent final evaluation; its feedback cannot drive development iterations. Toolkit manifests link DVC and MLflow records to project snapshots, component identities, approvals, and durable project-associated workflow state.
 
 ### Component responsibilities
 
@@ -130,13 +132,15 @@ These capabilities operate in the selected experiment project's environment usin
 | Experiment runner | Backend-independent submission, status, cancellation, resources, logs, artifacts, and checkpoints; local execution initially, Ray-backed execution later |
 | Framework adapters | Standardized and custom training entrypoints for scikit-learn, LightGBM, PyTorch |
 | Evaluation engine | Metrics, baseline comparisons, scientific validity, robustness, reproducibility |
-| Tracking and artifact store | MLflow records runs, parameters, metrics, and model artifacts; links to DVC dataset/pipeline versions and harness manifests for complete lineage |
-| Data versioning and pipelines | DVC tracks source and derived datasets, dependencies, stage outputs, and reproducible pipeline definitions; integrates with harness execution |
+| Tracking and artifact store | MLflow records runs, parameters, metrics, and model artifacts; links to DVC dataset/pipeline versions and toolkit manifests for complete lineage |
+| Data versioning and pipelines | DVC tracks source and derived datasets, dependencies, stage outputs, and reproducible pipeline definitions; integrates with toolkit execution |
 | Approval service | Workflow phase and acquisition approvals, authorization scope, audit records |
 
-### Harness and experiment project boundary
+<a id="harness-and-experiment-project-boundary"></a>
 
-The harness repository contains reusable execution, evaluation, tracking, agent integration, orchestration, approval handling, templates, and default runtime guidance. Each user experiment repository contains objectives, notebooks, supplied and generated code, configuration, and versioning metadata. One experiment repository may contain multiple related experiments sharing project code and dependencies.
+### Toolkit and experiment project boundary
+
+The toolkit repository contains reusable execution, evaluation, tracking, agent integration, orchestration, approval handling, templates, and default runtime guidance. Each user experiment repository contains objectives, notebooks, supplied and generated code, configuration, and versioning metadata. One experiment repository may contain multiple related experiments sharing project code and dependencies.
 
 ```mermaid
 flowchart LR
@@ -159,16 +163,16 @@ flowchart LR
 
 Directory contents are illustrative subsets; [Section 12](design/repository-layout.md#12-proposed-repository-layout) provides fuller layouts. The installation arrow represents a pinned GitHub package dependency installed into the user project's Python environment.
 
-Experiment agents operate within the experiment repository and use the installed harness through its public Python API and CLI. Routine experiment work does not modify the harness installation or source repository and must not require a neighboring harness checkout. Changes to shared harness capabilities follow a separate software-development review process.
+Experiment agents operate within the experiment repository and use the installed toolkit through its public Python API and CLI. Routine experiment work does not modify the toolkit installation or source repository and must not require a neighboring toolkit checkout. Changes to shared toolkit capabilities follow a separate software-development review process.
 
 ### Interactive and managed agent use
 
-- **Interactive mode:** The developer works with an external coding assistant, such as Codex, GitHub Copilot, or Claude Code, which prepares project files and invokes the harness CLI/API. No agent adapter is required, and the harness does not own the assistant session.
+- **Interactive mode:** The developer works with an external coding assistant, such as Codex, GitHub Copilot, or Claude Code, which prepares project files and invokes the toolkit CLI/API. No agent adapter is required, and the toolkit does not own the assistant session.
 - **Managed mode:** The orchestrator delegates bounded tasks through a configured agent adapter, receives structured results, and coordinates evaluation and further revisions. Managed support requires verification of a concrete product, interface, and version; a product name alone does not establish adapter capabilities.
 
-Both modes use the same harness-owned experiment state, plan validation, approvals, managed execution, budgets, artifact records, and independent evaluation. The assistant proposes changes and requests work; only recorded harness evidence and authorized developer decisions establish acceptance or workflow phase progression. The architecture diagram shows both directions: managed delegation through the agent integration layer and interactive CLI/API requests from an external assistant.
+Both modes use the same toolkit-owned experiment state, plan validation, approvals, managed execution, budgets, artifact records, and independent evaluation. The assistant proposes changes and requests work; only recorded toolkit evidence and authorized developer decisions establish acceptance or workflow phase progression. The architecture diagram shows both directions: managed delegation through the agent integration layer and interactive CLI/API requests from an external assistant.
 
-The orchestrator operates on an explicitly selected experiment project and environment. Durable workflow state and run artifacts are stored in configured locations associated with that project, independently of the harness source tree.
+The orchestrator operates on an explicitly selected experiment project and environment. Durable workflow state and run artifacts are stored in configured locations associated with that project, independently of the toolkit source tree.
 
 ## 4. Hierarchical Closed-Loop Workflow
 
@@ -212,14 +216,14 @@ Both loops must terminate on success, budget exhaustion, lack of improvement, un
 
 ### Notebook-centered user workflow
 
-The steps below describe the workflow with integrated agent support. Before milestone 4, developers can prepare inputs and notebooks themselves or with an external coding assistant such as Codex, GitHub Copilot, or Claude Code; no agent adapter is required for interactive use. In managed mode, configure a verified adapter. Harness-managed agent proposals, execution, and revision loops begin in milestone 4. The harness validates, records, and executes supplied inputs without requiring an agent.
+The steps below describe the workflow with integrated agent support. Before milestone 4, developers can prepare inputs and notebooks themselves or with an external coding assistant such as Codex, GitHub Copilot, or Claude Code; no agent adapter is required for interactive use. In managed mode, configure a verified adapter. Toolkit-managed agent proposals, execution, and revision loops begin in milestone 4. The toolkit validates, records, and executes supplied inputs without requiring an agent.
 
-1. Install `uv` and Git, create a separate user repository and Python project, install the harness from a pinned GitHub commit, and run `uv run agentic-ml init` to add experiment scaffolding and configure its environment.
+1. Install `uv` and Git, create a separate user repository and Python project, install the toolkit from a pinned GitHub commit, and run `uv run agentic-ml init` to add experiment scaffolding and configure its environment.
 2. Configure local data access, tracking, storage, and an agent adapter; optionally register supplied algorithms and preprocessors with their parameter specifications and modification permissions. Write the experiment brief, feature pipeline configuration, and search-space configuration.
 3. Ask the agent to generate readable notebooks that invoke supplied or built-in components. Generate new experiment-specific implementations or helper code only as needed and authorized.
 4. Inspect the notebooks and approve the resolved task contract, workflow phase plan, component selection, evaluation protocol, access scope, and budgets through the applicable gates before dependent execution. Validate component interfaces, parameters, and evaluation compatibility before training.
 5. Open the notebooks in VS Code, execute approved work, and inspect results. The agent may also execute and revise notebooks automatically within the current approved workflow phase, component permissions, parameter boundaries, and budgets. Workflow phase returns and scope changes require authorization; changes to immutable supplied code require approval and a new versioned experiment configuration.
-6. Record experiments through harness-managed execution of saved notebook and code snapshots, followed by independent evaluation. Interactive exploration alone does not establish acceptance.
+6. Record experiments through toolkit-managed execution of saved notebook and code snapshots, followed by independent evaluation. Interactive exploration alone does not establish acceptance.
 7. Review evidence at every workflow phase boundary and approve entry to the next workflow phase or request changes. Review final evaluation separately to approve or reject the final model. Preserved state supports interruption and resumption.
 
 Reviewing every notebook edit is optional unless configured as an additional gate; workflow phase approvals and scope controls remain mandatory.
@@ -278,7 +282,7 @@ See [repository layout](design/repository-layout.md) for the detailed contracts 
 | Data acquisition drift or cost | Scoped approval, source allowlists, acquisition budgets, controlled before/after comparisons |
 | Workflow inconsistency | Durable state, idempotent jobs, audit trail, recovery tests |
 | Restrictive framework abstraction | Standard operations plus custom training entrypoints |
-| Hidden dependency on harness checkout | Installed public API, separate-project acceptance fixtures, project lockfile, explicit harness build identity |
+| Hidden dependency on toolkit checkout | Installed public API, separate-project acceptance fixtures, project lockfile, explicit toolkit build identity |
 | Notebook state or source drift | Fresh-kernel execution, explicit artifact references, immutable notebook/helper snapshots including uncommitted changes |
 
 ## 14. Architecture Decision Records
@@ -291,7 +295,7 @@ See [architecture decisions](design/architecture-decisions.md) for the detailed 
 2. Reconcile this design document against the authoritative [user stories and acceptance criteria](user-stories.md), recording design gaps and unresolved decisions.
 3. Establish Milestone 0 contributor setup, macOS CI, coding conventions, minimal version CLI, and isolated wheel/source package verification before experiment-user capabilities.
 4. Define JSON Schemas and Python models for core contracts.
-5. Build Milestone 1 in a separate user project: initialize/install → extract → validate → snapshot → run notebook → evaluate → track, recording both experiment and harness identities.
+5. Build Milestone 1 in a separate user project: initialize/install → extract → validate → snapshot → run notebook → evaluate → track, recording both experiment and toolkit identities.
 6. Add inner-loop agent iteration, supervised orchestration, and then outer-loop acquisition.
 
-**Guiding principle:** Build an ML experimentation and data-development harness that agents can use, rather than a framework that hardcodes one particular agent's reasoning or workflow.
+**Guiding principle:** Build an ML experimentation and data-development toolkit that agents can use, rather than a framework that hardcodes one particular agent's reasoning or workflow.

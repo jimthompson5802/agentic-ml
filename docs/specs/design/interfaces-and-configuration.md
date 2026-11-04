@@ -1,6 +1,6 @@
 # Interfaces and Configuration
 
-Part of the [harness design](../agentic-ml-harness-design.md). Scope: Interfaces and Contracts.
+Part of the [toolkit design](../agentic-ml-harness-design.md). Scope: Interfaces and Contracts.
 
 **Related contracts:** Read [execution and governance](execution-and-governance.md); [data and features](data-and-features.md); [repository layout](repository-layout.md) when changing behavior that crosses these boundaries. Consult the [reading map and authority rules](../agentic-ml-harness-design.md#reading-map-and-document-authority) and [architecture decisions](architecture-decisions.md) before implementation.
 
@@ -8,7 +8,7 @@ Part of the [harness design](../agentic-ml-harness-design.md). Scope: Interfaces
 
 ### Contributor development and package verification (Milestone 0)
 
-US-31–33 establish the harness repository before experiment-user features. macOS is the initial verified local development platform. Linux (Ubuntu 24.04) is the initial CI platform, per US-32 SC-01. Windows and other platforms remain eligible for future verification; document platform-specific requirements and known limitations without claiming those platforms are verified. Python 3.12 or newer is required. CI verifies Python 3.12 as the minimum supported version; document any additional versions tested.
+US-31–33 establish the toolkit repository before experiment-user features. macOS is the initial verified local development platform. Linux (Ubuntu 24.04) is the initial CI platform, per US-32 SC-01. Windows and other platforms remain eligible for future verification; document platform-specific requirements and known limitations without claiming those platforms are verified. Python 3.12 or newer is required. CI verifies Python 3.12 as the minimum supported version; document any additional versions tested.
 
 Provide contributor prerequisites, clone/setup instructions, runtime and development dependency synchronization through `uv` and the committed lockfile, configuration/credential guidance with practical local defaults, and shared commands for tests, linting, formatting checks, type checks, and smoke verification. Commit tool configurations and control tool versions through development dependencies and the lockfile. Document Python naming, typing, docstring, import, and error-handling conventions; enforce conventions through automated checks where supported. Document when and how contributors may add rule suppressions and check exclusions, requiring a recorded justification for each exception.
 
@@ -99,17 +99,17 @@ Restoration recovers the state declared by the checkpoint. Exact training contin
 | `ExperimentProjectConfig` | Schema version, project root and environment reference, tracking/storage/state locations, access policy references, interactive/managed mode, optional managed adapter and verified product/interface/version, explicit project guidance mapping, project-local component declarations |
 | `ComponentSpec` | Identifier, kind, Python entrypoint, interface version, supported tasks/prediction outputs where applicable, parameter types/defaults/constraints, code or dependency identity, agent modification permission |
 | `ExperimentConfig` | Schema version, experiment identifier, brief/search-space references, notebook entrypoints, data references, feature pipeline component references and parameters, working directory, execution settings; resolved into the approved `ExperimentSpec` |
-| `RuntimeInstructionBundle` | Harness-supplied shared/task-specific guidance snapshots, audience, task mapping, ordered source paths, versions/checksums; separately identified additional assistant context where observable, with capture limitations |
+| `RuntimeInstructionBundle` | Toolkit-supplied shared/task-specific guidance snapshots, audience, task mapping, ordered source paths, versions/checksums; separately identified additional assistant context where observable, with capture limitations |
 | `SearchSpaceSpec` | Schema version, registered algorithm identifiers, fixed parameters, typed choices/ranges, scales, configuration checksum |
 | `WorkflowPlan` | Workflow phases, dependencies, gates, iteration limits |
 | `AgentTask` / `AgentResult` | Durable task/attempt identifiers, scope, approved plan and guidance references, allowed tools, proposed changes, output/artifact references, status, available usage evidence, cancellation outcome |
 | `ExtractionSpec` / `DatasetRef` | Source, query, snapshot, checksum, schema, lineage |
 | `DataGapReport` / `DataAcquisitionProposal` | Evidence, acquisition hypothesis, scope, cost, approval |
 | `FeaturePlan` / `FeatureSetRef` | Ordered component references, effective parameters, input/output schemas, fitting scope, modification permissions, fitted state, versions, provenance |
-| `ExperimentSpec` / `ExperimentResult` | Project/experiment identity, model, data, notebook/code snapshots, experiment Git revision, harness repository URL/full commit SHA/package version, build identity where available, environment/lockfile identity, effective parameters, source configuration references, runtime instruction bundle reference, resolved decisions, resources, metrics, artifacts |
+| `ExperimentSpec` / `ExperimentResult` | Project/experiment identity, model, data, notebook/code snapshots, experiment Git revision, toolkit repository URL/full commit SHA/package version, build identity where available, environment/lockfile identity, effective parameters, source configuration references, runtime instruction bundle reference, resolved decisions, resources, metrics, artifacts |
 | `EvaluationReport` | Metrics, validity checks, baseline comparison, evidence |
 | `ApprovalRecord` | Authenticated developer identity, scope and plan/configuration identity, decision, timestamp, verification evidence, audit trail; submission by an agent does not establish developer approval |
-| `WorkflowRecoveryRecord` | Project/workflow/phase identity and progress, task/attempt associations, submission key, approved configuration and input-manifest checksum, guidance and approval references, harness/runner/MLflow run identities, evidence/artifact references, budget reservations and accounted usage, terminal or reviewable outcomes, recovery ownership/version |
+| `WorkflowRecoveryRecord` | Project/workflow/phase identity and progress, task/attempt associations, submission key, approved configuration and input-manifest checksum, guidance and approval references, toolkit/runner/MLflow run identities, evidence/artifact references, budget reservations and accounted usage, terminal or reviewable outcomes, recovery ownership/version |
 | `SubmissionStatus` | Submission key and bound input identity, acceptance state (accepted, definitively not accepted, or unknown), runner run identity and execution status where known, evidence supporting the observation; lookup failure is unknown, not proof of non-acceptance |
 
 ### Submission identity and recovery contracts
@@ -120,13 +120,13 @@ Repeated submission with the same key and identical bound inputs returns the exi
 
 `lookup_submission` must distinguish accepted work, definitive evidence that submission was never accepted, and uncertainty. A timeout, missing MLflow record, or unavailable runner alone is insufficient evidence of non-acceptance. Backend-specific implementations must meet these semantics; inability to establish status leads to review under [§9](execution-and-governance.md#9-execution-evaluation-and-governance), not blind resubmission. A permitted retry after a failed or cancelled execution is a new attempt with a new submission key linked to its predecessor; a transport retry of the original submission keeps its original key.
 
-Recovery reconciles runner status, durable workflow records, and MLflow evidence as specified in [§9](execution-and-governance.md#9-execution-evaluation-and-governance). Publishing tracking records and terminal manifests must also tolerate retries: durably associate the tracking identity with the harness run, reconcile uncertain publication, and reuse existing records and identical immutable manifests rather than create duplicate logical results or overwrite conflicting evidence. Conflicting or uncertain identities require review. Explicit reproduction under the restoration lifecycle remains a new linked run, distinct from recovery of an existing attempt.
+Recovery reconciles runner status, durable workflow records, and MLflow evidence as specified in [§9](execution-and-governance.md#9-execution-evaluation-and-governance). Publishing tracking records and terminal manifests must also tolerate retries: durably associate the tracking identity with the toolkit run, reconcile uncertain publication, and reuse existing records and identical immutable manifests rather than create duplicate logical results or overwrite conflicting evidence. Conflicting or uncertain identities require review. Explicit reproduction under the restoration lifecycle remains a new linked run, distinct from recovery of an existing attempt.
 
 ### User-supplied ML components
 
-Users may supply existing model implementations, training routines, and feature-preparation code in their experiment repository or as pinned Python dependencies. Using these components must not require modifying the harness.
+Users may supply existing model implementations, training routines, and feature-preparation code in their experiment repository or as pinned Python dependencies. Using these components must not require modifying the toolkit.
 
-Project configuration declares each component's identifier, Python entrypoint, interface version, supported tasks where applicable, and parameter specification. The harness combines these declarations with its built-in registry for that project. Duplicate identifiers and incompatible interfaces are rejected before execution.
+Project configuration declares each component's identifier, Python entrypoint, interface version, supported tasks where applicable, and parameter specification. The toolkit combines these declarations with its built-in registry for that project. Duplicate identifiers and incompatible interfaces are rejected before execution.
 
 User-supplied components receive the same execution controls, parameter validation, independent evaluation, provenance tracking, and resource limits as built-in components.
 
@@ -142,7 +142,7 @@ The following capabilities become versioned public interfaces, refining the conc
 
 Framework-native implementations may be integrated through project-local wrappers. Training routines may return framework-specific models, provided the wrapper exposes the required prediction and persistence operations. The existing `FeatureEngineeringAdapter` plans and evaluates feature work; supplied preprocessors and transformations provide the execution capabilities listed above. Exact preprocessor method signatures remain subject to interface design.
 
-Component declarations include supported prediction outputs, such as labels, probabilities, or regression values. Before training, the harness rejects components that cannot provide the outputs required by the approved evaluation metrics. Protected test data remains accessible only through independent evaluation.
+Component declarations include supported prediction outputs, such as labels, probabilities, or regression values. Before training, the toolkit rejects components that cannot provide the outputs required by the approved evaluation metrics. Protected test data remains accessible only through independent evaluation.
 
 The following configuration illustrates the intended workflow; the precise schemas remain subject to interface design:
 
@@ -198,9 +198,9 @@ Run lineage preserves component declarations, exact project-code snapshots or pi
 
 ### Project initialization and installation
 
-Provide a documented bootstrap path starting with a vanilla Python interpreter and local raw data. Users first install `uv` and Git, then install the harness as a Python package directly from its GitHub repository into the user project's environment. Pin the Git dependency to a full commit SHA and use a normal package installation, rather than an editable installation. Package-registry distribution is future work.
+Provide a documented bootstrap path starting with a vanilla Python interpreter and local raw data. Users first install `uv` and Git, then install the toolkit as a Python package directly from its GitHub repository into the user project's environment. Pin the Git dependency to a full commit SHA and use a normal package installation, rather than an editable installation. Package-registry distribution is future work.
 
-Users do not need to manually clone or maintain a harness working checkout. The installer may fetch the pinned source into its managed cache to build and install the package. Downloads require network access and, for a private repository, configured Git credentials; keep credentials outside committed configuration.
+Users do not need to manually clone or maintain a toolkit working checkout. The installer may fetch the pinned source into its managed cache to build and install the package. Downloads require network access and, for a private repository, configured Git credentials; keep credentials outside committed configuration.
 
 The intended installation and initialization sequence is:
 
@@ -217,21 +217,21 @@ uv run agentic-ml init
 # Open this project in VS Code and select its .venv notebook kernel.
 ```
 
-The repository URL and commit SHA are placeholders. These commands specify the intended product interface; the harness and CLI still require implementation. There is no separate initializer-tool installation: `agentic-ml init` runs from the harness already installed in the project's `.venv`.
+The repository URL and commit SHA are placeholders. These commands specify the intended product interface; the toolkit and CLI still require implementation. There is no separate initializer-tool installation: `agentic-ml init` runs from the toolkit already installed in the project's `.venv`.
 
 `agentic-ml init` must:
 
 1. Add project configuration, ignore rules, an initial experiment brief, search-space and execution configuration, notebook templates, and any project-package scaffolding to the existing user repository.
-2. Preserve existing files and report conflicts rather than silently overwriting them. Preserve the declared harness Git dependency and pinned commit.
+2. Preserve existing files and report conflicts rather than silently overwriting them. Preserve the declared toolkit Git dependency and pinned commit.
 3. Add required ML, notebook-execution, and interactive notebook kernel dependencies to the project's `pyproject.toml` and synchronize its `uv` environment and lockfile. Users commit their project files and `uv.lock` to Git.
 4. Initialize project-local DVC metadata and configure local DVC storage, MLflow tracking/artifact storage, and durable workflow-state storage. Remote backend choices remain configurable.
 5. Generate explicit settings or prompts for raw-data paths/permissions, agent adapter/authentication, and the mechanism for presenting and recording approvals. Authentication and experiment-specific choices remain explicit setup steps; initialization does not authorize data access or execution. Keep credentials outside committed configuration.
 
 After initialization, users register existing raw data, including approved sources outside the repository, and resolve experiment-specific inputs before dependent work begins. Existing inputs are snapshotted and versioned without requiring external acquisition.
 
-The harness repository's root `pyproject.toml` must define its build system, package metadata, supported Python versions, dependencies, and `agentic-ml` CLI entrypoint. Package the `src/agentic_ml/` implementation, initialization templates, and default runtime guidance. Load resources from the installed package without relying on a source checkout. The Python import name remains `agentic_ml`; the distribution name and actual GitHub URL require implementation decisions.
+The toolkit repository's root `pyproject.toml` must define its build system, package metadata, supported Python versions, dependencies, and `agentic-ml` CLI entrypoint. Package the `src/agentic_ml/` implementation, initialization templates, and default runtime guidance. Load resources from the installed package without relying on a source checkout. The Python import name remains `agentic_ml`; the distribution name and actual GitHub URL require implementation decisions.
 
-The project lockfile records the resolved harness Git revision and library versions. Harness upgrades explicitly change the declared full commit SHA and project lockfile, creating a new environment identity; package version alone does not identify Git revisions. Resumed runs use the preserved compatible configuration and instruction bundle. The harness repository's own lockfile is for product development and does not replace the experiment project's environment record.
+The project lockfile records the resolved toolkit Git revision and library versions. Toolkit upgrades explicitly change the declared full commit SHA and project lockfile, creating a new environment identity; package version alone does not identify Git revisions. Resumed runs use the preserved compatible configuration and instruction bundle. The toolkit repository's own lockfile is for product development and does not replace the experiment project's environment record.
 
 ### Developer experiment inputs
 
@@ -274,43 +274,43 @@ Compare all classification algorithms declared in ./experiments/churn/search-spa
 Run at most 50 hyperparameter trials per algorithm.
 ```
 
-Before integrated agent support, developers supply experiment decisions through the brief and configuration files, optionally prepared with an external coding assistant. The harness validates these inputs and records the effective, versioned plan, including supplied decisions, defaults, source references, input checksums, and approval evidence, before dependent execution. Unresolved delegated choices and ambiguous or conflicting requirements block affected execution; delegated decisions require approval before use. The resolved plan identifies the allowed algorithm set, selected features, metric and direction, split protocol, and budgets as those capabilities are introduced.
+Before integrated agent support, developers supply experiment decisions through the brief and configuration files, optionally prepared with an external coding assistant. The toolkit validates these inputs and records the effective, versioned plan, including supplied decisions, defaults, source references, input checksums, and approval evidence, before dependent execution. Unresolved delegated choices and ambiguous or conflicting requirements block affected execution; delegated decisions require approval before use. The resolved plan identifies the allowed algorithm set, selected features, metric and direction, split protocol, and budgets as those capabilities are introduced.
 
 For this toolkit version, experiment approvals use explicit scoped
 unauthenticated records under
 [US-03-SC-01](../../plans/milestone-1-us-03.md#us-03-sc-01--unauthenticated-experiment-approvals-2026-10-31).
 Reviewer labels are self-declared; workspace writers can fabricate records or
-rewrite approval history. Authentication is deferred. Existing harness development
+rewrite approval history. Authentication is deferred. Existing toolkit development
 and testing approval gates remain unchanged. Plan/decision matching and missing,
 stale or revoked record checks still apply; a record grants no implicit execution
 or data access.
 
-Milestone 4 adds harness-managed agent proposals and iteration. The agent proposes delegated decisions and records its reasoning; those proposals use the same harness validation, plan recording, and applicable problem-definition and evaluation approval gates before use.
+Milestone 4 adds toolkit-managed agent proposals and iteration. The agent proposes delegated decisions and records its reasoning; those proposals use the same toolkit validation, plan recording, and applicable problem-definition and evaluation approval gates before use.
 
 ### Development and runtime agent instructions
 
-Use `AGENTS.md` for coding agents and ML experiment agents, with separate repository ownership and an explicit audience in each file. Ship default runtime guidance as resources in the installable harness distribution; the paths below identify their locations in the harness source repository.
+Use `AGENTS.md` for coding agents and ML experiment agents, with separate repository ownership and an explicit audience in each file. Ship default runtime guidance as resources in the installable toolkit distribution; the paths below identify their locations in the toolkit source repository.
 
 | Instruction location | Audience and scope |
 |---|---|
-| Harness repository `AGENTS.md` | Harness development conventions |
-| Harness `src/agentic_ml/AGENTS.md` and targeted component files | Coding agents implementing and maintaining the harness; component responsibilities, invariants, relevant contracts, and verification guidance |
-| Harness `runtime_guidance/AGENTS.md` | Packaged shared scientific and operational practices for experiment agents |
-| Harness `runtime_guidance/{data,features,modeling}/AGENTS.md` | Packaged task-specific practices for data assessment, feature engineering, and training/tuning |
-| Experiment repository `AGENTS.md` | Project development conventions; excluded from the harness runtime loader, but an external assistant may load it independently |
+| Toolkit repository `AGENTS.md` | Toolkit development conventions |
+| Toolkit `src/agentic_ml/AGENTS.md` and targeted component files | Coding agents implementing and maintaining the toolkit; component responsibilities, invariants, relevant contracts, and verification guidance |
+| Toolkit `runtime_guidance/AGENTS.md` | Packaged shared scientific and operational practices for experiment agents |
+| Toolkit `runtime_guidance/{data,features,modeling}/AGENTS.md` | Packaged task-specific practices for data assessment, feature engineering, and training/tuning |
+| Experiment repository `AGENTS.md` | Project development conventions; excluded from the toolkit runtime loader, but an external assistant may load it independently |
 | Experiment repository `runtime_guidance/` (optional) | Project-authored runtime practices, selected only through an explicit configured mapping |
 
 Add deeper development files only where a component needs distinct instructions. Keep shared rules in their common parent and load task-specific runtime guidance only when relevant.
 
 The runtime instruction loader must:
 
-1. Select packaged shared/task-specific guidance and any configured project guidance through an explicit task-to-guidance mapping. Record source ownership, package version or project path, and load order; the filename alone does not activate instructions. Neither repository's development files are automatically included by the harness runtime loader. This restriction does not assert control over instructions independently loaded by an external assistant.
+1. Select packaged shared/task-specific guidance and any configured project guidance through an explicit task-to-guidance mapping. Record source ownership, package version or project path, and load order; the filename alone does not activate instructions. Neither repository's development files are automatically included by the toolkit runtime loader. This restriction does not assert control over instructions independently loaded by an external assistant.
 2. Assemble shared guidance before task-specific guidance. Task-specific instructions may specialize shared practices within the experiment's constraints; incompatible requirements require clarification before affected work begins rather than silent override.
-3. Keep input authority explicit: runtime guidance describes how to work, the resolved experiment brief defines objectives and experiment-specific constraints, and YAML defines allowed algorithms and hyperparameter boundaries. Guidance cannot broaden data access, bypass approval gates, change evaluation criteria, or expand the search boundary. Harness-enforced policies apply to every task.
-4. Snapshot the exact contents, paths, versions/checksums, and loading order of all harness-supplied runtime guidance when the experiment plan is resolved. Preserve the instruction bundle with run lineage and use it for subsequent tasks and resumed execution in that experiment.
+3. Keep input authority explicit: runtime guidance describes how to work, the resolved experiment brief defines objectives and experiment-specific constraints, and YAML defines allowed algorithms and hyperparameter boundaries. Guidance cannot broaden data access, bypass approval gates, change evaluation criteria, or expand the search boundary. Toolkit-enforced policies apply to every task.
+4. Snapshot the exact contents, paths, versions/checksums, and loading order of all toolkit-supplied runtime guidance when the experiment plan is resolved. Preserve the instruction bundle with run lineage and use it for subsequent tasks and resumed execution in that experiment.
 5. Treat adoption of changed runtime guidance as a new versioned experiment configuration subject to the existing gates. Record conflicting instructions as a validation error or clarification request before dependent execution.
 
-The preserved bundle identifies what the harness supplied, not the assistant's complete instruction context. Record additional instructions, session configuration, and assistant identity/version where observable, and explicitly record capture limitations. Interactive use presents the preserved bundle for the developer/assistant to consume; managed adapters must demonstrate delivery of the referenced bundle. Neither mode claims complete prompt capture or deterministic reproduction of assistant reasoning. Conflicts visible to the harness block affected execution; unavailable context cannot be certified conflict-free.
+The preserved bundle identifies what the toolkit supplied, not the assistant's complete instruction context. Record additional instructions, session configuration, and assistant identity/version where observable, and explicitly record capture limitations. Interactive use presents the preserved bundle for the developer/assistant to consume; managed adapters must demonstrate delivery of the referenced bundle. Neither mode claims complete prompt capture or deterministic reproduction of assistant reasoning. Conflicts visible to the toolkit block affected execution; unavailable context cannot be certified conflict-free.
 
 Runtime instruction files contain reusable practices. Dataset locations, targets, chosen metrics, budgets, and algorithm search spaces remain in the experiment brief, resolved plan, and YAML configuration. Executable validation and access controls enforce these constraints independently of agent compliance with Markdown instructions.
 
@@ -357,7 +357,7 @@ Configuration rules:
 
 - The YAML is a **hard allowed boundary for the current experiment**, not an initial space the agent may expand. The brief may narrow that boundary but cannot expand it.
 - Fixed parameters retain their declared values. Search parameters may take only declared choices or values within their inclusive bounds. Integer ranges produce integers; logarithmic ranges require strictly positive bounds.
-- The harness validates algorithm/task compatibility, parameter names and types, nonempty choices, ordered bounds, and parameter combinations before execution. Initial configurations should use mutually compatible combinations; a conditional-parameter schema is deferred.
+- The toolkit validates algorithm/task compatibility, parameter names and types, nonempty choices, ordered bounds, and parameter combinations before execution. Initial configurations should use mutually compatible combinations; a conditional-parameter schema is deferred.
 - Parameters omitted from the YAML use registry-defined defaults, recorded with the adapter/library version in the resolved run configuration. Omission does not authorize the agent to tune them.
 - Every candidate, including candidates submitted through custom code or notebooks, is subject to the same boundary validation. Invalid candidates are rejected before training.
 - Search-space definitions specify where to search; the resolved trial and runtime budgets specify how much work may occur. Comparing all algorithms does not require exhaustively enumerating every parameter combination.
