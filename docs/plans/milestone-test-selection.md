@@ -78,3 +78,17 @@ will be recorded when known. Existing final phase approval remains valid.
 - Publication-record follow-up changes documentation only; whitespace check
   passed. Existing executable verification remains valid. Await PR review/CI;
   merge and branch cleanup are not authorized.
+
+### Squash merge — 2026-11-04
+
+Developer instruction “squash merge pr #52” authorized the merge. Final head
+`dee3101ef2722b0a68cfb057c817e6c8f57c3b5b` had successful
+[Linux/Python 3.12 CI](https://github.com/jimthompson5802/agentic-ml/actions/runs/41754352691).
+Merged with `gh pr merge --squash --match-head-commit` at that verified head.
+GitHub confirms MERGED at 01:42:20 UTC, squash commit
+`23ad2f49fa4641fbc39392d6186cab0a320522b0`. Branches retained; no cleanup requested.
+The developer subsequently instructed switching to `main`, pulling the merge,
+and committing/pushing this merge record and checkpoint update. Preserved both
+files through a temporary stash, fast-forwarded `main` to the squash merge and
+restored the updates without conflicts. Branches retained.
+`git diff --check` passed; no executable changes or additional test run.

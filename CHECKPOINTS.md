@@ -39,7 +39,13 @@ implementation commit `81f6ab7` on `origin/chore-refactor-tests` and opened
 Verified PR title, description, branch ownership and non-draft status. Initial
 GitHub CLI authentication was unavailable; existing Git credentials enabled
 creation, and the developer subsequently confirmed `gh` login.
-**Next action:** PR review and CI. No merge or branch cleanup authorized. The
+PR #52 was squash merged at the developer's explicit request on 2026-11-04,
+as `23ad2f49fa4641fbc39392d6186cab0a320522b0` after final-head Linux/Python 3.12 CI
+passed. GitHub confirms MERGED at 01:42:20 UTC. At the developer's subsequent
+request, switched to `main`, pulled the squash merge, and authorized committing
+and pushing these final merge records. Branches have been retained.
+**Next action:** publish this documentation-only final update on `main`, then
+await developer direction. No branch cleanup authorized. The
 three original timeout causes and separate milestone acceptance obligations
 remain open. Publication-record follow-up only; `git diff --check` passed and
 existing executable evidence remains applicable.
