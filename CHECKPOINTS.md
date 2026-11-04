@@ -2,7 +2,29 @@
 
 Last updated: 2026-11-04 (UTC)
 
-## Current milestone test selection work — 2026-11-04
+## Current US-05 planning — 2026-11-04
+
+On local branch `US-05-configuration-validation`, created the developer-requested
+[US-05 implementation plan](docs/plans/milestone-1-us-05.md) from clean `main`
+`4602fa6`. Retrieved complete issue #11 and prerequisite issues #9/#10 with all
+comment pages and stable final metadata; all have zero comments. US-05 remains
+open; US-02/03 are accepted and merged. The approved plan defines three implementation
+phases: registry/API/test contracts, shared semantic/candidate validation, and
+both-wheel installed verification plus final story review. Every gate and story
+acceptance remains pending. The developer approved the plan and authorized a
+local commit with “i approve plan, commit” on 2026-11-04. Implementation and push
+remain unauthorized.
+
+The local planning commit contains this checkpoint and the approved plan. Planning validation:
+relative file links resolve and `git diff --check` passes. No executable behavior
+changed, so TDD, harness tests and shared executable checks do not apply to this
+planning-only handoff. **Next action:** await explicit IP1 authorization. Registry inventory, compatibility/default evidence, combination
+policy and concrete public test boundaries must be settled and approved at IP1
+before executable work. Existing M1-ACCEPT-VERIFY, M50-ACCEPT-VERIFY, temporary
+skips and historical failures remain open. The following publication next-action
+record is historical and does not authorize work on this planning branch.
+
+## Milestone test selection publication record — 2026-11-04
 
 Branch `chore-refactor-tests`; initial working tree clean. The developer's
 supplied maintenance plan authorizes milestone classification and policy updates,
