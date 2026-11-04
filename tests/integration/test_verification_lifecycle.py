@@ -11,7 +11,7 @@ from pytest_workspace_support import owned_workspace
 ROOT = Path(__file__).resolve().parents[2]
 
 
-pytestmark = pytest.mark.story_acceptance
+pytestmark = pytest.mark.milestone_50
 
 
 def support() -> ModuleType:

@@ -88,7 +88,7 @@ Once the implementation phase's tasks are complete, move to **phase verification
 flowchart TD
     Before[Implement a phase] --> A
     subgraph Verify[Verify and approve a phase]
-        A[Run phase group and shared checks; record evidence and deferrals] --> B{Work and required checks complete?}
+        A[Run current milestone and shared checks; record evidence and deferrals] --> B{Work and required checks complete?}
         B -- No --> C[Correct within scope; stop for direction after three failed attempts]
         B -- Yes --> D[Update plan and checkpoints; present evidence]
         D --> E{Developer phase decision}
@@ -106,13 +106,13 @@ The [verification policy](development/verification.md#phase-and-story-verificati
 
 | Level | Required verification |
 |---|---|
-| Implementation phase | Direct tests of changed modules, plus shared development checks |
-| Story acceptance | Reconcile acceptance criteria; reuse valid phase evidence and renew invalidated checks |
-| Milestone acceptance | Full local suite, deferred caller regressions, and applicable distribution, installation, manual, and platform checks |
+| Implementation phase | Current milestone tests, plus shared development checks |
+| Story acceptance | M1–6 tests and shared checks; reconcile acceptance criteria |
+| Milestone acceptance | Reconcile deferrals and limitations; broader local checks require explicit developer command |
 
 Shared executable checks cover locked synchronization, lock consistency, lint, formatting, strict typing, CLI version output, and whitespace. Record lock hashes before and after verification. Use the [documented commands](development.md#shared-development-commands). Documentation-only work uses document, link, and whitespace checks with a rationale instead of product tests.
 
-At phase gates, record exact test selectors, changed-module mappings, acceptance criteria, public boundaries, selected/deselected counts, outcomes, and platform limitations. Run the entire phase group at each executable phase gate and both groups at user-story acceptance. Assign acceptance-group deferrals to a named story acceptance task; preserve separate milestone verification obligations. Known failures remain blockers. [CI](development/ci.md) runs the full suite on PRs and pushes to `main`; hosted success does not replace required local milestone verification.
+At phase gates, record exact test selectors, changed-module mappings, acceptance criteria, public boundaries, selected/deselected counts, outcomes, and platform limitations. Run the current milestone at each executable phase gate and M1–6 at every story acceptance. Broader local pytest runs and standalone artifact verification require an explicit developer command, including at milestone acceptance. Preserve named owners for excluded coverage and unresolved failures. [CI](development/ci.md) retains its complete suite and artifact checks.
 
 Keep reviewed reports in `docs/verification/` and durable raw evidence in `.dev-records/verification/`. Follow the [records policy](development/records.md) for identities, logs, lifetime retention, and backup responsibility. Distinguish macOS evidence from separately verified Linux results and unverified platforms.
 
@@ -128,12 +128,12 @@ Story acceptance is also explicit; it does not imply milestone acceptance. The f
 flowchart TD
     Before[Verify and approve a phase] --> A
     subgraph Complete[Complete and publish]
-        A[Run complete suite; reconcile story criteria and evidence] --> B{Explicit whole-story acceptance?}
+        A[Run M1–6; reconcile story criteria and evidence] --> B{Explicit whole-story acceptance?}
         B -- Pending --> C[Await developer decision]
         C --> B
         B -- Accepted --> D[Commit accepted work, push, create PR and publish static review]
         D --> E[Record publication results and hand off deferred checks]
-        E --> F[At milestone acceptance: run full suite and applicable deferred checks]
+        E --> F[At milestone acceptance: reconcile deferrals; broader runs require developer command]
         F --> G{Required checks pass and deferrals reconciled?}
         G -- No --> H[Record blockers and resolve within authorized scope]
         H --> F

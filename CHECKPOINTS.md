@@ -2,6 +2,47 @@
 
 Last updated: 2026-11-04 (UTC)
 
+## Current milestone test selection work — 2026-11-04
+
+Branch `chore-refactor-tests`; initial working tree clean. The developer's
+supplied maintenance plan authorizes milestone classification and policy updates,
+without commit, push or PR. This entry supersedes older next-action and automatic
+local full-suite/artifact requirements below. Historical evidence and failures
+remain preserved. Current milestone at phase gates; M1–6 at all story acceptance;
+other local pytest selections and standalone artifact drivers require an explicit
+developer command. CI remains complete-suite plus existing artifact checks.
+
+Inventory: M0 18, M1 314, M2–6 0 each, M50 80, M99 0, infrastructure 6;
+416 distinct cases, 314 default-selected and 102 excluded. Two associations overlap.
+The baseline 415 comprises 409 unchanged non-scheduling cases and five scheduling
+cases, replaced by six. Three temporary skips, assertions/timeouts and groups
+remain. See [plan](docs/plans/milestone-test-selection.md) and
+[evidence](docs/verification/milestone-test-selection.md).
+Scope-change records in US-03, US-35 and US-36 revise unfinished M1/M50
+verification obligations without changing historical approvals or resolving failures.
+
+Focused scheduling regressions: six passed (final renewal 2.97s). Default M1–6:
+313 passed, one existing skip in 234.32s, 102 excluded. Shared checks passed after
+one import-format correction; lock unchanged. Linux/Python 3.12.16 only;
+macOS/Windows remain unverified; the full-suite follow-up below covers the
+previously excluded selection except for the three temporary skips.
+Developer-requested complete suite (2026-11-04): **413 passed, 3 existing skips
+in 482.73s**, exit 0, all 416 selected. JUnit confirms no failures/errors; lock
+unchanged. No standalone artifact command or executable changes in this follow-up.
+The three original timeout causes remain unresolved.
+Final phase approved on 2026-11-04 by developer message “i approve the final
+phase”; all implementation tasks and gates are complete. Approval-record changes
+only; `git diff --check` passed, and existing executable evidence remains valid.
+The developer authorized commit, push and PR creation on 2026-11-04. Publication
+is in progress. GitHub CLI reports no authenticated hosts, including outside the
+sandbox; PR creation awaits `gh auth login` by the developer.
+**Next action:** commit the approved changes, attempt ordinary branch push, then
+create/verify the prepared PR once GitHub authentication is available. Working changes are tests/configuration,
+repository guidance, owning plans, this checkpoint and the report. The three
+original timeout causes and separate milestone acceptance obligations remain open.
+
+## Historical checkpoints (superseded resume instructions)
+
 ## Devcontainer GPG configuration — 2026-11-04
 
 Added the requested global Git signing configuration to

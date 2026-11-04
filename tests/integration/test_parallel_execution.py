@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -10,7 +11,7 @@ from pathlib import Path
 
 import pytest
 
-pytestmark = pytest.mark.story_acceptance
+pytestmark = pytest.mark.infrastructure
 
 
 def test_loadgroup_keeps_each_marked_group_on_one_worker(tmp_path: Path) -> None:
@@ -78,15 +79,16 @@ def test_beta(case, worker_id):
 @pytest.mark.parametrize(
     "selector,expected",
     [
-        (None, "1 passed, 1 deselected"),
-        ("story_acceptance", "1 passed, 1 deselected"),
-        ("", "2 passed"),
+        (None, "7 passed, 4 deselected"),
+        ("milestone_1", "2 passed, 9 deselected"),
+        ("milestone_50", "1 passed, 10 deselected"),
+        ("", "11 passed"),
     ],
 )
 def test_verification_schedule_selects_expected_group(
     tmp_path: Path, selector: str | None, expected: str
 ) -> None:
-    """Real pytest honors the repository schedule for new and acceptance tests."""
+    """Real pytest selects exactly the declared milestone associations."""
     root = Path(__file__).resolve().parents[2]
     configuration = tomllib.loads((root / "pyproject.toml").read_text())
     options = configuration["tool"]["pytest"]["ini_options"]
@@ -97,12 +99,14 @@ def test_verification_schedule_selects_expected_group(
         + "".join("    " + marker + "\n" for marker in options["markers"])
     )
     shutil.copyfile(root / "tests/conftest.py", tmp_path / "conftest.py")
-    (tmp_path / "test_schedule.py").write_text(
-        "import pytest\n"
-        "def test_new_phase():\n    pass\n"
-        "@pytest.mark.story_acceptance\n"
-        "def test_acceptance():\n    pass\n"
+    cases = "import pytest\n"
+    for milestone in (0, 1, 2, 3, 4, 5, 6, 50, 99):
+        cases += f"@pytest.mark.milestone_{milestone}\ndef test_m{milestone}(): pass\n"
+    cases += "@pytest.mark.infrastructure\ndef test_infrastructure(): pass\n"
+    cases += (
+        "@pytest.mark.milestone_1\n@pytest.mark.milestone_2\ndef test_overlap(): pass\n"
     )
+    (tmp_path / "test_schedule.py").write_text(cases)
     command = [
         sys.executable,
         "-m",
@@ -128,24 +132,35 @@ def test_verification_schedule_selects_expected_group(
     )
     assert result.returncode == 0, result.stdout + result.stderr
     assert expected in result.stdout
-    if selector is None:
-        # Ensure the selected case is the new phase test, not the acceptance test.
-        assert "test_new_phase PASSED" in result.stdout
-    elif selector == "story_acceptance":
-        assert "test_acceptance PASSED" in result.stdout
+    expected_cases = {
+        None: {"m1", "m2", "m3", "m4", "m5", "m6", "overlap"},
+        "milestone_1": {"m1", "overlap"},
+        "milestone_50": {"m50"},
+        "": {
+            "m0",
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "m50",
+            "m99",
+            "infrastructure",
+            "overlap",
+        },
+    }
+    executed = re.findall(r"::test_(\w+) PASSED", result.stdout)
+    assert set(executed) == expected_cases[selector]
+    assert len(executed) == len(expected_cases[selector])
 
 
-def test_verification_schedule_rejects_conflicting_groups(tmp_path: Path) -> None:
-    """Conflicting module and function schedules fail even with a selector."""
+def test_verification_schedule_rejects_missing_classification(tmp_path: Path) -> None:
+    """Unclassified tests fail collection even when the selector excludes them."""
     root = Path(__file__).resolve().parents[2]
     shutil.copyfile(root / "tests/conftest.py", tmp_path / "conftest.py")
-    (tmp_path / "pytest.ini").write_text(
-        "[pytest]\nmarkers =\n    phase\n    story_acceptance\n"
-    )
-    (tmp_path / "test_conflict.py").write_text(
-        "import pytest\npytestmark = pytest.mark.story_acceptance\n"
-        "@pytest.mark.phase\ndef test_conflict():\n    pass\n"
-    )
+    (tmp_path / "pytest.ini").write_text("[pytest]\nmarkers =\n    milestone_1\n")
+    (tmp_path / "test_conflict.py").write_text("def test_unclassified():\n    pass\n")
     env = dict(os.environ)
     for key in ("PYTEST_ADDOPTS", "PYTEST_XDIST_WORKER", "PYTEST_XDIST_WORKER_COUNT"):
         env.pop(key, None)
@@ -156,7 +171,7 @@ def test_verification_schedule_rejects_conflicting_groups(tmp_path: Path) -> Non
             "-m",
             "pytest",
             "-m",
-            "phase",
+            "milestone_1",
             "--basetemp",
             str(tmp_path / "nested-pytest"),
         ],
@@ -168,4 +183,5 @@ def test_verification_schedule_rejects_conflicting_groups(tmp_path: Path) -> Non
         check=False,
     )
     assert result.returncode == 4, result.stdout + result.stderr
-    assert "Conflicting verification groups" in result.stderr
+    assert "Missing test classification" in result.stderr
+    assert "test_conflict.py::test_unclassified" in result.stderr

@@ -70,6 +70,9 @@ def test_algorithm_selection_obeys_brief_mode(
         assert result.diagnostics[0].field == "execution.algorithm_subset"
 
 
+pytestmark = pytest.mark.milestone_1
+
+
 def test_resolution_preserves_declared_and_narrows_effective_space(
     planning_project: Path,
 ) -> None:

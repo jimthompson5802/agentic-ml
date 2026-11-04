@@ -15,7 +15,7 @@ from zipfile import ZipFile
 import pytest
 from pytest_workspace_support import owned_workspace
 
-pytestmark = [pytest.mark.xdist_group("distribution"), pytest.mark.story_acceptance]
+pytestmark = [pytest.mark.xdist_group("distribution")]
 
 ROOT = Path(__file__).resolve().parents[2]
 DRIVER = ROOT / "tests/packaging/verify_distributions.py"
@@ -31,6 +31,8 @@ def artifacts(
     return destination
 
 
+@pytest.mark.milestone_0
+@pytest.mark.milestone_50
 def test_both_installed_wheel_paths_pass(artifacts: Path, tmp_path: Path) -> None:
     """Real wheels pass from separate experiment projects outside the checkout."""
     result = subprocess.run(
@@ -75,6 +77,7 @@ def test_both_installed_wheel_paths_pass(artifacts: Path, tmp_path: Path) -> Non
     assert (workspace / "source").is_dir()
 
 
+@pytest.mark.milestone_1
 def test_complete_initialization_from_both_artifact_paths(
     artifacts: Path, tmp_path: Path
 ) -> None:
@@ -159,6 +162,7 @@ def damaged_wheel_result(
     return result
 
 
+@pytest.mark.milestone_0
 def test_missing_template_reports_installed_failure(
     artifacts: Path, tmp_path: Path
 ) -> None:
@@ -173,6 +177,7 @@ def test_missing_template_reports_installed_failure(
     assert "PASS rebuilt-wheel" not in result.stdout
 
 
+@pytest.mark.milestone_0
 def test_altered_guidance_reports_installed_failure(
     artifacts: Path, tmp_path: Path
 ) -> None:
@@ -189,6 +194,7 @@ def test_altered_guidance_reports_installed_failure(
     assert "PASS direct-wheel" not in result.stdout
 
 
+@pytest.mark.milestone_0
 def test_wrong_cli_version_reports_installed_failure(
     artifacts: Path, tmp_path: Path
 ) -> None:
@@ -205,6 +211,7 @@ def test_wrong_cli_version_reports_installed_failure(
     assert "PASS direct-wheel" not in result.stdout
 
 
+@pytest.mark.milestone_0
 def test_missing_artifacts_fail_with_selection_diagnostic(tmp_path: Path) -> None:
     """An empty artifact directory fails before any installation."""
     result = subprocess.run(
@@ -228,6 +235,7 @@ def test_missing_artifacts_fail_with_selection_diagnostic(tmp_path: Path) -> Non
     assert "PASS" not in result.stdout
 
 
+@pytest.mark.milestone_0
 @pytest.mark.parametrize("kind", ["wheel", "sdist"])
 def test_ambiguous_artifacts_fail_before_install(
     artifacts: Path, tmp_path: Path, kind: str
@@ -258,6 +266,7 @@ def test_ambiguous_artifacts_fail_before_install(
     assert " install" not in result.stdout
 
 
+@pytest.mark.milestone_0
 def test_corrupted_sdist_cannot_reuse_direct_success(
     artifacts: Path, tmp_path: Path
 ) -> None:
@@ -285,6 +294,7 @@ def test_corrupted_sdist_cannot_reuse_direct_success(
     assert "sdist extraction" in result.stderr
 
 
+@pytest.mark.milestone_1
 def test_missing_initialization_schema_reports_installed_failure(
     artifacts: Path, tmp_path: Path
 ) -> None:
@@ -300,6 +310,7 @@ def test_missing_initialization_schema_reports_installed_failure(
     assert "PASS direct-wheel" not in result.stdout
 
 
+@pytest.mark.milestone_1
 @pytest.mark.skip(
     reason="Temporarily skipped at developer request pending diagnosis of 120s timeouts."
 )
@@ -314,6 +325,7 @@ def test_missing_planning_schema_fails_installed_inventory(
     assert "planning resource missing" in result.stderr
 
 
+@pytest.mark.milestone_1
 def test_planning_from_both_artifact_paths(artifacts: Path, tmp_path: Path) -> None:
     """US-03 AC-01/03/04/05: installed interfaces work without checkout imports."""
     result = subprocess.run(
@@ -354,6 +366,7 @@ def test_planning_from_both_artifact_paths(artifacts: Path, tmp_path: Path) -> N
         assert not (workspace / "distributions" / label).exists()
 
 
+@pytest.mark.milestone_1
 def test_missing_approval_schema_fails_installed_inventory(
     artifacts: Path, tmp_path: Path
 ) -> None:
@@ -366,6 +379,7 @@ def test_missing_approval_schema_fails_installed_inventory(
     assert "PASS direct-wheel" not in result.stdout
 
 
+@pytest.mark.milestone_50
 def test_explicit_distribution_retention_keeps_both_interpreters(
     artifacts: Path, tmp_path: Path
 ) -> None:
@@ -408,6 +422,7 @@ def test_explicit_distribution_retention_keeps_both_interpreters(
     assert len(json.loads((records / "identities/artifacts.json").read_text())) == 3
 
 
+@pytest.mark.milestone_50
 @pytest.mark.skip(
     reason="Temporarily skipped at developer request pending diagnosis of 120s timeouts."
 )

@@ -41,10 +41,21 @@ packages = ["src/agentic_ml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--strict-config --strict-markers -m phase"
+addopts = "--strict-config --strict-markers -m 'milestone_1 or milestone_2 or milestone_3 or milestone_4 or milestone_5 or milestone_6'"
 tmp_path_retention_count = 1
 tmp_path_retention_policy = "failed"
-markers = ["phase: run at every implementation phase gate", "story_acceptance: run with the complete suite at every story acceptance"]
+markers = [
+    "milestone_0: directly verifies milestone 0 requirements",
+    "milestone_1: directly verifies milestone 1 requirements",
+    "milestone_2: directly verifies milestone 2 requirements",
+    "milestone_3: directly verifies milestone 3 requirements",
+    "milestone_4: directly verifies milestone 4 requirements",
+    "milestone_5: directly verifies milestone 5 requirements",
+    "milestone_6: directly verifies milestone 6 requirements",
+    "milestone_50: directly verifies milestone 50 requirements",
+    "milestone_99: directly verifies milestone 99 requirements",
+    "infrastructure: contributor tooling without direct milestone requirements",
+]
 
 [tool.ruff]
 target-version = "py312"

@@ -2,23 +2,33 @@
 
 ## Verification schedule
 
-Default pytest runs select the `phase` group: CLI smoke checks, initialization,
-planning and plan approvals. Run this entire group at every implementation phase
-end, regardless of changed modules. New tests default to this group; all new
-Milestone 2–6 tests must belong to it.
-
-Installation, distribution, verification lifecycle, pytest workspace and parallel
-scheduling modules carry `story_acceptance`. Run both groups at every user-story
-acceptance and milestone acceptance:
+Tests declare every milestone whose requirements they directly verify. Incidental
+use of a capability does not establish coverage. Use module markers for uniform
+coverage and function or parameter markers for mixed modules. Registered markers
+are `milestone_0` through `milestone_6`, `milestone_50`, `milestone_99`, and
+`infrastructure` for contributor tooling without direct milestone requirements.
+Collection fails with test IDs when any case lacks classification, even if a
+selector would exclude it. Multiple selected associations execute a case once.
 
 ```sh
+# Implementation phase gate: substitute the current milestone
+uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1
+
+# Story acceptance for any milestone, and default local selection: M1–6
 uv run --locked pytest -n 4 --dist=loadgroup
+
+# Complete suite: explicit developer command or CI
 uv run --locked pytest -n 4 --dist=loadgroup -m ""
 ```
 
-The former milestone-only initialization test now runs at story acceptance.
-Use `-m story_acceptance` only for diagnosis, not complete acceptance evidence.
-Conflicting group markers fail collection. Existing xdist groups remain intact.
+The default expression is `milestone_1 or milestone_2 or milestone_3 or
+milestone_4 or milestone_5 or milestone_6`. A phase gate selects only its current
+milestone; it does not automatically select earlier milestones. Every story
+acceptance selects M1–6, including stories in M0 and M50. Other local pytest
+selections and standalone artifact drivers require an explicit developer command.
+Selected tests may invoke artifact drivers internally. CI keeps the complete
+suite and its existing standalone artifact verification. Preserve assertions,
+timeouts, xdist groups and the three documented temporary skips.
 
 ## Local parallel test execution
 
@@ -69,8 +79,7 @@ active.
 Environment installation and MLflow initialization compete for CPU, memory and
 disk. Investigate resource constraints with a recorded worker-count comparison. Keep
 existing assertions and subprocess timeouts intact. Record worker count, suite
-count, durations, diagnostics and platform with results. A parallel run with `-m ""` exercises the full suite; selected runs do not replace final full
-verification. Retain serial execution for diagnosis. Parallel macOS evidence
+count, durations, diagnostics and platform with results. A parallel run with `-m ""` exercises the full suite; broader local runs require an explicit developer command. Retain serial execution for diagnosis. Parallel macOS evidence
 does not establish Linux or Windows support. The Linux CI workflow now requests
 four workers; hosted parallel verification remains pending until a run is observed.
 
@@ -125,7 +134,7 @@ Its public `Config.inicfg` compatibility mapping is deprecated in locked pytest
 To inspect successful pytest workspaces, run, for example:
 
 ```sh
-uv run --locked pytest -n 4 --dist=loadgroup -m story_acceptance --keep-test-workspaces tests/integration/test_distribution_verification.py
+uv run --locked pytest -n 4 --dist=loadgroup -m milestone_0 --keep-test-workspaces tests/integration/test_distribution_verification.py
 ```
 
 An explicit `--basetemp` must name a new, exclusively owned directory. Existing
@@ -154,74 +163,42 @@ Preserve completed evidence and approvals. CI continues running all tests.
 
 ### Implementation phase gates
 
-Use TDD for new behavior and bug fixes. At every executable phase gate,
-including the last phase of a story, run the entire phase group:
+Use TDD for new behavior and bug fixes, with focused public-interface checks for
+red–green cycles. At each executable phase gate, run the entire current milestone
+using `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_N` (substitute N).
+Focused checks do not replace that selection. Preserve developer approval gates.
 
-```sh
-uv run --locked pytest -n 4 --dist=loadgroup
-```
+Record changed modules, confirmed public boundaries, applicable acceptance
+criteria, exact commands, collected/selected/deselected counts, outcomes and
+platform. Preserve assertions, timeouts and known failures. Identify excluded
+coverage and its owning task; excluded tests and skips do not prove acceptance.
+Documentation-only phases use document/link/whitespace checks with a rationale.
 
-Use focused tests for red–green cycles and diagnosis; these do not replace the
-phase group at the gate. Run direct acceptance-group tests during development
-when needed to verify changed infrastructure, using an explicit marker override.
-Acceptance-group tests become mandatory together at story acceptance.
-
-Record changed modules, public boundaries, applicable acceptance criteria, exact
-commands, selected/deselected counts, outcomes and platform. Preserve assertions,
-timeouts and known failures. Record missing coverage and uncertain impact.
-Documentation-only phases use document, link and whitespace checks with a
-rationale instead of product tests.
-
-Keep locked synchronization, lock consistency, lint, formatting, strict typing,
-CLI version smoke and `git diff --check` at executable phase gates. Record the
-lock hash before and after verification and explain intentional changes.
-
-Record acceptance-group deferrals with the owning story acceptance task.
-Milestone acceptance retains its separate full-suite, artifact, manual and
-platform obligations.
+Retain locked synchronization, lock consistency, lint, formatting, strict typing,
+CLI version smoke and `git diff --check`. Record the lock hash before and after.
 
 ### Story acceptance
 
-Run the complete suite against the final story changes:
-
-```sh
-uv run --locked pytest -n 4 --dist=loadgroup -m ""
-```
-
-Both groups must pass, including initialization from both artifact paths.
-Reconcile acceptance criteria and every deferred check; retain shared checks and
-applicable distribution, installation, manual and platform checks. Reuse artifact
-evidence only when inputs are unchanged and the required checks demonstrably ran.
-Renew full-suite evidence after later executable changes and artifact evidence
-when its inputs change. Documentation-only stories use document checks with a
-rationale. Keep developer phase gates and explicit story acceptance. Known
-failures or unresolved required checks block acceptance.
+For every milestone, run `uv run --locked pytest -n 4 --dist=loadgroup` against
+final story changes: M1–6 only. Renew that evidence after executable changes.
+Reconcile acceptance criteria, excluded coverage, temporary skips and unresolved
+failures. Retain shared checks and explicit developer story acceptance. Broader
+pytest runs and standalone artifact checks require the developer's explicit
+command; they are not automatic acceptance requirements. Documentation-only
+stories use appropriate document checks with a rationale.
 
 ### Milestone acceptance
 
-Assign a named milestone acceptance verification task before requesting acceptance.
-That task owns every deferred check from the milestone's stories. Run:
+Keep a named milestone verification owner to reconcile historical deferrals,
+known failures, evidence identities, counts and platform/manual limitations.
+Milestone acceptance does not automatically trigger a local full suite or
+standalone artifact drivers. Broader verification requires the developer's
+explicit command. Preserve historical approvals and evidence without treating
+excluded coverage or CI results as proof of a local check.
 
-```sh
-uv run --locked pytest -n 4 --dist=loadgroup -m ""
-```
+## Scheduling policy revision — 2026-11-04
 
-Include shared checks, applicable direct-wheel and sdist-rebuilt-wheel distribution
-and installation verification, and required manual/platform checks. Reconcile
-all deferrals with actual results; reuse identical artifact checks only when the
-suite demonstrably performed them against unchanged inputs. Record revision,
-working-tree changes, lock hash, artifacts, commands, counts, outcomes and limits.
-Full-suite evidence and required checks must pass before milestone acceptance.
-After later executable changes, renew full-suite evidence against the final
-milestone implementation; renew artifacts when their inputs change. Document-only
-or approval-record edits require document checks with a rationale.
-
-
-## Scheduling policy revision — 2026-11-02
-
-The developer approved two-group scheduling and complete-suite story acceptance.
-This schedule supersedes direct-tests-only phase selection and deferral of the
-full suite until milestone acceptance in existing plans.
-Preserve historical approvals, evidence and unresolved milestone obligations.
-Shared checks and developer approval gates remain required. At story acceptance,
-renew the complete suite against the final executable changes.
+The developer's supplied “Stratify tests by milestone” plan explicitly authorizes
+this replacement of phase/story scheduling and revision of unfinished M1/M50
+verification obligations. Owning plans record the scope changes. Historical
+results, approvals, unresolved failures and the three temporary skips remain.
