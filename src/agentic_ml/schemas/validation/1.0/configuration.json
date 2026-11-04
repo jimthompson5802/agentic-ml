@@ -1,0 +1,195 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "project_root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "registry_id": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "registry_source": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "harness": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "origin": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "version",
+        "origin"
+      ],
+      "additionalProperties": false
+    },
+    "libraries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "distribution": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reference_version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "installed_version": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "distribution",
+          "reference_version",
+          "installed_version"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "algorithms": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 100,
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "task": {
+            "enum": [
+              "classification",
+              "regression"
+            ]
+          },
+          "adapter": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "version"
+            ],
+            "additionalProperties": false
+          },
+          "library_distribution": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fixed": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "null",
+                "boolean",
+                "integer",
+                "number",
+                "string"
+              ]
+            }
+          },
+          "defaults": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "null",
+                "boolean",
+                "integer",
+                "number",
+                "string"
+              ]
+            }
+          },
+          "search": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "task",
+          "adapter",
+          "library_distribution",
+          "fixed",
+          "defaults",
+          "search"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "capabilities": {
+      "const": [
+        "configuration_validation",
+        "candidate_validation"
+      ]
+    },
+    "execution_authorized": {
+      "const": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_root",
+    "experiment_id",
+    "plan_id",
+    "registry_id",
+    "registry_source",
+    "harness",
+    "libraries",
+    "algorithms",
+    "capabilities",
+    "execution_authorized"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

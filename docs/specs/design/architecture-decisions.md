@@ -101,3 +101,43 @@ currently in place for development and testing.” See
 
 **Consequences:** Revised concrete contract and public test boundaries approved.
 IP2 execution awaits explicit authorization. No executable behavior or future authenticated capability is delivered here.
+
+### US-05 IP1 — Semantic configuration and candidate validation proposals
+
+**Status: IP1 contracts and public test boundaries approved by developer “i approve” (2026-11-04), after the interface review.**
+The developer authorized IP1 with “start ip1”, following approval of the
+[US-05 plan](../../plans/milestone-1-us-05.md). The
+[contract report](../../verification/us-05-ip1.md) defines the proposed interfaces,
+registry inventory, schemas, evidence, compatibility and public test boundaries.
+These proposals do not accept ADR-002/004/007 in full or deliver executable code.
+
+- **ADR-002/007 validation slice:** Add `agentic_ml.validation` and CLI
+  `config validate/inspect`, `candidate validate`. Preserve US-03 structural
+  planning APIs, `input_ready` and immutable plan 1.0 identities; keep initialization
+  0.1 drafts inert. Successful semantic validation grants no execution authority.
+- **ADR-004 metadata slice:** Built-in scalar metadata profiles for
+  `dummy_classifier` and `dummy_regressor`, plus explicitly supplied additive
+  metadata. Validate IDs/tasks/types/defaults and declarative non-null implication
+  rules without importing user code. Unknown IDs, duplicate registrations and
+  unsupported interfaces block. Full component loading/training remains deferred
+  to its owning capabilities.
+- **Search compatibility:** Check declared and effective independent domains
+  conservatively before accepting a configuration. If a combination rule may be
+  violated by any domain value, reject the space; use domain membership checks,
+  not Cartesian enumeration. Conditional parameter schemas remain deferred.
+- **Defaults/version evidence:** Materialize fixed and omitted default values
+  without granting tuning permission. Preserve a separate immutable validation
+  bundle bound to current plan, registry, sources, harness, library observations
+  and adapter metadata version. A missing library is recorded explicitly and
+  does not prevent metadata-only validation; actual execution compatibility must
+  be established by a future training adapter. Drift blocks reuse, never updates
+  old defaults in place.
+- **Boundary:** Current candidate checks reverify evidence and apply the same
+  parameter rules through installed CLI/API. Future Python, custom-code and
+  notebook submission paths must validate every candidate before side effects,
+  and implement their own authorization, isolation, budget and capture obligations.
+  Validation APIs do not constrain arbitrary Python or authenticate project writers.
+
+**Consequences:** IP2 requires this implementation-phase gate and its public test
+boundaries to be approved first. Existing US-03-SC-01 approval limitations,
+separate milestone verification owners and historical failures remain unchanged.

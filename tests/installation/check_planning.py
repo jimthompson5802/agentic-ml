@@ -407,6 +407,7 @@ def main() -> None:
         Path(agentic_ml.__file__).resolve().is_relative_to(Path(sys.prefix).resolve())
     )
     args.workspace.mkdir()
+    check_semantic_validation(args.workspace)
     root = create_project(args.workspace, args.project)
     (root / "missing.csv").write_bytes(b"Private dataset sentinel")
     (root / "missing.csv").chmod(0)
@@ -659,6 +660,247 @@ def main() -> None:
         assert not (root / ".agentic-ml/init.json").exists()
     (root / "missing.csv").chmod(0o600)
     print("PASS installed planning", flush=True)
+
+
+def check_semantic_validation(workspace: Path) -> None:
+    """US-05 AC-01–05: exercise installed validation without training authority."""
+    from agentic_ml.validation import (
+        CandidateRequest,
+        ConfigurationRequest,
+        inspect_validation,
+        validate_candidate,
+        validate_configuration,
+    )
+
+    parent = workspace / "semantic"
+    parent.mkdir()
+    root = create_project(parent)
+    cli = str(Path(sys.executable).parent / "agentic-ml")
+    original = (root / "brief.md").read_text()
+
+    def command(arguments: list[str], expected: int) -> dict[str, JSONValue]:
+        completed = subprocess.run(
+            [cli, *arguments],
+            cwd=workspace,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        assert completed.returncode == expected, completed.stdout + completed.stderr
+        return cast(dict[str, JSONValue], json.loads(completed.stdout))
+
+    def configuration(
+        algorithm: str,
+        task: str,
+        fixed: dict[str, JSONValue],
+        search: dict[str, JSONValue],
+    ) -> str | None:
+        (root / "brief.md").write_text(
+            original.replace("logistic_regression", algorithm).replace(
+                "task_type: classification", "task_type: " + task
+            )
+        )
+        (root / "search.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "schema_version": "1.0",
+                    "algorithms": {algorithm: {"fixed": fixed, "search": search}},
+                }
+            )
+        )
+        plan = resolve_plan(ResolveRequest(root, Path("experiment.yaml")))
+        if plan.status != "input_ready":
+            assert plan.diagnostics
+            return None
+        assert plan.plan_id is not None
+        result = validate_configuration(ConfigurationRequest(root, plan.plan_id))
+        response = command(
+            [
+                "config",
+                "validate",
+                "--project-root",
+                str(root),
+                "--plan-id",
+                plan.plan_id,
+            ],
+            0 if result.status == "valid" else 2,
+        )
+        assert response["validation_id"] == result.validation_id
+        if result.status == "blocked":
+            assert result.diagnostics and result.diagnostics[0].message
+            assert response["diagnostics"]
+        else:
+            assert result.configuration is not None
+            assert result.configuration["execution_authorized"] is False
+        return result.validation_id
+
+    blocked_cases: list[tuple[str, str, dict[str, JSONValue], dict[str, JSONValue]]] = [
+        ("unknown", "classification", {}, {}),
+        ("dummy_regressor", "classification", {}, {}),
+        ("dummy_classifier", "classification", {"random_state": True}, {}),
+        ("dummy_classifier", "classification", {"unknown": 1}, {}),
+        ("dummy_classifier", "classification", {"strategy": "constant"}, {}),
+        (
+            "dummy_classifier",
+            "classification",
+            {},
+            {"strategy": {"type": "categorical", "choices": []}},
+        ),
+        (
+            "dummy_classifier",
+            "classification",
+            {},
+            {
+                "random_state": {
+                    "type": "integer",
+                    "min": 0,
+                    "max": 2,
+                    "scale": "logarithmic",
+                }
+            },
+        ),
+    ]
+    for algorithm, task, fixed, search in blocked_cases:
+        assert configuration(algorithm, task, fixed, search) is None
+
+    candidate_cases: list[
+        tuple[
+            str,
+            str,
+            dict[str, JSONValue],
+            dict[str, JSONValue],
+            dict[str, JSONValue],
+            list[dict[str, JSONValue]],
+            dict[str, JSONValue],
+        ]
+    ] = [
+        (
+            "dummy_classifier",
+            "classification",
+            {"strategy": "prior"},
+            {
+                "random_state": {
+                    "type": "integer",
+                    "min": 1,
+                    "max": 2,
+                    "scale": "linear",
+                }
+            },
+            {"random_state": 1},
+            [
+                {"random_state": 1.0},
+                {"random_state": 3},
+                {"random_state": 1, "strategy": "uniform"},
+                {},
+            ],
+            {"strategy": "prior", "random_state": 1, "constant": None},
+        ),
+        (
+            "dummy_regressor",
+            "regression",
+            {"strategy": "quantile"},
+            {
+                "quantile": {
+                    "type": "float",
+                    "min": 0.1,
+                    "max": 1.0,
+                    "scale": "logarithmic",
+                }
+            },
+            {"quantile": 1.0},
+            [{"quantile": 1.01}, {"quantile": True}],
+            {"strategy": "quantile", "quantile": 1.0, "constant": None},
+        ),
+    ]
+    for algorithm, task, fixed, search, valid, invalid, expected in candidate_cases:
+        identity = configuration(algorithm, task, fixed, search)
+        assert identity is not None
+        candidate_path = root / "candidate.json"
+        for parameters, accepted in [(valid, True), *[(p, False) for p in invalid]]:
+            result = validate_candidate(
+                CandidateRequest(root, identity, algorithm, parameters)
+            )
+            assert result.status == ("valid" if accepted else "blocked"), result
+            candidate_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "1.0",
+                        "algorithm": algorithm,
+                        "parameters": parameters,
+                    }
+                )
+            )
+            response = command(
+                [
+                    "candidate",
+                    "validate",
+                    "--project-root",
+                    str(root),
+                    "--validation-id",
+                    identity,
+                    "--candidate",
+                    "candidate.json",
+                ],
+                0 if accepted else 2,
+            )
+            assert response["parameters"] == result.parameters
+            if accepted:
+                assert result.parameters == expected
+            else:
+                assert result.diagnostics[0].message
+        # A project-owned helper consumes only the installed public interface.
+        helper = root / "validate_helper.py"
+        helper.write_text(
+            "from pathlib import Path\n"
+            "from agentic_ml.validation import CandidateRequest, validate_candidate\n"
+            f"result = validate_candidate(CandidateRequest(Path({str(root)!r}), "
+            f"{identity!r}, {algorithm!r}, {valid!r}))\n"
+            f"assert result.status == 'valid' and result.parameters == {expected!r}\n"
+        )
+        subprocess.run([sys.executable, "-I", str(helper)], cwd=workspace, check=True)
+        checked = inspect_validation(project_root=root, validation_id=identity)
+        assert checked.integrity and checked.current
+        lock = root / "uv.lock"
+        saved = lock.read_bytes()
+        lock.write_bytes(saved + b"# drift\n")
+        stale = validate_candidate(CandidateRequest(root, identity, algorithm, valid))
+        assert stale.status == "blocked" and stale.diagnostics[0].code == "stale_source"
+        command(
+            [
+                "config",
+                "inspect",
+                "--project-root",
+                str(root),
+                "--validation-id",
+                identity,
+            ],
+            2,
+        )
+        lock.write_bytes(saved)
+        bundle = root / ".agentic-ml/validations" / identity[7:] / "registry.json"
+        preserved = bundle.read_bytes()
+        bundle.write_text("{}\n")
+        corrupted = inspect_validation(project_root=root, validation_id=identity)
+        assert corrupted.status == "blocked" and not corrupted.integrity
+        rejected = validate_candidate(
+            CandidateRequest(root, identity, algorithm, valid)
+        )
+        assert rejected.status == "blocked" and rejected.parameters is None
+        command(
+            [
+                "candidate",
+                "validate",
+                "--project-root",
+                str(root),
+                "--validation-id",
+                identity,
+                "--candidate",
+                "candidate.json",
+            ],
+            2,
+        )
+        bundle.write_bytes(preserved)
+    print("PASS installed semantic validation", flush=True)
 
 
 if __name__ == "__main__":

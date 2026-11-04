@@ -2,7 +2,71 @@
 
 Last updated: 2026-11-04 (UTC)
 
-## Current milestone test selection work — 2026-11-04
+## Current US-05 accepted — PR #53 published — 2026-11-04
+
+On `US-05-configuration-validation`, baseline `3eefd55`, developer “start ip3”
+authorized the final phase, superseding the earlier hold. All IP3 tasks are
+technically complete in the [owning plan](docs/plans/milestone-1-us-05.md) and
+[IP3 report](docs/verification/us-05-ip3.md). Issue #11 full body/all comment pages
+refreshed; unchanged, zero comments. Approved public test boundaries reused.
+
+Added installed semantic CLI/API/project-helper checks for direct and sdist-rebuilt
+wheels, schema inventory and damaged-wheel regression, usage guide and evidence.
+M1: **371 passed, one existing skip in 234.20s**. M1–6: **371 passed, one existing
+skip in 226.43s**. Each selected 372/474, excluding 102. Shared checks, document
+links and whitespace pass; lock unchanged. Linux/Python 3.12.16 only. Original
+failed probe diagnostic expectation and corrective evidence preserved in report;
+no product Python/dependency changes or new exclusions.
+
+Working tree: probes/regression, README/usage/distribution docs, plan/report and
+this checkpoint. Developer approved IP3 with “i approve ip3” on 2026-11-04.
+Approval records updated; `git diff --check` passed, existing executable evidence
+remains applicable. Developer “i accept user story” accepted US-05 on 2026-11-04.
+Published commit `e4b5acf` on `origin/US-05-configuration-validation` and opened
+[PR #53](https://github.com/jimthompson5802/agentic-ml/pull/53) into `main`.
+[Verified static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/53#pullrequestreview-5762797927)
+found no actionable findings. Publication records are documentation only; final-head
+confirmation will appear in PR review history. **Next action:** await developer
+review/merge direction after publishing these records; no merge authorized.
+Earlier no-publication statements are historical. No executable changes or
+renewed tests in acceptance/publication recording.
+Developer-requested M1–6 repeat run was stopped by “stop the tests”, exit 130.
+No completed renewal claimed; earlier passing evidence remains valid. Do not
+restart tests without direction.
+Preserve M1-ACCEPT-VERIFY, M50-ACCEPT-VERIFY and the three historical temporary skips;
+no broader suite or standalone artifact driver run. IP2 installed/final verification
+deferrals resolved by IP3 evidence; historical timeout/platform limits remain open.
+
+## Historical US-05 IP2 approved — 2026-11-04
+
+On `US-05-configuration-validation`, baseline `55c03b6`, developer “i approve”
+after the interface review approved IP1/D1–D7/public boundaries and accepted the
+presented IP2 progression request. IP2 tasks are complete and the developer approved the gate with
+“i approve ip2; commit; do not strt ip3 yet” on 2026-11-04. The local commit
+contains the approved IP1/IP2 work and approval records. IP3 remains unstarted
+and explicitly not authorized.
+The [owning plan](docs/plans/milestone-1-us-05.md) and
+[IP2 evidence](docs/verification/us-05-ip2.md) record progress and verification.
+
+Implemented the four semantic validation APIs and CLI bindings, packaged scalar
+registry metadata/schemas, immutable validation evidence and public behavior
+regressions. Twelve focused red–green cycles and additional public coverage
+recorded 57 passing cases. Lint, formatting, strict typing, lock consistency and
+version smoke checks passed. Final M1: **370 passed, one existing skip in
+218.29s**, exit 0; 473 collected, 371 selected, 102 deselected. Preliminary M1
+369-pass evidence is retained separately; final evidence includes the
+type-sensitive replay correction. No executable/resource/test identities changed
+after final gate launch; lock SHA-256 unchanged. No full-story or milestone acceptance claimed. No dependencies or
+lock changes; no standalone artifact command or broader suite run.
+
+The approved local commit includes IP1 documentation, IP2 package/CLI,
+registry/schema resources, tests, report and progress records. Approval-record
+updates pass document/whitespace checks; existing executable evidence remains
+applicable. **Next action:** await explicit IP3 authorization. No push requested.
+Preserve M1-ACCEPT-VERIFY, M50-ACCEPT-VERIFY, three temporary skips and historical
+failures. The following publication next-action record is historical.
+
+## Milestone test selection publication record — 2026-11-04
 
 Branch `chore-refactor-tests`; initial working tree clean. The developer's
 supplied maintenance plan authorizes milestone classification and policy updates,

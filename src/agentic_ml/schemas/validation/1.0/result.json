@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "blocked"
+          ]
+        },
+        "validation_id": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "configuration": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "configuration.json"
+            }
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "field": {
+                "type": "string"
+              },
+              "source_path": {
+                "type": "string"
+              },
+              "line": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "column": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "field",
+              "source_path",
+              "line",
+              "column",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "status",
+        "validation_id",
+        "configuration",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "blocked"
+          ]
+        },
+        "validation_id": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "configuration": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "configuration.json"
+            }
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "field": {
+                "type": "string"
+              },
+              "source_path": {
+                "type": "string"
+              },
+              "line": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "column": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "field",
+              "source_path",
+              "line",
+              "column",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "integrity": {
+          "type": "boolean"
+        },
+        "current": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "schema_version",
+        "status",
+        "validation_id",
+        "configuration",
+        "diagnostics",
+        "integrity",
+        "current"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "blocked"
+          ]
+        },
+        "validation_id": {
+          "type": "string"
+        },
+        "algorithm": {
+          "type": "string"
+        },
+        "parameters": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "origins": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": {
+                "enum": [
+                  "fixed",
+                  "default",
+                  "candidate"
+                ]
+              }
+            }
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "field": {
+                "type": "string"
+              },
+              "source_path": {
+                "type": "string"
+              },
+              "line": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "column": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "field",
+              "source_path",
+              "line",
+              "column",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "status",
+        "validation_id",
+        "algorithm",
+        "parameters",
+        "origins",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "validation_id": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "files": {
+      "type": "object",
+      "minProperties": 2,
+      "maxProperties": 3,
+      "propertyNames": {
+        "enum": [
+          "configuration.json",
+          "registry.json",
+          "registry-source.yaml"
+        ]
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "validation_id",
+    "files"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
