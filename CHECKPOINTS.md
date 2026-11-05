@@ -2,6 +2,23 @@
 
 Last updated: 2026-11-05 (UTC)
 
+## Walkthrough software reference — 2026-11-05
+
+Developer requested appending the class/function explanation to
+`docs/specs/example-walkthrough.md` and integrating short descriptions in sections
+1–7, then asked whether all interfaces were accounted for. Added scenario-local
+descriptions and an appendix covering public services, protocol methods, 213
+blueprint table entries, inline records/aliases, 37 error classes, conceptual-name
+replacements, and remaining implementation decisions. Corrected stale claims that
+implemented APIs were unspecified. Blueprint remains authoritative for fields and
+signatures; private helpers are explicitly outside this inventory.
+
+Documentation only; TDD and executable checks do not apply. Type-table coverage,
+error-name coverage, local link targets, and `git diff --check` pass. Developer
+authorized commit and push of the walkthrough and this checkpoint on the existing
+`embellish-software-component-descriptions` branch. Recording authorization before
+publication; next action: developer review of the updated branch. No merge requested.
+
 ## Blueprint formatting correction — 2026-11-05
 
 Developer requested `uv run --locked ruff format --check .` and fixes. Initial
