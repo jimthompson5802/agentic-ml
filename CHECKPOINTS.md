@@ -2,7 +2,39 @@
 
 Last updated: 2026-11-05 (UTC)
 
-## Current software blueprint IP5 review — 2026-11-05
+## Current software blueprint IP6 final review — 2026-11-05
+
+Developer “commit” authorized committing approved IP6 documentation and final
+reconciliation. Recording direction and creating the local Conventional Commit;
+next action await developer direction. No push or PR requested.
+
+Developer “i approve ip6” approved the final documentation phase on 2026-11-05 UTC.
+All IP1–IP6 tasks/gates are complete; approval recorded in plan/evidence and current
+design status. Changes remain uncommitted; next action await developer direction.
+No commit/push/PR requested. Earlier pending statements below are historical;
+implementation blockers and deferred authentication remain unchanged.
+
+Developer “commit then start ip6” authorized IP5 commit first, completed as
+`0db2ded`, then IP6. On `embellish-software-component-descriptions`, IP6 T1–T6
+technically complete in [plan](docs/plans/software-blueprint.md).
+[IP6 evidence](docs/verification/software-blueprint-ip6.md) records complete stable
+issue #54–55 bodies/comments/metadata (zero comments), 23 M6 table records,
+five services, three protocol methods and source-limit/recovery contracts.
+[Final coverage index](docs/verification/software-blueprint-final-coverage.md)
+maps every one of 160 M1–6 criteria; all nine original protocols reconciled.
+US-23-AC-02 authentication remains partial/deferred; eight named decision/assurance
+records preserve implementation blockers and owners. No product delivery implied.
+
+Design 0.14 updates overview/date/reading map, topic/API/resource-path authority
+and stale interface/name/implementation statements. Checks pass: 889 relative
+links/anchors, 160 unique source criteria, 27 public source classes (two private
+helpers excluded), M6 inventory, nine protocols, six Mermaid parses and whitespace.
+No executable/source/dependency/lock changes, runtime tests or new platform evidence.
+Uncommitted work: blueprint/overview/topic docs/plan, IP6 report, final index and
+this checkpoint. IP6 final approval pending; next action developer review and
+approval or changes. No IP6 commit/push/PR requested. Earlier snapshots historical.
+
+## Historical software blueprint IP5 review — 2026-11-05
 
 Developer “commit then start ip6” authorized IP5 commit before IP6 execution.
 Recording direction and committing approved M5 documentation first; next action

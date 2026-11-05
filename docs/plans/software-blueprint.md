@@ -148,6 +148,32 @@ recorded 2026-11-05 UTC. No push/PR requested. Earlier execution holds are histo
 
 ### Mandatory detail and completeness standard for IP2–IP6
 
+### IP6 execution record
+
+Developer “commit then start ip6” authorized IP5 commit before IP6. Baseline
+`0db2ded` completed first. Work remains software-design documentation only.
+
+| Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
+|---|---|---|---|---|---|
+| IP6-T1 | Complete | Retrieve #54–55 complete discussions and reconcile M6 scope | IP5 approval/commit | Stable bodies/comments/metadata and explicit deferred strategies | US-28-AC-01–04; US-29-AC-01–07 |
+| IP6-T2 | Complete | Acquisition planning/approval/execution/lineage/comparison/recovery catalogue | T1 | Concrete types/methods/lifecycle with source-limit blocker | All M6 criteria |
+| IP6-T3 | Complete | Acquisition lifecycle diagram | T2 | Parseable scoped acquire/validate/return/compare/recovery flow | All M6 criteria |
+| IP6-T4 | Complete | Original nine protocols and complete M1–6 criterion reconciliation | T2 | Explicit disposition table and 160-row criterion/owner/boundary index | All 160 M1–6 criteria; authentication explicitly partial |
+| IP6-T5 | Complete | Overview/topic stale wording, design version/date/ADR links, final evidence/checkpoints | T3/T4 | Design 0.14 navigation, contract authority and actual document checks recorded | All M1–6 slices |
+| IP6-T6 | Complete | Final inventory/detail/reference/coverage verification | T5 | 889 links/anchors, 160 criteria, all nine protocols, six diagrams and M6/source inventories pass | All M1–6 slices |
+
+**IP6 developer approval: Approved, 2026-11-05 (UTC).** Developer “i approve ip6”
+approved the final phase, including the M6 contracts,
+cross-milestone index, explicit protocol replacements and unresolved decisions.
+No executable story/milestone acceptance or pending ADR wholesale acceptance is
+implied. [IP6 evidence](../verification/software-blueprint-ip6.md) and
+[complete coverage](../verification/software-blueprint-final-coverage.md) own
+results. All documentation tasks and implementation phase gates are complete.
+No IP6 commit/push/PR requested. This records final phase approval, not executable
+user-story/milestone acceptance or publication authorization.
+
+### Required detail and completeness checklist
+
 Use the M1 ExperimentSpec definition and M1 record catalogue as the minimum
 detail standard. This requirement applies to each remaining phase's contract
 tasks and developer approval gate, not only to final reconciliation.
@@ -180,7 +206,7 @@ Each phase must produce a completeness checklist in its verification report:
 Add these stable tasks to the existing sequences below: IP2-T5, IP3-T5, IP4-T5,
 IP5-T6 and IP6-T6 each perform their phase's inventory, detail, reference-closure,
 cross-milestone and criterion checklist review after all other tasks in that phase.
-IP2-T5, IP3-T5, IP4-T5 and IP5-T6 are Complete as recorded above; IP6-T6 is **Not started**.
+IP2-T5, IP3-T5, IP4-T5 and IP5-T6 are Complete as recorded above; IP6-T6 progress is recorded above.
 IP6-T6 also verifies the combined M1–6 inventory
 and is the final verification owner, extending IP6-T5's document checks.
 
@@ -196,7 +222,7 @@ documentation completion criteria without authorizing executable work or advanci
 past IP1. Existing historical evidence is preserved; IP1 approval remains pending.
 
 Each row below preserves the planned sequence. IP2 completion is recorded above;
-IP3–IP5 completion is recorded above; IP6 remains **Not started / Pending**.
+IP3–IP6 completion and approvals are recorded above; all phase gates are approved.
 Entry condition is approval of the preceding phase.
 
 | Phase | Ordered tasks | Completion and gate |
@@ -224,9 +250,10 @@ success/failure/boundary scenarios, implemented versus proposed labels and
 Record evidence in [IP1 report](../verification/software-blueprint-ip1.md), with
 later phase reports alongside it. Refresh checkpoints at handoff and gates.
 
-Final task IP6-T5 owns final document verification: every M1–6 criterion has a
+Final task IP6-T6 owns final document verification, following IP6-T5: every M1–6 criterion has a
 software owner, contract reference and public verification boundary; every original
 protocol is retained/refined/superseded explicitly; unresolved decisions have owners,
 affected criteria and blocked work. Preserve historical evidence, pending ADRs,
 platform limitations and separate milestone acceptance obligations. Final technical
-completion and developer acceptance remain separate. Actual final results: Pending.
+completion and developer acceptance remain separate. Actual final results belong
+to IP6 evidence; final phase approved by developer “i approve ip6”.

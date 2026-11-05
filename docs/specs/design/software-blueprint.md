@@ -1,8 +1,8 @@
 # Software implementation blueprint
 
-Part of the [toolkit design](../agentic-ml-harness-design.md). IP1 review draft.
-Milestones 1–5 are approved. Milestone 6
-awaits its separate design gate. Approval records belong to the owning plan.
+Part of the [toolkit design](../agentic-ml-harness-design.md). Milestones 1–5 are
+approved; Milestone 6 and final reconciliation are also approved at the IP6 gate.
+Approval records belong to the owning plan, not executable product acceptance.
 
 ## Authority and notation
 
@@ -1531,3 +1531,219 @@ directions; test missing/conflicting references and original producer provenance
 on reuse. No product tests run for this documentation phase. Authentication and
 concrete second-product support remain explicitly undelivered requirements, not
 passing evidence or reasons to weaken existing assertions.
+
+## Milestone 6: authorized acquisition and measured improvement
+
+**Proposed contracts, not implemented acquisition software.** Reuse earlier
+EvidenceId/RecordId, immutable record/payload identity, versioned serialization,
+Path/JSONValue and error rules. All fields below are required with no implicit
+defaults; nullable fields require explicit None. Persisted records add
+schema_version 1.0. Data records have no methods. Acquisition is an activity that
+can return to approved workflow phases, not an eighth WorkflowPhase.
+
+### Ownership and criterion map
+
+| Owner / issue | Criteria | Public boundary |
+|---|---|---|
+| `data.acquisition.planning` / [#54](https://github.com/jimthompson5802/agentic-ml/issues/54) | US-28-AC-01–04 | Evidence-backed gaps, bounded proposals/hypotheses, approved sources and development-only feedback |
+| `data.acquisition.execution`, `approvals.acquisition` / [#55](https://github.com/jimthompson5802/agentic-ml/issues/55) | US-29-AC-01–04 | Source/strategy/scope authorization, budget enforcement, validation/versioning/lineage and approved downstream return |
+| `data.acquisition.comparison`, `data.acquisition.loop` / #55 | US-29-AC-05–07 | Consistent before/after comparison, reviewable stops and durable recovery without duplicate work |
+
+### Evidence and proposal records
+
+Owner `data.acquisition.planning`; US-28-AC-01–04.
+
+| Type | Required attributes | Constraints and authority |
+|---|---|---|
+| `DataGapRequest` | ProjectContext; `dataset_id`, `assessment_id`: EvidenceId; `development_evaluation_ids: tuple[EvidenceId, ...]`; `authorization_id: RecordId` | Verified approved development data/evaluations only; reject final reports, protected memberships and derived final feedback. |
+| `DataGapFinding` | `finding_id`, `kind`, `description`: str; `affected_slice: ArtifactRef`; `observations: Mapping[str, JSONValue]`; `evidence_ids: tuple[EvidenceId, ...]` | Explicit development row/slice definition, observed counts/metrics with units and methods; nonblank explanation, no inference from protected-test results. |
+| `DataGapReport` | `report_id`, `dataset_id`, `assessment_id`: EvidenceId; `findings: tuple[DataGapFinding, ...]`; `development_evaluation_ids: tuple[EvidenceId, ...]`; `recorded_at: str`; `diagnostics: tuple[Diagnostic, ...]` | Absence of a supported finding is explicit empty findings, not an invented acquisition need. Preserve exact evidence sources and approved scope. |
+| `AcquisitionLimits` | `resources: ResourceLimits`; `max_compute_seconds: int`; `max_records: int`; `max_cost`, `currency`: str | Positive finite resource/compute/record ceilings; nonnegative exact decimal cost with currency. Zero cost is an explicit free-source ceiling, not unknown pricing. |
+| `AcquisitionStrategy` | `source_id: str`; `method: Literal["approved_extract", "targeted_sampling"]`; `query_or_path: str`; `parameters`, `sampling`: Mapping[str, JSONValue]; `origin: DataOrigin` | Uses approved local/SQL/object source connector and explicit sampling/query scope. No new external source or strategy implicitly authorized. |
+| `DataOrigin` | `kind: Literal["observed", "synthetic", "augmented"]`; `producer_identity: EvidenceId \| None`; `parent_dataset_ids: tuple[EvidenceId, ...]`; `description: str` | Synthetic/augmented input requires producer and parent lineage or explicit unavailable-parent explanation. Label imported synthetic inputs even when this release does not generate them. Never silently label generated data observed. |
+| `AcquisitionProposalRequest` | ProjectContext; `gap_report_id: EvidenceId`; `strategy: AcquisitionStrategy`; `limits: AcquisitionLimits`; `expected_benefit: str`; `cost_estimate: str`; `authorization_id: RecordId` | Nonblank benefit hypothesis, finite nonnegative decimal estimate in limits currency. Request is not execution approval. |
+| `DataAcquisitionProposal` | `proposal_id`, `gap_report_id`, `source_dataset_id`: EvidenceId; `reason: str`; `evidence_ids: tuple[EvidenceId, ...]`; `strategy: AcquisitionStrategy`; `expected_benefit: str`; `benefit_is_hypothesis: Literal[True]`; `cost_estimate: str`; `limits: AcquisitionLimits`; `required_scope: WorkflowScope` | Preserve reason/evidence/hypothesis/source/strategy/cost/limits and required return/approval scope. Cannot alter active evaluation/access/budget rules by itself. |
+
+Proposed typed replacements for conceptual acquisition protocols:
+
+```python
+class DataAcquisitionPlanner(Protocol):
+    def diagnose(self, request: DataGapRequest) -> DataGapReport: ...
+    def propose(self, request: AcquisitionProposalRequest) -> DataAcquisitionProposal: ...
+
+class DataAcquisitionExecutor(Protocol):
+    def execute(self, request: AcquisitionRequest) -> AcquisitionResult: ...
+```
+
+EvidenceBasedAcquisitionPlanner implements the two planning methods; constructor
+takes explicit project_root and uses preserved development evidence plus authored
+strategy/benefit inputs, requiring no agent. ApprovedSourceAcquisitionExecutor
+implements execute; constructor takes project_root and registered M1 source connectors.
+Neither has extra public attributes or approval methods. These request-based
+signatures replace the conceptual diagnose(dataset, evaluation), propose(gaps)
+and execute(proposal, authorization) signatures; unchanged protocol conformance is
+not claimed. Missing/unusable evidence blocks with AcquisitionError rather than
+fabricating findings. The executor delegates actual source I/O to the same M1
+authorization-enforced connectors, not an alternate unrestricted acquisition path.
+
+### Acquisition authorization, execution and lineage
+
+Owners `approvals.acquisition`, `data.acquisition.execution`; US-29-AC-01–04.
+
+| Type | Required attributes | Constraints and lifecycle |
+|---|---|---|
+| `AcquisitionApprovalRequest` | `project_root: Path`; `proposal_id: EvidenceId`; `workflow_id`, `workflow_decision_id`: RecordId; `reviewer`, `reason`: str | Nonblank reviewer/reason; matching reviewed source/strategy/scope/limits and authorizing WorkflowDecision. No blanket permission to query other sources. |
+| `AcquisitionApproval` | `approval_id`, `workflow_id`, `workflow_decision_id`: RecordId; `proposal_id: EvidenceId`; `strategy: AcquisitionStrategy`; `limits: AcquisitionLimits`; `reviewer`, `reason`, `recorded_at`: str; `authentication: Literal["none"]` | Current exact-scope record; no per-operation approval needed inside approved limits. Unauthenticated assurance follows existing exception, no protection against fabricated workspace approvals claimed. |
+| `AcquisitionRequest` | ProjectContext; `acquisition_id`, `workflow_id`: RecordId; `proposal_id: EvidenceId`; `approval_id`, `authorization_id`, `reservation_id`: RecordId; `submission_key: str`; `ownership: RecoveryOwnership` | Bind M5 durable intent/epoch and M1 extraction authorization; caller acquisition UUID allows cancellation/recovery. Key and exact inputs preserved across transport retries. |
+| `AcquisitionLineage` | `lineage_id`, `proposal_id`, `source_dataset_id`: EvidenceId; `acquisition_id`, `producer_run_id`: RecordId; `new_dataset_ids: tuple[EvidenceId, ...]`; `origin: DataOrigin`; `strategy: AcquisitionStrategy`; `approval_id: RecordId`; `extracted_at: str`; `content: tuple[ArtifactRef, ...]` | Source/query/sampling/time/permission references and synthetic provenance retained; new content never overwrites old dataset identity. |
+| `AcquisitionResult` | `acquisition_id`, `producer_run_id`: RecordId; `proposal_id: EvidenceId`; `status: Literal["completed", "failed", "budget_exhausted", "cancelled", "needs_review"]`; `datasets: tuple[DatasetRef, ...]`; `lineage: AcquisitionLineage \| None`; `validation_report_ids: tuple[EvidenceId, ...]`; `usage: ResourceUsage`; `compute_seconds: float`; `partial_artifacts: tuple[ArtifactRef, ...]`; `diagnostics: tuple[Diagnostic, ...]` | completed requires verified content/quality/versioning/lineage; other states preserve partial output but never call it accepted data. New dataset acceptance remains a separate M1 dataset approval. |
+| `AcquisitionCancellation` | `acquisition_id: RecordId`; `outcome: Literal["requested", "acknowledged", "terminal", "unknown"]`; `run_ids: tuple[RecordId, ...]`; `diagnostics: tuple[Diagnostic, ...]` | Cancellation is not confirmation of terminal source operation; preserve uncertain external request and budget reservation. |
+| `AcquisitionAccounting` | `workflow_id`, `acquisition_id`: RecordId; `limits: AcquisitionLimits`; `consumed: ResourceUsage`; `consumed_compute_seconds`, `reserved_compute_seconds`: float; `reservation_ids`, `measurement_ids`: tuple[RecordId, ...] | Nonnegative cumulative compute; measurement IDs settle once. Unknown work retains compute reservations as well as M5 cost/runtime/trial capacity. Persist as versioned M6 extension in the same local workflow transaction, not a silent change to ResourceUsage. |
+
+`approvals.acquisition.approve_acquisition(request: AcquisitionApprovalRequest) -> AcquisitionApproval`;
+`data.acquisition.execution.cancel_acquisition(*, project_root: Path, acquisition_id: str) -> AcquisitionCancellation`.
+AcquisitionResult is returned by the executor's execute method defined above.
+Before contacting a source, recheck approval/current access, source allowlist,
+required ceilings and epoch, persist submission/reservation, then admit I/O.
+ResourceLimits remains unchanged; AcquisitionLimits adds compute ceilings in M6
+evidence and AcquisitionAccounting in the same durable accounting transaction. Cost/record/runtime/compute
+limits apply to cumulative acquisition work, including unsuccessful requests.
+Preflight source pricing/max charge and bounded query/batch size before dispatch;
+if a source cannot bound required cost/record exposure, reject rather than claim
+a post-hoc invoice check enforces a hard budget. Unsupported mandatory compute
+enforcement also blocks. Enforce runtime/compute limits on managed acquisition
+workers and preserve partial/uncertain state on termination.
+
+Validate acquired content using M1 rules and publish DVC version/metadata only
+with verified content hashes. Preserve source lineage, origin marker, and initial
+input snapshot even on failure. Combining new training data with old data produces
+another dataset identity, not a mutation. Downstream assessment/splitting/features/
+training require matching current M5 return/revision gate approvals; acquisition
+success cannot skip those gates or directly authorize retraining.
+
+### Consistent evaluation, stopping and recovery
+
+Owners `data.acquisition.comparison`, `data.acquisition.loop`; US-29-AC-05–07.
+
+| Type | Required attributes | Constraints and authority |
+|---|---|---|
+| `AcquisitionComparisonProtocol` | `protocol_id`, `baseline_dataset_id`, `baseline_evaluation_id`, `evaluation_cohort_id`, `before_criteria_id`, `after_criteria_id`: EvidenceId; `metric: MetricSpec`; `model_settings: ReferenceEstimatorSpec`; `workflow_decision_id: RecordId` | Fixed development validation cohort and identical approved metric/direction/settings/tolerances. Before/after training/split identities may differ, but cohort membership/content and scoring protocol cannot silently change. |
+| `AcquisitionComparisonRequest` | `project_root: Path`; `protocol_id`, `lineage_id`, `after_dataset_id`, `after_evaluation_id`: EvidenceId; `authorization_id: RecordId` | Verified independent development evaluations, matching acquired lineage and separately authorized downstream work; no final-test evidence. |
+| `AcquisitionComparison` | `comparison_id`, `protocol_id`, `lineage_id`, `before_dataset_id`, `after_dataset_id`, `before_evaluation_id`, `after_evaluation_id`: EvidenceId; `before_score`, `after_score`, `gain`: float \| None; `outcome: Literal["gain", "tie", "regression", "incomparable"]`; `checks: tuple[CheckResult, ...]`; `diagnostics: tuple[Diagnostic, ...]` | Direction-normalized gain as M2; positive/zero/negative only for valid aligned evidence. Missing/mismatched protocol/cohort is incomparable, never an improvement claim. |
+| `AcquisitionLoopPolicy` | `max_acquisitions`, `patience`: int; `minimum_gain: float`; `comparison_protocol_id: EvidenceId` | Positive counts; finite nonnegative required improvement. Stop stagnation after patience consecutive valid comparisons below minimum_gain. Invalid results cannot count as improvement. |
+| `AcquisitionLoopRequest` | ProjectContext; `loop_id`, `workflow_id`: RecordId; `proposal_ids: tuple[EvidenceId, ...]`; `policy: AcquisitionLoopPolicy`; `authorization_id: RecordId`; `ownership: RecoveryOwnership` | Explicit finite ordered proposals, each separately approved in scope. No automatic strategy expansion, protected feedback or approval generation. |
+| `AcquisitionLoopStep` | `index: int`; `acquisition_id: RecordId`; `proposal_id: EvidenceId`; `result: AcquisitionResult`; `return_decision_id: RecordId \| None`; `comparison_id: EvidenceId \| None` | Nonnegative index; pending downstream approval records partial progress and stops, rather than running work in unapproved phase. |
+| `AcquisitionLoopResult` | `loop_id`, `workflow_id`: RecordId; `steps: tuple[AcquisitionLoopStep, ...]`; `stop_reason: Literal["success", "budget_exhausted", "stagnation", "failed", "policy_violation", "cancelled", "awaiting_approval", "needs_review", "completed"]`; `recovery_record_id: RecordId`; `diagnostics: tuple[Diagnostic, ...]` | Success meets approved development goal, not final model acceptance. completed means finite proposal list exhausted without another terminal condition. Preserve all consumed usage, outcomes and linked producer identities. |
+| `AcquisitionResumeRequest` | `project_root: Path`; `loop_id`, `workflow_id`, `owner_id`: RecordId; `expected_version: int`; `lease_seconds: int`; `authorization_id: RecordId` | Reuse M5 exclusive recovery ownership/current authorization. Restore proposal/approval/usage/data/config/bundle identities before additional admission. |
+
+`data.acquisition.comparison.compare_acquisition(request: AcquisitionComparisonRequest) -> AcquisitionComparison`;
+`data.acquisition.loop.run_acquisition_loop(request: AcquisitionLoopRequest) -> AcquisitionLoopResult`;
+`data.acquisition.loop.resume_acquisition_loop(request: AcquisitionResumeRequest) -> AcquisitionLoopResult`.
+run_acquisition_loop invokes already scoped proposals, records lineage, then pauses
+at required return/assessment/training gates. After explicit downstream completion,
+resume reconciles linked runs and comparisons, applying policy before another
+acquisition. Unknown source acceptance never triggers blind repeat acquisition;
+M5 needs_review and reserved capacity rules apply unchanged.
+
+The before/after protocol is a new comparison contract rather than broadening M3
+RunComparison's same-protocol rule: both criteria may reference different training
+split manifests, but the evaluator verifies identical approved development cohort,
+metric, settings and checks. Any change to that reference protocol needs explicit
+WorkflowDecision before comparison; report incompatibility instead of guessing.
+Protected holdout never serves as the evaluation cohort or acquisition signal.
+
+Proposed AcquisitionError, AcquisitionApprovalError, AcquisitionComparisonError
+and AcquisitionRecoveryError use M1 `(code: str, message: str, *, evidence_ids:
+tuple[EvidenceId, ...] = ())`, safe diagnostics and retained causes/evidence;
+no operational methods. Deny missing/stale/wrong-scope approvals, exhausted limits,
+unsupported source/strategy, protected feedback and invalid content before dependent
+work. External uncertainty retains reservations and source response evidence.
+
+**M6-D1 — blocked implementation contract, owner US-29.** Verify each enabled
+connector's pricing/limit and request-identity reconciliation behavior under the
+M1/M5 source isolation/admission controls. Sources lacking required hard bounds or
+definitive acceptance observation cannot be treated as safely retryable; reject
+unsupported operations or stop for review. Concrete connector capabilities must
+be recorded before enabling acquisition, not inferred from a generic adapter name.
+
+Initial strategies are approved additional observations and bounded targeted
+sampling through supported sources. Active learning, labeling services, augmentation
+generation, specialized acquisition agents and other advanced strategies remain
+deferred according to milestone delivery; merely recognizing synthetic/augmented
+origin does not implement generators. No Milestone 99 delivery is introduced.
+
+```mermaid
+sequenceDiagram
+    participant U as Developer
+    participant P as Acquisition planner
+    participant A as Workflow approval and admission
+    participant X as Bounded acquisition executor
+    participant D as Validation and DVC lineage
+    participant E as Independent development evaluator
+    P-->>U: Evidence and acquisition hypothesis
+    U->>A: Approve exact source strategy scope and limits
+    A->>X: Admit preserved proposal and reserved budget
+    X->>D: Preserve acquired content origin and source evidence
+    D-->>U: Versioned validated dataset or reviewable failure
+    U->>A: Authorize return and downstream work
+    A->>E: Execute approved retraining and fixed-cohort comparison
+    E-->>U: Gain tie regression or incompatible protocol
+    Note over X,E: Recovery retains approvals usage lineage and completed run IDs
+```
+
+Future public tests: known development data deficiencies; complete proposal and
+hypothetical benefit; protected-feedback rejection; missing/wrong/stale approval;
+source/query expansion denial; each cost/record/runtime/compute ceiling including
+in-flight and partial failures; content/schema/checksum rejection and explicit
+synthetic/augmented lineage; unauthorized phase return blocked. Compare known gain,
+tie/regression with fixed validation cohort, metric direction, settings and dataset
+version links; changed protocol becomes incomparable. Exercise success, exhaustion,
+stagnation, unrecoverable failure, policy violation, cancellation and pending gates.
+Interrupt after source admission, version publication and downstream completion;
+resume with original approvals/budgets/bundles/producer IDs without duplicate
+acquisition, training or accounting. No executable tests run for this design phase.
+
+## Final M1–6 reconciliation
+
+The [criterion-by-criterion coverage index](../../verification/software-blueprint-final-coverage.md)
+links every M1–6 requirement to software ownership and public verification boundaries.
+It records design coverage, not implementation or acceptance. Existing implemented
+APIs remain baseline contracts; future interfaces in this blueprint are proposals
+subject to owning story test-boundary review and executable acceptance.
+
+### Original nine protocol dispositions
+
+| Conceptual protocol | Blueprint disposition | Owning milestone |
+|---|---|---|
+| AgentAdapter | Replaced by typed capabilities/submit/status/result/cancel; two concrete verified integration slots with explicit product blockers | M4/M5 |
+| DataSourceAdapter | Retained discover/extract/validate; explicit project/authorization context and dataset/report contracts | M1 |
+| DataAcquisitionPlanner | Replaced by typed request-based diagnose/propose; gap/proposal records defined | M6 |
+| DataAcquisitionExecutor | Replaced by scoped request/result execute; cancellation/recovery services separate | M6 |
+| FeatureEngineeringAdapter | Replaced by authored FeaturePlan, execute_features and compare_features; no required M2 agent proposer | M2 |
+| ExperimentRunner | Retained submit/lookup/status, typed cancellation/artifacts and logs extension explicitly proposed | M1 |
+| ModelAdapter | Replaced Any-based methods with typed model/prediction contracts; separate CheckpointRestorer | M3 |
+| Evaluator | Replaced generic evaluate entrypoint with distinct development/final services and independent evidence | M3 |
+| ApprovalService | Replaced string-only request/decide with typed workflow gate/decision services; existing M1 approval functions preserved | M5 |
+
+### Open decision and assurance register
+
+| ID / owning story gate | Required decision/evidence | Blocked implementation |
+|---|---|---|
+| M1-D1 / US-09/11 | Verified OS filesystem/network/credential enforcement and supported platform | Managed execution/extraction access guarantees |
+| M2-D1 / US-12/14 | Protected partition/storage/cache/metadata isolation | Predictive feature comparison and exploratory protected-data denial |
+| M3-D1 / US-24 | Evaluator-only final access and restricted result delivery | Protected final evaluation and no-feedback boundary |
+| M4-D1 / US-08/17/30 | Assistant tools/workspace and interactive kernel controls | Immutable source and assistant/kernel isolation guarantees |
+| M4-D2 / US-30 M4 | First concrete product/interface/version selection and end-to-end verification | First managed integration support |
+| M5-D1 / US-23-AC-02 | Deferred authenticated reviewer/channel/history assurance | Claim of authenticated current workflow decisions; durable unauthenticated scope remains specified |
+| M5-D2 / US-30 M5 | Second concrete product/interface/version and common contract verification | Interchangeability acceptance |
+| M6-D1 / US-29 | Per-source pricing/resource/acceptance reconciliation evidence | Acquisition operations without verified required limits/retry semantics |
+
+Each record has an owning story gate, named missing evidence and blocked behavior;
+none is silently resolved by approving this documentation. Authentication remains
+explicit future assurance; mechanism/product choices must be recorded before
+dependent implementation. Existing pending ADR-002–006 are not accepted wholesale.
+The blueprint narrows interfaces and proposes local storage, not completed product
+delivery. Future serialization code/schemas must implement these reviewed contracts
+and fail unsupported versions; do not treat illustrative older examples as competing
+current interface specifications. Private helper algorithms remain implementation
+choices within confirmed public behavior and verification boundaries.

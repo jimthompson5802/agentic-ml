@@ -2,9 +2,9 @@
 
 # Agentic ML Development Toolkit — Design
 
-**Version:** 0.13
+**Version:** 0.14
 **Status:** Proposed specification; ADR-001 accepted; ADR-007 installation decisions accepted
-**Date:** 2026-10-28
+**Date:** 2026-11-05
 
 ## Reading map and document authority
 
@@ -12,13 +12,13 @@ Start with this overview for scope, architecture, and workflow phases. Before im
 
 For concrete software ownership and public API contracts, read the
 [software implementation blueprint](design/software-blueprint.md). Its Milestone 1
-through Milestone 5 revisions are approved. Milestone 6 awaits
-separate approval gates.
+through Milestone 6 revisions and final M1–6 reconciliation are approved.
 
 GitHub issues govern implementation scope and recorded scope decisions. [User stories](user-stories.md) define product requirements and stable acceptance-criterion IDs. This design and its topic documents provide supporting contracts; examples remain proposed unless explicitly settled. Resolve conflicts before implementing affected behavior.
 
 | Task or question | Required topic documents |
 |---|---|
+| Software components, public types/functions, persistence ownership, protocol replacements and unresolved implementation decisions | [Software blueprint](design/software-blueprint.md); [complete M1–6 criterion index](../verification/software-blueprint-final-coverage.md); applicable topic documents below |
 | Installation, initialization, configuration, public interfaces, custom components, runtime guidance | [Interfaces and configuration](design/interfaces-and-configuration.md); [execution and governance](design/execution-and-governance.md) |
 | Execution, notebook isolation, evaluation, tracking, restoration, cancellation, recovery, approvals, agent integration | [Execution and governance](design/execution-and-governance.md); [interfaces and configuration](design/interfaces-and-configuration.md) |
 | Extraction, acquisition, splits, feature engineering | [Data and features](design/data-and-features.md); [interfaces and configuration](design/interfaces-and-configuration.md); [execution and governance](design/execution-and-governance.md) |

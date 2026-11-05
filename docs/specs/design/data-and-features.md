@@ -6,6 +6,11 @@ Part of the [toolkit design](../agentic-ml-harness-design.md). Scope: Data Extra
 
 ## 6. Data Extraction and Iterative Acquisition
 
+The [M6 software blueprint](software-blueprint.md#milestone-6-authorized-acquisition-and-measured-improvement)
+specifies proposed gap/proposal, approval, bounded-execution, lineage, comparison
+and recovery interfaces. IP6 review is approved. Advanced strategies listed below
+remain subject to delivery scope; the list is not a claim of implemented support.
+
 ### Data extraction requirements
 
 - Connect to local CSV/Parquet, SQL, and object storage initially; add APIs later.

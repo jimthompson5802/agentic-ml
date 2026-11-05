@@ -16,7 +16,7 @@ The initial CLI implements `agentic-ml --version`, reporting the installed distr
 
 Build wheel and source distributions. Install each directly built wheel and each wheel rebuilt from the source distribution with declared runtime dependencies into a clean environment. Run checks outside the checkout without editable installation or development dependencies: verify version output against distribution metadata, `agentic_ml` imports, and access to packaged templates and runtime guidance. Document local reproduction and run these checks in CI. Milestone 0 ships at least one minimal template and one minimal runtime guidance file with explicitly provisional contents. Installed-package checks read both resources and compare their contents with expected values for each wheel build path. Complete, usable experiment initialization resources belong to Milestone 1.
 
-All contracts should have versioned JSON Schemas and typed Python models. `AgentAdapter` applies to managed delegation; interactive assistants use the public CLI/API for plan validation, submission, status, artifact retrieval, evaluation feedback, and cancellation without implementing this interface. These conceptual interfaces require further design for asynchronous operations, error handling, and authorization. Submission idempotency and recovery must satisfy the behavioral contract below; exact schemas and persistence mechanisms remain implementation decisions.
+All contracts should have versioned JSON Schemas and typed Python models. `AgentAdapter` applies to managed delegation; interactive assistants use the public CLI/API for plan validation, submission, status, artifact retrieval, evaluation feedback, and cancellation without implementing this interface. These are historical conceptual interfaces. The [software blueprint](software-blueprint.md#final-m16-reconciliation) records their typed replacements/extensions, request/result/error contracts, persistence ownership and unresolved implementation decisions. Submission idempotency and recovery must satisfy the behavioral contracts below; older signatures are not a competing current API inventory.
 
 ```python
 from typing import Protocol, Any
@@ -89,7 +89,7 @@ Managed adapter capability discovery must identify supported task types, invocat
 
 PyTorch integrations must provide a documented checkpoint restore path through the supplied or built-in model implementation, separately from final-model `save`/`load` persistence. The model implementation defines the checkpoint format, declares the state it contains, and restores that declared state. Preserve emitted checkpoints as run artifacts together with model, executed-code, configuration, and dependency identities needed to load them in the recorded environment. The experiment runner captures and preserves these artifacts; it does not interpret framework-specific checkpoint payloads.
 
-Restoration recovers the state declared by the checkpoint. Exact training continuation is not guaranteed by checkpoint capture or restoration alone; it requires explicit support for the necessary optimizer, scheduler, random-number, and data-loader state. Concrete restore API signatures and checkpoint payloads remain framework-specific implementation decisions subject to this contract.
+Restoration recovers the state declared by the checkpoint. Exact training continuation is not guaranteed by checkpoint capture or restoration alone; it requires explicit support for the necessary optimizer, scheduler, random-number, and data-loader state. The [M3 blueprint](software-blueprint.md#training-models-predictions-and-checkpoints) specifies CheckpointRestorer and typed restore requests/results. Checkpoint payload format and declared-state verification remain model-owned, with format/code/environment identity required before use.
 
 ### Primary contracts
 
@@ -140,7 +140,7 @@ The following capabilities become versioned public interfaces, refining the conc
 | Stateful preprocessor | Fit on training inputs; transform using fitted state; save and restore that state |
 | Stateless transformation | Transform inputs without fitting; declare output schema |
 
-Framework-native implementations may be integrated through project-local wrappers. Training routines may return framework-specific models, provided the wrapper exposes the required prediction and persistence operations. The existing `FeatureEngineeringAdapter` plans and evaluates feature work; supplied preprocessors and transformations provide the execution capabilities listed above. Exact preprocessor method signatures remain subject to interface design.
+Framework-native implementations may be integrated through project-local wrappers. Training routines may return framework-specific models, provided the wrapper exposes the required prediction and persistence operations. The [M2 blueprint](software-blueprint.md#ordered-feature-plans-execution-and-reference-comparison) explicitly replaces conceptual `FeatureEngineeringAdapter` with authored plans and execution/comparison services. Its [preprocessing protocols](software-blueprint.md#component-registration-and-preprocessing-protocols) specify fit/transform/output-schema/persistence signatures.
 
 Component declarations include supported prediction outputs, such as labels, probabilities, or regression values. Before training, the toolkit rejects components that cannot provide the outputs required by the approved evaluation metrics. Protected test data remains accessible only through independent evaluation.
 
@@ -221,7 +221,7 @@ uv run agentic-ml init
 # Open this project in VS Code and select its .venv notebook kernel.
 ```
 
-The repository URL and commit SHA are placeholders. These commands specify the intended product interface; the toolkit and CLI still require implementation. There is no separate initializer-tool installation: `agentic-ml init` runs from the toolkit already installed in the project's `.venv`.
+The URL and commit SHA in this historical example are placeholders. The settled repository is `https://github.com/jimthompson5802/agentic-ml.git`; the distribution/CLI are `agentic-ml`. Installation and initialization are implemented; see the [existing contracts](software-blueprint.md#bootstrap-and-initialization) and README for current commands. There is no separate initializer-tool installation: `agentic-ml init` runs from the toolkit already installed in the project's `.venv`.
 
 `agentic-ml init` must:
 
@@ -233,7 +233,7 @@ The repository URL and commit SHA are placeholders. These commands specify the i
 
 After initialization, users register existing raw data, including approved sources outside the repository, and resolve experiment-specific inputs before dependent work begins. Existing inputs are snapshotted and versioned without requiring external acquisition.
 
-The toolkit repository's root `pyproject.toml` must define its build system, package metadata, supported Python versions, dependencies, and `agentic-ml` CLI entrypoint. Package the `src/agentic_ml/` implementation, initialization templates, and default runtime guidance. Load resources from the installed package without relying on a source checkout. The Python import name remains `agentic_ml`; the distribution name and actual GitHub URL require implementation decisions.
+The toolkit repository's root `pyproject.toml` must define its build system, package metadata, supported Python versions, dependencies, and `agentic-ml` CLI entrypoint. Package the `src/agentic_ml/` implementation, initialization templates, and default runtime guidance. Load resources from the installed package without relying on a source checkout. The Python import name remains `agentic_ml`; distribution `agentic-ml` and repository `https://github.com/jimthompson5802/agentic-ml.git` are settled under ADR-007.
 
 The project lockfile records the resolved toolkit Git revision and library versions. Toolkit upgrades explicitly change the declared full commit SHA and project lockfile, creating a new environment identity; package version alone does not identify Git revisions. Resumed runs use the preserved compatible configuration and instruction bundle. The toolkit repository's own lockfile is for product development and does not replace the experiment project's environment record.
 
@@ -241,7 +241,7 @@ The project lockfile records the resolved toolkit Git revision and library versi
 
 Developers provide two complementary inputs: a Markdown experiment brief describing intent and constraints, and a YAML configuration defining the allowed algorithms and hyperparameter search spaces. These inputs are distinct from the resolved `ExperimentSpec` submitted for execution.
 
-Store these as `experiments/<name>/experiment.md` and `search-space.yaml` in the user repository. An adjacent `experiment.yaml` identifies notebook entrypoints, data references, feature pipeline components and parameters, and execution settings; it does not replace the brief or expand the search space. A project-root `project.yaml` holds project-wide environment, tracking, storage, agent, guidance settings, and user-supplied component declarations. Relative paths in these declarative inputs resolve against the experiment repository root; notebook working directories are explicitly recorded. The schemas and CLI/API commands beyond the selected `agentic-ml init` interface require further design.
+Store these as `experiments/<name>/experiment.md` and `search-space.yaml` in the user repository. An adjacent `experiment.yaml` identifies notebook entrypoints, data references, feature pipeline components and parameters, and execution settings; it does not replace the brief or expand the search space. A project-root `project.yaml` holds project-wide environment, tracking, storage, agent, guidance settings, and user-supplied component declarations. Relative paths in these declarative inputs resolve against the experiment repository root; notebook working directories are explicitly recorded. Accepted planning/approval/semantic-validation schemas and APIs are documented in the [existing blueprint contracts](software-blueprint.md#existing-public-contracts). Later capabilities use the blueprint's proposed typed APIs and explicit decision register; these illustrative examples do not supersede accepted schemas.
 
 The Markdown brief uses recognizable sections with natural-language guidance for:
 

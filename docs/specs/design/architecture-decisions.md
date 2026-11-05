@@ -38,6 +38,15 @@ Python 3.12 is the required initial verification baseline; additional verified v
 
 ### Pending decisions
 
+Design 0.14 adds the [software blueprint](software-blueprint.md), with approved
+M1–6 documentation slices and final reconciliation. It consolidates actual accepted
+M1 interfaces, typed future contracts, proposed local SQLite workflow storage and
+an [explicit decision register](software-blueprint.md#open-decision-and-assurance-register).
+These documentation reviews do not accept ADR-002–006 wholesale, implement future
+software, verify concrete managed products or deliver deferred authentication.
+Use the blueprint's named blockers rather than treating older generic pending
+interface statements as permission to ignore accepted story-level decisions.
+
 - **ADR-002:** Expose toolkit through Python API and CLI initially for developer and interactive coding-assistant use without an adapter. Managed delegation uses verified adapters; consider an MCP server later. Exact commands and managed product/interface choices remain pending.
 - **ADR-003:** Start with a lightweight durable state-machine orchestrator; evaluate agent orchestration frameworks if complexity requires.
 - **ADR-004:** Hybrid ML operations: standardized capabilities plus sandboxed custom Python code, with project-local registration of user-supplied algorithms and feature preparation through versioned public interfaces. Components may come from project code or pinned dependencies; using them requires no toolkit modifications. Supplied code is immutable by default, with explicit developer approval required to change immutable components. This proposed decision remains pending.

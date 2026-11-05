@@ -10,6 +10,14 @@ Part of the [toolkit design](../agentic-ml-harness-design.md). Scope: Proposed R
 
 ### Toolkit product repository
 
+The tree below is illustrative, not a current source/API inventory. The
+[software blueprint](software-blueprint.md) distinguishes existing initialization,
+planning, approval and validation packages from proposed component owners.
+Packaged resources currently live beneath `src/agentic_ml/templates/` and
+`src/agentic_ml/runtime_guidance/`; root-level resource paths below describe the
+older proposed arrangement, not a required relocation. Do not introduce development
+AGENTS.md files into runtime loading merely to match this diagram.
+
 This repository contains the installable product, templates, examples, and product tests. Example projects and fixtures demonstrate usage; user experiment repositories are created separately.
 
 ```text
