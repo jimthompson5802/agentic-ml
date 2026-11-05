@@ -2,6 +2,35 @@
 
 Last updated: 2026-11-05 (UTC)
 
+## Current software blueprint IP5 review — 2026-11-05
+
+Developer “commit then start ip6” authorized IP5 commit before IP6 execution.
+Recording direction and committing approved M5 documentation first; next action
+IP6. No push/PR requested. Earlier execution holds below are historical.
+
+Developer “i approve ip5” approved IP5 on 2026-11-05 UTC. Approval recorded in
+plan and evidence; changes remain uncommitted. Next action: await developer
+direction to commit and/or start IP6. IP6 unstarted; no publication authorized.
+Earlier pending-approval statements in this snapshot are historical.
+
+Developer “i approve ip4; commit and start ip5” approved IP4, committed first as
+`df2d32a`, then authorized IP5. On `embellish-software-component-descriptions`,
+IP5 T1–T6 complete in [plan](docs/plans/software-blueprint.md), with
+[evidence](docs/verification/software-blueprint-ip5.md). M5 catalogue contains
+32 table types/aliases, five services, nine orchestrator/store methods plus
+concrete store/adapter slots and error contracts. All 17 criteria mapped;
+US-23-AC-02 authenticated authorship explicitly partial/deferred under US-03-SC-01.
+No source requirement removed or claimed satisfied through unauthenticated labels.
+Full bodies/all comments/refreshed metadata #40–43 stable, zero comments.
+
+Document checks pass: 67 local links/anchors, type/function/method/criterion inventory,
+five Mermaid parses and whitespace. SQLite local state/epoch fencing and durable
+reconciliation are proposed contracts; second concrete integration remains M5-D2.
+No runtime tests/code/dependency/lock changes or platform support evidence.
+Uncommitted work: blueprint/plan/overview/interface/execution links, IP5 report
+and checkpoints. IP5 approval pending; next action review, await approval before
+IP6. No IP5 commit/push/PR requested. Earlier checkpoints below are historical.
+
 ## Milestone 6 issue publication — 2026-11-05
 
 At developer request, created feature issues from the local M6 stories using the
@@ -13,7 +42,7 @@ removed only task-owned temporary issue files after verification. No implementat
 or phase progression authorized by issue creation. IP4 remains awaiting developer
 approval; prior blueprint state and uncommitted documentation preserved.
 
-## Current software blueprint IP4 review — 2026-11-04
+## Historical software blueprint IP4 review — 2026-11-04
 
 Developer “i approve ip4; commit and start ip5” approved IP4 on 2026-11-05 UTC,
 authorizing commit before IP5. Recording approval and committing reviewed M4

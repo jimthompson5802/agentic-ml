@@ -98,6 +98,11 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 
 #### Recovery and reconciliation
 
+The [Milestone 5 software blueprint](software-blueprint.md#milestone-5-supervised-workflow-and-durable-recovery)
+specifies proposed state-store, ownership, approval, adapter and audit contracts.
+Its IP5 gate is approved. Current unauthenticated records do not satisfy future
+authenticated-reviewer assurance in US-23-AC-02.
+
 On restart, acquire exclusive recovery ownership for the workflow and reconcile its durable records with runner submission/execution status and MLflow evidence before issuing new work or accepting results. State transitions and submission authority must reject stale owners, for example through an ownership epoch checked at submission and state update; a lock timeout alone must not allow an old owner to continue advancing work. Exact locking, fencing, and transaction mechanisms remain milestone 5 design decisions.
 
 | Reconciled finding | Required action |

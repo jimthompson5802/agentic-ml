@@ -123,6 +123,29 @@ verification boundaries, M4-D1 assistant/kernel isolation and M4-D2 concrete
 product/interface/version selection blockers. [IP4 evidence](../verification/software-blueprint-ip4.md)
 records checks and limitations. Stop before IP5; no IP4 commit/push/PR requested.
 
+### IP5 execution record
+
+Developer “i approve ip4; commit and start ip5” approved IP4 and authorized its
+commit before IP5. Baseline `df2d32a` committed first. Documentation-only scope
+retained; US-23-AC-02 authentication remains deferred, not delivered or removed.
+
+| Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
+|---|---|---|---|---|---|
+| IP5-T1 | Complete | Retrieve #40–43 bodies/all comments and reconcile current design | IP4 approval/commit | Stable source discussion, authentication exception recorded | All M5 criteria below |
+| IP5-T2 | Complete | Orchestration, gates, state, audit and second-adapter contracts | T1 | Concrete public types and interfaces with persistence/ownership | US-23-AC-01–05; US-30-AC-06–09; US-26-AC-10–13 |
+| IP5-T3 | Complete | Recovery, uncertain submission, deduplication/accounting | T2 | SQLite transactions, version/epoch fencing and reconciled outcomes | US-25-AC-01–04 |
+| IP5-T4 | Complete | Preserve current unauthenticated exception and future requirement | T1/T2 | US-23-AC-02 explicitly partial, authentication assurance deferred | US-23-AC-02; US-30-AC-08 |
+| IP5-T5 | Complete | Recovery diagram and document checks | T2–T4 | Diagrams parse; links/whitespace pass | All M5 criteria |
+| IP5-T6 | Complete | Inventory, reference closure and criterion checklist | T5 | All 17 criteria mapped with partial/deferred distinction | All M5 criteria |
+
+**IP5 developer approval: Approved, 2026-11-05 (UTC).** Developer “i approve ip5”
+approved the proposed contracts, local SQLite
+mechanism, ownership/admission checks, protocol replacements and explicit deferred
+assurance/integration selection in [IP5 evidence](../verification/software-blueprint-ip5.md).
+No executable behavior or full authenticated criterion satisfaction claimed.
+Developer “commit then start ip6” authorizes IP5 commit followed by IP6 execution,
+recorded 2026-11-05 UTC. No push/PR requested. Earlier execution holds are historical.
+
 ### Mandatory detail and completeness standard for IP2–IP6
 
 Use the M1 ExperimentSpec definition and M1 record catalogue as the minimum
@@ -157,7 +180,7 @@ Each phase must produce a completeness checklist in its verification report:
 Add these stable tasks to the existing sequences below: IP2-T5, IP3-T5, IP4-T5,
 IP5-T6 and IP6-T6 each perform their phase's inventory, detail, reference-closure,
 cross-milestone and criterion checklist review after all other tasks in that phase.
-IP2-T5, IP3-T5 and IP4-T5 are Complete as recorded above; IP5-T6 and IP6-T6 are **Not started**.
+IP2-T5, IP3-T5, IP4-T5 and IP5-T6 are Complete as recorded above; IP6-T6 is **Not started**.
 IP6-T6 also verifies the combined M1–6 inventory
 and is the final verification owner, extending IP6-T5's document checks.
 
@@ -173,7 +196,7 @@ documentation completion criteria without authorizing executable work or advanci
 past IP1. Existing historical evidence is preserved; IP1 approval remains pending.
 
 Each row below preserves the planned sequence. IP2 completion is recorded above;
-IP3/IP4 completion is recorded above; IP5–IP6 remain **Not started / Pending**.
+IP3–IP5 completion is recorded above; IP6 remains **Not started / Pending**.
 Entry condition is approval of the preceding phase.
 
 | Phase | Ordered tasks | Completion and gate |

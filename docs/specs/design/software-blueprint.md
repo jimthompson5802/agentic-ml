@@ -1,8 +1,8 @@
 # Software implementation blueprint
 
 Part of the [toolkit design](../agentic-ml-harness-design.md). IP1 review draft.
-Milestones 1–3 are approved; Milestone 4 is an IP4 review draft. Milestones 5–6
-await their separate design gates. Approval records belong to the owning plan.
+Milestones 1–5 are approved. Milestone 6
+awaits its separate design gate. Approval records belong to the owning plan.
 
 ## Authority and notation
 
@@ -1275,3 +1275,259 @@ Verify every iteration stop reason, scoped phase-return blocking, consumed budge
 and preserved snapshots/evaluations. VS Code manual checks remain explicit platform
 evidence, not inferred from automated kernel execution. No product tests run for
 this documentation phase; mechanisms and concrete product remain explicit blockers.
+
+## Milestone 5: supervised workflow and durable recovery
+
+**Proposed software contracts, not implemented APIs.** Reuse M1–4 record/error,
+identity-envelope, schema-versioning, immutable-copy and serialization rules.
+Every field below is required with no defaults; None means explicitly unavailable.
+Persisted records add schema_version 1.0; plain data records have no methods.
+ProjectContext remains notation for request project_root/project_id/experiment_id.
+No new schema changes accepted M1–4 records silently.
+
+### Ownership and criterion coverage
+
+| Owner / issue | Criteria | Public boundary |
+|---|---|---|
+| `orchestrator`, `approvals.workflow` / [#40](https://github.com/jimthompson5802/agentic-ml/issues/40) | US-23-AC-01–05 | Evidence-gated phase transitions, durable reviewed scope, revisions/skips and final model approval |
+| `orchestrator.state`, `orchestrator.recovery` / [#41](https://github.com/jimthompson5802/agentic-ml/issues/41) | US-25-AC-01–04 | Fenced recovery, duplicate-free submission/finalization, retained budgets/configuration/guidance and outcomes |
+| `agents.registry` / [#42](https://github.com/jimthompson5802/agentic-ml/issues/42) | US-30-AC-06–09 | Two verified concrete integrations using unchanged task/result/evaluation boundaries |
+| `tracking.audit` / [#43](https://github.com/jimthompson5802/agentic-ml/issues/43) | US-26-AC-10–13 | Linked workflow/run/tracking/DVC/decision evidence and original producer provenance on reuse |
+
+All 17 criteria are accounted for; **US-23-AC-02 is only partially addressed in
+the current version**. Its durable reviewer label/scope/decision/time/evidence
+fields are specified, but authenticated authorship remains explicitly deferred
+under US-03-SC-01. The local story retains that future requirement; no acceptance
+claim, silent deletion or reinterpretation as authenticated current records is made.
+All development/testing approval gates and actual access controls remain required.
+
+### Workflow planning and state records
+
+Owner `orchestrator`; US-23-AC-01/03–05, US-25-AC-01–04.
+
+| Type | Required attributes | Constraints and authority |
+|---|---|---|
+| `WorkflowPhase` | Alias `Literal["problem_definition", "data_assessment", "feature_engineering", "baseline_modeling", "model_development", "optimization", "final_evaluation"]` | Maps to design's seven ML workflow phases, never implementation phase numbers. |
+| `PhasePlan` | `phase: WorkflowPhase`; `depends_on: tuple[WorkflowPhase, ...]`; `criteria_ids: tuple[EvidenceId, ...]`; `max_iterations: int`; `skip_artifacts: tuple[ArtifactRef, ...]` | Positive iteration ceiling, acyclic dependencies. Skipping needs approved sufficient existing artifacts, not missing execution evidence interpreted as success. |
+| `WorkflowPlan` | `workflow_plan_id`, `experiment_plan_id`, `configuration_id`: EvidenceId; `phases: tuple[PhasePlan, ...]`; `bundle_ids: tuple[EvidenceId, ...]`; `budget_limits: ResourceLimits` | One occurrence per included phase; initial approval completes problem definition. Preserve input decisions and frozen approved protocols; cannot expand experiment search/access scope. |
+| `WorkflowStatus` | Alias `Literal["planned", "running", "evaluating", "awaiting_approval", "approved", "completed", "failed", "cancelled", "budget_exhausted", "needs_review"]` | Separate from agent task/run status and model quality. Terminal/review states never silently authorize work. |
+| `PhaseProgress` | `phase: WorkflowPhase`; `status: WorkflowStatus`; `run_ids`, `task_attempt_ids`: tuple[RecordId, ...]; `evidence_ids: tuple[EvidenceId, ...]`; `decision_ids: tuple[RecordId, ...]`; `skipped: bool` | Evidence must match this phase and configuration. Skipped requires recorded approval and verified skip artifacts. |
+| `WorkflowState` | `workflow_id: RecordId`; project/experiment IDs; `workflow_plan_id`, `configuration_id`: EvidenceId; `phase: WorkflowPhase`; `status: WorkflowStatus`; `progress: tuple[PhaseProgress, ...]`; `version`, `owner_epoch`: int; `owner_id: RecordId \| None`; `pending_gate_ids: tuple[RecordId, ...]`; `submission_keys: tuple[str, ...]`; `usage: ResourceUsage`; `updated_at: str` | Nonnegative monotonically increasing version/epoch. Snapshot only, not mutable live handle. State references remain inspectable after failure/cancellation. |
+| `WorkflowStartRequest` | ProjectContext; `workflow_id: RecordId`; `workflow_plan_id: EvidenceId`; `authorization_id: RecordId` | Caller UUID supports inspection/cancel before blocking work finishes; starting creates planned state, not initial approval or task execution. Same UUID/request is idempotent. |
+| `WorkflowAdvanceRequest` | `project_root: Path`; `workflow_id: RecordId`; `expected_version: int`; `ownership: RecoveryOwnership`; `authorization_id: RecordId` | Requires current owner/version and matching approved decision/evidence before entering next authorized phase or scheduling work. |
+| `WorkflowCancelRequest` | `project_root: Path`; `workflow_id: RecordId`; `expected_version: int`; `reason: str` | Nonblank reason; durable cancellation takes precedence over subsequent scheduling. Child task/run cancellation tracked separately. |
+
+`orchestrator.WorkflowOrchestrator` constructor takes `project_root: Path` and
+`store: WorkflowStore`, with registered verified adapters, runner and evaluator
+resolved from project configuration. Methods:
+
+```python
+start(request: WorkflowStartRequest) -> WorkflowState
+advance(request: WorkflowAdvanceRequest) -> WorkflowState
+inspect(workflow_id: str) -> WorkflowState
+cancel(request: WorkflowCancelRequest) -> WorkflowState
+recover(request: RecoveryRequest) -> RecoveryResult
+```
+
+advance performs one evidence/gate/admission step, not an unbounded autonomous
+cross-phase loop. Runtime work uses M4 bounded iteration and M1/M3 submission.
+Successful final evaluation alone leaves awaiting_approval; completed additionally
+requires matching M3 ModelDecision approve. Rejection preserves evidence and
+ends workflow in cancelled with the reject decision retained; revision authorizes
+only its recorded scope, not automatic access to new phases or final-test feedback.
+
+### Scoped workflow decisions
+
+Owner `approvals.workflow`; US-23-AC-01–05. Existing approve_plan remains delegated
+decision approval, not silently redefined as entire workflow progression approval.
+
+| Type | Required attributes | Constraints and authority |
+|---|---|---|
+| `WorkflowScope` | `workflow_plan_id`, `configuration_id`: EvidenceId; `from_phase`, `to_phase`: WorkflowPhase; `operation: Literal["initial_plan", "advance", "revise", "return", "skip", "change_scope"]`; `access: AccessScope`; `limits: ResourceLimits`; `component_permission_ids: tuple[RecordId, ...]`; `criteria_ids: tuple[EvidenceId, ...]`; `skip_artifacts: tuple[ArtifactRef, ...]` | Explicit proposed change, never implicit broad permission. A changed criterion/access/budget/configuration requires a new reviewed scope. Final-feedback restrictions remain non-bypassable. |
+| `WorkflowGateRequest` | `project_root: Path`; `workflow_id: RecordId`; `expected_version: int`; `scope: WorkflowScope`; `evidence_ids: tuple[EvidenceId, ...]` | Independent evidence must be sufficient/current before request becomes reviewable; insufficient evidence keeps work blocked. |
+| `WorkflowGate` | `gate_id`, `workflow_id`: RecordId; `state_version: int`; `scope: WorkflowScope`; `evidence_ids: tuple[EvidenceId, ...]`; `status: Literal["pending", "decided", "stale"]`; `recorded_at: str` | Bind exact reviewed version; changed configuration/evidence makes old pending gate stale. |
+| `WorkflowDecisionRequest` | `project_root: Path`; `gate_id: RecordId`; `expected_version: int`; `decision: Literal["approve", "revise", "reject", "cancel"]`; `reviewer`, `reason`: str | Nonblank self-declared labels. A requested revision uses an explicitly proposed scope; cannot infer changes from free-text reason. |
+| `WorkflowDecision` | `decision_id`, `gate_id`, `workflow_id`: RecordId; `scope: WorkflowScope`; `decision: Literal["approve", "revise", "reject", "cancel"]`; `reviewer`, `reason`, `recorded_at`: str; `evidence_ids: tuple[EvidenceId, ...]`; `authentication: Literal["none"]` | Durable append-only record with exact binding. Current version does not prove developer identity or reject all forged agent-written approvals. |
+
+`approvals.workflow.request_gate(request: WorkflowGateRequest) -> WorkflowGate`;
+`approvals.workflow.decide_gate(request: WorkflowDecisionRequest) -> WorkflowDecision`.
+These explicit functions replace conceptual ApprovalService.request/decide for M5;
+its original string-only signatures are not claimed implemented unchanged. Decision
+and state transition commit together under optimistic version checks; a stale
+decision cannot advance a new configuration. Revise grants only the reviewed
+revision scope. Tool-execution permissions cannot create matching workflow decisions.
+
+**M5-D1 — deferred assurance, owner US-23-AC-02.** Authenticated reviewer identity,
+agent-resistant decision channel and tamper-resistant history remain future scope
+under the existing explicit approval exception. Current records fully retain scope,
+time and evidence; they do not satisfy authenticated authorship. Do not label this
+criterion fully verified when accepting any current-version implementation.
+
+### Durable store, ownership and reconciliation
+
+Owners `orchestrator.state`, `orchestrator.recovery`; US-25-AC-01–04.
+
+Proposed local mechanism: a separate SQLite workflow database in the configured
+project-associated state store, with schema_version 1.0, foreign keys enabled,
+WAL and synchronous FULL, short BEGIN IMMEDIATE write transactions and unique
+constraints on workflow/attempt/submission/measurement identities. Do not migrate
+or overwrite M1 initialization's JSON state in place. Single-host local filesystem
+only for this mechanism; remote/network filesystems require a separately verified
+store. It is durability/concurrency control, not protection against workspace writers.
+
+| Type | Required attributes | Constraints and lifecycle |
+|---|---|---|
+| `RecoveryOwnership` | `workflow_id`, `owner_id`: RecordId; `epoch: int`; `lease_expires_at: str` | Increment epoch on ownership acquisition, never reset/reuse it. Lease expiry alone does not authorize an old owner; every mutation/submission checks stored owner+epoch and lease. |
+| `OwnershipRequest` | `workflow_id`, `owner_id`: RecordId; `expected_version: int`; `lease_seconds: int` | Positive duration; acquire atomically only without current live owner or after expiry. Renew preserves epoch and rejects replaced owner. Clock anomalies require review rather than concurrent authority. |
+| `WorkflowCommit` | `workflow_id: RecordId`; `expected_version: int`; `ownership: RecoveryOwnership`; `new_state: WorkflowState`; `events: tuple[AuditEvent, ...]`; `intents: tuple[SubmissionIntent, ...]`; `measurements: tuple[UsageMeasurement, ...]` | Atomic compare-and-swap for state/events/intents/usage; version increments exactly once. Failed checks perform no partial commit. |
+| `SubmissionIntent` | `workflow_id`, `attempt_id`: RecordId; `submission_key: str`; `input_manifest_id`, `configuration_id`, `bundle_id`: EvidenceId; `approval_ids: tuple[RecordId, ...]`; `reservation_id: RecordId`; `owner_epoch: int`; `run_id: RecordId \| None`; `task_id: RecordId \| None`; `acceptance: Literal["pending", "accepted", "not_accepted", "unknown"]` | Persist before any runner/adapter call. Key bound to exact input/config/guidance; unknown cannot free reservation or permit a new attempt. |
+| `UsageMeasurement` | `measurement_id`, `workflow_id`, `attempt_id`: RecordId; `reservation_id: RecordId`; `usage: ResourceUsage`; `agent_usage: tuple[AgentUsage, ...]`; `final: bool` | Measurement IDs immutable; duplicate identical observation is a no-op, conflicting duplicate requires review. Snapshots for one attempt replace prior cumulative totals, never sum cumulative reports twice. |
+| `WorkflowRecoveryRecord` | `recovery_id`, `workflow_id`: RecordId; `workflow_plan_id`, `configuration_id`: EvidenceId; `phase: WorkflowPhase`; `state_version: int`; `ownership: RecoveryOwnership`; `intents: tuple[SubmissionIntent, ...]`; `run_ids`, `task_attempt_ids`, `approval_ids`: tuple[RecordId, ...]; `bundle_ids`, `dataset_ids`, `evidence_ids`: tuple[EvidenceId, ...]; `status: WorkflowStatus`; `recorded_at: str` | Durable reconciliation snapshot connects progress and exact preserved records; transcript/memory is not state. Reuse never changes producer identity. |
+| `RecoveryRequest` | `project_root: Path`; `workflow_id`, `owner_id`: RecordId; `expected_version: int`; `lease_seconds: int`; `authorization_id: RecordId` | Acquire exclusive epoch before reconciliation; current access required even for historically approved evidence. |
+| `ReconciliationItem` | `submission_key: str`; `observed: Literal["completed", "active", "not_accepted", "failed", "cancelled", "unknown", "conflict"]`; `action: Literal["reuse", "reattach", "retry_same_key", "preserve", "needs_review"]`; `run_id: RecordId \| None`; `evidence: tuple[ArtifactRef, ...]`; `diagnostics: tuple[Diagnostic, ...]` | Observations require runner/task/tracking evidence. Missing MLflow record or timeout alone is unknown, not never accepted. |
+| `RecoveryResult` | `record: WorkflowRecoveryRecord`; `state: WorkflowState`; `items: tuple[ReconciliationItem, ...]`; `diagnostics: tuple[Diagnostic, ...]` | No new execution until pending/unknown admissions reconciled and approvals/remaining budgets checked. Terminal states remain stopped unless separately authorized action. |
+
+Proposed WorkflowStore protocol and concrete SQLiteWorkflowStore share constructor
+`(*, project_root: Path, database: Path)` and methods:
+
+```python
+read(workflow_id: str) -> WorkflowState
+claim_owner(request: OwnershipRequest) -> RecoveryOwnership
+renew_owner(ownership: RecoveryOwnership, lease_seconds: int) -> RecoveryOwnership
+commit(request: WorkflowCommit) -> WorkflowState
+```
+
+Initial state is inserted idempotently by WorkflowOrchestrator.start in the same
+store transaction path; duplicate workflow IDs with differing plans fail. All
+mutation paths, including cancellation and approval services, use version checks;
+cancellation can atomically fence an old owner. Short DB transactions never remain
+open while waiting on external agents, runners or MLflow.
+
+At admission the runner/adapter gateway atomically validates the current epoch
+against the shared state store and records accepted key/input/owner binding before
+starting external work. This is the admission linearization point. Later ownership
+changes reconcile that admitted work rather than starting it again. A stale owner
+without admitted intent cannot launch or advance; late results can be retained but
+not transition state. M1 runner/M4 adapter signatures stay unchanged: the workflow
+gateway resolves their intent by key/attempt and adds the epoch check before invoking
+them; backend acceptance still follows their idempotency contracts. No separate
+unfenced submission path is allowed for workflow-owned work.
+
+Recovery performs these exact actions:
+
+| Observed state | Required action |
+|---|---|
+| Completed with sufficient verified evidence | Reuse original run, finish only outstanding evaluation/finalization/gates |
+| Active accepted work | Reattach to original run/task and monitor |
+| Definitively not accepted | Recheck current authorization/reservation, retry identical inputs with original key |
+| Failed/cancelled | Preserve outcome; any permitted retry is a new linked attempt, never silent replay |
+| Unknown/conflicting/insufficient evidence | needs_review, retain reservation and block dependent work/resubmission |
+
+Settling reservations replaces reserved amounts with actual consumed usage, never
+counts both. Uncertain work retains outstanding capacity. Source guidance drift
+does not replace preserved compatible bundles/configuration; missing/corrupt bundles
+block. Failed/cancelled/exhausted/review states retain evidence. Restoration or
+reattachment grants no fresh permission, expanded scope or automatic phase skip.
+
+### Two adapters under one contract
+
+Owner `agents.registry`; US-30-AC-06–09. Reuse M4 AgentIntegrationSpec,
+AgentCapabilities, AgentTask/Result, AgentAdapter methods, usage and cancellation.
+
+| Type | Required attributes | Constraints and authority |
+|---|---|---|
+| `AdapterRegistry` | `registry_id: EvidenceId`; `integrations: tuple[AgentIntegrationSpec, ...]` | Unique integration IDs and at least two independently verified concrete integrations for story acceptance; no credentials. |
+| `AdapterSelectionRequest` | `project_root: Path`; `registry_id: EvidenceId`; `integration_id: str`; `task_kind: str`; `required_capabilities: tuple[str, ...]`; `workflow_id: RecordId` | Explicit integration selection and live capability checks; no silent fallback to another assistant. |
+| `AdapterSelection` | `selection_id`, `registry_id`: EvidenceId; `integration_id: str`; `capabilities: AgentCapabilities`; `workflow_id: RecordId` | Reject missing guidance/access/cancellation/budget capabilities before delegation. Selection cannot alter plan, criteria, dataset access or evaluator. |
+
+`agents.registry.select_adapter(request: AdapterSelectionRequest) -> AdapterSelection`.
+SecondManagedAgentAdapter has the M4 FirstManagedAgentAdapter constructor and
+five-method contract, no additional public attributes. Tasks preserve configuration,
+bundle and contract versions across adapters; external task IDs are integration-scoped,
+not interchangeable across products. Switching an in-flight task requires safe
+reconciliation/cancellation and a new linked attempt where authorized, not sending
+the original task blindly to the other integration.
+
+**M5-D2 — blocked implementation decision, owner US-30.** Select/verify the second
+concrete product/interface/version in addition to M4-D2's first integration. Show
+both performing equivalent tasks with unchanged experiment/evaluation contracts,
+separate task/run cancellation, guidance delivery, durable resumption and explicit
+usage/control limits. Generic class slots are not evidence of two supported products.
+US-30-AC-08's approval assurance retains the current unauthenticated exception;
+it cannot be claimed agent-resistant reviewer authentication under this version.
+
+### Audit and retry-safe tracking publication
+
+Owner `tracking.audit`; US-26-AC-10–13 and US-25-AC-02.
+
+| Type | Required attributes | Constraints and lifecycle |
+|---|---|---|
+| `AuditEvent` | `event_id`, `workflow_id`: RecordId; `sequence: int`; `event_kind`, `recorded_at`: str; `phase: WorkflowPhase`; `configuration_id: EvidenceId`; `decision_ids`, `run_ids`, `task_attempt_ids`: tuple[RecordId, ...]; `evidence_ids: tuple[EvidenceId, ...]` | Append-only increasing workflow sequence; exact authorizing decisions/inputs retained. Append-only is cooperative storage semantics, not authenticity against workspace writers. |
+| `WorkflowManifest` | `manifest_id`: EvidenceId; `workflow_id: RecordId`; `workflow_plan_id`, `configuration_id`: EvidenceId; `bundle_ids`, `dataset_ids`: tuple[EvidenceId, ...]; `decision_ids`, `run_ids`: tuple[RecordId, ...]; `mlflow_run_ids: tuple[str, ...]`; `dvc_metadata: tuple[ArtifactRef, ...]`; `event_ids: tuple[RecordId, ...]` | Connect approved scope, MLflow/DVC, configurations, guidance and runs without relocating protected content into public manifests. |
+| `EvidenceReuseRecord` | `reuse_id`, `workflow_id`: RecordId; `producer_run_id: RecordId`; `producer_input_manifest_id`, `producer_configuration_id`, `producer_bundle_id`: EvidenceId; `authorization_id: RecordId`; `decision_ids: tuple[RecordId, ...]`; `recorded_at: str` | Original producer identities immutable; subsequent-use permission stored separately. Reuse requires current authorization/evaluation, not historical success alone. |
+| `TrackingPublication` | `run_id: RecordId`; `workflow_id: RecordId`; `mlflow_run_id: str \| None`; `input_manifest_id`: EvidenceId; `terminal_manifest_id: EvidenceId \| None`; `state: Literal["pending", "published", "unknown", "conflict"]`; `evidence: tuple[ArtifactRef, ...]` | Unique durable logical publication per toolkit run. Reuse identical publication; conflicting manifests/IDs require review, never overwrite. |
+| `AuditLookupRequest` | `project_root: Path`; `workflow_id: RecordId \| None`; `run_id: RecordId \| None`; `mlflow_run_id: str \| None` | Exactly one selector; authorization redacts protected references. |
+| `AuditLookupResult` | `workflow_id: RecordId`; `manifest: WorkflowManifest`; `events: tuple[AuditEvent, ...]`; `publications: tuple[TrackingPublication, ...]`; `reuse: tuple[EvidenceReuseRecord, ...]`; `diagnostics: tuple[Diagnostic, ...]` | Missing/conflicting references explicit; lookup success does not establish completeness or authenticity. |
+
+`tracking.audit.lookup(request: AuditLookupRequest) -> AuditLookupResult`;
+`tracking.audit.finalize_publication(*, project_root: Path, run_id: str) -> TrackingPublication`.
+Record publication intent before MLflow mutation, persist toolkit_run_id and
+workflow_id as MLflow tags and maintain a unique local reverse mapping. On retry,
+reconcile exact tagged remote records; exactly one matching record may be reused.
+Unknown remote outcome cannot cause an unconditional new create; zero visible
+records after a timeout is not definitive proof that no remote creation is in flight.
+Multiple/conflicting records require review. Identical immutable terminal payloads
+are idempotent; different payloads cannot overwrite an original logical result.
+
+Proposed WorkflowError, WorkflowStoreError, WorkflowDecisionError, RecoveryError,
+AdapterSelectionError and AuditError use M1 `(code: str, message: str, *,
+evidence_ids: tuple[EvidenceId, ...] = ())`; no operational methods. Invalid scope,
+stale version/owner, missing evidence, unsupported adapter or current access failure
+blocks dependent transitions. DB corruption/clock anomaly/uncertain remote outcomes
+preserve evidence and require review, never resetting state to planned or releasing
+uncertain budget. Unknown newer schema versions are refused without destructive
+migration. Backup/restore preserves DB, referenced manifests and evidence identities;
+restoring old state still requires external reconciliation before any admission.
+
+### Recovery and gate verification flow
+
+```mermaid
+sequenceDiagram
+    participant U as Developer
+    participant O as Workflow orchestrator
+    participant S as Durable state and ownership
+    participant R as Runner and agent adapter
+    participant T as Tracking evidence
+    O->>S: Acquire fresh ownership epoch
+    O->>R: Reconcile preserved submission keys
+    R-->>O: Accepted active completed or unknown
+    O->>T: Verify run evidence and publication identities
+    O->>S: Commit reconciliation and usage once
+    alt Unknown or conflicting work
+        S-->>U: Needs review with reservations retained
+    else Sufficient evidence and recorded scope
+        O-->>U: Present pending phase gate
+        U->>S: Record exact scope decision
+        O->>S: Check current owner version and approval
+        O->>R: Admit only authorized next work
+    end
+    Note over O,R: Stale owners and late results cannot advance workflow
+```
+
+Future public tests use separate installed projects and fault injection at durable
+intent/before submission, accepted/lost acknowledgement, completed/before state
+commit and tracking/finalization windows. Test repeated/concurrent same-key input
+identity, definitively unaccepted retry, unknown status with retained reservations,
+active reattachment, completed reuse, stale-owner rejection and single accounting.
+Check pending/approved/revised/rejected/cancelled decisions, insufficient evidence,
+wrong scope/version, valid/invalid phase skips, source guidance drift and preserved
+bundle reuse. Verify successful final evidence still awaits explicit model decision.
+
+Exercise both real adapters with the same versioned task/result/criteria/bundle,
+unsupported capability rejection, separate child/task/run cancellation, late result
+rejection, required access controls and usage limitations. Reconstruct authorizing
+scope across run/MLflow/DVC/configuration/guidance/decision records and both lookup
+directions; test missing/conflicting references and original producer provenance
+on reuse. No product tests run for this documentation phase. Authentication and
+concrete second-product support remain explicitly undelivered requirements, not
+passing evidence or reasons to weaken existing assertions.
