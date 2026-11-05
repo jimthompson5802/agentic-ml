@@ -80,6 +80,29 @@ public test boundaries and explicit M2-D1 isolation blocker in the
 claimed. Next action: developer review; stop before IP3. No IP2 commit or push
 authorized by the IP1-only commit instruction.
 
+### IP3 execution record
+
+Entry: IP2 approved by developer “i approve ip2, commit then start ip3” and
+committed first as `4d38afd`. IP3 refines software documentation only.
+
+| Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
+|---|---|---|---|---|---|
+| IP3-T1 | Complete | Retrieve/reconcile #26–33 bodies/all comments and M3 design | IP2 approval/commit | Source requirements and superseded #32 authentication reference recorded | All M3 criteria below |
+| IP3-T2 | Complete | Model/selection/framework/checkpoint/tuning/final/reporting catalogue | T1 | Exact attributes, services, lifecycle and scoped approval rules | All M3 criteria below |
+| IP3-T3 | Complete | Independent outcome model | T2 | Execution, validity, quality and acceptance are separate | US-21-AC-01–05; US-24-AC-01–05 |
+| IP3-T4 | Complete | Training/evaluation diagram and document checks | T2/T3 | All diagrams parse and document checks pass | All M3 criteria below |
+| IP3-T5 | Complete | Inventory/detail/reference/coverage checklist | T4 | Complete type/function inventory and criterion mapping | All M3 criteria below |
+
+Criteria: US-06-AC-01–04, US-16-AC-06–10, US-18-AC-01–04,
+US-19-AC-01–04, US-20-AC-01–04, US-21-AC-01–05,
+US-24-AC-01–05 and US-26-AC-06–09. These 35 criteria have design coverage,
+not executable acceptance. [IP3 evidence](../verification/software-blueprint-ip3.md)
+records the inventory and public boundaries. **IP3 developer approval: Approved,
+2026-11-04.** Developer “i approve ip3; commit and start ip4” authorizes the IP3
+commit followed by IP4 execution. Earlier pending statements are historical.
+Review proposed contracts, protocol replacements and M3-D1 enforcement blocker;
+stop before IP4. No IP3 commit/push/PR requested.
+
 ### Mandatory detail and completeness standard for IP2–IP6
 
 Use the M1 ExperimentSpec definition and M1 record catalogue as the minimum
@@ -114,7 +137,7 @@ Each phase must produce a completeness checklist in its verification report:
 Add these stable tasks to the existing sequences below: IP2-T5, IP3-T5, IP4-T5,
 IP5-T6 and IP6-T6 each perform their phase's inventory, detail, reference-closure,
 cross-milestone and criterion checklist review after all other tasks in that phase.
-IP2-T5 is Complete as recorded above; the other four tasks are **Not started**.
+IP2-T5 and IP3-T5 are Complete as recorded above; the other three tasks are **Not started**.
 IP6-T6 also verifies the combined M1–6 inventory
 and is the final verification owner, extending IP6-T5's document checks.
 
@@ -130,7 +153,8 @@ documentation completion criteria without authorizing executable work or advanci
 past IP1. Existing historical evidence is preserved; IP1 approval remains pending.
 
 Each row below preserves the planned sequence. IP2 completion is recorded above;
-IP3–IP6 remain **Not started / Pending**. Entry condition is approval of the preceding phase.
+IP3 completion is recorded above; IP4–IP6 remain **Not started / Pending**.
+Entry condition is approval of the preceding phase.
 
 | Phase | Ordered tasks | Completion and gate |
 |---|---|---|

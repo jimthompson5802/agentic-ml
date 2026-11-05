@@ -2,7 +2,30 @@
 
 Last updated: 2026-11-04 (UTC)
 
-## Current software blueprint IP2 review — 2026-11-04
+## Current software blueprint IP3 review — 2026-11-04
+
+Developer “i approve ip3; commit and start ip4” approved IP3 and authorized commit
+before IP4. Recording approval and committing reviewed M3 documentation first;
+next action IP4. No push or PR requested.
+
+Developer “i approve ip2, commit then start ip3” approved M2 and directed commit
+before IP3. Published local commit `4d38afd` first; no push. IP3 T1–T5 complete
+in the [plan](docs/plans/software-blueprint.md), with
+[evidence](docs/verification/software-blueprint-ip3.md). M3 blueprint documents
+35 table types, 13 service functions, model/checkpoint protocols and concrete
+framework adapter contracts, distinct evaluation/acceptance outcomes and final
+review flow. Full bodies/all comments/refreshed metadata #26–33: stable, zero
+comments. #32's older authentication dependency is explicitly superseded by
+recorded US-03-SC-01; holdout enforcement remains required under M3-D1.
+
+Checks pass: 60 local links/anchors, 35 types, 13 services, all 35 criterion
+references, three Mermaid parses and whitespace. No executable change/tests,
+lockfile changes or new platform evidence. Current uncommitted work is M3
+blueprint/plan/overview/topic links, IP3 report and checkpoints. IP3 approval
+pending; next action is review and await approval before IP4. No IP3 commit,
+push or PR requested. Earlier pending-gate snapshots below are historical.
+
+## Historical software blueprint IP2 review — 2026-11-04
 
 Developer “i approve ip2, commit then start ip3” approved IP2 and authorized
 commit before IP3. Recording approval and committing M2 documentation first;

@@ -12,7 +12,7 @@ Start with this overview for scope, architecture, and workflow phases. Before im
 
 For concrete software ownership and public API contracts, read the
 [software implementation blueprint](design/software-blueprint.md). Its Milestone 1
-revision is approved; Milestone 2 is an IP2 review draft. Later milestones await
+and Milestone 2 revisions are approved; Milestone 3 is an IP3 review draft. Later milestones await
 separate approval gates.
 
 GitHub issues govern implementation scope and recorded scope decisions. [User stories](user-stories.md) define product requirements and stable acceptance-criterion IDs. This design and its topic documents provide supporting contracts; examples remain proposed unless explicitly settled. Resolve conflicts before implementing affected behavior.

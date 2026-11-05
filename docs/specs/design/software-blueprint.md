@@ -1,7 +1,7 @@
 # Software implementation blueprint
 
 Part of the [toolkit design](../agentic-ml-harness-design.md). IP1 review draft.
-Milestone 1 is approved; Milestone 2 is an IP2 review draft. Milestones 3–6
+Milestones 1–2 are approved; Milestone 3 is an IP3 review draft. Milestones 4–6
 await their separate design gates. Approval records belong to the owning plan.
 
 ## Authority and notation
@@ -811,3 +811,240 @@ No executable behavior or tests are introduced by IP2. These are future public
 test boundaries requiring owning story confirmation and TDD before implementation.
 M3–6 classes remain explicitly deferred; M2 introduces no managed agent generator,
 general tuner, final holdout evaluation or complete workflow recovery service.
+
+## Milestone 3: training, tuning and independent evaluation
+
+**Proposed contracts; no executable M3 delivery is claimed.** Reuse M1 identity,
+serialization, error, admission, runner and evidence rules and M2 split/fitted-feature
+contracts by reference. Every listed field is required with no defaults; explicit
+None represents unavailable data. Persisted records carry schema_version 1.0.
+Data records have no behavioral methods. Credentials and protected content never
+appear in ordinary request/result records. All IDs ending in evidence identity
+use EvidenceId; operational/approval/run identities use RecordId as typed below.
+
+### Ownership and criterion map
+
+| Owner / issue | Criteria | Public contract boundary |
+|---|---|---|
+| `modeling.selection` / [#26](https://github.com/jimthompson5802/agentic-ml/issues/26) | US-06-AC-01–04 | Explicit use/select/compare plans, budgeted coverage and nonbinding recommendations |
+| `components.models` / [#27](https://github.com/jimthompson5802/agentic-ml/issues/27) | US-16-AC-06–10 | Supplied model registration, compatible outputs, restored prediction and exact lineage |
+| `frameworks`, `modeling` / [#28](https://github.com/jimthompson5802/agentic-ml/issues/28) | US-18-AC-01–04 | scikit-learn/LightGBM/PyTorch adapters, approved baseline, captured training |
+| `frameworks.pytorch`, `harness.execution` / [#29](https://github.com/jimthompson5802/agentic-ml/issues/29) | US-19-AC-01–04 | CPU/available GPU, declared checkpoints, cancellation, resource observations |
+| `modeling.tuning` / [#30](https://github.com/jimthompson5802/agentic-ml/issues/30) | US-20-AC-01–04 | Common candidate validation, budgeted trials and optimization summary |
+| `harness.evaluation` / [#31](https://github.com/jimthompson5802/agentic-ml/issues/31) | US-21-AC-01–05 | Independent execution/validity/quality/robustness/reproduction evidence |
+| `harness.evaluation.final`, `approvals` / [#32](https://github.com/jimthompson5802/agentic-ml/issues/32) | US-24-AC-01–05 | Evaluator-only authorized final access, no development feedback, final decision |
+| `tracking.reporting` / [#33](https://github.com/jimthompson5802/agentic-ml/issues/33) | US-26-AC-06–09 | MLflow comparisons, evidence-linked report and acceptance outcome |
+
+### Model registration and algorithm selection
+
+Owner `components.models`, `modeling.selection`; US-16-AC-06–10, US-06-AC-01–04.
+M2 ComponentSpec remains preprocessing-only. Add ModelSpec instead of silently
+adding model kinds to that accepted draft contract; reuse ParameterSpec.
+
+| Type | Required attributes | Constraints and authority |
+|---|---|---|
+| `ModelSpec` | `model_id`, `entrypoint`: str; `interface_version: Literal["1.0"]`; `framework: Literal["sklearn", "lightgbm", "pytorch", "custom"]`; `tasks: tuple[str, ...]`; `prediction_outputs: tuple[str, ...]`; `parameters: tuple[ParameterSpec, ...]`; `agent_may_modify: bool`; `code: tuple[ArtifactRef, ...]`; `dependency_lock: ArtifactRef` | Tasks classification/regression only; outputs labels/probabilities/regression_values. Unique IDs/parameters, explicit immutable-by-default permission; captured project code or pinned dependency, never toolkit edits. |
+| `ModelRegistrationRequest` | ProjectContext; `models: tuple[ModelSpec, ...]`; `authorization_id: RecordId` | Reject duplicate IDs across active combined model registry; validate signatures/version/task/output metadata before importing under execution controls. |
+| `ModelRegistry` | `registry_id: EvidenceId`; `models: tuple[ModelSpec, ...]`; `diagnostics: tuple[Diagnostic, ...]` | Returned only on valid registration; code/dependency identities preserved. Scalar metadata must agree with M1 validation registry; disagreement blocks execution. |
+| `AlgorithmSelectionRequest` | ProjectContext; `plan_id`, `validation_id`, `model_registry_id`: EvidenceId; `mode: Literal["use", "select", "compare"]`; `selected_model_id: str \| None`; `reason: str`; `authorization_id: RecordId` | use/select require one explicit allowed choice; compare requires None and schedules every allowed algorithm. No agent reasoning dependency. |
+| `AlgorithmSelection` | `selection_id`, `plan_id`, `validation_id`, `model_registry_id`: EvidenceId; `mode: str`; `model_ids: tuple[str, ...]`; `reason: str` | Immutable effective allowed set/selection; compare is algorithm coverage, not exhaustive parameter enumeration. Budget-shortened coverage stays incomplete, never silently becomes select mode. |
+| `SearchRecommendation` | `recommendation_id`, `source_plan_id`: EvidenceId; `suggested_algorithm: str \| None`; `suggested_parameters: Mapping[str, JSONValue]`; `rationale: str` | Proposal for a later configuration only; never expands active selection, registry or parameter bounds. |
+
+`components.models.register_models(request: ModelRegistrationRequest) -> ModelRegistry`;
+`modeling.selection.select_algorithms(request: AlgorithmSelectionRequest) -> AlgorithmSelection`.
+SearchRecommendation is authored data, persisted with results, not automatically
+adopted. Metadata checks reject incompatible metric outputs before costly training;
+actual prediction shape/value checks also run after prediction.
+
+### Training, models, predictions and checkpoints
+
+Owners `modeling`, `frameworks`; US-18-AC-01–04, US-19-AC-01–04, US-16-AC-07–10.
+
+| Type | Required attributes | Constraints and lifecycle |
+|---|---|---|
+| `ComputeRequest` | `device: Literal["cpu", "cuda", "mps"]`; `device_count: int`; `memory_bytes: int \| None`; `runtime_seconds: int` | Positive requested quantities; CPU count is 1 device. Reject unavailable device or mandatory unsupported quota before launch, never silently substitute hardware. |
+| `ComputeObservation` | `device: str`; `hardware: Mapping[str, str]`; `framework_version`, `backend_version`: str; `enforced_limits: tuple[str, ...]`; `unsupported_limits: tuple[str, ...]` | Actual device/version and explicit enforcement limitations; no unsupported limit reported as enforced. |
+| `TrainingRequest` | ProjectContext; `model_registry_id`, `selection_id`, `validation_id`, `feature_set_id`: EvidenceId; `model_id: str`; `parameters: Mapping[str, JSONValue]`; `seed: int`; `purpose: Literal["baseline", "candidate"]`; `baseline_approval_id: RecordId \| None`; `compute: ComputeRequest`; `authorization_id`, `reservation_id`: RecordId; `submission_key: str` | Candidate requires exact baseline approval. Always call M1 validate_candidate and compatibility checks before reservation consumption/training, including Python/notebook/custom-code calls. Parameters materialized with origins, not resampled by adapter. |
+| `TrainingContext` | `training: TransformResult`; `training_targets: ArtifactRef`; `validation: TransformResult \| None`; `validation_targets: ArtifactRef \| None`; `parameters: Mapping[str, JSONValue]`; `seed: int`; `compute: ComputeRequest`; `run_id: RecordId`; `checkpoint_directory: Path` | Service supplies approved aligned training inputs and, only if authorized, development validation for early stopping. Never protected inputs. Writes limited to authorized run/checkpoint storage. |
+| `FittedModel` | `model_identity: EvidenceId`; `model: ModelSpec`; `state: tuple[ArtifactRef, ...]`; `parameters: Mapping[str, JSONValue]`; `parameter_origins: Mapping[str, str]`; `feature_set_id`, `environment_id`, `validation_id`: EvidenceId; `producer_run_id: RecordId`; `compute: ComputeObservation` | Immutable fitted artifacts and exact code/lock/feature lineage; state loading is isolated and verified. |
+| `PredictionResult` | `content`, `row_keys`: ArtifactRef; `output_kind: Literal["labels", "probabilities", "regression_values"]`; `class_order: tuple[str, ...]`; `row_count: int` | Stable row alignment; probabilities finite in [0,1] with declared class order and row sums within 1e-6 of 1; regression finite; labels match declared classes. Empty class_order for regression. |
+| `TrainingResult` | `run_id: RecordId`; `status: RunStatus`; `model: FittedModel \| None`; `checkpoints: tuple[CheckpointRecord, ...]`; `diagnostics: tuple[Diagnostic, ...]` | Completed training requires model artifacts, but no scientific/quality/acceptance implication. Failure/cancellation preserves previously emitted checkpoints. |
+| `ModelRestoreRequest` | `project_root: Path`; `model_identity: EvidenceId`; `destination: Path`; `authorization_id: RecordId` | Explicit destination; verify code/state/environment before load, no implicit retraining. |
+| `CheckpointRecord` | `checkpoint_id: EvidenceId`; `producer_run_id: RecordId`; `model_id: str`; `artifacts: tuple[ArtifactRef, ...]`; `format_id: str`; `declared_state: tuple[str, ...]`; `step: int`; `environment_id: EvidenceId`; `code: tuple[ArtifactRef, ...]`; `recorded_at: str` | Nonnegative step; declared_state lists actual model/optimizer/scheduler/RNG/loader state supplied by implementation. Immutable artifacts capture available state, never promise absent continuation state. |
+| `CheckpointRestoreRequest` | `project_root: Path`; `checkpoint_id: EvidenceId`; `destination: Path`; `authorization_id: RecordId` | Verify checksum, format, code/environment compatibility and permitted writes. |
+| `CheckpointRestoration` | `checkpoint_id: EvidenceId`; `restored_state: tuple[str, ...]`; `checks: tuple[CheckResult, ...]`; `usable: bool`; `diagnostics: tuple[Diagnostic, ...]` | Required declared state must be usable under recorded checks; no exact-continuation claim merely from usable true. |
+
+Proposed typed replacement for conceptual ModelAdapter (its Any-based signatures
+are not claimed unchanged). This also extends beyond M2 ReferenceEstimator,
+whose fixed-feature-comparison scope remains unchanged:
+
+```python
+class ModelAdapter(Protocol):
+    def train(self, context: TrainingContext) -> FittedModel: ...
+    def predict(self, model: FittedModel, data: TransformResult,
+                output_kind: str) -> PredictionResult: ...
+    def save(self, model: FittedModel, path: Path) -> tuple[ArtifactRef, ...]: ...
+    def load(self, artifacts: tuple[ArtifactRef, ...]) -> FittedModel: ...
+
+class CheckpointRestorer(Protocol):
+    def restore_checkpoint(self, checkpoint: CheckpointRecord,
+                           destination: Path) -> CheckpointRestoration: ...
+```
+
+Adapters constructed with verified ModelSpec and explicit project context resolve
+the framework object inside an isolated worker; no live privileged model escapes
+to an unrestricted caller. FittedModel is the artifact descriptor, not the live
+framework instance. predict/load/save may load state in worker-private memory but
+cannot change preserved state. PyTorch adapters implement CheckpointRestorer;
+checkpoint formats remain model-owned and versioned through format_id and code.
+Framework-specific checkpoint capture writes atomic complete artifacts to the
+context directory, then registers a CheckpointRecord in run evidence before it
+can be advertised. Runner preserves registered artifacts after forced termination;
+it cannot promise an additional checkpoint after killing a process.
+
+`modeling.train_model(request: TrainingRequest) -> TrainingResult`;
+`modeling.restore_model(request: ModelRestoreRequest) -> FittedModel`;
+`frameworks.pytorch.restore_checkpoint(request: CheckpointRestoreRequest) -> CheckpointRestoration`.
+Initial framework adapters SklearnModelAdapter, LightGBMModelAdapter and
+PyTorchModelAdapter have the ModelAdapter constructor/method contract above, no
+extra public data attributes; PyTorch additionally implements CheckpointRestorer.
+They record actual framework/library/hardware identities. CPU is mandatory;
+GPU support is demonstrated only where hardware/backend is available. Cancellation
+uses the M1 runner cancel method and original run ID, not a second framework-only
+cancellation API. No distributed/Ray or exact optimizer continuation requirement.
+
+### Baselines and bounded tuning
+
+Owners `modeling.tuning`, `approvals`; US-18-AC-02, US-20-AC-01–04, US-06-AC-01–04.
+
+| Type | Required attributes | Constraints and authority |
+|---|---|---|
+| `BaselineApprovalRequest` | `project_root: Path`; `baseline_run_id: RecordId`; `evaluation_id: EvidenceId`; `reviewer`, `reason`: str | Matching scientifically valid development baseline and nonblank labels before candidate comparisons. |
+| `BaselineApprovalRecord` | `approval_id`, `baseline_run_id`: RecordId; project/experiment IDs; `evaluation_id`, `feature_set_id`, `split_id`: EvidenceId; `reviewer`, `reason`, `recorded_at`: str; `authentication: Literal["none"]`; `decision: Literal["approve"]` | Immutable reviewed baseline identity and evidence; baseline changes invalidate dependent comparisons. |
+| `TuningRequest` | ProjectContext; `selection_id`, `validation_id`, `feature_set_id`, `criteria_id`: EvidenceId; `baseline_approval_id`, `authorization_id`: RecordId; `candidates: tuple[CandidateRequest, ...]`; `compute: ComputeRequest`; `seed: int` | Explicit finite candidate order provides simple local non-exhaustive tuning. Each CandidateRequest uses same project/validation binding and immutable checked boundaries. Evaluation uses the fixed criteria_id, not a trial-selected metric. No Optuna dependency required. |
+| `TrialRecord` | `trial_id`, `run_id`: RecordId; `candidate: CandidateResult`; `evaluation_id: EvidenceId \| None`; `model_identity: EvidenceId \| None`; `status: RunStatus`; `usage: ResourceUsage` | Rejected candidate starts no training; trial/run identity and reservation are durably allocated once for each admitted candidate. |
+| `OptimizationSummary` | `summary_id`, `selection_id`, `validation_id`: EvidenceId; `trials: tuple[TrialRecord, ...]`; `remaining_model_ids: tuple[str, ...]`; `usage: ResourceUsage`; `stop_reason: Literal["completed", "budget_exhausted", "cancelled", "failed", "needs_review"]`; `proposed_model_identity: EvidenceId \| None`; `recommendations: tuple[SearchRecommendation, ...]` | Summarize coverage/search and consumed resources, including unsuccessful work. Proposal uses development evidence only; no final access authorization. |
+
+`approvals.approve_baseline(request: BaselineApprovalRequest) -> BaselineApprovalRecord`;
+`modeling.tuning.tune_models(request: TuningRequest) -> OptimizationSummary`.
+Each trial reuses validate_candidate, authorization, fresh reservation and runner
+admission, preserving trial keys across transport retry. Aggregate runtime/trial
+limits stop new work and apply cancellation to running work as configured. A failed
+trial still retains consumed usage. compare mode requires a candidate for every
+allowed algorithm or remains incomplete; budget shortage is reported, not hidden.
+Selection of proposed best candidate follows approved metric direction with stable
+original trial order to break exact ties. No protected-test feedback enters tuning.
+
+### Independent evaluation and final decisions
+
+Owner `harness.evaluation`; US-21-AC-01–05, US-24-AC-01–05. Reuse M2 MetricSpec
+for accuracy/MSE minimum implementations; other approved metrics require a named
+versioned extension before use, never a silently changed score definition.
+
+| Type | Required attributes | Constraints and lifecycle |
+|---|---|---|
+| `EvaluationCheckSpec` | `check_id: str`; `kind: Literal["fold", "slice", "stress", "repeat"]`; `inputs: tuple[ArtifactRef, ...]`; `expected: JSONValue`; `absolute_tolerance`, `relative_tolerance`: float | Nonempty ID and finite nonnegative tolerances. Fold/slice inputs contain explicit development row memberships; stress inputs contain an approved transformed development dataset; repeat inputs reference repeated development run evidence. expected is a finite scalar score. All input identities are frozen before evaluation and cannot include protected data in development. |
+| `AcceptanceCriteria` | `criteria_id`, `split_id`: EvidenceId; `metric: MetricSpec`; `quality_threshold: float`; `minimum_baseline_gain: float \| None`; `robustness_checks`, `reproduction_checks`: tuple[EvaluationCheckSpec, ...]; `output_kind: str` | Freeze metric/output compatibility, thresholds, fold/slice/stress definitions and rerun tolerances before evaluation. quality_threshold is an inclusive lower bound for maximize and upper bound for minimize; baseline gain uses direction-normalized candidate improvement. Output kind must match the metric; checks require explicit expected values. |
+| `EvaluationRequest` | `project_root: Path`; `run_id: RecordId`; `criteria_id: EvidenceId`; `baseline_evaluation_id: EvidenceId \| None`; `authorization_id: RecordId` | Development validation only; baseline None allowed only for baseline evaluation. Evaluator restores model and fitted preprocessing from verified evidence. |
+| `EvaluationReport` | `evaluation_id`, `criteria_id`: EvidenceId; `run_id: RecordId`; `model_identity: EvidenceId \| None`; `phase: Literal["development", "final"]`; `execution: Literal["completed", "failed", "incomplete"]`; `scientific_validity: Literal["valid", "invalid", "incomplete"]`; `model_quality: Literal["sufficient", "insufficient", "not_assessed"]`; `score`, `baseline_gain`: float \| None; `checks: tuple[CheckResult, ...]`; `predictions: PredictionResult \| None`; `diagnostics: tuple[Diagnostic, ...]` | Model quality cannot be sufficient if execution/validity prerequisites fail. Missing evidence is explicit. Robustness and reproduction checks remain separate individual results; no narrative acceptance claim. |
+| `FinalEvaluationApprovalRequest` | `project_root: Path`; `model_identity`, `criteria_id`: EvidenceId; `development_evaluation_id: EvidenceId`; `reviewer`, `reason`: str | Select exactly one frozen candidate and separately authorize final evaluation scope. All development prerequisites and pending gates checked. |
+| `FinalEvaluationApproval` | `approval_id: RecordId`; project/experiment IDs; `model_identity`, `criteria_id`, `development_evaluation_id`: EvidenceId; `reviewer`, `reason`, `recorded_at`: str; `authentication: Literal["none"]` | Bound final scope, no reusable permission for iterative testing. |
+| `FinalEvaluationRequest` | `project_root: Path`; `final_approval_id`, `authorization_id`, `reservation_id`: RecordId; `submission_key: str` | Protected evaluator resolves test resources internally. Repeat transport request reattaches to same final attempt, never creates another evaluation. |
+| `ModelDecisionRequest` | `project_root: Path`; `final_evaluation_id: EvidenceId`; `decision: Literal["approve", "reject", "review"]`; `reviewer`, `reason`: str | Approve requires completed, scientifically valid, quality-sufficient final evidence and required checks passed. |
+| `ModelDecision` | `decision_id: RecordId`; project/experiment IDs; `final_evaluation_id`, `model_identity`: EvidenceId; `decision: Literal["approve", "reject", "review"]`; `reviewer`, `reason`, `recorded_at`: str; `authentication: Literal["none"]` | Only explicit approve permits model acceptance; reject/review preserves evidence and stops dependent improvement. |
+
+`harness.evaluation.evaluate_model(request: EvaluationRequest) -> EvaluationReport`;
+`approvals.authorize_final_evaluation(request: FinalEvaluationApprovalRequest) -> FinalEvaluationApproval`;
+`harness.evaluation.final.evaluate_final(request: FinalEvaluationRequest) -> EvaluationReport`;
+`approvals.decide_model(request: ModelDecisionRequest) -> ModelDecision`.
+The conceptual Evaluator.evaluate(run_id, criteria) protocol is proposed to be
+replaced by these separate development/final service contracts, avoiding a generic
+entrypoint that accidentally exposes holdout access. Not claimed as unchanged
+protocol conformance. M1 check_execution remains the execution/artifact subcheck.
+
+Development evaluator independently restores/predicts/scores and checks split and
+training-only fitted lineage. It evaluates approved robustness and reproducibility
+protocols rather than trusting training/agent assertions. Evaluation failures cannot
+be converted to pass by omitting unavailable checks. Protected results are restricted
+final-review evidence, unavailable to development recommendation/tuning services.
+Unsuccessful final evaluation ends in reject/review; any continuation requires a
+separately approved protocol preserving holdout protection, never an automatic retry
+with revised model parameters. Durable single-attempt binding precedes final access;
+uncertain submission requires review rather than repeated test exposure.
+
+**M3-D1 — blocked implementation decision, ADR-006, owner US-24 contract gate.**
+Specify and test evaluator-only holdout storage/credential/process access and
+restricted report delivery, building on M2-D1. Arbitrary training/custom code,
+exploratory kernels and assistant tools must be unable to read protected content
+or use final feedback for development. Ordinary API checks, hashes or unauthenticated
+approvals cannot enforce this boundary. #32's older authenticated-dependency wording
+is superseded for this version by recorded US-03-SC-01 and the current ADR-006
+exception; reviewer labels remain unauthenticated, future US-23-AC-02 undelivered.
+This does not defer or weaken actual holdout isolation or development approval gates.
+
+### Reporting and public verification
+
+Owner `tracking.reporting`; US-26-AC-06–09.
+
+| Type | Required attributes | Constraints and authority |
+|---|---|---|
+| `RunComparisonRequest` | `project_root: Path`; `baseline_run_id: RecordId`; `candidate_run_ids: tuple[RecordId, ...]`; `criteria_id: EvidenceId` | Same approved comparison protocol/features/split or explicit incomparable result, not silently mixed metrics. |
+| `RunComparison` | `comparison_id`, `criteria_id`: EvidenceId; `runs: tuple[RunRecord, ...]`; `evaluations: tuple[EvaluationReport, ...]`; `mlflow_run_ids: tuple[str, ...]`; `comparable: bool`; `diagnostics: tuple[Diagnostic, ...]` | Preserve baseline/candidate parameters, statuses, models and evaluation refs; missing links cannot imply comparability. |
+| `FinalReportRequest` | `project_root: Path`; `comparison_id`, `final_evaluation_id`: EvidenceId; `decision_id: RecordId \| None` | No decision means awaiting review, not accepted. Protected report readable only in final-review context. |
+| `FinalReport` | `report_id`, `comparison_id`, `final_evaluation_id`, `model_identity`: EvidenceId; `decision_id: RecordId \| None`; `acceptance: Literal["pending", "approved", "rejected", "review"]`; `evidence: tuple[ArtifactRef, ...]`; `document: ArtifactRef` | Includes original objective, metrics/baseline, validity/robustness/reproduction, component/fitted-feature/data/code/config/environment lineage and independent evidence references. Document text cannot override ModelDecision or evaluation. |
+
+`tracking.reporting.compare_runs(request: RunComparisonRequest) -> RunComparison`;
+`tracking.reporting.build_final_report(request: FinalReportRequest) -> FinalReport`.
+Persist comparisons/reports as immutable MLflow-linked evidence with M1 run IDs,
+not duplicate disconnected tracking runs. No decision_id yields pending acceptance;
+model-quality failure and execution failure remain separately visible.
+
+Proposed ModelError, SelectionError, CheckpointError, TuningError, EvaluationError
+and ReportError follow M1 `(code: str, message: str, *, evidence_ids:
+tuple[EvidenceId, ...] = ())`, with no operational methods. Invalid scope/version,
+parameters, output compatibility, hash/state/environment, missing approvals or
+unsupported hardware block affected work; operational framework/storage failures
+retain causes and available evidence. Results describe unsuccessful executions
+without erasing emitted checkpoints or reporting insufficient quality as a crash.
+
+```mermaid
+sequenceDiagram
+    participant U as Installed API caller
+    participant A as Admission and approvals
+    participant T as Training and tuning
+    participant D as Development evaluator
+    participant F as Protected final evaluator
+    participant R as Review and reporting
+    U->>T: Train reproducible baseline
+    T->>D: Restore and assess baseline
+    U->>A: Approve baseline evidence
+    U->>T: Submit allowed candidate trials
+    T->>A: Validate every candidate and reserve budget
+    T->>D: Restore and independently evaluate candidates
+    D-->>U: Development findings and optimization evidence
+    U->>A: Authorize frozen candidate for final evaluation
+    A->>F: Admit one scoped final attempt
+    F->>R: Restricted final evidence
+    U->>R: Explicit model approval rejection or review
+    Note over F,R: Final feedback cannot enter the development loop
+```
+
+Required future installed-project scenarios: all three algorithm modes, partial
+compare coverage, forbidden fixed/default/range changes through arbitrary custom
+code and notebooks, exhausted budgets and duplicate trial submission. Run tabular
+classification/regression across sklearn/LightGBM and basic PyTorch image fixtures;
+verify CPU and available GPU separately, recorded enforcement limitations and
+no implicit fallback. Test pretraining output incompatibility and independently
+restored model/pipeline predictions with row alignment and known metrics.
+
+Checkpoint fixtures emit state, cancel, restore and verify declared usability;
+forced termination preserves existing artifacts without requiring a new checkpoint.
+Test missing/corrupt state and unsupported continuation claims. Independent
+evaluation covers failed execution/artifacts, leakage/wrong-fit/split violations,
+insufficient quality, metric direction, approved folds/slices/stress and repeated
+run tolerances. Reject unauthorized holdout access outside API calls and final
+feedback supplied to tuning. Test unsuccessful final review, pending model decision,
+approved successful evidence and accurate failed/insufficient-quality reports.
+No implementation tests run for this documentation-only phase. M3-D1 remains
+an explicit implementation blocker; M4 agent integration and M5 orchestration
+remain deferred. All these contracts await the IP3 developer gate.
