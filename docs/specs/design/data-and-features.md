@@ -6,6 +6,11 @@ Part of the [toolkit design](../agentic-ml-harness-design.md). Scope: Data Extra
 
 ## 6. Data Extraction and Iterative Acquisition
 
+The [M6 software blueprint](software-blueprint.md#milestone-6-authorized-acquisition-and-measured-improvement)
+specifies proposed gap/proposal, approval, bounded-execution, lineage, comparison
+and recovery interfaces. IP6 review is approved. Advanced strategies listed below
+remain subject to delivery scope; the list is not a claim of implemented support.
+
 ### Data extraction requirements
 
 - Connect to local CSV/Parquet, SQL, and object storage initially; add APIs later.
@@ -51,6 +56,11 @@ proposal:
 The predicted benefit is a hypothesis, not a guarantee. Compare before/after training with consistent evaluation protocols. Never use protected final-test feedback to guide acquisition. Changes to evaluation protocols require separate approval.
 
 ## 7. Feature Engineering
+
+The [Milestone 2 software blueprint](software-blueprint.md#milestone-2-assessment-features-and-pipeline-reuse)
+provides proposed typed contracts for assessment/splits, preprocessing,
+feature comparison and stage reuse. Its IP2 gate is approved; the product
+requirements here do not imply those APIs are implemented.
 
 The feature engineering engine must:
 

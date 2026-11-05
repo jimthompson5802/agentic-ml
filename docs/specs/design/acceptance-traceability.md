@@ -6,6 +6,11 @@ Part of the [toolkit design](../agentic-ml-harness-design.md). Scope: Acceptance
 
 ## 10. Acceptance Criteria Traceability
 
+For concrete software ownership and public verification boundaries for every M1–6
+criterion, see the [blueprint coverage index](../../verification/software-blueprint-final-coverage.md).
+It distinguishes proposed contracts from executable evidence and preserves the
+deferred authenticated-reviewer requirement in US-23-AC-02.
+
 [User stories](../user-stories.md) define the authoritative product acceptance criteria and own their stable IDs. This design document describes architectural support for those requirements; it does not define a separate product acceptance-criteria list.
 
 The table groups criterion links by story increment and milestone. Each link resolves to the criterion definition in the user stories. Design references identify relevant mechanisms, not proof of complete coverage, implementation, or successful verification. Pending design decisions remain subject to satisfying the story criteria.

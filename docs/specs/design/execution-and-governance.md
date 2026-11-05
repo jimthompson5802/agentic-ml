@@ -63,7 +63,7 @@ The toolkit owns this lifecycle:
 4. **Restore:** Starting from an experiment checkout and recorded run manifest, retrieve the pinned toolkit revision, project dependency files, source/configuration bundle, applicable guidance, and DVC inputs. Verify required evidence checksums and restored dataset content hashes before execution. Rebuild the locked environment without a manually maintained toolkit checkout and materialize the recorded source, including preserved uncommitted changes. Missing source, dependencies, dataset content, or mismatched required evidence produces an explicit restoration failure identifying the affected input; never substitute a current working-tree file, newer dependency, or alternate dataset silently. Access credentials and current execution authorization remain required; historical approval evidence does not grant new access.
 5. **Compare:** Execute the recorded entrypoint from its recorded relative working directory as a new run linked to the original manifest. Independently assess the new outputs against the original declared checks/tolerances, recording comparison results and retaining both runs. Output checksums identify evidence; declared checks determine whether reproduction succeeds when byte equality is not required.
 
-Milestone 1 provides this restoration path without an agent. Demonstrate it in a clean second-machine environment with an uncommitted notebook edit and a required untracked helper, verify that working-tree edits after capture cannot affect execution, and verify explicit failures for removed or corrupted required inputs. Configured storage must be accessible from the second machine; initially local stores may be transferred with their recorded content identities preserved. Exact manifest serialization and CLI/API signatures remain implementation decisions.
+Milestone 1 provides this restoration path without an agent. Demonstrate it in a clean second-machine environment with an uncommitted notebook edit and a required untracked helper, verify that working-tree edits after capture cannot affect execution, and verify explicit failures for removed or corrupted required inputs. Configured storage must be accessible from the second machine; initially local stores may be transferred with their recorded content identities preserved. The [M1 blueprint](software-blueprint.md#proposed-execution-and-evidence-contracts) specifies typed capture/manifest/restore interfaces and content-addressed payload rules; executable serialization and schemas must implement those reviewed contracts.
 
 ### Notebook development and execution contract
 
@@ -80,6 +80,10 @@ Milestone 1 provides this restoration path without an agent. Demonstrate it in a
 
 ### Independent evaluation
 
+The [Milestone 3 software blueprint](software-blueprint.md#milestone-3-training-tuning-and-independent-evaluation)
+provides proposed model, tuning, checkpoint, evaluator and reporting contracts.
+Its IP3 approval gate is approved; these contracts do not imply implemented APIs.
+
 1. **Execution correctness:** code completes and expected artifacts exist.
 2. **Scientific validity:** split boundaries, preprocessing fitting, and leakage rules are respected.
 3. **Model quality:** agreed metrics and baseline comparisons are computed consistently.
@@ -94,7 +98,12 @@ Additional terminal or reviewable states: `Failed`, `Cancelled`, `BudgetExhauste
 
 #### Recovery and reconciliation
 
-On restart, acquire exclusive recovery ownership for the workflow and reconcile its durable records with runner submission/execution status and MLflow evidence before issuing new work or accepting results. State transitions and submission authority must reject stale owners, for example through an ownership epoch checked at submission and state update; a lock timeout alone must not allow an old owner to continue advancing work. Exact locking, fencing, and transaction mechanisms remain milestone 5 design decisions.
+The [Milestone 5 software blueprint](software-blueprint.md#milestone-5-supervised-workflow-and-durable-recovery)
+specifies proposed state-store, ownership, approval, adapter and audit contracts.
+Its IP5 gate is approved. Current unauthenticated records do not satisfy future
+authenticated-reviewer assurance in US-23-AC-02.
+
+On restart, acquire exclusive recovery ownership for the workflow and reconcile its durable records with runner submission/execution status and MLflow evidence before issuing new work or accepting results. State transitions and submission authority must reject stale owners, for example through an ownership epoch checked at submission and state update; a lock timeout alone must not allow an old owner to continue advancing work. The [M5 blueprint](software-blueprint.md#durable-store-ownership-and-reconciliation) proposes local SQLite transactions, optimistic versions and ownership epochs as the concrete mechanism; implementation must verify its admission/recovery guarantees.
 
 | Reconciled finding | Required action |
 |---|---|
@@ -114,7 +123,7 @@ Cancelling an experiment run and cancelling a managed agent task are distinct op
 
 Enforce toolkit-run runtime, trial, and resource budgets independently of assistant usage. Record assistant token/cost usage and enforce configured assistant limits where the integration supports measurement and control; label unavailable accounting explicitly rather than claiming a complete assistant cost bound. Admission of new managed tasks requires remaining applicable budgets. Reaching a limit stops the relevant work and preserves a reviewable outcome.
 
-Resume from durable task/attempt and run identities, approved plan and guidance references, captured artifacts, recorded approvals, and consumed budgets. Reconcile in-flight work under the submission identity and workflow recovery contracts before retrying or accepting results; a conversation transcript or assistant memory is not the workflow state. Concrete persistence and coordination mechanisms remain implementation decisions subject to those contracts.
+Resume from durable task/attempt and run identities, approved plan and guidance references, captured artifacts, recorded approvals, and consumed budgets. Reconcile in-flight work under the submission identity and workflow recovery contracts before retrying or accepting results; a conversation transcript or assistant memory is not the workflow state. The [M4/M5 blueprint](software-blueprint.md#milestone-5-supervised-workflow-and-durable-recovery) specifies task/attempt evidence, storage ownership and reconciliation; concrete product selection remains an explicit blocked decision in its final register.
 
 ### Governance
 

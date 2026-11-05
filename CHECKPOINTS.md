@@ -1,6 +1,222 @@
 # Development Checkpoints
 
-Last updated: 2026-11-04 (UTC)
+Last updated: 2026-11-05 (UTC)
+
+## Walkthrough software reference — 2026-11-05
+
+Developer requested appending the class/function explanation to
+`docs/specs/example-walkthrough.md` and integrating short descriptions in sections
+1–7, then asked whether all interfaces were accounted for. Added scenario-local
+descriptions and an appendix covering public services, protocol methods, 213
+blueprint table entries, inline records/aliases, 37 error classes, conceptual-name
+replacements, and remaining implementation decisions. Corrected stale claims that
+implemented APIs were unspecified. Blueprint remains authoritative for fields and
+signatures; private helpers are explicitly outside this inventory.
+
+Documentation only; TDD and executable checks do not apply. Type-table coverage,
+error-name coverage, local link targets, and `git diff --check` pass. Developer
+authorized commit and push of the walkthrough and this checkpoint on the existing
+`embellish-software-component-descriptions` branch. Recording authorization before
+publication; next action: developer review of the updated branch. No merge requested.
+
+## Blueprint formatting correction — 2026-11-05
+
+Developer requested `uv run --locked ruff format --check .` and fixes. Initial
+check found one unformatted file: Python fences in the software blueprint.
+Ran `uv run --locked ruff format docs/specs/design/software-blueprint.md`;
+renewed exact full check passes, 161 files already formatted. `git diff --check`
+passes. Documentation formatting only; no executable behavior or lock change.
+Developer “commit and push” authorized committing the blueprint formatting fix
+and this checkpoint and pushing to the existing PR #56 branch.
+Next action: developer PR review. No merge requested.
+
+## Current software blueprint IP6 final review — 2026-11-05
+
+Developer “push and create pull request” authorized publication. Pushed approved
+branch and opened [PR #56](https://github.com/jimthompson5802/agentic-ml/pull/56)
+into `main`; verified title/body, ownership, base/head, non-draft and initial
+head `62ecce2`. Renewed six diagram parses, 889 links/anchors, 160-criterion
+equality and branch whitespace checks pass. Publication-record follow-up only;
+committing/pushing plan and checkpoint records to the same PR. Next action:
+developer PR review. No merge authorized. Earlier no-publication statements below
+are historical; unresolved product decisions remain unchanged.
+
+Developer “commit” authorized committing approved IP6 documentation and final
+reconciliation. Recording direction and creating the local Conventional Commit;
+next action await developer direction. No push or PR requested.
+
+Developer “i approve ip6” approved the final documentation phase on 2026-11-05 UTC.
+All IP1–IP6 tasks/gates are complete; approval recorded in plan/evidence and current
+design status. Changes remain uncommitted; next action await developer direction.
+No commit/push/PR requested. Earlier pending statements below are historical;
+implementation blockers and deferred authentication remain unchanged.
+
+Developer “commit then start ip6” authorized IP5 commit first, completed as
+`0db2ded`, then IP6. On `embellish-software-component-descriptions`, IP6 T1–T6
+technically complete in [plan](docs/plans/software-blueprint.md).
+[IP6 evidence](docs/verification/software-blueprint-ip6.md) records complete stable
+issue #54–55 bodies/comments/metadata (zero comments), 23 M6 table records,
+five services, three protocol methods and source-limit/recovery contracts.
+[Final coverage index](docs/verification/software-blueprint-final-coverage.md)
+maps every one of 160 M1–6 criteria; all nine original protocols reconciled.
+US-23-AC-02 authentication remains partial/deferred; eight named decision/assurance
+records preserve implementation blockers and owners. No product delivery implied.
+
+Design 0.14 updates overview/date/reading map, topic/API/resource-path authority
+and stale interface/name/implementation statements. Checks pass: 889 relative
+links/anchors, 160 unique source criteria, 27 public source classes (two private
+helpers excluded), M6 inventory, nine protocols, six Mermaid parses and whitespace.
+No executable/source/dependency/lock changes, runtime tests or new platform evidence.
+Uncommitted work: blueprint/overview/topic docs/plan, IP6 report, final index and
+this checkpoint. IP6 final approval pending; next action developer review and
+approval or changes. No IP6 commit/push/PR requested. Earlier snapshots historical.
+
+## Historical software blueprint IP5 review — 2026-11-05
+
+Developer “commit then start ip6” authorized IP5 commit before IP6 execution.
+Recording direction and committing approved M5 documentation first; next action
+IP6. No push/PR requested. Earlier execution holds below are historical.
+
+Developer “i approve ip5” approved IP5 on 2026-11-05 UTC. Approval recorded in
+plan and evidence; changes remain uncommitted. Next action: await developer
+direction to commit and/or start IP6. IP6 unstarted; no publication authorized.
+Earlier pending-approval statements in this snapshot are historical.
+
+Developer “i approve ip4; commit and start ip5” approved IP4, committed first as
+`df2d32a`, then authorized IP5. On `embellish-software-component-descriptions`,
+IP5 T1–T6 complete in [plan](docs/plans/software-blueprint.md), with
+[evidence](docs/verification/software-blueprint-ip5.md). M5 catalogue contains
+32 table types/aliases, five services, nine orchestrator/store methods plus
+concrete store/adapter slots and error contracts. All 17 criteria mapped;
+US-23-AC-02 authenticated authorship explicitly partial/deferred under US-03-SC-01.
+No source requirement removed or claimed satisfied through unauthenticated labels.
+Full bodies/all comments/refreshed metadata #40–43 stable, zero comments.
+
+Document checks pass: 67 local links/anchors, type/function/method/criterion inventory,
+five Mermaid parses and whitespace. SQLite local state/epoch fencing and durable
+reconciliation are proposed contracts; second concrete integration remains M5-D2.
+No runtime tests/code/dependency/lock changes or platform support evidence.
+Uncommitted work: blueprint/plan/overview/interface/execution links, IP5 report
+and checkpoints. IP5 approval pending; next action review, await approval before
+IP6. No IP5 commit/push/PR requested. Earlier checkpoints below are historical.
+
+## Milestone 6 issue publication — 2026-11-05
+
+At developer request, created feature issues from the local M6 stories using the
+repository user-story template: [US-28 #54](https://github.com/jimthompson5802/agentic-ml/issues/54)
+and [US-29 #55](https://github.com/jimthompson5802/agentic-ml/issues/55).
+Checked open/closed issues and story searches before publication. Verified exact
+published bodies, enhancement labels and all 11 unchanged acceptance criteria;
+removed only task-owned temporary issue files after verification. No implementation
+or phase progression authorized by issue creation. IP4 remains awaiting developer
+approval; prior blueprint state and uncommitted documentation preserved.
+
+## Historical software blueprint IP4 review — 2026-11-04
+
+Developer “i approve ip4; commit and start ip5” approved IP4 on 2026-11-05 UTC,
+authorizing commit before IP5. Recording approval and committing reviewed M4
+documentation plus the M6 issue publication checkpoint; next action IP5.
+No push or PR requested. Earlier pending approval statements are historical.
+
+Developer “i approve ip3; commit and start ip4” approved IP3, committed first as
+`7b00662`, then authorized IP4. On `embellish-software-component-descriptions`,
+IP4 T1–T5 complete in [plan](docs/plans/software-blueprint.md), with
+[evidence](docs/verification/software-blueprint-ip4.md). Added M4 catalogue:
+32 table types/status alias, 10 service functions, proposed five-method AgentAdapter,
+first concrete adapter slot and seven errors; all 26 criteria mapped. Issues
+#34–39 bodies/all comment pages/refreshed metadata stable, zero comments.
+#37's older authentication assurance explicitly superseded by US-03-SC-01.
+
+Checks pass: 65 local links/anchors, type/function/criterion inventory, four Mermaid
+parses and whitespace. No executable changes/tests, lockfile edits or support
+claims. M4-D1 assistant/kernel isolation and M4-D2 first concrete product/interface/
+version remain implementation blockers. Uncommitted work: blueprint/plan/overview,
+interfaces/execution links, IP4 report and this checkpoint. IP4 approval pending;
+next action review, await approval before IP5. No IP4 commit/push/PR requested.
+
+## Historical software blueprint IP3 review — 2026-11-04
+
+Developer “i approve ip3; commit and start ip4” approved IP3 and authorized commit
+before IP4. Recording approval and committing reviewed M3 documentation first;
+next action IP4. No push or PR requested.
+
+Developer “i approve ip2, commit then start ip3” approved M2 and directed commit
+before IP3. Published local commit `4d38afd` first; no push. IP3 T1–T5 complete
+in the [plan](docs/plans/software-blueprint.md), with
+[evidence](docs/verification/software-blueprint-ip3.md). M3 blueprint documents
+35 table types, 13 service functions, model/checkpoint protocols and concrete
+framework adapter contracts, distinct evaluation/acceptance outcomes and final
+review flow. Full bodies/all comments/refreshed metadata #26–33: stable, zero
+comments. #32's older authentication dependency is explicitly superseded by
+recorded US-03-SC-01; holdout enforcement remains required under M3-D1.
+
+Checks pass: 60 local links/anchors, 35 types, 13 services, all 35 criterion
+references, three Mermaid parses and whitespace. No executable change/tests,
+lockfile changes or new platform evidence. Current uncommitted work is M3
+blueprint/plan/overview/topic links, IP3 report and checkpoints. IP3 approval
+pending; next action is review and await approval before IP4. No IP3 commit,
+push or PR requested. Earlier pending-gate snapshots below are historical.
+
+## Historical software blueprint IP2 review — 2026-11-04
+
+Developer “i approve ip2, commit then start ip3” approved IP2 and authorized
+commit before IP3. Recording approval and committing M2 documentation first;
+next action is IP3. Earlier pending-gate statements below are historical.
+No push or PR requested.
+
+Developer approved IP1 and directed commit first, then IP2. Committed approved
+M1 documentation as `a475835` on `embellish-software-component-descriptions`.
+IP2 tasks T1–T5 are complete in the [plan](docs/plans/software-blueprint.md);
+[evidence](docs/verification/software-blueprint-ip2.md) records source reconciliation,
+inventory/detail/reference closure and all 22 M2 criterion mappings. Blueprint
+adds 33 proposed table types, preprocessing/reference-estimator protocols, errors,
+services and lifecycle diagram. Issues #19–23 full bodies/all comment pages and
+metadata refreshed: stable, zero comments. M2-D1 holdout isolation remains a
+blocking implementation decision. No executable changes or runtime verification.
+
+Both Mermaid fences parse. Document checks pass: 48 local links/anchors, 33 type
+inventory entries, 22 criteria, whitespace. Initial inventory check rejected
+abbreviated paired record names in evidence; expanded names and renewed check
+passes. Changes since commit: blueprint, plan, overview/data-feature links, IP2
+report and this checkpoint. IP2 approval pending; next action is developer review,
+then await authorization before IP3. No IP2 commit/push/PR requested.
+At developer request, clarified that M2 proposes replacing FeatureEngineeringAdapter
+with authored FeaturePlan and execute/compare services, rather than implementing
+the original protocol. Explicit replacement mapping added; IP2 gate still pending.
+
+## Historical software blueprint IP1 review — 2026-11-04
+
+Developer “i approve ip1, coomit firs then move to ip2” approved IP1 and authorized
+commit before IP2 execution. Recording approval and committing the reviewed
+documentation; next action is IP2. Earlier pending-gate statements below are
+historical. No push or PR requested.
+
+Developer “Implement the plan” authorized documentation work through IP1, with
+separate later phase gates. Created `embellish-software-component-descriptions`
+first, from clean `main` at `59e4beb`. Added the
+[plan](docs/plans/software-blueprint.md),
+[M1 blueprint](docs/specs/design/software-blueprint.md),
+[evidence](docs/verification/software-blueprint-ip1.md) and design navigation links.
+Issues #8–18 bodies/comment pages/metadata refreshed; all zero comments, stable.
+No executable changes, dependency changes or tests; document checks only.
+M1-D1 isolation remains an explicit owning-story decision. IP1 developer gate
+review refinement now specifies ExperimentSpec fields, construction, manifest
+authority, immutability and submission checks at developer request. Document-only.
+Developer “i agree complete m1 first” authorized extending the same precision to
+all M1 public and referenced records. Catalogue now includes existing fields and
+defaults plus proposed types/methods/lifecycle/negative cases, with explicit
+later-milestone deferrals. Document checks renewed; no executable changes.
+IP1 gate remains pending; next action is review, then await approval before IP2.
+No commit/push/PR.
+Developer “make that update to the plan” authorized recording the M1 detail
+standard for IP2–IP6. The plan now requires per-phase type inventories, complete
+contract descriptions, reference closure, cross-milestone reconciliation and
+criterion checklists, with explicit completeness tasks at every remaining gate.
+Documentation-only plan refinement; IP1 approval still pending, IP2 unstarted.
+Fixed developer-reported Mermaid parse failure: reproduced line-20 error, removed
+semicolon from sequence note, and verified the same cached Mermaid parser passes.
+Attempt 1 successful; whitespace passes. Evidence appended to IP1 report.
+Historical executable evidence and milestone obligations below remain unchanged.
 
 ## Current US-05 accepted — PR #53 squash merged — 2026-11-04
 
