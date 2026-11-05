@@ -1,7 +1,7 @@
 # Software implementation blueprint
 
 Part of the [toolkit design](../agentic-ml-harness-design.md). IP1 review draft.
-Milestones 1–2 are approved; Milestone 3 is an IP3 review draft. Milestones 4–6
+Milestones 1–3 are approved; Milestone 4 is an IP4 review draft. Milestones 5–6
 await their separate design gates. Approval records belong to the owning plan.
 
 ## Authority and notation
@@ -1048,3 +1048,230 @@ approved successful evidence and accurate failed/insufficient-quality reports.
 No implementation tests run for this documentation-only phase. M3-D1 remains
 an explicit implementation blocker; M4 agent integration and M5 orchestration
 remain deferred. All these contracts await the IP3 developer gate.
+
+## Milestone 4: bounded agent integration
+
+**Proposed contracts; no implemented managed adapter is claimed.** Apply the same
+M1 EvidenceId/RecordId, immutable copying, versioned record envelope, serialization
+and exception conventions. Persisted records add schema_version 1.0. All listed
+attributes are required with no implicit defaults, including explicit None where
+allowed. ProjectContext is the earlier project_root/project_id/experiment_id request
+notation. Records have no methods unless explicitly specified below. A tool's
+permission to execute a command is never experiment approval.
+
+### Ownership and criterion map
+
+| Owner / issue | Criteria | Public boundary |
+|---|---|---|
+| `agents.decisions` / [#34](https://github.com/jimthompson5802/agentic-ml/issues/34) | US-04-AC-01–04 | Only delegated proposals, exact reasoning/source lineage and existing plan approval |
+| `agents.notebooks` / [#35](https://github.com/jimthompson5802/agentic-ml/issues/35) | US-07-AC-01–04 | Reviewable notebook/helper revision, explicit parameters, installed imports and managed snapshot execution |
+| `interactive` / [#36](https://github.com/jimthompson5802/agentic-ml/issues/36) | US-08-AC-01–04 | Project kernel, arbitrary-Python isolation, managed training and no interactive acceptance |
+| `components.permissions` / [#37](https://github.com/jimthompson5802/agentic-ml/issues/37) | US-17-AC-01–04 | Default immutable code, scoped change approval and new versioned configuration |
+| `agents.iteration` / [#38](https://github.com/jimthompson5802/agentic-ml/issues/38) | US-22-AC-01–05 | Development feedback, bounded revisions, managed re-evaluation and explicit stop reasons |
+| `agents.adapters`, `guidance` / [#39](https://github.com/jimthompson5802/agentic-ml/issues/39) | US-30-AC-01–05 | First verified product/interface/version, task/result/cancellation and preserved guidance delivery |
+
+All 26 criteria are covered by this increment. M5's second adapter/full workflow
+recovery and M6 acquisition remain outside M4; durable single-phase task identities,
+budgets, cancellation and rejection of uncertain duplicate work are required now.
+
+### Runtime guidance selection and preservation
+
+Owner `guidance`; US-30-AC-02–05. Packaged resources are read through installed
+package APIs, project runtime files through explicit root-relative mappings.
+
+| Type | Required attributes | Constraints and authority |
+|---|---|---|
+| `GuidanceSource` | `owner: Literal["toolkit", "project"]`; `path: str`; `version: str`; `task_kinds: tuple[str, ...]`; `layer: Literal["shared", "task", "project"]` | Packaged runtime-resource path or project runtime path, never arbitrary discovery. Nonempty version; explicit task mapping, no filename-based activation. Development AGENTS.md files are not selectable runtime sources. |
+| `GuidanceSelectionRequest` | ProjectContext; `plan_id: EvidenceId`; `task_kind: str`; `sources: tuple[GuidanceSource, ...]` | Only configured mappings; source ownership/path resolved explicitly. Shared first, task second, project last; preserve configured order within each layer. |
+| `PreservedGuidance` | `source: GuidanceSource`; `content: ArtifactRef`; `load_index: int` | Preserve exact UTF-8 bytes, original path/version and checksum. Contiguous zero-based load indexes, no source silently overwritten. |
+| `GuidanceConflict` | `source_indexes: tuple[int, ...]`; `constraint_field: str`; `description: str`; `status: Literal["unresolved", "resolved"]`; `resolution: str \| None` | Explicit observable conflict with another source or approved experiment field. Nonblank resolution only for resolved; unresolved blocks dependent work. No promise to infer every contradiction in unrestricted natural language. |
+| `RuntimeInstructionBundle` | `bundle_id`, `plan_id`: EvidenceId; `task_kind: str`; `entries: tuple[PreservedGuidance, ...]`; `conflicts: tuple[GuidanceConflict, ...]`; `recorded_at: str` | Immutable selected contents/order/ownership. No toolkit/experiment development files loaded automatically. Bound plan remains preserved; changed selection/content creates new bundle and configuration. |
+| `GuidanceSelectionResult` | `status: Literal["ready", "blocked"]`; `bundle: RuntimeInstructionBundle \| None`; `diagnostics: tuple[Diagnostic, ...]` | Only ready bundle may be delivered; absent source, unknown version or unresolved visible conflict blocks. Preserve diagnostic evidence for rejected selections. |
+| `ExternalContextRecord` | `observed_instructions: tuple[ArtifactRef, ...]`; `session_settings: Mapping[str, JSONValue]`; `unobservable_context: tuple[str, ...]`; `capture_complete: bool` | Capture only permitted observable context; false when anything unknown. No credential/session secret copies. External independently loaded AGENTS.md is outside toolkit loader guarantee. |
+| `GuidanceDeliveryReceipt` | `task_id`, `attempt_id`: RecordId; `bundle_id: EvidenceId`; `delivered_entries: tuple[EvidenceId, ...]`; `external_context: ExternalContextRecord`; `acknowledged: bool`; `recorded_at: str` | Must match bundle's ordered content identities; acknowledged means delivery evidence, not proof of instruction compliance or deterministic reasoning. |
+
+`guidance.select_guidance(request: GuidanceSelectionRequest) -> GuidanceSelectionResult`;
+`guidance.inspect_bundle(*, project_root: Path, bundle_id: EvidenceId) -> RuntimeInstructionBundle`.
+The inspector verifies preserved bytes and order; it does not reload changed live
+files. New bundle adoption requires newly resolved experiment configuration and
+applicable existing approval gates. Conflicts visible through structured constraints,
+declared conflicts or review block work; unavailable external context is recorded
+as a limitation, never certified conflict-free. M1 ordered guidance ArtifactRefs
+remain valid; M4 adds explicit loader/delivery records as separate evidence, not
+an incompatible mutation of old input manifests.
+
+### Adapter capabilities, tasks and results
+
+Owner `agents.adapters`; US-30-AC-01, supporting all M4 agent stories.
+
+| Type | Required attributes | Constraints and lifecycle |
+|---|---|---|
+| `AgentIntegrationSpec` | `integration_id`, `product`, `product_version`, `interface_name`, `interface_version`: str; `adapter_version: str`; `verification_evidence: tuple[ArtifactRef, ...]` | Exact verified invocation interface/version, not a marketing product name. No credential values. Unverified version cannot claim supported status. |
+| `AgentCapabilities` | `integration: AgentIntegrationSpec`; `task_kinds: tuple[str, ...]`; `guidance_delivery: bool`; `cancellation: Literal["requested_only", "acknowledged", "confirmed_terminal"]`; `usage_measurement`, `usage_enforcement`: tuple[str, ...]; `access_enforcement: tuple[str, ...]`; `limitations: tuple[str, ...]` | Task kinds delegated_decisions/generate_notebook/revise_experiment. Missing required capability blocks delegation. Measurement/enforcement named separately for tokens/cost/runtime; unavailable usage is explicit. |
+| `AgentTask` | `task_id`, `attempt_id`: RecordId; project/experiment IDs; `task_kind: str`; `plan_id`, `validation_id`, `bundle_id`: EvidenceId; `authorization_id: RecordId`; `workflow_phase: str`; `input_artifacts: tuple[ArtifactRef, ...]`; `feedback_ids: tuple[EvidenceId, ...]`; `allowed_tools`, `writable_paths`: tuple[str, ...]; `component_permission_ids: tuple[RecordId, ...]`; `budget: AgentBudget`; `predecessor_attempt_id: RecordId \| None` | Bound approved phase/scope. Paths/tools narrow authorization, never broaden it. Feedback is development-only. Fresh attempt ID on permitted retry; identical transport retry keeps same attempt. |
+| `AgentBudget` | `runtime_seconds: int`; `max_tokens: int \| None`; `max_cost: str \| None`; `currency: str \| None` | Positive limits, exact decimal cost and currency paired. Required tokens/cost limit unsupported by adapter blocks task rather than claiming enforcement; optional unavailable measurements remain limitations. Toolkit run budgets remain independently enforced. |
+| `AgentUsage` | `measurement_id: RecordId`; `runtime_seconds: float`; `input_tokens`, `output_tokens`: int \| None; `cost: str \| None`; `currency: str \| None`; `source: str`; `complete: bool` | Nonnegative known quantities; unknown is None, not zero. Durable measurement IDs prevent double accounting. Runtime observation does not imply complete token/cost accounting. |
+| `AgentTaskStatus` | Alias `Literal["submitted", "running", "completed", "failed", "cancelled", "budget_exhausted", "awaiting_approval", "needs_review"]` | Task status is independent of experiment RunStatus and model acceptance. |
+| `AgentTaskHandle` | `task_id`, `attempt_id`: RecordId; `integration_id: str`; `external_task_id: str \| None`; `status: AgentTaskStatus` | Durable binding before accepting execution; unknown external acceptance goes to needs_review, not automatic resend. |
+| `AgentResult` | `task_id`, `attempt_id`: RecordId; `status: AgentTaskStatus`; `plan_id`, `bundle_id`: EvidenceId; `proposals: tuple[DecisionProposal, ...]`; `changes: tuple[ProposedFileChange, ...]`; `explanation: str`; `delivery: GuidanceDeliveryReceipt \| None`; `usage: tuple[AgentUsage, ...]`; `run_ids: tuple[RecordId, ...]`; `evaluation_ids: tuple[EvidenceId, ...]`; `diagnostics: tuple[Diagnostic, ...]` | Untrusted proposal/evidence references, not authority. Completed managed result requires matching delivered bundle. Cross-attempt/late cancelled results cannot advance work. |
+| `AgentCancellation` | `task_id`, `attempt_id`: RecordId; `outcome: Literal["requested", "acknowledged", "terminal", "unknown"]`; `child_run_ids: tuple[RecordId, ...]`; `diagnostics: tuple[Diagnostic, ...]` | Cancels assistant task, not automatically every experiment run. Explicit child-work disposition is recorded; late results cannot bypass stop decision. |
+
+Proposed replacement for the conceptual synchronous AgentAdapter.execute contract:
+
+```python
+class AgentAdapter(Protocol):
+    def capabilities(self) -> AgentCapabilities: ...
+    def submit(self, task: AgentTask) -> AgentTaskHandle: ...
+    def status(self, task_id: str, attempt_id: str) -> AgentTaskStatus: ...
+    def result(self, task_id: str, attempt_id: str) -> AgentResult: ...
+    def cancel(self, task_id: str, attempt_id: str) -> AgentCancellation: ...
+```
+
+Constructor takes verified AgentIntegrationSpec and project_root; secret credentials
+are resolved out of band. submit durably binds attempt/input/adapter identity;
+duplicate identical submissions return same handle, conflicting payloads fail.
+status/result poll without resubmitting; unavailable/incomplete result raises
+AgentError with safe pending/unknown code, retaining task evidence. Adapter may
+stage changes only inside authorized workspace; result does not approve them.
+`agents.adapters.FirstManagedAgentAdapter` is the first concrete implementation
+slot with exactly this constructor/method contract, no extra public attributes.
+Product selection remains explicit decision M4-D2 below, not claimed supported.
+
+Interactive external assistants need no adapter: installed CLI/API operations and
+preserved bundle presentation suffice, with the same experiment access/admission
+controls. Toolkit cancellation cannot promise to stop an externally owned session.
+
+### Delegated proposals and controlled file changes
+
+Owners `agents.decisions`, `agents.notebooks`, `components.permissions`;
+US-04-AC-01–04, US-07-AC-01–04, US-17-AC-01–04.
+
+| Type | Required attributes | Constraints and authority |
+|---|---|---|
+| `DecisionProposal` | `field: str`; `value: JSONValue`; `rationale: str`; `source_plan_id: EvidenceId`; `task_id`, `attempt_id`: RecordId | Only explicitly delegated fields; nonblank rationale and schema-valid proposed values. Undelegated scientific decisions cannot be overwritten. |
+| `DecisionProposalRequest` | ProjectContext; `source_plan_id: EvidenceId`; `result: AgentResult`; `destination: Path` | Preserve original input bytes, write revised proposed inputs at explicit new location, never alter original evidence. |
+| `DecisionProposalResult` | `source_plan_id: EvidenceId`; `proposed_plan: PlanResult`; `input_artifacts: tuple[ArtifactRef, ...]`; `diagnostics: tuple[Diagnostic, ...]` | Reuse resolver schemas and approval semantics; source/resolved versions retained. Proposed delegated decisions remain blocked until existing approve_plan records match. |
+| `ProposedFileChange` | `path: str`; `operation: Literal["create", "replace", "delete"]`; `expected_before: EvidenceId \| None`; `after: ArtifactRef \| None`; `component_id: str \| None` | Root-relative safe project path. Create requires absent before; replace/delete require exact prior hash. Delete has after None; other operations require captured content. Reject toolkit install/source and unauthorized paths. |
+| `NotebookRevisionRequest` | ProjectContext; `plan_id`, `bundle_id`: EvidenceId; `result: AgentResult`; `authorization_id: RecordId`; `component_permission_ids: tuple[RecordId, ...]` | Verify active task/scope and file identities before applying; agent rationale cannot authorize changes. |
+| `NotebookRevision` | `revision_id`, `source_plan_id`, `new_configuration_id`: EvidenceId; `task_id`, `attempt_id`: RecordId; `files: tuple[ArtifactRef, ...]`; `checks: tuple[CheckResult, ...]`; `explanation: str` | Saved notebook/helper snapshot with Markdown objectives/assumptions/code/results/next steps and tagged parameter cell. No hidden unsaved state. Results narrative remains unverified until managed run/evaluation. |
+| `ComponentChangeRequest` | `project_root: Path`; `plan_id: EvidenceId`; `component_id: str`; `before_code: tuple[ArtifactRef, ...]`; `proposed_changes: tuple[ProposedFileChange, ...]`; `reviewer`, `reason`: str | Exact immutable code identities and narrowly proposed changes; no blanket algorithm/data/metric expansion. Nonblank reviewer/reason. |
+| `ComponentChangeApproval` | `approval_id: RecordId`; project/experiment IDs; `plan_id: EvidenceId`; `component_id: str`; `changes_id: EvidenceId`; `reviewer`, `reason`, `recorded_at`: str; `authentication: Literal["none"]` | Permission matches hashed proposed changes. Default absent permission denies immutable writes. Pinned dependency change requires a new locked dependency identity, never editing site-packages in place. |
+
+`agents.decisions.record_proposals(request: DecisionProposalRequest) -> DecisionProposalResult`;
+`components.permissions.approve_component_change(request: ComponentChangeRequest) -> ComponentChangeApproval`;
+`agents.notebooks.apply_revision(request: NotebookRevisionRequest) -> NotebookRevision`.
+apply_revision validates notebook structure, parameter cells, public toolkit/project
+imports and no obvious checkout-path dependencies, but actual fresh-kernel execution
+is still required. Compare all expected-before hashes before any file publication;
+stage files privately and publish a versioned revision record only when complete.
+Interrupted application is marked incomplete for review; do not claim a cross-file
+atomic transaction. Authorized modified code always creates new configuration
+identity and new captured source before execution. New configuration identity is
+the immutable revision payload hash plus source inputs; resolve/validate it through
+existing services before dependent use, never treat a hash as approval.
+
+The workspace boundary must prevent direct agent tools from bypassing this service.
+Immutable originals are read-only; authorized edits occur in a new approved working
+copy. Appending a post-hoc checksum is not write prevention. US-03-SC-01 supersedes
+#37's older authenticated/agent-authored-approval rejection assurance for this
+version: correct scope matching is required, reviewer authenticity is not promised.
+Data/workspace isolation and toolkit development gates remain mandatory.
+
+### Interactive kernels and bounded development iteration
+
+Owners `interactive`, `agents.iteration`; US-08-AC-01–04, US-22-AC-01–05.
+
+| Type | Required attributes | Constraints and lifecycle |
+|---|---|---|
+| `InteractiveKernelRequest` | ProjectContext; `plan_id`, `environment_id`: EvidenceId; `authorization_id: RecordId`; `working_directory: str` | Locked project environment, declared ipykernel dependency, explicit authorized cwd; no protected-test/evaluator credentials. |
+| `InteractiveKernelSession` | `session_id: RecordId`; `environment_id`, `plan_id`: EvidenceId; `connection_reference: str`; `status: Literal["running", "stopped", "needs_review"]`; `isolation_evidence: tuple[ArtifactRef, ...]` | Nonsecret reference to protected local connection settings; never publish raw kernel tokens. VS Code connection documented separately; no acceptance effect. |
+| `DevelopmentFeedback` | `feedback_id`, `evaluation_id`, `plan_id`: EvidenceId; `run_id: RecordId`; `findings: tuple[CheckResult, ...]`; `score: float \| None`; `recommendations: tuple[str, ...]` | Only verified development-phase EvaluationReport can generate feedback; reject final-phase evidence or derived protected-test recommendations. |
+| `IterationPolicy` | `max_iterations`, `patience`: int; `minimum_gain: float`; `criteria_id: EvidenceId`; `workflow_phase: str` | Positive counts, finite nonnegative gain in metric's approved direction. Stagnation means patience consecutive independently valid comparisons below minimum_gain; invalidity never counts as improvement. |
+| `IterationRequest` | ProjectContext; `iteration_id: RecordId`; `integration_id: str`; `plan_id`, `bundle_id`: EvidenceId; `initial_feedback_id: EvidenceId`; `authorization_id: RecordId`; `policy: IterationPolicy`; `agent_budget: AgentBudget` | Caller supplies a fresh UUID so cancellation can target active work before the blocking improve call returns. Persist identity before first task; identical retry reconciles existing work, conflicting request fails. One approved workflow phase only; independent toolkit budgets and no implicit phase return/acquisition. |
+| `IterationStep` | `index: int`; `task_id`, `attempt_id`: RecordId; `feedback_id: EvidenceId`; `revision_id: EvidenceId \| None`; `run_id: RecordId \| None`; `evaluation_id: EvidenceId \| None`; `usage: tuple[AgentUsage, ...]` | Nonnegative index; preserve unsuccessful/partial attempts and consumed budgets. No duplicate acceptance/accounting after uncertain adapter responses. |
+| `IterationResult` | `iteration_id: RecordId`; `plan_id`, `bundle_id`: EvidenceId; `steps: tuple[IterationStep, ...]`; `stop_reason: Literal["success", "budget_exhausted", "stagnation", "failed", "policy_violation", "cancelled", "awaiting_approval", "needs_review"]`; `diagnostics: tuple[Diagnostic, ...]` | Success is development criteria met, not final model acceptance. Stop at configured max iterations as budget_exhausted. Unknown work remains needs_review, never silently retried. |
+
+`interactive.start_kernel(request: InteractiveKernelRequest) -> InteractiveKernelSession`;
+`interactive.stop_kernel(*, project_root: Path, session_id: str) -> InteractiveKernelSession`;
+`agents.iteration.prepare_feedback(*, project_root: Path, evaluation_id: EvidenceId) -> DevelopmentFeedback`;
+`agents.iteration.improve_experiment(request: IterationRequest) -> IterationResult`;
+`agents.iteration.cancel_iteration(*, project_root: Path, iteration_id: str) -> IterationResult`.
+start/stop session state is durable and safe to inspect after interruption; unknown
+termination remains needs_review. Interactive training cells call M3 train_model
+and common validation/admission rather than training in unrestricted kernel memory.
+Interactive work must be saved, recaptured and run managed before any acceptance.
+Record VS Code/extensions/kernel/interpreter versions in manual verification.
+
+The iteration service polls the adapter, validates the result, applies authorized
+revision, invokes M1/M3 managed execution/evaluation and constructs next feedback.
+It independently checks success against frozen criteria, stops on every listed
+condition, and preserves per-step task/run/guidance/configuration identities.
+Cancellation requests task cancellation and records separate child-run cancellation
+outcomes through M1 runner; it cannot label unconfirmed work terminated. Results
+from old/cancelled attempts are retained as evidence but cannot advance iteration.
+Persist active attempt and consumed usage before additional work; uncertainty
+requires review. Full multi-phase orchestration/recovery ownership/fencing is M5,
+not a prerequisite for preserving M4 single-phase evidence and safe stopping.
+
+### Errors, unresolved integration mechanisms and verification
+
+Proposed GuidanceError, AgentError, DecisionError, RevisionError,
+ComponentPermissionError, InteractiveError and IterationError use M1 constructor
+`(code: str, message: str, *, evidence_ids: tuple[EvidenceId, ...] = ())`.
+They have no operational methods. Validation/permission/visible conflict failures
+block dependent work with safe diagnostics; transport/tool/storage failures retain
+causes and evidence. No exception authorizes automatic resubmission, broader access
+or fabricated completion. Partial task/run outcomes remain explicitly reviewable.
+
+**M4-D1 — blocked implementation decision, ADR-006; owner US-08/17/30 gates.**
+Choose and verify assistant-process/tool/workspace and interactive-kernel isolation,
+including immutable source mounts, allowed generated writes, evaluator/holdout
+separation and credential access. A restricted notebook subprocess alone does not
+restrict assistant tools. Fail closed when required isolation cannot be established;
+do not describe unrestricted local assistants as protected solely by instructions.
+
+**M4-D2 — blocked implementation decision, ADR-002; owner US-30 gate.** Select
+the first concrete managed product/interface/version and verify capabilities with
+that exact release before implementing FirstManagedAgentAdapter. Store the selection
+and end-to-end evidence in AgentIntegrationSpec. This blueprint defines the software
+slot and interface; it does not invent a supported product or claim a generic
+adapter satisfies US-30-AC-01. Second-adapter interchangeability is M5.
+
+```mermaid
+sequenceDiagram
+    participant U as Developer
+    participant G as Guidance and approved scope
+    participant A as Verified agent adapter
+    participant R as Revision admission
+    participant X as Managed execution
+    participant E as Independent development evaluator
+    U->>G: Select preserved bundle and approved phase
+    G->>A: Deliver bounded task with exact bundle
+    A->>R: Return proposals and authorized project changes
+    R->>G: Check delegated fields permissions and current scope
+    R->>X: Capture and execute validated saved revision
+    X->>E: Assess preserved run evidence
+    E->>A: Development feedback only
+    Note over A,E: No protected final-test feedback
+    A-->>U: Stop at approval boundary or terminal condition
+```
+
+Future installed-project verification must demonstrate one real verified adapter
+receiving task/guidance, editing notebook/helpers, invoking managed execution,
+consuming structured development feedback and stopping at developer gate. Exercise
+capability/version rejection, unsupported mandatory usage limits, duplicate/uncertain
+submission, task versus run cancellation and late-result rejection. Record actual
+usage coverage and external-context limitations, not inferred complete context.
+
+Test shared/task/project guidance order and exact snapshot delivery, exclusion of
+both development AGENTS.md trees, live-file drift/restoration, explicit conflicts
+and rejected constraint expansion. Test delegated versus fixed decisions, source
+lineage and pending/stale approvals. Test readable Markdown/parameter cells,
+installed imports, saved fresh-kernel replay and required helper capture. Attempt
+immutable dependency/project/toolkit writes and arbitrary Python/tool/kernel
+holdout/credential reads outside toolkit calls; require actual denial. Approved
+code changes create new configuration without broadening algorithm/data/metric scope.
+Verify every iteration stop reason, scoped phase-return blocking, consumed budgets
+and preserved snapshots/evaluations. VS Code manual checks remain explicit platform
+evidence, not inferred from automated kernel execution. No product tests run for
+this documentation phase; mechanisms and concrete product remain explicit blockers.

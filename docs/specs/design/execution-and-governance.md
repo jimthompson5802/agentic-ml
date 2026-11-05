@@ -82,7 +82,7 @@ Milestone 1 provides this restoration path without an agent. Demonstrate it in a
 
 The [Milestone 3 software blueprint](software-blueprint.md#milestone-3-training-tuning-and-independent-evaluation)
 provides proposed model, tuning, checkpoint, evaluator and reporting contracts.
-Its IP3 approval gate is pending; these contracts do not imply implemented APIs.
+Its IP3 approval gate is approved; these contracts do not imply implemented APIs.
 
 1. **Execution correctness:** code completes and expected artifacts exist.
 2. **Scientific validity:** split boundaries, preprocessing fitting, and leakage rules are respected.

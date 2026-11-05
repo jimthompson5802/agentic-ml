@@ -1,8 +1,42 @@
 # Development Checkpoints
 
-Last updated: 2026-11-04 (UTC)
+Last updated: 2026-11-05 (UTC)
 
-## Current software blueprint IP3 review — 2026-11-04
+## Milestone 6 issue publication — 2026-11-05
+
+At developer request, created feature issues from the local M6 stories using the
+repository user-story template: [US-28 #54](https://github.com/jimthompson5802/agentic-ml/issues/54)
+and [US-29 #55](https://github.com/jimthompson5802/agentic-ml/issues/55).
+Checked open/closed issues and story searches before publication. Verified exact
+published bodies, enhancement labels and all 11 unchanged acceptance criteria;
+removed only task-owned temporary issue files after verification. No implementation
+or phase progression authorized by issue creation. IP4 remains awaiting developer
+approval; prior blueprint state and uncommitted documentation preserved.
+
+## Current software blueprint IP4 review — 2026-11-04
+
+Developer “i approve ip4; commit and start ip5” approved IP4 on 2026-11-05 UTC,
+authorizing commit before IP5. Recording approval and committing reviewed M4
+documentation plus the M6 issue publication checkpoint; next action IP5.
+No push or PR requested. Earlier pending approval statements are historical.
+
+Developer “i approve ip3; commit and start ip4” approved IP3, committed first as
+`7b00662`, then authorized IP4. On `embellish-software-component-descriptions`,
+IP4 T1–T5 complete in [plan](docs/plans/software-blueprint.md), with
+[evidence](docs/verification/software-blueprint-ip4.md). Added M4 catalogue:
+32 table types/status alias, 10 service functions, proposed five-method AgentAdapter,
+first concrete adapter slot and seven errors; all 26 criteria mapped. Issues
+#34–39 bodies/all comment pages/refreshed metadata stable, zero comments.
+#37's older authentication assurance explicitly superseded by US-03-SC-01.
+
+Checks pass: 65 local links/anchors, type/function/criterion inventory, four Mermaid
+parses and whitespace. No executable changes/tests, lockfile edits or support
+claims. M4-D1 assistant/kernel isolation and M4-D2 first concrete product/interface/
+version remain implementation blockers. Uncommitted work: blueprint/plan/overview,
+interfaces/execution links, IP4 report and this checkpoint. IP4 approval pending;
+next action review, await approval before IP5. No IP4 commit/push/PR requested.
+
+## Historical software blueprint IP3 review — 2026-11-04
 
 Developer “i approve ip3; commit and start ip4” approved IP3 and authorized commit
 before IP4. Recording approval and committing reviewed M3 documentation first;

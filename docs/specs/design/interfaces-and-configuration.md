@@ -293,6 +293,11 @@ Milestone 4 adds toolkit-managed agent proposals and iteration. The agent propos
 
 ### Development and runtime agent instructions
 
+The [Milestone 4 software blueprint](software-blueprint.md#milestone-4-bounded-agent-integration)
+specifies proposed typed task, guidance, revision and iteration contracts. Its IP4
+gate is pending; product/interface selection and isolation mechanisms are explicit
+implementation blockers, not verified integrations.
+
 Use `AGENTS.md` for coding agents and ML experiment agents, with separate repository ownership and an explicit audience in each file. Ship default runtime guidance as resources in the installable toolkit distribution; the paths below identify their locations in the toolkit source repository.
 
 | Instruction location | Audience and scope |

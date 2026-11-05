@@ -103,6 +103,26 @@ commit followed by IP4 execution. Earlier pending statements are historical.
 Review proposed contracts, protocol replacements and M3-D1 enforcement blocker;
 stop before IP4. No IP3 commit/push/PR requested.
 
+### IP4 execution record
+
+Developer “i approve ip3; commit and start ip4” approved IP3 and authorized its
+commit before IP4. Baseline commit `7b00662` completed first. Scope remains
+documentation-only, with the same detail/completeness standard.
+
+| Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
+|---|---|---|---|---|---|
+| IP4-T1 | Complete | Retrieve #34–39 bodies/all comments, refresh metadata, reconcile design | IP3 approval/commit | Complete source discussion, scope exceptions explicit | All M4 slices below |
+| IP4-T2 | Complete | Delegation/notebooks/guidance/immutability/interactive/iteration contracts | T1 | Required fields, types, lifecycle and enforcement ownership | US-04-AC-01–04; US-07-AC-01–04; US-08-AC-01–04; US-17-AC-01–04; US-22-AC-01–05 |
+| IP4-T3 | Complete | Typed adapter task/capability/result/cancel/usage contract | T2 | Explicit replacement of synchronous conceptual protocol; first-product blocker recorded | US-30-AC-01–05 |
+| IP4-T4 | Complete | Feedback-loop diagram and document checks | T2/T3 | Diagrams parse and links/whitespace pass | All M4 slices |
+| IP4-T5 | Complete | Inventory, reference closure and criterion checklist | T4 | Complete classes/functions and all 26 criteria mapped | All M4 slices |
+
+**IP4 developer approval: Approved, 2026-11-05 (UTC).** Developer “i approve ip4;
+commit and start ip5” authorizes commit before IP5 execution. Review covered proposed interfaces and public
+verification boundaries, M4-D1 assistant/kernel isolation and M4-D2 concrete
+product/interface/version selection blockers. [IP4 evidence](../verification/software-blueprint-ip4.md)
+records checks and limitations. Stop before IP5; no IP4 commit/push/PR requested.
+
 ### Mandatory detail and completeness standard for IP2–IP6
 
 Use the M1 ExperimentSpec definition and M1 record catalogue as the minimum
@@ -137,7 +157,7 @@ Each phase must produce a completeness checklist in its verification report:
 Add these stable tasks to the existing sequences below: IP2-T5, IP3-T5, IP4-T5,
 IP5-T6 and IP6-T6 each perform their phase's inventory, detail, reference-closure,
 cross-milestone and criterion checklist review after all other tasks in that phase.
-IP2-T5 and IP3-T5 are Complete as recorded above; the other three tasks are **Not started**.
+IP2-T5, IP3-T5 and IP4-T5 are Complete as recorded above; IP5-T6 and IP6-T6 are **Not started**.
 IP6-T6 also verifies the combined M1–6 inventory
 and is the final verification owner, extending IP6-T5's document checks.
 
@@ -153,7 +173,7 @@ documentation completion criteria without authorizing executable work or advanci
 past IP1. Existing historical evidence is preserved; IP1 approval remains pending.
 
 Each row below preserves the planned sequence. IP2 completion is recorded above;
-IP3 completion is recorded above; IP4–IP6 remain **Not started / Pending**.
+IP3/IP4 completion is recorded above; IP5–IP6 remain **Not started / Pending**.
 Entry condition is approval of the preceding phase.
 
 | Phase | Ordered tasks | Completion and gate |
