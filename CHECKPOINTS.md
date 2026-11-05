@@ -2,7 +2,34 @@
 
 Last updated: 2026-11-04 (UTC)
 
-## Current software blueprint IP1 review — 2026-11-04
+## Current software blueprint IP2 review — 2026-11-04
+
+Developer “i approve ip2, commit then start ip3” approved IP2 and authorized
+commit before IP3. Recording approval and committing M2 documentation first;
+next action is IP3. Earlier pending-gate statements below are historical.
+No push or PR requested.
+
+Developer approved IP1 and directed commit first, then IP2. Committed approved
+M1 documentation as `a475835` on `embellish-software-component-descriptions`.
+IP2 tasks T1–T5 are complete in the [plan](docs/plans/software-blueprint.md);
+[evidence](docs/verification/software-blueprint-ip2.md) records source reconciliation,
+inventory/detail/reference closure and all 22 M2 criterion mappings. Blueprint
+adds 33 proposed table types, preprocessing/reference-estimator protocols, errors,
+services and lifecycle diagram. Issues #19–23 full bodies/all comment pages and
+metadata refreshed: stable, zero comments. M2-D1 holdout isolation remains a
+blocking implementation decision. No executable changes or runtime verification.
+
+Both Mermaid fences parse. Document checks pass: 48 local links/anchors, 33 type
+inventory entries, 22 criteria, whitespace. Initial inventory check rejected
+abbreviated paired record names in evidence; expanded names and renewed check
+passes. Changes since commit: blueprint, plan, overview/data-feature links, IP2
+report and this checkpoint. IP2 approval pending; next action is developer review,
+then await authorization before IP3. No IP2 commit/push/PR requested.
+At developer request, clarified that M2 proposes replacing FeatureEngineeringAdapter
+with authored FeaturePlan and execute/compare services, rather than implementing
+the original protocol. Explicit replacement mapping added; IP2 gate still pending.
+
+## Historical software blueprint IP1 review — 2026-11-04
 
 Developer “i approve ip1, coomit firs then move to ip2” approved IP1 and authorized
 commit before IP2 execution. Recording approval and committing the reviewed

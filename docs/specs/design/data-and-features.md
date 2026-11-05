@@ -52,6 +52,11 @@ The predicted benefit is a hypothesis, not a guarantee. Compare before/after tra
 
 ## 7. Feature Engineering
 
+The [Milestone 2 software blueprint](software-blueprint.md#milestone-2-assessment-features-and-pipeline-reuse)
+provides proposed typed contracts for assessment/splits, preprocessing,
+feature comparison and stage reuse. Its IP2 gate remains pending; the product
+requirements here do not imply those APIs are implemented.
+
 The feature engineering engine must:
 
 - Propose and execute missing-value handling, encoding, scaling, feature construction, selection, and dimensionality reduction.

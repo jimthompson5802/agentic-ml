@@ -58,6 +58,28 @@ results explicitly refine the conceptual protocol. IP1 gate remains pending.
 
 ## Remaining phases
 
+### IP2 execution record
+
+Entry: IP1 committed as `a475835` before IP2 began, as directed by developer
+“i approve ip1, coomit firs then move to ip2”. This authorizes IP2 only; IP3 awaits
+its separate gate. The earlier IP1 pending statements are historical snapshots.
+
+| Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
+|---|---|---|---|---|---|
+| IP2-T1 | Complete | Retrieve #19–23 bodies/comments and reconcile M2 source contracts | IP1 approval/commit | Complete discussions, stable metadata and scope recorded | All M2 slices below |
+| IP2-T2 | Complete | Blueprint assessment/splits, preprocessing and pipeline records/services | T1 | Concrete types/constraints/lifecycle and ownership | US-12-AC-02–04; US-15-AC-01–04; US-16-AC-01–05; US-27-AC-05–09 |
+| IP2-T3 | Complete | Fixed estimator and feature comparison protocol | T2 | Approved baseline/settings/metric/split bindings and distinct outcomes | US-14-AC-01–05 |
+| IP2-T4 | Complete | Fit/transform/restore diagram and document checks | T2/T3 | Diagram parses; checks recorded | All M2 slices |
+| IP2-T5 | Complete | Inventory/detail/reference/coverage checklist | T4 | Evidence checklist passes; implementation blocker explicit | All M2 slices |
+
+**IP2 developer approval: Approved, 2026-11-04.** Developer “i approve ip2,
+commit then start ip3” approved the M2 contracts and directed commit before IP3.
+Review covered the proposed M2 software contracts,
+public test boundaries and explicit M2-D1 isolation blocker in the
+[IP2 evidence](../verification/software-blueprint-ip2.md). No executable acceptance
+claimed. Next action: developer review; stop before IP3. No IP2 commit or push
+authorized by the IP1-only commit instruction.
+
 ### Mandatory detail and completeness standard for IP2–IP6
 
 Use the M1 ExperimentSpec definition and M1 record catalogue as the minimum
@@ -92,7 +114,8 @@ Each phase must produce a completeness checklist in its verification report:
 Add these stable tasks to the existing sequences below: IP2-T5, IP3-T5, IP4-T5,
 IP5-T6 and IP6-T6 each perform their phase's inventory, detail, reference-closure,
 cross-milestone and criterion checklist review after all other tasks in that phase.
-All five tasks are **Not started**. IP6-T6 also verifies the combined M1–6 inventory
+IP2-T5 is Complete as recorded above; the other four tasks are **Not started**.
+IP6-T6 also verifies the combined M1–6 inventory
 and is the final verification owner, extending IP6-T5's document checks.
 
 Missing definitions or checklist failures leave the affected contract tasks and
@@ -106,8 +129,8 @@ approved recording this standard for all remaining milestones. This strengthens
 documentation completion criteria without authorizing executable work or advancing
 past IP1. Existing historical evidence is preserved; IP1 approval remains pending.
 
-Each row is an ordered task sequence. All statuses and developer gates are
-**Not started / Pending**. Entry condition is approval of the preceding phase.
+Each row below preserves the planned sequence. IP2 completion is recorded above;
+IP3–IP6 remain **Not started / Pending**. Entry condition is approval of the preceding phase.
 
 | Phase | Ordered tasks | Completion and gate |
 |---|---|---|
