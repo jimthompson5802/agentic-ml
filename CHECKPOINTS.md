@@ -2,6 +2,17 @@
 
 Last updated: 2026-11-05 (UTC)
 
+## Blueprint formatting correction — 2026-11-05
+
+Developer requested `uv run --locked ruff format --check .` and fixes. Initial
+check found one unformatted file: Python fences in the software blueprint.
+Ran `uv run --locked ruff format docs/specs/design/software-blueprint.md`;
+renewed exact full check passes, 161 files already formatted. `git diff --check`
+passes. Documentation formatting only; no executable behavior or lock change.
+Developer “commit and push” authorized committing the blueprint formatting fix
+and this checkpoint and pushing to the existing PR #56 branch.
+Next action: developer PR review. No merge requested.
+
 ## Current software blueprint IP6 final review — 2026-11-05
 
 Developer “push and create pull request” authorized publication. Pushed approved
