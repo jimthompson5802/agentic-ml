@@ -2,6 +2,40 @@
 
 Last updated: 2026-11-04 (UTC)
 
+## Current software blueprint IP1 review — 2026-11-04
+
+Developer “i approve ip1, coomit firs then move to ip2” approved IP1 and authorized
+commit before IP2 execution. Recording approval and committing the reviewed
+documentation; next action is IP2. Earlier pending-gate statements below are
+historical. No push or PR requested.
+
+Developer “Implement the plan” authorized documentation work through IP1, with
+separate later phase gates. Created `embellish-software-component-descriptions`
+first, from clean `main` at `59e4beb`. Added the
+[plan](docs/plans/software-blueprint.md),
+[M1 blueprint](docs/specs/design/software-blueprint.md),
+[evidence](docs/verification/software-blueprint-ip1.md) and design navigation links.
+Issues #8–18 bodies/comment pages/metadata refreshed; all zero comments, stable.
+No executable changes, dependency changes or tests; document checks only.
+M1-D1 isolation remains an explicit owning-story decision. IP1 developer gate
+review refinement now specifies ExperimentSpec fields, construction, manifest
+authority, immutability and submission checks at developer request. Document-only.
+Developer “i agree complete m1 first” authorized extending the same precision to
+all M1 public and referenced records. Catalogue now includes existing fields and
+defaults plus proposed types/methods/lifecycle/negative cases, with explicit
+later-milestone deferrals. Document checks renewed; no executable changes.
+IP1 gate remains pending; next action is review, then await approval before IP2.
+No commit/push/PR.
+Developer “make that update to the plan” authorized recording the M1 detail
+standard for IP2–IP6. The plan now requires per-phase type inventories, complete
+contract descriptions, reference closure, cross-milestone reconciliation and
+criterion checklists, with explicit completeness tasks at every remaining gate.
+Documentation-only plan refinement; IP1 approval still pending, IP2 unstarted.
+Fixed developer-reported Mermaid parse failure: reproduced line-20 error, removed
+semicolon from sequence note, and verified the same cached Mermaid parser passes.
+Attempt 1 successful; whitespace passes. Evidence appended to IP1 report.
+Historical executable evidence and milestone obligations below remain unchanged.
+
 ## Current US-05 accepted — PR #53 squash merged — 2026-11-04
 
 On `US-05-configuration-validation`, baseline `3eefd55`, developer “start ip3”

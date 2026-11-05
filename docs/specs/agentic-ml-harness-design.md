@@ -10,6 +10,10 @@
 
 Start with this overview for scope, architecture, and workflow phases. Before implementing a capability, read its topic documents below and follow their related-contract links for affected behavior. Read the applicable milestone, acceptance-criteria mapping, and accepted or pending architecture decisions as well.
 
+For concrete software ownership and public API contracts, read the
+[software implementation blueprint](design/software-blueprint.md). Its Milestone 1
+revision is an IP1 review draft; later milestones await separate approval gates.
+
 GitHub issues govern implementation scope and recorded scope decisions. [User stories](user-stories.md) define product requirements and stable acceptance-criterion IDs. This design and its topic documents provide supporting contracts; examples remain proposed unless explicitly settled. Resolve conflicts before implementing affected behavior.
 
 | Task or question | Required topic documents |

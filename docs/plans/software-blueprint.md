@@ -1,0 +1,142 @@
+# Software blueprint documentation plan
+
+## Scope and decisions
+
+Source: developer conversation, 2026-11-04, “Implement the plan.” Documentation
+maintenance across M1–6; no invented story ID or executable delivery. Use the
+[planning template](../templates/user-story-implementation-plan.md) task/gate
+conventions. Branch: `embellish-software-component-descriptions`, created as the
+first execution step. Initial working tree clean. Plan approved by execution
+request; every implementation gate remains separately pending.
+
+Deliver [software blueprint](../specs/design/software-blueprint.md), overview/topic
+links, reconciled interface status and criterion ownership. Each entry records
+module, APIs/types/errors, inputs/outcomes, authorization/enforcement, persistence,
+recovery, verification boundaries and implemented/accepted/proposed/blocked status.
+Preserve accepted interfaces and issue decisions. Changes to governed scope use
+[manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md).
+
+## IP1 — Inventory and Milestone 1
+
+| Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
+|---|---|---|---|---|---|
+| IP1-T1 | Complete | Create requested branch; inspect working tree | None | Correct branch, clean initial tree | Documentation requirement |
+| IP1-T2 | Complete | Save this plan; inventory exports, schemas and accepted contract reports | T1 | Existing/proposed distinctions in blueprint | M1 criteria below |
+| IP1-T3 | Complete | Retrieve issues #8–18 including all comments and refresh metadata | T2 | M1 source reconciliation | M1 criteria below |
+| IP1-T4 | Complete | Establish blueprint format and criterion matrix | T3 | All M1 criterion slices assigned | M1 criteria below |
+| IP1-T5 | Complete | Describe existing and proposed M1 components | T4 | Public contracts and explicit blocking decision | M1 criteria below |
+| IP1-T6 | Complete | Add execution interaction diagram and document checks | T5 | Reviewable execution/evidence flow | M1 criteria below |
+
+Criteria: US-01-AC-01–04, US-02-AC-01–05, US-03-AC-01–05,
+US-05-AC-01–05 (future entrypoints retain integration obligations),
+US-09-AC-01–05, US-10-AC-01–05, US-11-AC-01–05,
+US-12-AC-01/05, US-13-AC-01–04, US-26-AC-01–05, US-27-AC-01–04.
+Mapping is design coverage, never executable acceptance.
+
+**IP1 developer approval: Approved, 2026-11-04.** Developer “i approve ip1,
+coomit firs then move to ip2” approves IP1, authorizes its commit first, and then
+IP2 execution. Review covered concrete proposed contracts, ownership,
+verification boundaries and M1-D1 isolation blocker. Stop before IP2. Scope-change
+history: None. Exact future wire schemas and isolation mechanism require owning
+story contract gates; this documentation does not authorize implementation.
+
+### IP1 requested refinement
+
+Developer “can you make it more precise” requested explicit ExperimentSpec
+attributes and responsibilities. Refined IP1-T5 within existing scope: required
+fields/types, manifest authority, immutable nested parameters, preparation and
+submission checks, and failure cases. Documentation checks renewed; IP1 approval
+remains pending and IP2 remains unstarted. No executable API implemented.
+
+Developer “i agree complete m1 first” further requested the same precision for
+all remaining M1 public classes and referenced request/result types. IP1-T5 now
+includes the complete M1 record catalogue: implemented field/default inventory,
+proposed field/type/constraint tables, service methods, lifecycle and verification
+scenarios. This refines the existing deliverable without adding executable scope
+or advancing IP2. Existing source contracts are preserved; proposed typed runner
+results explicitly refine the conceptual protocol. IP1 gate remains pending.
+
+## Remaining phases
+
+### Mandatory detail and completeness standard for IP2–IP6
+
+Use the M1 ExperimentSpec definition and M1 record catalogue as the minimum
+detail standard. This requirement applies to each remaining phase's contract
+tasks and developer approval gate, not only to final reconciliation.
+
+For each class, protocol, request/result type, exception and nested record:
+
+- Record purpose, owning module, milestone, story and acceptance-criterion IDs.
+- Specify every attribute's exact type, required/optional status, default and
+  constraints; distinguish nullable values from omitted fields.
+- Specify method signatures, construction/preparation boundaries, observable
+  outcomes, errors and side effects. Explicitly state when records have no methods.
+- Define validation, immutability, serialization, persistence, identity/version,
+  lifecycle, authorization and recovery rules where applicable. Mark inapplicable
+  items with a reason rather than leaving ambiguous omissions.
+- Identify authoritative records, cross-record bindings, dependencies and
+  verification scenarios, including relevant failure and boundary cases.
+- Distinguish implemented, accepted, proposed and blocked contracts. Preserve
+  accepted behavior; explicitly document extensions and incompatibilities.
+
+Each phase must produce a completeness checklist in its verification report:
+
+| Required evidence | Completion condition |
+|---|---|
+| Public type/interface inventory | Includes all types introduced by the phase, types mentioned only in signatures, nested records, aliases and relevant exceptions. Each item links to its definition. |
+| Detail checklist | Every inventory item satisfies the standard above or states a justified inapplicable item. |
+| Reference closure | Every referenced type is defined locally, linked to an earlier definition, or explicitly deferred with its owning milestone/story, reason and blocked work. An in-scope required type cannot be deferred merely to pass this check. |
+| Cross-milestone reconciliation | Earlier definitions are reused by reference; extensions, conflicting signatures, identity conventions and changed assumptions are explicitly reconciled. |
+| Criterion coverage | Every in-scope acceptance criterion maps to software owners, contract definitions and public verification scenarios. Mapping does not claim executable acceptance. |
+
+Add these stable tasks to the existing sequences below: IP2-T5, IP3-T5, IP4-T5,
+IP5-T6 and IP6-T6 each perform their phase's inventory, detail, reference-closure,
+cross-milestone and criterion checklist review after all other tasks in that phase.
+All five tasks are **Not started**. IP6-T6 also verifies the combined M1–6 inventory
+and is the final verification owner, extending IP6-T5's document checks.
+
+Missing definitions or checklist failures leave the affected contract tasks and
+completeness task unfinished. Do not present a phase as technically complete until
+its checklist passes and evidence is recorded. Each gate requires both the
+phase-specific deliverables below and this checklist; developer approval remains
+a separate explicit decision.
+
+**Plan refinement authorization:** Developer “make that update to the plan”
+approved recording this standard for all remaining milestones. This strengthens
+documentation completion criteria without authorizing executable work or advancing
+past IP1. Existing historical evidence is preserved; IP1 approval remains pending.
+
+Each row is an ordered task sequence. All statuses and developer gates are
+**Not started / Pending**. Entry condition is approval of the preceding phase.
+
+| Phase | Ordered tasks | Completion and gate |
+|---|---|---|
+| IP2 / M2 | T1 retrieve/reconcile owning issues; T2 assessment/splits, features, preprocessing registration/fit/persist/restore and pipeline reuse; T3 minimal estimator/evaluator contracts; T4 fitting/restoration diagram and checks | All M2 criterion slices mapped; developer approval |
+| IP3 / M3 | T1 retrieve/reconcile issues; T2 algorithm modes, supplied models/frameworks, tuning, checkpoints, holdout and reporting; T3 distinct execution/validity/quality/acceptance outcomes; T4 training/evaluation diagram and checks | All M3 slices mapped; developer approval |
+| IP4 / M4 | T1 retrieve/reconcile issues; T2 delegation/notebooks/guidance/immutability/interactive controls/iteration; T3 concrete agent task/result/capability/cancellation contracts and usage limitations; T4 feedback-loop diagram and checks | All M4 slices mapped; developer approval |
+| IP5 / M5 | T1 retrieve/reconcile issues; T2 orchestration/approvals/state/audit/adapters; T3 recovery/uncertainty/deduplication/accounting; T4 preserve unauthenticated exception and deferred authentication; T5 recovery diagram and checks | All M5 slices mapped; developer approval |
+| IP6 / M6 and final reconciliation | T1 retrieve/reconcile issues; T2 gap diagnosis/acquisition/limits/lineage/comparison/recovery; T3 acquisition diagram; T4 all nine protocols and all M1–6 criteria reconciled; T5 overview/topic stale wording, version/date/ADR references, final evidence and checkpoints | Complete coverage matrix, links and contract status checked; final developer acceptance |
+
+Every phase uses concrete proposed contracts for future software. Preserve issue
+scope and accepted APIs; resolve conflicts before affected contracts proceed.
+Existing topic documents own product rules; blueprint owns software seams.
+Keep M0/50/99 outside scope except prerequisite references. No commit, push or PR
+is authorized. Record actual progress, evidence and approval references; reopen
+invalidated tasks. Follow the repository three-attempt limit for failed fixes.
+
+## Verification and final acceptance
+
+Documentation-only: no new executable behavior, so TDD, runtime suites and artifact
+drivers do not apply under the [verification policy](../development/verification.md).
+Each phase checks links/anchors, source symbols/signatures, criterion coverage,
+success/failure/boundary scenarios, implemented versus proposed labels and
+`git diff --check`. Manual Mermaid review does not establish renderer validation.
+Record evidence in [IP1 report](../verification/software-blueprint-ip1.md), with
+later phase reports alongside it. Refresh checkpoints at handoff and gates.
+
+Final task IP6-T5 owns final document verification: every M1–6 criterion has a
+software owner, contract reference and public verification boundary; every original
+protocol is retained/refined/superseded explicitly; unresolved decisions have owners,
+affected criteria and blocked work. Preserve historical evidence, pending ADRs,
+platform limitations and separate milestone acceptance obligations. Final technical
+completion and developer acceptance remain separate. Actual final results: Pending.

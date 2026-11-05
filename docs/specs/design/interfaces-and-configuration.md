@@ -198,6 +198,10 @@ Run lineage preserves component declarations, exact project-code snapshots or pi
 
 ### Project initialization and installation
 
+The [software blueprint](software-blueprint.md) records implemented initialization,
+planning and validation interfaces and proposed remaining M1 software contracts.
+Historical examples below are not a current API inventory.
+
 Provide a documented bootstrap path starting with a vanilla Python interpreter and local raw data. Users first install `uv` and Git, then install the toolkit as a Python package directly from its GitHub repository into the user project's environment. Pin the Git dependency to a full commit SHA and use a normal package installation, rather than an editable installation. Package-registry distribution is future work.
 
 Users do not need to manually clone or maintain a toolkit working checkout. The installer may fetch the pinned source into its managed cache to build and install the package. Downloads require network access and, for a private repository, configured Git credentials; keep credentials outside committed configuration.
