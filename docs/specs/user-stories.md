@@ -1,22 +1,54 @@
-Planning terms follow the [repository terminology](../../README.md#planning-terminology): delivery milestones group user stories into usable product increments, Milestone 50 groups ongoing technical environment improvements, implementation phases group tasks within a story with developer approval gates, and workflow phases describe ML experiment execution.
+# User stories and delivery scope
 
-| Milestone | User-visible outcome | Stories |
+Planning terminology follows the [README](../../README.md#planning-terminology).
+
+**Scope revision:** MVP-SC-01 and MVP-SC-02 were approved at Gate 1 on 2026-11-06
+by “i approve gate 1 and authorize phase 2”. This Phase 2 local revision is pending
+Gate 2 review. Required behavior below does not imply new delivered capabilities.
+[Original dispositions](../reviews/mvp-scope-criterion-dispositions.md) preserve
+every original criterion, old milestone and displaced guarantee.
+
+**Transition boundary:** GitHub bodies and design 0.14 still describe the previous
+scope. Phase 3 reconciles design/developer instructions; Phase 4 publishes issues.
+This edit alone does not authorize product implementation against conflicting
+sources. Accepted APIs and historical evidence retain their original contracts.
+
+## Delivery milestones
+
+| Milestone | User-visible outcome | Stories / slices |
 |---|---|---|
-| **0. Establish the toolkit development foundation** | Set up this repository, run the toolkit from source, and verify contributor changes and distributable packages locally and in CI. | US-31, US-32, US-33 |
-| **1. Run and record a reproducible experiment** | Initialize a separate project, extract and validate data, execute a notebook, inspect its recorded results, and reproduce the run. | US-01, US-02, US-03, US-05, US-09, US-10, US-11, validation portion of US-12, US-13; initial US-26 and US-27 |
-| **2. Assess data and build reproducible feature pipelines** | Profile data, approve versioned splits, restore fitted feature pipelines and outputs, and compare predictive performance using a fixed approved reference estimator. | assessment/split portion of US-12; US-14, US-15; preprocessing portion of US-16; pipeline portion of US-27 |
-| **3. Train, tune, and independently evaluate models** | Compare baselines and candidate models within declared boundaries and obtain an independent assessment. | US-06, US-18, US-19, US-20, US-21, US-24; model portion of US-16; reporting portion of US-26 |
-| **4. Let an agent improve an experiment** | Generate reviewable notebooks and improve a model using development feedback within an approved workflow phase. | US-04, US-07, US-08, US-17, US-22; first-adapter portion of US-30 |
-| **5. Supervise and resume the complete workflow** | Run the workflow spanning multiple ML workflow phases with durable approvals, interruption recovery, and interchangeable agents. | US-23, US-25; second-adapter portion of US-30; audit portion of US-26 |
-| **6. Improve the dataset through authorized acquisition** | Diagnose a data limitation, authorize acquisition, version the resulting data, and measure the effect of retraining. | US-28, US-29 |
-| **50. Improve the technical environment** | Reduce development and verification overhead while preserving test isolation, coverage, and diagnostic evidence. Add stories as improvement areas are identified. | US-35, US-36, US-37, US-38 |
-| **99. Future enhancements** | Capture improvements deferred because they are not critical to current functionality. | US-34 |
+| **0. Establish the toolkit development foundation** | Accepted package, contributor checks and CI. | US-31–33; unchanged |
+| **1. Complete one experiment** | One local classification experiment: extraction, quality/splits, features, baseline, bounded tuning, final evaluation, MLflow records and native DVC stages; scientist-directed assistant demonstration. | Accepted US-01/02/03/05; M1 slices of US-10–15/18/20/21/24/26/27; US-39 AC-01–08 |
+| **2. Validate usability and reproduction** | Regression, custom components, saved notebooks, fitted-state restoration and clean committed-project reproduction with DVC cache/invalidation and assistant evidence. **MVP ends here.** | US-09/16; M2 slices of US-13/15/18/21/27/39; US-40 |
+| **Uncommitted roadmap** | Deferred platform capabilities without dates or delivery order; historical M3–6 are migration context. | Deferred criteria and displaced clauses below |
+| **50. Improve the technical environment** | Preserve accepted tooling and supporting backlog. | US-35–38; unchanged |
+| **99. Future enhancements** | Existing deferred contribution/review story. | US-34; unchanged |
 
-This document is the authoritative source of product and technical environment requirements and acceptance criteria. The original stories originated from version 0.10 of the [Agentic ML Development Toolkit design document](agentic-ml-harness-design.md); the design document now describes the supporting design and references the criteria defined here. Technical environment stories are added as improvement areas are identified. These requirements describe proposed behavior, not implemented capabilities or finalized interfaces.
+## MVP contracts and history
 
-Acceptance criteria use stable IDs of the form `US-<story>-AC-<criterion>`, such as `US-01-AC-01`. Criterion numbers are unique within a story and continue across milestones. Preserve IDs when wording changes or criteria move; assign the next unused number to a new criterion and never reuse a retired ID. Architecture references identify supporting design sections rather than defining another set of requirements.
-
-Milestones 0–6 are cumulative. Repeated story identifiers describe incremental delivery of the same user outcome. Access controls, applicable approvals, budget enforcement, independent validation, and provenance accompany each capability when introduced; Milestone 5 completes their durable orchestration across workflow phases. The acceptance criteria below define verifiable outcomes without settling its pending API, configuration-schema, or isolation-design decisions. Milestone 50 is an ongoing technical improvement backlog outside that product delivery sequence; its number does not prescribe when its stories are implemented.
+- Trusted local code, CPU scikit-learn, CSV/Parquet and project functions. MLflow
+  owns records/artifacts; DVC owns data versions, stage execution and cache.
+- Training-only preprocessing, recorded disjoint splits, consistent metrics and
+  separate final testing remain required. Seeded random splits or supplied time/
+  group-aware partitions are supported; no OS-protected holdout or universal
+  leakage assurance.
+- Scientists own external assistant sessions. Assistants edit project code and
+  invoke public toolkit interfaces/DVC, inspect results and make directed
+  validation-based revisions. Managed delegation/autonomous loops are deferred.
+- The basic path requires explicit valid settings and a trial cap, not mandatory
+  experiment approvals. Existing strict planning/approval APIs stay available.
+  Their historical acceptance is not proof that simpler execution exists yet.
+- Reproduction uses committed code/configuration, lockfiles, seeds and DVC data;
+  automatic arbitrary dirty/untracked-source replay is deferred.
+- Developer gates, public test-boundary review, TDD and verification requirements
+  remain. Do not weaken tests, erase historical evidence, or close outstanding
+  M1/M50 obligations through renumbering.
+- IDs are stable and unique across slices. Every original ID remains once;
+  reworded outcomes retain IDs and displaced clauses remain in the approved
+  matrix. Entirely deferred criteria retain original wording. New US-39/40
+  criteria have no implementation evidence.
+- Component stories own behavior tests; integration stories own interoperability
+  and assistant usability. Repeated story numbers denote distinct slices.
 
 <a id="milestone-0-establish-the-harness-development-foundation"></a>
 
@@ -72,15 +104,15 @@ Acceptance criteria:
 - <a id="us-33-ac-06"></a> **US-33-AC-06:** The Milestone 0 CLI provides `agentic-ml --version`, which prints the installed package version and exits successfully. The reported version matches the installed distribution metadata. Experiment commands are introduced in later milestones.
 - <a id="us-33-ac-07"></a> **US-33-AC-07:** The installed-package checks run `agentic-ml --version` for both the directly built wheel and the wheel rebuilt from the source distribution, verifying successful exit and the expected version. The documented source-checkout smoke check also runs `agentic-ml --version`.
 
-## Milestone 1: Run and record a reproducible experiment
+## Milestone 1: Complete one experiment
 
-Starting with Python and local raw data, the developer creates a separate experiment repository and completes an extraction-to-recorded-notebook run without requiring an agent or a manually maintained toolkit checkout. Developers may use an external coding assistant to prepare inputs and code and invoke the public toolkit CLI/API without an agent adapter; the toolkit must validate, record, and execute supplied inputs without an agent dependency. This milestone covers extraction, snapshots, basic validation and review, recorded execution, and restoration. Detailed profiling and train/validation/protected-test splits are introduced in Milestone 2; Milestone 1 versioning and restoration cover the source dataset and recorded run inputs.
-
-<a id="us-01-install-a-pinned-harness-version"></a>
+M1 exits when a separate installed project completes classification and ASW-01–06, with MLflow artifacts and a native DVC pipeline. Correctly recorded experiments may show no gain over baseline.
 
 ### US-01: Install a pinned toolkit version
 
 As a developer, I want to install a pinned toolkit version into my own experiment repository so that my project has a reproducible environment.
+
+**Existing accepted slice:** preserve its original contract/evidence. Default-path and future training integration work is separate.
 
 Acceptance criteria:
 
@@ -89,11 +121,13 @@ Acceptance criteria:
 - <a id="us-01-ac-03"></a> **US-01-AC-03:** The project lockfile records the resolved toolkit revision and dependencies; the installed package exposes `agentic-ml`, `agentic_ml`, templates, and runtime guidance.
 - <a id="us-01-ac-04"></a> **US-01-AC-04:** An explicit toolkit upgrade changes the commit pin and lockfile, producing a new environment identity.
 
-Architecture references: [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation); [§9 Execution](design/execution-and-governance.md#execution).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-02: Initialize an experiment project
 
 As a developer, I want to initialize configuration, notebooks, dependencies, and local storage while preserving existing files so that I can start experimenting safely.
+
+**Existing accepted slice:** preserve its original contract/evidence. Default-path and future training integration work is separate.
 
 Acceptance criteria:
 
@@ -103,11 +137,15 @@ Acceptance criteria:
 - <a id="us-02-ac-04"></a> **US-02-AC-04:** Project-associated DVC, MLflow, and durable-state storage are initialized with local defaults and configurable locations.
 - <a id="us-02-ac-05"></a> **US-02-AC-05:** Data access, agent authentication, and approval presentation remain explicit setup choices; initialization grants no execution or data-access authorization, and credentials remain outside committed configuration.
 
-Architecture references: [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation).
+US-39-AC-01 owns runnable defaults/draft-schema compatibility. Accepted initialization supplies drafts, not an implemented experiment runner.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-03: Define experiment objectives and boundaries
 
 As a data scientist, I want to describe objectives and constraints in Markdown and declare search boundaries in YAML so that agents work toward my intended outcome.
+
+**Existing accepted slice:** preserve its original contract/evidence. Default-path and future training integration work is separate.
 
 Acceptance criteria:
 
@@ -117,18 +155,15 @@ Acceptance criteria:
 - <a id="us-03-ac-04"></a> **US-03-AC-04:** Ambiguous or conflicting requirements block affected runs until resolved; delegated decisions require approval before use.
 - <a id="us-03-ac-05"></a> **US-03-AC-05:** Relative input paths resolve against the experiment repository root, with the notebook working directory recorded explicitly.
 
-Current-version approval decision (2026-10-31): Under
-[US-03-SC-01](../plans/milestone-1-us-03.md#us-03-sc-01--unauthenticated-experiment-approvals-2026-10-31),
-AC-04 uses explicit scoped unauthenticated experiment approval records. Reviewer
-identity and protection against fabricated approvals/history edits are not
-verified. Authentication is deferred; approval-before-use and all development
-and testing approval gates remain required. Criterion IDs are unchanged.
+Strict explicit APIs retain readiness rules and unauthenticated-record limitations under [US-03-SC-01](../plans/milestone-1-us-03.md#us-03-sc-01--unauthenticated-experiment-approvals-2026-10-31). US-39-AC-01/02 own the simpler basic workflow; accepted contracts are not silently changed.
 
-Architecture references: [§8 Developer experiment inputs](design/interfaces-and-configuration.md#developer-experiment-inputs); [§8 Algorithm and hyperparameter configuration](design/interfaces-and-configuration.md#algorithm-and-hyperparameter-configuration).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-05: Reject invalid configurations before execution
 
 As a data scientist, I want invalid algorithms, parameters, and search configurations rejected before training so that compute is spent on valid candidates.
+
+**Existing accepted slice:** preserve its original contract/evidence. Default-path and future training integration work is separate.
 
 Acceptance criteria:
 
@@ -138,290 +173,314 @@ Acceptance criteria:
 - <a id="us-05-ac-04"></a> **US-05-AC-04:** Invalid inputs produce actionable validation errors before training starts.
 - <a id="us-05-ac-05"></a> **US-05-AC-05:** As training entrypoints are introduced, every candidate submitted through Python, custom code, or notebooks receives the same boundary checks.
 
-Architecture references: [§8 Algorithm and hyperparameter configuration](design/interfaces-and-configuration.md#algorithm-and-hyperparameter-configuration); [§8 User-supplied ML components](design/interfaces-and-configuration.md#user-supplied-ml-components).
+Accepted validation metadata does not establish training support. AC-05 future training/custom/notebook integrations remain open; supported-call validation does not constrain arbitrary external Python.
 
-### US-09: Execute saved notebooks reproducibly
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
-As a data scientist, I want saved notebooks executed automatically from a fresh kernel with explicit inputs so that recorded results do not depend on hidden state.
+### US-10: Run and inspect local experiments
 
-Acceptance criteria:
-
-- <a id="us-09-ac-01"></a> **US-09-AC-01:** Managed execution uses the selected project's locked environment, a fresh kernel, cell order, explicit parameters, and a recorded working directory.
-- <a id="us-09-ac-02"></a> **US-09-AC-02:** The run preserves the source notebook, parameters, environment identity, executed notebook with cell outputs, errors, and generated artifacts.
-- <a id="us-09-ac-03"></a> **US-09-AC-03:** Notebook-to-notebook dependencies use recorded artifact references rather than another kernel's variables.
-- <a id="us-09-ac-04"></a> **US-09-AC-04:** Cell errors, timeouts, and cancellation produce the corresponding run status; successful execution remains subject to independent validation.
-- <a id="us-09-ac-05"></a> **US-09-AC-05:** Access restrictions, approvals, and budgets apply equally to notebook and Python entrypoints; unauthorized filesystem or credential access is blocked.
-
-Architecture references: [§9 Execution](design/execution-and-governance.md#execution); [§9 Notebook development and execution contract](design/execution-and-governance.md#notebook-development-and-execution-contract).
-
-### US-10: Control and inspect runs
-
-As a data scientist, I want to submit, monitor, cancel, and inspect runs so that I can control execution and understand failures.
+As a data scientist, I want to run local experiments and inspect logs, status and artifacts so that I can diagnose execution failures.
 
 Acceptance criteria:
 
-- <a id="us-10-ac-01"></a> **US-10-AC-01:** The local runner supports submission, status inspection, cancellation, logs, and artifact retrieval through the toolkit interfaces.
-- <a id="us-10-ac-02"></a> **US-10-AC-02:** Runs record completion, failure, timeout, or cancellation outcomes with available diagnostic evidence.
-- <a id="us-10-ac-03"></a> **US-10-AC-03:** Runtime and experiment-count limits prevent further unauthorized work; supported resource limits are enforced.
+- <a id="us-10-ac-01"></a> **US-10-AC-01:** Run a local experiment and expose logs, final result status and artifact locations.
+- <a id="us-10-ac-02"></a> **US-10-AC-02:** Record completion or failure with available diagnostics.
+- <a id="us-10-ac-03"></a> **US-10-AC-03:** Limit search to configured maximum candidate trials through the supported runner/search path.
 - <a id="us-10-ac-04"></a> **US-10-AC-04:** Unsuccessful model performance is distinguishable from execution failure when modeling is added.
-- <a id="us-10-ac-05"></a> **US-10-AC-05:** Cancelled or budget-exhausted work preserves available evidence for review.
+- <a id="us-10-ac-05"></a> **US-10-AC-05:** Preserve available completed-trial results and failure/interruption evidence when execution can finalize.
 
-Architecture references: [§8 ExperimentRunner interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts); [§9 Execution](design/execution-and-governance.md#execution); [§9 Workflow states](design/execution-and-governance.md#workflow-states).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
-### US-11: Extract approved source data
+### US-11: Extract local experiment data
 
-As a data scientist, I want approved data extracted from supported local, SQL, or object-storage sources so that I can work with existing datasets.
+As a data scientist, I want to prepare local CSV/Parquet files using selection, filtering and joins so that I can start with traceable data.
 
 Acceptance criteria:
 
-- <a id="us-11-ac-01"></a> **US-11-AC-01:** Initial connectors support local CSV/Parquet, SQL, and object storage; acceptance demonstrations extract data from at least two source types.
-- <a id="us-11-ac-02"></a> **US-11-AC-02:** Source discovery exposes permitted schema and metadata without unrestricted data exposure.
-- <a id="us-11-ac-03"></a> **US-11-AC-03:** Extraction executes only approved queries or sampling plans within source allowlists, permissions, network restrictions, and cost/record limits.
-- <a id="us-11-ac-04"></a> **US-11-AC-04:** Each snapshot records source identity, query, parameters, extraction time, checksums, and permissions metadata.
+- <a id="us-11-ac-01"></a> **US-11-AC-01:** Read local CSV/Parquet and support configured column selection, filtering and joins; permit project-owned extraction functions.
+- <a id="us-11-ac-02"></a> **US-11-AC-02:** Report local source schemas and metadata needed for extraction.
+- <a id="us-11-ac-03"></a> **US-11-AC-03:** Execute explicitly configured local extraction operations and report their configuration.
+- <a id="us-11-ac-04"></a> **US-11-AC-04:** Record source paths/content identities, extraction settings and time, and output checksum/DVC reference.
 - <a id="us-11-ac-05"></a> **US-11-AC-05:** Extraction failures are reported without presenting incomplete output as a validated dataset.
 
-Architecture references: [§6 Data extraction requirements](design/data-and-features.md#data-extraction-requirements).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
-### US-12: Validate extracted data
+### US-12: Validate data and define reproducible splits
 
-As a data scientist, I want basic data validation and review so that I can identify extraction and quality-rule failures before accepting a reproducible data run.
+As a data scientist, I want to check data quality and record distinct partitions so that training and evaluation use suitable inputs.
 
 Acceptance criteria:
 
 - <a id="us-12-ac-01"></a> **US-12-AC-01:** Validation checks schema, row counts, types, nulls, duplicates, and configured quality rules, reporting mismatches and failures.
-- <a id="us-12-ac-05"></a> **US-12-AC-05:** Basic validation results are presented for approval before the dataset is accepted for the Milestone 1 run.
+- <a id="us-12-ac-05"></a> **US-12-AC-05:** Report validation results and block supported pipeline steps when configured required checks fail.
+- <a id="us-12-ac-02"></a> **US-12-AC-02:** Provide basic distributions, missingness and classification target balance.
+- <a id="us-12-ac-03"></a> **US-12-AC-03:** Record seeded train/validation/test partitions; accept explicit user-supplied partitions for time/group problems and check row membership/disjointness.
 
-Architecture references: [§4 Data extraction and EDA](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§5 Workflow phases and gates](agentic-ml-harness-design.md#5-standard-workflow-phases-and-gates); [§6 Data extraction requirements](design/data-and-features.md#data-extraction-requirements); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
-### US-13: Version and restore datasets
+### US-13: Version and restore datasets with DVC
 
-As a data scientist, I want to version and restore datasets with verified content hashes so that experiments use identifiable, recoverable inputs.
+As a data scientist, I want to track and restore datasets with native DVC so that experiment inputs can be identified and reproduced.
 
 Acceptance criteria:
 
 - <a id="us-13-ac-01"></a> **US-13-AC-01:** DVC versions source snapshots, split manifests, and derived datasets as those artifacts are introduced.
 - <a id="us-13-ac-02"></a> **US-13-AC-02:** Git tracks DVC metadata and relevant manifests while dataset content resides in the configured cache/storage and is excluded from Git.
-- <a id="us-13-ac-03"></a> **US-13-AC-03:** A dataset can be restored from configured storage using its recorded metadata, and restored content hashes are verified.
-- <a id="us-13-ac-04"></a> **US-13-AC-04:** Missing or mismatched content prevents the dataset from being treated as successfully restored.
 
-Architecture references: [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
-### US-26: Record run artifacts and provenance
+### US-14: Build and compare authored feature pipelines
 
-As a data scientist, I want recorded runs linked to their exact inputs, code, and environment so that I can inspect and audit results.
+As a data scientist, I want to execute authored feature pipelines and compare validation results so that feature changes have measurable evidence.
 
 Acceptance criteria:
 
-- <a id="us-26-ac-01"></a> **US-26-AC-01:** MLflow records run status, effective parameters, available metrics, outputs, and artifact references, linked to the toolkit run identifier.
-- <a id="us-26-ac-02"></a> **US-26-AC-02:** Each run links to the exact DVC dataset state, experiment Git revision, source snapshots including uncommitted changes, and configuration checksums.
-- <a id="us-26-ac-03"></a> **US-26-AC-03:** Provenance includes the toolkit repository URL, full commit SHA, package version, build identity where available, and project lockfile/environment identity.
-- <a id="us-26-ac-04"></a> **US-26-AC-04:** Source snapshots include notebooks, imported helpers, project code, configuration, and applicable runtime guidance; later milestones extend these records to components, pipelines, and approvals.
-- <a id="us-26-ac-05"></a> **US-26-AC-05:** Basic execution correctness is independently checked against expected artifacts; notebook completion alone does not establish experiment acceptance.
+- <a id="us-14-ac-01"></a> **US-14-AC-01:** Describe authored scikit-learn pipeline steps, parameters, selected columns and training-only fit scope.
+- <a id="us-14-ac-02"></a> **US-14-AC-02:** Execute authored transformations and record pipeline settings, dependencies, output references and source-data identity.
+- <a id="us-14-ac-03"></a> **US-14-AC-03:** Compare authored feature variants using the same split, estimator/settings and metric; report direction-aware gains/ties/regressions.
+- <a id="us-14-ac-04"></a> **US-14-AC-04:** Link feature/pipeline artifacts to source datasets and verify expected outputs through supported paths.
+- <a id="us-14-ac-05"></a> **US-14-AC-05:** Use explicitly authored or supplied feature candidates.
 
-Architecture references: [§3 Component responsibilities](agentic-ml-harness-design.md#component-responsibilities); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
-
-### US-27: Reproduce a basic run in a clean environment
-
-As a collaborating data scientist, I want to reproduce an experiment on another machine so that I can independently check its results.
-
-Acceptance criteria:
-
-- <a id="us-27-ac-01"></a> **US-27-AC-01:** An experiment checkout, recorded source snapshots, lockfile, and dataset metadata restore the pinned toolkit commit and required inputs without a maintained toolkit checkout.
-- <a id="us-27-ac-02"></a> **US-27-AC-02:** Reproduction executes the recorded source, including preserved uncommitted changes, rather than assuming the Git revision alone identifies it.
-- <a id="us-27-ac-03"></a> **US-27-AC-03:** Declared output checks or tolerances determine whether the basic run reproduces successfully; metric tolerances apply when modeling is introduced.
-- <a id="us-27-ac-04"></a> **US-27-AC-04:** Missing source, dependencies, or dataset content is reported explicitly instead of silently substituted.
-
-Architecture references: [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
-
-## Milestone 2: Assess data and build reproducible feature pipelines
-
-Starting with versioned source data, the developer profiles the dataset, creates versioned training/validation/protected-test splits respecting time and group constraints, and obtains approval of the assessment and split protocol before dependent feature or modeling work. The developer then prepares features, compares their predictive performance using a fixed approved reference estimator, metric, and split protocol, and restores fitted preprocessing and pipeline outputs. Milestone 2 includes the minimal training/evaluation capability for these comparisons; broader model experimentation remains in Milestone 3.
-
-### US-12: Assess data quality and define splits
-
-As a data scientist, I want detailed data-quality assessments and an explicit split protocol so that I can identify unsuitable data before feature engineering or modeling.
-
-Acceptance criteria:
-
-- <a id="us-12-ac-02"></a> **US-12-AC-02:** Assessment includes distributions, class balance where relevant, anomalies, and leakage diagnostics.
-- <a id="us-12-ac-03"></a> **US-12-AC-03:** A versioned split manifest records training, validation, and protected-test partitions, respecting approved time or group constraints.
-- <a id="us-12-ac-04"></a> **US-12-AC-04:** Dataset assessment and split protocol are presented for approval before dependent feature or modeling work.
-
-Architecture references: [§4 Data extraction and EDA](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§5 Workflow phases and gates](agentic-ml-harness-design.md#5-standard-workflow-phases-and-gates); [§6 Data extraction requirements](design/data-and-features.md#data-extraction-requirements); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
-
-### US-14: Generate and compare feature pipelines
-
-As a data scientist, I want agents to generate and compare feature pipelines on consistent splits so that feature improvements have credible evidence.
-
-Acceptance criteria:
-
-- <a id="us-14-ac-01"></a> **US-14-AC-01:** Feature plans identify ordered components, effective parameters, input/output schemas, fitting scope, and modification permissions.
-- <a id="us-14-ac-02"></a> **US-14-AC-02:** The toolkit executes candidate transformations and records their definitions, dependencies, outputs, and lineage.
-- <a id="us-14-ac-03"></a> **US-14-AC-03:** Candidate feature sets are compared for predictive performance against a fixed approved baseline feature set using the same fixed approved reference estimator, estimator settings, metric, and split protocol. Improvement follows the declared metric direction; comparisons record gains, ties, or regressions. Milestone 2 includes the minimal training/evaluation capability needed for this comparison; broader model experimentation remains in Milestone 3.
-- <a id="us-14-ac-04"></a> **US-14-AC-04:** Feature artifacts trace back to their source datasets and are independently validated before workflow phase advancement.
-- <a id="us-14-ac-05"></a> **US-14-AC-05:** This milestone supports supplied or explicitly authored candidates; agent generation is exercised when agent integration arrives in Milestone 4.
-
-Architecture references: [§7 Feature Engineering](design/data-and-features.md#7-feature-engineering); [§5 Workflow phases and gates](agentic-ml-harness-design.md#5-standard-workflow-phases-and-gates).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-15: Preserve training-only preprocessing
 
-As a data scientist, I want preprocessing fitted only on training data and preserved for reuse so that validation and inference transformations remain consistent.
+As a data scientist, I want to fit preprocessing on training rows and preserve fitted state so that validation and inference use consistent transformations.
 
 Acceptance criteria:
 
-- <a id="us-15-ac-01"></a> **US-15-AC-01:** Stateful preprocessing fits only on the approved training partition and applies unchanged fitted state to validation, test, and inference inputs.
-- <a id="us-15-ac-02"></a> **US-15-AC-02:** Transformations that violate split boundaries or leakage rules are rejected.
-- <a id="us-15-ac-03"></a> **US-15-AC-03:** Preparation code, fitted state, dependencies, parameters, and output schemas are preserved as artifacts.
-- <a id="us-15-ac-04"></a> **US-15-AC-04:** Restored preprocessing reproduces validation and inference transformations under declared reproducibility checks.
+- <a id="us-15-ac-01"></a> **US-15-AC-01:** Fit preprocessing only on training rows and reuse fitted state for validation/test/inference.
+- <a id="us-15-ac-02"></a> **US-15-AC-02:** Reject supported-path partition overlap and improper fit scope; test for train-only fitting with independently defined expectations.
+- <a id="us-15-ac-03"></a> **US-15-AC-03:** Preserve fitted pipeline, feature settings and declared schema plus committed code/dependency references.
 
-Architecture references: [§7 Feature Engineering](design/data-and-features.md#7-feature-engineering); [§8 User-supplied ML components](design/interfaces-and-configuration.md#user-supplied-ml-components).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
-### US-16: Register supplied preprocessing components
+### US-18: Train scikit-learn models
 
-As a data scientist, I want to register my existing preprocessors without changing the toolkit so that I can reuse domain-specific implementations.
+As a data scientist, I want to train CPU tabular classification and regression models so that I can compare baselines and candidates.
 
 Acceptance criteria:
 
-- <a id="us-16-ac-01"></a> **US-16-AC-01:** Project configuration registers stateful preprocessors and stateless transformations from project code or pinned dependencies through versioned public interfaces.
-- <a id="us-16-ac-02"></a> **US-16-AC-02:** Declarations include identifiers, entrypoints, interface versions, parameter specifications, and modification permissions; duplicate identifiers and incompatible interfaces are rejected.
-- <a id="us-16-ac-03"></a> **US-16-AC-03:** Stateful components support fitting, transformation, and fitted-state persistence/restoration; stateless components declare their output schema.
-- <a id="us-16-ac-04"></a> **US-16-AC-04:** Registered components follow the same validation, resource, access, and lineage rules as built-in components.
-- <a id="us-16-ac-05"></a> **US-16-AC-05:** Lineage records declarations, exact code snapshots or pinned dependency identities, effective parameters, and fitted artifacts.
+- <a id="us-18-ac-01"></a> **US-18-AC-01:** Deliver classification in M1 and regression in M2 using scikit-learn on CPU.
+- <a id="us-18-ac-02"></a> **US-18-AC-02:** Train and record a reproducible baseline before comparing candidates.
+- <a id="us-18-ac-03"></a> **US-18-AC-03:** Use native compatible estimator/pipeline fit, predict and persistence operations.
+- <a id="us-18-ac-04"></a> **US-18-AC-04:** Each run records effective parameters, framework/library identities, metrics, model artifacts, and feature/data lineage.
 
-Architecture references: [§7 Feature Engineering](design/data-and-features.md#7-feature-engineering); [§8 User-supplied ML components](design/interfaces-and-configuration.md#user-supplied-ml-components); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
+AC-01 spans M1 classification and M2 regression; M1 alone does not complete it. Other ML frameworks are deferred.
 
-### US-27: Reproduce and reuse pipeline stages
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
-As a data scientist, I want reproducible pipeline stages and valid output reuse so that I can avoid redundant work while preserving trustworthy results.
+### US-20: Tune within declared search limits
+
+As a data scientist, I want to run validated searches with a maximum trial count so that tuning stays within declared parameter and trial boundaries.
+
+Acceptance criteria:
+
+- <a id="us-20-ac-01"></a> **US-20-AC-01:** Candidates use only declared algorithms, fixed values, categorical choices, and numeric ranges; omitted defaults cannot be tuned.
+- <a id="us-20-ac-02"></a> **US-20-AC-02:** Validate candidates before training through supported toolkit/script/notebook execution paths.
+- <a id="us-20-ac-03"></a> **US-20-AC-03:** Enforce a configured maximum trial count and preserve completed trial results.
+- <a id="us-20-ac-04"></a> **US-20-AC-04:** Summarize candidates, validation scores, best selection, trial count and elapsed time.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-21: Evaluate experiment outputs consistently
+
+As a data scientist, I want to compute consistent metrics and supported split/fitting checks so that I can assess results against a baseline.
+
+Acceptance criteria:
+
+- <a id="us-21-ac-01"></a> **US-21-AC-01:** Compute/check status and expected outputs from execution evidence, rather than narrative claims.
+- <a id="us-21-ac-02"></a> **US-21-AC-02:** Check supported split disjointness and train-only preprocessing fitting.
+- <a id="us-21-ac-03"></a> **US-21-AC-03:** Compute configured metrics consistently and compare against baseline with explicit direction.
+- <a id="us-21-ac-05"></a> **US-21-AC-05:** Report execution failure, configured validation failure and insufficient quality distinctly.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-24: Evaluate a selected model on a separate test partition
+
+As a data scientist, I want to run final testing after validation-based model selection so that test scores do not drive the supported tuning workflow.
+
+Acceptance criteria:
+
+- <a id="us-24-ac-02"></a> **US-24-AC-02:** Evaluate the selected fitted pipeline on a separate test partition after validation-based selection.
+- <a id="us-24-ac-03"></a> **US-24-AC-03:** Keep test scores out of the supported tuning/feature-selection path; document no retuning on final scores.
+- <a id="us-24-ac-04"></a> **US-24-AC-04:** Report unsuccessful final evaluation as a result rather than silently resume tuning.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-26: Record and compare experiment results
+
+As a data scientist, I want to link MLflow results to code, configuration and DVC data so that I can inspect and compare recorded experiments.
+
+Acceptance criteria:
+
+- <a id="us-26-ac-01"></a> **US-26-AC-01:** Record MLflow run status, parameters, metrics, outputs and artifact locations with a stable run reference.
+- <a id="us-26-ac-02"></a> **US-26-AC-02:** Link MLflow results to DVC data identity, committed experiment revision and effective configuration.
+- <a id="us-26-ac-03"></a> **US-26-AC-03:** Provenance includes the toolkit repository URL, full commit SHA, package version, build identity where available, and project lockfile/environment identity.
+- <a id="us-26-ac-04"></a> **US-26-AC-04:** Record committed entrypoint/project code/configuration references and save the executed notebook when used.
+- <a id="us-26-ac-05"></a> **US-26-AC-05:** Check expected output presence and report failures separately from successful process exit.
+- <a id="us-26-ac-06"></a> **US-26-AC-06:** MLflow comparisons expose effective parameters, metrics, execution status, and model artifacts for baseline and candidate runs.
+- <a id="us-26-ac-07"></a> **US-26-AC-07:** Produce a concise result summary with model, configured metrics, baseline comparison and validation outcomes.
+- <a id="us-26-ac-08"></a> **US-26-AC-08:** Link model/pipeline artifacts to DVC data, committed code/configuration and locked environment references.
+- <a id="us-26-ac-09"></a> **US-26-AC-09:** Link report claims to recorded numerical evaluation results/artifacts.
+- <a id="us-26-ac-12"></a> **US-26-AC-12:** Allow results to locate their MLflow run and MLflow metadata to locate committed project/config/data references.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-27: Run and reproduce native DVC pipelines
+
+As a data scientist, I want to run native DVC stages from committed experiment inputs so that I can reproduce results and reuse valid outputs.
 
 Acceptance criteria:
 
 - <a id="us-27-ac-05"></a> **US-27-AC-05:** DVC pipeline definitions record stage dependencies, parameters, and outputs, with resolved hashes preserved in `dvc.lock`.
 - <a id="us-27-ac-06"></a> **US-27-AC-06:** Stage working directories and paths are explicit and consistent with toolkit execution.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-39: Complete an assistant-supported tabular experiment
+
+As a data scientist, I want a coding assistant to help prepare, run, inspect and revise an experiment through installed public interfaces so that I can reach recorded results quickly.
+
+**New integration story; not implemented.** Component stories retain technical ownership. This slice owns ASW-01–06.
+
+Acceptance criteria:
+
+- <a id="us-39-ac-01"></a> **US-39-AC-01:** Starting from a separate experiment project, documented initialization and pinned installation provide a runnable local classification example without a neighboring toolkit checkout, manual draft-schema migration, managed agent adapter or toolkit source edits.
+- <a id="us-39-ac-02"></a> **US-39-AC-02:** The basic experiment path accepts explicit objectives, data, metric and search settings, validates them before training and does not require formal plan resolution or delegated-decision approvals. Existing explicit planning, approval and validation APIs retain their documented strict behavior.
+- <a id="us-39-ac-03"></a> **US-39-AC-03:** A scientist-directed external coding-assistant session prepares project configuration and extraction/preprocessing code, invokes installed public toolkit interfaces and native DVC stages, and locates MLflow results without private toolkit imports.
+- <a id="us-39-ac-04"></a> **US-39-AC-04:** The classification walkthrough completes extraction, quality/split checks, training-only preprocessing, baseline training and bounded tuning, then exposes MLflow parameters, validation metrics and fitted artifacts linked to DVC inputs and committed configuration/code references.
+- <a id="us-39-ac-05"></a> **US-39-AC-05:** Before final testing, the scientist directs at least one assistant-authored feature or parameter revision using validation evidence; a recorded rerun compares the change using consistent splits and metric. Gains, ties and regressions are valid outcomes; final-test feedback is not used for the revision.
+- <a id="us-39-ac-06"></a> **US-39-AC-06:** After selection, the walkthrough executes the separate final-test step, saves the selected fitted pipeline/model and metrics, and reports the result without silently retuning from final-test scores. Quality shortfalls and execution failures are distinguishable.
+- <a id="us-39-ac-07"></a> **US-39-AC-07:** Walkthrough evidence identifies at least one external assistant product, interface and version, scientist prompts, consequential edits/actions, commands/outcomes and independently checked MLflow/DVC references. A complete transcript and multiple assistant products are not required.
+- <a id="us-39-ac-08"></a> **US-39-AC-08:** Installed-project checks demonstrate invalid configuration or candidate parameters and missing required local inputs fail clearly with available diagnostics, rather than being reported as a completed successful experiment.
+
+Dependencies: component criteria in this milestone and the [assistant walkthrough](../reviews/mvp-scope-criterion-dispositions.md#assistant-supported-walkthrough). Check artifacts/metrics independently of assistant statements. No managed adapter or multiple-product claim.
+
+## Milestone 2: Validate usability and reproduction
+
+M2 exits when regression, customization, fresh-kernel notebook execution and committed-project reproduction pass declared checks, including ASW-07–08. Deferred platform guarantees are not implied.
+
+### US-09: Execute saved notebooks
+
+As a data scientist, I want to run saved notebooks from a fresh kernel with explicit inputs so that recorded results do not depend on hidden state.
+
+Acceptance criteria:
+
+- <a id="us-09-ac-01"></a> **US-09-AC-01:** Execute saved notebooks in the project locked environment from a fresh kernel, in cell order, with explicit inputs and working directory.
+- <a id="us-09-ac-02"></a> **US-09-AC-02:** The run preserves the source notebook, parameters, environment identity, executed notebook with cell outputs, errors, and generated artifacts.
+- <a id="us-09-ac-03"></a> **US-09-AC-03:** Notebook-to-notebook dependencies use recorded artifact references rather than another kernel's variables.
+- <a id="us-09-ac-04"></a> **US-09-AC-04:** Record execution success or cell failure and retain available diagnostics; check expected outputs.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-13: Version and restore datasets with DVC
+
+As a data scientist, I want to track and restore datasets with native DVC so that experiment inputs can be identified and reproduced.
+
+Acceptance criteria:
+
+- <a id="us-13-ac-03"></a> **US-13-AC-03:** A dataset can be restored from configured storage using its recorded metadata, and restored content hashes are verified.
+- <a id="us-13-ac-04"></a> **US-13-AC-04:** Missing or mismatched content prevents the dataset from being treated as successfully restored.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-15: Preserve training-only preprocessing
+
+As a data scientist, I want to fit preprocessing on training rows and preserve fitted state so that validation and inference use consistent transformations.
+
+Acceptance criteria:
+
+- <a id="us-15-ac-04"></a> **US-15-AC-04:** Restored preprocessing reproduces validation and inference transformations under declared reproducibility checks.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-16: Use compatible project components
+
+As a data scientist, I want to use compatible project-owned transformers and estimators so that I can customize experiments without changing the toolkit.
+
+Acceptance criteria:
+
+- <a id="us-16-ac-01"></a> **US-16-AC-01:** Accept compatible project-owned scikit-learn transformers/functions and pinned dependencies.
+- <a id="us-16-ac-02"></a> **US-16-AC-02:** Check supplied objects/functions satisfy the supported scikit-learn interface and parameter contract.
+- <a id="us-16-ac-03"></a> **US-16-AC-03:** Fit/transform and persist/restore compatible supplied pipelines; verify resulting feature shape/schema.
+- <a id="us-16-ac-04"></a> **US-16-AC-04:** Apply supported-path validation, train-only fitting and result tracking to supplied components.
+- <a id="us-16-ac-05"></a> **US-16-AC-05:** Record committed component/dependency identity, effective parameters and fitted artifacts.
+- <a id="us-16-ac-06"></a> **US-16-AC-06:** Use project-owned compatible estimators without modifying the toolkit.
+- <a id="us-16-ac-07"></a> **US-16-AC-07:** Fit supplied estimators, predict and preserve/restore fitted pipelines.
+- <a id="us-16-ac-08"></a> **US-16-AC-08:** Reject unsupported tasks, invalid parameters and incompatible estimator/prediction outputs through supported paths.
+- <a id="us-16-ac-09"></a> **US-16-AC-09:** Tune compatible supplied estimators within configured search bounds and evaluate restored predictions.
+- <a id="us-16-ac-10"></a> **US-16-AC-10:** Record code/dependency references, effective parameters and fitted artifacts.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-21: Evaluate experiment outputs consistently
+
+As a data scientist, I want to compute consistent metrics and supported split/fitting checks so that I can assess results against a baseline.
+
+Acceptance criteria:
+
+- <a id="us-21-ac-04"></a> **US-21-AC-04:** Reproduce example outputs/metrics under declared tolerances.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-27: Run and reproduce native DVC pipelines
+
+As a data scientist, I want to run native DVC stages from committed experiment inputs so that I can reproduce results and reuse valid outputs.
+
+Acceptance criteria:
+
+- <a id="us-27-ac-01"></a> **US-27-AC-01:** Restore pinned toolkit/project dependencies and required DVC data from committed experiment configuration/lockfiles.
+- <a id="us-27-ac-02"></a> **US-27-AC-02:** Execute the recorded committed code/configuration, failing if required inputs are unavailable.
+- <a id="us-27-ac-03"></a> **US-27-AC-03:** Declared output checks or tolerances determine whether the basic run reproduces successfully; metric tolerances apply when modeling is introduced.
+- <a id="us-27-ac-04"></a> **US-27-AC-04:** Missing source, dependencies, or dataset content is reported explicitly instead of silently substituted.
 - <a id="us-27-ac-07"></a> **US-27-AC-07:** Reproducing declared stages restores or generates the expected outputs under the recorded configuration.
-- <a id="us-27-ac-08"></a> **US-27-AC-08:** Reused outputs retain producer provenance and remain subject to current authorization and evaluation checks.
-- <a id="us-27-ac-09"></a> **US-27-AC-09:** Cache reuse alone does not establish experiment acceptance or bypass a gate.
+- <a id="us-27-ac-08"></a> **US-27-AC-08:** Use native DVC dependency hashes for reuse and retain traceable run/data/code references; re-evaluate outputs where required.
+- <a id="us-27-ac-09"></a> **US-27-AC-09:** Treat cached output as reusable data, not proof that metrics/checks pass.
 
-Architecture references: [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
-## Milestone 3: Train, tune, and independently evaluate models
+### US-39: Complete an assistant-supported tabular experiment
 
-Starting with approved features, the developer establishes baselines, compares and tunes candidates within declared limits, and obtains an independent assessment and final report.
+As a data scientist, I want a coding assistant to help prepare, run, inspect and revise an experiment through installed public interfaces so that I can reach recorded results quickly.
 
-### US-06: Choose an algorithm execution mode
-
-As a data scientist, I want to use one algorithm, select among allowed algorithms, or compare the allowed set so that experimentation matches my question and budget.
+**New integration story; not implemented.** Component stories retain technical ownership. This slice extends ASW-08; US-40 owns ASW-07.
 
 Acceptance criteria:
 
-- <a id="us-06-ac-01"></a> **US-06-AC-01:** Use mode runs the specified allowed algorithm; select mode records a selection from the allowed set; compare mode evaluates every algorithm in that set within the approved plan and budgets.
-- <a id="us-06-ac-02"></a> **US-06-AC-02:** All modes respect task compatibility, parameter boundaries, and trial/runtime budgets.
-- <a id="us-06-ac-03"></a> **US-06-AC-03:** Comparing algorithms does not require exhaustive enumeration of parameter combinations.
-- <a id="us-06-ac-04"></a> **US-06-AC-04:** Suggested algorithms or expanded ranges are recorded only as recommendations for a subsequent experiment; adopting them requires a new versioned configuration and applicable approvals.
+- <a id="us-39-ac-09"></a> **US-39-AC-09:** A tabular regression example completes the same installed-project workflow and records its baseline, candidate and final evaluation results in MLflow with DVC/code/configuration references.
+- <a id="us-39-ac-10"></a> **US-39-AC-10:** A customization example uses compatible project-owned preprocessing and estimator code through supported scikit-learn interfaces, preserves/restores fitted artifacts and records results without toolkit modification or a general component registry.
+- <a id="us-39-ac-11"></a> **US-39-AC-11:** The scientist-directed assistant walkthrough includes a saved notebook example executed in the project environment from a fresh kernel, with explicit paths/inputs, preserved outputs/errors and recorded artifact references instead of hidden cross-kernel state.
 
-Architecture references: [§8 Developer experiment inputs](design/interfaces-and-configuration.md#developer-experiment-inputs); [§8 Algorithm and hyperparameter configuration](design/interfaces-and-configuration.md#algorithm-and-hyperparameter-configuration).
+Dependencies: component criteria in this milestone and the [assistant walkthrough](../reviews/mvp-scope-criterion-dispositions.md#assistant-supported-walkthrough). Check artifacts/metrics independently of assistant statements. No managed adapter or multiple-product claim.
 
-### US-16: Register supplied models
+### US-40: Reproduce an experiment through DVC with assistant support
 
-As a data scientist, I want to register my existing model implementations without changing the toolkit so that I can reuse domain-specific training code.
+As a data scientist, I want to reproduce committed experiments through DVC with coding-assistant help so that I can verify results and avoid unnecessary recomputation.
 
-Acceptance criteria:
-
-- <a id="us-16-ac-06"></a> **US-16-AC-06:** Project-local or pinned-dependency models register through the public component interface without toolkit modifications.
-- <a id="us-16-ac-07"></a> **US-16-AC-07:** Models support training on approved inputs, evaluator-compatible prediction, and fitted-model persistence/restoration.
-- <a id="us-16-ac-08"></a> **US-16-AC-08:** Before training, validation rejects unsupported tasks, invalid parameters, incompatible interfaces, and prediction outputs incompatible with the approved metrics.
-- <a id="us-16-ac-09"></a> **US-16-AC-09:** Supplied models can be tuned within approved boundaries and independently evaluated after restoration.
-- <a id="us-16-ac-10"></a> **US-16-AC-10:** Component declarations, code/dependency identities, effective parameters, and fitted artifacts appear in run lineage.
-
-Architecture references: [§7 Feature Engineering](design/data-and-features.md#7-feature-engineering); [§8 User-supplied ML components](design/interfaces-and-configuration.md#user-supplied-ml-components); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
-
-### US-18: Train across supported frameworks
-
-As a data scientist, I want to train and evaluate scikit-learn, LightGBM, and PyTorch models so that I can compare approaches across supported frameworks.
+**New integration story; not implemented.** US-13/15/16/21/27 retain component ownership; this story owns cross-component reproduction and ASW-07.
 
 Acceptance criteria:
 
-- <a id="us-18-ac-01"></a> **US-18-AC-01:** End-to-end runs cover tabular classification, tabular regression, and a basic PyTorch deep-learning example.
-- <a id="us-18-ac-02"></a> **US-18-AC-02:** A simple reproducible baseline is recorded and approved before candidate improvement comparisons.
-- <a id="us-18-ac-03"></a> **US-18-AC-03:** Framework adapters expose training, prediction, and persistence operations usable by independent evaluation.
-- <a id="us-18-ac-04"></a> **US-18-AC-04:** Each run records effective parameters, framework/library identities, metrics, model artifacts, and feature/data lineage.
+- <a id="us-40-ac-01"></a> **US-40-AC-01:** A fresh checkout of committed experiment code/configuration, pinned toolkit dependencies and available DVC data can restore required inputs and execute declared stages outside the toolkit checkout using documented commands.
+- <a id="us-40-ac-02"></a> **US-40-AC-02:** An unchanged pipeline demonstrates native DVC output reuse without retraining unchanged stages; evidence distinguishes cached reuse from newly executed training and retains traceable result/data/code references.
+- <a id="us-40-ac-03"></a> **US-40-AC-03:** Changing a declared data, code or parameter dependency invalidates the affected native DVC stages; the demonstration records which stages rerun and verifies their regenerated outputs.
+- <a id="us-40-ac-04"></a> **US-40-AC-04:** Missing required source, dependencies or DVC content, and corrupted or mismatched required data, produce explicit restoration/reproduction failures without silently substituting current or alternate inputs.
+- <a id="us-40-ac-05"></a> **US-40-AC-05:** Actual reproduced execution records MLflow results and committed code/configuration, environment and DVC identities, with references to the compared experiment. Cache reuse alone is not recorded as newly executed training or proof of passing evaluation.
+- <a id="us-40-ac-06"></a> **US-40-AC-06:** The data scientist directs an external coding assistant through documented DVC restoration/reproduction and result inspection; evidence records assistant product/interface/version, prompts, commands/outcomes and verified run/data references without requiring a managed adapter.
+- <a id="us-40-ac-07"></a> **US-40-AC-07:** Declared output checks and metric tolerances determine reproduction success; the demonstration includes restored fitted preprocessing/model predictions as applicable and reports mismatches rather than claiming successful reproduction.
 
-Architecture references: [§4 Baseline modeling and Model development](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§8 ModelAdapter interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines).
+Dependencies: US-39 M1 artifacts; US-13 restoration; US-27 stages/reproduction; US-15 fitted-state restoration and US-21 output/tolerance checks. Declare concrete checks/tolerances in later implementation plans before execution.
 
-### US-19: Manage PyTorch execution
+## Uncommitted roadmap
 
-As a data scientist, I want PyTorch runs to support CPU/GPU execution, checkpoints, and cancellation so that deep-learning experiments are manageable.
-
-Acceptance criteria:
-
-- <a id="us-19-ac-01"></a> **US-19-AC-01:** Basic PyTorch training runs on CPU and supports GPU execution when the required hardware/backend is available.
-- <a id="us-19-ac-02"></a> **US-19-AC-02:** Checkpoints are captured as run artifacts and can be restored by the model implementation.
-- <a id="us-19-ac-03"></a> **US-19-AC-03:** Cancellation stops managed training and preserves available logs, checkpoints, and status.
-- <a id="us-19-ac-04"></a> **US-19-AC-04:** Resource requests, hardware metadata, runtime limits, and supported quotas are recorded and enforced where supported.
-
-Architecture references: [§9 Execution](design/execution-and-governance.md#execution); [§8 ModelAdapter interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts).
-
-### US-20: Tune within declared limits
-
-As a data scientist, I want bounded tuning with enforced trial and runtime limits so that agents cannot exceed the authorized search or budget.
-
-Acceptance criteria:
-
-- <a id="us-20-ac-01"></a> **US-20-AC-01:** Candidates use only declared algorithms, fixed values, categorical choices, and numeric ranges; omitted defaults cannot be tuned.
-- <a id="us-20-ac-02"></a> **US-20-AC-02:** Candidate validation rejects boundary violations before training, including submissions from custom code and notebooks.
-- <a id="us-20-ac-03"></a> **US-20-AC-03:** Experiment-count and runtime budgets stop new work and leave a reviewable summary of completed trials.
-- <a id="us-20-ac-04"></a> **US-20-AC-04:** The optimization summary identifies the search performed, resources consumed, candidate evidence, and model proposed for final evaluation.
-
-Architecture references: [§8 Algorithm and hyperparameter configuration](design/interfaces-and-configuration.md#algorithm-and-hyperparameter-configuration); [§5 Optimization](agentic-ml-harness-design.md#5-standard-workflow-phases-and-gates); [§9 Execution](design/execution-and-governance.md#execution).
-
-### US-21: Independently assess experiment results
-
-As a data scientist, I want independent evaluation of execution, leakage, model quality, robustness, and reproducibility so that acceptance rests on evidence.
-
-Acceptance criteria:
-
-- <a id="us-21-ac-01"></a> **US-21-AC-01:** The evaluator checks successful execution and required artifacts independently of agent assertions.
-- <a id="us-21-ac-02"></a> **US-21-AC-02:** Scientific-validity checks reject split violations, improper preprocessing fitting, and leakage.
-- <a id="us-21-ac-03"></a> **US-21-AC-03:** Approved metrics and baseline comparisons are computed consistently, respecting optimization direction.
-- <a id="us-21-ac-04"></a> **US-21-AC-04:** Defined folds, data slices, or stress tests assess robustness; repeated runs are checked against explicit reproducibility tolerances.
-- <a id="us-21-ac-05"></a> **US-21-AC-05:** Structured evaluation results distinguish execution failure, scientific invalidity, and insufficient model quality.
-
-Architecture references: [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
-
-### US-24: Protect final holdout evaluation
-
-As a data scientist, I want protected holdout evaluation reserved for the authorized final workflow phase so that final-test results do not influence development.
-
-Acceptance criteria:
-
-- <a id="us-24-ac-01"></a> **US-24-AC-01:** Experiment agents, training code, and exploratory kernels cannot access protected test data; protection is enforced independently of agent instructions.
-- <a id="us-24-ac-02"></a> **US-24-AC-02:** Only the independent evaluator accesses the holdout for the authorized final evaluation.
-- <a id="us-24-ac-03"></a> **US-24-AC-03:** Protected-test results cannot drive feature, model, or acquisition improvement loops.
-- <a id="us-24-ac-04"></a> **US-24-AC-04:** Unsuccessful final evaluation ends in rejection or review; further development requires a separately approved protocol preserving holdout protection.
-- <a id="us-24-ac-05"></a> **US-24-AC-05:** Completion requires developer approval of successful final evaluation.
-
-Architecture references: [§4 Final evaluation](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§9 Notebook development and execution contract](design/execution-and-governance.md#notebook-development-and-execution-contract); [§9 Governance](design/execution-and-governance.md#governance); [ADR-006](design/architecture-decisions.md#pending-decisions).
-
-### US-26: Compare runs and review the final report
-
-As a data scientist, I want run comparisons and a final report linked to their evidence so that I can judge the model against the original objective.
-
-Acceptance criteria:
-
-- <a id="us-26-ac-06"></a> **US-26-AC-06:** MLflow comparisons expose effective parameters, metrics, execution status, and model artifacts for baseline and candidate runs.
-- <a id="us-26-ac-07"></a> **US-26-AC-07:** The final report identifies the model, approved metrics, baseline comparison, validity/robustness/reproducibility findings, and acceptance outcome.
-- <a id="us-26-ac-08"></a> **US-26-AC-08:** Model lineage traces through component identities, fitted feature pipelines, source datasets, exact code/configuration snapshots, and environment identity.
-- <a id="us-26-ac-09"></a> **US-26-AC-09:** Reports preserve references to independent evaluation evidence rather than treating generated narrative as proof of acceptance.
-
-Architecture references: [§3 Component responsibilities](agentic-ml-harness-design.md#component-responsibilities); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
-
-## Milestone 4: Let an agent improve an experiment
-
-An agent resolves delegated choices, generates notebooks, and improves a model using development feedback while the developer retains control of workflow phase scope and component permissions.
+Deferred requirements below are not active M3–6 delivery promises or new M99 scope. Entirely deferred criteria retain original wording. Stronger displaced clauses of retained criteria remain in the [original disposition matrix](../reviews/mvp-scope-criterion-dispositions.md#criterion-level-disposition-matrix), including isolation, approvals, hard quotas, full source capture and component-framework guarantees.
 
 ### US-04: Approve delegated experiment decisions
 
 As a data scientist, I want agents to propose delegated feature, metric, and algorithm decisions for approval so that I retain control over the experiment design.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
 
 Acceptance criteria:
 
@@ -430,11 +489,28 @@ Acceptance criteria:
 - <a id="us-04-ac-03"></a> **US-04-AC-03:** Ambiguities and conflicts are surfaced before affected execution, and dependent work waits for approval through applicable gates.
 - <a id="us-04-ac-04"></a> **US-04-AC-04:** Original inputs, resolved decisions, and their versions/checksums remain available in run lineage.
 
-Architecture references: [§8 Developer experiment inputs](design/interfaces-and-configuration.md#developer-experiment-inputs); [§4 Problem definition](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-06: Choose an algorithm execution mode
+
+As a data scientist, I want to use one algorithm, select among allowed algorithms, or compare the allowed set so that experimentation matches my question and budget.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
+
+Acceptance criteria:
+
+- <a id="us-06-ac-01"></a> **US-06-AC-01:** Use mode runs the specified allowed algorithm; select mode records a selection from the allowed set; compare mode evaluates every algorithm in that set within the approved plan and budgets.
+- <a id="us-06-ac-02"></a> **US-06-AC-02:** All modes respect task compatibility, parameter boundaries, and trial/runtime budgets.
+- <a id="us-06-ac-03"></a> **US-06-AC-03:** Comparing algorithms does not require exhaustive enumeration of parameter combinations.
+- <a id="us-06-ac-04"></a> **US-06-AC-04:** Suggested algorithms or expanded ranges are recorded only as recommendations for a subsequent experiment; adopting them requires a new versioned configuration and applicable approvals.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-07: Generate reviewable experiment notebooks
 
 As a data scientist, I want agents to generate readable notebooks and project code so that I can inspect, edit, and understand their work.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
 
 Acceptance criteria:
 
@@ -443,11 +519,13 @@ Acceptance criteria:
 - <a id="us-07-ac-03"></a> **US-07-AC-03:** Saved notebooks support interactive use and fresh-kernel managed execution without hidden state.
 - <a id="us-07-ac-04"></a> **US-07-AC-04:** Generated notebooks, helpers, and project code stay within the experiment repository and authorized storage; the toolkit installation/source remain unchanged.
 
-Architecture references: [§9 Notebook development and execution contract](design/execution-and-governance.md#notebook-development-and-execution-contract); [§3 Toolkit and experiment project boundary](agentic-ml-harness-design.md#harness-and-experiment-project-boundary).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-08: Explore interactively under the same controls
 
 As a data scientist, I want to explore interactively in VS Code under the experiment's access rules so that exploration preserves evaluation integrity.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
 
 Acceptance criteria:
 
@@ -456,11 +534,37 @@ Acceptance criteria:
 - <a id="us-08-ac-03"></a> **US-08-AC-03:** Training cells submit through managed APIs that enforce candidate boundaries, applicable approvals, budgets, and tracking.
 - <a id="us-08-ac-04"></a> **US-08-AC-04:** Interactive execution cannot establish acceptance; recorded results require managed execution of saved snapshots and independent evaluation.
 
-Architecture references: [§9 Notebook development and execution contract](design/execution-and-governance.md#notebook-development-and-execution-contract); [§8 Project initialization and installation](design/interfaces-and-configuration.md#project-initialization-and-installation); [ADR-006](design/architecture-decisions.md#pending-decisions).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-09: Execute saved notebooks reproducibly
+
+As a data scientist, I want saved notebooks executed automatically from a fresh kernel with explicit inputs so that recorded results do not depend on hidden state.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
+
+Acceptance criteria:
+
+- <a id="us-09-ac-05"></a> **US-09-AC-05:** Access restrictions, approvals, and budgets apply equally to notebook and Python entrypoints; unauthorized filesystem or credential access is blocked.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-12: Assess data quality and define splits
+
+As a data scientist, I want basic data validation and review so that I can identify extraction and quality-rule failures before accepting a reproducible data run.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
+
+Acceptance criteria:
+
+- <a id="us-12-ac-04"></a> **US-12-AC-04:** Dataset assessment and split protocol are presented for approval before dependent feature or modeling work.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-17: Respect immutable supplied components
 
 As a data scientist, I want supplied code to remain immutable unless I approve changes so that agents respect ownership and component permissions.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
 
 Acceptance criteria:
 
@@ -469,11 +573,28 @@ Acceptance criteria:
 - <a id="us-17-ac-03"></a> **US-17-AC-03:** Approved changes to immutable code create a new versioned experiment configuration.
 - <a id="us-17-ac-04"></a> **US-17-AC-04:** Modification permission does not expand algorithm, parameter, data-access, or evaluation boundaries; authorized code changes appear in run snapshots.
 
-Architecture references: [§8 User-supplied ML components](design/interfaces-and-configuration.md#user-supplied-ml-components); [§4 Scope changes](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-19: Manage PyTorch execution
+
+As a data scientist, I want PyTorch runs to support CPU/GPU execution, checkpoints, and cancellation so that deep-learning experiments are manageable.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
+
+Acceptance criteria:
+
+- <a id="us-19-ac-01"></a> **US-19-AC-01:** Basic PyTorch training runs on CPU and supports GPU execution when the required hardware/backend is available.
+- <a id="us-19-ac-02"></a> **US-19-AC-02:** Checkpoints are captured as run artifacts and can be restored by the model implementation.
+- <a id="us-19-ac-03"></a> **US-19-AC-03:** Cancellation stops managed training and preserves available logs, checkpoints, and status.
+- <a id="us-19-ac-04"></a> **US-19-AC-04:** Resource requests, hardware metadata, runtime limits, and supported quotas are recorded and enforced where supported.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-22: Improve models using development feedback
 
 As a data scientist, I want agents to revise experiments using structured development feedback so that model improvement can proceed within approved scope.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
 
 Acceptance criteria:
 
@@ -483,34 +604,13 @@ Acceptance criteria:
 - <a id="us-22-ac-04"></a> **US-22-AC-04:** Iteration stops on success, budget exhaustion, lack of improvement, unrecoverable failure, policy violation, or developer cancellation.
 - <a id="us-22-ac-05"></a> **US-22-AC-05:** Workflow phase returns and scope expansions await authorization; protected-test feedback never enters the revision loop.
 
-Architecture references: [§4 Hierarchical Closed-Loop Workflow](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
-
-### US-30: Connect the first agent with preserved runtime guidance
-
-As a data scientist, I want an agent adapter with explicit, preserved runtime guidance so that agent behavior follows the approved experiment context.
-
-Acceptance criteria:
-
-- <a id="us-30-ac-01"></a> **US-30-AC-01:** The first managed coding-assistant adapter verifies a concrete product/interface/version and supports capability discovery, structured task/result exchange, and documented task cancellation through the common contract. Interactive assistants can use the public toolkit CLI/API without an adapter. Acceptance demonstrates task receipt, project-code/notebook revision, managed execution, development-feedback consumption, and stopping at a developer approval boundary.
-- <a id="us-30-ac-02"></a> **US-30-AC-02:** Runtime loading explicitly selects packaged shared guidance, relevant task-specific guidance, and configured project guidance, recording ownership and order.
-- <a id="us-30-ac-03"></a> **US-30-AC-03:** Development `AGENTS.md` files from either repository are excluded from automatic loading by the toolkit runtime loader. Instructions independently loaded by an external assistant are outside this guarantee; observable additional context and capture limitations are recorded.
-- <a id="us-30-ac-04"></a> **US-30-AC-04:** The plan snapshots toolkit-supplied guidance contents, paths, versions/checksums, and load order; subsequent tasks reference the preserved bundle, with managed adapters demonstrating delivery. This records toolkit-supplied guidance, not the assistant's complete instruction context.
-- <a id="us-30-ac-05"></a> **US-30-AC-05:** Conflicting guidance or attempts to expand experiment constraints block affected execution; adopting changed guidance requires a new versioned configuration and applicable approvals.
-
-Architecture references: [§8 AgentAdapter interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts); [§8 Development and runtime agent instructions](design/interfaces-and-configuration.md#development-and-runtime-agent-instructions).
-
-## Milestone 5: Supervise and resume the complete workflow
-
-The developer supervises all workflow phases through durable, scoped approval decisions, recovers interrupted work, and can use another agent adapter without changing experiment contracts.
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-23: Approve workflow phase progression and scope changes
 
-Future scope: US-23-AC-02 retains authenticated approval for Milestone 5. Current
-unauthenticated toolkit experiment records under US-03-SC-01 do not satisfy it;
-authentication is deferred beyond the current version, not claimed delivered.
-This distinction does not relax any development or testing approval gate.
+undefined
 
-As a data scientist, I want to approve, revise, or reject workflow phase progression using validated evidence so that I supervise consequential decisions.
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
 
 Acceptance criteria:
 
@@ -520,11 +620,26 @@ Acceptance criteria:
 - <a id="us-23-ac-04"></a> **US-23-AC-04:** Workflow phases can be skipped only when the approved plan identifies valid existing artifacts supporting the skip.
 - <a id="us-23-ac-05"></a> **US-23-AC-05:** Rejection or cancellation preserves results; successful final evaluation requires explicit model approval before completion.
 
-Architecture references: [§4 Hierarchical Closed-Loop Workflow](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§5 Workflow phases and gates](agentic-ml-harness-design.md#5-standard-workflow-phases-and-gates); [§9 Governance](design/execution-and-governance.md#governance).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-24: Protect final holdout evaluation
+
+As a data scientist, I want protected holdout evaluation reserved for the authorized final workflow phase so that final-test results do not influence development.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
+
+Acceptance criteria:
+
+- <a id="us-24-ac-01"></a> **US-24-AC-01:** Experiment agents, training code, and exploratory kernels cannot access protected test data; protection is enforced independently of agent instructions.
+- <a id="us-24-ac-05"></a> **US-24-AC-05:** Completion requires developer approval of successful final evaluation.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-25: Resume interrupted workflows
 
 As a data scientist, I want interrupted workflows to resume from durable state without repeating completed runs so that work and approvals are preserved.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
 
 Acceptance criteria:
 
@@ -533,41 +648,27 @@ Acceptance criteria:
 - <a id="us-25-ac-03"></a> **US-25-AC-03:** Resumed tasks use the preserved compatible configuration and runtime instruction bundle, even if source guidance has changed.
 - <a id="us-25-ac-04"></a> **US-25-AC-04:** Cancelled, failed, budget-exhausted, and review-required outcomes retain evidence and do not silently authorize further work.
 
-Architecture references: [§3 Component responsibilities](agentic-ml-harness-design.md#component-responsibilities); [§9 Workflow states](design/execution-and-governance.md#workflow-states); [§8 Development and runtime agent instructions](design/interfaces-and-configuration.md#development-and-runtime-agent-instructions).
-
-### US-30: Use interchangeable agent adapters
-
-As a data scientist, I want interchangeable agent adapters so that I can change assistants without redefining the experiment workflow.
-
-Acceptance criteria:
-
-- <a id="us-30-ac-06"></a> **US-30-AC-06:** Two adapters successfully execute tasks using the same versioned task/result contract.
-- <a id="us-30-ac-07"></a> **US-30-AC-07:** Capability discovery identifies which tasks each adapter supports before delegation.
-- <a id="us-30-ac-08"></a> **US-30-AC-08:** Both managed adapters meet the common cancellation, toolkit-guidance delivery, developer-approval, access, and toolkit-run budget requirements, including boundaries for assistant tools/workspaces. Agent-task cancellation is recorded separately from experiment-run cancellation; assistant usage measurement/control capabilities and limitations are explicit. Resumption uses durable task/run evidence and consumed budgets rather than assistant memory.
-- <a id="us-30-ac-09"></a> **US-30-AC-09:** Agent selection does not alter independent evaluation or the experiment's allowed boundaries.
-
-Architecture references: [§8 AgentAdapter interface](design/interfaces-and-configuration.md#8-interfaces-and-contracts); [§8 Development and runtime agent instructions](design/interfaces-and-configuration.md#development-and-runtime-agent-instructions).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-26: Audit workflow decisions and evidence
 
-As a reviewer, I want run lineage connected to workflow decisions so that I can reconstruct what was authorized, executed, and accepted.
+As a data scientist, I want recorded runs linked to their exact inputs, code, and environment so that I can inspect and audit results.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
 
 Acceptance criteria:
 
 - <a id="us-26-ac-10"></a> **US-26-AC-10:** Toolkit manifests connect runs, MLflow records, DVC state, configuration versions, runtime bundles, and approval records.
 - <a id="us-26-ac-11"></a> **US-26-AC-11:** The audit trail identifies the scope authorizing each workflow phase, approved scope changes, and the evidence used for each decision.
-- <a id="us-26-ac-12"></a> **US-26-AC-12:** Bidirectional run references allow lookup from a toolkit result to its MLflow run and from the tracking record to toolkit provenance.
 - <a id="us-26-ac-13"></a> **US-26-AC-13:** Resumption and reuse preserve original producer provenance and the decisions authorizing subsequent use.
 
-Architecture references: [§3 Component responsibilities](agentic-ml-harness-design.md#component-responsibilities); [§9 Experiment tracking, data versioning, and pipelines](design/execution-and-governance.md#experiment-tracking-data-versioning-and-pipelines); [§9 Independent evaluation](design/execution-and-governance.md#independent-evaluation).
-
-## Milestone 6: Improve the dataset through authorized acquisition
-
-The developer reviews evidence of data limitations, authorizes a bounded acquisition, and evaluates the effect of the resulting dataset through approved downstream work.
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-28: Diagnose data gaps and propose acquisition
 
 As a data scientist, I want evidence-backed data-gap diagnoses and acquisition proposals so that I can decide whether additional data is worth obtaining.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
 
 Acceptance criteria:
 
@@ -576,11 +677,13 @@ Acceptance criteria:
 - <a id="us-28-ac-03"></a> **US-28-AC-03:** Expected benefit is presented as a hypothesis rather than a guaranteed improvement.
 - <a id="us-28-ac-04"></a> **US-28-AC-04:** Proposals do not use protected final-test feedback or expand access, evaluation protocols, or budgets without approval.
 
-Architecture references: [§6 Acquisition strategies and Acquisition proposal contract](design/data-and-features.md#6-data-extraction-and-iterative-acquisition); [§4 Outer loop](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-29: Acquire data and measure its effect within approved limits
 
 As a data scientist, I want authorized acquisition to enforce limits, version new data, compare outcomes, and stop at defined conditions so that data improvement remains controlled.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
 
 Acceptance criteria:
 
@@ -592,7 +695,30 @@ Acceptance criteria:
 - <a id="us-29-ac-06"></a> **US-29-AC-06:** The acquisition loop stops on success, budget exhaustion, lack of improvement, unrecoverable failure, policy violation, or cancellation, preserving a reviewable outcome.
 - <a id="us-29-ac-07"></a> **US-29-AC-07:** Resumption after acquisition retains approvals, budget usage, dataset lineage, and completed-run identities; advanced acquisition strategies remain deferred according to the design's [milestone delivery plan](design/milestone-delivery.md#11-milestone-delivery-plan).
 
-Architecture references: [§6 Data Extraction and Iterative Acquisition](design/data-and-features.md#6-data-extraction-and-iterative-acquisition); [§4 Scope changes and stopping conditions](agentic-ml-harness-design.md#4-hierarchical-closed-loop-workflow); [§9 Governance](design/execution-and-governance.md#governance).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+### US-30: Connect the first agent with preserved runtime guidance
+
+As a data scientist, I want an agent adapter with explicit, preserved runtime guidance so that agent behavior follows the approved experiment context.
+
+**Deferred:** original criteria below are not MVP prerequisites or delivered behavior.
+
+Acceptance criteria:
+
+- <a id="us-30-ac-01"></a> **US-30-AC-01:** The first managed coding-assistant adapter verifies a concrete product/interface/version and supports capability discovery, structured task/result exchange, and documented task cancellation through the common contract. Interactive assistants can use the public toolkit CLI/API without an adapter. Acceptance demonstrates task receipt, project-code/notebook revision, managed execution, development-feedback consumption, and stopping at a developer approval boundary.
+- <a id="us-30-ac-02"></a> **US-30-AC-02:** Runtime loading explicitly selects packaged shared guidance, relevant task-specific guidance, and configured project guidance, recording ownership and order.
+- <a id="us-30-ac-03"></a> **US-30-AC-03:** Development `AGENTS.md` files from either repository are excluded from automatic loading by the toolkit runtime loader. Instructions independently loaded by an external assistant are outside this guarantee; observable additional context and capture limitations are recorded.
+- <a id="us-30-ac-04"></a> **US-30-AC-04:** The plan snapshots toolkit-supplied guidance contents, paths, versions/checksums, and load order; subsequent tasks reference the preserved bundle, with managed adapters demonstrating delivery. This records toolkit-supplied guidance, not the assistant's complete instruction context.
+- <a id="us-30-ac-05"></a> **US-30-AC-05:** Conflicting guidance or attempts to expand experiment constraints block affected execution; adopting changed guidance requires a new versioned configuration and applicable approvals.
+- <a id="us-30-ac-06"></a> **US-30-AC-06:** Two adapters successfully execute tasks using the same versioned task/result contract.
+- <a id="us-30-ac-07"></a> **US-30-AC-07:** Capability discovery identifies which tasks each adapter supports before delegation.
+- <a id="us-30-ac-08"></a> **US-30-AC-08:** Both managed adapters meet the common cancellation, toolkit-guidance delivery, developer-approval, access, and toolkit-run budget requirements, including boundaries for assistant tools/workspaces. Agent-task cancellation is recorded separately from experiment-run cancellation; assistant usage measurement/control capabilities and limitations are explicit. Resumption uses durable task/run evidence and consumed budgets rather than assistant memory.
+- <a id="us-30-ac-09"></a> **US-30-AC-09:** Agent selection does not alter independent evaluation or the experiment's allowed boundaries.
+
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+
+M50/M99 criteria and their original notes below are retained. References in those
+historical notes to the former milestone sequence do not expand the revised MVP.
 
 ## Milestone 50: Improve the technical environment
 
@@ -669,3 +795,52 @@ Acceptance criteria:
 - <a id="us-34-ac-01"></a> **US-34-AC-01:** Contribution instructions describe how to prepare and submit changes and link to the development setup and verification commands.
 - <a id="us-34-ac-02"></a> **US-34-AC-02:** Required CI checks and review expectations are documented, including the conditions for merging a pull request.
 - <a id="us-34-ac-03"></a> **US-34-AC-03:** Branch protection enforces the documented required checks and review expectations on the default branch.
+
+## Historical link aliases
+
+These anchors preserve prior issue/plan/design references as migration context;
+they do not reinstate the old delivery sequence or superseded wording.
+
+<a id="milestone-1-run-and-record-a-reproducible-experiment"></a>
+
+<a id="us-10-control-and-inspect-runs"></a>
+
+<a id="us-11-extract-approved-source-data"></a>
+
+<a id="us-12-validate-extracted-data"></a>
+
+<a id="us-13-version-and-restore-datasets"></a>
+
+<a id="us-26-record-run-artifacts-and-provenance"></a>
+
+<a id="us-27-reproduce-a-basic-run-in-a-clean-environment"></a>
+
+<a id="milestone-2-assess-data-and-build-reproducible-feature-pipelines"></a>
+
+<a id="us-14-generate-and-compare-feature-pipelines"></a>
+
+<a id="us-16-register-supplied-preprocessing-components"></a>
+
+<a id="us-27-reproduce-and-reuse-pipeline-stages"></a>
+
+<a id="milestone-3-train-tune-and-independently-evaluate-models"></a>
+
+<a id="us-16-register-supplied-models"></a>
+
+<a id="us-18-train-across-supported-frameworks"></a>
+
+<a id="us-20-tune-within-declared-limits"></a>
+
+<a id="us-21-independently-assess-experiment-results"></a>
+
+<a id="us-26-compare-runs-and-review-the-final-report"></a>
+
+<a id="milestone-4-let-an-agent-improve-an-experiment"></a>
+
+<a id="milestone-5-supervise-and-resume-the-complete-workflow"></a>
+
+<a id="us-30-use-interchangeable-agent-adapters"></a>
+
+<a id="milestone-6-improve-the-dataset-through-authorized-acquisition"></a>
+
+<a id="us-01-install-a-pinned-harness-version"></a>
