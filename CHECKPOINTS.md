@@ -2,35 +2,43 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current US-11 planning request — 2026-11-07 UTC
+## Current US-11 pandas design revision — 2026-11-07 UTC
 
-Developer requested an implementation plan for US-11. Checkout is now
-`US-11-local-data-extraction`, created from clean `main` at `03dd739`.
-Authentication is now available. Retrieved issue #14's full body and all comments
-(one unique comment matching the reported count; stable metadata refresh).
-[Source snapshot](docs/plans/sources/us-11-issue-14.md) and
-[draft implementation plan](docs/plans/milestone-1-us-11.md) are saved.
-The export subprocess initially hit sandbox network restrictions; its approved
-outside-sandbox retry succeeded. Earlier authentication failures are resolved.
+Branch `US-11-local-data-extraction`, baseline `5c035cd`. Original plan approval,
+local planning commit and IP1 authorization remain recorded. Developer requested
+pandas for extraction and as the foundation for feature engineering, replacing
+the proposed proprietary classes. That explicit direction authorizes design
+revision US-11-SC-01; it does not authorize IP2 or approve its renewed IP1 gate.
 
-The plan covers all five M1 criteria in three implementation phases: settle the
-component contract/test boundaries; implement built-in extraction/provenance;
-verify project functions and both installed wheel paths. All tasks and gates
-remain pending. Extraction checksum evidence is independent of later US-13 DVC
-integration; no cross-story implementation is included. Proposed API, operation
-edge semantics and dependencies require IP1 contract review before code/tests.
+The [revised contract](docs/extraction.md) uses native pandas DataFrames/readers/
+operations, ordinary project functions, dictionaries and standard exceptions.
+Only a small provenance/publication helper remains proposed. DataFrame-based
+feature handoff is clarified; learned transforms still fit training rows only.
+[Plan scope history](docs/plans/milestone-1-us-11.md#scope-change-history) records
+changed/retained scope, reworked tasks, preserved criteria/evidence and gates.
+Active overview/data/interfaces/blueprint documents now match this direction.
+No feature implementation or cross-story executable task was added.
 
-Developer “I approve plan; commit changes; and authorize ip1” approved the plan,
-authorized a local commit and separately authorized IP1 on 2026-11-07 UTC.
-Next action: commit these planning records, then execute IP1 contract/document
-tasks and stop at its pending gate. No IP2 or push authorization.
-Only the checkpoint, new plan and source snapshot changed.
-Document/path/criterion/gate checks and `git diff --check` passed. No product
-code, runtime tests, dependency installation or publication performed.
-TDD and product checks do not apply to plan drafting. Historical milestone
-obligations and evidence remain open.
-The preceding scope-publication next action is superseded by commit `03dd739`
-and this new planning request; its historical approval records remain intact.
+IP1-T1–T3 were reopened and their design work renewed; technically complete for
+review. [Current evidence and test matrix](docs/verification/us-11-ip1.md) replace
+the class-based boundary; [initial evidence](docs/verification/us-11-ip1-initial.md)
+and full pre-revision document snapshots remain preserved. Complete issue #14
+refresh still has one unique comment and stable updated_at 2026-11-07T00:28:37Z;
+all five criteria remain M1 with no issue/design conflict or GitHub write.
+
+Document links/anchors, Python-example syntax, task/criterion/gate checks and
+whitespace passed. Product code/tests/dependencies/lock/resources unchanged;
+no executable tests or installation because this is documentation-only IP1 work.
+Raw renewed records: `.dev-records/verification/20261107-5c035cd-us11-ip1-pandas/`;
+initial records and failed/limited historical evidence remain intact. Dependency,
+typing, runtime and both-wheel verification remain IP2/IP3 obligations. Historical
+M1/M50 and future milestone acceptance obligations remain open.
+
+Developer “i approve ip1; commit the changes; i authorize ip2” approved revised
+IP1 and public test boundaries on 2026-11-07 UTC, authorized a local commit of
+these documents and IP2 execution. Next action: commit the approved revision,
+then execute IP2 with small TDD slices and required M1/shared checks. Stop at
+IP2 gate; no IP3 or push authorization. No product implementation yet.
 
 ## Current MVP scope revision — Accepted — 2026-11-07 UTC
 

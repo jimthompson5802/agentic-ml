@@ -8,8 +8,8 @@
   one unique comment, all pages retrieved, stable metadata refresh. GitHub's
   milestone field is unset; the issue body assigns all five criteria to M1.
 - **User-visible outcome:** A separate experiment project reads local CSV and
-  Parquet, inspects source schemas, executes explicit selection/filter/join rules
-  or its own extraction function, and receives output plus traceable extraction
+  Parquet, inspects source schemas, executes a project pandas function using explicit settings and native
+  selection/filter/merge operations, and receives a DataFrame plus traceable extraction
   metadata or an actionable failure.
 - **Acceptance criteria covered:** [US-11-AC-01](../specs/user-stories.md#us-11-ac-01),
   [AC-02](../specs/user-stories.md#us-11-ac-02),
@@ -87,141 +87,126 @@ or passing runtime checks are claimed by this plan.
 
 ## Scope-change history
 
-None. During execution use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md)
+### US-11-SC-01 — Pandas extraction foundation — 2026-11-07 UTC
+
+- **Request and reason:** Developer “Instead of creating our own proprietary
+  classes, I'd like to use pandas for all data extraction and the basis for
+  feature engineering. Rework the design of data extraction to use pandas.”
+- **Scope difference:** Replace proposed request/result/schema/source/operation/
+  context classes and ExtractionError with native pandas DataFrames, ordinary
+  project pandas functions, built-in mappings/tuples and standard/native
+  exceptions. Remove the separate inspect_source API and toolkit predicate/join
+  interpreter. Source inspection uses pandas directly and the extraction report.
+  Retain one small recording/publication helper. Clarify DataFrames as the basis
+  for future authored features while retaining training-only learned transforms.
+- **Impact:** Reopened IP1-T1–T3 for design/test-boundary rework, now technically
+  complete with revised evidence. IP2/IP3 tasks refined in place with stable IDs;
+  no executable work started or accepted. Prior IP1 class-contract evidence is
+  historical only; its gate was never approved. Original plan approval and
+  planning commit 5c035cd remain historical facts.
+- **Plan and requirement revisions:** This plan, [contract](../extraction.md),
+  [current IP1 evidence](../verification/us-11-ip1.md), active overview/data/
+  interfaces/blueprint. All US-11 criterion IDs/outcomes and milestone assignments
+  retained; no issue/story text or ADR changed. Feature implementation remains
+  outside US-11; no cross-story task added. Current issue #14 remains consistent
+  with ordinary project extraction functions and configured operations.
+- **Verification and gates:** Renew document/example/link/task/criterion checks.
+  Preserve all five criterion families, public installed boundaries, failure and
+  identity checks, both wheel paths, M1 phase and M1–6 story commands and shared
+  checks. Replace tests of withdrawn toolkit-specific types/semantics with
+  observable native pandas/project-function cases. No reduction in milestone or
+  artifact evidence; no invented testing of nonexistent proprietary APIs.
+- **Decision:** Approved for this design revision by the explicit developer
+  instruction above, 2026-11-07 UTC. This does not approve revised IP1 gate or IP2.
+- **Resume point:** Revised IP1 contract and public case matrix ready for renewed
+  developer gate review; stop before executable implementation.
+- **History:** [Initial IP1 evidence](../verification/us-11-ip1-initial.md);
+  full pre-revision documents retained under
+  `.dev-records/verification/20261107-5c035cd-us11-ip1-pandas/identities/`.
+
+ During execution use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md)
 for material scope/approach changes. Record change ID/date, request, scope
 difference, impacted tasks/criteria/evidence/gates, decision reference and resume
 point here. No inferred approval from silence or command permissions.
 
-## Proposed public contract for IP1 review
+## Public contract for IP1 gate review
 
-All names and paths in this section are **proposed**, not existing exports.
-Keep reusable helpers in `src/agentic_ml/extraction/` with exports from its
-`__init__.py`. Prefer native pandas file/merge behavior behind a small typed API;
-do not create a connector framework or expression language based on Python eval.
+[Pandas extraction contract](../extraction.md) replaces the original class-based
+proposal under US-11-SC-01. Public data is pandas DataFrame, settings/report are
+plain dictionaries, and project functions use native pandas operations. One
+proposed extract_data recording helper returns a DataFrame/report tuple;
+inspect_source and all proposed proprietary extraction classes are withdrawn.
+Native pandas semantics replace the custom predicate catalogue/row-order rules.
 
-1. `inspect_source(SourceRequest) -> SourceInspection`: explicit absolute
-   `project_root`, local source path and format/reader settings. Return ordered
-   column names and logical types, parsed row count, file byte count, resolved
-   source path, SHA-256 content identity, and effective reader settings. Relative
-   paths resolve from project root regardless of caller cwd; record cwd separately.
-   CSV reports parsed/inferred types; Parquet reports the reader's schema. No
-   promise that inference is a data-quality check or that inspection is free of
-   full-file reads.
-2. `extract_data(ExtractionRequest) -> ExtractionResult`: ordered named sources,
-   explicit operations, destination and format. Return output path/schema/row count,
-   output SHA-256 and a serializable provenance report. No plan/approval ID or
-   training validation record is required. Do not add a new CLI family in this
-   story; project scripts call Python and can print/save the returned report.
-3. Typed declarative operations: source projections, filters and ordered joins,
-   with an optional final projection. Propose conjunction of `eq`, `ne`, `lt`,
-   `le`, `gt`, `ge`, `in`, `is_null`, `not_null` predicates; reject unknown columns,
-   operators and incompatible literals before producing a success record.
-   Missing values do not match ordinary comparisons; explicit null predicates
-   select them. Propose inner/left/right/full joins with explicit keys, collision
-   suffixes and optional declared cardinality checked through native merge.
-   Record effective join mode, keys, cardinality and ordered settings. Freeze
-   null-key matching, duplicate-key expansion and row ordering at IP1 with
-   concrete examples; do not let incidental backend behavior become undocumented
-   product guarantees. Empty outputs are extractable with schema/row count;
-   required nonempty data is a later quality rule.
-4. Optional project callable mode: pass an ordinary imported project function
-   with named loaded frames and JSON-compatible settings; receive a dataframe
-   for the same serialization/provenance checks. No dynamic import registry.
-   Require declared local inputs and a project code reference; record callable
-   module/qualified name and declared code path/hash/settings. Do not claim to
-   discover arbitrary hidden reads or capture all imported helpers. In IP1,
-   settle whether callable and declarative operations are exclusive; the proposed
-   minimal contract makes them exclusive and rejects ambiguous mixed requests.
-5. Provenance: resolved and supplied source paths, byte hashes, actual reader and
-   operation settings, project root/cwd, UTC start/completion times, elapsed time,
-   output path/format/schema/row count/hash and relevant library/toolkit versions.
-   The request/result/report shapes and timestamp representation are frozen at IP1.
-   Hash bytes actually consumed; reject detectable source change during reading.
-   Do not claim OS isolation or an immutable source store. Output checksum is
-   always real; DVC references remain absent until supplied by native integration.
-6. `ExtractionError`: actionable source/operation/output location and stage/code,
-   preserving the original cause. Reject missing/unreadable/unsupported/malformed
-   inputs, duplicate/ambiguous source names, invalid operations, incompatible
-   callback returns, callback failures, output conflicts and write failures.
-   Validate destinations before invoking callbacks; never overwrite source or
-   existing destination files. Write output/report to a fresh owned destination
-   bundle and expose completion only after both are ready; a returned success
-   requires independently readable complete output and matching metadata. Failed
-   writes leave no new completed bundle; retain useful diagnostics and preserve
-   pre-existing files. No hard-kill recovery guarantee or cleanup of arbitrary
-   callback side effects. Final publication semantics must be reviewed at IP1.
+[Current IP1 evidence and public case matrix](../verification/us-11-ip1.md)
+maps the revised boundary to all five criteria. Original proposal/evidence is
+preserved as history; it is not current test-boundary confirmation. Proposed
+pandas>=3.1,<3.2, pyarrow>=25,<26 and dev-only pandas-stubs>=3,<4 constraints stay
+unchanged, with resolution/strict typing pending IP2. Existing strict APIs,
+packaged resources, verification commands and developer gates remain unchanged.
 
 ## US-11 / Implementation Phase 1: Confirm extraction contracts and test boundaries
 
-- **Outcome:** Reviewable, settled component contract and examples before tests.
+- **Outcome:** Reviewable pandas-based component contract and examples before tests.
 - **Entry conditions:** Plan review accepted and IP1 separately authorized.
 - **Acceptance criteria advanced:** AC-01–05 design only; none verified executable.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-11-IP1-T1 | Not started | Refresh #14 and all comments; verify active design/source agreement. Refine the proposed public contract in this plan and proposed `docs/extraction.md`. | Authorization | Exact signatures, reader options/defaults, path policy, join/filter/null/order rules, custom function contract and publication/failure semantics documented with examples; unresolved items block dependent tasks. | AC-01–05 |
-| US-11-IP1-T2 | Not started | Review pandas/pyarrow runtime requirements, typing and packaging impact in `pyproject.toml`, `uv.lock` and both independent inventory probes. Record chosen constraints and any necessary reference consultation. | T1 | Dependency/typing proposal and precise touched-file list; no dependency installation or Python implementation in this phase. No blanket suppressions. | AC-01/02/05 |
-| US-11-IP1-T3 | Not started | Freeze fixtures and public test boundaries below; refine IP2/IP3 tasks and proposed test selectors against the settled API. | T1, T2 | Developer can approve exact observable tests and coverage limits; document/link/whitespace checks pass and IP1 evidence is recorded in this plan. | AC-01–05 |
+| US-11-IP1-T1 | Complete | Refresh #14 and all comments; verify active design/source agreement. Refine the proposed public contract in this plan and proposed `docs/extraction.md`. | Authorization | One native-object helper signature, pandas readers/operations, plain report/settings, path/provenance/publication/failure rules and feature handoff documented with examples; unresolved items block dependent tasks. | AC-01–05 |
+| US-11-IP1-T2 | Complete | Review pandas/pyarrow runtime requirements, typing and packaging impact in `pyproject.toml`, `uv.lock` and both independent inventory probes. Record chosen constraints and any necessary reference consultation. | T1 | Dependency/typing proposal and precise touched-file list; no dependency installation or Python implementation in this phase. No blanket suppressions. | AC-01/02/05 |
+| US-11-IP1-T3 | Complete | Renew fixtures and public test boundaries for US-11-SC-01; refine stable IP2/IP3 task records and proposed test selectors against native pandas/project functions. | T1, T2 | Developer can approve exact observable tests and coverage limits; document/link/whitespace checks pass and IP1 evidence is recorded in this plan. | AC-01–05 |
 
 ### Verification and review evidence
 
 Inspect issue/spec alignment, local links, task/criterion coverage and
 `git diff --check`. No executable changes: TDD, milestone tests and shared
 executable checks are inapplicable to this documentation-only phase.
-Actual results/evidence: Pending implementation-phase execution.
+Actual results/evidence: [Revised IP1 report](../verification/us-11-ip1.md).
+Complete stable issue refresh and active-design comparison retained all criteria.
+Pandas/native-object contract and renewed public case matrix replace the initial
+proposal. Document/link/anchor/syntax/whitespace checks passed; no product,
+test, dependency, lock or packaged-resource changes. Active design documents
+were intentionally refined by the developer instruction. No runtime checks run.
 
-**Public boundaries proposed for confirmation:** public extraction Python API
-and persisted outputs/reports; separate experiment project invoking a normally
-installed package from an unrelated cwd; project function imported from its own
-installed project code. Assert independent row/schema/hash expectations, not
-private helper calls. No internal collaborator mocks. A controlled public callback
-may raise or modify a declared source to exercise failure behavior. Filesystem
-publication failure uses a real conflicting/unwritable destination where reliable;
-review any necessary fault boundary before using injection.
-
-**Controlled fixture:** `people.csv`: `(id, age, group)` rows `(1,20,A)`,
-`(2,35,B)`, `(3,40,A)`, `(4,null,C)`. `groups.parquet`: `(group,label)` rows
-`(A,alpha)`, `(B,beta)`. Filter `age >= 30`, left join on `group`, select
-`id,label`: expected `(2,beta)`, `(3,alpha)` in the reviewed ordering. CSV and
-Parquet variants must produce equivalent logical rows; compare types according
-to the reviewed schema policy. Create separate fixtures for every join mode,
-unmatched/null/duplicate keys, cardinality rejection, suffix collisions, empty
-results and malformed input. Expected rows are literal independently specified
-values, never computed by calling the operation under test. File hashes use an
-independent standard-library digest over actual input/output bytes; do not demand
-byte equality between separate Parquet serializations. No statistical tolerance
-is needed for these integer/string outcomes.
+**Public boundaries proposed for confirmation:** The function/standard/native
+objects in [the contract](../extraction.md), and literal rows/metadata/error
+expectations in [the revised public matrix](../verification/us-11-ip1.md#public-test-boundaries-and-case-matrix).
+All tests enter through project pandas functions and the installed recording
+helper; no private-helper mocks or proprietary predicate/type tests. Native join,
+filter and dtype behavior is demonstrated with explicit project settings and
+independently specified outputs. Boundary approval remains pending renewed review.
 
 ### Developer approval gate
 
-- **Approval criteria:** T1–T3 complete; API, dependency approach, all operation
-  edge semantics, fixture expectations and public test boundaries explicitly confirmed.
-- **Evidence presented:** Pending; contract diff and document checks.
-- **Remaining limitations or blocked work:** No runtime behavior yet.
-- **Developer decision / reference / date:** Pending.
-- **Requested changes and resolution:** None recorded.
-- **Progression authorized:** IP2 only after explicit IP1 gate approval.
+- **Approval criteria:** T1–T3 complete; revised pandas design, native-object helper, dependency
+  approach, fixture expectations and public test boundaries explicitly confirmed.
+- **Evidence presented:** [API contract](../extraction.md), [IP1 evidence](../verification/us-11-ip1.md), public case matrix and retained document checks.
+- **Remaining limitations or blocked work:** No runtime behavior; dependency/typing resolution and actual filesystem behavior await IP2. Contract and public test-boundary confirmation pending.
+- **Developer decision / reference / date:** Approved — developer “i approve ip1; commit the changes; i authorize ip2”, 2026-11-07 UTC. Revised contract and public test boundaries confirmed; local commit and IP2 authorized, not IP3 or push.
+- **Requested changes and resolution:** US-11-SC-01 requested pandas directly; revised design and evidence presented for renewed review. Gate approval remains pending.
+- **Progression authorized:** IP2 authorized by the approval above. Stop at IP2 gate.
 
-## US-11 / Implementation Phase 2: Implement local extraction and provenance
+## US-11 / Implementation Phase 2: Integrate native pandas extraction and provenance
 
-- **Outcome:** Public inspection and declarative extraction complete or fail honestly.
+- **Outcome:** Project pandas extraction and recording/publication helper complete or fail honestly.
 - **Entry conditions:** IP1 approved, including test boundaries and dependency scope.
-- **Acceptance criteria advanced:** AC-01 built-in portion, AC-02–05.
+- **Acceptance criteria advanced:** AC-01–05 component behavior; installed-project delivery verified in IP3.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-11-IP2-T1 | Not started | Add reviewed direct requirements/dev typing support in `pyproject.toml`, intentionally update `uv.lock`; update independent direct requirement inventories in both probes. Add proposed public models/errors/exports under `src/agentic_ml/extraction/`. | IP1 gate | Locked environment and both inventory declarations agree; typed interface skeleton enables first meaningful red test without unrelated import/setup failure. | AC-01/02/05 |
-| US-11-IP2-T2 | Not started | In proposed `tests/integration/test_extraction.py`, add one CSV inspection/identity test; implement inspection under proposed `extraction/sources.py`. Repeat separately for Parquet and missing/malformed/schema/path cases. | T1 | Each behavior has observed red then green; public results match literal schemas/rows and independent hashes; unrelated cwd resolves root correctly. | AC-01/02/05 |
-| US-11-IP2-T3 | Not started | Add vertical tests and implementation for no-op read/output, projections, each filter, then joins under proposed `extraction/operations.py` and `extraction/execution.py`. | T2 | Reviewed operations and edge cases produce independently expected rows; ambiguous/invalid configuration fails before publication. Each added behavior has its own red–green cycle. | AC-01/03/05 |
-| US-11-IP2-T4 | Not started | Add vertical tests and implementation for effective settings, timestamps, source/output identities and complete destination publication under proposed `extraction/provenance.py`; test malformed/changed source, destination conflict and write failure. | T3 | Persisted metadata matches actual output, timestamps bracket execution, old files remain intact and failure never returns a completed dataset/report. | AC-02/03/04/05 |
-| US-11-IP2-T5 | Not started | Run M1 and shared checks below; record red/green commands, results, selected counts, platform and lock identities in proposed `docs/verification/us-11-ip2.md`; update plan/checkpoint. | T1–T4 | Required verification passes; limitations and exclusions explicitly assigned to IP3-T4. | AC-01–05 built-in scope |
+| US-11-IP2-T1 | Not started | Add reviewed direct requirements/dev typing support in `pyproject.toml`, intentionally update `uv.lock`; update independent direct requirement inventories in both probes. Add only the proposed public function export under `src/agentic_ml/extraction/`; no extraction request/result/operation/exception classes. | IP1 gate | Locked environment and both inventory declarations agree; native-object function boundary enables first meaningful red test without unrelated import/setup failure. | AC-01/02/05 |
+| US-11-IP2-T2 | Not started | In proposed `tests/integration/test_extraction.py`, add one CSV identity/schema-report test through the helper and a project pandas function; implement native pandas reading under proposed `extraction/sources.py`. Repeat for Parquet, native reader kwargs and missing/malformed/schema/path cases. | T1 | Each behavior has observed red then green; public results match literal schemas/rows and independent hashes; unrelated cwd resolves root correctly. | AC-01/02/05 |
+| US-11-IP2-T3 | Not started | Add vertical native-pandas project-function examples/tests for no-op output, selection, filters and merge modes through proposed `extraction/execution.py`. Implement callback invocation and native return validation; do not create `operations.py` or a toolkit query engine. | T2 | Project functions using native pandas and explicit settings produce independent expected rows; native/project errors retain context and no completed output. Each added behavior has its own red–green cycle. | AC-01/03/05 |
+| US-11-IP2-T4 | Not started | Add vertical tests and implementation for effective settings, timestamps, source/output identities and complete destination publication under proposed `extraction/provenance.py`; test malformed/changed source, destination conflict and write failure. | T3 | Persisted metadata matches actual output, timestamps bracket execution, old files remain intact; standard/native failures never return a completed dataset/report; no custom exception class. | AC-02/03/04/05 |
+| US-11-IP2-T5 | Not started | Run M1 and shared checks below; record red/green commands, results, selected counts, platform and lock identities in proposed `docs/verification/us-11-ip2.md`; update plan/checkpoint. | T1–T4 | Required verification passes; limitations and exclusions explicitly assigned to IP3-T4. | AC-01–05 component scope |
 
 ### Verification and review evidence
 
 Public boundaries: reuse IP1-confirmed API/output boundaries. During short serial
 TDD cycles use `uv run --locked pytest tests/integration/test_extraction.py::<case>`;
-record why serial execution is appropriate. Cases are proposed until IP1 freezes
-their names. Declare direct M1 requirements with `pytest.mark.milestone_1`.
+record why serial execution is appropriate. Case names and public expectations are listed in the IP1 case matrix;
+implementation starts only after its gate approval. Declare direct M1 requirements with `pytest.mark.milestone_1`.
 Focused cycles do not replace the gate command.
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
@@ -233,7 +218,7 @@ Focused cycles do not replace the gate command.
 Impact: new extraction modules/dependencies, input paths, operation configuration,
 output serialization/provenance and failure semantics. M1 retains accepted
 initialization/planning/approval/validation regressions. Excluded M2–6 coverage,
-custom callable checks, both installed artifact paths and final criterion
+external-project pandas customization, both installed artifact paths and final criterion
 reconciliation are owned by IP3-T1–T4. Infrastructure/M0/M50 suites and standalone
 artifact drivers are not automatically run; broader commands need explicit
 developer direction. No exemption for a required slow M1 test.
@@ -242,12 +227,12 @@ developer direction. No exemption for a required slow M1 test.
 
 - **Approval criteria:** T1–T5 complete; red/green and M1/shared evidence passes.
 - **Evidence presented:** Pending; `docs/verification/us-11-ip2.md` when created.
-- **Remaining limitations:** Project callable and installed artifact evidence pending IP3.
+- **Remaining limitations:** External-project pandas function and installed artifact evidence pending IP3.
 - **Developer decision / reference / date:** Pending.
 - **Requested changes and resolution:** None recorded.
 - **Progression authorized:** IP3 only after explicit IP2 gate approval.
 
-## US-11 / Implementation Phase 3: Verify project extraction functions and installed delivery
+## US-11 / Implementation Phase 3: Verify native project pandas functions and installed delivery
 
 - **Outcome:** All criteria verified through installed public interfaces; usage documented.
 - **Entry conditions:** IP2 gate approved; confirmed IP1 callable/installed boundaries.
@@ -255,8 +240,8 @@ developer direction. No exemption for a required slow M1 test.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-11-IP3-T1 | Not started | Add one callback behavior test then minimal implementation in `extraction/execution.py`; repeat for settings/code provenance, invalid return, raised exception and missing declared input. | IP2 gate | Ordinary project function produces literal expected rows; failures preserve causes and publish no completed output; undeclared-read capture is not claimed. | AC-01/03/04/05 |
-| US-11-IP3-T2 | Not started | Add proposed `tests/installation/check_extraction.py` and an M1 installed test in `tests/integration/test_distribution_verification.py`, reusing its artifact fixture and distribution driver; extend probe inventory/resource checks only as needed. | T1 | Normally install direct wheel and wheel rebuilt from sdist into separate clean environments; copied project probe imports only installed API/project code, checks unrelated cwd, CSV/Parquet/filter/join/custom output, provenance and missing/corrupt-input failure. Assert imports are outside source checkout and runtime dependencies suffice. Observe red/green for new behavior. | AC-01–05 |
+| US-11-IP3-T1 | Not started | Extend public integration tests with a separately installed project pandas function using configured native operations; verify copied settings/code provenance, invalid return, original pandas/project exception types and missing declared input. Reuse IP2 callback support; no second custom-function adapter. | IP2 gate | Ordinary project function produces literal expected rows; failures preserve causes and publish no completed output; undeclared-read capture is not claimed. | AC-01/03/04/05 |
+| US-11-IP3-T2 | Not started | Add proposed `tests/installation/check_extraction.py` and an M1 installed test in `tests/integration/test_distribution_verification.py`, reusing its artifact fixture and distribution driver; extend probe inventory/resource checks only as needed. | T1 | Normally install direct wheel and wheel rebuilt from sdist into separate clean environments; copied project probe imports only installed API/project code, checks unrelated cwd, CSV/Parquet/native filter/merge/project-function output, provenance and missing/corrupt-input failure. Assert imports are outside source checkout and runtime dependencies suffice. Observe red/green for new behavior. | AC-01–05 |
 | US-11-IP3-T3 | Not started | Finish proposed `docs/extraction.md`, link it from `README.md`; include explicit root/cwd, settings, metadata/failure example and project callable use. Verify newly shipped resources through installed API if any are added by approved contract. | T2 | Commands/API examples match verified behavior; extraction success distinguished from quality validation; checksum/DVC ownership and trusted-code limits stated. No unrelated runtime resource rewrite. | AC-01–05 |
 | US-11-IP3-T4 | Not started | Final verification and criterion/deferred-check reconciliation in proposed `docs/verification/us-11-ip3.md`; update this plan and `CHECKPOINTS.md`. | T1–T3 | Final M1 gate, M1–6 acceptance and shared checks pass against final executable changes; both wheel paths and all criterion evidence recorded before final gate. | AC-01–05 |
 
@@ -314,7 +299,7 @@ developer direction. No exemption for a required slow M1 test.
   under `.dev-records/verification/<timestamp>-<commit>-us11-<unique>/`, following
   [records policy](../development/records.md). Preserve failures and diagnostics.
 - **Actual results and limitations:** Pending. No runtime verification performed
-  during plan drafting; no platform delivery claim.
+  during IP1 design/revision; no platform delivery claim.
 
 ## Story completion review
 
@@ -324,7 +309,7 @@ developer direction. No exemption for a required slow M1 test.
 | US-11-AC-02 | IP1-T1/T3; IP2-T2/T4; IP3-T2 | Ordered schemas, types, row/byte counts and source identities | Pending |
 | US-11-AC-03 | IP1-T1/T3; IP2-T3/T4; IP3-T1/T2 | Independently expected operations plus actual effective settings report | Pending |
 | US-11-AC-04 | IP1-T1/T3; IP2-T4; IP3-T1/T2 | Input/output independent SHA-256 checks, paths/settings/time/code references; checksum satisfies output identity branch | Pending |
-| US-11-AC-05 | IP1-T1/T3; IP2-T2–T4; IP3-T1/T2 | Invalid/missing/malformed inputs, ambiguous operations, callback and publication failure; no incomplete success | Pending |
+| US-11-AC-05 | IP1-T1/T3; IP2-T2–T4; IP3-T1/T2 | Invalid/missing/malformed inputs, native/project configuration errors, callback and publication failure; no incomplete success | Pending |
 
 - **Remaining work:** All implementation tasks; no partial prerequisite delivery claimed.
 - **Final verification:** Pending US-11-IP3-T4.

@@ -86,6 +86,14 @@ Reuse existing library behavior before adding toolkit infrastructure.
 6. Select a model, then run the separate final-test step and save its fitted pipeline.
 7. Commit source/configuration/lock/DVC metadata and reproduce declared stages.
 
+Pandas DataFrames and ordinary project pandas functions are the tabular basis
+for extraction and feature engineering. Reuse native pandas IO/operations;
+toolkit provenance/publication helpers use native objects and plain dictionaries
+rather than proprietary extraction classes. Learned preprocessing still follows
+the training-only native pipeline rules. This 2026-11-07 developer-directed
+refinement is recorded as [US-11-SC-01](../plans/milestone-1-us-11.md#scope-change-history);
+its concrete [API proposal](../extraction.md) awaits renewed IP1 gate review.
+
 These activities are not mandatory experiment approval gates. Existing explicit
 planning/approval APIs keep their strict behavior and unauthenticated-record
 limitations. The future simple path is owned by US-39-AC-01/02; it is not yet

@@ -13,6 +13,9 @@ a neighboring toolkit checkout are not experiment interfaces. Load shipped
 templates/runtime resources with installed-package resource APIs.
 
 The project owns extraction/custom transformers/estimators and notebooks. Use
+pandas DataFrames and project pandas functions for extraction and authored
+features, with plain dictionaries for extraction settings/metadata. Avoid
+toolkit-specific tabular/request/operation classes. Use
 native compatible scikit-learn objects and project functions; no general plugin
 registration, framework adapter or FeaturePlan language is required for the MVP.
 Validate supported estimator parameters and prediction compatibility through the
@@ -55,6 +58,10 @@ feature/preprocessing selection, split seed or supplied partitions, metric and
 direction, selected estimators, fixed/search parameters and maximum trial count.
 Record effective values and library/environment references. Missing/ambiguous
 required settings or invalid candidates must fail before affected training.
+Extraction settings feed ordinary project pandas code; no proprietary
+predicate/join configuration language is required. The
+[US-11 contract revision](../../extraction.md) is proposed component design,
+not a delivered basic-run API or acceptance of downstream feature stories.
 
 ## Paths, customization and notebooks
 
