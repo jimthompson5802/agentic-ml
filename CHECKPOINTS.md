@@ -2,7 +2,7 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current US-12 PR #61 correction approved for publication — 2026-11-07 UTC
+## Current US-12 PR #61 correction published — 2026-11-07 UTC
 
 Branch `US-12-data-validation`, baseline `32efc2f`. Developer approved the initial
 recommendation and, after comparison overflow was discovered, “I approve”
@@ -17,11 +17,11 @@ link targets and whitespace pass; lock unchanged. Installed quality regressions
 pass; new edge cases exercised via editable public API tests. Linux aarch64 only.
 Raw evidence: `.dev-records/verification/20261107-32efc2f-pr61-r1/`.
 Developer “i approve the fix; commit and push” approved the correction and
-authorized commit/push on 2026-11-07 UTC. Recording approval before publication.
-Working tree: source, tests, plan, evidence and checkpoint; ready for commit/push.
+authorized commit/push on 2026-11-07 UTC. Correction committed and pushed as
+`4022775` to PR #61. This publication-record update follows that successful push.
 Historical approvals/skips and independent M1/M50 obligations remain unchanged;
-#19 remains separate. **Next action:** commit and push the approved correction
-to PR #61. No GitHub reply/thread resolution or merge requested.
+#19 remains separate. **Next action:** developer PR review/merge decision.
+No GitHub reply/thread resolution or merge performed. No product edits remain.
 
 ## Previous US-12 IP2 approved — 2026-11-07 UTC
 

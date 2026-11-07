@@ -278,3 +278,6 @@ are technically complete. **Correction approval gate: Approved** by developer
 “i approve the fix; commit and push”, 2026-11-07 UTC. Authorizes committing
 and pushing this correction to PR #61. Earlier pending entries are historical;
 no merge or review-thread action authorized.
+
+Approved correction committed/pushed as `4022775` (`fix: preserve large integer
+data quality bounds`) to PR #61 on 2026-11-07 UTC. No merge/thread action performed.
