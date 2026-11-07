@@ -203,6 +203,8 @@ def main() -> None:
         "nbformat<6,>=5",
         "dvc<4,>=3",
         "mlflow<4,>=3",
+        "pandas<3.2,>=3.1",
+        "pyarrow<26,>=25",
     }, "unexpected declared runtime dependencies"
     inventory = sorted((d.metadata["Name"], d.version) for d in distributions())
     spec = importlib.util.spec_from_file_location(

@@ -1,8 +1,8 @@
 # Pandas extraction and feature data
 
-**Status:** Revised US-11 / Implementation Phase 1 design, 2026-11-07 UTC.
-Developer-directed revision US-11-SC-01; renewed IP1 gate review pending.
-No new API in this document is implemented. The
+**Status:** IP1 contract/test boundaries approved 2026-11-07 UTC under
+US-11-SC-01. IP2 component implementation and its M1/shared checks passed;
+developer IP2 gate approved 2026-11-07 UTC. IP3 remains explicitly unstarted. Separate installed-project delivery is owned by IP3. The
 [owning plan](plans/milestone-1-us-11.md) governs execution and
 [issue #14](https://github.com/jimthompson5802/agentic-ml/issues/14) governs outcomes.
 
@@ -191,7 +191,7 @@ the supported guarantee. [DVC repro](https://doc.dvc.org/command-reference/repro
 
 ## Example using pandas
 
-Future installed API usage, not currently runnable against the toolkit:
+Usage for the IP2 API; both isolated installed-wheel demonstrations remain IP3:
 
 ```python
 from pathlib import Path
@@ -199,7 +199,9 @@ import pandas as pd
 from agentic_ml.extraction import extract_data
 
 
-def extract_people(frames: dict[str, pd.DataFrame], settings: dict[str, object]) -> pd.DataFrame:
+def extract_people(
+    frames: dict[str, pd.DataFrame], settings: dict[str, object]
+) -> pd.DataFrame:
     minimum_age = settings["minimum_age"]
     assert isinstance(minimum_age, int)
     columns = settings["columns"]
@@ -210,7 +212,9 @@ def extract_people(frames: dict[str, pd.DataFrame], settings: dict[str, object])
     assert settings["join_validate"] == "many_to_one"
     people = frames["people"]
     selected = people.loc[people["age"].ge(minimum_age)]
-    joined = selected.merge(frames["groups"], on=join_key, how="left", validate="many_to_one")
+    joined = selected.merge(
+        frames["groups"], on=join_key, how="left", validate="many_to_one"
+    )
     return joined.loc[:, columns].sort_values("id").reset_index(drop=True)
 
 
@@ -220,8 +224,11 @@ frame, report = extract_data(
     sources={"people": Path("data/people.csv"), "groups": Path("data/groups.parquet")},
     destination=Path("outputs/extracted-v1"),
     settings={
-        "minimum_age": 30, "columns": ["id", "label"],
-        "join_key": "group", "join_how": "left", "join_validate": "many_to_one",
+        "minimum_age": 30,
+        "columns": ["id", "label"],
+        "join_key": "group",
+        "join_how": "left",
+        "join_validate": "many_to_one",
     },
     code_paths=[Path("src/project_experiments/extraction.py")],
 )
@@ -265,11 +272,11 @@ implement or accept their quality, split, pipeline or persistence behavior.
 
 Keep proposed direct runtime requirements pandas>=3.1,<3.2 and pyarrow>=25,<26,
 starting from existing locked 3.1.0 / 25.0.1. Dev-only pandas-stubs>=3,<4 must be
-resolved compatibly and checked with strict mypy during IP2. No dependency edits,
-installation or resolution occur in this documentation revision. Update both
+resolved compatibly and checked with strict mypy during IP2. IP2 has resolved pandas-stubs 3.1.0.261029 and added these declared requirements;
+see its verification report for actual platform/check results. Update both
 independent runtime inventory probes with intentional dependency changes.
 
-IP1 renewed approval covers this single-function/native-object contract and
+IP1 approval confirms this single-function/native-object contract and
 [public test matrix](verification/us-11-ip1.md#public-test-boundaries-and-case-matrix).
 All five US-11 criteria, M1 phase tests, M1–6 story checks, both installed wheel
-paths and existing developer gates are retained. Runtime behavior is unverified.
+paths and existing developer gates are retained. Whole-story acceptance and installed extraction evidence remain pending IP3.

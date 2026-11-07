@@ -2,43 +2,43 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current US-11 pandas design revision — 2026-11-07 UTC
+## Current US-11 IP2 approved; IP3 not authorized — 2026-11-07 UTC
 
-Branch `US-11-local-data-extraction`, baseline `5c035cd`. Original plan approval,
-local planning commit and IP1 authorization remain recorded. Developer requested
-pandas for extraction and as the foundation for feature engineering, replacing
-the proposed proprietary classes. That explicit direction authorizes design
-revision US-11-SC-01; it does not authorize IP2 or approve its renewed IP1 gate.
-
-The [revised contract](docs/extraction.md) uses native pandas DataFrames/readers/
-operations, ordinary project functions, dictionaries and standard exceptions.
-Only a small provenance/publication helper remains proposed. DataFrame-based
-feature handoff is clarified; learned transforms still fit training rows only.
-[Plan scope history](docs/plans/milestone-1-us-11.md#scope-change-history) records
-changed/retained scope, reworked tasks, preserved criteria/evidence and gates.
-Active overview/data/interfaces/blueprint documents now match this direction.
-No feature implementation or cross-story executable task was added.
-
-IP1-T1–T3 were reopened and their design work renewed; technically complete for
-review. [Current evidence and test matrix](docs/verification/us-11-ip1.md) replace
-the class-based boundary; [initial evidence](docs/verification/us-11-ip1-initial.md)
-and full pre-revision document snapshots remain preserved. Complete issue #14
-refresh still has one unique comment and stable updated_at 2026-11-07T00:28:37Z;
-all five criteria remain M1 with no issue/design conflict or GitHub write.
-
-Document links/anchors, Python-example syntax, task/criterion/gate checks and
-whitespace passed. Product code/tests/dependencies/lock/resources unchanged;
-no executable tests or installation because this is documentation-only IP1 work.
-Raw renewed records: `.dev-records/verification/20261107-5c035cd-us11-ip1-pandas/`;
-initial records and failed/limited historical evidence remain intact. Dependency,
-typing, runtime and both-wheel verification remain IP2/IP3 obligations. Historical
-M1/M50 and future milestone acceptance obligations remain open.
-
+Branch `US-11-local-data-extraction`, execution baseline `0543d26`.
 Developer “i approve ip1; commit the changes; i authorize ip2” approved revised
-IP1 and public test boundaries on 2026-11-07 UTC, authorized a local commit of
-these documents and IP2 execution. Next action: commit the approved revision,
-then execute IP2 with small TDD slices and required M1/shared checks. Stop at
-IP2 gate; no IP3 or push authorization. No product implementation yet.
+IP1/pandas test boundaries and authorized local commit plus IP2. Approved design
+committed as `0543d26`; earlier plan commit `5c035cd` retained. No push authorized.
+
+IP2-T1–T5 complete; developer gate approved in the
+[plan](docs/plans/milestone-1-us-11.md). Implemented the native pandas
+extract_data function, plain report/settings, explicit root/local paths, source/
+code/output identities, configured native reader/project operations, timing and
+safe output/report bundle publication. Standard exceptions preserve identity and
+carry context; no new classes, query language, CLI, suppressions or skips.
+[IP2 evidence](docs/verification/us-11-ip2.md) owns red/green cycles, static-check
+corrections, scope, commands and limitations. Raw records/JUnit:
+`.dev-records/verification/20261107-0543d26-us11-ip2/`.
+
+Verification: 60 focused extraction cases passed. Full M1 phase command passed:
+431 passed, 1 existing skip in 232.63s, exit 0, four loadgroup workers;
+432/534 collected, 102 deselected. Locked sync/lock consistency, repository lint,
+format, strict mypy (57 files), CLI version 0.1.0 and whitespace passed. Original
+lock hash 90b77d41… intentionally changed to 4b21570f… for direct pandas/pyarrow
+and dev-only pandas-stubs 3.1.0.261029; post-resolution hash unchanged by checks.
+Linux aarch64 / Python 3.12.16 / uv 0.13.6; other platforms unverified.
+Sandbox uv cache errors passed on approved outside-sandbox retries. Initial
+mypy dynamic overload and style failures were corrected without suppressions;
+original red/failure evidence is retained. Known workspace member was not changed.
+
+Developer “i approve ip2; commit changes; do not start ip3” approved IP2 on
+2026-11-07 UTC and authorized a local Conventional Commit of the phase changes
+and records. No push or IP3 authorized. Committing extraction package/test,
+dependency declarations/lock, two inventory probes, guide, plan, checkpoint
+and IP2 evidence. Approval-record edits are documentation-only; existing
+runtime evidence remains applicable. **Next action:** await developer direction;
+IP3 remains Not started and must not execute under this approval. Installed
+extraction/whole-story/M1–6 acceptance remain IP3 obligations. Historical M1/M50
+obligations and existing skip/failure evidence remain open.
 
 ## Current MVP scope revision — Accepted — 2026-11-07 UTC
 

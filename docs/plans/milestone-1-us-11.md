@@ -195,13 +195,23 @@ independently specified outputs. Boundary approval remains pending renewed revie
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-11-IP2-T1 | Not started | Add reviewed direct requirements/dev typing support in `pyproject.toml`, intentionally update `uv.lock`; update independent direct requirement inventories in both probes. Add only the proposed public function export under `src/agentic_ml/extraction/`; no extraction request/result/operation/exception classes. | IP1 gate | Locked environment and both inventory declarations agree; native-object function boundary enables first meaningful red test without unrelated import/setup failure. | AC-01/02/05 |
-| US-11-IP2-T2 | Not started | In proposed `tests/integration/test_extraction.py`, add one CSV identity/schema-report test through the helper and a project pandas function; implement native pandas reading under proposed `extraction/sources.py`. Repeat for Parquet, native reader kwargs and missing/malformed/schema/path cases. | T1 | Each behavior has observed red then green; public results match literal schemas/rows and independent hashes; unrelated cwd resolves root correctly. | AC-01/02/05 |
-| US-11-IP2-T3 | Not started | Add vertical native-pandas project-function examples/tests for no-op output, selection, filters and merge modes through proposed `extraction/execution.py`. Implement callback invocation and native return validation; do not create `operations.py` or a toolkit query engine. | T2 | Project functions using native pandas and explicit settings produce independent expected rows; native/project errors retain context and no completed output. Each added behavior has its own red–green cycle. | AC-01/03/05 |
-| US-11-IP2-T4 | Not started | Add vertical tests and implementation for effective settings, timestamps, source/output identities and complete destination publication under proposed `extraction/provenance.py`; test malformed/changed source, destination conflict and write failure. | T3 | Persisted metadata matches actual output, timestamps bracket execution, old files remain intact; standard/native failures never return a completed dataset/report; no custom exception class. | AC-02/03/04/05 |
-| US-11-IP2-T5 | Not started | Run M1 and shared checks below; record red/green commands, results, selected counts, platform and lock identities in proposed `docs/verification/us-11-ip2.md`; update plan/checkpoint. | T1–T4 | Required verification passes; limitations and exclusions explicitly assigned to IP3-T4. | AC-01–05 component scope |
+| US-11-IP2-T1 | Complete | Add reviewed direct requirements/dev typing support in `pyproject.toml`, intentionally update `uv.lock`; update independent direct requirement inventories in both probes. Add only the proposed public function export under `src/agentic_ml/extraction/`; no extraction request/result/operation/exception classes. | IP1 gate | Locked environment and both inventory declarations agree; native-object function boundary enables first meaningful red test without unrelated import/setup failure. | AC-01/02/05 |
+| US-11-IP2-T2 | Complete | In proposed `tests/integration/test_extraction.py`, add one CSV identity/schema-report test through the helper and a project pandas function; implement native pandas reading under proposed `extraction/sources.py`. Repeat for Parquet, native reader kwargs and missing/malformed/schema/path cases. | T1 | Each behavior has observed red then green; public results match literal schemas/rows and independent hashes; unrelated cwd resolves root correctly. | AC-01/02/05 |
+| US-11-IP2-T3 | Complete | Add vertical native-pandas project-function examples/tests for no-op output, selection, filters and merge modes through proposed `extraction/execution.py`. Implement callback invocation and native return validation; do not create `operations.py` or a toolkit query engine. | T2 | Project functions using native pandas and explicit settings produce independent expected rows; native/project errors retain context and no completed output. Each added behavior has its own red–green cycle. | AC-01/03/05 |
+| US-11-IP2-T4 | Complete | Add vertical tests and implementation for effective settings, timestamps, source/output identities and complete destination publication under proposed `extraction/provenance.py`; test malformed/changed source, destination conflict and write failure. | T3 | Persisted metadata matches actual output, timestamps bracket execution, old files remain intact; standard/native failures never return a completed dataset/report; no custom exception class. | AC-02/03/04/05 |
+| US-11-IP2-T5 | Complete | Run M1 and shared checks below; record red/green commands, results, selected counts, platform and lock identities in proposed `docs/verification/us-11-ip2.md`; update plan/checkpoint. | T1–T4 | Required verification passes; limitations and exclusions explicitly assigned to IP3-T4. | AC-01–05 component scope |
 
 ### Verification and review evidence
+
+Execution baseline `0543d26`, approved IP1 contract/test boundaries. IP2-T1–T4
+have passing focused evidence (60 cases); no public proprietary classes,
+operation interpreter or suppressions introduced. Native-object API and report
+are implemented in extraction/__init__.py, sources.py and provenance.py. Direct
+requirements/probe inventories and an intentional 18-line lock addition agree.
+M1 gate passed: 431 passed, 1 existing skip in 232.63s (432/534 selected;
+102 deselected). All shared checks passed and the intentional lock hash remained
+unchanged. IP2-T5 is technically complete. Actual evidence is owned by
+[IP2 report](../verification/us-11-ip2.md); no gate approval yet.
 
 Public boundaries: reuse IP1-confirmed API/output boundaries. During short serial
 TDD cycles use `uv run --locked pytest tests/integration/test_extraction.py::<case>`;
@@ -211,9 +221,9 @@ Focused cycles do not replace the gate command.
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Native data operations and failures | One behavior-focused red–green test at a time, using the confirmed API/fixture | Independent rows, metadata, diagnostics and no incomplete success | Pending |
-| Current milestone gate | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | All selected M1 checks pass; counts and existing skips reported | Pending |
-| Shared development checks | `uv sync --locked --group dev`; `uv lock --check`; `uv run --locked ruff check .`; `uv run --locked ruff format --check .`; `uv run --locked mypy src tests`; `uv run --locked agentic-ml --version`; `git diff --check` | Pass; capture SHA-256 of `uv.lock` before/after verification; intentional dependency update distinguished from check mutation | Pending |
+| Native data operations and failures | One behavior-focused red–green test at a time, using the confirmed API/fixture | Independent rows, metadata, diagnostics and no incomplete success | 60 passed; [IP2 evidence](../verification/us-11-ip2.md) |
+| Current milestone gate | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | All selected M1 checks pass; counts and existing skips reported | 431 passed, 1 existing skip in 232.63s; 432/534 selected, 102 deselected; [IP2 evidence](../verification/us-11-ip2.md) |
+| Shared development checks | `uv sync --locked --group dev`; `uv lock --check`; `uv run --locked ruff check .`; `uv run --locked ruff format --check .`; `uv run --locked mypy src tests`; `uv run --locked agentic-ml --version`; `git diff --check` | Pass; capture SHA-256 of `uv.lock` before/after verification; intentional dependency update distinguished from check mutation | All passed; intentional lock hash 4b21570f… unchanged during verification; [IP2 evidence](../verification/us-11-ip2.md) |
 
 Impact: new extraction modules/dependencies, input paths, operation configuration,
 output serialization/provenance and failure semantics. M1 retains accepted
@@ -226,11 +236,11 @@ developer direction. No exemption for a required slow M1 test.
 ### Developer approval gate
 
 - **Approval criteria:** T1–T5 complete; red/green and M1/shared evidence passes.
-- **Evidence presented:** Pending; `docs/verification/us-11-ip2.md` when created.
+- **Evidence presented:** [IP2 evidence](../verification/us-11-ip2.md), 60 focused passes, final M1 result (431 passed, 1 existing skip), passing shared checks, unchanged verification lock identity and raw JUnit/logs.
 - **Remaining limitations:** External-project pandas function and installed artifact evidence pending IP3.
-- **Developer decision / reference / date:** Pending.
+- **Developer decision / reference / date:** Approved — developer “i approve ip2; commit changes; do not start ip3”, 2026-11-07 UTC. Local commit authorized; no IP3 or push authorization.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** IP3 only after explicit IP2 gate approval.
+- **Progression authorized:** None. Developer explicitly directed not to start IP3; await further direction.
 
 ## US-11 / Implementation Phase 3: Verify native project pandas functions and installed delivery
 
