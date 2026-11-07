@@ -240,20 +240,21 @@ developer direction. No exemption for a required slow M1 test.
 - **Remaining limitations:** External-project pandas function and installed artifact evidence pending IP3.
 - **Developer decision / reference / date:** Approved — developer “i approve ip2; commit changes; do not start ip3”, 2026-11-07 UTC. Local commit authorized; no IP3 or push authorization.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** None. Developer explicitly directed not to start IP3; await further direction.
+- **Progression authorized:** Originally none. Superseded by developer “start us-11 ip3”, 2026-11-07 UTC; IP3 now authorized, stop at its final gate.
 
 ## US-11 / Implementation Phase 3: Verify native project pandas functions and installed delivery
 
+- **Authorization:** Developer “start us-11 ip3”, 2026-11-07 UTC; baseline `0d74c21`, clean tree. IP2 approved and committed; final gate and whole-story acceptance remain pending.
 - **Outcome:** All criteria verified through installed public interfaces; usage documented.
 - **Entry conditions:** IP2 gate approved; confirmed IP1 callable/installed boundaries.
 - **Acceptance criteria advanced:** AC-01–05 complete subject to developer acceptance.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-11-IP3-T1 | Not started | Extend public integration tests with a separately installed project pandas function using configured native operations; verify copied settings/code provenance, invalid return, original pandas/project exception types and missing declared input. Reuse IP2 callback support; no second custom-function adapter. | IP2 gate | Ordinary project function produces literal expected rows; failures preserve causes and publish no completed output; undeclared-read capture is not claimed. | AC-01/03/04/05 |
-| US-11-IP3-T2 | Not started | Add proposed `tests/installation/check_extraction.py` and an M1 installed test in `tests/integration/test_distribution_verification.py`, reusing its artifact fixture and distribution driver; extend probe inventory/resource checks only as needed. | T1 | Normally install direct wheel and wheel rebuilt from sdist into separate clean environments; copied project probe imports only installed API/project code, checks unrelated cwd, CSV/Parquet/native filter/merge/project-function output, provenance and missing/corrupt-input failure. Assert imports are outside source checkout and runtime dependencies suffice. Observe red/green for new behavior. | AC-01–05 |
-| US-11-IP3-T3 | Not started | Finish proposed `docs/extraction.md`, link it from `README.md`; include explicit root/cwd, settings, metadata/failure example and project callable use. Verify newly shipped resources through installed API if any are added by approved contract. | T2 | Commands/API examples match verified behavior; extraction success distinguished from quality validation; checksum/DVC ownership and trusted-code limits stated. No unrelated runtime resource rewrite. | AC-01–05 |
-| US-11-IP3-T4 | Not started | Final verification and criterion/deferred-check reconciliation in proposed `docs/verification/us-11-ip3.md`; update this plan and `CHECKPOINTS.md`. | T1–T3 | Final M1 gate, M1–6 acceptance and shared checks pass against final executable changes; both wheel paths and all criterion evidence recorded before final gate. | AC-01–05 |
+| US-11-IP3-T1 | Complete | Extend public integration tests with a separately installed project pandas function using configured native operations; verify copied settings/code provenance, invalid return, original pandas/project exception types and missing declared input. Reuse IP2 callback support; no second custom-function adapter. | IP2 gate | Ordinary project function produces literal expected rows; failures preserve causes and publish no completed output; undeclared-read capture is not claimed. | AC-01/03/04/05 |
+| US-11-IP3-T2 | Complete | Add proposed `tests/installation/check_extraction.py` and an M1 installed test in `tests/integration/test_distribution_verification.py`, reusing its artifact fixture and distribution driver; extend probe inventory/resource checks only as needed. | T1 | Normally install direct wheel and wheel rebuilt from sdist into separate clean environments; copied project probe imports only installed API/project code, checks unrelated cwd, CSV/Parquet/native filter/merge/project-function output, provenance and missing/corrupt-input failure. Assert imports are outside source checkout and runtime dependencies suffice. Observe red/green for new behavior. | AC-01–05 |
+| US-11-IP3-T3 | Complete | Finish proposed `docs/extraction.md`, link it from `README.md`; include explicit root/cwd, settings, metadata/failure example and project callable use. Verify newly shipped resources through installed API if any are added by approved contract. | T2 | Commands/API examples match verified behavior; extraction success distinguished from quality validation; checksum/DVC ownership and trusted-code limits stated. No unrelated runtime resource rewrite. | AC-01–05 |
+| US-11-IP3-T4 | Complete | Final verification and criterion/deferred-check reconciliation in proposed `docs/verification/us-11-ip3.md`; update this plan and `CHECKPOINTS.md`. | T1–T3 | Final M1 gate, M1–6 acceptance and shared checks pass against final executable changes; both wheel paths and all criterion evidence recorded before final gate. | AC-01–05 |
 
 ### Verification and review evidence
 
@@ -272,23 +273,21 @@ developer direction. No exemption for a required slow M1 test.
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Callback success/failure and both artifact paths | Focused reviewed TDD selectors; then installed test included in M1 | Correct external-project outputs, dependency/import origins and honest failures | Pending |
-| Final phase gate | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass, counts/skip limitations recorded | Pending |
-| Story acceptance | `uv run --locked pytest -n 4 --dist=loadgroup` | M1–6 pass against final implementation; all deferrals reconciled | Pending |
-| Shared development checks | All exact shared commands from IP2 table | Pass with intentional lock changes reviewed and verification immutability recorded | Pending |
-| Documentation | Local path/anchor and API/example review; `git diff --check` | Links/examples match tested installed behavior | Pending |
+| Callback success/failure and both artifact paths | Focused reviewed TDD selectors; then installed test included in M1 | Correct external-project outputs, dependency/import origins and honest failures | Focused installed test passed in 12.00s; [IP3 evidence](../verification/us-11-ip3.md) |
+| Final phase gate | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass, counts/skip limitations recorded | 432 passed, 1 existing skip in 223.52s; 433/535 selected, 102 deselected; [IP3 evidence](../verification/us-11-ip3.md) |
+| Story acceptance | `uv run --locked pytest -n 4 --dist=loadgroup` | M1–6 pass against final implementation; all deferrals reconciled | 432 passed, 1 existing skip in 208.91s; 433/535 selected, 102 deselected; [IP3 evidence](../verification/us-11-ip3.md) |
+| Shared development checks | All exact shared commands from IP2 table | Pass with intentional lock changes reviewed and verification immutability recorded | All passed; unchanged lock 4b21570f…; [IP3 evidence](../verification/us-11-ip3.md) |
+| Documentation | Local path/anchor and API/example review; `git diff --check` | Links/examples match tested installed behavior | 63 local links/anchors and Python fence syntax passed; [IP3 evidence](../verification/us-11-ip3.md) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete; all five criteria have passing evidence,
   both artifact paths verified, no unresolved required behavior or concealed failures.
-- **Evidence presented:** Pending; `docs/verification/us-11-ip3.md` when created.
-- **Remaining limitations or blocked work:** Pending actual verification; external
-  quality/DVC/runner/assistant integration and untested platforms identified separately.
-- **Developer decision / reference / date:** Pending.
+- **Evidence presented:** [IP3 report](../verification/us-11-ip3.md), both normal wheel paths, 432 passes/1 existing skip in each M1 and M1–6 run, passing shared/document checks and retained source/artifact identities.
+- **Remaining limitations or blocked work:** No required US-11 behavior blocker. Existing missing-planning-schema skip and historical obligations remain open; quality/DVC/runner/assistant integration belongs to other stories. Linux aarch64 verified; other platforms unverified by IP3.
+- **Developer decision / reference / date:** Approved — developer “i approve ip3”, 2026-11-07 UTC. Final implementation phase approved; whole-story acceptance remains pending.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Stop for final gate; whole-story acceptance must be
-  explicit, whether given with this gate or separately. No automatic publication.
+- **Progression authorized:** Whole-story acceptance subsequently given by developer “i accept us-11”, 2026-11-07 UTC. Publish accepted story under execute-plan; no merge authorized.
 
 ## Final verification requirements
 
@@ -308,22 +307,21 @@ developer direction. No exemption for a required slow M1 test.
 - **Evidence storage:** Tracked reports above link raw commands/logs/identities
   under `.dev-records/verification/<timestamp>-<commit>-us11-<unique>/`, following
   [records policy](../development/records.md). Preserve failures and diagnostics.
-- **Actual results and limitations:** Pending. No runtime verification performed
-  during IP1 design/revision; no platform delivery claim.
+- **Actual results and limitations:** [IP3 evidence](../verification/us-11-ip3.md) records final source/diff/lock/platform/artifact identities, M1/M1–6/shared checks and all criterion outcomes. Both installed wheel paths passed. Existing skip, historical obligations and other-platform/cross-story limits remain explicit. No story acceptance inferred.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-11-AC-01 | IP1-T1/T3; IP2-T1–T3; IP3-T1/T2 | CSV/Parquet rows, configured operations, actual project callable in both installations | Pending |
-| US-11-AC-02 | IP1-T1/T3; IP2-T2/T4; IP3-T2 | Ordered schemas, types, row/byte counts and source identities | Pending |
-| US-11-AC-03 | IP1-T1/T3; IP2-T3/T4; IP3-T1/T2 | Independently expected operations plus actual effective settings report | Pending |
-| US-11-AC-04 | IP1-T1/T3; IP2-T4; IP3-T1/T2 | Input/output independent SHA-256 checks, paths/settings/time/code references; checksum satisfies output identity branch | Pending |
-| US-11-AC-05 | IP1-T1/T3; IP2-T2–T4; IP3-T1/T2 | Invalid/missing/malformed inputs, native/project configuration errors, callback and publication failure; no incomplete success | Pending |
+| US-11-AC-01 | IP1-T1/T3; IP2-T1–T3; IP3-T1/T2 | CSV/Parquet rows, configured operations, actual project callable in both installations | Accepted |
+| US-11-AC-02 | IP1-T1/T3; IP2-T2/T4; IP3-T2 | Ordered schemas, types, row/byte counts and source identities | Accepted |
+| US-11-AC-03 | IP1-T1/T3; IP2-T3/T4; IP3-T1/T2 | Independently expected operations plus actual effective settings report | Accepted |
+| US-11-AC-04 | IP1-T1/T3; IP2-T4; IP3-T1/T2 | Input/output independent SHA-256 checks, paths/settings/time/code references; checksum satisfies output identity branch | Accepted |
+| US-11-AC-05 | IP1-T1/T3; IP2-T2–T4; IP3-T1/T2 | Invalid/missing/malformed inputs, native/project configuration errors, callback and publication failure; no incomplete success | Accepted |
 
-- **Remaining work:** All implementation tasks; no partial prerequisite delivery claimed.
-- **Final verification:** Pending US-11-IP3-T4.
-- **Developer acceptance / reference / date:** Pending.
+- **Remaining work:** Accepted-story publication and static review; all technical tasks and implementation phase gates complete.
+- **Final verification:** Complete under US-11-IP3-T4; [IP3 evidence](../verification/us-11-ip3.md).
+- **Developer acceptance / reference / date:** Accepted — developer “i accept us-11”, 2026-11-07 UTC. All five criteria accepted; execute-plan accepted-story publication workflow authorized.
 
 ## Milestone acceptance handoff
 

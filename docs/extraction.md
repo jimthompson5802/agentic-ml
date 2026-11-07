@@ -1,9 +1,9 @@
 # Pandas extraction and feature data
 
-**Status:** IP1 contract/test boundaries approved 2026-11-07 UTC under
-US-11-SC-01. IP2 component implementation and its M1/shared checks passed;
-developer IP2 gate approved 2026-11-07 UTC. IP3 remains explicitly unstarted. Separate installed-project delivery is owned by IP3. The
-[owning plan](plans/milestone-1-us-11.md) governs execution and
+**Status:** Implemented component API; IP1/IP2 approved. IP3 verifies separate
+installed projects through the direct wheel and a wheel rebuilt from the source
+distribution. IP3 approved and whole-story accepted 2026-11-07 UTC.
+The [owning plan](plans/milestone-1-us-11.md) governs delivery and
 [issue #14](https://github.com/jimthompson5802/agentic-ml/issues/14) governs outcomes.
 
 ## Use pandas directly
@@ -25,16 +25,16 @@ restricted predicate catalogue or alternative set of join semantics.
 | Select/filter/join | Native column indexing, `.loc`, boolean masks, `.merge` / `.join` |
 | Engineer features | Ordinary functions accepting/returning DataFrames, native pandas operations |
 | Fit learned preprocessing | Native scikit-learn pipelines/transformers operating on the pandas data boundary; fit training rows only |
-| Record toolkit provenance and publish completed output | One small proposed `extract_data` function using native objects and ordinary dictionaries |
+| Record toolkit provenance and publish completed output | One small `extract_data` function using native objects and ordinary dictionaries |
 
 The toolkit still owns US-11 metadata, source/output identity, timing, and honest
 publication/failure handling. It does not reimplement pandas. Quality rules,
 splits, fitted-state handling and feature comparisons retain their owning stories.
 
-## Proposed toolkit integration function
+## Toolkit integration function
 
 Public import: `from agentic_ml.extraction import extract_data`.
-This is the only new extraction export proposed by this revision.
+This is the public extraction entrypoint.
 
 ```python
 from collections.abc import Callable, Mapping, Sequence
@@ -179,8 +179,7 @@ exceptions and their original types; attach contextual notes using add_note with
 source name, operation or stage, root/cwd and available staging location. No broad
 conversion into a proprietary exception. Cleanup errors add a note to the primary
 exception rather than replacing it. KeyboardInterrupt/SystemExit are not wrapped.
-If a narrow catch at the callable boundary needs a Ruff exception, justify and
-register it during implementation; no suppression is added in this design phase.
+The implementation adds context without suppressing lint/type checks.
 
 Ordinary reruns use a new destination or explicit project output management.
 Future DVC stages declare the entire non-persistent output bundle; DVC's normal
@@ -191,7 +190,9 @@ the supported guarantee. [DVC repro](https://doc.dvc.org/command-reference/repro
 
 ## Example using pandas
 
-Usage for the IP2 API; both isolated installed-wheel demonstrations remain IP3:
+Install the toolkit as a normal dependency in your separate experiment project
+using the [setup guide](experiment-setup.md). Store this function in
+`src/project_experiments/extraction.py` and import it in your project script:
 
 ```python
 from pathlib import Path
@@ -234,9 +235,57 @@ frame, report = extract_data(
 )
 ```
 
-The project function resides at the declared code path; `outputs` exists and
-`extracted-v1` does not. It returns the plan fixture's literal rows `(2,beta)` and
-`(3,alpha)`. A production project may validate settings with its preferred native
+For a small runnable fixture, create `data` and `outputs` beneath the explicit
+project root, then write the inputs:
+
+```python
+root = Path("/absolute/path/to/experiment")
+(root / "data").mkdir(exist_ok=True)
+(root / "outputs").mkdir(exist_ok=True)
+(root / "data/people.csv").write_text(
+    "id,age,group\n1,20,A\n2,35,B\n3,40,A\n", encoding="utf-8"
+)
+pd.DataFrame({"group": ["A", "B"], "label": ["alpha", "beta"]}).to_parquet(
+    root / "data/groups.parquet", index=False
+)
+```
+
+Run input preparation before `extract_data`. The function's declared source file
+must exist, `outputs` must exist and `extracted-v1` must be fresh. The example
+returns rows `(2, "beta")` and `(3, "alpha")`. The caller may run from an unrelated
+cwd; the explicit absolute root resolves all relative inputs and output paths.
+For later calls, import `extract_people` from your project module and choose a
+new destination. Inspect the plain report and saved output:
+
+```python
+print(report["sources"])
+print(report["extraction"])
+print(report["output"])
+assert frame["id"].tolist() == [2, 3]
+restored = pd.read_parquet(root / "outputs/extracted-v1/dataset.parquet")
+assert restored["label"].tolist() == ["beta", "alpha"]
+```
+
+For example, a missing input preserves its standard exception and adds context:
+
+```python
+try:
+    extract_data(
+        extract_people,
+        project_root=root,
+        sources={"people": Path("data/missing.csv")},
+        destination=Path("outputs/failed-extraction"),
+        code_paths=[Path("src/project_experiments/extraction.py")],
+    )
+except FileNotFoundError as error:
+    print(error)
+    print(error.__notes__)  # Source/stage, project root and caller cwd.
+    assert not (root / "outputs/failed-extraction").exists()
+```
+
+This component's `status="complete"` means extraction and serialization completed.
+It does not mark the dataset quality-validated; US-12 owns those checks.
+A production project may validate settings with its preferred native
 Python conventions. Source schema is also inspectable directly with pandas:
 
 ```python
@@ -270,13 +319,13 @@ implement or accept their quality, split, pipeline or persistence behavior.
 
 ## Dependencies and gate
 
-Keep proposed direct runtime requirements pandas>=3.1,<3.2 and pyarrow>=25,<26,
-starting from existing locked 3.1.0 / 25.0.1. Dev-only pandas-stubs>=3,<4 must be
-resolved compatibly and checked with strict mypy during IP2. IP2 has resolved pandas-stubs 3.1.0.261029 and added these declared requirements;
-see its verification report for actual platform/check results. Update both
-independent runtime inventory probes with intentional dependency changes.
+The toolkit declares pandas>=3.1,<3.2 and pyarrow>=25,<26 directly.
+The contributor lock uses pandas 3.1.0, pyarrow 25.0.1 and dev-only
+pandas-stubs 3.1.0.261029. Normal wheel installs use declared runtime dependency
+ranges; contributor typing tools are unnecessary in experiment environments.
 
 IP1 approval confirms this single-function/native-object contract and
 [public test matrix](verification/us-11-ip1.md#public-test-boundaries-and-case-matrix).
 All five US-11 criteria, M1 phase tests, M1–6 story checks, both installed wheel
-paths and existing developer gates are retained. Whole-story acceptance and installed extraction evidence remain pending IP3.
+paths and existing developer gates are retained. See [IP3 verification](verification/us-11-ip3.md) for installed extraction evidence
+and platform limits. Whole-story acceptance remains a separate developer decision.

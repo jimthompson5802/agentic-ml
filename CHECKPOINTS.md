@@ -2,43 +2,47 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current US-11 IP2 approved; IP3 not authorized — 2026-11-07 UTC
+## Current US-11 accepted; publication in progress — 2026-11-07 UTC
 
-Branch `US-11-local-data-extraction`, execution baseline `0543d26`.
-Developer “i approve ip1; commit the changes; i authorize ip2” approved revised
-IP1/pandas test boundaries and authorized local commit plus IP2. Approved design
-committed as `0543d26`; earlier plan commit `5c035cd` retained. No push authorized.
+Branch `US-11-local-data-extraction`, baseline `0d74c21`; clean at phase entry.
+Developer “start us-11 ip3” authorized IP3 after approved/committed IP2.
+IP3-T1–T4 technically complete in the [plan](docs/plans/milestone-1-us-11.md).
+[IP3 evidence](docs/verification/us-11-ip3.md) owns the complete stable #14 issue/
+one-comment refresh, confirmed boundaries, red/green/correction records,
+criterion reconciliation and source/platform/artifact identities.
 
-IP2-T1–T5 complete; developer gate approved in the
-[plan](docs/plans/milestone-1-us-11.md). Implemented the native pandas
-extract_data function, plain report/settings, explicit root/local paths, source/
-code/output identities, configured native reader/project operations, timing and
-safe output/report bundle publication. Standard exceptions preserve identity and
-carry context; no new classes, query language, CLI, suppressions or skips.
-[IP2 evidence](docs/verification/us-11-ip2.md) owns red/green cycles, static-check
-corrections, scope, commands and limitations. Raw records/JUnit:
-`.dev-records/verification/20261107-0543d26-us11-ip2/`.
+Separate projects run actual pandas extraction code through normally installed
+direct and sdist-rebuilt wheels, using isolated Python and unrelated cwd. Verified
+literal CSV/Parquet/configured filter/select/merge output, copied settings,
+schemas, input/code/output hashes, timing and persisted report. Invalid return,
+original project exception, native pandas failure, missing input and corrupt
+Parquet preserve context without completed failure output. Both normal runtime
+inventories/resources and environments passed; cleanup complete. Guide finished
+and linked from README. Product source, dependencies and lock unchanged in IP3.
 
-Verification: 60 focused extraction cases passed. Full M1 phase command passed:
-431 passed, 1 existing skip in 232.63s, exit 0, four loadgroup workers;
-432/534 collected, 102 deselected. Locked sync/lock consistency, repository lint,
-format, strict mypy (57 files), CLI version 0.1.0 and whitespace passed. Original
-lock hash 90b77d41… intentionally changed to 4b21570f… for direct pandas/pyarrow
-and dev-only pandas-stubs 3.1.0.261029; post-resolution hash unchanged by checks.
-Linux aarch64 / Python 3.12.16 / uv 0.13.6; other platforms unverified.
-Sandbox uv cache errors passed on approved outside-sandbox retries. Initial
-mypy dynamic overload and style failures were corrected without suppressions;
-original red/failure evidence is retained. Known workspace member was not changed.
+Verification: M1 432 passed, 1 existing skip in 223.52s; final M1–6 432 passed,
+1 existing skip in 208.91s; both 433/535 selected, 102 deselected, four loadgroup
+workers, exit 0. All locked sync/lock/lint/format/mypy (60 files)/CLI 0.1.0 and
+whitespace checks passed. Guide Python syntax and 63 local links/anchors passed.
+Lock SHA-256 4b21570f… unchanged. Linux aarch64 / Python 3.12.16 / uv 0.13.6;
+normal wheel installs pandas 3.1.1 / pyarrow 25.0.1; other platforms unverified.
+Raw logs/JUnit/commands/identities:
+`.dev-records/verification/20261107-0d74c21-us11-ip3/` plus linked child records.
 
-Developer “i approve ip2; commit changes; do not start ip3” approved IP2 on
-2026-11-07 UTC and authorized a local Conventional Commit of the phase changes
-and records. No push or IP3 authorized. Committing extraction package/test,
-dependency declarations/lock, two inventory probes, guide, plan, checkpoint
-and IP2 evidence. Approval-record edits are documentation-only; existing
-runtime evidence remains applicable. **Next action:** await developer direction;
-IP3 remains Not started and must not execute under this approval. Installed
-extraction/whole-story/M1–6 acceptance remain IP3 obligations. Historical M1/M50
-obligations and existing skip/failure evidence remain open.
+Original intended red and initial probe-exception/type-check/checker failures
+retained; each correction passed on attempt 1, with no suppressions/skips or
+weakened assertions. Sandbox cache/network failures passed on approved retries.
+Existing missing-planning-schema skip, other two historical skips and independent
+M1/M50 obligations remain open. Quality, DVC, runners and assistant integration
+retain their other-story owners; no end-to-end experiment acceptance claimed.
+
+Working-tree changes: three new installation probe/driver/project fixture files,
+one new M1 integration test, extraction guide, README, plan, IP3 report and this
+checkpoint. Developer “i approve ip3” approved the final phase on 2026-11-07 UTC;
+all implementation phase gates are complete. Developer “i accept us-11” accepted
+the whole story on 2026-11-07 UTC. **Next action:** commit accepted changes, push,
+create the PR and publish a static COMMENT review under execute-plan. No merge authorized.
+Approval records only changed after verification; whitespace check passed.
 
 ## Current MVP scope revision — Accepted — 2026-11-07 UTC
 
