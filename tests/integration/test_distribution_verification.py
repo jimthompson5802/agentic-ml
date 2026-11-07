@@ -529,3 +529,37 @@ def test_extraction_from_both_artifact_paths(artifacts: Path, tmp_path: Path) ->
     assert summary["cleanup"] == "complete"
     assert len(summary["child_records"]) == 1
     assert not list((tmp_path / "extraction").rglob("pyvenv.cfg"))
+
+
+@pytest.mark.milestone_1
+def test_data_quality_from_both_artifact_paths(artifacts: Path, tmp_path: Path) -> None:
+    """US-12 AC-01/05: installed quality and blocking verify both wheels."""
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "tests/installation/verify_data_quality.py"),
+            "--artifacts-dir",
+            str(artifacts),
+            "--workspace",
+            str(tmp_path / "data_quality"),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=180,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    for label in ("direct-wheel", "rebuilt-wheel"):
+        assert f"PASS data_quality {label}" in result.stdout, result.stdout
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in result.stdout.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    summary = json.loads((records / "summary.json").read_text())
+    assert summary["cleanup"] == "complete"
+    assert len(summary["child_records"]) == 1
+    assert not list((tmp_path / "data_quality").rglob("pyvenv.cfg"))

@@ -29,6 +29,15 @@ quality rules. Include basic distributions/missingness and classification target
 balance. Report actionable mismatches and block dependent supported steps when
 required checks fail. No mandatory dataset approval service is needed.
 
+US-12 issue #15's [concrete quality contract](../../data-quality.md) was approved
+at Gate 1 on 2026-11-07 UTC by developer “i approve ip1; commit”. It specifies pandas-based checks,
+plain reports and a synchronous helper that blocks a dependent project operation
+on required-check failure. The public `agentic_ml.data_quality` API is implemented with Gate 2 approval;
+IP3 installed checks pass; Gate 3 is approved; issue #15 AC-01/05 accepted on 2026-11-07 UTC. Assessment and
+partitions retain issue #19 ownership; this proposal does not change that scope.
+Developer-directed US-12-SC-01 also permits explicit empty rules: report
+`not_checked` and allow the operation, without claiming quality validation passed.
+
 ## Reproducible partitions
 
 Record seeded train/validation/test membership and source-data identity. Verify

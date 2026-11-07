@@ -58,6 +58,13 @@ Built-in metadata currently covers dummy classifier/regressor profiles plus
 supplied additive metadata. This does not establish useful real-estimator training
 support. See [accepted validation contract](../../verification/us-05-ip1.md).
 
+### Dataset quality
+
+`agentic_ml.data_quality` exports `validate_data`, `run_validated_step` and
+`DataQualityError`. The [quality guide](../../data-quality.md) specifies seven
+rule families, JSON reports and required/advisory/no-check semantics. Gate 2
+approved implementation; IP3 installed checks pass; Gate 3 is approved; issue #15 AC-01/05 accepted on 2026-11-07 UTC. Assessment and partitions remain issue #19 work.
+
 ### CLI and resources
 
 The actual CLI implements `--version`, `init`,
