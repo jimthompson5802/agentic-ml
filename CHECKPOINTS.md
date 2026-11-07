@@ -1,8 +1,17 @@
 # Development Checkpoints
 
-Last updated: 2026-11-06 (UTC)
+Last updated: 2026-11-07 (UTC)
 
-## Current MVP scope revision — Phase 3 approved — 2026-11-06
+## Current MVP scope revision — Phase 4 authorized — 2026-11-07 UTC
+
+Developer “execut phase 4” authorizes the explained source publication/PR and
+subsequent approved issue synchronization. Starting clean at `25544e5` on
+`refactor-milestones-user-stories`. Remote `main` remains `0a7b643`; no existing
+branch/PR for this work. Authentication succeeds outside the network sandbox.
+Approved issue bodies link to `main`, so publish documents/open a PR first and
+await merge authorization before dependent issue writes; do not silently change
+reviewed URLs or publish broken source links. No issue writes or merge yet.
+Earlier Phase 3 status below is historical.
 
 Developer “I approve Gate 3; commit the changes” approved the aligned design and
 refreshed issue package and authorized committing this IP3 snapshot locally.

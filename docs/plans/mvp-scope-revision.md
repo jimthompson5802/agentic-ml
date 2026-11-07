@@ -176,9 +176,16 @@ before IP4 issue writes; commit/push/merge permissions are separate.
 
 Entry: Gate 3 approval, progression and explicit issue publication authorization.
 
+Developer “execut phase 4”, 2026-11-06, authorizes IP4 after the publication
+sequence was explained: push approved documents/open a PR, then synchronize issues
+once reviewed source links resolve. Source branch publication and PR creation
+are now authorized. PR merge is not inferred from that instruction; exact
+approved issue bodies reference `main`, so issue writes await that source
+prerequisite. Do not silently repoint reviewed links or publish broken references.
+
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| IP4-T1 | Not started | Refresh affected issues and reconcile concurrent changes | Gate 3 | Reviewed baseline remains applicable or changes return for review | Publication consistency |
+| IP4-T1 | Complete | Refresh affected issues and reconcile concurrent changes | Gate 3 | 41 complete stable discussions, one historical comment, exact original body/title/state/comment equality; source publication prerequisite identified | Publication consistency |
 | IP4-T2 | Not started | Publish approved issue edits/comments/new issues | T1 | Exact action manifest applied; history intact | Approved package |
 | IP4-T3 | Not started | Re-retrieve issues and verify bodies/states | T2 | Local/GitHub equality; actual issue links recorded | Published source consistency |
 | IP4-T4 | Not started | Final reconciliation, verification report and checkpoint handoff | T3 | Next implementation story identified with remaining work | All revision outcomes |
