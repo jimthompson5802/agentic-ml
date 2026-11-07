@@ -1,0 +1,153 @@
+# US-12 issue #19: split-layout alignment source snapshot
+
+Retrieved after the developer-authorized issue update on 2026-11-07 UTC.
+Complete body and all comment pages retrieved; one unique comment matches the
+reported count. Final metadata refresh unchanged: `updated_at=2026-11-07T21:38:29Z`.
+The published body matches the prepared body apart from its final newline.
+The original [pre-alignment snapshot](us-12-issue-19.md) remains historical evidence.
+Linked pages, timeline events and inaccessible/deleted content are outside this export.
+
+## Complete issue metadata and body
+
+```json
+{
+  "url": "https://api.github.com/repos/jimthompson5802/agentic-ml/issues/19",
+  "repository_url": "https://api.github.com/repos/jimthompson5802/agentic-ml",
+  "labels_url": "https://api.github.com/repos/jimthompson5802/agentic-ml/issues/19/labels{/name}",
+  "comments_url": "https://api.github.com/repos/jimthompson5802/agentic-ml/issues/19/comments",
+  "events_url": "https://api.github.com/repos/jimthompson5802/agentic-ml/issues/19/events",
+  "html_url": "https://github.com/jimthompson5802/agentic-ml/issues/19",
+  "id": 6111910558,
+  "node_id": "I_kwDOVZ7kv88AAAABbExang",
+  "number": 19,
+  "title": "US-12: Assess data quality and define splits",
+  "user": {
+    "login": "jimthompson5802",
+    "id": 1425269,
+    "node_id": "MDQ6VXNlcjE0MjUyNjk=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1425269?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/jimthompson5802",
+    "html_url": "https://github.com/jimthompson5802",
+    "followers_url": "https://api.github.com/users/jimthompson5802/followers",
+    "following_url": "https://api.github.com/users/jimthompson5802/following{/other_user}",
+    "gists_url": "https://api.github.com/users/jimthompson5802/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/jimthompson5802/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/jimthompson5802/subscriptions",
+    "organizations_url": "https://api.github.com/users/jimthompson5802/orgs",
+    "repos_url": "https://api.github.com/users/jimthompson5802/repos",
+    "events_url": "https://api.github.com/users/jimthompson5802/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/jimthompson5802/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "labels": [
+    {
+      "id": 12862971353,
+      "node_id": "LA_kwDOVZ7kv88AAAAC_rFd2Q",
+      "url": "https://api.github.com/repos/jimthompson5802/agentic-ml/labels/enhancement",
+      "name": "enhancement",
+      "color": "a2eeef",
+      "default": true,
+      "description": "New feature or request",
+      "archived_at": null,
+      "archived_by": null
+    }
+  ],
+  "state": "open",
+  "locked": false,
+  "assignees": [],
+  "milestone": null,
+  "comments": 1,
+  "created_at": "2026-10-30T02:10:21Z",
+  "updated_at": "2026-11-07T21:38:29Z",
+  "closed_at": null,
+  "assignee": null,
+  "author_association": "OWNER",
+  "active_lock_reason": null,
+  "sub_issues_summary": {
+    "total": 0,
+    "completed": 0,
+    "percent_completed": 0
+  },
+  "issue_dependencies_summary": {
+    "blocked_by": 0,
+    "total_blocked_by": 0,
+    "blocking": 0,
+    "total_blocking": 0
+  },
+  "body": "## User Story\n\nAs a data scientist, I want to check data quality and record distinct partitions so that training and evaluation use suitable inputs.\n\n## Description\n\nDelivery: M1. No implementation acceptance is claimed.\n\nOriginal criterion IDs and issue discussion are preserved. The approved disposition changes this issue's remaining scope; this is not completed implementation.\n\nCriterion assignment: US-12-AC-02: M1; US-12-AC-03: M1; US-12-AC-04: deferred.\n\nScope source: MVP-SC-01/MVP-SC-02, Gate 1 approved on 2026-11-06 by\n“i approve gate 1 and authorize phase 2”. This scope revision does not claim\nnew implementation acceptance. Preserve the scope-decision comment and original\nissue history.\n\n## Split-layout scope alignment — 2026-11-07\n\nDeveloper requested support for both two-way (train/test) and three-way\n(train/validation/test) splitting and authorized alignment of this issue,\nUS-12-AC-03 and the supporting design. This adds two-way support while retaining\nthree-way and supplied time/group partition requirements. The original AC-03\nrequired recorded seeded train/validation/test partitions and explicit supplied\npartitions with membership/disjointness checks. Its ID and the earlier scope\ndecision/comment remain preserved. No implementation acceptance or development\ngate approval is claimed by this alignment.\n\n## Acceptance Criteria\n\n- [ ] **US-12-AC-02:** Provide basic distributions, missingness and classification target balance.\n- [ ] **US-12-AC-03:** Support two-way (train/test) and three-way (train/validation/test) layouts for seeded generation and explicit user-supplied partitions, including time/group problems; record the selected layout and exact row membership, and check row membership/disjointness. Two-way layouts do not require a validation partition.\n\n### Deferred original criteria — not MVP requirements\n\n- [ ] **US-12-AC-04:** Dataset assessment and split protocol are presented for approval before dependent feature or modeling work.\n\n## Scope / Non-Goals\n\n**In Scope:**\n\n- The milestone slices above, through installed public interfaces in a separate experiment project.\n- Trusted local code; project-owned configuration, models and preprocessing; MLflow records and native DVC stages.\n- Component criteria own technical behavior; integration criteria own cross-component and assistant usability evidence.\n\n**Out of Scope:**\n\n- Managed agents and autonomous loops; mandatory experiment workflow approvals.\n- OS-enforced filesystem/network/credential/holdout isolation and arbitrary-Python bypass prevention.\n- Hard runtime/resource/cost quotas, durable workflow recovery and comprehensive dirty-source replay.\n- Additional frameworks and connectors beyond the approved MVP. Displaced clauses remain in the migration record.\n- The explicitly deferred original criteria above remain roadmap work, not completed or removed history.\n\n## Implementation Phase\n\n**Phase:** Not specified. Define story/milestone implementation phases and granular tasks in a separate owning plan.\n\n**Deliverables:** The assigned milestone outcomes and criterion-mapped evidence above.\n\n**Developer Validation:** Confirm public test boundaries before executable tests. Stop at every implementation phase gate, including the final gate, for explicit developer approval.\n\n**Exit Criteria:** Verify the assigned criteria; phase approval and whole-story/milestone acceptance remain distinct. Written-plan approval does not approve implementation gates.\n\n## Validation Approach\n\n### Automated Validation\n\n- Configured data quality checks; seeded and supplied two-way and three-way membership, including time/group-aware cases; disjointness, selected-layout round-trip and layout/membership mismatch failures.\n- Use independently defined outcomes through installed public interfaces and separate experiment-project fixtures; follow small vertical red–green TDD slices.\n- Follow the repository verification policy: current milestone at executable gates; M1–6 selection at story acceptance; preserve failures/skips and explicit authorization requirements for broader/artifact checks.\n\n### Developer Validation\n\n- Review criterion-mapped evidence, failures, artifact/run/data references and platform/tool identities.\n- Preserve development approval gates and separate milestone verification obligations; do not infer runtime behavior from documentation.\n\n## Dependencies / References\n\n- [Authoritative user stories](https://github.com/jimthompson5802/agentic-ml/blob/main/docs/specs/user-stories.md).\n- [Approved original scope dispositions and assistant walkthrough](https://github.com/jimthompson5802/agentic-ml/blob/main/docs/reviews/mvp-scope-criterion-dispositions.md).\n- [Revision plan and approval history](https://github.com/jimthompson5802/agentic-ml/blob/main/docs/plans/mvp-scope-revision.md).\n- [Verification policy](https://github.com/jimthompson5802/agentic-ml/blob/main/docs/development/verification.md#phase-and-story-verification).\n- [Active MVP design](https://github.com/jimthompson5802/agentic-ml/blob/main/docs/specs/agentic-ml-harness-design.md) defines the revised trusted-local scope; archived 0.14 platform contracts are historical reference. Synchronize issue scope and the reviewed source revision before product implementation.\n\n",
+  "closed_by": null,
+  "reactions": {
+    "url": "https://api.github.com/repos/jimthompson5802/agentic-ml/issues/19/reactions",
+    "total_count": 0,
+    "+1": 0,
+    "-1": 0,
+    "laugh": 0,
+    "hooray": 0,
+    "confused": 0,
+    "heart": 0,
+    "rocket": 0,
+    "eyes": 0
+  },
+  "timeline_url": "https://api.github.com/repos/jimthompson5802/agentic-ml/issues/19/timeline",
+  "performed_via_github_app": null,
+  "state_reason": null,
+  "pinned_comment": null
+}
+```
+
+## Complete comments in creation order
+
+```json
+[
+  {
+    "url": "https://api.github.com/repos/jimthompson5802/agentic-ml/issues/comments/6699588996",
+    "html_url": "https://github.com/jimthompson5802/agentic-ml/issues/19#issuecomment-6699588996",
+    "issue_url": "https://api.github.com/repos/jimthompson5802/agentic-ml/issues/19",
+    "id": 6699588996,
+    "node_id": "IC_kwDOVZ7kv88AAAABj1OdhA",
+    "user": {
+      "login": "jimthompson5802",
+      "id": 1425269,
+      "node_id": "MDQ6VXNlcjE0MjUyNjk=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1425269?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jimthompson5802",
+      "html_url": "https://github.com/jimthompson5802",
+      "followers_url": "https://api.github.com/users/jimthompson5802/followers",
+      "following_url": "https://api.github.com/users/jimthompson5802/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jimthompson5802/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jimthompson5802/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jimthompson5802/subscriptions",
+      "organizations_url": "https://api.github.com/users/jimthompson5802/orgs",
+      "repos_url": "https://api.github.com/users/jimthompson5802/repos",
+      "events_url": "https://api.github.com/users/jimthompson5802/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jimthompson5802/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "created_at": "2026-11-07T00:28:54Z",
+    "updated_at": "2026-11-07T00:28:54Z",
+    "body": "MVP scope decision MVP-SC-01/MVP-SC-02 — 2026-11-06\n\nGate 2 was subsequently approved by “I approve gate 2 and authorize phase 3”; this records scope/design context, not new executable acceptance.\n\nDeveloper “i approve gate 1 and authorize phase 2” approved the criterion dispositions and milestone migration. The revised body preserves original IDs and distinguishes active outcomes from deferred scope. The issue remains open; no criterion is newly verified by this edit.\n\nAssignments: US-12-AC-02: M1; US-12-AC-03: M1; US-12-AC-04: deferred.\n\n[Original criterion text and displaced guarantees](https://github.com/jimthompson5802/agentic-ml/blob/main/docs/reviews/mvp-scope-criterion-dispositions.md#criterion-level-disposition-matrix) remain review history. [Revised stories](https://github.com/jimthompson5802/agentic-ml/blob/main/docs/specs/user-stories.md) govern the new delivery scope after synchronized publication. Existing development/testing gates and historical verification obligations remain unchanged. Managed security, approvals, recovery and broader platform capabilities are deferred only as recorded in the approved matrix.\n",
+    "author_association": "OWNER",
+    "pin": null,
+    "reactions": {
+      "url": "https://api.github.com/repos/jimthompson5802/agentic-ml/issues/comments/6699588996/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "performed_via_github_app": null,
+    "minimized": null
+  }
+]
+```

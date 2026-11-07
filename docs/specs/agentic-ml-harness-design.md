@@ -76,6 +76,13 @@ service is required. Experiments also work without an assistant.
 These are responsibility boundaries, not mandatory separate services or processes.
 Reuse existing library behavior before adding toolkit infrastructure.
 
+For assessment and partitioning, use scikit-learn's existing splitting capabilities
+and pandas' native descriptive operations. Do not duplicate library algorithms.
+Any proposed toolkit-specific assessment/partition functionality must identify
+the library gap and be discussed with the developer before approval and code.
+The [data design](design/data-and-features.md#reuse-existing-assessment-and-partition-capabilities)
+records the native APIs and open integration decisions for issue #19.
+
 ## Supported workflow and safeguards
 
 1. Supply explicit data, target/task, metric, split settings and search bounds.

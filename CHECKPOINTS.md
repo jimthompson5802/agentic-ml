@@ -4,13 +4,46 @@ Last updated: 2026-11-07 (UTC)
 
 ## Current position and next action
 
-Checkout: `main`, baseline `8775327`; working tree contains the new
-[MVP project status](docs/project-status.md), its README link and this checkpoint
-update. No implementation phase is pending.
-**Next action:** await developer direction on subsequent work. The requested
-project overview is documentation only; no executable behavior changed, so TDD
-does not apply. `git diff --check` passed. The developer authorized committing
-and pushing these additions; publication proceeds with this record.
+Checkout: `US-12-assessment-splits`, baseline `bce7ccc`; working tree contains
+the new [issue #19 plan](docs/plans/milestone-1-us-12-assessment-splits.md),
+active design refinements and this checkpoint update.
+**Next action:** await authorization to start contract-only IP1, then discuss
+proposed toolkit-specific assessment/partition support:
+native split composition, membership/source records, supplied-membership
+checks and assessment report adaptation. Developer direction requires native
+scikit-learn capabilities wherever available, with pandas native descriptions;
+no custom splitting/statistics algorithms. The draft's standard-library split
+proposal is superseded under US-12-19-SC-01. Exact custom helpers remain unapproved;
+IP1 must settle them and direct scikit-learn dependency/inventory changes.
+Developer requested both two-way (train/test) and three-way
+(train/validation/test) layouts for seeded and supplied partitions; plan revision
+US-12-19-SC-02 covers layout records, validation and both installed-path matrices.
+Developer “make the alignment” subsequently authorized alignment of repository
+AC-03, supporting design and issue #19. Issue body published and independently
+re-read with one preserved comment and stable final metadata
+(`updated_at` 2026-11-07T21:38:29Z); the plan links its new complete source snapshot.
+The scope synchronization prerequisite is satisfied. Developer “commit changes”
+authorized committing the approved plan, supporting design/requirement alignment,
+updated issue source snapshot and checkpoint together on this branch.
+Plan approved by developer “i approve the plan”, 2026-11-07 UTC, recorded in
+the owning plan. Contract-only IP1 execution authorization remains pending;
+plan approval does not approve implementation gates or unresolved custom helpers.
+Four implementation phases cover contract/test-boundary review,
+assessment, partitions/records, and both installed artifact paths/final verification.
+Every gate is pending; no implementation task has started. Issue #19's complete
+body and one unique comment are recorded in the refreshed source snapshot.
+M1 AC-02/03 remain active; AC-04 is deferred.
+Accepted US-11 and issue #15 provide upstream extraction/quality; both discussions
+were refreshed and their closed state confirmed. Public assessment/split contracts
+and test boundaries require IP1 review before executable tests. No executable
+behavior changed; no tests ran. Document validation is recorded in the plan.
+Alignment checks passed: 189 local links/anchors, matching local/published AC-03,
+one preserved comment, 15 incomplete tasks/four gates and `git diff --check`.
+Earlier `gh auth status` reported an invalid configured token; repository reads
+and the authorized issue-body write both succeeded. Documentation validation and
+`git diff --check` passed before the authorized local commit; no product tests
+apply to these documentation-only changes. Push/PR and implementation remain
+unauthorized by this commit request.
 
 US-12 issue [#15](https://github.com/jimthompson5802/agentic-ml/issues/15)
 is accepted and closed. PR #61 squash-merged as `1f9eb86`; local and remote

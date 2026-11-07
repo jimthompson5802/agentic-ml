@@ -21,6 +21,13 @@ registration, framework adapter or FeaturePlan language is required for the MVP.
 Validate supported estimator parameters and prediction compatibility through the
 toolkit path; this cannot constrain arbitrary code outside that path.
 
+Assessment and partitioning reuse native pandas descriptive outputs and
+scikit-learn split APIs. A new `assess_data`, `create_partitions` or record
+write/read interface is not yet an accepted public contract. Discuss any
+toolkit-specific gap and the smallest needed integration with the developer
+before approving a wrapper, schema or persistence API. See
+[native capability reuse and open decisions](data-and-features.md#reuse-existing-assessment-and-partition-capabilities).
+
 ## Existing public interfaces
 
 The currently implemented families are initialization, planning, approvals and

@@ -83,6 +83,7 @@ and test boundaries before code. Use native library interfaces where possible.
 |---|---|---|
 | Runnable basic experiment | Setup/defaults and validated explicit settings compatible with existing APIs | US-39-AC-01/02: separate project runs without manual schema conversion or mandatory formal planning |
 | Local data | Native pandas readers/DataFrames and project pandas extraction; small recording/publication helpers use plain dictionaries | US-11/12/13: expected data, checks, membership and DVC identities |
+| Assessment and partitions | Native pandas descriptions/missingness/counts and scikit-learn splitting; any new toolkit integration requires developer discussion of the library gap | US-12 #19 AC-02/03: descriptive outputs and recorded, disjoint membership; [integration decisions](data-and-features.md#proposed-toolkit-integration-requiring-discussion) remain open |
 | Feature/model pipeline | Pandas DataFrames/project feature functions plus native scikit-learn compatible fit/transform/predict and persistence | US-14/15/16/18: train-only fit, validation comparisons and usable fitted artifacts |
 | Local experiment/search | Supported project script/API path using native estimator/search behavior | US-10/20: logs/status, validated candidates and maximum trial count |
 | Evaluation/reporting | Metric/output checks over recorded pipeline results | US-21/24/26: baseline/validation/final metrics and distinct failure/quality outcomes |
