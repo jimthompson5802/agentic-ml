@@ -44,6 +44,13 @@ govern implementation scope. No subsequent story implementation is authorized.
 
 ## Completed work: authoritative records
 
+Contributor skill added: `.agents/skills/report-test-progress/` monitors an
+existing pytest session in the current chat and reports remaining/total,
+completed and failed counts approximately every minute. It never launches tests;
+unavailable counts remain explicitly unknown. Documentation-only instructions
+and UI metadata add no executable behavior, so TDD does not apply. No pytest run
+was started for this work. Existing US-12 changes and Gate 2 status are unchanged.
+
 | Work | Final status and records |
 |---|---|
 | US-01–03 | Accepted and merged; [US-01](docs/plans/milestone-1-us-01.md), [US-02](docs/plans/milestone-1-us-02.md), [US-03](docs/plans/milestone-1-us-03.md). |
