@@ -219,4 +219,9 @@ Reports belong in `docs/verification/us-12-ip*.md`; raw commands/logs/JUnit/iden
 
 ## Publication record
 
-Issue #15 accepted; commit, push, PR and static review in progress under execute-plan.
+Issue #15 accepted; committed/pushed `92eb9d8` and opened
+[PR #61](https://github.com/jimthompson5802/agentic-ml/pull/61).
+[Static review](https://github.com/jimthompson5802/agentic-ml/pull/61#pullrequestreview-5813444709)
+identified one Low finite-integer range-bound overflow edge case; no fix authorized.
+No project checks were run during static review. Publication records are committed
+separately; #19 remains separate, no merge authorized.

@@ -19,8 +19,11 @@ installed records: `.dev-records/verification/20261107-1c34871-us12-ip3/`.
 Linux aarch64 only; historical M1/M50 obligations and skips remain open.
 Working tree contains three new installed quality probe files, the M1 integration
 test, guide/README/design updates, plan, evidence and checkpoint. Product source,
-dependencies/resources unchanged. No commit, push or PR performed.
-**Next action:** commit, push, open PR and publish static review under execute-plan. #19 assessment/splits remain separate work.
+dependencies/resources unchanged in IP3. Accepted work committed/pushed as
+`92eb9d8`; [PR #61](https://github.com/jimthompson5802/agentic-ml/pull/61) opened.
+[Static review](https://github.com/jimthompson5802/agentic-ml/pull/61#pullrequestreview-5813444709)
+identified one Low finite-integer range-bound overflow edge case; fix awaits direction.
+**Next action:** await developer direction on review finding or merge. #19 assessment/splits remain separate work.
 
 ## Previous US-12 IP2 approved — 2026-11-07 UTC
 
