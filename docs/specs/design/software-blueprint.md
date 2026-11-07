@@ -75,8 +75,8 @@ and test boundaries before code. Use native library interfaces where possible.
 | Capability | Implementation seam | Story owner / observable result |
 |---|---|---|
 | Runnable basic experiment | Setup/defaults and validated explicit settings compatible with existing APIs | US-39-AC-01/02: separate project runs without manual schema conversion or mandatory formal planning |
-| Local data | Project extraction plus reusable local-file/quality/split helpers | US-11/12/13: expected data, checks, membership and DVC identities |
-| Feature/model pipeline | Native scikit-learn compatible fit/transform/predict and persistence | US-14/15/16/18: train-only fit, validation comparisons and usable fitted artifacts |
+| Local data | Native pandas readers/DataFrames and project pandas extraction; small recording/publication helpers use plain dictionaries | US-11/12/13: expected data, checks, membership and DVC identities |
+| Feature/model pipeline | Pandas DataFrames/project feature functions plus native scikit-learn compatible fit/transform/predict and persistence | US-14/15/16/18: train-only fit, validation comparisons and usable fitted artifacts |
 | Local experiment/search | Supported project script/API path using native estimator/search behavior | US-10/20: logs/status, validated candidates and maximum trial count |
 | Evaluation/reporting | Metric/output checks over recorded pipeline results | US-21/24/26: baseline/validation/final metrics and distinct failure/quality outcomes |
 | Tracking | MLflow run/artifact records with project/config/environment/DVC references | US-26: inspectable evidence, no second general run-state store |

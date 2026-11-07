@@ -495,3 +495,37 @@ def test_rebuilt_probe_failure_retains_both_environments(
     identity = json.loads((records / "identities/rebuilt-wheel.json").read_text())
     assert identity["status"] == "unavailable"
     assert (records / "commands.json").is_file()
+
+
+@pytest.mark.milestone_1
+def test_extraction_from_both_artifact_paths(artifacts: Path, tmp_path: Path) -> None:
+    """US-11 AC-01–05: installed project pandas extraction verifies both wheels."""
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "tests/installation/verify_extraction.py"),
+            "--artifacts-dir",
+            str(artifacts),
+            "--workspace",
+            str(tmp_path / "extraction"),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=180,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    for label in ("direct-wheel", "rebuilt-wheel"):
+        assert f"PASS extraction {label}" in result.stdout, result.stdout
+    records = Path(
+        next(
+            line.removeprefix("RECORDS ")
+            for line in result.stdout.splitlines()
+            if line.startswith("RECORDS ")
+        )
+    )
+    summary = json.loads((records / "summary.json").read_text())
+    assert summary["cleanup"] == "complete"
+    assert len(summary["child_records"]) == 1
+    assert not list((tmp_path / "extraction").rglob("pyvenv.cfg"))

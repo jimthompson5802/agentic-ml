@@ -83,6 +83,8 @@ def main() -> None:
         "nbformat<6,>=5",
         "dvc<4,>=3",
         "mlflow<4,>=3",
+        "pandas<3.2,>=3.1",
+        "pyarrow<26,>=25",
     }, "unexpected declared runtime dependencies"
     for package in lock["package"]:
         package["optional_dependencies"] = package.get("optional-dependencies", {})

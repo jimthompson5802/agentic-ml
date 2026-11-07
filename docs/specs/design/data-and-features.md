@@ -7,6 +7,16 @@ implemented by current configuration-validation APIs.
 
 ## Local extraction and quality
 
+Developer-directed design refinement, 2026-11-07: use pandas DataFrame as the
+native tabular representation for extraction and the basis for feature
+engineering. Project-owned pandas functions use read_csv/read_parquet, column
+selection, boolean masks and merge/join directly. Do not introduce toolkit
+source/request/result classes, predicate/join classes or a separate operation
+language. Toolkit helpers may record provenance and publish output using native
+objects and ordinary dictionaries. The proposed component interface and review
+status are in [the extraction contract](../../extraction.md) and
+[US-11-SC-01](../../plans/milestone-1-us-11.md#scope-change-history).
+
 Read local CSV/Parquet and support configured column selection, filtering and
 joins. Permit ordinary project extraction functions. Record source paths/content
 identities, effective extraction settings/time and output checksum/DVC reference.
@@ -32,6 +42,11 @@ does not feed final scores back into feature/tuning decisions. Arbitrary project
 Python can still access files; this is not protected evaluator storage.
 
 ## Authored feature pipelines
+
+Use DataFrames as the extraction-to-feature boundary and ordinary pandas
+functions for authored tabular features. Native pandas operations retain their
+own semantics; there is no toolkit dataframe or feature wrapper. This design
+foundation does not authorize feature implementation under US-11.
 
 Use native scikit-learn pipeline steps and project functions for imputation,
 encoding, scaling and authored domain features as applicable. Record selected
