@@ -35,6 +35,13 @@ families are `init`, `plan resolve/inspect/verify/approve/revoke-approval`,
 `config validate/inspect`, and `candidate validate`, plus `--version`.
 These are not training or notebook-run commands.
 
+Dataset-content checks are a separate proposed public boundary under
+[US-12 issue #15's quality contract](../../data-quality.md). IP1 has selected
+function/report/rule shapes, approved by developer “i approve ip1; commit” at
+Gate 1 on 2026-11-07 UTC. The API is implemented with Gate 2 approval; IP3 installed checks pass;
+Gate 3 is approved; issue #15 AC-01/05 accepted on 2026-11-07 UTC. Existing plan-bound validation exports are
+unchanged by this proposal.
+
 Preserve their accepted request/result shapes, integrity/currentness checks,
 conflict handling, recorded defaults, revocation/staleness rules and diagnostics.
 Formal plan approval remains required when using the explicit delegated-decision

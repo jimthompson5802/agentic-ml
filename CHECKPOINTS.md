@@ -2,7 +2,125 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current US-11 accepted and squash-merged — 2026-11-07 UTC
+## Current US-12 issue #15 accepted — 2026-11-07 UTC
+
+Developer “start ip3” authorized IP3 on `US-12-data-validation`, clean baseline
+`1c34871` (approved IP2 committed). IP3-T1–T4 are technically complete;
+Developer “i approve gate 3”, 2026-11-07 UTC, approved Gate 3;
+developer “i accept issue #15”, 2026-11-07 UTC, accepted AC-01/05. The
+[plan](docs/plans/milestone-1-us-12.md) and [evidence](docs/verification/us-12-ip3.md)
+record installed direct/rebuilt quality checks, sentinels, documentation and
+criterion reconciliation. Complete #15/#19 discussions refreshed and stable.
+
+M1: 528 passed, one existing skip in 218.88s; final M1–6: 528 passed, one
+existing skip in 220.48s; both 529/631 selected. Shared checks pass, 77 local
+links/anchors and Python examples pass, lock unchanged. Raw JUnit and linked
+installed records: `.dev-records/verification/20261107-1c34871-us12-ip3/`.
+Linux aarch64 only; historical M1/M50 obligations and skips remain open.
+Working tree contains three new installed quality probe files, the M1 integration
+test, guide/README/design updates, plan, evidence and checkpoint. Product source,
+dependencies/resources unchanged in IP3. Accepted work committed/pushed as
+`92eb9d8`; [PR #61](https://github.com/jimthompson5802/agentic-ml/pull/61) opened.
+[Static review](https://github.com/jimthompson5802/agentic-ml/pull/61#pullrequestreview-5813444709)
+identified one Low finite-integer range-bound overflow edge case; fix awaits direction.
+**Next action:** await developer direction on review finding or merge. #19 assessment/splits remain separate work.
+
+## Previous US-12 IP2 approved — 2026-11-07 UTC
+
+Developer “i approve ip2 and commit” approved Gate 2 and authorized a local
+commit of the completed IP2 work. The [plan](docs/plans/milestone-1-us-12.md)
+and [evidence](docs/verification/us-12-ip2.md) record 95 focused passes, final
+M1 527 passed and one existing skip, and passing shared checks. Recording the
+decision before the authorized commit. IP3, story acceptance, push and PR are
+not authorized. **Next action:** complete the local commit, then await separate
+IP3 direction. Earlier gate-pending and provisional entries below are historical.
+
+## Current US-12 IP2 developer gate — 2026-11-07 UTC
+
+Gate preparation found the advisory test lacked the approved file sentinel.
+Added that assertion; all 95 focused cases pass. Renewed final M1: 527 passed,
+one existing skip, 528/630 selected in 219.54 seconds. Shared checks passed
+after the change; final JUnit is `m1-gate.xml` in the records directory linked
+below. IP2-T1–T4 are technically complete; developer Gate 2 approval is pending.
+Stop before IP3. The preceding-run details below are historical.
+
+### Earlier gate preparation
+
+US-12 #15 IP2-T1–T4 are technically complete; developer Gate 2 approval is
+pending. The [plan](docs/plans/milestone-1-us-12.md) and
+[IP2 evidence](docs/verification/us-12-ip2.md) record the public quality rules,
+blocking boundary, TDD and corrections. Focused tests: 95 passed. Final M1:
+527 passed, one existing skip; 528/630 selected. Locked sync, lock consistency,
+lint, format, strict typing, CLI smoke and whitespace checks passed; lock hash
+unchanged. Raw final JUnit is in `.dev-records/verification/20261107-ec82d75-us12-ip2/`;
+red/green console transcripts were not retained as raw logs. Linux aarch64 only.
+Installed direct/rebuilt wheel quality verification and final M1–6 remain IP3;
+existing historical M1/M50 obligations and skip remain open. No IP3, story
+acceptance, commit or publication authorized. **Next action:** developer Gate 2
+review and explicit approval; stop before IP3.
+
+### Earlier IP2 progress
+
+Developer “start ip2” authorized IP2 on `US-12-data-validation`, clean baseline
+`ec82d75`, after IP1 approval. Five initial public TDD slices and their results
+are recorded in the [plan](docs/plans/milestone-1-us-12.md). The provisional
+`agentic_ml.data_quality` module and tests are incomplete: configuration and
+frame validation, remaining quality rules, blocking, full matrix and phase checks
+remain. No IP2 task or approval gate is complete. Continue the approved contract
+one red–green slice at a time; do not treat current code as a usable boundary.
+No milestone/shared verification, IP3, acceptance, commit or publication yet.
+Developer “contineu us-12 ip2” resumed work. Three further red–green slices
+cover invalid row-count thresholds, null counts and excess duplicate counts;
+the focused file now has 10 passing cases. All tasks remain incomplete and the
+provisional module does not yet implement the full approved contract.
+Further continuation covers initial range/membership, required blocking, missing
+columns, non-scalar cells, duplicate IDs and snapshot/settings cases; 18 focused
+cases pass. One initial missing-column correction failed and the second passed;
+the plan records the attempt. Full contract and phase checks remain outstanding.
+
+## Current US-12 issue #15 IP1 approved — 2026-11-07 UTC
+
+Developer “start ip1” authorized IP1 of the approved
+[M1 US-12 plan](docs/plans/milestone-1-us-12.md). Branch
+`US-12-data-validation`, baseline `2cf6b33`, clean at entry. IP1-T1–T4 are
+complete; developer “i approve ip1; commit” approved Gate 1 and authorized
+a local commit on 2026-11-07 UTC. IP2 authorization remains pending.
+[Concrete contract](docs/data-quality.md) specifies public pandas functions,
+seven quality-rule kinds, report/error/required-advisory semantics, checked
+snapshot blocking, literal fixtures and installed probe files. Contract/API/test
+boundaries are approved contracts; executable delivery remains pending.
+
+Refreshed complete #15/#19 discussions: one unique comment each, all pages,
+matching counts and stable metadata; planning snapshots unchanged. #15 owns
+AC-01/05; #19 retains AC-02/03 and deferred AC-04. Accepted US-11 extraction
+supplier evidence inspected. Plan, contract, active design links and
+[IP1 evidence](docs/verification/us-12-ip1.md) record decisions and handoff.
+Raw refresh/check records: `.dev-records/verification/20261107-2cf6b33-us12-ip1/`.
+
+Documentation-only work; no product source/tests/dependencies/lock/resources
+changed. Document/source checks passed: 48 local links/anchors, four Python/JSON
+syntax blocks, source snapshot parity, task/gate/criterion states and whitespace;
+source/tests/dependencies/resources and lock unchanged. Results are recorded in
+the IP1 report and raw checks log. No executable tests, builds, dependency installation or runtime
+support claim; TDD does not apply to this contract-only implementation phase.
+Developer “I want to support "no checks"” authorized US-12-SC-01: explicit
+empty rules report not_checked and permit the operation; malformed rules still
+error. Contract/fixtures/future tests revised within IP1 and approved at Gate 1.
+Original document checker misread Python type brackets as Markdown links;
+corrective attempt 1 excludes fenced code, preserving original failure evidence.
+Scope ownership and verification obligations remain unchanged.
+
+Developer review clarification: the contract example now explains each of its
+seven rules beside the code, including defaults, missing-value handling and
+required/advisory/no-check behavior. Documentation-only clarification; renewed
+document/source checks passed. Gate 1 approved; IP2 authorization remains pending.
+
+Working-tree changes: plan, contract, IP1 evidence, two active design references
+and this checkpoint. Recording approval before the authorized local commit;
+no push, PR or GitHub writes requested.
+**Next action:** await explicit IP2 authorization; stop before IP2. Independent M1/M50 obligations/skips remain open.
+
+## Previous US-11 accepted and squash-merged — 2026-11-07 UTC
 
 Branch `US-11-local-data-extraction`, baseline `0d74c21`; clean at phase entry.
 Developer “start us-11 ip3” authorized IP3 after approved/committed IP2.
