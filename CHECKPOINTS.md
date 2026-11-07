@@ -4,11 +4,13 @@ Last updated: 2026-11-07 (UTC)
 
 ## Current position and next action
 
-Checkout: `main`, baseline `03324e3`; working tree was clean before this
-checkpoint-only cleanup. No implementation phase is pending.
-**Next action:** await developer direction on subsequent work. This cleanup
-changes documentation only. Developer authorized committing and pushing this
-cleanup; publication proceeds with this record.
+Checkout: `main`, baseline `8775327`; working tree contains the new
+[MVP project status](docs/project-status.md), its README link and this checkpoint
+update. No implementation phase is pending.
+**Next action:** await developer direction on subsequent work. The requested
+project overview is documentation only; no executable behavior changed, so TDD
+does not apply. `git diff --check` passed. The developer authorized committing
+and pushing these additions; publication proceeds with this record.
 
 US-12 issue [#15](https://github.com/jimthompson5802/agentic-ml/issues/15)
 is accepted and closed. PR #61 squash-merged as `1f9eb86`; local and remote

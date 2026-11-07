@@ -36,6 +36,7 @@ Start with the [development guide](docs/development.md) for Python 3.12, uv, loc
 
 ## Repository contents
 
+- [MVP project status](docs/project-status.md): Milestone-by-story overview of accepted work and remaining MVP scope, with GitHub issue links.
 - [User stories](docs/specs/user-stories.md): Authoritative product and technical environment requirements and acceptance criteria, covering the development foundation (Milestone 0), revised MVP increments (Milestones 1–2), the uncommitted platform roadmap, ongoing technical environment improvements (Milestone 50), and deferred enhancements (Milestone 99), with stable story and criterion IDs.
 - [Toolkit design](docs/specs/agentic-ml-harness-design.md): MVP architecture, implemented/planned interfaces, data/features, execution/tracking/reproduction, decisions and criterion coverage. Start with its reading map.
 - [Example walkthrough](docs/specs/example-walkthrough.md): Required scientist-directed assistant scenario, with prompts, expected evidence and explicit implemented-versus-planned commands.
