@@ -2,7 +2,7 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current US-11 accepted; publication in progress — 2026-11-07 UTC
+## Current US-11 accepted; PR #60 open — 2026-11-07 UTC
 
 Branch `US-11-local-data-extraction`, baseline `0d74c21`; clean at phase entry.
 Developer “start us-11 ip3” authorized IP3 after approved/committed IP2.
@@ -40,8 +40,13 @@ Working-tree changes: three new installation probe/driver/project fixture files,
 one new M1 integration test, extraction guide, README, plan, IP3 report and this
 checkpoint. Developer “i approve ip3” approved the final phase on 2026-11-07 UTC;
 all implementation phase gates are complete. Developer “i accept us-11” accepted
-the whole story on 2026-11-07 UTC. **Next action:** commit accepted changes, push,
-create the PR and publish a static COMMENT review under execute-plan. No merge authorized.
+the whole story on 2026-11-07 UTC. Committed `f2c215c`, pushed the story branch
+and opened [PR #60](https://github.com/jimthompson5802/agentic-ml/pull/60).
+Published verified static [COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/60#pullrequestreview-5811972716):
+one Low stale design-status finding, no executable defect identified in inspected
+supported paths. Recording publication and covering the records-only updated
+head with a supplemental static review. **Next action:** developer PR review and
+direction on the finding. No merge, finding fix or next story authorized.
 Approval records only changed after verification; whitespace check passed.
 
 ## Current MVP scope revision — Accepted — 2026-11-07 UTC

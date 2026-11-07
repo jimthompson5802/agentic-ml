@@ -319,7 +319,7 @@ developer direction. No exemption for a required slow M1 test.
 | US-11-AC-04 | IP1-T1/T3; IP2-T4; IP3-T1/T2 | Input/output independent SHA-256 checks, paths/settings/time/code references; checksum satisfies output identity branch | Accepted |
 | US-11-AC-05 | IP1-T1/T3; IP2-T2–T4; IP3-T1/T2 | Invalid/missing/malformed inputs, native/project configuration errors, callback and publication failure; no incomplete success | Accepted |
 
-- **Remaining work:** Accepted-story publication and static review; all technical tasks and implementation phase gates complete.
+- **Remaining work:** Publication-record follow-up and updated-head review; accepted story implementation complete.
 - **Final verification:** Complete under US-11-IP3-T4; [IP3 evidence](../verification/us-11-ip3.md).
 - **Developer acceptance / reference / date:** Accepted — developer “i accept us-11”, 2026-11-07 UTC. All five criteria accepted; execute-plan accepted-story publication workflow authorized.
 
@@ -361,3 +361,22 @@ attempts and remaining uncertainty, and await developer direction. Never weaken
 assertions, suppress failures, change thresholds or add a workaround without
 explicit direction. Use scope-change procedure for invalidated approaches or
 out-of-scope prerequisites; preserve historical decisions and evidence.
+
+## Accepted-story publication — 2026-11-07 UTC
+
+Developer “i accept us-11” accepted US-11 after all three implementation phase
+gates. Committed remaining IP3 work/acceptance as `f2c215c`, pushed
+`US-11-local-data-extraction`, and opened
+[PR #60](https://github.com/jimthompson5802/agentic-ml/pull/60) into `main`
+(base `03dd739`). Verified repository/head ownership, non-draft status and body
+against the repository template. Final runtime evidence remains applicable:
+post-verification changes are approval/publication documentation only.
+
+Published and verified a static COMMENT
+[review](https://github.com/jimthompson5802/agentic-ml/pull/60#pullrequestreview-5811972716)
+on `f2c215c`. One Low finding at design overview line 95: stale “awaits renewed
+IP1 gate review” status despite delivered/accepted API. No executable defect
+identified in inspected supported paths. No project code/checks executed during
+the static review. Finding fixes require separate developer direction; no fix,
+merge, branch cleanup or next-story work authorized. This publication-record
+commit changes only records; review its documentation delta on the updated head.
