@@ -291,3 +291,6 @@ PR #61 merged at 2026-11-07T17:40:11Z as
 with `--ff-only`; merged tree equals approved PR head `8f71b2e` (empty diff).
 Overflow review thread already resolved. No new product changes or tests;
 existing verification evidence and historical limitations remain applicable.
+
+Developer requested cleanup: local and remote `US-12-data-validation` deleted
+after tree equality with squash merge `1f9eb86` was confirmed. Checkout stays on `main`.
