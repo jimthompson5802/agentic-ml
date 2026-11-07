@@ -2,7 +2,27 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current US-12 IP2 approved — 2026-11-07 UTC
+## Current US-12 issue #15 accepted — 2026-11-07 UTC
+
+Developer “start ip3” authorized IP3 on `US-12-data-validation`, clean baseline
+`1c34871` (approved IP2 committed). IP3-T1–T4 are technically complete;
+Developer “i approve gate 3”, 2026-11-07 UTC, approved Gate 3;
+developer “i accept issue #15”, 2026-11-07 UTC, accepted AC-01/05. The
+[plan](docs/plans/milestone-1-us-12.md) and [evidence](docs/verification/us-12-ip3.md)
+record installed direct/rebuilt quality checks, sentinels, documentation and
+criterion reconciliation. Complete #15/#19 discussions refreshed and stable.
+
+M1: 528 passed, one existing skip in 218.88s; final M1–6: 528 passed, one
+existing skip in 220.48s; both 529/631 selected. Shared checks pass, 77 local
+links/anchors and Python examples pass, lock unchanged. Raw JUnit and linked
+installed records: `.dev-records/verification/20261107-1c34871-us12-ip3/`.
+Linux aarch64 only; historical M1/M50 obligations and skips remain open.
+Working tree contains three new installed quality probe files, the M1 integration
+test, guide/README/design updates, plan, evidence and checkpoint. Product source,
+dependencies/resources unchanged. No commit, push or PR performed.
+**Next action:** commit, push, open PR and publish static review under execute-plan. #19 assessment/splits remain separate work.
+
+## Previous US-12 IP2 approved — 2026-11-07 UTC
 
 Developer “i approve ip2 and commit” approved Gate 2 and authorized a local
 commit of the completed IP2 work. The [plan](docs/plans/milestone-1-us-12.md)

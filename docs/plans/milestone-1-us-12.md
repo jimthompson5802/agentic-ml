@@ -39,7 +39,7 @@ Pandas `>=3.1,<3.2`, pyarrow `>=25,<26` and development pandas stubs are already
 - **Developer decision:** Approved.
 - **Decision reference and date:** Developer “i approve plan; commit changes”, 2026-11-07 UTC. Authorizes plan approval and a local commit of the planning changes; no IP1 execution or publication authorized.
 - **Requested plan changes:** None recorded.
-- **Implementation authorization:** Developer “start ip1”, 2026-11-07 UTC, authorized IP1 only. Developer “i approve ip1; commit”, 2026-11-07 UTC, approved Gate 1 and a local commit. Developer “start ip2”, 2026-11-07 UTC, authorized IP2. Developer “i approve ip2 and commit”, 2026-11-07 UTC, approved Gate 2 and a local commit; IP3 remains unauthorized.
+- **Implementation authorization:** Developer “start ip1”, 2026-11-07 UTC, authorized IP1 only. Developer “i approve ip1; commit”, 2026-11-07 UTC, approved Gate 1 and a local commit. Developer “start ip2”, 2026-11-07 UTC, authorized IP2. Developer “i approve ip2 and commit”, 2026-11-07 UTC, approved Gate 2 and a local commit; Developer “start ip3”, 2026-11-07 UTC, authorized IP3.
 
 ## Scope-change history
 
@@ -57,7 +57,7 @@ Use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md) for sub
 
 ## Selected IP1 technical approach and public test boundaries
 
-The [concrete contract](../data-quality.md) specifies exact signatures, rule/report dictionaries, edge cases, fixture outcomes, error semantics and installation seams. It supersedes the initial draft alternatives; developer confirmed this contract at Gate 1 on 2026-11-07 UTC. IP2 implementation is in progress.
+The [concrete contract](../data-quality.md) specifies exact signatures, rule/report dictionaries, edge cases, fixture outcomes, error semantics and installation seams. It supersedes the initial draft alternatives; developer confirmed this contract at Gate 1 on 2026-11-07 UTC. IP2 implementation and Gate 2 are approved.
 
 Selected exports from proposed `agentic_ml.data_quality`: `validate_data`, generic `run_validated_step` and report-bearing `DataQualityError`. Native DataFrames and ordinary dictionaries remain the interface. Seven configured rule kinds cover columns, dtypes, row_count, nulls, duplicates, numeric range and allowed values. No project rule callbacks, operation language, persistence service or new dependency is needed. Dtypes use canonical pandas strings; duplicate counts are excess rows with keep='first'; nulls are separate from range/membership violations. Malformed declarations raise built-in errors; absent data columns produce rule failures. Advisory failures remain reported without blocking. Explicit empty rules yield `not_checked` and allow the operation; malformed rules still error, per US-12-SC-01.
 
@@ -151,32 +151,33 @@ New product tests declare `milestone_1`. Contributor-only driver lifecycle tests
 - **Outcome:** Independent installed projects verify extraction-to-quality/blocking behavior on both artifact paths; issue #15 evidence and user guidance ready.
 - **Entry conditions:** Gate 2 approved and IP3 authorized; IP1-selected installation seam available.
 - **Acceptance criteria advanced:** AC-01 and AC-05 fully within #15 scope.
+- **Execution started:** Developer “start ip3”, 2026-11-07 UTC; clean baseline `1c34871`. Approved Gate 1 installation boundaries reused; no runner enforcement claim.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-12-IP3-T1 | Not started | Add IP1-selected `tests/installation/{data_quality_project,check_data_quality,verify_data_quality}.py`; reuse existing verification support | Gate 2 | Project-owned quality example imports installed public APIs; normal direct and sdist-rebuilt installs retain independent origins, runtime inventories and evidence | AC-01/05 |
-| US-12-IP3-T2 | Not started | Add M1 integration case to `tests/integration/test_distribution_verification.py`; verify both paths from unrelated cwd with isolated Python, extraction output, each rule family and required/advisory/no-check sentinel outcomes | T1 | Public artifact behavior first fails as intended then passes; no source-checkout imports or editable install; malformed rules/callback failures retain context | AC-01/05 |
-| US-12-IP3-T3 | Not started | Finish `docs/data-quality.md`, link from `README.md`; update affected active design status without rewriting history; document report JSON, failure recovery, future pipeline handoff and #19 exclusions | T2 | Runnable reviewed examples match API; installed resource inventory unchanged; no unsupported runner or whole-US-12 completion claim | AC-01/05 |
-| US-12-IP3-T4 | Not started | Refresh complete issues, reconcile every criterion and deferred check; run M1 then final M1–6/shared checks; record proposed `docs/verification/us-12-ip3.md`, identities/platforms, final acceptance table and checkpoint | T1–T3 | All required evidence reconciled against final inputs before final gate; issue #19 remains open work | AC-01/05 |
+| US-12-IP3-T1 | Complete | Add IP1-selected `tests/installation/{data_quality_project,check_data_quality,verify_data_quality}.py`; reuse existing verification support | Gate 2 | Project-owned quality example imports installed public APIs; normal direct and sdist-rebuilt installs retain independent origins, runtime inventories and evidence | AC-01/05 |
+| US-12-IP3-T2 | Complete | Add M1 integration case to `tests/integration/test_distribution_verification.py`; verify both paths from unrelated cwd with isolated Python, extraction output, each rule family and required/advisory/no-check sentinel outcomes | T1 | Public artifact behavior first fails as intended then passes; no source-checkout imports or editable install; malformed rules/callback failures retain context | AC-01/05 |
+| US-12-IP3-T3 | Complete | Finish `docs/data-quality.md`, link from `README.md`; update affected active design status without rewriting history; document report JSON, failure recovery, future pipeline handoff and #19 exclusions | T2 | Runnable reviewed examples match API; installed resource inventory unchanged; no unsupported runner or whole-US-12 completion claim | AC-01/05 |
+| US-12-IP3-T4 | Complete | Refresh complete issues, reconcile every criterion and deferred check; run M1 then final M1–6/shared checks; record proposed `docs/verification/us-12-ip3.md`, identities/platforms, final acceptance table and checkpoint | T1–T3 | All required evidence reconciled against final inputs before final gate; issue #19 remains open work | AC-01/05 |
 
 ### Verification and review evidence
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Installed project scenarios | New M1 integration case invokes reviewed artifact probe internally | Both normal wheel paths pass positive/failure/blocking cases; import/CLI/version/resource identities independently checked | Pending |
-| Current milestone gate | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass, counts and limits recorded | Pending |
-| Final issue-slice acceptance | `uv run --locked pytest -n 4 --dist=loadgroup` | M1–6 pass against final executable changes | Pending |
-| Shared checks and docs | Commands below; changed local links/anchors and examples | Pass; planned versus actual results distinguished | Pending |
+| Installed project scenarios | New M1 integration case invokes reviewed artifact probe internally | Both normal wheel paths pass positive/failure/blocking cases; import/CLI/version/resource identities independently checked | Passed; [IP3 evidence](../verification/us-12-ip3.md) |
+| Current milestone gate | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass, counts and limits recorded | 528 passed, 1 existing skip; 529/631 selected in 218.88s |
+| Final issue-slice acceptance | `uv run --locked pytest -n 4 --dist=loadgroup` | M1–6 pass against final executable changes | 528 passed, 1 existing skip; 529/631 selected in 220.48s; [evidence](../verification/us-12-ip3.md) |
+| Shared checks and docs | Commands below; changed local links/anchors and examples | Pass; planned versus actual results distinguished | Passed; 77 local links/anchors and Python examples; lock unchanged |
 
 No standalone artifact command or broader pytest selection is automatically authorized by this plan. Required artifact behavior is exercised inside selected M1 tests. Use new isolated owned child workspaces, preserve xdist groups/timeouts/fixture scopes, and retain raw records outside disposable trees. No executable changes after final evidence without renewal.
 
 ### Developer approval gate
 
 - **Approval criteria:** All IP3 tasks complete; both criteria mapped to actual installed evidence; final M1–6/shared checks pass; deferrals and platforms explicit.
-- **Evidence presented:** Pending IP3 report and acceptance matrix.
+- **Evidence presented:** [IP3 report](../verification/us-12-ip3.md); T1–T4 technically complete. Both installed paths pass, M1 and final M1–6 each 528 passed/1 existing skip, shared checks pass. Developer Gate 3 approved.
 - **Remaining limitations:** #19 AC-02/03, deferred AC-04, downstream runner adoption, independent milestone obligations and unverified platforms remain open.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer “i approve gate 3”, 2026-11-07 UTC. Phase approval only; explicit issue #15 acceptance remains pending.
 - **Requested changes and resolution:** None recorded.
 - **Progression authorized:** Stop at final gate. Obtain explicit acceptance of issue #15 slice separately; Gate 3 may also provide that acceptance only if the developer says so. No commit, push, PR, issue edit/closure or merge authorized by this planning request.
 
@@ -195,23 +196,27 @@ Reports belong in `docs/verification/us-12-ip*.md`; raw commands/logs/JUnit/iden
 - **M1–6/shared checks:** Run against final story changes; renew after executable changes. Record counts/skips and reconcile each with its actual coverage. Documentation-only final edits use document checks.
 - **Artifact boundary:** Both installed paths through selected integration tests; no standalone artifact driver or complete-suite run without explicit developer command. Existing packaged-resource checks remain unchanged and run through reused normal-wheel verification.
 - **Deferred-check reconciliation:** IP2 omissions resolved by final M1–6 and installed checks. Infrastructure/M0/M50/M99 exclusions and historical skips remain named limitations, not passing evidence. Missing required #15 evidence blocks acceptance.
-- **Actual results:** IP1 document/source checks recorded in its evidence report; no product tests, builds, dependency installation or quality implementation performed in IP1. Executable acceptance remains pending IP2/IP3.
+- **Actual results:** IP1 document/source checks recorded in its evidence report; no product tests, builds, dependency installation or quality implementation performed in IP1. IP2 and IP3 technical evidence complete; Gate 3 approved; issue-slice acceptance pending.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-12-AC-01 (#15) | IP1-T2; IP2-T1/T2; IP3-T1/T2/T4 | Literal schema/count/type/null/duplicate/rule cases; installed positive/negative reports | Pending |
-| US-12-AC-05 (#15) | IP1-T2; IP2-T2/T3; IP3-T1/T2/T4 | Required/advisory reports, absent/present downstream sentinel, project failure separation | Pending |
+| US-12-AC-01 (#15) | IP1-T2; IP2-T1/T2; IP3-T1/T2/T4 | Literal schema/count/type/null/duplicate/rule cases; installed positive/negative reports; [IP3 evidence](../verification/us-12-ip3.md) | Accepted; developer “i accept issue #15”, 2026-11-07 UTC |
+| US-12-AC-05 (#15) | IP1-T2; IP2-T2/T3; IP3-T1/T2/T4 | Required/advisory reports, absent/present downstream sentinel, project failure separation; [IP3 evidence](../verification/us-12-ip3.md) | Accepted; developer “i accept issue #15”, 2026-11-07 UTC |
 | US-12-AC-02/03 (#19) | Separate future plan | No acceptance claimed | Outside this plan |
 | US-12-AC-04 (#19 deferred) | Future explicit scope activation | No mandatory experiment gate implemented | Deferred |
 
 - **Remaining work:** #19 assessment/splits and consumer-story integration; no full experiment acceptance.
 - **Partial prerequisite delivery:** #15 component slice only; issue acceptance does not mean all US-12 or M1 acceptance.
-- **Final verification:** Pending US-12-IP3-T4.
-- **Developer acceptance:** Pending, explicitly for issue #15 scope.
-- **Decision reference and date:** Pending.
+- **Final verification:** US-12-IP3-T4 complete; M1 and M1–6/shared checks passed; [IP3 evidence](../verification/us-12-ip3.md).
+- **Developer acceptance:** Accepted, explicitly for issue #15 AC-01/05 scope.
+- **Decision reference and date:** Developer “i accept issue #15”, 2026-11-07 UTC. Authorizes accepted-story publication under execute-plan; #19 remains separate.
 
 ## Milestone acceptance handoff
 
 **Owner:** `MVP-M1-ACCEPT-VERIFY`, coordinated by the future US-39 M1 plan under the active delivery design. Preserve the existing `M1-ACCEPT-VERIFY` obligation in [checkpoint](../../CHECKPOINTS.md#outstanding-verification-and-known-limitations), with US-03 ownership retained. `M50-ACCEPT-VERIFY` remains independent. Reconcile historical selections, failed/skipped cases, raw evidence availability, artifacts/manual/platform deferrals and actual final inventories before milestone acceptance. Complete-suite `uv run --locked pytest -n 4 --dist=loadgroup -m ""` and standalone artifact checks require explicit developer commands; do not run them merely because the template names milestone handoff. Preserve historical evidence and approvals; CI success is not substitute local evidence.
+
+## Publication record
+
+Issue #15 accepted; commit, push, PR and static review in progress under execute-plan.

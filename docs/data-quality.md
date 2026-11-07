@@ -1,8 +1,8 @@
 # Data quality contract
 
 **Status:** Contract approved at US-12 issue #15 Gate 1 by developer
-“i approve ip1; commit”, 2026-11-07 UTC. IP2 implementation and verification
-are in progress; installed-artifact verification remains assigned to IP3.
+“i approve ip1; commit”, 2026-11-07 UTC. IP2 implementation and Gate 2 are approved; IP3 installed-artifact verification
+is technically complete; Gate 3 is approved; issue #15 AC-01/05 accepted on 2026-11-07 UTC.
 The [implementation plan](plans/milestone-1-us-12.md) owns tasks and approvals;
 [IP1 evidence](verification/us-12-ip1.md) records investigation and checks.
 
@@ -325,7 +325,7 @@ the expected content. Assert that the consumed values match the checked data,
 and that mutation inside the operation leaves caller inputs/settings unchanged.
 Use real operations, not private-method tests or mocked internal collaborators.
 
-IP3 adds these contributor-only files:
+IP3 verifies installed use with these contributor-only files:
 
 - `tests/installation/data_quality_project.py`: project functions/rules and
   sentinel operation, copied into an independent experiment directory.
@@ -356,3 +356,27 @@ isolation. Future US-10/14/15/18/39 consumers must call the reviewed boundary
 immediately before their affected operation and add their own integration
 evidence; they may not treat extraction completion or a stored report as passing
 validation. This handoff adds no tasks or acceptance claims to those stories.
+
+## Save reports and recover from failures
+
+Reports contain ordinary JSON values. Project code can persist one explicitly:
+
+```python
+import json
+from pathlib import Path
+
+Path("quality.json").write_text(json.dumps(report, indent=2, allow_nan=False))
+```
+
+Catch `DataQualityError` to inspect its `.report` and identify failed required
+rule IDs. Correct the data or deliberately revise the project requirements, then
+call `run_validated_step` again with the current frame. A saved passing report
+does not authorize a later operation. An advisory failure appears in the report
+while permitting execution; `rules=[]` records `not_checked`.
+
+Malformed declarations raise `TypeError` or `ValueError` before execution.
+Project operation errors propagate with their original identity and a stage note;
+inspect project outputs before retrying because project code owns side effects.
+Extraction provenance and quality reports describe different outcomes: a completed
+extraction may still fail required checks. Assessment and partitions remain #19
+work; future runners must independently integrate this boundary.
