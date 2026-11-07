@@ -9,8 +9,11 @@ No new executable capability is delivered by this document.
 
 GitHub issues govern implementation scope. The locally approved
 [user stories](user-stories.md) contain stable criteria and the two-milestone MVP.
-Remote issues still describe the previous scope until the reviewed publication
-phase. Resolve that transition before product implementation. The
+Remote issues are synchronized to the approved scope after
+[PR #57](https://github.com/jimthompson5802/agentic-ml/pull/57) and Phase 4 issue
+publication. New integration owners are
+[US-39 #58](https://github.com/jimthompson5802/agentic-ml/issues/58) and
+[US-40 #59](https://github.com/jimthompson5802/agentic-ml/issues/59). The
 [scope revision plan](../plans/mvp-scope-revision.md) owns approval/publication gates.
 
 | Question | Active reference |

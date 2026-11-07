@@ -19,7 +19,9 @@ M2 adds regression, customization, fresh-kernel notebooks and committed-project
 reproduction. The scientist owns the assistant session; managed agents, required
 experiment phase approvals, OS isolation and durable orchestration are deferred.
 Toolkit development/testing gates remain required. Gate 2 approved this scope;
-design alignment is approved at Gate 3 and remote issues await publication.
+design and story scope were published through
+[PR #57](https://github.com/jimthompson5802/agentic-ml/pull/57), and the GitHub
+backlog is synchronized. Publication does not deliver unfinished experiment APIs.
 
 Start with the [current installation/setup guide](docs/experiment-setup.md) and
 [configuration validation guide](docs/configuration-validation.md) for implemented

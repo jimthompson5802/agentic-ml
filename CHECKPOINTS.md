@@ -2,55 +2,50 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current MVP scope revision — Phase 4 authorized — 2026-11-07 UTC
+## Current MVP scope revision — Accepted — 2026-11-07 UTC
 
-Developer “execut phase 4” authorizes the explained source publication/PR and
-subsequent approved issue synchronization. Starting clean at `25544e5` on
-`refactor-milestones-user-stories`. Remote `main` remains `0a7b643`; no existing
-branch/PR for this work. Authentication succeeds outside the network sandbox.
-Approved issue bodies link to `main`, so publish documents/open a PR first and
-await merge authorization before dependent issue writes; do not silently change
-reviewed URLs or publish broken source links. No issue writes or merge yet.
-Earlier Phase 3 status below is historical.
+Developer “yes i approve” approved the final documentation/backlog gate on
+2026-11-07 UTC. All IP1–IP4 tasks and gates are complete; scope revision accepted.
+No product/MVP implementation acceptance or new implementation authorization.
 
-Developer “I approve Gate 3; commit the changes” approved the aligned design and
-refreshed issue package and authorized committing this IP3 snapshot locally.
-Recording approval before commit on `refactor-milestones-user-stories`.
-No Phase 4 execution, source push/PR/merge or issue publication requested.
-**Next action:** await publication direction; referenced source documents must
-be available on GitHub before issue writes. Final revision acceptance remains
-separate. Earlier review-state statements below are historical.
+IP4 publication and verification complete on `refactor-milestones-user-stories`.
+Developer “execut phase 4” authorized publication and separately approved
+squash merge of PR #57 after passing checks. Published reviewed head `4d8b398`;
+[PR #57](https://github.com/jimthompson5802/agentic-ml/pull/57) merged as
+`cef75068e1fd161b97507b0afb038a752f68b615` at 00:28 UTC. Branches retained.
+Hosted Linux/Python 3.12 CI: 471 passed, three existing skips; lint, formatting,
+typing, smoke, package paths and lock immutability passed. No local runtime tests
+or new platform/MVP functionality claimed.
 
-Developer “I approve gate 2 and authorize phase 3” approved the revised local
-stories/milestones/criteria and issue drafts and authorized IP3 design/guidance
-alignment. IP1/IP2 snapshot committed as `0404916`; starting worktree clean on
-`refactor-milestones-user-stories`. Stop at Gate 3 before issue publication;
-no commit/push/PR authorized by this approval. Prior Phase 2 status below is
-historical; preserved baseline evidence remains valid for its original inputs.
+Verified 32 issue edits, 35 scope comments and two new integration issues:
+[US-39 #58](https://github.com/jimthompson5802/agentic-ml/issues/58) and
+[US-40 #59](https://github.com/jimthompson5802/agentic-ml/issues/59).
+All 43 complete discussions are stable; existing states, metadata and history
+preserved. Six no-action accepted issues untouched. Remote criteria 209 plus
+13 local-only US-34/37/38 criteria equals 222. Source documents were on main and
+matched reviewed blobs before any issue writes. No draft URL rewrite, duplicate
+creation, issue closure/reopening or blind retry.
 
-IP3-T1–T5 technically complete: active design 0.15 topics, concise blueprint,
-222-criterion mapping, explicit assistant walkthrough, README/guides and developer
-capability instructions aligned. Three labeled 0.14 references preserve original
-blueprint/decision/walkthrough content; eight historical plan bodies and 160 index
-rows/statuses preserved with annotations/archive links. Current criterion text and
-43-action issue inventory unchanged; draft context updated, nothing published.
+[Plan](docs/plans/mvp-scope-revision.md),
+[IP4 evidence/action links](docs/verification/mvp-scope-revision-ip4.md) and
+[published package](docs/plans/mvp-scope-issues/README.md) own actual results.
+Raw snapshots, per-command ledger, CI logs and verification:
+`.dev-records/verification/20261107-mvp-scope-ip4-25544e5/`.
+Historical 11 external evidence-path limitations, M1/M50 obligations, failures/
+skips and platform limits remain open; no assertions or checks weakened.
 
-[IP3 evidence](docs/verification/mvp-scope-revision-ip3.md) records scoped document
-checks, 37 API exports, repository/intended-source links, historical anchors,
-13 formatted docs and seven browser-DOM Mermaid parses. Annotation whitespace,
-two legacy aliases and EOF whitespace corrected with original checks retained.
-The broader evidence-availability probe still fails on 11 pre-existing external
-absolute `/private/tmp` references in unchanged US-01 reports; availability is
-unverified, not replaced or treated as passing. See raw diagnostics and final
-summary in `.dev-records/verification/20261106-mvp-scope-ip3-0404916/`.
-
-No source/tests/resources/dependency/lock/verification-policy changes, runtime
-tests, assistant demonstration, commit/push/PR or issue writes. M1/M50 obligations,
-historical failures/skips and platform limits remain open. Working-tree changes:
-active/historical design docs, README/guides/AGENTS, status/plan/index annotations,
-draft context and this checkpoint. **Next action:** Gate 3 developer review of
-design and exact issue package. Source docs must be published at the referenced
-GitHub revision before issue writes; publication permissions remain separate.
+Developer “I like this, run those commands” explicitly authorized stashing the
+accepted final records, switching to main, pulling with fast-forward only,
+restoring the stash, committing and pushing directly to main without another PR.
+Recording direction before publication; preserve the feature branch and existing
+stashes. Product source, tests, dependencies, resources and verification policy
+unchanged. **Next action:** complete the authorized direct-main publication,
+then await separately authorized product planning.
+This does not accept an implemented MVP.
+Next product step after separate authorization: coordinated US-39 M1 implementation
+plans with supplying story slices and confirmed public test boundaries; US-40 is
+the M2 reproduction integration owner. Historical Phase 1–3 decisions/evidence
+remain in owning plans, reports and Git history.
 
 ## Historical Phase 2 review — 2026-11-06
 

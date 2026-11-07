@@ -1,6 +1,6 @@
 {
   "repository": "jimthompson5802/agentic-ml",
-  "status": "Gate 3 approved; local commit authorized. Phase 4 execution and remote publication not requested; source-link prerequisites remain.",
+  "status": "Published and verified; final documentation/backlog gate approved by 'yes i approve', 2026-11-07 UTC.",
   "source_baseline": "0a7b64389cf663290d3bf4fc7063aae29ef8f20c",
   "scope_decision": "MVP-SC-01/MVP-SC-02; Gate 1 approved 2026-11-06",
   "publication_prerequisites": [
@@ -1142,5 +1142,37 @@
     "US-38"
   ],
   "phase3_baseline": "0404916",
-  "active_design_version": "0.15"
+  "active_design_version": "0.15",
+  "source_publication": {
+    "pr": "https://github.com/jimthompson5802/agentic-ml/pull/57",
+    "reviewed_head": "4d8b398b73c9210cebb5e61f9b94b95a5757a8ea",
+    "merge_commit": "cef75068e1fd161b97507b0afb038a752f68b615",
+    "merged_at": "2026-11-07T00:28:00Z",
+    "ci": "https://github.com/jimthompson5802/agentic-ml/actions/runs/42317228764"
+  },
+  "published_story_issues": {
+    "US-39": {
+      "number": 58,
+      "url": "https://github.com/jimthompson5802/agentic-ml/issues/58"
+    },
+    "US-40": {
+      "number": 59,
+      "url": "https://github.com/jimthompson5802/agentic-ml/issues/59"
+    }
+  },
+  "publication_verification": {
+    "issues_verified": 43,
+    "stable_discussions": 43,
+    "updated_open_issues": 32,
+    "scope_comments": 35,
+    "remote_criteria": 209,
+    "local_only_criteria": 13,
+    "existing_states_metadata_history_preserved": true
+  },
+  "final_gate": {
+    "decision": "Approved",
+    "date_utc": "2026-11-07",
+    "reference": "yes i approve",
+    "scope": "Documentation/backlog revision only; no MVP implementation acceptance."
+  }
 }

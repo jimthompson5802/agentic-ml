@@ -9,10 +9,11 @@ new delivered capabilities.
 [Original dispositions](../reviews/mvp-scope-criterion-dispositions.md) preserve
 every original criterion, old milestone and displaced guarantee.
 
-**Transition boundary:** GitHub bodies still describe the previous scope. Local
-design 0.15 aligns with this revision and is approved at Gate 3; Phase 4 publishes issues.
-This edit alone does not authorize product implementation against conflicting
-sources. Accepted APIs and historical evidence retain their original contracts.
+**Publication:** design 0.15 and these stories were published through
+[PR #57](https://github.com/jimthompson5802/agentic-ml/pull/57); Phase 4 synchronized
+the issue scope and created the integration issues below. Final documentation/
+backlog handoff review is separate from product implementation or acceptance.
+Accepted APIs and historical evidence retain their original contracts.
 
 ## Delivery milestones
 
@@ -341,6 +342,8 @@ Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP
 
 ### US-39: Complete an assistant-supported tabular experiment
 
+Owning issue: [#58](https://github.com/jimthompson5802/agentic-ml/issues/58).
+
 As a data scientist, I want a coding assistant to help prepare, run, inspect and revise an experiment through installed public interfaces so that I can reach recorded results quickly.
 
 **New integration story; not implemented.** Component stories retain technical ownership. This slice owns ASW-01–06.
@@ -443,6 +446,8 @@ Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP
 
 ### US-39: Complete an assistant-supported tabular experiment
 
+Owning issue: [#58](https://github.com/jimthompson5802/agentic-ml/issues/58).
+
 As a data scientist, I want a coding assistant to help prepare, run, inspect and revise an experiment through installed public interfaces so that I can reach recorded results quickly.
 
 **New integration story; not implemented.** Component stories retain technical ownership. This slice extends ASW-08; US-40 owns ASW-07.
@@ -456,6 +461,8 @@ Acceptance criteria:
 Dependencies: component criteria in this milestone and the [assistant walkthrough](../reviews/mvp-scope-criterion-dispositions.md#assistant-supported-walkthrough). Check artifacts/metrics independently of assistant statements. No managed adapter or multiple-product claim.
 
 ### US-40: Reproduce an experiment through DVC with assistant support
+
+Owning issue: [#59](https://github.com/jimthompson5802/agentic-ml/issues/59).
 
 As a data scientist, I want to reproduce committed experiments through DVC with coding-assistant help so that I can verify results and avoid unnecessary recomputation.
 

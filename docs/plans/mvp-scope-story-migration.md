@@ -54,8 +54,8 @@ moved to M99 and is not treated as accepted.
 | US-36 | M50 | M50 | [#49](https://github.com/jimthompson5802/agentic-ml/issues/49) |
 | US-37 | M50 | M50 | Local only; no creation planned |
 | US-38 | M50 | M50 | Local only; no creation planned |
-| US-39 | New | M1, M2 | New issue draft |
-| US-40 | New | M2 | New issue draft |
+| US-39 | New | M1, M2 | [#58](https://github.com/jimthompson5802/agentic-ml/issues/58) |
+| US-40 | New | M2 | [#59](https://github.com/jimthompson5802/agentic-ml/issues/59) |
 
 US-18-AC-01 spans classification in M1 and regression in M2 and appears once in
 the source. M1 verification advances but does not fully complete that criterion.
@@ -133,11 +133,13 @@ must coordinate prerequisites without requiring unrelated roadmap completion.
 
 ## Source transition and preserved obligations
 
-- GitHub still has the original issue bodies. [Draft package](mvp-scope-issues/README.md)
-  contains exact planned edits/comments and new issues; publish only after Gate 3.
+- GitHub is synchronized after merged PR #57 and Phase 4 issue publication.
+  The [published package](mvp-scope-issues/README.md) preserves exact source bodies/
+  comments and action history. US-39 is #58; US-40 is #59.
 - Active design 0.15, blueprint and developer capability instructions now align
-  with the revised scope and await Gate 3. Historical 0.14 references preserve
-  previous contracts; do not start product code before issue/source reconciliation.
+  with the revised scope and were approved at Gate 3. Historical 0.14 references
+  preserve previous contracts. Product implementation still requires separately
+  authorized owning plans and public test-boundary review.
 - Historical plans, completed approvals, runtime evidence, M1-ACCEPT-VERIFY,
   M50-ACCEPT-VERIFY, three temporary skips and platform limitations remain intact.
   Migration does not close obligations or authorize weaker verification.

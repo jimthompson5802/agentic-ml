@@ -62,7 +62,8 @@ items, not silently reassigned to M99.
 - Gate 2: Approved, 2026-11-06, developer “I approve gate 2 and authorize phase 3”.
 - Gate 3: Approved, 2026-11-06, developer “I approve Gate 3; commit the changes”.
   Local commit authorized; Phase 4 execution/source publication not requested.
-  Final acceptance remains pending.
+  Final documentation/backlog gate subsequently approved by “yes i approve”,
+  2026-11-07 UTC; no product/MVP implementation acceptance implied.
 - Change ID: MVP-SC-01, 2026-11-06.
 - Reason: original lightweight experiment MVP has expanded into a supervised agent
   platform; narrow remaining delivery to a complete usable experiment.
@@ -183,16 +184,36 @@ are now authorized. PR merge is not inferred from that instruction; exact
 approved issue bodies reference `main`, so issue writes await that source
 prerequisite. Do not silently repoint reviewed links or publish broken references.
 
+Developer answered “Approve squash merge after checks pass” for PR #57. Verified
+head `4d8b398` passed CI and was squash merged as
+`cef75068e1fd161b97507b0afb038a752f68b615`, 2026-11-07 00:28 UTC.
+Source branch/PR publication and source prerequisite are satisfied; exact issue
+synchronization proceeds under the existing IP4 authorization. Branches retained.
+
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
 | IP4-T1 | Complete | Refresh affected issues and reconcile concurrent changes | Gate 3 | 41 complete stable discussions, one historical comment, exact original body/title/state/comment equality; source publication prerequisite identified | Publication consistency |
-| IP4-T2 | Not started | Publish approved issue edits/comments/new issues | T1 | Exact action manifest applied; history intact | Approved package |
-| IP4-T3 | Not started | Re-retrieve issues and verify bodies/states | T2 | Local/GitHub equality; actual issue links recorded | Published source consistency |
-| IP4-T4 | Not started | Final reconciliation, verification report and checkpoint handoff | T3 | Next implementation story identified with remaining work | All revision outcomes |
+| IP4-T2 | Complete | Publish approved issue edits/comments/new issues | T1 | 32 title/body edits, 35 scope comments, new US-39 #58 / US-40 #59; six no-action issues untouched; exact per-write checks | Approved package |
+| IP4-T3 | Complete | Re-retrieve issues and verify bodies/states | T2 | All 43 discussions stable; 209 remote criteria + 13 local-only = 222; original states/metadata/history preserved | Published source consistency |
+| IP4-T4 | Complete | Final reconciliation, verification report and checkpoint handoff | T3 | Verified publication report, issue links, hosted CI, unchanged criterion/source identities, document checks and next-story ownership saved; final gate approved | All revision outcomes |
 
-**Final gate:** Pending. Developer acceptance of documentation/backlog revision;
-not product, story implementation or MVP acceptance. Do not close unfinished
-stories as completed.
+**Final gate:** Approved, 2026-11-07 UTC. Developer “yes i approve” answered the
+request to approve the final documentation/backlog gate. All IP1–IP4 tasks and
+gates are complete; the scope revision is accepted. This is not product, story
+implementation or MVP acceptance. Unfinished implementation issues remain open.
+Final approval/publication records were saved locally; developer subsequently
+authorized direct-main publication with “I like this, run those commands”, using
+stash → switch main → fast-forward pull → stash pop → commit → push. This does not
+authorize product implementation or another PR.
+
+Published sources: [merged PR #57](https://github.com/jimthompson5802/agentic-ml/pull/57),
+[US-39 #58](https://github.com/jimthompson5802/agentic-ml/issues/58),
+[US-40 #59](https://github.com/jimthompson5802/agentic-ml/issues/59).
+[IP4 report](../verification/mvp-scope-revision-ip4.md) owns exact action/comment
+links, CI evidence, reconciliation and final-review limitations. No executable MVP
+behavior delivered. Next product work, after revision acceptance and separate
+authorization: coordinated US-39 M1 implementation plans and supplying story slices
+with confirmed public test boundaries. US-40 reproduction is the M2 integration owner.
 
 ## Verification, evidence and execution rules
 
@@ -244,6 +265,10 @@ by “I approve Gate 3; commit the changes”; commit this approved snapshot loc
 
 ## Local commit authorization
 
+Historical local commit instructions below were fulfilled by `0404916` and
+`25544e5`; later IP4 publication/merge and final-gate approvals are recorded above.
+Final handoff/status records are accepted and direct-main publication is authorized.
+
 Developer “commit changes”, 2026-11-06, authorizes committing the current IP1/IP2
 documentation, local story revisions and unpublished issue drafts. This preserves
 the review snapshot; it does not approve Gate 2, start IP3, or authorize push/PR/
@@ -254,3 +279,9 @@ authorizes a local Conventional Commit of the design, historical references,
 guidance, draft context and approval records. No source push/PR/merge, Phase 4
 execution or remote issue writes requested. Record authorization before commit;
 await publication direction with source-link prerequisites preserved.
+
+Developer “I like this, run those commands”, 2026-11-07 UTC, authorizes the
+explained direct-main publication sequence for accepted final records, without
+another PR. Stash tracked changes, switch main, pull with `--ff-only`, restore,
+verify and commit as `docs: record completed MVP scope publication`, then push
+main. Preserve existing stashes/branches and record the result in the handoff.

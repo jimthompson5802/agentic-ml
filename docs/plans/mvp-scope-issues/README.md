@@ -1,8 +1,13 @@
-# Unpublished MVP issue package
+# Published MVP issue package
 
-**Unpublished.** Gates 1–3 approved scope, stories, aligned design and this package.
-The latest instruction authorizes a local commit, not Phase 4 execution or remote writes.
-No issue body, title, comment, state, label or milestone has been changed remotely.
+**Published and verified, 2026-11-07 UTC.** Gates 1–3 approved this package;
+“execut phase 4” authorized publication. User separately approved squash-merging
+[PR #57](https://github.com/jimthompson5802/agentic-ml/pull/57) after checks passed.
+Then 32 open issues were updated, 35 scope comments added and
+[US-39 #58](https://github.com/jimthompson5802/agentic-ml/issues/58)/
+[US-40 #59](https://github.com/jimthompson5802/agentic-ml/issues/59) created.
+All 43 discussions were re-retrieved and verified; existing states/metadata/history
+were preserved. The six no-action accepted issues were untouched.
 
 [Manifest](manifest.json) is the exact action inventory. Bodies follow the repository
 user-story template; comments preserve scope history. All existing issue states,
@@ -15,13 +20,15 @@ remain local-only; no issue creation for them is included.
 - 6 accepted foundation/tooling issues: no action.
 - 2 new issues: US-39 first experiment and US-40 DVC reproduction.
 
-## Publication prerequisites
+## Original publication prerequisites (satisfied)
 
 Refresh complete bodies/comments at IP4 and reconcile concurrent changes. Verify
 write authentication, supported metadata and duplicate absence before creation;
 reconcile uncertain writes before retrying. No issue closure/reopening is planned.
 
-The local active design is now version 0.15; archived 0.14 is historical reference.
+The exact reviewed source was published on main before issue writes, satisfying
+the blob/main prerequisite below. This section preserves the original instructions.
+The active design is version 0.15; archived 0.14 is historical reference.
 The GitHub `blob/main` source links below identify intended final locations;
 new/updated documents are not published yet. Before IP4, ensure the reviewed
 stories/design/report/plan exist at the referenced revision, or prepare explicit
@@ -30,7 +37,7 @@ is separate; do not publish broken links or infer that source publication is
 already authorized. Phase 3 may refine the package's references, requiring final
 Gate 3 review of exact bodies/comments.
 
-## Draft actions
+## Published actions and retained source files
 
 | Target | Action | Desired title | Body | Scope comment |
 |---|---|---|---|---|
