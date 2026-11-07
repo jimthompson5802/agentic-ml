@@ -2,6 +2,59 @@
 
 Last updated: 2026-11-07 (UTC)
 
+## Current US-12 IP2 approved — 2026-11-07 UTC
+
+Developer “i approve ip2 and commit” approved Gate 2 and authorized a local
+commit of the completed IP2 work. The [plan](docs/plans/milestone-1-us-12.md)
+and [evidence](docs/verification/us-12-ip2.md) record 95 focused passes, final
+M1 527 passed and one existing skip, and passing shared checks. Recording the
+decision before the authorized commit. IP3, story acceptance, push and PR are
+not authorized. **Next action:** complete the local commit, then await separate
+IP3 direction. Earlier gate-pending and provisional entries below are historical.
+
+## Current US-12 IP2 developer gate — 2026-11-07 UTC
+
+Gate preparation found the advisory test lacked the approved file sentinel.
+Added that assertion; all 95 focused cases pass. Renewed final M1: 527 passed,
+one existing skip, 528/630 selected in 219.54 seconds. Shared checks passed
+after the change; final JUnit is `m1-gate.xml` in the records directory linked
+below. IP2-T1–T4 are technically complete; developer Gate 2 approval is pending.
+Stop before IP3. The preceding-run details below are historical.
+
+### Earlier gate preparation
+
+US-12 #15 IP2-T1–T4 are technically complete; developer Gate 2 approval is
+pending. The [plan](docs/plans/milestone-1-us-12.md) and
+[IP2 evidence](docs/verification/us-12-ip2.md) record the public quality rules,
+blocking boundary, TDD and corrections. Focused tests: 95 passed. Final M1:
+527 passed, one existing skip; 528/630 selected. Locked sync, lock consistency,
+lint, format, strict typing, CLI smoke and whitespace checks passed; lock hash
+unchanged. Raw final JUnit is in `.dev-records/verification/20261107-ec82d75-us12-ip2/`;
+red/green console transcripts were not retained as raw logs. Linux aarch64 only.
+Installed direct/rebuilt wheel quality verification and final M1–6 remain IP3;
+existing historical M1/M50 obligations and skip remain open. No IP3, story
+acceptance, commit or publication authorized. **Next action:** developer Gate 2
+review and explicit approval; stop before IP3.
+
+### Earlier IP2 progress
+
+Developer “start ip2” authorized IP2 on `US-12-data-validation`, clean baseline
+`ec82d75`, after IP1 approval. Five initial public TDD slices and their results
+are recorded in the [plan](docs/plans/milestone-1-us-12.md). The provisional
+`agentic_ml.data_quality` module and tests are incomplete: configuration and
+frame validation, remaining quality rules, blocking, full matrix and phase checks
+remain. No IP2 task or approval gate is complete. Continue the approved contract
+one red–green slice at a time; do not treat current code as a usable boundary.
+No milestone/shared verification, IP3, acceptance, commit or publication yet.
+Developer “contineu us-12 ip2” resumed work. Three further red–green slices
+cover invalid row-count thresholds, null counts and excess duplicate counts;
+the focused file now has 10 passing cases. All tasks remain incomplete and the
+provisional module does not yet implement the full approved contract.
+Further continuation covers initial range/membership, required blocking, missing
+columns, non-scalar cells, duplicate IDs and snapshot/settings cases; 18 focused
+cases pass. One initial missing-column correction failed and the second passed;
+the plan records the attempt. Full contract and phase checks remain outstanding.
+
 ## Current US-12 issue #15 IP1 approved — 2026-11-07 UTC
 
 Developer “start ip1” authorized IP1 of the approved

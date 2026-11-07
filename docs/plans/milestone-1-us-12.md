@@ -35,11 +35,11 @@ Pandas `>=3.1,<3.2`, pyarrow `>=25,<26` and development pandas stubs are already
 
 ## Plan review
 
-- **Status:** Approved; IP1 approved, IP2 authorization and later gates remain pending.
+- **Status:** Approved; IP1 and IP2 approved, later gate pending.
 - **Developer decision:** Approved.
 - **Decision reference and date:** Developer “i approve plan; commit changes”, 2026-11-07 UTC. Authorizes plan approval and a local commit of the planning changes; no IP1 execution or publication authorized.
 - **Requested plan changes:** None recorded.
-- **Implementation authorization:** Developer “start ip1”, 2026-11-07 UTC, authorized IP1 only. Developer “i approve ip1; commit”, 2026-11-07 UTC, approves Gate 1 and a local commit; IP2 authorization remains pending.
+- **Implementation authorization:** Developer “start ip1”, 2026-11-07 UTC, authorized IP1 only. Developer “i approve ip1; commit”, 2026-11-07 UTC, approved Gate 1 and a local commit. Developer “start ip2”, 2026-11-07 UTC, authorized IP2. Developer “i approve ip2 and commit”, 2026-11-07 UTC, approved Gate 2 and a local commit; IP3 remains unauthorized.
 
 ## Scope-change history
 
@@ -57,7 +57,7 @@ Use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md) for sub
 
 ## Selected IP1 technical approach and public test boundaries
 
-The [concrete contract](../data-quality.md) now specifies exact proposed signatures, rule/report dictionaries, edge cases, fixture outcomes, error semantics and installation seams. It supersedes the initial draft alternatives; developer confirmed this contract at Gate 1 on 2026-11-07 UTC. No public function is implemented yet.
+The [concrete contract](../data-quality.md) specifies exact signatures, rule/report dictionaries, edge cases, fixture outcomes, error semantics and installation seams. It supersedes the initial draft alternatives; developer confirmed this contract at Gate 1 on 2026-11-07 UTC. IP2 implementation is in progress.
 
 Selected exports from proposed `agentic_ml.data_quality`: `validate_data`, generic `run_validated_step` and report-bearing `DataQualityError`. Native DataFrames and ordinary dictionaries remain the interface. Seven configured rule kinds cover columns, dtypes, row_count, nulls, duplicates, numeric range and allowed values. No project rule callbacks, operation language, persistence service or new dependency is needed. Dtypes use canonical pandas strings; duplicate counts are excess rows with keep='first'; nulls are separate from range/membership violations. Malformed declarations raise built-in errors; absent data columns produce rule failures. Advisory failures remain reported without blocking. Explicit empty rules yield `not_checked` and allow the operation; malformed rules still error, per US-12-SC-01.
 
@@ -108,13 +108,20 @@ Actual IP1 results: [evidence](../verification/us-12-ip1.md), including stable s
 - **Outcome:** Public dataset validation and immediate blocking boundary work against native pandas data.
 - **Entry conditions:** Gate 1 approved, boundaries confirmed, IP2 authorized; implement final reviewed contract rather than treating draft signatures as settled.
 - **Acceptance criteria advanced:** AC-01 and AC-05 executable behavior; installed-artifact acceptance remains IP3.
+- **Execution started:** Developer “start ip2”, 2026-11-07 UTC; baseline `ec82d75`, clean tree. T1–T4 are technically complete; renewed M1 passed after adding the advisory file sentinel. Developer approved Gate 2 on 2026-11-07 UTC.
+
+Partial TDD evidence: `uv run --locked pytest tests/integration/test_data_quality.py -k passing_row_count`, `-k explicit_no_checks`, `-k schema_reports`, `-k dtype_mismatch`, and `-k unknown_rule` each first failed on the intended missing behavior. Following each change, the focused selection or whole file passed; final `uv run --locked pytest tests/integration/test_data_quality.py` reported 5 passed. These limited tests do not complete T1: invalid configuration, input validation, row-count failures and other cases remain. T2–T4, milestone and shared checks remain outstanding; no gate is ready. Serial tests are appropriate for these small isolated TDD slices.
+
+Continuation: `-k invalid_row_count_minimum` first failed on three accepted invalid values; `-k null_rule` and `-k duplicate_rule` first failed on unsupported kinds. After each corresponding change the complete focused file passed, most recently 10 passed. These are partial implementations only: the complete rule configuration and failure matrix remain outstanding, including missing-column handling and strict typing.
+
+Further continuation: `-k range_counts`, `-k allowed_values`, `-k required_failure_blocks`, `-k missing_referenced`, `-k non_scalar`, `-k duplicate_rule_ids`, `-k step_mutations`, and `-k invalid_settings` each failed initially on missing behavior, then passed with the complete file (18 passed). The first correction for missing referenced columns placed handling in the configuration loop and still raised `KeyError`; attempt 2 moved it to the measurement loop, and the original test and regressions passed. All tasks remain incomplete: these cases do not establish the full contract, particularly malformed declarations, supported scalar values, settings validation, error propagation, and remaining boundary matrix. Milestone/shared checks and IP2 evidence report remain outstanding.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-12-IP2-T1 | Not started | Add proposed `tests/integration/test_data_quality.py` and `src/agentic_ml/data_quality/` exports; start with one passing-frame behavior test, then explicit no-check status and schema/type/row-count cases, one red–green slice at a time | Gate 1 | Independently expected reports, strict invalid-setting errors and unchanged native frame verified | AC-01 |
-| US-12-IP2-T2 | Not started | Extend same public tests and package with null, duplicate and reviewed configured-rule checks; advisory/required aggregation and JSON normalization | T1 | Each boundary/failure case added through its own red–green cycle; full literal outcome matrix passes | AC-01/05 |
-| US-12-IP2-T3 | Not started | Implement reviewed blocking function/error and public sentinel-output tests; verify pass/proceed, required fail/block, advisory fail/proceed, explicit no-check/proceed, changed-data recheck and project exception propagation | T2 | Failed checks never invoke dependent operation; report accessible; consumed frame is checked frame; no internal collaborator mocks | AC-05 |
-| US-12-IP2-T4 | Not started | Review structure after green; finalize API docstrings and contract examples; run M1/shared checks; record proposed `docs/verification/us-12-ip2.md` and checkpoint | T1–T3 | All required checks pass, actual red/green commands/results and changed modules recorded, Gate 2 evidence ready | AC-01/05 |
+| US-12-IP2-T1 | Complete | Add proposed `tests/integration/test_data_quality.py` and `src/agentic_ml/data_quality/` exports; start with one passing-frame behavior test, then explicit no-check status and schema/type/row-count cases, one red–green slice at a time | Gate 1 | Independently expected reports, strict invalid-setting errors and unchanged native frame verified | AC-01 |
+| US-12-IP2-T2 | Complete | Extend same public tests and package with null, duplicate and reviewed configured-rule checks; advisory/required aggregation and JSON normalization | T1 | Each boundary/failure case added through its own red–green cycle; full literal outcome matrix passes | AC-01/05 |
+| US-12-IP2-T3 | Complete | Implement reviewed blocking function/error and public sentinel-output tests; verify pass/proceed, required fail/block, advisory fail/proceed, explicit no-check/proceed, changed-data recheck and project exception propagation | T2 | Failed checks never invoke dependent operation; report accessible; consumed frame is checked frame; no internal collaborator mocks | AC-05 |
+| US-12-IP2-T4 | Complete | Review structure after green; finalize API docstrings and contract examples; run M1/shared checks; record proposed `docs/verification/us-12-ip2.md` and checkpoint | T1–T3 | All required checks pass, actual red/green commands/results and changed modules recorded, Gate 2 evidence ready | AC-01/05 |
 
 ### Verification and review evidence
 
@@ -122,22 +129,22 @@ Use one public behavior test per red–green cycle, including an observed intend
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Required/advisory quality cases | Reviewed public test matrix above | Literal measured results, actionable failures, no mutation | Pending |
-| Blocking and error separation | Public sentinel output and raised-error tests | Required failure blocks; advisory failure proceeds; callback error stays a process failure | Pending |
-| Current milestone | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass; record counts, skips and known limits | Pending |
-| Shared development checks | Commands below | Pass without unintended lock change | Pending |
+| Required/advisory quality cases | Reviewed public test matrix above | Literal measured results, actionable failures, no mutation | 95 focused cases passed; [evidence](../verification/us-12-ip2.md) |
+| Blocking and error separation | Public sentinel output and raised-error tests | Required failure blocks; advisory failure proceeds; callback error stays a process failure | Passed; [evidence](../verification/us-12-ip2.md) |
+| Current milestone | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass; record counts, skips and known limits | 527 passed, 1 existing skip; 528/630 selected; [evidence](../verification/us-12-ip2.md) |
+| Shared development checks | Commands below | Pass without unintended lock change | Passed; lock unchanged; [evidence](../verification/us-12-ip2.md) |
 
 New product tests declare `milestone_1`. Contributor-only driver lifecycle tests, if necessary, declare `infrastructure`; do not misclassify these to obtain coverage. Existing M1 tests preserve strict validation/extraction behavior. M2–6 exclusions and installed quality scenarios are assigned to IP3-T4 and IP3-T1–T3 respectively. M0/M50/M99/infrastructure coverage remains outside automatic story selections; retain named historical milestone obligations.
 
 ### Developer approval gate
 
 - **Approval criteria:** All tasks complete; confirmed public behavior and expected failures verified; M1/shared checks pass with unchanged assertions/skips; evidence recorded.
-- **Evidence presented:** Pending IP2 report, contract and implementation diff.
+- **Evidence presented:** [IP2 report](../verification/us-12-ip2.md), [contract](../data-quality.md) and implementation diff; 95 focused cases pass; M1 passes with one existing skip; shared checks pass.
 - **Remaining limitations:** Installed quality behavior and final M1–6 acceptance pending IP3.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer “i approve ip2 and commit”, 2026-11-07 UTC; local commit authorized.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Stop. Explicit Gate 2 approval and IP3 authorization required.
+- **Progression authorized:** Stop after the authorized local commit. IP3 requires separate authorization.
 
 ## US-12 / Implementation Phase 3: Verify installed use and finalize issue acceptance
 

@@ -1,7 +1,8 @@
 # Data quality contract
 
 **Status:** Contract approved at US-12 issue #15 Gate 1 by developer
-“i approve ip1; commit”, 2026-11-07 UTC. Not implemented; IP2 authorization pending. Examples describe the future public API.
+“i approve ip1; commit”, 2026-11-07 UTC. IP2 implementation and verification
+are in progress; installed-artifact verification remains assigned to IP3.
 The [implementation plan](plans/milestone-1-us-12.md) owns tasks and approvals;
 [IP1 evidence](verification/us-12-ip1.md) records investigation and checks.
 
@@ -21,7 +22,7 @@ they require neither a formal experiment plan nor an approval record.
 
 ## Public interface
 
-Proposed exports from `agentic_ml.data_quality`:
+Exports from `agentic_ml.data_quality`:
 
 ```python
 from collections.abc import Callable, Mapping, Sequence
@@ -194,26 +195,38 @@ promised for project operations; project code owns its files and paths.
 
 ## Example and independently expected results
 
-Proposed future use (Python 3.12+, not runnable before IP2):
+Example use (Python 3.12+):
 
 ```python
 import pandas as pd
 
 from agentic_ml.data_quality import run_validated_step, validate_data
 
-frame = pd.DataFrame({
-    "id": pd.Series([1, 2, 3, 4], dtype="int64"),
-    "age": pd.Series([20, 35, 40, 50], dtype="int64"),
-    "group": pd.Series(["A", "B", "A", "C"], dtype="str"),
-})
+frame = pd.DataFrame(
+    {
+        "id": pd.Series([1, 2, 3, 4], dtype="int64"),
+        "age": pd.Series([20, 35, 40, 50], dtype="int64"),
+        "group": pd.Series(["A", "B", "A", "C"], dtype="str"),
+    }
+)
 rules = [
-    {"id": "schema", "kind": "columns", "columns": ["id", "age", "group"], "exact": True},
+    {
+        "id": "schema",
+        "kind": "columns",
+        "columns": ["id", "age", "group"],
+        "exact": True,
+    },
     {"id": "types", "kind": "dtypes", "columns": {"id": "int64", "age": "int64"}},
     {"id": "rows", "kind": "row_count", "min": 4, "max": 4},
     {"id": "age_present", "kind": "nulls", "column": "age"},
     {"id": "unique_id", "kind": "duplicates", "columns": ["id"]},
     {"id": "age_bounds", "kind": "range", "column": "age", "min": 0, "max": 120},
-    {"id": "known_group", "kind": "allowed_values", "column": "group", "values": ["A", "B", "C"]},
+    {
+        "id": "known_group",
+        "kind": "allowed_values",
+        "column": "group",
+        "values": ["A", "B", "C"],
+    },
 ]
 report = validate_data(frame, rules=rules)
 
