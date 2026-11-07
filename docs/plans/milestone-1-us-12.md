@@ -27,49 +27,52 @@ Pandas `>=3.1,<3.2`, pyarrow `>=25,<26` and development pandas stubs are already
 | Dependency or decision | Required outcome | Work blocked | Status / evidence |
 |---|---|---|---|
 | Accepted local extraction | Obtain a native DataFrame and identifiable local output | External extraction-to-quality example | Satisfied by US-11 IP2/IP3 and whole-story acceptance in linked plan; no new supplier tasks |
-| Public quality contract and test boundaries | Confirm rule shape, dtype semantics, failure policy and blocking interface | All executable tests and implementation | Proposed below; settle in IP1 and obtain Gate 1 approval |
-| Report meaning and freshness | Distinguish invalid settings, executed failed checks and callback/process errors; check data actually consumed | IP2/IP3 | IP1-T2 decision; no caller-supplied success flag or stale report treated as authorization |
-| Existing artifact infrastructure | Both direct and sdist-rebuilt normal installs exercise public quality API | IP3 | Existing drivers inspected; IP1-T3 selects minimal extension seam |
+| Public quality contract and test boundaries | Confirm rule shape, dtype semantics, failure policy and blocking interface | All executable tests and implementation | Concrete IP1 contract selected in docs/data-quality.md; confirmed by developer Gate 1 approval, 2026-11-07 UTC |
+| Report meaning and freshness | Distinguish invalid settings, executed failed checks and callback/process errors; check data actually consumed | IP2/IP3 | Selected in IP1: fresh checked snapshot, report-bearing DataQualityError, original operation exceptions; confirmed at Gate 1, 2026-11-07 UTC |
+| Existing artifact infrastructure | Both direct and sdist-rebuilt normal installs exercise public quality API | IP3 | IP1-T3 selects dedicated data-quality probe using existing distribution verifier and Invocation support; Gate 1 approved, 2026-11-07 UTC |
 | Future pipeline adoption | US-10/14/15/18/39 consume the reviewed blocking boundary before affected work | Full experiment integration | Outside #15; document handoff, do not claim a runner exists |
 | Assessment and splits | Distributions, target balance and seeded/supplied membership | #19 acceptance only | Separate issue; not prerequisites for validating an existing DataFrame |
 
 ## Plan review
 
-- **Status:** Approved; implementation authorization and all implementation gates remain pending.
+- **Status:** Approved; IP1 approved, IP2 authorization and later gates remain pending.
 - **Developer decision:** Approved.
 - **Decision reference and date:** Developer “i approve plan; commit changes”, 2026-11-07 UTC. Authorizes plan approval and a local commit of the planning changes; no IP1 execution or publication authorized.
 - **Requested plan changes:** None recorded.
-- **Implementation authorization:** Pending; plan approval does not approve implementation gates.
+- **Implementation authorization:** Developer “start ip1”, 2026-11-07 UTC, authorized IP1 only. Developer “i approve ip1; commit”, 2026-11-07 UTC, approves Gate 1 and a local commit; IP2 authorization remains pending.
 
 ## Scope-change history
 
-None. During execution use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md) for material scope/approach changes; record change ID/date, request, scope difference, impacts, revisions, verification/gates, explicit decision and resume point. Preserve historical evidence and approvals.
+### US-12-SC-01 — Explicit no-check mode — 2026-11-07 UTC
 
-## Proposed technical approach and public test boundaries
+- **Request and reason:** Developer “I want to support "no checks"” during IP1 contract review, after the initial draft rejected empty rules.
+- **Scope difference:** Explicit `rules=[]` now selects no quality checks. Return `status="not_checked"`, `blocked=False`, `checks=[]`; the operation helper proceeds. The rules argument stays required; malformed declarations are still errors. This replaces the draft's empty-rule rejection.
+- **Impact:** IP1-T2/T3/T4 contract/fixtures/evidence updated and rechecked; IP2-T1/T3 and IP3-T1/T2 add no-check report/proceed cases. No dependency, milestone, task ID or acceptance criterion changes; AC-05 still blocks every configured required failure. Original plan approval remains historical; Gate 1 confirmation applies to the revised contract.
+- **Plan and requirement revisions:** This plan and [contract](../data-quality.md); active design proposal references and IP1 evidence reflect no-check mode. No authoritative issue edit needed: configured checks remain mandatory when present, and unchecked data is never reported as passed.
+- **Verification and gates:** Add independent literal empty-report and sentinel cases, preserve malformed-rule errors and all existing failure assertions. Renew IP1 document/source checks; M1 and final M1–6 schedules unchanged. All implementation gates remain pending.
+- **Decision:** Approved direction — developer “I want to support "no checks"”, 2026-11-07 UTC, authorizes this IP1 contract revision; no IP2 authorization or gate approval implied.
+- **Resume point:** Complete IP1 contract and document evidence, then stop at Gate 1.
 
-Use native pandas frames, ordinary configuration dictionaries and small reusable functions in proposed `src/agentic_ml/data_quality/`; keep existing `agentic_ml.validation` exports unchanged. No proprietary table, source, request or pipeline hierarchy is needed. Proposed signatures for IP1 review:
+Use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md) for subsequent material changes; preserve historical evidence and approvals.
 
-```python
-validate_data(frame, *, rules) -> dict
-run_validated_step(frame, step, *, rules, settings=None) -> tuple[object, dict]
-```
+## Selected IP1 technical approach and public test boundaries
 
-`validate_data` checks without modifying input and returns a JSON-compatible report. `run_validated_step` validates a defensive frame snapshot immediately before passing that checked snapshot and copied settings to the project operation; on required failures it raises proposed `DataQualityError` carrying the report before invoking the operation. A passing report alone is not a reusable permission token. Callback exceptions propagate with useful stage context and original cause/type. IP1 must confirm whether this small callback helper is the preferred public enforcement boundary; a changed choice requires revised tasks and developer review before dependent tests. It is synchronous trusted-local composition, not a general runner or security boundary.
+The [concrete contract](../data-quality.md) now specifies exact proposed signatures, rule/report dictionaries, edge cases, fixture outcomes, error semantics and installation seams. It supersedes the initial draft alternatives; developer confirmed this contract at Gate 1 on 2026-11-07 UTC. No public function is implemented yet.
 
-Proposed configuration covers required columns and optionally exact schema, native pandas dtype declarations, inclusive row-count bounds, per-column null limits, whole-row or declared-key duplicate limits, and named configured rules (minimum proposal: inclusive numeric range and allowed values). Explicit required versus advisory checks determine blocking; advisory failures remain visible. Consider project-owned pandas rule callbacks only if needed for AC-01; IP1 must bound their return/error semantics rather than adding an unreviewed rule language. Invalid/unknown rules, missing referenced columns, negative/impossible thresholds and unsupported types must fail explicitly. Do not silently coerce data or infer thresholds.
+Selected exports from proposed `agentic_ml.data_quality`: `validate_data`, generic `run_validated_step` and report-bearing `DataQualityError`. Native DataFrames and ordinary dictionaries remain the interface. Seven configured rule kinds cover columns, dtypes, row_count, nulls, duplicates, numeric range and allowed values. No project rule callbacks, operation language, persistence service or new dependency is needed. Dtypes use canonical pandas strings; duplicate counts are excess rows with keep='first'; nulls are separate from range/membership violations. Malformed declarations raise built-in errors; absent data columns produce rule failures. Advisory failures remain reported without blocking. Explicit empty rules yield `not_checked` and allow the operation; malformed rules still error, per US-12-SC-01.
 
-IP1 must settle empty frames, duplicate column names, nullable/extension dtypes, missing values in range/membership rules, duplicate counting (`keep=False` versus excess rows), all-null columns, finite numeric values and deterministic check ordering. Specify strict JSON normalization of pandas/NumPy scalars and missing values. Reports must identify checks/columns, effective expectations, actual measurements, pass/fail, required/advisory status and aggregate blocking status. Bound examples rather than dumping sensitive/full rows. This scope needs neither a generic report registry nor automatic report persistence; projects may serialize the returned dictionary. If persistence is added, review its path/conflict/failure semantics first.
-
-Proposed public test boundaries, confirmation pending Gate 1:
+The operation helper checks a private scalar-valued DataFrame snapshot immediately before passing it to project code. Required failure prevents callback invocation and carries the report; successful invocation returns the project result and input report. No previous report is accepted as permission. The contract bounds object-cell copying and concurrent mutation; it does not promise arbitrary-Python isolation.
 
 | Boundary | Independently checked observations | Limits |
 |---|---|---|
-| `validate_data` using tiny native frames | Literal expected counts/schema/rule outcomes; JSON serialization; no mutation; invalid declarations | Does not prove fitting, scientific validity, splits or pipeline adoption |
-| `run_validated_step` with project operation | A sentinel file/observable output appears only when required checks pass; failed report retained in exception; advisory-only failure proceeds; checked data equals consumed data | Trusted same-process operation; does not constrain external Python or future runners |
-| Separate installed project | Import origin, CLI version, extraction-to-quality results, block/proceed outcomes and report serialization on both wheel paths from unrelated cwd | Observed OS/Python/dependency versions only; no notebook/assistant/DVC claim |
-| Existing strict public APIs | Existing M1 regressions remain green | Does not extend their contract to basic experiment execution |
+| `validate_data` | Contract's literal seven-rule baseline and each independent mutation; JSON report, explicit no-check status; invalid declarations; caller data/rules unchanged | No model fitting, assessment/splits or pipeline integration claim |
+| `run_validated_step` | Explicit project sentinel absent on required failure, present for valid/advisory-only/no-check inputs; checked values equal consumed values; copied settings/data; original callback exception | Synchronous trusted local operation; future runners require their own adoption tests |
+| Installed direct/rebuilt wheels | Copied project code uses public APIs; extraction-to-quality, every rule family, report/error and sentinel assertions; import/CLI/resource/runtime identities | Only observed environment/platform; no notebook/assistant/DVC claim |
+| Existing strict APIs | Existing M1 regressions | No new basic experiment runner or altered strict contract |
 
-Fixture proposal: valid rows `id=[1,2,3,4]`, `age=[20,35,40,50]`, `group=[A,B,A,C]`; require these columns, integer id/age, four rows, zero age nulls, unique id, age 0–120 and group in A/B/C. Independently altered fixtures remove `age`, add an unexpected column under exact-schema rules, change dtype, use three/five rows, introduce one age null, duplicate id 1, set age 121 or group Z. Declare literal expected counts and mismatches before implementation. Include exact-boundary values, nullable types, empty/all-null inputs, malformed rules, required/advisory combinations and repeated calls after data changes. Confirm final fixture values and measurement semantics at Gate 1; tests must not call production helpers to derive expected results.
+The [fixture matrix](../data-quality.md#example-and-independently-expected-results) fixes baseline dtypes and literal results, including nullable/all-null/empty inputs, inclusive bounds, infinity handling, excess duplicate counts, missing columns, malformed rules, advisory combinations and changed data between calls. Expected results must remain independent of implementation helpers. Public-boundary confirmation is recorded by developer “i approve ip1; commit”, 2026-11-07 UTC, approving this contract and matrix including US-12-SC-01.
+
+Selected IP3 files are `tests/installation/data_quality_project.py`, `check_data_quality.py`, and `verify_data_quality.py`, plus new M1 `test_data_quality_from_both_artifact_paths` in `tests/integration/test_distribution_verification.py`. Reuse its module artifact fixture, distribution xdist group, normal direct/rebuilt installation verifier and `verification_support.Invocation`. The contract specifies the exact probe responsibilities and consumer handoff. Paths are selected, not placeholders for later investigation.
 
 ## US-12 / Implementation Phase 1: Settle quality and blocking contracts
 
@@ -79,26 +82,26 @@ Fixture proposal: valid rows `id=[1,2,3,4]`, `age=[20,35,40,50]`, `group=[A,B,A,
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-12-IP1-T1 | Not started | Refresh complete #15/#19 discussions using retrieval skill; reconcile this plan and source snapshots with active stories/design and US-11 evidence | IP1 authorization | Stable full sources, confirmed criterion ownership and recorded prerequisite identity | AC-01/05 |
-| US-12-IP1-T2 | Not started | Create proposed `docs/data-quality.md` contract; settle every decision above, proposed `data_quality` exports, supported rules and errors; update plan with final fixtures and public boundaries | T1 | Exact signatures, examples, literal expected reports and blocking semantics ready for developer confirmation; no unresolved executable-contract choices | AC-01/05 |
-| US-12-IP1-T3 | Not started | Inspect artifact test fixture/driver seams; specify proposed `tests/integration/test_data_quality.py`, installed probe paths and future pipeline consumption in contract; reconcile relevant active design statements if needed | T2 | Concrete file/task refinements and coverage matrix; no added dependency or new runner prerequisite | AC-01/05 |
-| US-12-IP1-T4 | Not started | Record proposed `docs/verification/us-12-ip1.md`, link checks, criterion/decision reconciliation and checkpoint update | T1–T3 | Documentation checks pass, contract/boundaries presented for Gate 1 | AC-01/05 |
+| US-12-IP1-T1 | Complete | Refresh complete #15/#19 discussions using retrieval skill; reconcile this plan and source snapshots with active stories/design and US-11 evidence | IP1 authorization | Stable full sources, confirmed criterion ownership and recorded prerequisite identity | AC-01/05 |
+| US-12-IP1-T2 | Complete | Create proposed `docs/data-quality.md` contract; settle every decision above, proposed `data_quality` exports, supported rules and errors; update plan with final fixtures and public boundaries | T1 | Exact signatures, examples, literal expected reports and blocking semantics ready for developer confirmation; no unresolved executable-contract choices | AC-01/05 |
+| US-12-IP1-T3 | Complete | Inspect artifact test fixture/driver seams; specify proposed `tests/integration/test_data_quality.py`, installed probe paths and future pipeline consumption in contract; reconcile relevant active design statements if needed | T2 | Concrete file/task refinements and coverage matrix; no added dependency or new runner prerequisite | AC-01/05 |
+| US-12-IP1-T4 | Complete | Record proposed `docs/verification/us-12-ip1.md`, link checks, criterion/decision reconciliation and checkpoint update | T1–T3 | Documentation checks pass, contract/boundaries presented for Gate 1 | AC-01/05 |
 
 ### Verification and review evidence
 
 Documentation-only: check all changed local links/anchors, criterion assignment, signature/report/example consistency and `git diff --check`. TDD, pytest and shared executable checks do not apply because this implementation phase changes no executable behavior. No test results claimed.
 
-Deferred executable coverage is owned by IP2-T1–T4 and final IP3-T4. IP1-T3 must select the exact installed-probe extension and update task paths before Gate 1; no tests begin until boundaries are confirmed.
+Actual IP1 results: [evidence](../verification/us-12-ip1.md), including stable source refresh, selected contract/fixtures, probe inspection and document/source checks. Deferred executable coverage remains IP2-T1–T4 and final IP3-T4; no tests begin until the Gate 1 boundary confirmation.
 
 ### Developer approval gate
 
 - **Approval criteria:** All tasks complete; rules, edge cases, public boundaries, installed-probe paths and handoff reviewed; unresolved decisions closed.
-- **Evidence presented:** Pending IP1 report and contract.
-- **Remaining limitations:** Design only; future pipeline integration remains separately owned.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
-- **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Stop. Explicit Gate 1 approval and IP2 authorization required before executable work.
+- **Evidence presented:** [IP1 report](../verification/us-12-ip1.md) and [concrete contract](../data-quality.md); IP1-T1–T4 technically complete, developer approved Gate 1 on 2026-11-07 UTC.
+- **Remaining limitations:** Design only; contract/test boundaries approved. Future pipeline integration remains separately owned; no executable acceptance claimed.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer “i approve ip1; commit”, 2026-11-07 UTC. Approves IP1 contract, fixtures and public test boundaries, including no-check mode; authorizes a local commit.
+- **Requested changes and resolution:** US-12-SC-01 no-check mode and rule explanations incorporated and approved.
+- **Progression authorized:** Stop. Gate 1 approved; await explicit IP2 authorization before executable work. No push or PR authorized.
 
 ## US-12 / Implementation Phase 2: Implement checks and blocking through TDD
 
@@ -108,9 +111,9 @@ Deferred executable coverage is owned by IP2-T1–T4 and final IP3-T4. IP1-T3 mu
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-12-IP2-T1 | Not started | Add proposed `tests/integration/test_data_quality.py` and `src/agentic_ml/data_quality/` exports; start with one passing-frame behavior test, then schema/type/row-count cases, one red–green slice at a time | Gate 1 | Independently expected reports, strict invalid-setting errors and unchanged native frame verified | AC-01 |
+| US-12-IP2-T1 | Not started | Add proposed `tests/integration/test_data_quality.py` and `src/agentic_ml/data_quality/` exports; start with one passing-frame behavior test, then explicit no-check status and schema/type/row-count cases, one red–green slice at a time | Gate 1 | Independently expected reports, strict invalid-setting errors and unchanged native frame verified | AC-01 |
 | US-12-IP2-T2 | Not started | Extend same public tests and package with null, duplicate and reviewed configured-rule checks; advisory/required aggregation and JSON normalization | T1 | Each boundary/failure case added through its own red–green cycle; full literal outcome matrix passes | AC-01/05 |
-| US-12-IP2-T3 | Not started | Implement reviewed blocking function/error and public sentinel-output tests; verify pass/proceed, required fail/block, advisory fail/proceed, changed-data recheck and project exception propagation | T2 | Failed checks never invoke dependent operation; report accessible; consumed frame is checked frame; no internal collaborator mocks | AC-05 |
+| US-12-IP2-T3 | Not started | Implement reviewed blocking function/error and public sentinel-output tests; verify pass/proceed, required fail/block, advisory fail/proceed, explicit no-check/proceed, changed-data recheck and project exception propagation | T2 | Failed checks never invoke dependent operation; report accessible; consumed frame is checked frame; no internal collaborator mocks | AC-05 |
 | US-12-IP2-T4 | Not started | Review structure after green; finalize API docstrings and contract examples; run M1/shared checks; record proposed `docs/verification/us-12-ip2.md` and checkpoint | T1–T3 | All required checks pass, actual red/green commands/results and changed modules recorded, Gate 2 evidence ready | AC-01/05 |
 
 ### Verification and review evidence
@@ -144,8 +147,8 @@ New product tests declare `milestone_1`. Contributor-only driver lifecycle tests
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-12-IP3-T1 | Not started | Add proposed `tests/installation/{data_quality_project,check_data_quality,verify_data_quality}.py` or the minimal alternative paths settled at Gate 1; reuse existing verification support | Gate 2 | Project-owned quality example imports installed public APIs; normal direct and sdist-rebuilt installs retain independent origins, runtime inventories and evidence | AC-01/05 |
-| US-12-IP3-T2 | Not started | Add M1 integration case to `tests/integration/test_distribution_verification.py`; verify both paths from unrelated cwd with isolated Python, extraction output, each rule family and required/advisory sentinel outcomes | T1 | Public artifact behavior first fails as intended then passes; no source-checkout imports or editable install; malformed rules/callback failures retain context | AC-01/05 |
+| US-12-IP3-T1 | Not started | Add IP1-selected `tests/installation/{data_quality_project,check_data_quality,verify_data_quality}.py`; reuse existing verification support | Gate 2 | Project-owned quality example imports installed public APIs; normal direct and sdist-rebuilt installs retain independent origins, runtime inventories and evidence | AC-01/05 |
+| US-12-IP3-T2 | Not started | Add M1 integration case to `tests/integration/test_distribution_verification.py`; verify both paths from unrelated cwd with isolated Python, extraction output, each rule family and required/advisory/no-check sentinel outcomes | T1 | Public artifact behavior first fails as intended then passes; no source-checkout imports or editable install; malformed rules/callback failures retain context | AC-01/05 |
 | US-12-IP3-T3 | Not started | Finish `docs/data-quality.md`, link from `README.md`; update affected active design status without rewriting history; document report JSON, failure recovery, future pipeline handoff and #19 exclusions | T2 | Runnable reviewed examples match API; installed resource inventory unchanged; no unsupported runner or whole-US-12 completion claim | AC-01/05 |
 | US-12-IP3-T4 | Not started | Refresh complete issues, reconcile every criterion and deferred check; run M1 then final M1–6/shared checks; record proposed `docs/verification/us-12-ip3.md`, identities/platforms, final acceptance table and checkpoint | T1–T3 | All required evidence reconciled against final inputs before final gate; issue #19 remains open work | AC-01/05 |
 
@@ -185,7 +188,7 @@ Reports belong in `docs/verification/us-12-ip*.md`; raw commands/logs/JUnit/iden
 - **M1–6/shared checks:** Run against final story changes; renew after executable changes. Record counts/skips and reconcile each with its actual coverage. Documentation-only final edits use document checks.
 - **Artifact boundary:** Both installed paths through selected integration tests; no standalone artifact driver or complete-suite run without explicit developer command. Existing packaged-resource checks remain unchanged and run through reused normal-wheel verification.
 - **Deferred-check reconciliation:** IP2 omissions resolved by final M1–6 and installed checks. Infrastructure/M0/M50/M99 exclusions and historical skips remain named limitations, not passing evidence. Missing required #15 evidence blocks acceptance.
-- **Actual results:** Pending. No product tests, builds, dependency installation or quality implementation performed during planning.
+- **Actual results:** IP1 document/source checks recorded in its evidence report; no product tests, builds, dependency installation or quality implementation performed in IP1. Executable acceptance remains pending IP2/IP3.
 
 ## Story completion review
 
@@ -204,4 +207,4 @@ Reports belong in `docs/verification/us-12-ip*.md`; raw commands/logs/JUnit/iden
 
 ## Milestone acceptance handoff
 
-**Owner:** Existing `M1-ACCEPT-VERIFY` obligation in [checkpoint](../../CHECKPOINTS.md#outstanding-verification-and-known-limitations), with US-03 ownership retained. `M50-ACCEPT-VERIFY` remains independent. Reconcile historical selections, failed/skipped cases, raw evidence availability, artifacts/manual/platform deferrals and actual final inventories before milestone acceptance. Complete-suite `uv run --locked pytest -n 4 --dist=loadgroup -m ""` and standalone artifact checks require explicit developer commands; do not run them merely because the template names milestone handoff. Preserve historical evidence and approvals; CI success is not substitute local evidence.
+**Owner:** `MVP-M1-ACCEPT-VERIFY`, coordinated by the future US-39 M1 plan under the active delivery design. Preserve the existing `M1-ACCEPT-VERIFY` obligation in [checkpoint](../../CHECKPOINTS.md#outstanding-verification-and-known-limitations), with US-03 ownership retained. `M50-ACCEPT-VERIFY` remains independent. Reconcile historical selections, failed/skipped cases, raw evidence availability, artifacts/manual/platform deferrals and actual final inventories before milestone acceptance. Complete-suite `uv run --locked pytest -n 4 --dist=loadgroup -m ""` and standalone artifact checks require explicit developer commands; do not run them merely because the template names milestone handoff. Preserve historical evidence and approvals; CI success is not substitute local evidence.

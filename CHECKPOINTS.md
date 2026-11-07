@@ -2,37 +2,47 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current US-12 issue #15 planning — 2026-11-07 UTC
+## Current US-12 issue #15 IP1 approved — 2026-11-07 UTC
 
-Developer “generate implementation plan for us-12” authorized planning after the
-recommendation to start #15. Created and verified local branch
-`US-12-data-validation` from clean `main` at `cfcda77`. Approved
-[M1 US-12 plan](docs/plans/milestone-1-us-12.md) covers #15 AC-01/05 only:
-quality checks, actionable reports and blocking supported dependent operations.
-Three implementation phases: contract/test-boundary review; TDD implementation;
-installed direct/rebuilt-wheel evidence and final acceptance. Every implementation
-gate remains pending. Proposed API/rule/report choices must be
-settled at Gate 1 before executable tests.
+Developer “start ip1” authorized IP1 of the approved
+[M1 US-12 plan](docs/plans/milestone-1-us-12.md). Branch
+`US-12-data-validation`, baseline `2cf6b33`, clean at entry. IP1-T1–T4 are
+complete; developer “i approve ip1; commit” approved Gate 1 and authorized
+a local commit on 2026-11-07 UTC. IP2 authorization remains pending.
+[Concrete contract](docs/data-quality.md) specifies public pandas functions,
+seven quality-rule kinds, report/error/required-advisory semantics, checked
+snapshot blocking, literal fixtures and installed probe files. Contract/API/test
+boundaries are approved contracts; executable delivery remains pending.
 
-Retrieved complete #15 and #19 discussions with one unique comment each, all
-pages, matching counts and stable metadata refresh; saved full metadata/body/
-comment snapshots under `docs/plans/sources/us-12-issue-{15,19}.md`.
-#19 retains AC-02/03 assessment/splits and deferred AC-04. This plan does not
-authorize closing all US-12 work, implementing consumers, or changing issue scope.
-Reviewed current package/extraction/strict-validation seams, installation probes,
-active design, planning template and verification policy. US-11 remains accepted.
+Refreshed complete #15/#19 discussions: one unique comment each, all pages,
+matching counts and stable metadata; planning snapshots unchanged. #15 owns
+AC-01/05; #19 retains AC-02/03 and deferred AC-04. Accepted US-11 extraction
+supplier evidence inspected. Plan, contract, active design links and
+[IP1 evidence](docs/verification/us-12-ip1.md) record decisions and handoff.
+Raw refresh/check records: `.dev-records/verification/20261107-2cf6b33-us12-ip1/`.
 
-Planning only: no executable behavior, dependencies, lock, tests or packaged
-resources changed; TDD/runtime checks are inapplicable. All 20 plan-local
-links/anchors, 12 incomplete task IDs, three pending gates and criterion ownership
-checks passed; tracked whitespace check passed. Sandboxed Git branch creation and auth check
-failed; approved retries succeeded; complete API reads succeeded.
-Developer “i approve plan; commit changes” approved the plan and authorized a
-local Conventional Commit of the plan, two source snapshots and this checkpoint.
-Recording that decision before committing; document whitespace checks passed.
-No push, PR, GitHub writes or implementation execution authorized.
-**Next action:** await explicit IP1 authorization; do not start implementation meanwhile.
-Independent M1/M50 verification obligations, skips and platform limits remain.
+Documentation-only work; no product source/tests/dependencies/lock/resources
+changed. Document/source checks passed: 48 local links/anchors, four Python/JSON
+syntax blocks, source snapshot parity, task/gate/criterion states and whitespace;
+source/tests/dependencies/resources and lock unchanged. Results are recorded in
+the IP1 report and raw checks log. No executable tests, builds, dependency installation or runtime
+support claim; TDD does not apply to this contract-only implementation phase.
+Developer “I want to support "no checks"” authorized US-12-SC-01: explicit
+empty rules report not_checked and permit the operation; malformed rules still
+error. Contract/fixtures/future tests revised within IP1 and approved at Gate 1.
+Original document checker misread Python type brackets as Markdown links;
+corrective attempt 1 excludes fenced code, preserving original failure evidence.
+Scope ownership and verification obligations remain unchanged.
+
+Developer review clarification: the contract example now explains each of its
+seven rules beside the code, including defaults, missing-value handling and
+required/advisory/no-check behavior. Documentation-only clarification; renewed
+document/source checks passed. Gate 1 approved; IP2 authorization remains pending.
+
+Working-tree changes: plan, contract, IP1 evidence, two active design references
+and this checkpoint. Recording approval before the authorized local commit;
+no push, PR or GitHub writes requested.
+**Next action:** await explicit IP2 authorization; stop before IP2. Independent M1/M50 obligations/skips remain open.
 
 ## Previous US-11 accepted and squash-merged — 2026-11-07 UTC
 
