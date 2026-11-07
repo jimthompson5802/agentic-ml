@@ -281,3 +281,13 @@ no merge or review-thread action authorized.
 
 Approved correction committed/pushed as `4022775` (`fix: preserve large integer
 data quality bounds`) to PR #61 on 2026-11-07 UTC. No merge/thread action performed.
+
+## Merge record — 2026-11-07 UTC
+
+Developer “squash merge the pr; commit; switch to main; pull the latest changes
+and commit and push” authorized squash merge and this record's publication.
+PR #61 merged at 2026-11-07T17:40:11Z as
+`1f9eb867a59b87a0af3880761129c3e5d2ea95e8`. Switched to `main` and pulled
+with `--ff-only`; merged tree equals approved PR head `8f71b2e` (empty diff).
+Overflow review thread already resolved. No new product changes or tests;
+existing verification evidence and historical limitations remain applicable.
