@@ -2,6 +2,36 @@
 
 Last updated: 2026-11-07 (UTC)
 
+## Current US-11 planning request — 2026-11-07 UTC
+
+Developer requested an implementation plan for US-11. Checkout is now
+`US-11-local-data-extraction`, created from clean `main` at `03dd739`.
+Authentication is now available. Retrieved issue #14's full body and all comments
+(one unique comment matching the reported count; stable metadata refresh).
+[Source snapshot](docs/plans/sources/us-11-issue-14.md) and
+[draft implementation plan](docs/plans/milestone-1-us-11.md) are saved.
+The export subprocess initially hit sandbox network restrictions; its approved
+outside-sandbox retry succeeded. Earlier authentication failures are resolved.
+
+The plan covers all five M1 criteria in three implementation phases: settle the
+component contract/test boundaries; implement built-in extraction/provenance;
+verify project functions and both installed wheel paths. All tasks and gates
+remain pending. Extraction checksum evidence is independent of later US-13 DVC
+integration; no cross-story implementation is included. Proposed API, operation
+edge semantics and dependencies require IP1 contract review before code/tests.
+
+Developer “I approve plan; commit changes; and authorize ip1” approved the plan,
+authorized a local commit and separately authorized IP1 on 2026-11-07 UTC.
+Next action: commit these planning records, then execute IP1 contract/document
+tasks and stop at its pending gate. No IP2 or push authorization.
+Only the checkpoint, new plan and source snapshot changed.
+Document/path/criterion/gate checks and `git diff --check` passed. No product
+code, runtime tests, dependency installation or publication performed.
+TDD and product checks do not apply to plan drafting. Historical milestone
+obligations and evidence remain open.
+The preceding scope-publication next action is superseded by commit `03dd739`
+and this new planning request; its historical approval records remain intact.
+
 ## Current MVP scope revision — Accepted — 2026-11-07 UTC
 
 Developer “yes i approve” approved the final documentation/backlog gate on
