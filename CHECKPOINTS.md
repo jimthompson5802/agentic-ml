@@ -1,6 +1,131 @@
 # Development Checkpoints
 
-Last updated: 2026-11-05 (UTC)
+Last updated: 2026-11-07 (UTC)
+
+## Current MVP scope revision — Phase 4 authorized — 2026-11-07 UTC
+
+Developer “execut phase 4” authorizes the explained source publication/PR and
+subsequent approved issue synchronization. Starting clean at `25544e5` on
+`refactor-milestones-user-stories`. Remote `main` remains `0a7b643`; no existing
+branch/PR for this work. Authentication succeeds outside the network sandbox.
+Approved issue bodies link to `main`, so publish documents/open a PR first and
+await merge authorization before dependent issue writes; do not silently change
+reviewed URLs or publish broken source links. No issue writes or merge yet.
+Earlier Phase 3 status below is historical.
+
+Developer “I approve Gate 3; commit the changes” approved the aligned design and
+refreshed issue package and authorized committing this IP3 snapshot locally.
+Recording approval before commit on `refactor-milestones-user-stories`.
+No Phase 4 execution, source push/PR/merge or issue publication requested.
+**Next action:** await publication direction; referenced source documents must
+be available on GitHub before issue writes. Final revision acceptance remains
+separate. Earlier review-state statements below are historical.
+
+Developer “I approve gate 2 and authorize phase 3” approved the revised local
+stories/milestones/criteria and issue drafts and authorized IP3 design/guidance
+alignment. IP1/IP2 snapshot committed as `0404916`; starting worktree clean on
+`refactor-milestones-user-stories`. Stop at Gate 3 before issue publication;
+no commit/push/PR authorized by this approval. Prior Phase 2 status below is
+historical; preserved baseline evidence remains valid for its original inputs.
+
+IP3-T1–T5 technically complete: active design 0.15 topics, concise blueprint,
+222-criterion mapping, explicit assistant walkthrough, README/guides and developer
+capability instructions aligned. Three labeled 0.14 references preserve original
+blueprint/decision/walkthrough content; eight historical plan bodies and 160 index
+rows/statuses preserved with annotations/archive links. Current criterion text and
+43-action issue inventory unchanged; draft context updated, nothing published.
+
+[IP3 evidence](docs/verification/mvp-scope-revision-ip3.md) records scoped document
+checks, 37 API exports, repository/intended-source links, historical anchors,
+13 formatted docs and seven browser-DOM Mermaid parses. Annotation whitespace,
+two legacy aliases and EOF whitespace corrected with original checks retained.
+The broader evidence-availability probe still fails on 11 pre-existing external
+absolute `/private/tmp` references in unchanged US-01 reports; availability is
+unverified, not replaced or treated as passing. See raw diagnostics and final
+summary in `.dev-records/verification/20261106-mvp-scope-ip3-0404916/`.
+
+No source/tests/resources/dependency/lock/verification-policy changes, runtime
+tests, assistant demonstration, commit/push/PR or issue writes. M1/M50 obligations,
+historical failures/skips and platform limits remain open. Working-tree changes:
+active/historical design docs, README/guides/AGENTS, status/plan/index annotations,
+draft context and this checkpoint. **Next action:** Gate 3 developer review of
+design and exact issue package. Source docs must be published at the referenced
+GitHub revision before issue writes; publication permissions remain separate.
+
+## Historical Phase 2 review — 2026-11-06
+
+Developer “i approve gate 1 and authorize phase 2” approved scope and authorized
+IP2. IP2-T1–T5 are technically complete on `refactor-milestones-user-stories`,
+baseline `0a7b643`: [revised stories](docs/specs/user-stories.md),
+[migration/follow-up ownership](docs/plans/mvp-scope-story-migration.md),
+[issue drafts](docs/plans/mvp-scope-issues/README.md),
+[plan](docs/plans/mvp-scope-revision.md) and
+[IP2 evidence](docs/verification/mvp-scope-revision-ip2.md).
+
+Preserved 204 original IDs and accepted/deferred/backlog wording; added 18 criteria
+for US-39/40 with ASW-01–08 ownership. Prepared 32 edit/comment actions, three
+accepted-issue comments, six no-actions and two new issue drafts. All 41 issue
+timestamps/states match complete IP1 snapshots. Initial sandbox inventory read
+failed; escalated read succeeded. No issue writes, commits, pushes or PRs.
+
+Document checks pass: criterion/milestone mapping, body/template/manifest parity,
+local/intended-source links and all 913 repository-relative incoming story links;
+source/tests/lock/design/development instructions unchanged. No executable tests
+or assistant walkthrough run. IP2 raw records:
+`.dev-records/verification/20261106-mvp-scope-ip2-0a7b643/`.
+Working-tree changes: revised stories, plan/report/checkpoint records, migration,
+IP2 evidence and unpublished issue package; pre-existing IP1 work preserved.
+**Next action:** developer Gate 2 review/approval. Stop before IP3 design edits
+or GitHub publication; remote source-link publication requires separate direction.
+M1/M50 verification obligations, skips, failures and platform limits remain open.
+
+Developer “commit changes” authorized a local Conventional Commit of the current
+Phase 1–2 documentation, revised stories and unpublished issue package. Recording
+direction before committing. Gate 2 remains pending; no Phase 3, push, PR or
+GitHub issue publication authorized. Next action remains developer Gate 2 review.
+
+## Historical Phase 1 review and assistant refinement — 2026-11-06
+
+Developer “Implement the plan” authorized IP1 of the
+[MVP revision plan](docs/plans/mvp-scope-revision.md) on
+`refactor-milestones-user-stories`, baseline `0a7b643`. IP1-T1–T4 technically
+complete; [criterion dispositions](docs/reviews/mvp-scope-criterion-dispositions.md)
+and [IP1 evidence](docs/verification/mvp-scope-revision-ip1.md) are ready for Gate 1.
+Retrieved 41 complete stable issue snapshots (one comment), mapped all 204 local
+criteria and recorded milestone/decision/owning-plan impacts. Scope reductions
+remain proposed; authoritative stories/design/issues unchanged. Development
+gates, historical evidence, M1/M50 verification obligations and three skips preserved.
+
+Document/source checks pass: complete criterion mapping, local links/anchors,
+whitespace and unchanged source/stories/lock identities. One copied relative link
+failed initial validation; corrective attempt 1 rebased it and renewed validation
+passed. No executable tests, dependency changes, commit/push/PR or issue writes.
+Raw records under `.dev-records/verification/20261106-mvp-scope-ip1-0a7b643/`.
+Working-tree changes: plan, disposition report, evidence and this checkpoint,
+including the pre-existing reassessment entry. **Next action:** developer Gate 1
+review/approval; stop before IP2 and authoritative requirements edits.
+
+Developer “make the assistant-support walkthrough explicit” authorized plan/report
+refinement MVP-SC-02. Added ASW-01–08 for scientist-directed external assistant
+setup, extraction, features, baseline/tuning, MLflow inspection and validation-based
+revision, final testing, DVC reproduction and notebook/regression/customization.
+Mapped future story/design ownership and concrete assistant/version plus output
+evidence requirements. Existing criterion dispositions preserved; no walkthrough
+executed, authoritative story/design edits or managed-agent scope added. Renewed
+document/source checks and whitespace pass; Gate 1 remains pending.
+
+## Historical MVP reassessment — 2026-11-06
+
+On `refactor-milestones-user-stories`, baseline `0a7b643`, reviewed the milestone
+and story definitions, design overview/topic contracts and decision register,
+public package/CLI implementation, recorded acceptance, and live GitHub issue
+states against the developer's original lightweight ML experiment MVP intent.
+M0 and US-01/02/03/05 are delivered; M1 execution/tracking and M2–6 remain planned.
+Recommended a narrower local tabular end-to-end delivery and explicit deferral
+of managed agents, durable orchestration and stronger isolation guarantees.
+This is advice, not an approved scope change. Existing requirements and gates
+remain in force. No product/specification/plan edits or tests; static assessment
+only. Working-tree change: this checkpoint. Next action: developer scope decision.
 
 ## Walkthrough software reference — 2026-11-05
 

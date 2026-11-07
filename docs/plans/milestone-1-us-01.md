@@ -1,5 +1,14 @@
 # Milestone 1 / US-01: Install a pinned harness version
 
+> **Scope annotation — 2026-11-06:** The MVP scope revision approved at Gates 1–2
+> supersedes future platform obligations as recorded in the
+> [migration](mvp-scope-story-migration.md) and active
+> [design](../specs/agentic-ml-harness-design.md). Original tasks, approvals,
+> evidence, known failures and outstanding verification obligations below remain
+> historical records. Existing strict APIs retain their accepted behavior; new
+> basic-path work is owned by US-39/40. This annotation does not close M1/M50
+> obligations, revise their check requirements or authorize additional implementation.
+
 ## Scope and outcome
 
 - **Milestone:** 1 — Run and record a reproducible experiment.
