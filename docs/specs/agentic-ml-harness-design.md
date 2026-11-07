@@ -92,7 +92,10 @@ toolkit provenance/publication helpers use native objects and plain dictionaries
 rather than proprietary extraction classes. Learned preprocessing still follows
 the training-only native pipeline rules. This 2026-11-07 developer-directed
 refinement is recorded as [US-11-SC-01](../plans/milestone-1-us-11.md#scope-change-history);
-its concrete [API proposal](../extraction.md) awaits renewed IP1 gate review.
+its [implemented extraction API](../extraction.md) passed IP1–IP3 approval and
+[US-11 whole-story acceptance](../plans/milestone-1-us-11.md#story-completion-review)
+on 2026-11-07. Earlier proposal and review history remain in the linked plan
+and phase evidence.
 
 These activities are not mandatory experiment approval gates. Existing explicit
 planning/approval APIs keep their strict behavior and unauthenticated-record

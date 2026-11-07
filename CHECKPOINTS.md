@@ -36,18 +36,20 @@ Existing missing-planning-schema skip, other two historical skips and independen
 M1/M50 obligations remain open. Quality, DVC, runners and assistant integration
 retain their other-story owners; no end-to-end experiment acceptance claimed.
 
-Working-tree changes: three new installation probe/driver/project fixture files,
-one new M1 integration test, extraction guide, README, plan, IP3 report and this
-checkpoint. Developer “i approve ip3” approved the final phase on 2026-11-07 UTC;
-all implementation phase gates are complete. Developer “i accept us-11” accepted
-the whole story on 2026-11-07 UTC. Committed `f2c215c`, pushed the story branch
-and opened [PR #60](https://github.com/jimthompson5802/agentic-ml/pull/60).
-Published verified static [COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/60#pullrequestreview-5811972716):
-one Low stale design-status finding, no executable defect identified in inspected
-supported paths. Recording publication and covering the records-only updated
-head with a supplemental static review. **Next action:** developer PR review and
-direction on the finding. No merge, finding fix or next story authorized.
-Approval records only changed after verification; whitespace check passed.
+US-11 accepted by developer “i accept us-11” after all implementation gates.
+Committed `f2c215c` plus publication records `1557ce1`; pushed and opened
+[PR #60](https://github.com/jimthompson5802/agentic-ml/pull/60).
+Static review found one Low stale design-status issue; the records-only head
+received a verified [supplemental review](https://github.com/jimthompson5802/agentic-ml/pull/60#pullrequestreview-5811978935).
+
+Developer requested resolving [comment r4501540084](https://github.com/jimthompson5802/agentic-ml/pull/60#discussion_r4501540084).
+Updated the active overview to identify the implemented API, all phase approvals
+and whole-story acceptance, with links to the contract and acceptance record.
+Historical evidence preserved. Documentation-only status correction; link/anchor,
+status and whitespace checks pass; no executable behavior requires TDD/test reruns.
+Working-tree changes: overview, owning plan and this checkpoint. Commit/push the
+requested correction and resolve its thread. **Next action:** developer PR review;
+no merge or next-story work authorized.
 
 ## Current MVP scope revision — Accepted — 2026-11-07 UTC
 

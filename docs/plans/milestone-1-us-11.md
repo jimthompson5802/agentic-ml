@@ -319,7 +319,7 @@ developer direction. No exemption for a required slow M1 test.
 | US-11-AC-04 | IP1-T1/T3; IP2-T4; IP3-T1/T2 | Input/output independent SHA-256 checks, paths/settings/time/code references; checksum satisfies output identity branch | Accepted |
 | US-11-AC-05 | IP1-T1/T3; IP2-T2–T4; IP3-T1/T2 | Invalid/missing/malformed inputs, native/project configuration errors, callback and publication failure; no incomplete success | Accepted |
 
-- **Remaining work:** Publication-record follow-up and updated-head review; accepted story implementation complete.
+- **Remaining work:** Developer PR review; accepted story implementation and publication complete.
 - **Final verification:** Complete under US-11-IP3-T4; [IP3 evidence](../verification/us-11-ip3.md).
 - **Developer acceptance / reference / date:** Accepted — developer “i accept us-11”, 2026-11-07 UTC. All five criteria accepted; execute-plan accepted-story publication workflow authorized.
 
@@ -380,3 +380,13 @@ identified in inspected supported paths. No project code/checks executed during
 the static review. Finding fixes require separate developer direction; no fix,
 merge, branch cleanup or next-story work authorized. This publication-record
 commit changes only records; review its documentation delta on the updated head.
+
+## PR #60 documentation follow-up — 2026-11-07 UTC
+
+Developer requested resolution of [review comment r4501540084](https://github.com/jimthompson5802/agentic-ml/pull/60#discussion_r4501540084).
+Updated the active design overview to link the implemented extraction API and
+US-11 acceptance, recording all phase approvals and the acceptance date.
+Historical proposals/evidence remain unchanged. Documentation only: no executable
+behavior or scope change, so TDD/runtime reruns do not apply. Verified linked
+files/acceptance anchor, corrected status text and whitespace. Commit/push to
+PR #60 and resolve the requested thread; no merge or other-story work authorized.
