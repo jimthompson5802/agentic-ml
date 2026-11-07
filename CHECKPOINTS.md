@@ -2,28 +2,26 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current US-12 issue #15 accepted — 2026-11-07 UTC
+## Current US-12 PR #61 correction approved for publication — 2026-11-07 UTC
 
-Developer “start ip3” authorized IP3 on `US-12-data-validation`, clean baseline
-`1c34871` (approved IP2 committed). IP3-T1–T4 are technically complete;
-Developer “i approve gate 3”, 2026-11-07 UTC, approved Gate 3;
-developer “i accept issue #15”, 2026-11-07 UTC, accepted AC-01/05. The
-[plan](docs/plans/milestone-1-us-12.md) and [evidence](docs/verification/us-12-ip3.md)
-record installed direct/rebuilt quality checks, sentinels, documentation and
-criterion reconciliation. Complete #15/#19 discussions refreshed and stable.
-
-M1: 528 passed, one existing skip in 218.88s; final M1–6: 528 passed, one
-existing skip in 220.48s; both 529/631 selected. Shared checks pass, 77 local
-links/anchors and Python examples pass, lock unchanged. Raw JUnit and linked
-installed records: `.dev-records/verification/20261107-1c34871-us12-ip3/`.
-Linux aarch64 only; historical M1/M50 obligations and skips remain open.
-Working tree contains three new installed quality probe files, the M1 integration
-test, guide/README/design updates, plan, evidence and checkpoint. Product source,
-dependencies/resources unchanged in IP3. Accepted work committed/pushed as
-`92eb9d8`; [PR #61](https://github.com/jimthompson5802/agentic-ml/pull/61) opened.
-[Static review](https://github.com/jimthompson5802/agentic-ml/pull/61#pullrequestreview-5813444709)
-identified one Low finite-integer range-bound overflow edge case; fix awaits direction.
-**Next action:** await developer direction on review finding or merge. #19 assessment/splits remain separate work.
+Branch `US-12-data-validation`, baseline `32efc2f`. Developer approved the initial
+recommendation and, after comparison overflow was discovered, “I approve”
+authorized the additional comparison fix. Float-only finiteness checking and
+temporary object comparisons for huge integer bounds now pass all 120 quality
+cases, including null/infinity and caller-data preservation. Attempt 1 failure
+is retained; attempt 2 passed. [Plan](docs/plans/milestone-1-us-12.md#post-review-correction-pr61-r1--2026-11-07-utc)
+and [evidence](docs/verification/us-12-pr61-r1.md) own details.
+M1: 553 passed, one existing skip in 220.76s; final M1–6: 553 passed, one existing
+skip in 226.65s; each 554/656 selected, 102 deselected. Shared checks, 104 local
+link targets and whitespace pass; lock unchanged. Installed quality regressions
+pass; new edge cases exercised via editable public API tests. Linux aarch64 only.
+Raw evidence: `.dev-records/verification/20261107-32efc2f-pr61-r1/`.
+Developer “i approve the fix; commit and push” approved the correction and
+authorized commit/push on 2026-11-07 UTC. Recording approval before publication.
+Working tree: source, tests, plan, evidence and checkpoint; ready for commit/push.
+Historical approvals/skips and independent M1/M50 obligations remain unchanged;
+#19 remains separate. **Next action:** commit and push the approved correction
+to PR #61. No GitHub reply/thread resolution or merge requested.
 
 ## Previous US-12 IP2 approved — 2026-11-07 UTC
 

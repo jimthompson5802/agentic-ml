@@ -348,7 +348,17 @@ def test_wrong_rule_parameter_types_are_rejected(rule: dict[str, object]) -> Non
 
 
 @pytest.mark.parametrize(
-    "bounds", [{"min": float("nan")}, {"min": True}, {"min": 2, "max": 1}]
+    "bounds",
+    [
+        {"min": float("nan")},
+        {"min": True},
+        {"min": 2, "max": 1},
+        {"min": float("inf")},
+        {"max": float("-inf")},
+        {"max": float("nan")},
+        {"max": False},
+        {"min": 10**400, "max": -(10**400)},
+    ],
 )
 def test_invalid_range_bounds_are_rejected(bounds: dict[str, object]) -> None:
     """Test invalid range bounds are rejected."""
@@ -931,3 +941,65 @@ def test_nonexact_schema_allows_extra_columns() -> None:
     assert checks[0]["expected"] == {"columns": ["id"], "exact": False}
     assert checks[0]["actual"] == {"missing": [], "unexpected": []}
     assert report["status"] == "passed"
+
+
+@pytest.mark.parametrize(
+    ("key", "bound", "invalid_count"),
+    [
+        ("min", -(10**400), 0),
+        ("max", 10**400, 0),
+        ("min", 10**400, 1),
+        ("max", -(10**400), 1),
+    ],
+)
+@pytest.mark.parametrize("dtype", ["int64", "Int64", "float64"])
+def test_range_accepts_large_integer_bounds(
+    key: str, bound: int, invalid_count: int, dtype: str
+) -> None:
+    """Finite integer bounds retain their values and normal range semantics."""
+    report = validate_data(
+        pd.DataFrame({"value": pd.Series([0], dtype=dtype)}),
+        rules=[{"id": "huge", "kind": "range", "column": "value", key: bound}],
+    )
+    assert report["status"] == ("failed" if invalid_count else "passed")
+    assert report["blocked"] is bool(invalid_count)
+    checks = report["checks"]
+    assert isinstance(checks, list)
+    assert checks[0]["expected"] == {
+        "column": "value",
+        "min": bound if key == "min" else None,
+        "max": bound if key == "max" else None,
+    }
+    assert checks[0]["actual"] == {"invalid_count": invalid_count, "missing_count": 0}
+    assert checks[0]["passed"] is (invalid_count == 0)
+
+
+@pytest.mark.parametrize("dtype", ["float64", "Float64"])
+@pytest.mark.parametrize(
+    ("key", "bound", "invalid_count"),
+    [
+        ("min", -(10**400), 1),
+        ("max", 10**400, 1),
+        ("min", 10**400, 2),
+        ("max", -(10**400), 2),
+    ],
+)
+def test_large_integer_range_preserves_missing_and_infinite_values(
+    dtype: str, key: str, bound: int, invalid_count: int
+) -> None:
+    """Huge bounds preserve infinity ordering, missing counts and caller data."""
+    frame = pd.DataFrame(
+        {"value": pd.Series([0, float("inf"), float("-inf"), None], dtype=dtype)}
+    )
+    original = frame.copy(deep=True)
+    report = validate_data(
+        frame,
+        rules=[{"id": "huge", "kind": "range", "column": "value", key: bound}],
+    )
+    checks = report["checks"]
+    assert isinstance(checks, list)
+    assert checks[0]["actual"] == {"invalid_count": invalid_count, "missing_count": 1}
+    assert checks[0]["passed"] is False
+    assert report["blocked"] is True
+    assert report["columns"] == [{"name": "value", "dtype": dtype}]
+    pd.testing.assert_frame_equal(frame, original)

@@ -222,6 +222,59 @@ Reports belong in `docs/verification/us-12-ip*.md`; raw commands/logs/JUnit/iden
 Issue #15 accepted; committed/pushed `92eb9d8` and opened
 [PR #61](https://github.com/jimthompson5802/agentic-ml/pull/61).
 [Static review](https://github.com/jimthompson5802/agentic-ml/pull/61#pullrequestreview-5813444709)
-identified one Low finite-integer range-bound overflow edge case; no fix authorized.
+identified one Low finite-integer range-bound overflow edge case; subsequent
+fix authorization and current incomplete results are recorded below.
 No project checks were run during static review. Publication records are committed
 separately; #19 remains separate, no merge authorized.
+
+## Post-review correction PR61-R1 — 2026-11-07 UTC
+
+Developer “i approve the recommendation” authorizes the proposed narrow fix and
+public regression tests for discussion r4502615342. This corrects the existing
+finite built-in integer contract under #15, US-12-AC-01/05; no scope, dependency,
+acceptance criterion or boundary changes. Historical approvals remain intact;
+review of this correction is pending. No commit or publication authorized.
+
+Reused confirmed boundary: public `validate_data` on native numeric DataFrames,
+with literal expected violation/missing counts, status, blocked flag and exact
+large integer bounds in the report. Covers positive/negative huge min/max and
+passing/failing results; retains malformed-float/boolean/inverted-bound errors.
+Installed direct/rebuilt regressions run via M1 selection; the new edge cases
+are checked in the editable public API tests, not added to installed probes.
+Developer approved these boundaries in the preceding recommendation.
+
+| Task | Status | Completion condition |
+|---|---|---|
+| PR61-R1-T1 | Complete | Reproduce OverflowError with one public regression; retain red log |
+| PR61-R1-T2 | Complete | Float-only finiteness check; green, remaining boundary cases and existing quality tests |
+| PR61-R1-T3 | Complete | M1 gate, renewed final M1–6 and shared checks; evidence and checkpoint |
+
+Serial focused tests are selected for short TDD feedback. Required milestone
+and final acceptance selections retain four workers/loadgroup. Full suite and
+standalone artifact drivers are excluded by policy; historical skips/platform
+and independent milestone obligations remain. Evidence:
+[PR61-R1 report](../verification/us-12-pr61-r1.md).
+
+**Developer approval gate:** Pending final diff/evidence review; stop before
+commit/push/publication. This authorization does not approve the resulting changes.
+
+Correction attempt 1 passes original integer-column regression but expanded
+float64 cases reveal pandas comparison OverflowError (108 passed, 4 failed).
+Additional comparison-path fix proposed in linked report; developer direction
+pending before attempt 2. M1/final/shared verification remains pending; existing
+acceptance is historical and does not approve the current correction.
+
+Developer “I approve” (2026-11-07 UTC) authorizes attempt 2: temporary object
+comparison for huge integer bounds, retaining exact bounds and original column
+dtype; add null/infinity boundary cases. No scope/criterion changes. Final
+correction gate, commit and publication approval remain pending.
+
+Attempt 2 passed: 120 focused quality cases; M1 553 passed/one existing skip
+in 220.76s; final M1–6 553 passed/one existing skip in 226.65s. Each selection
+554/656, 102 deselected. All shared checks and 104 local link targets passed;
+lock unchanged. [Evidence](../verification/us-12-pr61-r1.md) retains attempts,
+commands/logs/JUnit, installed-check coverage and platform limits. PR61-R1-T1–T3
+are technically complete. **Correction approval gate: Approved** by developer
+“i approve the fix; commit and push”, 2026-11-07 UTC. Authorizes committing
+and pushing this correction to PR #61. Earlier pending entries are historical;
+no merge or review-thread action authorized.

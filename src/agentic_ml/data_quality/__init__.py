@@ -3,6 +3,7 @@
 import json
 import math
 import numbers
+import sys
 from collections.abc import Callable, Mapping, Sequence
 from copy import deepcopy
 from datetime import date, time, timedelta
@@ -226,7 +227,7 @@ def validate_data(
                     bound = rule[key]
                     if type(bound) not in {int, float}:
                         raise TypeError(f"{key} must be a number")
-                    if not math.isfinite(cast(float, bound)):
+                    if isinstance(bound, float) and not math.isfinite(bound):
                         raise ValueError(f"{key} must be finite")
             if (
                 "min" in rule
@@ -364,11 +365,18 @@ def validate_data(
                     }
                 )
                 continue
+            comparison_series = series
+            if any(
+                isinstance(bound, int) and abs(bound) > sys.float_info.max
+                for bound in (minimum, maximum)
+            ):
+                # Preserve Python scalar comparisons when a bound cannot fit a float.
+                comparison_series = series.astype(object)
             invalid = pd.Series(False, index=series.index)
             if minimum is not None:
-                invalid |= series < minimum
+                invalid |= comparison_series < minimum
             if maximum is not None:
-                invalid |= series > maximum
+                invalid |= comparison_series > maximum
             count = int(invalid.fillna(False).sum())
             missing_count = int(series.isna().sum())
             checks.append(
