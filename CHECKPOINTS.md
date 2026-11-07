@@ -2,7 +2,39 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current US-11 accepted and squash-merged — 2026-11-07 UTC
+## Current US-12 issue #15 planning — 2026-11-07 UTC
+
+Developer “generate implementation plan for us-12” authorized planning after the
+recommendation to start #15. Created and verified local branch
+`US-12-data-validation` from clean `main` at `cfcda77`. Approved
+[M1 US-12 plan](docs/plans/milestone-1-us-12.md) covers #15 AC-01/05 only:
+quality checks, actionable reports and blocking supported dependent operations.
+Three implementation phases: contract/test-boundary review; TDD implementation;
+installed direct/rebuilt-wheel evidence and final acceptance. Every implementation
+gate remains pending. Proposed API/rule/report choices must be
+settled at Gate 1 before executable tests.
+
+Retrieved complete #15 and #19 discussions with one unique comment each, all
+pages, matching counts and stable metadata refresh; saved full metadata/body/
+comment snapshots under `docs/plans/sources/us-12-issue-{15,19}.md`.
+#19 retains AC-02/03 assessment/splits and deferred AC-04. This plan does not
+authorize closing all US-12 work, implementing consumers, or changing issue scope.
+Reviewed current package/extraction/strict-validation seams, installation probes,
+active design, planning template and verification policy. US-11 remains accepted.
+
+Planning only: no executable behavior, dependencies, lock, tests or packaged
+resources changed; TDD/runtime checks are inapplicable. All 20 plan-local
+links/anchors, 12 incomplete task IDs, three pending gates and criterion ownership
+checks passed; tracked whitespace check passed. Sandboxed Git branch creation and auth check
+failed; approved retries succeeded; complete API reads succeeded.
+Developer “i approve plan; commit changes” approved the plan and authorized a
+local Conventional Commit of the plan, two source snapshots and this checkpoint.
+Recording that decision before committing; document whitespace checks passed.
+No push, PR, GitHub writes or implementation execution authorized.
+**Next action:** await explicit IP1 authorization; do not start implementation meanwhile.
+Independent M1/M50 verification obligations, skips and platform limits remain.
+
+## Previous US-11 accepted and squash-merged — 2026-11-07 UTC
 
 Branch `US-11-local-data-extraction`, baseline `0d74c21`; clean at phase entry.
 Developer “start us-11 ip3” authorized IP3 after approved/committed IP2.
