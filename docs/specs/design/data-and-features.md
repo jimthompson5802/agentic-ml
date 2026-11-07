@@ -1,84 +1,84 @@
 # Data and Features
 
-Part of the [toolkit design](../agentic-ml-harness-design.md). Scope: Data Extraction and Iterative Acquisition, Feature Engineering.
+Active design 0.15; [authority](../agentic-ml-harness-design.md).
+Owns US-11/12/13/14/15/16 requirements in the revised
+[stories](../user-stories.md). These data/feature operations are planned, not
+implemented by current configuration-validation APIs.
 
-**Related contracts:** Read [interfaces and configuration](interfaces-and-configuration.md); [execution and governance](execution-and-governance.md); [acceptance traceability](acceptance-traceability.md) when changing behavior that crosses these boundaries. Consult the [reading map and authority rules](../agentic-ml-harness-design.md#reading-map-and-document-authority) and [architecture decisions](architecture-decisions.md) before implementation.
+## Local extraction and quality
 
-## 6. Data Extraction and Iterative Acquisition
+Read local CSV/Parquet and support configured column selection, filtering and
+joins. Permit ordinary project extraction functions. Record source paths/content
+identities, effective extraction settings/time and output checksum/DVC reference.
+Reject missing/invalid required inputs and report failures without calling partial
+outputs validated data. SQL, object storage, discovery security and source quotas
+are deferred; no universal connector interface is required now.
 
-The [M6 software blueprint](software-blueprint.md#milestone-6-authorized-acquisition-and-measured-improvement)
-specifies proposed gap/proposal, approval, bounded-execution, lineage, comparison
-and recovery interfaces. IP6 review is approved. Advanced strategies listed below
-remain subject to delivery scope; the list is not a claim of implemented support.
+Check configured required columns/schema/types, row counts, nulls, duplicates and
+quality rules. Include basic distributions/missingness and classification target
+balance. Report actionable mismatches and block dependent supported steps when
+required checks fail. No mandatory dataset approval service is needed.
 
-### Data extraction requirements
+## Reproducible partitions
 
-- Connect to local CSV/Parquet, SQL, and object storage initially; add APIs later.
-- Discover source schemas and metadata without unrestricted data exposure.
-- Execute approved extraction queries and sampling plans.
-- Version extracted datasets with DVC; capture source identity, query, parameters, extraction time, checksums, and permissions metadata in associated manifests. Commit DVC metadata to Git; store dataset content in the DVC cache and configured remote storage.
-- Validate schema, row counts, nulls, types, duplicates, and other configured quality rules.
-- Enforce least-privilege access, source allowlists, network restrictions, and cost/record limits.
+Record seeded train/validation/test membership and source-data identity. Verify
+disjoint rows and target alignment. Accept explicit user-provided partitions for
+time/group-sensitive tasks, with recorded constraints and overlap checks; automatic
+time/group split algorithms are not required by this MVP.
 
-### Acquisition strategies
+Training/preprocessing receives training rows; development scores use validation
+rows. Final testing occurs after validation-based selection. The supported path
+does not feed final scores back into feature/tuning decisions. Arbitrary project
+Python can still access files; this is not protected evaluator storage.
 
-- Additional observations from approved sources.
-- Targeted sampling for underrepresented classes or data slices.
-- Additional feature columns or related datasets.
-- Human or external labeling workflows.
-- Active learning: select informative unlabeled examples.
-- Data augmentation and synthetic data, explicitly labeled and tracked as distinct from observed data.
+## Authored feature pipelines
 
-### Acquisition proposal contract
+Use native scikit-learn pipeline steps and project functions for imputation,
+encoding, scaling and authored domain features as applicable. Record selected
+columns, step order, effective settings, declared feature schema and fitted state.
+Fit stateful transformations on training data only and reuse the fitted pipeline
+unchanged for validation/test/inference.
 
-```yaml
-proposal:
-  id: acquisition-001
-  reason: underrepresented_class
-  evidence:
-    affected_class: minority_class
-    current_samples: 250
-    observed_recall: 0.61
-  acquisition:
-    strategy: targeted_sampling
-    source: approved_training_database
-    target_additional_samples: 500
-  expected_benefit:
-    hypothesis: improve_minority_class_recall
-    metric: recall
-  constraints:
-    max_records: 500
-    max_runtime_minutes: 15
-  approval:
-    required: true
-```
+Compare authored feature variants with a fixed split, estimator/settings and
+metric/direction. Record gains, ties or regressions honestly; no gain is needed
+for a valid result. There is no separate FeaturePlan permission language or
+baseline/feature authorization gate.
 
-The predicted benefit is a hypothesis, not a guarantee. Compare before/after training with consistent evaluation protocols. Never use protected final-test feedback to guide acquisition. Changes to evaluation protocols require separate approval.
+M2 accepts compatible supplied transformers/estimators without toolkit edits or
+a versioned registry. Verify supported fit/transform/predict shapes, parameters
+and restored fitted state. Comprehensive leakage detection and arbitrary-code
+prevention are not promised; tests independently verify supported split/fit scope.
 
-## 7. Feature Engineering
+## DVC data and fitted artifacts
 
-The [Milestone 2 software blueprint](software-blueprint.md#milestone-2-assessment-features-and-pipeline-reuse)
-provides proposed typed contracts for assessment/splits, preprocessing,
-feature comparison and stage reuse. Its IP2 gate is approved; the product
-requirements here do not imply those APIs are implemented.
+DVC versions extracted data, split records and derived datasets; Git tracks DVC
+metadata and native stages/lockfiles. Keep content/generated stores out of Git.
+MLflow saves fitted pipelines/models and results with links to DVC identities,
+committed code/configuration and environment references.
 
-The feature engineering engine must:
+M2 restores available DVC inputs with identity verification and reproduces fitted
+transforms/predictions under declared checks. Missing/corrupt required content
+fails explicitly. See [execution/reproduction](execution-and-governance.md).
 
-- Propose and execute missing-value handling, encoding, scaling, feature construction, selection, and dimensionality reduction.
-- Support domain-specific transformations and custom code.
-- Track feature definitions, fitted preprocessors, parameters, versions, and dependencies.
-- Fit stateful transformations only on training data; apply unchanged to validation/test data.
-- Compare candidate feature sets for predictive performance against a fixed approved baseline feature set using the same fixed approved reference estimator, estimator settings, metric, and split protocol. Record gains, ties, or regressions according to the metric optimization direction.
-- Support deep-learning preprocessing, image augmentation, tokenization, and PyTorch datasets where relevant.
-- Make transformations reusable for inference without requiring model deployment in the initial release.
+## Deferred acquisition and breadth
 
-Milestone 2 supplies the minimal estimator training, prediction, and independent validation-metric computation needed for feature comparison. Approve and record the baseline feature set, reference estimator/settings, metric/direction, and split protocol before candidate comparison. Fit preprocessing and the estimator only on approved training partitions, score only on approved validation partitions, and enforce protected-test isolation for experiment code and exploratory kernels. Apply execution authorization, resource budgets, independent leakage/result checks, and existing run-evidence contracts to these runs. Preserve baseline/candidate feature identities, estimator code/dependency identities and settings, fitted artifacts, predictions, scores, and data/split lineage so comparisons can be reviewed and reproduced. A candidate need not improve to produce a valid comparison; an improvement claim must follow the recorded metric direction. Algorithm selection and hyperparameter search remain in Milestone 3.
+Autonomous gap diagnosis, proposals, labeling/synthetic acquisition loops,
+authorization/pricing/resource reconciliation and retraining orchestration are
+uncommitted roadmap work under US-28/29. Deep-learning preprocessing, tokenization,
+image augmentation and general framework registration are also deferred.
+The accepted historical closed-loop vision does not add these as MVP prerequisites.
 
-Experiment-specific transformations belong in the experiment repository's notebooks or helper modules. Code shared across experiments in that repository belongs in its own Python package. Generic feature-engineering capabilities belong in the toolkit package; promoting project code into the toolkit is a separate development change.
+## Historical link aliases
 
-Feature preparation supports user-supplied stateless transformations and stateful preprocessors. Stateful preprocessors expose separate fitting and transformation operations: fitting receives only the approved training partition, and the fitted state is reused unchanged for validation, test, and inference.
+These anchors retain old links as historical context; they do not reinstate
+superseded platform requirements. See the [previous reviewed document](https://github.com/jimthompson5802/agentic-ml/blob/0a7b64389cf663290d3bf4fc7063aae29ef8f20c/docs/specs/design/data-and-features.md).
 
-Users may require a supplied preparation pipeline or explicitly delegate selection and modification to the agent. The resolved feature plan records component order, effective parameters, input/output schemas, fitting scope, and whether agent modifications are permitted.
+<a id="6-data-extraction-and-iterative-acquisition"></a>
 
-Preserve the preparation code, fitted state, dependencies, and output feature schema as run artifacts. Supplied pipelines must satisfy the same leakage, reproducibility, and lineage checks as generated pipelines.
+<a id="data-extraction-requirements"></a>
 
+<a id="acquisition-strategies"></a>
+
+<a id="acquisition-proposal-contract"></a>
+
+<a id="7-feature-engineering"></a>

@@ -1,111 +1,69 @@
-# Repository Layout
+# Repository and Resource Layout
 
-Part of the [toolkit design](../agentic-ml-harness-design.md). Scope: Proposed Repository Layout.
+Active design 0.15; [authority](../agentic-ml-harness-design.md).
+Paths below distinguish current resources from illustrative future experiment files.
 
-**Related contracts:** Read [interfaces and configuration](interfaces-and-configuration.md); [execution and governance](execution-and-governance.md) when changing behavior that crosses these boundaries. Consult the [reading map and authority rules](../agentic-ml-harness-design.md#reading-map-and-document-authority) and [architecture decisions](architecture-decisions.md) before implementation.
+## Toolkit product repository
 
-## 12. Proposed Repository Layout
+Current reusable package is `src/agentic_ml/`, including `initialization/`,
+`planning/`, `approvals/`, `validation/` and `cli/`.
+Templates, runtime guidance, schemas and registry metadata are package resources
+under that same package. Preserve their locations; no resource move or new
+root-level runtime/development instruction loading is authorized.
+
+Docs and tests stay contributor-owned. Future data/experiment/tracking helpers
+belong in the installable package when reusable; exact module seams are reviewed
+in owning story plans. A general orchestrator/framework/agent directory tree is
+not required just to match the archived platform layout.
+
+## Separate experiment project
+
+Illustrative MVP project, not an implemented initializer output promise:
+
+```text
+experiment-project/
+  pyproject.toml
+  uv.lock
+  project.yaml
+  .gitignore
+  .dvc/
+  data.dvc
+  dvc.yaml
+  dvc.lock
+  src/project_experiments/
+  experiments/
+    baseline/
+      experiment.md
+      experiment.yaml
+      search-space.yaml
+      notebooks/
+  data/                 # DVC content; excluded from Git
+```
+
+Project package/name and stage paths are user-selected. Current initialization
+already creates project/scaffolding/storage with 0.1 drafts; it does not yet create
+a runnable end-to-end experiment or these DVC stage files. US-39 supplies that gap.
+M2 demonstrates compatible project preprocessing/model code and saved notebooks.
+
+Track source/notebooks, reviewed configuration, lockfiles, DVC metadata/stages and
+nonsecret run/data references in Git. Store datasets via DVC and fitted models/
+results via configured MLflow artifacts. Exclude local generated stores, dataset
+content and credentials from Git. Current private setup journal/state remains
+setup evidence, not a mandatory durable experiment state machine.
+
+Resolve paths against the explicit project root and honor declared DVC stage
+working directories. Reproduction uses committed required source and available
+versioned inputs; no automatic untracked/helper snapshot collection is promised.
+
+## Historical link aliases
+
+These anchors retain old links as historical context; they do not reinstate
+superseded platform requirements. See the [previous reviewed document](https://github.com/jimthompson5802/agentic-ml/blob/0a7b64389cf663290d3bf4fc7063aae29ef8f20c/docs/specs/design/repository-layout.md).
+
+<a id="repository-layout"></a>
+
+<a id="12-proposed-repository-layout"></a>
+
+<a id="separate-user-experiment-repository"></a>
 
 <a id="harness-product-repository"></a>
-
-### Toolkit product repository
-
-The tree below is illustrative, not a current source/API inventory. The
-[software blueprint](software-blueprint.md) distinguishes existing initialization,
-planning, approval and validation packages from proposed component owners.
-Packaged resources currently live beneath `src/agentic_ml/templates/` and
-`src/agentic_ml/runtime_guidance/`; root-level resource paths below describe the
-older proposed arrangement, not a required relocation. Do not introduce development
-AGENTS.md files into runtime loading merely to match this diagram.
-
-This repository contains the installable product, templates, examples, and product tests. Example projects and fixtures demonstrate usage; user experiment repositories are created separately.
-
-```text
-agentic-ml-harness/
-├── AGENTS.md
-├── README.md
-├── pyproject.toml             # Build metadata, dependencies, agentic-ml entrypoint
-├── uv.lock
-├── docs/
-│   └── specs/
-├── templates/                # Separate-project and notebook scaffolding
-├── runtime_guidance/         # Included as resources in the distribution
-│   ├── AGENTS.md
-│   ├── data/AGENTS.md
-│   ├── features/AGENTS.md
-│   └── modeling/AGENTS.md
-├── src/agentic_ml/
-│   ├── AGENTS.md
-│   ├── contracts/
-│   ├── orchestrator/
-│   │   └── AGENTS.md
-│   ├── agents/adapters/
-│   ├── approvals/            # Approval service and scoped decision handling
-│   ├── data/
-│   │   ├── sources/
-│   │   ├── acquisition/
-│   │   └── validation/
-│   ├── features/
-│   │   └── AGENTS.md
-│   ├── harness/
-│   │   ├── execution/
-│   │   ├── evaluation/
-│   │   └── resources/
-│   ├── frameworks/
-│   │   ├── sklearn/
-│   │   ├── lightgbm/
-│   │   └── pytorch/
-│   ├── tracking/
-│   ├── storage/
-│   └── cli/
-├── examples/
-│   ├── tabular-classification/
-│   │   ├── experiment.md
-│   │   ├── search-space.yaml
-│   │   ├── experiment.yaml
-│   │   └── notebooks/
-│   ├── tabular-regression/
-│   └── image-classification/
-└── tests/
-    ├── unit/
-    ├── integration/
-    ├── acceptance/
-    └── fixtures/
-```
-
-### Separate user experiment repository
-
-The following is an illustrative initialized project, not a directory inside the toolkit repository. Its project package name and experiment names are user-selected.
-
-```text
-customer-churn/
-├── README.md
-├── AGENTS.md                 # Project development conventions
-├── pyproject.toml            # Project package and harness Git dependency/full SHA
-├── uv.lock                   # Resolved experiment environment
-├── project.yaml              # Storage, tracking, state, agent, guidance, components
-├── .gitignore
-├── .dvc/
-├── data/                     # DVC-managed content; excluded from Git
-├── data.dvc                  # Illustrative data-version metadata tracked in Git
-├── runtime_guidance/         # Optional explicitly mapped project practices
-├── src/churn_experiments/    # Shared project code, custom models/preprocessors
-└── experiments/
-    └── baseline-comparison/
-        ├── experiment.md
-        ├── search-space.yaml
-        ├── experiment.yaml   # Entrypoints, data, feature pipeline, execution
-        ├── dvc.yaml
-        ├── dvc.lock
-        ├── notebooks/
-        │   ├── 01_data_assessment.ipynb
-        │   ├── 02_features_and_baseline.ipynb
-        │   ├── 03_model_development.ipynb
-        │   └── 04_results.ipynb
-        └── helpers/          # Optional experiment-specific Python
-```
-
-Project configuration and experiment-input paths resolve against the user repository root. DVC stage paths follow DVC's declared stage working-directory semantics; pipeline templates must make those paths explicit and consistent with toolkit execution. Raw sources may remain outside the repository under approved access rules; `data/` represents versioned project snapshots.
-
-Executed notebook snapshots, model artifacts, DVC content/cache, and durable workflow state live in configured project-associated storage and are excluded from Git when stored beneath the project root. Track source notebooks, generated Python, briefs, configuration, project dependency lockfiles, DVC metadata/pipeline definitions, and artifact references in the experiment repository. Preserve immutable source snapshots for runs even when the working tree has uncommitted changes.
-

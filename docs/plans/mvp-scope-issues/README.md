@@ -1,7 +1,7 @@
 # Unpublished MVP issue package
 
-**Draft only.** Gate 1 approves scope; Gate 2 reviews these local drafts. Phase 3
-must reconcile design/instructions; Gate 3 separately authorizes issue publication.
+**Unpublished.** Gates 1–3 approved scope, stories, aligned design and this package.
+The latest instruction authorizes a local commit, not Phase 4 execution or remote writes.
 No issue body, title, comment, state, label or milestone has been changed remotely.
 
 [Manifest](manifest.json) is the exact action inventory. Bodies follow the repository
@@ -21,6 +21,7 @@ Refresh complete bodies/comments at IP4 and reconcile concurrent changes. Verify
 write authentication, supported metadata and duplicate absence before creation;
 reconcile uncertain writes before retrying. No issue closure/reopening is planned.
 
+The local active design is now version 0.15; archived 0.14 is historical reference.
 The GitHub `blob/main` source links below identify intended final locations;
 new/updated documents are not published yet. Before IP4, ensure the reviewed
 stories/design/report/plan exist at the referenced revision, or prepare explicit

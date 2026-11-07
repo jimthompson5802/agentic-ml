@@ -1,7 +1,7 @@
 # Story migration and follow-up ownership
 
-Date: 2026-11-06. MVP-SC-01/MVP-SC-02 approved at Gate 1; **Phase 2 local
-revision pending Gate 2**. [Execution plan](mvp-scope-revision.md) owns progress.
+Date: 2026-11-06. MVP-SC-01/MVP-SC-02 approved at Gate 1; **Phase 2 approved at
+Gate 2** with Phase 3 authorization. [Execution plan](mvp-scope-revision.md) owns progress.
 [Stories](../specs/user-stories.md) contain the revised criteria; the
 [original matrix](../reviews/mvp-scope-criterion-dispositions.md) preserves
 original text, decisions, displaced clauses and historical scope.
@@ -135,9 +135,9 @@ must coordinate prerequisites without requiring unrelated roadmap completion.
 
 - GitHub still has the original issue bodies. [Draft package](mvp-scope-issues/README.md)
   contains exact planned edits/comments and new issues; publish only after Gate 3.
-- Design 0.14, blueprint and development capability obligations still reflect prior
-  scope. IP3 reconciles them after Gate 2. Do not start conflicting product code
-  based on this intermediate state.
+- Active design 0.15, blueprint and developer capability instructions now align
+  with the revised scope and await Gate 3. Historical 0.14 references preserve
+  previous contracts; do not start product code before issue/source reconciliation.
 - Historical plans, completed approvals, runtime evidence, M1-ACCEPT-VERIFY,
   M50-ACCEPT-VERIFY, three temporary skips and platform limitations remain intact.
   Migration does not close obligations or authorize weaker verification.

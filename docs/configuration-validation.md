@@ -100,8 +100,12 @@ environment drift blocks reuse; explicitly resolve/revalidate current inputs
 instead of editing preserved evidence.
 
 Validation sets `execution_authorized: false`. It creates no training run or
-execution approval. Future Python, notebook and custom-code submission entrypoints
-must revalidate the current plan, registry, configuration and candidate before
-training side effects, and independently enforce authorization, access and budgets.
+execution approval. Existing explicit plan-bound calls retain their integrity,
+currentness, registry/configuration and candidate checks. Future supported training
+paths must validate effective settings/candidates before fitting and enforce the
+declared trial cap. The simpler explicit-input path is new US-39-AC-01/02 work;
+it cannot silently bypass or fabricate existing plan-bound validation evidence.
+Mandatory runtime experiment approvals, OS access isolation and hard resource/
+cost quotas are deferred under the revised [MVP design](specs/agentic-ml-harness-design.md).
 Calling these APIs from an unrestricted kernel does not isolate arbitrary code or
 prevent users bypassing them. Dataset-dependent compatibility remains future work.

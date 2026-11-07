@@ -1,11 +1,11 @@
 {
   "repository": "jimthompson5802/agentic-ml",
-  "status": "Draft only; Gate 2 pending; Gate 3 publication authorization required.",
+  "status": "Gate 3 approved; local commit authorized. Phase 4 execution and remote publication not requested; source-link prerequisites remain.",
   "source_baseline": "0a7b64389cf663290d3bf4fc7063aae29ef8f20c",
   "scope_decision": "MVP-SC-01/MVP-SC-02; Gate 1 approved 2026-11-06",
   "publication_prerequisites": [
     "Refresh bodies/comments and reconcile concurrent changes at IP4.",
-    "Complete Phase 3 design/instruction reconciliation and Gate 3 approval.",
+    "Obtain Gate 3 approval of the reconciled local design/instructions and exact issue package.",
     "Verify reviewed source documents are available at the referenced GitHub revision; do not publish broken blob/main links. Commit/push requires separate authorization.",
     "Verify write authentication/metadata and absence of duplicate new stories; reconcile uncertain writes before retry."
   ],
@@ -1140,5 +1140,7 @@
     "US-34",
     "US-37",
     "US-38"
-  ]
+  ],
+  "phase3_baseline": "0404916",
+  "active_design_version": "0.15"
 }

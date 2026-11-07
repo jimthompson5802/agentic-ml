@@ -12,7 +12,7 @@ Use the GitHub issue as the implementation scope. Consult [user stories](docs/sp
 
 Reference the issue and applicable acceptance criterion IDs in the implementation plan and verification evidence. For stories spanning milestones, identify the criteria covered by the current implementation. Record unresolved design decisions before dependent implementation.
 
-This guidance covers Milestones 0–6. Apply capability-specific rules when implementing the milestone that introduces the capability, and preserve them in subsequent milestones. Milestone 99 remains deferred; moving its work into delivery requires an explicit scope decision recorded in the issue and affected plan.
+Current product delivery follows the approved two-milestone MVP in [user stories](docs/specs/user-stories.md): M1 completes one local classification experiment; M2 adds usability and committed-project reproduction. M0 foundation and M50 tooling retain their evidence and obligations. Deferred platform capabilities and M99 require explicit issue/plan scope decisions before delivery. Historical M1–6 specifications are reference material, not additional MVP prerequisites. GitHub scope synchronization remains required before product implementation.
 
 If no GitHub issue is supplied or identifiable, request the issue before starting user-story implementation.
 
@@ -89,21 +89,45 @@ Keep development instructions separate from packaged experiment runtime guidance
 
 ## Toolkit implementation contracts
 
-For each changed capability, derive implementation and test obligations from the GitHub issue and relevant [toolkit design](docs/specs/agentic-ml-harness-design.md) contracts. Keep detailed product rules in those sources. Apply the following checks to the affected components as their capabilities are introduced:
+Derive obligations from the owning issue, current [stories](docs/specs/user-stories.md)
+and active [design](docs/specs/agentic-ml-harness-design.md). Follow the design reading
+map for each changed capability. Preserve accepted strict initialization/planning/
+approval/validation APIs; simpler basic-path behavior is separately owned by US-39.
 
-- **Execution and initialization:** Implement CLI/API use without an agent adapter, conflict-safe initialization, configuration validation before execution, explicit path/working-directory handling, and reproducible execution of saved notebooks. Verify these behaviors through installed-package integration tests.
-- **Policy enforcement:** Implement shared validation and executable authorization, access, search-boundary, and budget controls across supported entrypoints. Test bypass attempts from custom code and interactive kernels; Markdown guidance alone does not enforce a boundary.
-- **Provenance and restoration:** Implement capture of exact inputs, required uncommitted/untracked source, environment identities, artifacts, and linked MLflow/DVC records. Test checksum verification, missing/corrupted inputs, fitted-component and checkpoint restoration, and preservation of available evidence after unsuccessful execution.
-- **Data and evaluation:** Implement versioned split/pipeline contracts, training-only fitting, component registration/persistence, consistent comparisons, and independent evaluation. Test leakage rejection and protected-test isolation beyond API calls. Verify that execution completion, scientific validity, model quality, and developer acceptance remain distinct outcomes.
-- **Workflow and recovery:** Implement authenticated, scoped, durable approvals separately from assistant tool permissions. Test pending gates, terminal outcomes, interruption recovery, uncertain submission, duplicate execution/accounting prevention, preserved configuration/guidance, and original producer provenance on reuse.
-- **Acquisition:** Implement authorization and source/resource-limit enforcement, dataset validation/versioning, source lineage, synthetic-data identification, consistent comparison protocols, and recovery. Test unauthorized acquisition and limit exhaustion as well as successful acquisition.
-- **Agent integration:** Implement adapters against versioned task/result and capability contracts. Verify concrete supported products/interfaces/versions, guidance delivery, cancellation, and adapter interchangeability when required by the issue. Distinguish agent-task cancellation from experiment-run cancellation and document usage-control limitations.
+- **Setup and execution:** Preserve installed-package use, conflict-safe initialization,
+  explicit project root/cwd and validation before affected execution. Verify local
+  Python and fresh-kernel notebook behavior through installed public interfaces.
+- **Search and diagnostics:** Validate supported candidates and fixed/default/search
+  bounds; enforce configured trial count. Preserve available logs/results and
+  distinguish process failure, configured validation failure and poor model quality.
+- **Data and evaluation:** Record disjoint seeded or supplied partitions. Fit learned
+  preprocessing/models only on training rows; use consistent validation comparisons
+  and a separate final-test step without supported-path feedback into tuning.
+  Verify native compatible project components and restored fitted artifacts.
+- **Tracking and reproduction:** Link MLflow records/artifacts to committed code,
+  effective configuration, locked environment/toolkit identities and DVC data.
+  Verify native stage reuse/invalidation, input integrity, missing/corrupt failures
+  and reproduction against declared checks/tolerances in separate project fixtures.
+- **Assistant use:** Demonstrate scientist-directed external assistant setup,
+  invocation, MLflow inspection, validation-based code revision and DVC replay under
+  US-39/40. Record one concrete product/interface/version, prompts/actions and
+  independently checked outputs; assistant assertions alone are insufficient.
+- **Deferred guarantees:** Trusted local MVP does not promise OS isolation,
+  arbitrary-code bypass prevention, mandatory experiment approvals, hard resource/
+  cost quotas, automatic dirty-source replay, managed agents, durable workflow
+  recovery, autonomous acquisition or broader frameworks. Activation requires an
+  explicit scope decision and tests of the newly claimed guarantees.
+
+Existing explicit experiment approval records remain unauthenticated under
+US-03-SC-01. The basic experiment path will not require them, while explicit strict
+APIs retain readiness/revocation/staleness rules. Toolkit development/testing
+approval gates and verification obligations remain unchanged.
 
 ## Runtime guidance development
 
-When implementing packaged runtime guidance or its loader, follow the design's development/runtime instruction boundary. Verify explicit selection mappings, exclusion of development `AGENTS.md` files from automatic toolkit loading, and preservation of selected contents, ownership, paths, versions/checksums, and load order.
+Keep contributor instructions separate from packaged experiment-use guidance. Preserve existing installed resource paths/content and verify changed resources through the installed package. Write experiment-use directions in runtime resources rather than this development file.
 
-Test conflicting guidance, approved version changes, and restoration of preserved bundles. Document observable external context and capture limitations. Write experiment-use directions in the runtime resources rather than this development file.
+A task-specific loader and managed guidance delivery are deferred. If an owning issue activates a loader, review its selection/version/restoration contracts and test them before claiming support. Exclude development `AGENTS.md` files from toolkit runtime loading; document observable external assistant context and capture limits without claiming control of the assistant session.
 
 ## Verification evidence
 

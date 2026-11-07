@@ -3,13 +3,14 @@
 Planning terminology follows the [README](../../README.md#planning-terminology).
 
 **Scope revision:** MVP-SC-01 and MVP-SC-02 were approved at Gate 1 on 2026-11-06
-by “i approve gate 1 and authorize phase 2”. This Phase 2 local revision is pending
-Gate 2 review. Required behavior below does not imply new delivered capabilities.
+by “i approve gate 1 and authorize phase 2”. Gate 2 was approved by
+“I approve gate 2 and authorize phase 3”. Required behavior below does not imply
+new delivered capabilities.
 [Original dispositions](../reviews/mvp-scope-criterion-dispositions.md) preserve
 every original criterion, old milestone and displaced guarantee.
 
-**Transition boundary:** GitHub bodies and design 0.14 still describe the previous
-scope. Phase 3 reconciles design/developer instructions; Phase 4 publishes issues.
+**Transition boundary:** GitHub bodies still describe the previous scope. Local
+design 0.15 aligns with this revision and is approved at Gate 3; Phase 4 publishes issues.
 This edit alone does not authorize product implementation against conflicting
 sources. Accepted APIs and historical evidence retain their original contracts.
 
@@ -121,7 +122,7 @@ Acceptance criteria:
 - <a id="us-01-ac-03"></a> **US-01-AC-03:** The project lockfile records the resolved toolkit revision and dependencies; the installed package exposes `agentic-ml`, `agentic_ml`, templates, and runtime guidance.
 - <a id="us-01-ac-04"></a> **US-01-AC-04:** An explicit toolkit upgrade changes the commit pin and lockfile, producing a new environment identity.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-02: Initialize an experiment project
 
@@ -139,7 +140,7 @@ Acceptance criteria:
 
 US-39-AC-01 owns runnable defaults/draft-schema compatibility. Accepted initialization supplies drafts, not an implemented experiment runner.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-03: Define experiment objectives and boundaries
 
@@ -157,7 +158,7 @@ Acceptance criteria:
 
 Strict explicit APIs retain readiness rules and unauthenticated-record limitations under [US-03-SC-01](../plans/milestone-1-us-03.md#us-03-sc-01--unauthenticated-experiment-approvals-2026-10-31). US-39-AC-01/02 own the simpler basic workflow; accepted contracts are not silently changed.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-05: Reject invalid configurations before execution
 
@@ -175,7 +176,7 @@ Acceptance criteria:
 
 Accepted validation metadata does not establish training support. AC-05 future training/custom/notebook integrations remain open; supported-call validation does not constrain arbitrary external Python.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-10: Run and inspect local experiments
 
@@ -189,7 +190,7 @@ Acceptance criteria:
 - <a id="us-10-ac-04"></a> **US-10-AC-04:** Unsuccessful model performance is distinguishable from execution failure when modeling is added.
 - <a id="us-10-ac-05"></a> **US-10-AC-05:** Preserve available completed-trial results and failure/interruption evidence when execution can finalize.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-11: Extract local experiment data
 
@@ -203,7 +204,7 @@ Acceptance criteria:
 - <a id="us-11-ac-04"></a> **US-11-AC-04:** Record source paths/content identities, extraction settings and time, and output checksum/DVC reference.
 - <a id="us-11-ac-05"></a> **US-11-AC-05:** Extraction failures are reported without presenting incomplete output as a validated dataset.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-12: Validate data and define reproducible splits
 
@@ -216,7 +217,7 @@ Acceptance criteria:
 - <a id="us-12-ac-02"></a> **US-12-AC-02:** Provide basic distributions, missingness and classification target balance.
 - <a id="us-12-ac-03"></a> **US-12-AC-03:** Record seeded train/validation/test partitions; accept explicit user-supplied partitions for time/group problems and check row membership/disjointness.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-13: Version and restore datasets with DVC
 
@@ -227,7 +228,7 @@ Acceptance criteria:
 - <a id="us-13-ac-01"></a> **US-13-AC-01:** DVC versions source snapshots, split manifests, and derived datasets as those artifacts are introduced.
 - <a id="us-13-ac-02"></a> **US-13-AC-02:** Git tracks DVC metadata and relevant manifests while dataset content resides in the configured cache/storage and is excluded from Git.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-14: Build and compare authored feature pipelines
 
@@ -241,7 +242,7 @@ Acceptance criteria:
 - <a id="us-14-ac-04"></a> **US-14-AC-04:** Link feature/pipeline artifacts to source datasets and verify expected outputs through supported paths.
 - <a id="us-14-ac-05"></a> **US-14-AC-05:** Use explicitly authored or supplied feature candidates.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-15: Preserve training-only preprocessing
 
@@ -253,7 +254,7 @@ Acceptance criteria:
 - <a id="us-15-ac-02"></a> **US-15-AC-02:** Reject supported-path partition overlap and improper fit scope; test for train-only fitting with independently defined expectations.
 - <a id="us-15-ac-03"></a> **US-15-AC-03:** Preserve fitted pipeline, feature settings and declared schema plus committed code/dependency references.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-18: Train scikit-learn models
 
@@ -268,7 +269,7 @@ Acceptance criteria:
 
 AC-01 spans M1 classification and M2 regression; M1 alone does not complete it. Other ML frameworks are deferred.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-20: Tune within declared search limits
 
@@ -281,7 +282,7 @@ Acceptance criteria:
 - <a id="us-20-ac-03"></a> **US-20-AC-03:** Enforce a configured maximum trial count and preserve completed trial results.
 - <a id="us-20-ac-04"></a> **US-20-AC-04:** Summarize candidates, validation scores, best selection, trial count and elapsed time.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-21: Evaluate experiment outputs consistently
 
@@ -294,7 +295,7 @@ Acceptance criteria:
 - <a id="us-21-ac-03"></a> **US-21-AC-03:** Compute configured metrics consistently and compare against baseline with explicit direction.
 - <a id="us-21-ac-05"></a> **US-21-AC-05:** Report execution failure, configured validation failure and insufficient quality distinctly.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-24: Evaluate a selected model on a separate test partition
 
@@ -306,7 +307,7 @@ Acceptance criteria:
 - <a id="us-24-ac-03"></a> **US-24-AC-03:** Keep test scores out of the supported tuning/feature-selection path; document no retuning on final scores.
 - <a id="us-24-ac-04"></a> **US-24-AC-04:** Report unsuccessful final evaluation as a result rather than silently resume tuning.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-26: Record and compare experiment results
 
@@ -325,7 +326,7 @@ Acceptance criteria:
 - <a id="us-26-ac-09"></a> **US-26-AC-09:** Link report claims to recorded numerical evaluation results/artifacts.
 - <a id="us-26-ac-12"></a> **US-26-AC-12:** Allow results to locate their MLflow run and MLflow metadata to locate committed project/config/data references.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-27: Run and reproduce native DVC pipelines
 
@@ -336,7 +337,7 @@ Acceptance criteria:
 - <a id="us-27-ac-05"></a> **US-27-AC-05:** DVC pipeline definitions record stage dependencies, parameters, and outputs, with resolved hashes preserved in `dvc.lock`.
 - <a id="us-27-ac-06"></a> **US-27-AC-06:** Stage working directories and paths are explicit and consistent with toolkit execution.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-39: Complete an assistant-supported tabular experiment
 
@@ -372,7 +373,7 @@ Acceptance criteria:
 - <a id="us-09-ac-03"></a> **US-09-AC-03:** Notebook-to-notebook dependencies use recorded artifact references rather than another kernel's variables.
 - <a id="us-09-ac-04"></a> **US-09-AC-04:** Record execution success or cell failure and retain available diagnostics; check expected outputs.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-13: Version and restore datasets with DVC
 
@@ -383,7 +384,7 @@ Acceptance criteria:
 - <a id="us-13-ac-03"></a> **US-13-AC-03:** A dataset can be restored from configured storage using its recorded metadata, and restored content hashes are verified.
 - <a id="us-13-ac-04"></a> **US-13-AC-04:** Missing or mismatched content prevents the dataset from being treated as successfully restored.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-15: Preserve training-only preprocessing
 
@@ -393,7 +394,7 @@ Acceptance criteria:
 
 - <a id="us-15-ac-04"></a> **US-15-AC-04:** Restored preprocessing reproduces validation and inference transformations under declared reproducibility checks.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-16: Use compatible project components
 
@@ -412,7 +413,7 @@ Acceptance criteria:
 - <a id="us-16-ac-09"></a> **US-16-AC-09:** Tune compatible supplied estimators within configured search bounds and evaluate restored predictions.
 - <a id="us-16-ac-10"></a> **US-16-AC-10:** Record code/dependency references, effective parameters and fitted artifacts.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-21: Evaluate experiment outputs consistently
 
@@ -422,7 +423,7 @@ Acceptance criteria:
 
 - <a id="us-21-ac-04"></a> **US-21-AC-04:** Reproduce example outputs/metrics under declared tolerances.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-27: Run and reproduce native DVC pipelines
 
@@ -438,7 +439,7 @@ Acceptance criteria:
 - <a id="us-27-ac-08"></a> **US-27-AC-08:** Use native DVC dependency hashes for reuse and retain traceable run/data/code references; re-evaluate outputs where required.
 - <a id="us-27-ac-09"></a> **US-27-AC-09:** Treat cached output as reusable data, not proof that metrics/checks pass.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-39: Complete an assistant-supported tabular experiment
 
@@ -489,7 +490,7 @@ Acceptance criteria:
 - <a id="us-04-ac-03"></a> **US-04-AC-03:** Ambiguities and conflicts are surfaced before affected execution, and dependent work waits for approval through applicable gates.
 - <a id="us-04-ac-04"></a> **US-04-AC-04:** Original inputs, resolved decisions, and their versions/checksums remain available in run lineage.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-06: Choose an algorithm execution mode
 
@@ -504,7 +505,7 @@ Acceptance criteria:
 - <a id="us-06-ac-03"></a> **US-06-AC-03:** Comparing algorithms does not require exhaustive enumeration of parameter combinations.
 - <a id="us-06-ac-04"></a> **US-06-AC-04:** Suggested algorithms or expanded ranges are recorded only as recommendations for a subsequent experiment; adopting them requires a new versioned configuration and applicable approvals.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-07: Generate reviewable experiment notebooks
 
@@ -519,7 +520,7 @@ Acceptance criteria:
 - <a id="us-07-ac-03"></a> **US-07-AC-03:** Saved notebooks support interactive use and fresh-kernel managed execution without hidden state.
 - <a id="us-07-ac-04"></a> **US-07-AC-04:** Generated notebooks, helpers, and project code stay within the experiment repository and authorized storage; the toolkit installation/source remain unchanged.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-08: Explore interactively under the same controls
 
@@ -534,7 +535,7 @@ Acceptance criteria:
 - <a id="us-08-ac-03"></a> **US-08-AC-03:** Training cells submit through managed APIs that enforce candidate boundaries, applicable approvals, budgets, and tracking.
 - <a id="us-08-ac-04"></a> **US-08-AC-04:** Interactive execution cannot establish acceptance; recorded results require managed execution of saved snapshots and independent evaluation.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-09: Execute saved notebooks reproducibly
 
@@ -546,7 +547,7 @@ Acceptance criteria:
 
 - <a id="us-09-ac-05"></a> **US-09-AC-05:** Access restrictions, approvals, and budgets apply equally to notebook and Python entrypoints; unauthorized filesystem or credential access is blocked.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-12: Assess data quality and define splits
 
@@ -558,7 +559,7 @@ Acceptance criteria:
 
 - <a id="us-12-ac-04"></a> **US-12-AC-04:** Dataset assessment and split protocol are presented for approval before dependent feature or modeling work.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-17: Respect immutable supplied components
 
@@ -573,7 +574,7 @@ Acceptance criteria:
 - <a id="us-17-ac-03"></a> **US-17-AC-03:** Approved changes to immutable code create a new versioned experiment configuration.
 - <a id="us-17-ac-04"></a> **US-17-AC-04:** Modification permission does not expand algorithm, parameter, data-access, or evaluation boundaries; authorized code changes appear in run snapshots.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-19: Manage PyTorch execution
 
@@ -588,7 +589,7 @@ Acceptance criteria:
 - <a id="us-19-ac-03"></a> **US-19-AC-03:** Cancellation stops managed training and preserves available logs, checkpoints, and status.
 - <a id="us-19-ac-04"></a> **US-19-AC-04:** Resource requests, hardware metadata, runtime limits, and supported quotas are recorded and enforced where supported.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-22: Improve models using development feedback
 
@@ -604,7 +605,7 @@ Acceptance criteria:
 - <a id="us-22-ac-04"></a> **US-22-AC-04:** Iteration stops on success, budget exhaustion, lack of improvement, unrecoverable failure, policy violation, or developer cancellation.
 - <a id="us-22-ac-05"></a> **US-22-AC-05:** Workflow phase returns and scope expansions await authorization; protected-test feedback never enters the revision loop.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-23: Approve workflow phase progression and scope changes
 
@@ -620,7 +621,7 @@ Acceptance criteria:
 - <a id="us-23-ac-04"></a> **US-23-AC-04:** Workflow phases can be skipped only when the approved plan identifies valid existing artifacts supporting the skip.
 - <a id="us-23-ac-05"></a> **US-23-AC-05:** Rejection or cancellation preserves results; successful final evaluation requires explicit model approval before completion.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-24: Protect final holdout evaluation
 
@@ -633,7 +634,7 @@ Acceptance criteria:
 - <a id="us-24-ac-01"></a> **US-24-AC-01:** Experiment agents, training code, and exploratory kernels cannot access protected test data; protection is enforced independently of agent instructions.
 - <a id="us-24-ac-05"></a> **US-24-AC-05:** Completion requires developer approval of successful final evaluation.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-25: Resume interrupted workflows
 
@@ -648,7 +649,7 @@ Acceptance criteria:
 - <a id="us-25-ac-03"></a> **US-25-AC-03:** Resumed tasks use the preserved compatible configuration and runtime instruction bundle, even if source guidance has changed.
 - <a id="us-25-ac-04"></a> **US-25-AC-04:** Cancelled, failed, budget-exhausted, and review-required outcomes retain evidence and do not silently authorize further work.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-26: Audit workflow decisions and evidence
 
@@ -662,7 +663,7 @@ Acceptance criteria:
 - <a id="us-26-ac-11"></a> **US-26-AC-11:** The audit trail identifies the scope authorizing each workflow phase, approved scope changes, and the evidence used for each decision.
 - <a id="us-26-ac-13"></a> **US-26-AC-13:** Resumption and reuse preserve original producer provenance and the decisions authorizing subsequent use.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-28: Diagnose data gaps and propose acquisition
 
@@ -677,7 +678,7 @@ Acceptance criteria:
 - <a id="us-28-ac-03"></a> **US-28-AC-03:** Expected benefit is presented as a hypothesis rather than a guaranteed improvement.
 - <a id="us-28-ac-04"></a> **US-28-AC-04:** Proposals do not use protected final-test feedback or expand access, evaluation protocols, or budgets without approval.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-29: Acquire data and measure its effect within approved limits
 
@@ -695,7 +696,7 @@ Acceptance criteria:
 - <a id="us-29-ac-06"></a> **US-29-AC-06:** The acquisition loop stops on success, budget exhaustion, lack of improvement, unrecoverable failure, policy violation, or cancellation, preserving a reviewable outcome.
 - <a id="us-29-ac-07"></a> **US-29-AC-07:** Resumption after acquisition retains approvals, budget usage, dataset lineage, and completed-run identities; advanced acquisition strategies remain deferred according to the design's [milestone delivery plan](design/milestone-delivery.md#11-milestone-delivery-plan).
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 ### US-30: Connect the first agent with preserved runtime guidance
 
@@ -715,7 +716,7 @@ Acceptance criteria:
 - <a id="us-30-ac-08"></a> **US-30-AC-08:** Both managed adapters meet the common cancellation, toolkit-guidance delivery, developer-approval, access, and toolkit-run budget requirements, including boundaries for assistant tools/workspaces. Agent-task cancellation is recorded separately from experiment-run cancellation; assistant usage measurement/control capabilities and limitations are explicit. Resumption uses durable task/run evidence and consumed budgets rather than assistant memory.
 - <a id="us-30-ac-09"></a> **US-30-AC-09:** Agent selection does not alter independent evaluation or the experiment's allowed boundaries.
 
-Supporting design: [overview](agentic-ml-harness-design.md) and reading map; alignment pending Phase 3. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
+Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 
 M50/M99 criteria and their original notes below are retained. References in those
 historical notes to the former milestone sequence do not expand the revised MVP.

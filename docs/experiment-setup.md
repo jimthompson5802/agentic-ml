@@ -35,8 +35,10 @@ The checker copies inputs and has no project/registry access. Its diagnostic pat
 are logical input names; the resolver maps them to selected file locations.
 An empty `SearchSelection()` validates the declaration alone. A checker result
 does not establish plan readiness or approval. Consumers must use `verify_plan`
-for preserved plan integrity/readiness. US-05 will add registry/task/parameter
-compatibility, recorded defaults and candidate validation before training.
+for preserved plan integrity/readiness. US-05 now supplies registry/task/parameter
+compatibility, recorded defaults and candidate validation; see the
+[configuration validation guide](configuration-validation.md). Training integration
+and the simpler basic experiment path remain subsequent work.
 
 Experiment approval uses an explicit project-local record with
 a self-declared reviewer; it is unauthenticated and cannot prove who approved or
@@ -98,9 +100,12 @@ creates a new plan ID that requires its own approval. Missing/corrupt evidence
 fails closed. CLI exit 0 means input-ready/success, 2 means blocked/invalid input,
 and 3 means an operational I/O or lock failure.
 
-Downstream capabilities must reverify readiness and apply their own access,
-execution and budget controls. US-05 will add registry compatibility and candidate
-validation. These records do not establish scientific validity, model quality,
+Downstream explicit plan-bound calls retain readiness checks. Future supported
+training must validate settings/candidates and enforce declared trial counts;
+mandatory experiment approvals, OS access restrictions and hard resource quotas
+are deferred under the revised [MVP design](specs/agentic-ml-harness-design.md).
+US-05 supplies registry compatibility and candidate validation. These records do
+not establish scientific validity, model quality,
 reviewer identity or tamper-resistant history.
 
 ## Prerequisites

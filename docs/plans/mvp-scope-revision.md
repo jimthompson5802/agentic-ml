@@ -17,7 +17,7 @@ invent an owning product story ID. Follow the repository
 [verification policy](../development/verification.md#phase-and-story-verification).
 GitHub issues govern scope. Gate 1 now authorizes local
 [story revisions](../specs/user-stories.md); the
-[design](../specs/agentic-ml-harness-design.md) remains unchanged until Gate 2.
+[design](../specs/agentic-ml-harness-design.md) is aligned in IP3 under Gate 2 approval.
 Product implementation waits for source reconciliation and publication.
 
 Deliver local, reviewable revisions, then synchronize approved changes to GitHub.
@@ -59,7 +59,10 @@ items, not silently reassigned to M99.
 
 - Plan review: Approved for IP1 execution by “Implement the plan,” 2026-11-06.
 - Gate 1: Approved, 2026-11-06, developer “i approve gate 1 and authorize phase 2”.
-  IP2 execution authorized; Gate 2 and later gates remain pending.
+- Gate 2: Approved, 2026-11-06, developer “I approve gate 2 and authorize phase 3”.
+- Gate 3: Approved, 2026-11-06, developer “I approve Gate 3; commit the changes”.
+  Local commit authorized; Phase 4 execution/source publication not requested.
+  Final acceptance remains pending.
 - Change ID: MVP-SC-01, 2026-11-06.
 - Reason: original lightweight experiment MVP has expanded into a supervised agent
   platform; narrow remaining delivery to a complete usable experiment.
@@ -68,7 +71,7 @@ items, not silently reassigned to M99.
 - Decision: Approved at Gate 1, 2026-11-06, developer “i approve gate 1 and authorize phase 2”.
 - Existing approvals/evidence remain historical facts. Do not weaken tests,
   remove evidence, close verification obligations, or imply new acceptance.
-- Resume: IP2 authorized; stop at Gate 2 before design revision/publication.
+- Resume: Commit approved IP3 locally; await publication direction and source-link prerequisites before IP4.
 
 ### MVP-SC-02 — Explicit assistant-supported walkthrough
 
@@ -128,8 +131,9 @@ history. New integration criteria cover separate project setup through MLflow
 results, and DVC reproduction/cache reuse/dependency invalidation/missing or corrupt
 inputs. Component criteria retain ownership rather than being duplicated.
 
-**Gate 2:** Pending. Approve revised stories, criteria, milestones and issue drafts.
-Stop before design revision.
+**Gate 2:** Approved, 2026-11-06. Developer “I approve gate 2 and authorize phase 3”
+approved revised stories, criteria, milestones and local issue drafts. IP3 design/
+guidance alignment authorized. Gate 3 publication authorization remains pending.
 
 Review artifacts: [revised stories](../specs/user-stories.md),
 [migration and follow-up ownership](mvp-scope-story-migration.md),
@@ -142,11 +146,11 @@ Entry: Gate 2 approval and progression authorization.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| IP3-T1 | Not started | Revise overview and architecture decisions | Gate 2 | MVP and deferred vision separated; decisions explicitly narrowed/superseded | Approved MVP scope |
-| IP3-T2 | Not started | Revise interface, execution/governance, data/features, delivery and layout topics | T1 | Active contracts match stories | Revised source criteria |
-| IP3-T3 | Not started | Preserve old blueprint as a reference; write concise active MVP blueprint | T2 | Existing APIs accurate; deferred contracts not prerequisites | API ownership/status |
-| IP3-T4 | Not started | Align traceability, README, walkthrough and applicable developer instructions; make external assistant interaction explicit | T3 | Scientist/assistant actions, implemented commands, expected artifacts and acceptance evidence documented; no conflicting controls or managed-adapter prerequisite | Criterion/design coverage; ASW-01–08 report references |
-| IP3-T5 | Not started | Annotate affected plans/evidence indexes; refresh checkpoints | T4 | Historical approvals and evidence retained with supersession links | MVP-SC-01 |
+| IP3-T1 | Complete | Revise overview and architecture decisions | Gate 2 | Design 0.15 and ADR-008 state approved MVP scope; all earlier decisions/history distinguished | Approved MVP scope |
+| IP3-T2 | Complete | Revise interface, execution/governance, data/features, delivery and layout topics | T1 | Active contracts match local stories; trusted-code and optional-path boundaries explicit | Revised source criteria |
+| IP3-T3 | Complete | Preserve old blueprint as a reference; write concise active MVP blueprint | T2 | 37 exports checked; three full 0.14 references preserved; future platform catalogue not prerequisite | API ownership/status |
+| IP3-T4 | Complete | Align traceability, README, walkthrough and applicable developer instructions; make external assistant interaction explicit | T3 | All 222 criteria mapped, ASW-01–08 explicit, commands/status truthful; development controls preserved | Criterion/design coverage; ASW-01–08 |
+| IP3-T5 | Complete | Annotate affected plans/evidence indexes; refresh checkpoints | T4 | Eight historical plan bodies and 160 index rows preserved; issue package refreshed; checks and historical evidence limits recorded | MVP-SC-01 |
 
 Ownership: project owns extraction/custom transformations/model choices;
 scikit-learn owns fit/predict/search; MLflow owns records/artifacts; DVC owns
@@ -154,8 +158,19 @@ data/pipeline execution/cache; toolkit owns setup/validation/helpers/evaluation
 and linkage. Preserve implemented APIs. Specify compatibility changes as later
 story work. Do not finalize unnecessary future APIs/wire schemas.
 
-**Gate 3:** Pending. Approve reconciled documents and authorize exact GitHub
-publication package. Stop before external writes.
+**Gate 3:** Approved, 2026-11-06, developer “I approve Gate 3; commit the changes”.
+Aligned design and refreshed issue package approved; local commit authorized.
+This instruction does not request Phase 4 execution, push/PR/merge or issue writes.
+Referenced source publication and explicit progression remain prerequisites to IP4.
+
+Review: [design overview](../specs/agentic-ml-harness-design.md),
+[assistant walkthrough](../specs/example-walkthrough.md),
+[current blueprint](../specs/design/software-blueprint.md),
+[criterion mapping](../specs/design/acceptance-traceability.md),
+[refreshed issue package](mvp-scope-issues/README.md) and
+[IP3 evidence](../verification/mvp-scope-revision-ip3.md).
+Document publication at the referenced GitHub revision remains a prerequisite
+before IP4 issue writes; commit/push/merge permissions are separate.
 
 ## IP4 — GitHub synchronization and handoff
 
@@ -210,7 +225,15 @@ criteria (204 original, 18 new); accepted/deferred/backlog wording and all origi
 anchors preserved. Issue bodies agree with local criteria and template structure;
 all planned existing issue states remain unchanged. Document checks and whitespace
 pass; source/tests/lock/design/history unchanged. See the linked IP2 evidence.
-Gate 2 remains pending; stop before IP3/design edits or external publication.
+The original IP2 handoff left Gate 2 pending; subsequent approval above authorized IP3.
+
+IP3-T1–T5 technically complete, 2026-11-06. Active design 0.15, 222-criterion
+coverage, assistant walkthrough and developer guidance align with approved scope.
+Historical references/plan bodies/index rows preserved. Scoped design checks,
+formatting and seven Mermaid parses pass; 11 pre-existing external absolute raw
+evidence paths remain unavailable and explicitly unverified. No product changes,
+new runtime/platform evidence or external publication. Gate 3 subsequently approved
+by “I approve Gate 3; commit the changes”; commit this approved snapshot locally.
 
 ## Local commit authorization
 
@@ -218,3 +241,9 @@ Developer “commit changes”, 2026-11-06, authorizes committing the current IP
 documentation, local story revisions and unpublished issue drafts. This preserves
 the review snapshot; it does not approve Gate 2, start IP3, or authorize push/PR/
 issue publication. Checkpoint and plan record authorization before the commit.
+
+Developer “I approve Gate 3; commit the changes”, 2026-11-06, approves IP3 and
+authorizes a local Conventional Commit of the design, historical references,
+guidance, draft context and approval records. No source push/PR/merge, Phase 4
+execution or remote issue writes requested. Record authorization before commit;
+await publication direction with source-link prerequisites preserved.
