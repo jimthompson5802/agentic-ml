@@ -205,6 +205,7 @@ def main() -> None:
         "mlflow<4,>=3",
         "pandas<3.2,>=3.1",
         "pyarrow<26,>=25",
+        "scikit-learn<1.10,>=1.9.1",
     }, "unexpected declared runtime dependencies"
     inventory = sorted((d.metadata["Name"], d.version) for d in distributions())
     spec = importlib.util.spec_from_file_location(

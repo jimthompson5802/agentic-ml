@@ -2,7 +2,8 @@
 
 **Status:** IP1 contract approved for [issue #19](https://github.com/jimthompson5802/agentic-ml/issues/19),
 M1 / US-12-AC-02 and US-12-AC-03. `assess_data` is implemented in IP2;
-`create_partitions` remains planned for IP3. Installed verification remains IP4.
+`create_partitions` is implemented in IP3; Gate 3 approved on 2026-11-07 UTC.
+Installed verification remains IP4.
 Developer selected only `assess_data` and `create_partitions` in this conversation;
 “make the update” authorizes the corresponding documentation revision.
 Developer “i approve ip1; commit changes”, 2026-11-07 UTC, confirms the contracts,
@@ -91,7 +92,7 @@ Project code owns report persistence using standard JSON/file operations in
 an explicit project path. The toolkit provides no assessment or partition
 read/write functions.
 
-## Proposed partition boundary
+## Partition boundary
 
 ```python
 from agentic_ml.splitting import create_partitions
@@ -111,7 +112,7 @@ parts, record = create_partitions(
 #           protocol={"kind": "time", "column": "observed_at"}
 ```
 
-Proposed keyword contract: required `row_id: str`, `target: str`,
+Keyword contract: required `row_id: str`, `target: str`,
 `layout: Literal["train_test", "train_validation_test"]`; optional
 `seed: int | None = None`, `test_size: float | None = None`,
 `validation_size: float | None = None`, `shuffle: bool = True`,
@@ -155,7 +156,7 @@ Generic membership checks do not certify chronological separation or group
 separation. Tests assert those properties independently on controlled fixtures;
 automatic protocol inference/generation/certification is outside #19.
 
-## Source identity and record proposal
+## Source identity and record
 
 Partition record version `1.0` contains exactly `schema_version`, `layout`,
 `row_id`, `target`, `source`, `method`, `settings`, `protocol`, `memberships`.
@@ -165,8 +166,9 @@ Seeded settings store the requested seed/fractions/flags and a `calls` array
 containing each effective native call's sizes/random state/stratification target.
 Supplied settings are empty, with no fabricated seed or library calls.
 
-`source` contains row count, ordered name/dtype schema, SHA-256, identity format
-`pandas-parquet-v1`, and exact toolkit/pandas/pyarrow/scikit-learn versions.
+`source` contains `row_count`, `schema` (ordered `{name, dtype}` entries),
+`sha256`, `identity_format="pandas-parquet-v1"`, and `versions` (distribution names
+`agentic-ml`, `pandas`, `pyarrow`, `scikit-learn` mapped to their exact versions).
 For the hash, take a copy with cleared `attrs`, serialize through native
 [`to_parquet`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_parquet.html)
 with `engine="pyarrow", index=False, compression=None`, then SHA-256 those bytes.
@@ -182,7 +184,7 @@ not accept an entire saved record or verify its old checksum/library versions.
 Comparing saved/current identities belongs to project code and requires matching
 serialization versions for meaningful byte comparisons. Recorded versions are
 provenance, not a toolkit restoration compatibility gate.
-IP3 must test repeat serialization, supported dtype sensitivity and JSON round-trip;
+IP3 verifies repeat serialization, supported dtype sensitivity and JSON round-trip;
 any failure invalidating this proposal reopens IP1 before dependent changes.
 External file/DVC identity remains the project/US-13 responsibility. This local
 record is not authenticated against a writer who changes both data and record.
@@ -254,18 +256,80 @@ cwd under isolated Python. Exercise both retained helpers, supplied time/group c
 for both layouts and required-quality failure blocking preparation through
 `run_validated_step`. Retain existing runtime/resource/CLI/origin checks.
 
-## Dependency proposal and review limits
+## Dependency and review limits
 
-The current lock already contains scikit-learn 1.9.1 transitively. Propose direct
-`scikit-learn>=1.9.1,<1.10` in IP3, an intentional lock update, and independent
-`scikit-learn<1.10,>=1.9.1` inventory entries in
+IP3 declares direct `scikit-learn>=1.9.1,<1.10`; the intentional lock update
+adds direct metadata while retaining the existing 1.9.1 resolution. Independent
+`scikit-learn<1.10,>=1.9.1` runtime inventory entries are in
 `tests/packaging/check_installed.py` and `tests/installation/check_project.py`.
 The [1.9 API reference](https://scikit-learn.org/1.9/modules/generated/sklearn.model_selection.train_test_split.html)
-is the proposed support line, not a claim that future minor releases pass.
-No dependency declaration, lock or inventory changes occur in IP1.
+is the supported line. IP1 changed no dependencies; IP3 owns declaration,
+lock metadata and inventory changes.
 
 IP2 owns assessment TDD and M1/shared checks; IP3 owns partitions/records/dependency
 TDD and M1/shared checks; IP4 owns both installed matrices and final M1–6/shared
-checks. Gate 1 approves this contract and its test boundaries; IP2 still needs
-separate execution authorization. No implementation, notebook, fitting, MLflow/DVC replay or platform
-acceptance is established by this proposal. See [IP1 evidence](verification/us-12-19-ip1.md).
+checks. Gate 1 approved this contract and its test boundaries; each executable
+phase requires separate authorization. IP1 alone established no implementation
+or platform acceptance. Current
+editable helper evidence is recorded in IP2/IP3; notebook, fitting and
+MLflow/DVC replay remain separate story work. See [IP1 evidence](verification/us-12-19-ip1.md).
+
+## Runnable project example
+
+Run the [standalone demo](../examples/assessment_and_splits.py) from the checkout:
+
+```sh
+uv run --locked python examples/assessment_and_splits.py
+```
+
+It prints a small input table, the assessment report, both seeded layouts,
+source/membership records, JSON reconstruction, and an expected overlap error.
+It uses in-memory data and JSON; it writes no experiment files.
+
+
+```python
+import json
+
+import pandas as pd
+
+from agentic_ml.data_assessment import assess_data
+from agentic_ml.splitting import create_partitions
+
+frame = pd.DataFrame({"id": range(5), "label": list("ABABA")})
+assessment = assess_data(frame, target="label")
+parts, record = create_partitions(
+    frame,
+    row_id="id",
+    target="label",
+    layout="train_test",
+    seed=42,
+    test_size=0.4,
+)
+assert record["memberships"] == {"train": [2, 0, 3], "test": [1, 4]}
+assert set(parts) == {"train", "test"}
+# Project code chooses a path and saves records if needed.
+encoded = json.dumps(record, allow_nan=False)
+saved = json.loads(encoded)
+restored, current = create_partitions(
+    frame,
+    row_id=saved["row_id"],
+    target=saved["target"],
+    layout=saved["layout"],
+    memberships=saved["memberships"],
+)
+# A new supplied record describes current data; retain the original seed record.
+assert current["method"] == "supplied"
+assert current["source"] == saved["source"]
+```
+
+Three-way generation uses `layout="train_validation_test"` and
+`validation_size=0.2` in the same generation call. The fixed example yields
+train `[0,3]`, validation `[2]`, test `[1,4]`. Fractions refer to the original
+frame; actual row counts follow native rounding. For time/group problems,
+project code supplies exact memberships and declares the existing protocol
+column. The helper checks membership; the project checks chronology/group
+separation. Preparation may be a callback to `run_validated_step`; a required
+quality failure prevents assessment/splitting and other callback work. Empty
+quality rules allow preparation with `not_checked`, without claiming quality
+passed. See [IP3 evidence](verification/us-12-19-ip3.md) for public composition,
+identity limits, tests and pending installed coverage.

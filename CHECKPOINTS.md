@@ -4,21 +4,32 @@ Last updated: 2026-11-07 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-12-assessment-splits`, IP2 baseline `37ffe7d` (approved IP1
-commit). Developer “start ip2”, 2026-11-07 UTC, authorizes IP2 only.
-Developer “i approve ip2; commit changes”, 2026-11-07 UTC, approves Gate 2
-and authorizes a local IP2 commit.
-**Next action:** await explicit IP3 execution authorization. IP2-T1–T3 Complete;
-Gates 1–2 Approved; IP3/IP4 Not started. No push or PR authorized.
+Checkout: `US-12-assessment-splits`, IP3 baseline `43cd770`, initially clean.
+Developer “start ip3”, 2026-11-07 UTC, authorized IP3. Developer
+“i approve ip3; commit”, 2026-11-07 UTC, approves Gate 3 and a local IP3 commit.
+**Next action:** await explicit IP4 execution authorization.
+IP3-T1–T4 Complete; Gates 1–3 Approved; IP4 Not started. No push or PR authorized.
+The approved changes include the splitting module, 124 public tests, direct
+dependency/lock/inventory updates, contributor typing stubs, guide, plan, evidence
+and checkpoint. The developer-requested [demo](examples/assessment_and_splits.py)
+runs successfully and changes no toolkit behavior.
 
 The [approved contract](docs/data-assessment-and-splits.md) retains two optional
 helpers, native pandas assessment/scikit-learn splits and project-owned JSON
-persistence. IP2 implements only `assess_data`; 35 focused public cases pass.
-M1 passed 588 tests with one existing skip (589/691 selected, 102 deselected).
-Lint, formatting, strict typing, lock consistency and version smoke pass. The lock hash is unchanged. The
-[IP2 evidence](docs/verification/us-12-19-ip2.md) owns commands, red/green history,
-corrective attempts and limits. Installed assessment remains IP4; partitions,
-direct scikit-learn dependency and inventory changes remain IP3.
+persistence. IP2 implements `assess_data`; IP3 adds `create_partitions` with seeded
+and supplied two-way/three-way layouts, complete disjoint ordered membership,
+source identity and contextual failures. Project-owned JSON reconstruction and
+extraction/quality/preparation composition pass. Time/group protocols remain
+declarations; identity is version-bound native Parquet.
+
+M1 passed 712 tests with one existing skip (713/815 selected, 102 deselected).
+All 124 focused cases pass. Locked synchronization, lint, formatting, strict
+typing, lock consistency and version smoke pass. The intentional lock update adds
+only direct scikit-learn metadata; final SHA-256 is
+`5f99c2da64eb46bc758f798f364e67eab25246253fc75315ebb404461e466a9d`.
+The [IP3 evidence](docs/verification/us-12-19-ip3.md) owns red/green commands,
+attempts, raw records and limits. Both installed matrices and final M1–6 remain
+IP4; Linux aarch64 is the only platform verified in IP3.
 
 Issue #19 complete body and all comments refreshed with stable final timestamp
 `2026-11-07T21:38:29Z`, one unique comment and open state. Scope is unchanged:

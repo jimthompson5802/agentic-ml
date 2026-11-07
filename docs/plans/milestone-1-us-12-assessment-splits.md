@@ -119,8 +119,9 @@ Developer “i approve ip1; commit changes”, 2026-11-07 UTC, subsequently conf
 the revised two-helper contract/policies/test boundaries and approves Gate 1 and
 a local commit. Developer “start ip2” authorizes IP2 execution in this conversation
 on 2026-11-07 UTC, baseline `37ffe7d` with a clean tree. Gate 2 is now approved by developer “i approve ip2; commit changes”,
-2026-11-07 UTC; a local IP2 commit is authorized. IP3 execution remains
-unauthorized; Gates 3–4 remain Pending.
+2026-11-07 UTC; a local IP2 commit is authorized. Developer “start ip3”,
+2026-11-07 UTC, authorizes IP3 on clean baseline `43cd770`. Developer “i approve ip3; commit”, 2026-11-07 UTC,
+approves Gate 3 and authorizes a local IP3 commit. Gate 4 remains Pending.
 Historical pending statements in scope records below describe their original
 decisions, not the current approval state.
 The earlier all-Not-started counts below are historical planning evidence.
@@ -487,13 +488,19 @@ Other milestone/tooling exclusions retain their owning obligations below.
 - **Entry conditions:** Gate 2 approved and IP3 authorized; Gate 1 split/identity
   choices remain valid. Reopen contract review before code if they do not.
 - **Acceptance criteria advanced:** AC-03.
+- **Execution:** Developer “start ip3”, 2026-11-07 UTC, authorizes this phase
+  on clean baseline `43cd770`. All four technical tasks are complete through
+  the confirmed public boundary. 124 focused cases pass;
+  M1 passes 712 tests with one existing skip (713/815 selected, 102 deselected).
+  [IP3 evidence](../verification/us-12-19-ip3.md) records all red/green results,
+  dependency/typing changes and current verification; Gate 3 Approved.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-12-19-IP3-T1 | Not started | Add reviewed public tests and approved integration surface (draft paths `tests/integration/test_splitting.py`, `src/agentic_ml/splitting/` remain conditional); declare scikit-learn runtime dependency, intentionally update lock and both inventories; implement native seeded generation for each layout through separate red–green slices | Gate 2; IP1 dependency/integration decisions; synchronized issue scope | Two-way and three-way fixed seed oracles, effective settings, exact names/alignment; no validation placeholder for two-way; incompatible layout/settings fail; direct dependency/inventories agree | AC-03; SC-02 |
-| US-12-19-IP3-T2 | Not started | Extend reviewed public boundary/tests for supplied two-way and three-way time/group membership and each invalid membership/layout mutation | T1 | Exact supplied rows/order/protocol retained in either layout; overlaps/duplicates/unknown IDs/reviewed coverage failures and missing/extra/wrong names rejected; no automatic time/group algorithm implied | AC-03; SC-02 |
-| US-12-19-IP3-T3 | Not started | Verify JSON-compatible records and consumed-frame identity; add project-owned JSON round-trip and supplied-mode reconstruction for both layouts; update guide; toolkit read/write/filesystem work removed under SC-03 | T1/T2 | Saved layout/ordered membership/provenance survive; supplied mode reconstructs exact rows and rejects layout/key/membership mismatch; changed values/target/dtypes/order change returned identity; project owns file/old-record checks | AC-03; SC-02/03 |
-| US-12-19-IP3-T4 | Not started | Compose project extraction and existing `run_validated_step` with assessment/splitting; add sentinel cases in public tests; refactor after green; run M1/shared checks; record proposed `docs/verification/us-12-19-ip3.md` and checkpoint | T1–T3 | Required failure never reaches preparation; valid/advisory/no-check behavior preserves #15 semantics; report and memberships refer to consumed frame; Gate 3 evidence ready | AC-02/03; regression AC-05 |
+| US-12-19-IP3-T1 | Complete | Add reviewed public tests and approved integration surface (draft paths `tests/integration/test_splitting.py`, `src/agentic_ml/splitting/` remain conditional); declare scikit-learn runtime dependency, intentionally update lock and both inventories; implement native seeded generation for each layout through separate red–green slices | Gate 2; IP1 dependency/integration decisions; synchronized issue scope | Two-way and three-way fixed seed oracles, effective settings, exact names/alignment; no validation placeholder for two-way; incompatible layout/settings fail; direct dependency/inventories agree | AC-03; SC-02 |
+| US-12-19-IP3-T2 | Complete | Extend reviewed public boundary/tests for supplied two-way and three-way time/group membership and each invalid membership/layout mutation | T1 | Exact supplied rows/order/protocol retained in either layout; overlaps/duplicates/unknown IDs/reviewed coverage failures and missing/extra/wrong names rejected; no automatic time/group algorithm implied | AC-03; SC-02 |
+| US-12-19-IP3-T3 | Complete | Verify JSON-compatible records and consumed-frame identity; add project-owned JSON round-trip and supplied-mode reconstruction for both layouts; update guide; toolkit read/write/filesystem work removed under SC-03 | T1/T2 | Saved layout/ordered membership/provenance survive; supplied mode reconstructs exact rows and rejects layout/key/membership mismatch; changed values/target/dtypes/order change returned identity; project owns file/old-record checks | AC-03; SC-02/03 |
+| US-12-19-IP3-T4 | Complete | Compose project extraction and existing `run_validated_step` with assessment/splitting; add sentinel cases in public tests; refactor after green; run M1/shared checks; record proposed `docs/verification/us-12-19-ip3.md` and checkpoint | T1–T3 | Required failure never reaches preparation; valid/advisory/no-check behavior preserves #15 semantics; report and memberships refer to consumed frame; Gate 3 evidence ready | AC-02/03; regression AC-05 |
 
 ### Verification and review evidence
 
@@ -506,10 +513,10 @@ tests/project fixtures; no assessment or partition persistence API.
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Seeded/supplied/record matrix | Public `create_partitions` cases and project JSON round-trip with isolated project paths | Literal memberships, JSON-compatible records, source-identity sensitivity and unchanged inputs; invalid supplied membership fails; project persistence is outside toolkit guarantees | Pending |
-| Required-check composition | Public `run_validated_step`, project sentinel and independent consumed values | Required failure blocks; accepted quality semantics preserved | Pending |
-| Current milestone | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass, actual counts/skips recorded | Pending |
-| Shared checks | Commands below | Pass without unintended lock changes | Pending |
+| Seeded/supplied/record matrix | Public `create_partitions` cases and project JSON round-trip with isolated project paths | Literal memberships, JSON-compatible records, source-identity sensitivity and unchanged inputs; invalid supplied membership fails; project persistence is outside toolkit guarantees | Passed; [IP3 evidence](../verification/us-12-19-ip3.md), 124 public cases |
+| Required-check composition | Public `run_validated_step`, project sentinel and independent consumed values | Required failure blocks; accepted quality semantics preserved | Passed; [IP3 evidence](../verification/us-12-19-ip3.md), four policy/sentinel cases |
+| Current milestone | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass, actual counts/skips recorded | Passed; 712 passed, 1 existing skip; 713/815 selected, 102 deselected; [IP3 evidence](../verification/us-12-19-ip3.md) |
+| Shared checks | Commands below | Pass without unintended lock changes | Passed; intentional direct scikit-learn metadata update only; [IP3 evidence](../verification/us-12-19-ip3.md) |
 
 Both installed paths and final M2–6 regressions remain owned by IP4-T1/T2/T4.
 Train-only model fitting and actual DVC/MLflow consumers remain their owning
@@ -520,13 +527,19 @@ stories, not deferred #19 tests.
 - **Approval criteria:** T1–T4 complete; both seeded/supplied layouts, persisted
   layout round-trip through project code and supplied-mode validation, AC-03 public behavior and regression
   composition verified; M1/shared checks pass; identity limits documented.
-- **Evidence presented:** Pending IP3 report and implementation diff.
+- **Evidence presented:** [IP3 report](../verification/us-12-19-ip3.md), public
+  splitting implementation/tests, guide and dependency/inventory/typing changes.
+  124 public cases and M1/shared checks pass; all raw red/green evidence retained.
 - **Remaining limitations:** Installed/final acceptance evidence pending IP4.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+  Source identity is version-bound native Parquet; project code owns old/current
+  identity comparisons and persistence. Time/group protocols are declarations.
+  Linux aarch64 only; existing skip and broader milestone obligations remain.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer “i approve ip3; commit”,
+  2026-11-07 UTC.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending explicit Gate 3 approval and IP4 authorization.
-  Stop at this gate.
+- **Progression authorized:** Local IP3 commit only. Await explicit IP4
+  execution authorization; no push or PR authorized.
 
 ## US-12 / Implementation Phase 4: Verify installed projects and issue acceptance
 
