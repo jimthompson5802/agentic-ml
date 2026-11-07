@@ -117,7 +117,10 @@ Execution authorization: developer “start ip1”, 2026-11-07 UTC, authorizes
 contract-only IP1 on clean baseline `c0dcaa1`. All four gates were Pending at entry.
 Developer “i approve ip1; commit changes”, 2026-11-07 UTC, subsequently confirms
 the revised two-helper contract/policies/test boundaries and approves Gate 1 and
-a local commit. IP2 execution remains unauthorized; Gates 2–4 remain Pending.
+a local commit. Developer “start ip2” authorizes IP2 execution in this conversation
+on 2026-11-07 UTC, baseline `37ffe7d` with a clean tree. Gate 2 is now approved by developer “i approve ip2; commit changes”,
+2026-11-07 UTC; a local IP2 commit is authorized. IP3 execution remains
+unauthorized; Gates 3–4 remain Pending.
 Historical pending statements in scope records below describe their original
 decisions, not the current approval state.
 The earlier all-Not-started counts below are historical planning evidence.
@@ -434,12 +437,16 @@ M1/M1–6/shared/installed obligations, and authorize no later implementation ph
 - **Outcome:** Public descriptive reports match reviewed independent expectations.
 - **Entry conditions:** Gate 1 approved, boundaries confirmed and IP2 authorized.
 - **Acceptance criteria advanced:** AC-02.
+- **Execution:** Authorized by developer “start ip2”, 2026-11-07 UTC.
+  T1–T3 technically complete; 35 focused cases pass. M1: 588 passed, 1 existing
+  skip (589/691 selected). Shared checks pass; Gate 2 approved on 2026-11-07 UTC.
+  Red/green history and limitations: [IP2 evidence](../verification/us-12-19-ip2.md).
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-12-19-IP2-T1 | Not started | Add proposed `tests/integration/test_data_assessment.py` and `src/agentic_ml/data_assessment/`; start with one numeric/missingness test; implement through individual red–green cycles | Gate 1 | Literal summaries and schema; unchanged caller frame; intended missing-behavior red observed before green | AC-02 |
-| US-12-19-IP2-T2 | Not started | Extend same public boundary with categorical/target counts, proportions and reviewed empty/nullable/nonfinite/type/error matrix | T1 | Every case independently expected; JSON serializable under strict finite JSON policy; no target omission or silent coercion outside contract | AC-02 |
-| US-12-19-IP2-T3 | Not started | Review refactoring after green; finalize docstrings/examples; run M1/shared checks and record proposed `docs/verification/us-12-19-ip2.md` and checkpoint | T1/T2 | Reviewed assessment contract implemented; all phase checks pass with exact evidence and limitations | AC-02 |
+| US-12-19-IP2-T1 | Complete | Add proposed `tests/integration/test_data_assessment.py` and `src/agentic_ml/data_assessment/`; start with one numeric/missingness test; implement through individual red–green cycles | Gate 1 | Literal summaries and schema; unchanged caller frame; intended missing-behavior red observed before green | AC-02 |
+| US-12-19-IP2-T2 | Complete | Extend same public boundary with categorical/target counts, proportions and reviewed empty/nullable/nonfinite/type/error matrix | T1 | Every case independently expected; JSON serializable under strict finite JSON policy; no target omission or silent coercion outside contract | AC-02 |
+| US-12-19-IP2-T3 | Complete | Review refactoring after green; finalize docstrings/examples; run M1/shared checks and record proposed `docs/verification/us-12-19-ip2.md` and checkpoint | T1/T2 | Reviewed assessment contract implemented; all phase checks pass with exact evidence and limitations | AC-02 |
 
 ### Verification and review evidence
 
@@ -451,9 +458,9 @@ collaborator mocks or expectations derived from toolkit helpers. New tests decla
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Assessment matrix | Reviewed public cases, one red–green slice at a time | Exact counts/missingness/balance; numeric tolerance specified at Gate 1; actionable errors | Pending |
-| Current milestone | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass with counts/skips recorded | Pending |
-| Shared checks | All commands in shared execution rules below | Pass; lock identity unchanged | Pending |
+| Assessment matrix | Reviewed public cases, one red–green slice at a time | Exact counts/missingness/balance; numeric tolerance specified at Gate 1; actionable errors | Passed; [IP2 evidence](../verification/us-12-19-ip2.md) |
+| Current milestone | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass with counts/skips recorded | Passed; [IP2 evidence](../verification/us-12-19-ip2.md) |
+| Shared checks | All commands in shared execution rules below | Pass; lock identity unchanged | Passed; [IP2 evidence](../verification/us-12-19-ip2.md) |
 
 Installed assessment coverage and M2–6 regressions defer to IP4-T1/T2/T4.
 Other milestone/tooling exclusions retain their owning obligations below.
@@ -462,13 +469,15 @@ Other milestone/tooling exclusions retain their owning obligations below.
 
 - **Approval criteria:** T1–T3 complete; AC-02 editable public behavior verified;
   M1/shared checks pass and red/green evidence recorded.
-- **Evidence presented:** Pending IP2 report.
+- **Evidence presented:** [IP2 report](../verification/us-12-19-ip2.md), public
+  implementation/tests and guide. 35 focused cases and M1/shared checks pass.
 - **Remaining limitations:** Installed verification and AC-03 remain pending.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer “i approve ip2; commit changes”,
+  2026-11-07 UTC.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending explicit Gate 2 approval and IP3 authorization.
-  Stop at this gate.
+- **Progression authorized:** Local IP2 commit only. Await explicit IP3 execution
+  authorization; no push or PR authorized.
 
 ## US-12 / Implementation Phase 3: Implement recorded and validated partitions
 
@@ -635,8 +644,9 @@ records. Update `CHECKPOINTS.md` at completions, gates, blockers and handoff.
 | US-12-AC-01/05 (#15) | Existing supplier plan; IP3-T4/IP4-T2 reuse regressions | Supplier acceptance retained; new composition evidence pending | Accepted supplier scope; no reopening or new acceptance claimed |
 | US-12-AC-04 | Explicit future activation required | None claimed | Deferred |
 
-- **Remaining work:** IP1-T1–T4 Complete and Gate 1 approved; IP2–IP4 Not started.
-  Await IP2 authorization. No full experiment, DVC reproduction or assistant
+- **Remaining work:** IP1/IP2 tasks Complete; Gates 1–2 approved.
+  IP3/IP4 Not started. Await explicit IP3 authorization.
+  No full experiment, DVC reproduction or assistant
   acceptance is implied.
 - **Partial prerequisite delivery:** No new supplier slices; #19 consumes
   accepted #14/#15 and supplies future consumers with reports and split records.

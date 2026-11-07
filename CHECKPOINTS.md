@@ -4,41 +4,27 @@ Last updated: 2026-11-07 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-12-assessment-splits`, IP1 baseline `c0dcaa1`.
-Developer “i approve ip1; commit changes”, 2026-11-07 UTC, approved Gate 1 and
-authorized a local commit of the contract, plan, evidence, source snapshot,
-active design references and this checkpoint.
-**Next action:** await explicit IP2 execution authorization. IP1-T1–T4 are
-Complete; Gate 1 Approved; IP2–IP4 Not started and Gates 2–4 Pending.
-No executable toolkit implementation, dependency changes, push or PR authorized.
+Checkout: `US-12-assessment-splits`, IP2 baseline `37ffe7d` (approved IP1
+commit). Developer “start ip2”, 2026-11-07 UTC, authorizes IP2 only.
+Developer “i approve ip2; commit changes”, 2026-11-07 UTC, approves Gate 2
+and authorizes a local IP2 commit.
+**Next action:** await explicit IP3 execution authorization. IP2-T1–T3 Complete;
+Gates 1–2 Approved; IP3/IP4 Not started. No push or PR authorized.
 
-The [approved two-helper contract](docs/data-assessment-and-splits.md) retains
-`assess_data` and `create_partitions` with native pandas reporting/scikit-learn
-splitting, both layouts, optional stratification and supplied-membership checks.
-SC-03 assigns JSON persistence and saved-document/source comparisons to project
-code; dedicated toolkit read/write helpers and their filesystem/restoration
-guarantees are removed. Both helpers are optional for experiment scripts.
-The IP1 approval confirms signatures, report/scalar/ID/coverage/protocol/identity
-policies and public test boundaries. Native Parquet identity stability still
-requires IP3 evidence. The confirmed direct scikit-learn dependency approach is
-`>=1.9.1,<1.10` (1.9.1 is already transitively locked); IP3 intentionally updates
-the declaration, lock and both independent runtime inventories.
+The [approved contract](docs/data-assessment-and-splits.md) retains two optional
+helpers, native pandas assessment/scikit-learn splits and project-owned JSON
+persistence. IP2 implements only `assess_data`; 35 focused public cases pass.
+M1 passed 588 tests with one existing skip (589/691 selected, 102 deselected).
+Lint, formatting, strict typing, lock consistency and version smoke pass. The lock hash is unchanged. The
+[IP2 evidence](docs/verification/us-12-19-ip2.md) owns commands, red/green history,
+corrective attempts and limits. Installed assessment remains IP4; partitions,
+direct scikit-learn dependency and inventory changes remain IP3.
 
-[IP1 evidence](docs/verification/us-12-19-ip1.md) owns verification and approval.
-Independent native scikit-learn 1.9.1 calls confirm both fixed seeded oracles;
-no toolkit code/test was invoked. Document/link/task/gate/whitespace checks and
-unchanged lock identity are recorded there; executable verification remains
-IP2/IP3/IP4. No new platform support or completed AC is claimed.
-
-Issue #19 and suppliers #14/#15 were completely refreshed during IP1 with stable
-metadata and one unique comment each; #19 open, suppliers closed.
-[Source snapshot](docs/plans/sources/us-12-19-ip1-issues.md) retains the discussions.
-AC-02/03 cover both layouts; SC-02 alignment remains synchronized; AC-04 deferred.
-Supplier approvals/public APIs and installed probe seams were inspected without
-rerunning their historical evidence. Configured-token status failed but required
-GET reads succeeded; no credentials changed or remote publication attempted.
-Commit this approval record with the authorized IP1 work; the resulting commit
-is identifiable in Git history.
+Issue #19 complete body and all comments refreshed with stable final timestamp
+`2026-11-07T21:38:29Z`, one unique comment and open state. Scope is unchanged:
+M1 AC-02/03 active, AC-04 deferred. Configured-token status failed but required
+GET reads succeeded. Accepted suppliers #14/#15 and their historical evidence
+remain intact. [IP1 evidence](docs/verification/us-12-19-ip1.md) owns Gate 1.
 
 US-12 issue [#15](https://github.com/jimthompson5802/agentic-ml/issues/15)
 is accepted and closed. PR #61 squash-merged as `1f9eb86`; local and remote

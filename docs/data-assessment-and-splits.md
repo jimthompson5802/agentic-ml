@@ -1,7 +1,8 @@
 # Data assessment and recorded partitions — approved IP1 contract
 
 **Status:** IP1 contract approved for [issue #19](https://github.com/jimthompson5802/agentic-ml/issues/19),
-M1 / US-12-AC-02 and US-12-AC-03. None of the functions below exists yet.
+M1 / US-12-AC-02 and US-12-AC-03. `assess_data` is implemented in IP2;
+`create_partitions` remains planned for IP3. Installed verification remains IP4.
 Developer selected only `assess_data` and `create_partitions` in this conversation;
 “make the update” authorizes the corresponding documentation revision.
 Developer “i approve ip1; commit changes”, 2026-11-07 UTC, confirms the contracts,
@@ -25,13 +26,21 @@ still requires recorded membership/disjointness and installed verification.
 No new manifest service,
 custom split/statistics algorithm or runtime approval mechanism is proposed.
 
-## Proposed assessment boundary
+## Assessment boundary
 
 ```python
 from agentic_ml.data_assessment import assess_data
 
 report = assess_data(frame, target="label")  # -> dict[str, object]
 ```
+
+For example, `frame = pd.DataFrame({"value": [1, 3, 5, None],
+"label": ["A", "A", "B", None]})` reports four rows, one missing value
+per column, numeric mean 3 and sample standard deviation 2. Target balance
+contains A at 2/3 and B at 1/3; the target column separately reports one
+missing value. Import pandas as `pd` in the project script. The report describes
+data and does not assign a quality judgment. Project code may save it with
+`json.dump(report, stream, allow_nan=False)`.
 
 Input is a native DataFrame with unique, nonempty string column names and an
 existing target. Return `schema_version="1.0"`, `row_count`, `target`, ordered
@@ -88,8 +97,14 @@ read/write functions.
 from agentic_ml.splitting import create_partitions
 
 parts, record = create_partitions(
-    frame, row_id="id", target="label", layout="train_test",
-    seed=42, test_size=0.4, shuffle=True, stratify=False,
+    frame,
+    row_id="id",
+    target="label",
+    layout="train_test",
+    seed=42,
+    test_size=0.4,
+    shuffle=True,
+    stratify=False,
 )
 # Three-way: layout="train_validation_test", validation_size=0.2
 # Supplied: memberships={"train": [1, 2, 3, 4], "test": [5, 6]},
