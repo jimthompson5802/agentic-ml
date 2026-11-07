@@ -63,20 +63,27 @@ decisions, not authorization for a new assessment API or reporting framework.
 
 ### Proposed toolkit integration requiring discussion
 
-The following are possible gaps between library outputs and US-12's recorded,
-validated experiment inputs. They are proposals, not approved new public APIs:
+Developer selected only `assess_data` and `create_partitions` under
+[US-12-19-SC-03](../../plans/milestone-1-us-12-assessment-splits.md#us-12-19-sc-03--retain-two-helpers-project-owned-persistence-2026-11-07-utc).
+Project code owns JSON save/load. Developer “i approve ip1; commit changes”,
+2026-11-07 UTC, approved detailed contracts/policies and public test boundaries
+at Gate 1; implementation remains unstarted. The confirmed integration is:
 
 | Requirement | Existing capability to reuse | Remaining decision for developer discussion |
 |---|---|---|
-| Recorded two-way (train/test) or three-way (train/validation/test) partitions | scikit-learn `train_test_split` directly supplies two subsets; compose native calls for three-way layout | Explicit layout choice; whether project code composes calls or a small toolkit helper does; split order, sizes and random states. Native rounding/errors remain authoritative. |
-| Record exact membership and source identity (AC-03) | Native split indices/rows, project files and subsequent DVC ownership | Minimum identity/membership record and its owner; whether any toolkit persistence/restoration helper is needed. A new manifest service or canonical DataFrame hashing scheme is not approved. |
-| Validate explicit supplied membership (AC-03) | Native pandas index/set operations for membership, duplicates and intersections | Minimum toolkit validation needed to bind supplied rows to the source and check disjointness; row-ID convention and coverage policy remain open. |
-| Present assessment results (AC-02) | Native pandas outputs and serialization | Whether native outputs suffice or a small toolkit report adapter is useful; any new JSON schema, scalar conversion or write/read API requires discussion. |
+| Recorded two-way (train/test) or three-way (train/validation/test) partitions | scikit-learn `train_test_split` supplies two subsets; `create_partitions` composes native calls for three-way layout | Settings, split order, sizes and random states confirmed in the IP1 contract. Native rounding/errors remain authoritative. |
+| Record exact membership and source identity (AC-03) | Native split rows, project JSON files and subsequent DVC ownership | `create_partitions` returns the record; project owns save/load, saved-document validation and old/current identity comparison. Native Parquet identity confirmed for implementation; stability evidence remains IP3. |
+| Validate explicit supplied membership (AC-03) | Native pandas index/set operations for membership, duplicates and intersections | String/integer IDs, complete/nonempty coverage and membership/disjointness policies confirmed in the IP1 contract. |
+| Present assessment results (AC-02) | Native pandas outputs and serialization | `assess_data` fields/scalar conversion confirmed at Gate 1. Project owns persistence. |
 
 No custom statistical or splitting algorithm has been identified as necessary.
 The owning [issue #19 plan](../../plans/milestone-1-us-12-assessment-splits.md)
-must resolve these integration decisions before dependent executable work.
+owns the approved contract and separate authorization before executable work.
 Existing accepted extraction/quality APIs and their evidence remain intact.
+Project-loaded layout/membership can enter `create_partitions` supplied mode for
+validation/reconstruction. This does not validate the entire saved record or
+automatically detect changed values under valid IDs. Saved-layout JSON round-trip
+remains required project evidence; toolkit file/restoration guarantees are removed.
 
 ## Reproducible partitions
 

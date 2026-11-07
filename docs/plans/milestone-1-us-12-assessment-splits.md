@@ -89,10 +89,10 @@ train-only fitting does not move US-15's fitting implementation into #19.
 | Native extraction | DataFrame plus persisted source/output identity | Installed extraction-to-assessment example | Satisfied: [US-11 plan](milestone-1-us-11.md), IP2-T1–T5/IP3-T1–T4 and approvals/acceptance; [IP3 evidence](../verification/us-11-ip3.md), PR #60 merged. Supplying task records checked during planning; refresh before execution. |
 | Required quality checks | Public checks and synchronous blocking helper | Supported preparation example | Satisfied: [#15 plan](milestone-1-us-12.md), IP2-T1–T4/IP3-T1–T4, approved gates and explicit #15 acceptance; [final correction](../verification/us-12-pr61-r1.md), PR #61 merged. |
 | Scope synchronization | Active issues agree with design | Dependent implementation | #14/#15 complete bodies and one comment each fetched on 2026-11-07; final counts/timestamps stable, both closed. #19 open, one comment, stable snapshot. No new upstream implementation required. |
-| Assessment and partition contract | Concrete signatures, data/report schemas, error semantics and literal expected cases | All executable tests and implementation | Pending IP1 and explicit Gate 1 approval; proposals below are not existing APIs. |
-| Native capability reuse / custom integration discussion | Use scikit-learn splitters and pandas descriptions; discuss every proposed toolkit-specific gap before approving it | Dependent contract approval and executable work | Developer direction recorded in US-12-19-SC-01 below; integration choices remain open. |
+| Assessment and partition contract | Concrete signatures, data/report schemas, error semantics and literal expected cases | All executable tests and implementation | Confirmed at Gate 1 by developer “i approve ip1; commit changes”; contract remains unimplemented. |
+| Native capability reuse / custom integration discussion | Use scikit-learn splitters and pandas descriptions; discuss toolkit-specific gaps before approval | Dependent contract approval and executable work | SC-03 selects two helpers and project persistence; exact policies/test boundaries confirmed at Gate 1. |
 | Two-way/three-way issue alignment | Record additive layout choice in issue #19 and repository AC-03 before product implementation | Dependent executable work | Satisfied by developer “make the alignment”; issue body published and verified on 2026-11-07, current source snapshot linked above. Executable gates remain pending. |
-| Source identity and persistence | Bind membership to actual consumed rows; define safe write/read/revalidation behavior | IP3/IP4 | Pending IP1-T3; cannot simply trust a caller's checksum or pandas index. |
+| Source identity and persistence | Return consumed-frame identity/membership; project code owns JSON save/load and old-source checks | IP3/IP4 | Native Parquet identity contract confirmed at Gate 1; stability/type sensitivity need IP3 evidence. No toolkit read/write/filesystem guarantees. |
 | Downstream workflow | Future consumers use recorded splits and train-only fitting | End-to-end experiment acceptance | Outside #19; US-15/24/39 own adoption. Callable component needs no future runner. |
 
 The #14 final refresh was `2026-11-07T12:02:00Z`, comment 6699585176;
@@ -104,7 +104,7 @@ confirmed with `gh repo view`; publication authentication is unverified.
 
 ## Plan review
 
-- **Status:** Approved — implementation not started.
+- **Status:** Approved plan — contract-only IP1 complete and Gate 1 approved.
 - **Developer decision:** Approved plan, including native library reuse and
   two-way/three-way scope alignment; implementation gates remain pending.
 - **Decision reference and date:** Developer “i approve the plan” in this
@@ -113,10 +113,14 @@ confirmed with `gh repo view`; publication authentication is unverified.
 - Approval of this plan does not confirm unresolved IP1 contract details, approve
   an implementation gate or authorize publication. Begin IP1 only when authorized.
 
-Approval recording: all 15 task statuses remain Not started and all four
-implementation gates remain Pending. IP1 execution authorization and discussion
-of proposed toolkit-specific integration remain outstanding. This status-only
-documentation update uses `git diff --check`; TDD/product tests are inapplicable.
+Execution authorization: developer “start ip1”, 2026-11-07 UTC, authorizes
+contract-only IP1 on clean baseline `c0dcaa1`. All four gates were Pending at entry.
+Developer “i approve ip1; commit changes”, 2026-11-07 UTC, subsequently confirms
+the revised two-helper contract/policies/test boundaries and approves Gate 1 and
+a local commit. IP2 execution remains unauthorized; Gates 2–4 remain Pending.
+Historical pending statements in scope records below describe their original
+decisions, not the current approval state.
+The earlier all-Not-started counts below are historical planning evidence.
 
 Planning validation on 2026-11-07 UTC: `git diff --check` passed; a read-only
 Python document check passed 47 local file/directory links and anchors across
@@ -223,7 +227,50 @@ for further changes to requirements, approach or approved boundaries. Preserve
 supplier approvals/evidence. New upstream work requires a scope decision and,
 if needed, separate owning plans and a coordinated execution index.
 
+### US-12-19-SC-03 — Retain two helpers; project-owned persistence, 2026-11-07 UTC
+
+- **Request and reason:** Developer “I only want to keep 1 and 2” selects
+  `assess_data` and `create_partitions`; subsequent “make the update” authorizes
+  revising the plan, contract, design references, evidence and checkpoint.
+- **Scope difference:** Remove proposed `write_partition_record` and
+  `read_partition_record`. Project code owns report/record JSON save/load,
+  saved-document validation and optional old/current source identity comparison.
+  Retain native assessment/splitting, supplied membership validation, source
+  identity and JSON-compatible layout/exact membership records. Helpers and
+  persistence are optional for simply running an experiment.
+- **Impact:** IP1-T2/T3 retain the selected adapters but exact policies/boundaries
+  remain unconfirmed. IP3-T3 now verifies project-owned JSON round-trip and
+  reconstruction through `create_partitions` supplied mode. IP4 repeats that
+  path on both wheels. Reconstruction produces a new supplied record; it does
+  not validate the entire old record or automatically reject changed content
+  under still-valid IDs. No task IDs or completed supplier evidence are removed.
+- **Verification revision:** Remove toolkit saved-file parser/version-restore
+  and filesystem conflict/path/symlink/partial-publication test obligations.
+  Retain JSON-compatible reports/records, layout/key mismatch and membership
+  failures, consumed-frame identity sensitivity, project JSON round-trip,
+  both installed matrices, M1 at executable gates, M1–6 at acceptance and all
+  shared checks. This explicitly narrows proposed API verification, not AC-02/03.
+  No executable tests exist to disable; initial document evidence remains historical.
+- **Plan and requirement revisions:** Current approach, boundaries, IP3-T3,
+  IP4-T2 and evidence below reflect the change. The contract, active data/interface
+  design and blueprint reflect the selected surface. GitHub #19, authoritative
+  criteria and immutable source snapshots need no change: none prescribes
+  dedicated persistence functions; saved-layout round-trip remains covered.
+- **Decision:** Approved scope direction/document revision by the quoted user
+  instructions, 2026-11-07 UTC. Exact policies, test boundaries, Gate 1 and
+  later implementation authorization remain Pending.
+- **Resume point:** Finish IP1 contract-policy/test-boundary review. T1 stays
+  Complete; T2–T4 remain In progress. All four gates stay Pending.
+- **Documentation verification:** See the renewed checks in
+  [IP1 evidence](../verification/us-12-19-ip1.md#two-helper-scope-revision).
+
 ## Proposed technical approach and public boundaries
+
+**IP1 approved contract:** [concrete contract and matrix](../data-assessment-and-splits.md),
+[evidence](../verification/us-12-19-ip1.md). SC-03 selects two helpers and
+project-owned persistence; exact signatures, fields, split composition, identity
+and validation policies confirmed at Gate 1 on 2026-11-07 UTC. These
+policies are not all independently required by AC-03.
 
 Use native pandas frames and plain dictionaries, with no new dataset wrapper,
 operation language or approval service. Proposed modules are
@@ -243,10 +290,9 @@ random states for each call. IP1 must also revisit the proposed stable-ID domain
 complete-coverage/nonempty policies, canonical frame hashing and persistence
 surface instead of treating them as acceptance-criterion requirements.
 
-Discussion items: (1) project code versus a thin helper composing two native
-splits; (2) minimal recorded membership/source identity and persistence ownership;
-(3) minimal checks for supplied membership using pandas operations; (4) native
-assessment outputs versus a small report/serialization adapter. These match the
+Selected: two native adapters, with project-owned persistence. Remaining
+discussion items: report/scalar schema, split settings, minimal recorded
+membership/source identity and supplied-membership policies. These refine the
 [design gap register](../specs/design/data-and-features.md#proposed-toolkit-integration-requiring-discussion).
 No custom statistical or splitting algorithm is currently justified.
 
@@ -279,27 +325,28 @@ No custom statistical or splitting algorithm is currently justified.
    preserve exact project membership and recorded protocol; explicitly distinguish
    membership validation from certifying scientific suitability or inferring
    group/time constraints.
-   Persist only the selected partition names; restoration must validate layout
-   against actual membership keys and reject inconsistencies. Do not infer a
+   Project records persist only the selected partition names; supplied mode
+   validates layout against actual membership keys and rejects inconsistencies. Do not infer a
    third partition, manufacture validation membership or silently reinterpret
    a saved layout. Two-way support prepares train/test data; it does not authorize
    downstream tuning/selection on final-test rows or add cross-validation execution
    to this issue's scope.
-4. Define a small public write/read-and-validate boundary in IP1. Persist reports
-   and membership in project-owned paths using an explicit root and unchanged
-   caller cwd; reject output conflicts and avoid completed partial records.
-   Revalidation against the actual source frame detects changed content/target,
-   unknown/overlapping members and malformed records. Specify canonical identity
-   inputs and dtype/order sensitivity, rather than hash only row IDs or accept an
-   unverified extraction report. Reuse an existing public seam where suitable;
-   do not extend private extraction utilities into a cross-module public contract.
-   No DVC ID is fabricated and no general workflow state store is introduced.
+4. Project code owns JSON save/load of reports and membership records, using
+   explicit paths and unchanged caller cwd. No toolkit read/write functions,
+   saved-file parser or filesystem guarantees remain under SC-03. A project
+   selects saved layout/ID/target/membership/protocol fields and passes them to
+   `create_partitions` supplied mode for current-frame membership validation and
+   reconstruction. It retains the original record for provenance and handles
+   saved-document/source checks itself. The helper returns actual consumed-frame
+   identity with reviewed dtype/order sensitivity; same IDs with changed values
+   produce new identity rather than an automatic restoration error. No private
+   extraction seam, DVC identity fabrication or workflow store is introduced.
 
 | Public boundary | Independently defined observations | Coverage limits / confirmation |
 |---|---|---|
 | Assessment function | Literal counts, summaries and rates; explicit JSON values and errors; input unchanged | Proposed; IP1 Gate 1 must confirm precise matrix before tests. No quality-rule or model acceptance claim. |
 | Partition creation | Both two-way and three-way layouts, exact names/membership, complete/disjoint sets, target alignment, reproducible seed settings, preserved supplied ordering and invalid-layout/input errors | Proposed; Gate 1 confirms native calls/rounding and separate fixed oracles. No fitted pipeline or protected holdout claim. |
-| Record write/read/revalidation | Selected layout and names survive round-trip; reject layout/key mismatch; actual input identity, changed-data/malformed/missing/conflicting output failures | Proposed; Gate 1 confirms schema and file/path failure matrix. No hostile modification authentication or crash recovery claim. |
+| Project JSON round-trip into supplied mode | Saved layout/ordered IDs/provenance survive project save/load; `create_partitions` rejects mismatched keys or invalid membership; returned identity reflects consumed data | Project owns parsing/file/old-source checks. No public record-reader/writer, restoration compatibility or publication guarantees. Exact helper policies need Gate 1 confirmation. |
 | Installed project | Project code uses all reviewed public functions with separate cwd and both normal wheel installations; independent expected outputs and import/runtime identities | Reuse installation infrastructure; new behavioral boundaries need Gate 1 confirmation. No assistant/notebook/DVC replay claim. |
 | Existing extraction/quality/strict APIs | Existing M1 regressions and positive/required-failure preparation examples | Reuse confirmed supplier boundaries; no signature or semantics changes. |
 
@@ -325,16 +372,18 @@ do not compute expected membership by calling the implementation under test.
 ## US-12 / Implementation Phase 1: Confirm assessment and partition contracts
 
 - **Outcome:** Concrete documented APIs and independently expected test matrix,
-  with source identity, persistence and supplied-protocol limits settled.
+  with source identity, project persistence ownership and supplied-protocol limits settled.
 - **Entry conditions:** Plan reviewed and IP1 explicitly authorized.
+- **Authorization:** Developer “start ip1”, 2026-11-07 UTC; baseline `c0dcaa1`,
+  clean branch `US-12-assessment-splits`. Scope synchronization already satisfied.
 - **Acceptance criteria advanced:** AC-02/03 design only.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-12-19-IP1-T1 | Not started | Refresh #19 and supplier discussions/evidence; reconcile two-way/three-way scope with active design and prepare issue synchronization for separately authorized publication; inspect exports/installation seams and update prerequisite references | IP1 authorization | Stable sources and supplier approvals verified; developer extension explicit; issue scope synchronized before dependent executable work | AC-02/03; SC-02 |
-| US-12-19-IP1-T2 | Not started | Create proposed `docs/data-assessment-and-splits.md`: map assessment outputs to native pandas calls/options; discuss whether any custom report adapter/API is needed; expand literal oracle | T1; custom integration discussion | Native semantics and exact matrix reviewable; any new helper/schema justified and developer decision recorded before contract approval | AC-02 |
-| US-12-19-IP1-T3 | Not started | Map both layouts to native scikit-learn calls: two-way single split and three-way composition; settle explicit layout selection, settings, membership keys and record validation; discuss identity/supplied-membership gaps; propose direct dependency/lock changes and inventories in `tests/packaging/check_installed.py` and `tests/installation/check_project.py` | T1; custom integration discussion | Native rounding/errors retained; fixed seeded and supplied-case oracles for each layout; no validation placeholder for two-way; approved minimum integration/dependency proposal; refine conditional tasks before code | AC-03; SC-02 |
-| US-12-19-IP1-T4 | Not started | Refine dependent tasks and public boundaries in this plan; record proposed `docs/verification/us-12-19-ip1.md` and update `CHECKPOINTS.md` | T2/T3 | All dependent choices resolved or affected tasks blocked; source/link/anchor/whitespace checks pass; Gate 1 ready | AC-02/03 |
+| US-12-19-IP1-T1 | Complete | Refresh #19 and supplier discussions/evidence; reconcile two-way/three-way scope with active design and inspect exports/installation seams | IP1 authorization | Stable complete [source refresh](sources/us-12-19-ip1-issues.md); supplier approvals/acceptance verified; existing SC-02 synchronization unchanged; see IP1 evidence | AC-02/03; SC-02 |
+| US-12-19-IP1-T2 | Complete | Refine selected `assess_data` contract, native pandas options, schema/scalar policies and literal oracle | T1; SC-03 helper selection | Report contract/policies and public matrix confirmed by developer IP1 approval | AC-02 |
+| US-12-19-IP1-T3 | Complete | Refine selected `create_partitions`, supplied/identity policies, project-owned JSON reconstruction, direct dependency and both inventories | T1; SC-03 helper selection | Both-layout/dependency/identity/coverage contracts confirmed; independent native 1.9.1 calls match fixed two-way/three-way oracles | AC-03; SC-02/03 |
+| US-12-19-IP1-T4 | Complete | Refine dependent tasks/boundaries; record `docs/verification/us-12-19-ip1.md` and update checkpoint | T2/T3 | Contract, evidence and checkpoint reconciled; document checks pass; Gate 1 approved | AC-02/03 |
 
 ### Verification and review evidence
 
@@ -343,7 +392,22 @@ fixture arithmetic, confirm existing file references, check local links/anchors
 and run `git diff --check`. TDD, builds, dependency synchronization and executable
 checks do not apply: this implementation phase changes no executable behavior.
 All executable checks are deferred to IP2/IP3 and finally IP4-T4, not claimed passed.
-**Actual results:** Pending. Public-boundary confirmation reference: Pending.
+**Actual results:** [IP1 report](../verification/us-12-19-ip1.md): source refresh,
+native API references, supplier/probe inspection and document checks. T1–T4
+complete; native scikit-learn 1.9.1 reference calls independently confirm both
+seeded oracles. Developer “i approve ip1; commit changes” confirms contracts,
+policies and public boundaries, 2026-11-07 UTC. No toolkit execution evidence.
+
+Proposed dependent refinement: IP2-T1/T2 use the draft's explicit report and
+dtype/finite-value matrix. IP3-T1 uses the direct `scikit-learn>=1.9.1,<1.10`
+declaration, both independent inventories and effective native calls;
+IP3-T2 uses reviewed membership/protocol policies; IP3-T3 uses project-owned
+JSON round-trip and supplied-mode reconstruction with consumed-frame identity.
+IP4-T1/T2 repeat the draft's critical families independently on both wheel paths.
+Project code writes assessment and partition JSON; only the two selected helpers
+are proposed public exports. All these
+refinements are confirmed at Gate 1, retain task IDs and existing
+M1/M1–6/shared/installed obligations, and authorize no later implementation phase.
 
 ### Developer approval gate
 
@@ -351,13 +415,19 @@ All executable checks are deferred to IP2/IP3 and finally IP4-T4, not claimed pa
   policies, identity/record semantics and independent test boundaries confirmed;
   any new toolkit-specific support has a recorded developer discussion/decision,
   native library reuse is explicit, and dependency/inventory changes are reviewed.
-- **Evidence presented:** Pending IP1 report and contract diff.
-- **Remaining limitations:** No executable assessment or partitions yet.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
-- **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending explicit Gate 1 approval and IP2 authorization.
-  Stop here; plan approval alone does not permit executable tests.
+- **Evidence presented:** [IP1 report](../verification/us-12-19-ip1.md) and
+  [approved contract](../data-assessment-and-splits.md); T1–T4 complete with
+  document checks and independent native split-oracle confirmation.
+- **Remaining limitations:** No toolkit executable behavior or installed evidence.
+  Native Parquet identity stability and full type/failure matrix await IP3.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer “i approve ip1; commit changes”,
+  2026-11-07 UTC; confirms two-helper contracts/policies/test boundaries,
+  native reuse and dependency/inventory approach, and authorizes a local commit.
+- **Requested changes and resolution:** SC-03 selects two helpers; documentation
+  revised; exact contract/test-boundary confirmation received in the approval above.
+- **Progression authorized:** Local IP1 commit only. Await explicit IP2 execution
+  authorization; do not begin executable implementation or tests.
 
 ## US-12 / Implementation Phase 2: Implement descriptive assessment
 
@@ -403,7 +473,8 @@ Other milestone/tooling exclusions retain their owning obligations below.
 ## US-12 / Implementation Phase 3: Implement recorded and validated partitions
 
 - **Outcome:** Seeded and supplied partitions retain exact usable membership and
-  identity, with public record round-trip/revalidation and clear invalid-input errors.
+  identity, with project JSON round-trip/supplied-mode reconstruction and clear
+  invalid-input errors through `create_partitions`.
 - **Entry conditions:** Gate 2 approved and IP3 authorized; Gate 1 split/identity
   choices remain valid. Reopen contract review before code if they do not.
 - **Acceptance criteria advanced:** AC-03.
@@ -412,7 +483,7 @@ Other milestone/tooling exclusions retain their owning obligations below.
 |---|---|---|---|---|---|
 | US-12-19-IP3-T1 | Not started | Add reviewed public tests and approved integration surface (draft paths `tests/integration/test_splitting.py`, `src/agentic_ml/splitting/` remain conditional); declare scikit-learn runtime dependency, intentionally update lock and both inventories; implement native seeded generation for each layout through separate red–green slices | Gate 2; IP1 dependency/integration decisions; synchronized issue scope | Two-way and three-way fixed seed oracles, effective settings, exact names/alignment; no validation placeholder for two-way; incompatible layout/settings fail; direct dependency/inventories agree | AC-03; SC-02 |
 | US-12-19-IP3-T2 | Not started | Extend reviewed public boundary/tests for supplied two-way and three-way time/group membership and each invalid membership/layout mutation | T1 | Exact supplied rows/order/protocol retained in either layout; overlaps/duplicates/unknown IDs/reviewed coverage failures and missing/extra/wrong names rejected; no automatic time/group algorithm implied | AC-03; SC-02 |
-| US-12-19-IP3-T3 | Not started | Add reviewed record write/read/revalidation for both layouts and public filesystem cases; update guide | T1/T2 | Strict JSON round-trip preserves layout and exact selected memberships; mismatched layout/keys, changed source/target, malformed/missing/conflicting records fail; no partial completed record or caller mutation | AC-03; SC-02 |
+| US-12-19-IP3-T3 | Not started | Verify JSON-compatible records and consumed-frame identity; add project-owned JSON round-trip and supplied-mode reconstruction for both layouts; update guide; toolkit read/write/filesystem work removed under SC-03 | T1/T2 | Saved layout/ordered membership/provenance survive; supplied mode reconstructs exact rows and rejects layout/key/membership mismatch; changed values/target/dtypes/order change returned identity; project owns file/old-record checks | AC-03; SC-02/03 |
 | US-12-19-IP3-T4 | Not started | Compose project extraction and existing `run_validated_step` with assessment/splitting; add sentinel cases in public tests; refactor after green; run M1/shared checks; record proposed `docs/verification/us-12-19-ip3.md` and checkpoint | T1–T3 | Required failure never reaches preparation; valid/advisory/no-check behavior preserves #15 semantics; report and memberships refer to consumed frame; Gate 3 evidence ready | AC-02/03; regression AC-05 |
 
 ### Verification and review evidence
@@ -421,12 +492,12 @@ Focused command: `uv run --locked pytest tests/integration/test_splitting.py -k 
 short serial TDD rationale as IP2. Assert independent literal row/target outcomes
 and error classes/context through reviewed public calls. Repeated seeds alone
 are insufficient; retain the fixed oracle and saved memberships. New product
-cases declare `milestone_1`. Changed modules: proposed split package, tests and
-reviewed assessment persistence surface if selected at Gate 1.
+cases declare `milestone_1`. Changed modules: selected split package and public
+tests/project fixtures; no assessment or partition persistence API.
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Seeded/supplied/record matrix | Reviewed public integration tests with isolated project paths | Literal memberships; JSON/source integrity and unchanged inputs; each negative case fails explicitly | Pending |
+| Seeded/supplied/record matrix | Public `create_partitions` cases and project JSON round-trip with isolated project paths | Literal memberships, JSON-compatible records, source-identity sensitivity and unchanged inputs; invalid supplied membership fails; project persistence is outside toolkit guarantees | Pending |
 | Required-check composition | Public `run_validated_step`, project sentinel and independent consumed values | Required failure blocks; accepted quality semantics preserved | Pending |
 | Current milestone | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass, actual counts/skips recorded | Pending |
 | Shared checks | Commands below | Pass without unintended lock changes | Pending |
@@ -438,7 +509,7 @@ stories, not deferred #19 tests.
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete; both seeded/supplied layouts, persisted
-  layout validation, AC-03 public behavior and regression
+  layout round-trip through project code and supplied-mode validation, AC-03 public behavior and regression
   composition verified; M1/shared checks pass; identity limits documented.
 - **Evidence presented:** Pending IP3 report and implementation diff.
 - **Remaining limitations:** Installed/final acceptance evidence pending IP4.
@@ -458,7 +529,7 @@ stories, not deferred #19 tests.
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
 | US-12-19-IP4-T1 | Not started | Add proposed `tests/installation/{assessment_splits_project,check_assessment_splits,verify_assessment_splits}.py`; reuse `verification_support.Invocation` and normal distribution verifier | Gate 3 | Separate project uses only installed public interfaces, declared runtime dependencies and its own code; direct and rebuilt installs retain independent origins/identities | AC-02/03 |
-| US-12-19-IP4-T2 | Not started | Add M1 case in `tests/integration/test_distribution_verification.py` invoking probe internally; TDD installed assessment, seeded/supplied two-way and three-way membership (including time/group cases), record restore and invalid layout/membership cases | T1 | Each wheel passes both layouts and exact positive/negative matrix from unrelated cwd using isolated Python; import origins, resources, CLI version, runtime inventory and cleanup/evidence checked | AC-02/03; SC-02 |
+| US-12-19-IP4-T2 | Not started | Add M1 case in `tests/integration/test_distribution_verification.py`; TDD both installed helpers, seeded/supplied two-way/three-way time/group cases, project JSON round-trip/supplied reconstruction and invalid layout/membership cases | T1 | Each wheel exercises both retained helpers and revised positive/negative matrix from unrelated cwd using isolated Python; source identity, import origins, resources, CLI version, runtime inventory and cleanup/evidence checked; no toolkit filesystem/restoration claims | AC-02/03; SC-02/03 |
 | US-12-19-IP4-T3 | Not started | Finish guide and README link with explicit two-way/three-way examples and saved layouts; update active design status/traceability without rewriting history | T2 | Runnable examples show optional validation partition and both native split patterns; record schema/downstream handoff documented; no tuning on final-test data, fitting/DVC/assistant acceptance claim | AC-02/03; SC-02 |
 | US-12-19-IP4-T4 | Not started | Refresh #19, reconcile criteria/deferrals; run M1, final M1–6/shared checks and document validation; record proposed `docs/verification/us-12-19-ip4.md`, final table and checkpoint | T1–T3 | Final identities, actual counts/skips/platforms and all required #19 evidence reconciled before final gate; no executable change after evidence without renewal | AC-02/03 |
 
@@ -559,13 +630,14 @@ records. Update `CHECKPOINTS.md` at completions, gates, blockers and handoff.
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
 | US-12-AC-02 (#19) | IP1-T2/T4; IP2-T1–T3; IP4-T1–T4 | Reviewed literal distribution/missingness/target matrix, both installed paths, final M1–6 | Pending |
-| US-12-AC-03 (#19) | IP1-T3/T4; IP3-T1–T4; IP4-T1–T4 | Fixed seeded oracle; explicit time/group membership; invalid membership/source/record cases, both installed paths | Pending |
+| US-12-AC-03 (#19) | IP1-T3/T4; IP3-T1–T4; IP4-T1–T4 | Fixed seeded oracle; supplied time/group membership; invalid layout/membership, consumed-frame identity and project JSON round-trip/reconstruction, both installed paths | Pending |
 | Developer extension US-12-19-SC-02: two-way and three-way layouts | IP1-T1/T3/T4; IP3-T1–T3; IP4-T1–T4 | Both layouts generated and supplied, no two-way validation placeholder, recorded layout round-trip/mismatch errors, both installed paths | Pending |
 | US-12-AC-01/05 (#15) | Existing supplier plan; IP3-T4/IP4-T2 reuse regressions | Supplier acceptance retained; new composition evidence pending | Accepted supplier scope; no reopening or new acceptance claimed |
 | US-12-AC-04 | Explicit future activation required | None claimed | Deferred |
 
-- **Remaining work:** All #19 implementation tasks are Not started; no full
-  experiment, DVC reproduction or assistant acceptance is implied.
+- **Remaining work:** IP1-T1–T4 Complete and Gate 1 approved; IP2–IP4 Not started.
+  Await IP2 authorization. No full experiment, DVC reproduction or assistant
+  acceptance is implied.
 - **Partial prerequisite delivery:** No new supplier slices; #19 consumes
   accepted #14/#15 and supplies future consumers with reports and split records.
 - **Final verification:** Pending IP4-T4; required before acceptance.

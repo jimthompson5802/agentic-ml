@@ -22,10 +22,13 @@ Validate supported estimator parameters and prediction compatibility through the
 toolkit path; this cannot constrain arbitrary code outside that path.
 
 Assessment and partitioning reuse native pandas descriptive outputs and
-scikit-learn split APIs. A new `assess_data`, `create_partitions` or record
-write/read interface is not yet an accepted public contract. Discuss any
-toolkit-specific gap and the smallest needed integration with the developer
-before approving a wrapper, schema or persistence API. See
+scikit-learn split APIs. Developer selected `assess_data` and `create_partitions`
+as the only new helpers under US-12-19-SC-03. Developer “i approve ip1; commit
+changes”, 2026-11-07 UTC, confirmed exact contracts/test boundaries at Gate 1;
+implementation still requires IP2 authorization. Project code owns JSON save/load and any
+saved-source comparison. No toolkit record read/write interface is included.
+Supplied mode validates selected loaded layout/membership against the current
+frame, without providing a saved-file parser or full restoration guarantee. See
 [native capability reuse and open decisions](data-and-features.md#reuse-existing-assessment-and-partition-capabilities).
 
 ## Existing public interfaces
