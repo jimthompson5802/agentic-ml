@@ -2,7 +2,7 @@
 
 Last updated: 2026-11-07 (UTC)
 
-## Current US-11 accepted; PR #60 open — 2026-11-07 UTC
+## Current US-11 accepted and squash-merged — 2026-11-07 UTC
 
 Branch `US-11-local-data-extraction`, baseline `0d74c21`; clean at phase entry.
 Developer “start us-11 ip3” authorized IP3 after approved/committed IP2.
@@ -47,9 +47,19 @@ Updated the active overview to identify the implemented API, all phase approvals
 and whole-story acceptance, with links to the contract and acceptance record.
 Historical evidence preserved. Documentation-only status correction; link/anchor,
 status and whitespace checks pass; no executable behavior requires TDD/test reruns.
-Working-tree changes: overview, owning plan and this checkpoint. Commit/push the
-requested correction and resolve its thread. **Next action:** developer PR review;
-no merge or next-story work authorized.
+Correction committed/pushed as `0fe1af0`; requested thread resolved and verified.
+Developer “squash merge PR #60” authorized merging. Latest-head hosted CI
+[run 42369843959](https://github.com/jimthompson5802/agentic-ml/actions/runs/42369843959)
+passed (11m29s). Squash-merged PR #60 into main as
+`5772fe5888751dfff05638a98f8be216e08e28c5` at 2026-11-07 12:01:58 UTC;
+verified PR MERGED and issue #14 CLOSED. Branches retained. Raw CI log and merge
+metadata are in the IP3 records directory. No additional local tests run.
+Developer “switch to main; pull from origin; commit changes;” authorized local
+synchronization and the merge-record commit. Switched to `main`, fast-forwarded
+from origin to `5772fe5`, and restored this checkpoint update; existing feature
+branch retained. Committing this documentation-only record with no push requested.
+Whitespace check passed; runtime evidence remains applicable. **Next action:**
+await developer direction; no new story authorized.
 
 ## Current MVP scope revision — Accepted — 2026-11-07 UTC
 
