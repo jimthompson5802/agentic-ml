@@ -1,13 +1,15 @@
 # Acceptance Traceability
 
 Active design 0.15; criteria are in [user stories](../user-stories.md).
-This index covers all **222** local criteria: **204 original IDs and 18 new**.
+This index covers all **228** local criteria: **204 original IDs, 18 US-39/40 criteria,
+and six deferred US-41 criteria**.
 A supporting contract is design coverage, not executable verification/acceptance.
 Scope and supporting design were approved at Gates 1–3.
 
 ## Coverage status and verification boundaries
 
-Accepted M0/US-01/02/03/05 and US-35/36 retain historical owning-plan evidence.
+Accepted M0/US-01/02/03/05, US-11, US-12 AC-01/02/03/05 and US-35/36
+retain owning-plan evidence. US-12-AC-04 remains deferred.
 US-05-AC-05 training integration and US-39's default/basic path remain new work;
 do not infer training support from accepted metadata or storage setup.
 
@@ -61,7 +63,7 @@ requirements or claims that their stronger guarantees were verified.
 | [US-05-AC-02](../user-stories.md#us-05-ac-02) | M1; accepted slice | [Contract](software-blueprint.md#semantic-validation) | Metadata/candidate checks; future training integration remains open |
 | [US-05-AC-03](../user-stories.md#us-05-ac-03) | M1; accepted slice | [Contract](software-blueprint.md#semantic-validation) | Metadata/candidate checks; future training integration remains open |
 | [US-05-AC-04](../user-stories.md#us-05-ac-04) | M1; accepted slice | [Contract](software-blueprint.md#semantic-validation) | Metadata/candidate checks; future training integration remains open |
-| [US-05-AC-05](../user-stories.md#us-05-ac-05) | M1; accepted slice | [Contract](software-blueprint.md#semantic-validation) | Metadata/candidate checks; future training integration remains open; supported training-path integration remains pending |
+| [US-05-AC-05](../user-stories.md#us-05-ac-05) | M1; pending training integration | [Contract](software-blueprint.md#semantic-validation) | Metadata/candidate APIs accepted; supported training-path integration remains pending |
 | [US-09-AC-01](../user-stories.md#us-09-ac-01) | M2; planned | [Contract](interfaces-and-configuration.md#paths-customization-and-notebooks) | Fresh kernel, explicit artifacts and saved diagnostics |
 | [US-09-AC-02](../user-stories.md#us-09-ac-02) | M2; planned | [Contract](interfaces-and-configuration.md#paths-customization-and-notebooks) | Fresh kernel, explicit artifacts and saved diagnostics |
 | [US-09-AC-03](../user-stories.md#us-09-ac-03) | M2; planned | [Contract](interfaces-and-configuration.md#paths-customization-and-notebooks) | Fresh kernel, explicit artifacts and saved diagnostics |
@@ -72,13 +74,13 @@ requirements or claims that their stronger guarantees were verified.
 | [US-10-AC-03](../user-stories.md#us-10-ac-03) | M1; planned | [Contract](execution-and-governance.md#local-execution-and-limits) | Local status/logs, trial cap and available evidence |
 | [US-10-AC-04](../user-stories.md#us-10-ac-04) | M1; planned | [Contract](execution-and-governance.md#local-execution-and-limits) | Local status/logs, trial cap and available evidence |
 | [US-10-AC-05](../user-stories.md#us-10-ac-05) | M1; planned | [Contract](execution-and-governance.md#local-execution-and-limits) | Local status/logs, trial cap and available evidence |
-| [US-11-AC-01](../user-stories.md#us-11-ac-01) | M1; planned | [Contract](data-and-features.md#local-extraction-and-quality) | Local file operations, settings/identity and explicit failures |
-| [US-11-AC-02](../user-stories.md#us-11-ac-02) | M1; planned | [Contract](data-and-features.md#local-extraction-and-quality) | Local file operations, settings/identity and explicit failures |
-| [US-11-AC-03](../user-stories.md#us-11-ac-03) | M1; planned | [Contract](data-and-features.md#local-extraction-and-quality) | Local file operations, settings/identity and explicit failures |
-| [US-11-AC-04](../user-stories.md#us-11-ac-04) | M1; planned | [Contract](data-and-features.md#local-extraction-and-quality) | Local file operations, settings/identity and explicit failures |
-| [US-11-AC-05](../user-stories.md#us-11-ac-05) | M1; planned | [Contract](data-and-features.md#local-extraction-and-quality) | Local file operations, settings/identity and explicit failures |
-| [US-12-AC-01](../user-stories.md#us-12-ac-01) | M1; planned | [Contract](data-and-features.md#reproducible-partitions) | Quality checks, recorded disjoint partitions and train-only scope |
-| [US-12-AC-05](../user-stories.md#us-12-ac-05) | M1; planned | [Contract](data-and-features.md#reproducible-partitions) | Quality checks, recorded disjoint partitions and train-only scope |
+| [US-11-AC-01](../user-stories.md#us-11-ac-01) | M1; accepted 2026-11-07 | [Contract](../../extraction.md) | Native CSV/Parquet and project selection/filter/join outputs; both installed paths |
+| [US-11-AC-02](../user-stories.md#us-11-ac-02) | M1; accepted 2026-11-07 | [Contract](../../extraction.md) | Source schemas, rows, bytes, reader settings and identities; both installed paths |
+| [US-11-AC-03](../user-stories.md#us-11-ac-03) | M1; accepted 2026-11-07 | [Contract](../../extraction.md) | Project callback executes native operations with recorded settings; no arbitrary-code isolation |
+| [US-11-AC-04](../user-stories.md#us-11-ac-04) | M1; accepted 2026-11-07 | [Contract](../../extraction.md) | Source/code/output checksums, settings and timing; real DVC links remain US-13 work |
+| [US-11-AC-05](../user-stories.md#us-11-ac-05) | M1; accepted 2026-11-07 | [Contract](../../extraction.md) | Missing/invalid inputs and callback/publication failures; completion is not a quality-pass claim |
+| [US-12-AC-01](../user-stories.md#us-12-ac-01) | M1; accepted 2026-11-07 | [Contract](../../data-quality.md) | Seven rule families with measurements and required/advisory failures; both installed paths |
+| [US-12-AC-05](../user-stories.md#us-12-ac-05) | M1; accepted 2026-11-07 | [Contract](../../data-quality.md) | Required failure blocks supplied operation; advisory/no-check permits it; future runner integration pending |
 | [US-13-AC-01](../user-stories.md#us-13-ac-01) | M1; planned | [Contract](data-and-features.md#dvc-data-and-fitted-artifacts) | DVC versions/restore identity and missing-corrupt checks |
 | [US-13-AC-02](../user-stories.md#us-13-ac-02) | M1; planned | [Contract](data-and-features.md#dvc-data-and-fitted-artifacts) | DVC versions/restore identity and missing-corrupt checks |
 | [US-13-AC-03](../user-stories.md#us-13-ac-03) | M2; planned | [Contract](data-and-features.md#dvc-data-and-fitted-artifacts) | DVC versions/restore identity and missing-corrupt checks |
@@ -92,8 +94,8 @@ requirements or claims that their stronger guarantees were verified.
 | [US-27-AC-02](../user-stories.md#us-27-ac-02) | M2; planned | [Contract](execution-and-governance.md#native-dvc-pipeline-and-reproduction) | Native stages, cache invalidation/replay and output checks |
 | [US-27-AC-03](../user-stories.md#us-27-ac-03) | M2; planned | [Contract](execution-and-governance.md#native-dvc-pipeline-and-reproduction) | Native stages, cache invalidation/replay and output checks |
 | [US-27-AC-04](../user-stories.md#us-27-ac-04) | M2; planned | [Contract](execution-and-governance.md#native-dvc-pipeline-and-reproduction) | Native stages, cache invalidation/replay and output checks |
-| [US-12-AC-02](../user-stories.md#us-12-ac-02) | M1; IP2/IP3 implemented, IP4 verification; accepted 2026-11-08 | [Contract](data-and-features.md#reproducible-partitions) | Quality checks, recorded disjoint partitions and train-only scope |
-| [US-12-AC-03](../user-stories.md#us-12-ac-03) | M1; IP2/IP3 implemented, IP4 verification; accepted 2026-11-08 | [Contract](data-and-features.md#reproducible-partitions) | Quality checks, recorded disjoint partitions and train-only scope |
+| [US-12-AC-02](../user-stories.md#us-12-ac-02) | M1; accepted 2026-11-08 | [Contract](../../data-assessment-and-splits.md#assessment-boundary) | Native summaries/missingness/target balance and JSON scalars; both installed paths; no quality judgment |
+| [US-12-AC-03](../user-stories.md#us-12-ac-03) | M1; accepted 2026-11-08 | [Contract](../../data-assessment-and-splits.md#partition-boundary) | Seeded/supplied two-way/three-way membership, disjointness, source identity and project JSON reconstruction; protocols declared only; no fitting guarantee |
 | [US-12-AC-04](../user-stories.md#us-12-ac-04) | Roadmap; deferred | [Contract](architecture-decisions.md#deferred-assurance-register) | Preserved original requirement; explicit future activation/evidence needed |
 | [US-14-AC-01](../user-stories.md#us-14-ac-01) | M1; planned | [Contract](data-and-features.md#authored-feature-pipelines) | Authored fit/transform and consistent feature comparisons |
 | [US-14-AC-02](../user-stories.md#us-14-ac-02) | M1; planned | [Contract](data-and-features.md#authored-feature-pipelines) | Authored fit/transform and consistent feature comparisons |
@@ -244,6 +246,12 @@ requirements or claims that their stronger guarantees were verified.
 | [US-40-AC-05](../user-stories.md#us-40-ac-05) | M2; planned | [Contract](execution-and-governance.md#native-dvc-pipeline-and-reproduction) | Committed replay, native cache behavior, assistant and tolerance checks |
 | [US-40-AC-06](../user-stories.md#us-40-ac-06) | M2; planned | [Contract](execution-and-governance.md#native-dvc-pipeline-and-reproduction) | Committed replay, native cache behavior, assistant and tolerance checks |
 | [US-40-AC-07](../user-stories.md#us-40-ac-07) | M2; planned | [Contract](execution-and-governance.md#native-dvc-pipeline-and-reproduction) | Committed replay, native cache behavior, assistant and tolerance checks |
+| [US-41-AC-01](../user-stories.md#us-41-ac-01) | M99; deferred, local-only | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Deferred wheel bootstrap in a separate project; no package-index publication |
+| [US-41-AC-02](../user-stories.md#us-41-ac-02) | M99; deferred, local-only | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Deferred CLI/API distribution-origin initialization and compatible reruns; current initializer requires a Git pin |
+| [US-41-AC-03](../user-stories.md#us-41-ac-03) | M99; deferred, local-only | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Deferred version/locked-artifact identity consistency checks |
+| [US-41-AC-04](../user-stories.md#us-41-ac-04) | M99; deferred, local-only | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Deferred pre-mutation identity failures and distribution dependency preservation |
+| [US-41-AC-05](../user-stories.md#us-41-ac-05) | M99; deferred, local-only | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Deferred explicit distribution upgrades and environment-identity updates |
+| [US-41-AC-06](../user-stories.md#us-41-ac-06) | M99; deferred, local-only | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Deferred direct/rebuilt-wheel initialization and identity-failure evidence; preserve Git installation |
 
 ## Required scenario families
 

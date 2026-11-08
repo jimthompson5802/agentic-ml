@@ -6,15 +6,21 @@ Paths below distinguish current resources from illustrative future experiment fi
 ## Toolkit product repository
 
 Current reusable package is `src/agentic_ml/`, including `initialization/`,
-`planning/`, `approvals/`, `validation/` and `cli/`.
+`planning/`, `approvals/`, `validation/`, `extraction/`, `data_quality/`,
+`data_assessment/`, `splitting/` and `cli/`.
 Templates, runtime guidance, schemas and registry metadata are package resources
 under that same package. Preserve their locations; no resource move or new
 root-level runtime/development instruction loading is authorized.
 
-Docs and tests stay contributor-owned. Future data/experiment/tracking helpers
+Docs and tests stay contributor-owned. Future experiment/tracking helpers
 belong in the installable package when reusable; exact module seams are reviewed
 in owning story plans. A general orchestrator/framework/agent directory tree is
 not required just to match the archived platform layout.
+
+Current extraction publishes a project-owned directory containing `dataset.csv`
+or `dataset.parquet` plus `extraction.json`. Quality/assessment/partition APIs
+return plain dictionaries; project code selects paths and saves/loads reports or
+split records. These files do not imply current DVC stages or MLflow run logging.
 
 ## Separate experiment project
 

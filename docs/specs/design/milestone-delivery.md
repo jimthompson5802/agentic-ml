@@ -2,7 +2,8 @@
 
 Active design 0.15. [Stories](../user-stories.md) define required outcomes;
 [migration](../../plans/mvp-scope-story-migration.md) records old assignments and
-retained/deferred clauses. GitHub synchronization remains a separate gated step.
+retained/deferred clauses. The revised MVP issues were synchronized through
+PR #57's publication workflow; future scope changes still require synchronization.
 
 ## Delivery outcomes and exits
 
@@ -12,7 +13,7 @@ retained/deferred clauses. GitHub synchronization remains a separate gated step.
 | M1 complete one experiment | Separate installed project completes local classification extraction, quality/split checks, training-only features, baseline, bounded tuning, selected-model final testing, MLflow results and actual native DVC stage execution. US-39-AC-01–08 demonstrate scientist-directed assistant use and one validation-based revision. |
 | M2 validate usability/reproduction | Add regression, compatible project components, fresh-kernel saved notebook, restored fitted state and clean committed-project DVC reproduction including reuse/invalidation/missing-corrupt failures. US-39-AC-09–11 and US-40-AC-01–07 complete ASW-07/08. MVP ends here. |
 | M50 | Accepted US-35/36 tooling plus US-37/38 local backlog; independent verification obligations preserved. |
-| M99 | US-34 remains deferred; roadmap platform scope is not silently added here. |
+| M99 | US-34 contribution/review checks and US-41 distribution-based initialization remain deferred. US-41 is local-only pending GitHub publication; roadmap platform scope is not silently added here. |
 
 M1 advances US-18-AC-01 classification; M2 regression completes the criterion.
 Repeated story slices have unique acceptance IDs. Feature comparison/model
@@ -22,7 +23,8 @@ training move into the first useful experiment rather than waiting for old M2/M3
 
 1. Reuse accepted installation/setup/planning/validation; settle runnable basic
    path compatibility under US-39-AC-01/02 without breaking strict APIs.
-2. Establish local extraction, quality, split and DVC data metadata: US-11/12/13.
+2. Reuse accepted US-11 extraction and US-12 quality/assessment/partitions; add
+   DVC data metadata under US-13 and integrated use under US-39.
 3. Fit native pipelines/baselines and compare authored features: US-14/15/18.
 4. Add validated bounded search, evaluation/final-test step and MLflow links:
    US-10/20/21/24/26, with staged US-05 training integration.
