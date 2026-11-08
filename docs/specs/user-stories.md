@@ -23,7 +23,7 @@ Accepted APIs and historical evidence retain their original contracts.
 | **1. Complete one experiment** | One local classification experiment: extraction, quality/splits, features, baseline, bounded tuning, final evaluation, MLflow records and native DVC stages; scientist-directed assistant demonstration. | Accepted US-01/02/03/05; M1 slices of US-10–15/18/20/21/24/26/27; US-39 AC-01–08 |
 | **2. Validate usability and reproduction** | Regression, custom components, saved notebooks, fitted-state restoration and clean committed-project reproduction with DVC cache/invalidation and assistant evidence. **MVP ends here.** | US-09/16; M2 slices of US-13/15/18/21/27/39; US-40 |
 | **Uncommitted roadmap** | Deferred platform capabilities without dates or delivery order; historical M3–6 are migration context. | Deferred criteria and displaced clauses below |
-| **50. Improve the technical environment** | Preserve accepted tooling and supporting backlog. | US-35–38; unchanged |
+| **50. Improve the technical environment** | Preserve accepted tooling and supporting backlog. | US-35–38; US-41 |
 | **99. Future enhancements** | Existing deferred contribution/review story. | US-34; unchanged |
 
 ## MVP contracts and history
@@ -796,6 +796,21 @@ Acceptance criteria:
 
 Notes: This story reduces peak usage within one invocation; US-35 reduces retained usage after completion. Coordinate their cleanup and retention behavior. The initialization and planning drivers currently invoke distribution verification and then consume its installed environments, so cleanup must follow the complete consumer lifecycle rather than occur immediately after an intermediate probe.
 
+### US-41: Initialize experiments from a package distribution
+
+As a data scientist, I want to install the toolkit from a Python package distribution and initialize my experiment repository so that setup does not require a Git source dependency.
+
+**Assigned to Milestone 50.** This extends US-01/US-02 installation identity beyond the current full-SHA Git contract; US-33 supplies distribution builds. Package-index publication and registry hosting are outside this story.
+
+Acceptance criteria:
+
+- <a id="us-41-ac-01"></a> **US-41-AC-01:** Documented bootstrap instructions install a toolkit wheel distribution as a normal dependency in a separate Git/Python experiment project without requiring a Git source dependency or toolkit checkout.
+- <a id="us-41-ac-02"></a> **US-41-AC-02:** Initialization through the installed CLI and public API accepts the supported distribution installation and provides the US-02 scaffolding, dependency synchronization and local storage behavior while preserving compatible existing files.
+- <a id="us-41-ac-03"></a> **US-41-AC-03:** The project dependency declaration, lockfile and installed distribution are checked for consistent package identity; the recorded identity includes the package version and locked artifact integrity information rather than requiring Git-origin metadata.
+- <a id="us-41-ac-04"></a> **US-41-AC-04:** Missing, inconsistent or unsupported package identity produces an actionable failure before project changes; initialization preserves the selected distribution dependency and does not silently replace it with a Git source or another artifact.
+- <a id="us-41-ac-05"></a> **US-41-AC-05:** A documented explicit distribution upgrade updates the dependency declaration, lockfile and recorded environment identity; ordinary initialization or locked synchronization does not silently upgrade the toolkit.
+- <a id="us-41-ac-06"></a> **US-41-AC-06:** Installed-project verification covers initialization and compatible reruns using both a directly built wheel and a wheel genuinely rebuilt from the source distribution, plus identity failure cases. Existing full-SHA Git installation and initialization remain supported.
+
 ## Milestone 99: Future enhancements
 
 This milestone groups enhancements that are not critical to current functionality. Inclusion records deferred scope rather than a commitment to delivery order. Unlike Milestones 0–6, this milestone is a backlog of future enhancements; stories can move into a delivery milestone when prioritized, preserving their acceptance criterion IDs.
@@ -809,21 +824,6 @@ Acceptance criteria:
 - <a id="us-34-ac-01"></a> **US-34-AC-01:** Contribution instructions describe how to prepare and submit changes and link to the development setup and verification commands.
 - <a id="us-34-ac-02"></a> **US-34-AC-02:** Required CI checks and review expectations are documented, including the conditions for merging a pull request.
 - <a id="us-34-ac-03"></a> **US-34-AC-03:** Branch protection enforces the documented required checks and review expectations on the default branch.
-
-### US-41: Initialize experiments from a package distribution
-
-As a data scientist, I want to install the toolkit from a Python package distribution and initialize my experiment repository so that setup does not require a Git source dependency.
-
-**Deferred to Milestone 99.** This extends US-01/US-02 installation identity beyond the current full-SHA Git contract; US-33 supplies distribution builds. Package-index publication and registry hosting are outside this story.
-
-Acceptance criteria:
-
-- <a id="us-41-ac-01"></a> **US-41-AC-01:** Documented bootstrap instructions install a toolkit wheel distribution as a normal dependency in a separate Git/Python experiment project without requiring a Git source dependency or toolkit checkout.
-- <a id="us-41-ac-02"></a> **US-41-AC-02:** Initialization through the installed CLI and public API accepts the supported distribution installation and provides the US-02 scaffolding, dependency synchronization and local storage behavior while preserving compatible existing files.
-- <a id="us-41-ac-03"></a> **US-41-AC-03:** The project dependency declaration, lockfile and installed distribution are checked for consistent package identity; the recorded identity includes the package version and locked artifact integrity information rather than requiring Git-origin metadata.
-- <a id="us-41-ac-04"></a> **US-41-AC-04:** Missing, inconsistent or unsupported package identity produces an actionable failure before project changes; initialization preserves the selected distribution dependency and does not silently replace it with a Git source or another artifact.
-- <a id="us-41-ac-05"></a> **US-41-AC-05:** A documented explicit distribution upgrade updates the dependency declaration, lockfile and recorded environment identity; ordinary initialization or locked synchronization does not silently upgrade the toolkit.
-- <a id="us-41-ac-06"></a> **US-41-AC-06:** Installed-project verification covers initialization and compatible reruns using both a directly built wheel and a wheel genuinely rebuilt from the source distribution, plus identity failure cases. Existing full-SHA Git installation and initialization remain supported.
 
 ## Historical link aliases
 

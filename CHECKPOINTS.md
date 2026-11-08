@@ -22,10 +22,17 @@ checked. Developer then authorized committing and pushing this checkpoint.
 product tests do not apply. Hosted verification of the CI change is not claimed.
 **Next action:** await developer direction.
 
+Developer requested moving US-41 from Milestone 99 to Milestone 50 in
+`docs/specs/user-stories.md`. The story placement, milestone assignment and
+delivery table now reflect M50; all six acceptance criteria are unchanged.
+Developer authorized committing and pushing this documentation change.
+No implementation or GitHub issue publication is authorized. Verification: placement/criterion preservation checks and
+`git diff --check` passed. TDD and executable tests do not apply.
+
 The design now records accepted US-11 extraction and US-12 quality/assessment/
 partitions, exact split composition and project-owned persistence/identity checks.
 The criterion index contains all 228 local IDs, with US-05-AC-05 integration pending
-and US-41 deferred to M99. M1/M2 outcomes, strict APIs and historical evidence are
+and US-41 now assigned to M50. M1/M2 outcomes, strict APIs and historical evidence are
 preserved. Verification is documentation-only: criterion set/uniqueness, 43 public
 exports across eight module surfaces, relative links/anchors, manual diff/source
 review and `git diff --check`. No executable behavior changed; TDD/product tests
@@ -75,13 +82,14 @@ committed-project reproduction; M0 accepted, M50 ongoing, M99 deferred.
 [Stories](docs/specs/user-stories.md) govern milestone context; GitHub issues
 govern implementation scope. No subsequent story implementation is authorized.
 
-## Deferred story addition: US-41
+## Story addition and reassignment: US-41
 
 Developer requested US-41, distribution-based experiment initialization, locally
 in `docs/specs/user-stories.md` under Milestone 99, then authorized commit and
 push. Six criteria cover wheel bootstrap, initialization, identity validation,
 failures, explicit upgrades and both wheel verification paths while preserving
 Git installs. No implementation is authorized and no GitHub issue was published.
+The developer subsequently moved the local story to Milestone 50 on 2026-11-08.
 The empty GitHub milestone “Milestone 99: Future enhancements” was created before
 the developer limited story publication to the local specification. GitHub issue
 synchronization remains required before implementation. This is documentation
