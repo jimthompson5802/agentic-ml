@@ -12,7 +12,7 @@ PR #57's publication workflow; future scope changes still require synchronizatio
 | M0 accepted foundation | Retain US-31–33 evidence and contributor/package checks; no reopened acceptance. |
 | M1 complete one experiment | Separate installed project completes local classification extraction, quality/split checks, training-only features, baseline, bounded tuning, selected-model final testing, MLflow results and actual native DVC stage execution. US-39-AC-01–08 demonstrate scientist-directed assistant use and one validation-based revision. |
 | M2 validate usability/reproduction | Add regression, compatible project components, fresh-kernel saved notebook, restored fitted state and clean committed-project DVC reproduction including reuse/invalidation/missing-corrupt failures. US-39-AC-09–11 and US-40-AC-01–07 complete ASW-07/08. MVP ends here. |
-| M50 | Accepted US-35/36 tooling plus US-37/38 local backlog and unimplemented US-41 distribution-based initialization ([issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64)); independent verification obligations preserved. |
+| M50 | Accepted US-35/36 tooling plus US-37/38 local backlog and implemented US-41 distribution-based initialization pending final verification and acceptance ([issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64)); independent verification obligations preserved. |
 | M99 | US-34 contribution/review checks remain deferred; roadmap platform scope is not silently added here. |
 
 M1 advances US-18-AC-01 classification; M2 regression completes the criterion.

@@ -7,17 +7,20 @@ Active design 0.15; see the [authority/reading map](../agentic-ml-harness-design
 ## Installed project boundary
 
 Use Python 3.12+, uv and the committed lockfile. Install the normal toolkit
-dependency at a full Git SHA into a separate experiment project. Preserve
+dependency at a full Git SHA or from a supported retained local wheel into a
+separate experiment project. Preserve
 `agentic-ml` as CLI and `agentic_ml` as import name. Source imports or paths into
 a neighboring toolkit checkout are not experiment interfaces. Load shipped
 templates/runtime resources with installed-package resource APIs.
 
-Distribution-based initialization is planned under
+Distribution-based initialization is implemented under
 [US-41](../user-stories.md#us-41-initialize-experiments-from-a-package-distribution)
 in M50, owned by [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64).
-It remains unimplemented. Current initialization still requires matching Git-origin metadata and a
-full-SHA dependency pin. US-33's wheel build/import checks do not establish
-distribution-origin initialization support; package-index publication is outside US-41.
+The supported form is a retained local purelib wheel, with native locked SHA-256,
+installed origin/version and independent payload comparison as specified below.
+Full-SHA Git dependencies remain supported. Passing final verification and pending
+developer acceptance are tracked in the [plan](../../plans/milestone-50-us-41.md);
+package-index publication is outside US-41.
 
 The project owns extraction/custom transformers/estimators and notebooks. Use
 pandas DataFrames and project pandas functions for extraction and authored
@@ -43,7 +46,9 @@ frame, without providing a saved-file parser or full restoration guarantee. See
 
 ### US-41 wheel contract proposed at Gate 1
 
-**Status:** Contract approved at Gate 1 on 2026-11-08; not implemented.
+**Status:** Contract approved at Gate 1 on 2026-11-08; implemented in IP2/IP3.
+IP4 verification passed; Gate 4 Approved on 2026-11-08. Developer whole-story
+acceptance remains pending in the owning plan.
 Developer decision: “i approve ip1; commit changes”. Native uv 0.13.6
 feasibility evidence and limitations are in [IP1 evidence](../../verification/us-41-ip1.md).
 

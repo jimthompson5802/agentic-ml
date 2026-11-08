@@ -44,7 +44,7 @@ Propose explicit upgrade via native `uv add` selecting a different reviewed whee
 ## Plan review
 
 - **Status:** Approved.
-- **Developer decision:** Plan accepted; developer requested “implement ip1” on 2026-11-08. IP1 execution authorized; Gate 1 approved on 2026-11-08. Developer subsequently authorized IP2: “yes, I meant implement ip2”. IP2 is Complete; Gate 2 Approved on 2026-11-08 (“I approve ip2; commit changes”). Gate 3 Approved on 2026-11-08 (“i approve ip3; commmit”); Gate 4 remains Pending.
+- **Developer decision:** Plan accepted; developer requested “implement ip1” on 2026-11-08. IP1 execution authorized; Gate 1 approved on 2026-11-08. Developer subsequently authorized IP2: “yes, I meant implement ip2”. IP2 is Complete; Gate 2 Approved on 2026-11-08 (“I approve ip2; commit changes”). Gate 3 Approved on 2026-11-08 (“i approve ip3; commmit”); Gate 4 Approved on 2026-11-08 (“I approve ip4; commit”). Developer “start ip4” on 2026-11-08 authorizes IP4 execution only.
 - **Decision reference and date:** Developer message “i accept plan”, 2026-11-08 (UTC).
 - **Requested plan changes:** None recorded.
 - Plan approval confirms the proposed public boundaries and authorizes only the explicitly requested execution; it does not approve any implementation gate. Exact dependency/identity/upgrade choices require Gate 1 review before IP2.
@@ -215,9 +215,9 @@ four workers. Raw logs: `.dev-records/verification/us-41-ip3-20261108/`.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-41-IP4-T1 | Not started | Extend `tests/installation/verify_initialization.py`, `check_initialization.py`, `tests/integration/test_initialization.py` and/or proposed distribution test module; reuse `tests/packaging/verify_distributions.py` genuine build outputs | Gate 3 | Direct wheel and actually sdist-rebuilt wheel each initialize CLI/API fresh and compatible projects and rerun; wheel-origin metadata remains genuine; full-SHA Git cases retained | AC-01/02/03/06 |
-| US-41-IP4-T2 | Not started | Add missing installed identity/failure/upgrade matrix cases through red–green slices; review `tests/packaging/check_installed.py` only if inventory changes require it | T1 | Both wheel paths cover negative identities and explicit upgrade; independently verified hashes, imports/resources/store results, unchanged damaged-project snapshots | AC-03/04/05/06 |
-| US-41-IP4-T3 | Not started | Final story verification, deferred-check reconciliation, update setup/design/traceability status and `CHECKPOINTS.md`; save `docs/verification/us-41-ip4.md` | T2 | Final M50, M1–6 and shared checks pass, all criteria mapped, known skips/platform gaps qualified; no false milestone completion | AC-01–06 |
+| US-41-IP4-T1 | Complete | Extend `tests/installation/verify_initialization.py`, `check_initialization.py`, `tests/integration/test_initialization.py` and/or proposed distribution test module; reuse `tests/packaging/verify_distributions.py` genuine build outputs | Gate 3 | Direct wheel and actually sdist-rebuilt wheel each initialize CLI/API fresh and compatible projects and rerun; wheel-origin metadata remains genuine; full-SHA Git cases retained | AC-01/02/03/06 |
+| US-41-IP4-T2 | Complete | Add missing installed identity/failure/upgrade matrix cases through red–green slices; review `tests/packaging/check_installed.py` only if inventory changes require it | T1 | Both wheel paths cover negative identities and explicit upgrade; independently verified hashes, imports/resources/store results, unchanged damaged-project snapshots | AC-03/04/05/06 |
+| US-41-IP4-T3 | Complete | Final story verification, deferred-check reconciliation, update setup/design/traceability status and `CHECKPOINTS.md`; save `docs/verification/us-41-ip4.md` | T2 | Final M50, M1–6 and shared checks pass, all criteria mapped, known skips/platform gaps qualified; no false milestone completion | AC-01–06 |
 
 ### Verification and review evidence
 
@@ -228,11 +228,11 @@ Both interface/artifact success and rerun coverage is mandatory. Partition negat
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete; final checks pass, all ACs have evidence, remaining limitations accurately stated.
-- **Evidence presented:** Pending — `docs/verification/us-41-ip4.md` and linked durable records.
+- **Evidence presented:** [IP4 report](../verification/us-41-ip4.md), raw phase records `.dev-records/verification/us-41-ip4-20261108/` and eight linked worker artifact/build manifests. All 166 US-41 cases passed (83 per artifact path). Final M50: 244 passed, 2 existing skips / 246 selected; final M1–6: 720 passed, 1 existing skip / 721 selected. Shared checks, relative links and diff check passed. Final inventory: 989; M50 deselected 743, M1–6 deselected 268. Linux aarch64 / Python 3.12.16 / uv 0.13.6; lock unchanged. No product change or new TDD slice; existing behavior received artifact/legacy regression coverage. Gate 4 Approved on 2026-11-08 (“I approve ip4; commit”).
 - **Remaining limitations:** Historical milestone obligations and unverified platforms remain separate.
-- **Developer decision / reference and date:** Pending.
+- **Developer decision / reference and date:** Approved — developer “I approve ip4; commit”, 2026-11-08 UTC.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Stop for final gate approval; whole-story acceptance requires explicit developer acceptance, which may be given with this gate. No publication authorized by plan drafting.
+- **Progression authorized:** Commit IP4 changes and approval records. Whole-story acceptance remains pending; no push or publication authorized.
 
 ## Final verification requirements
 
@@ -242,21 +242,21 @@ Both interface/artifact success and rerun coverage is mandatory. Partition negat
 - **M1–6:** Exact default command above; counts/outcomes and all skips recorded. Neither selected-out tests nor existing skips establish coverage.
 - **Distribution/installation:** Selected M50 tests must verify normal installed wheels outside the checkout with only declared runtime dependencies, CLI/API/resources/import origins, direct and truly rebuilt artifacts. Record build and artifact hashes plus manifests/logs and cleanup results.
 - **Deferred-check reconciliation:** IP2/IP3 M1–6, Git regressions and full artifact matrix owned here. Report failures instead of claiming completion. Standalone/full-suite checks only if explicitly requested; no need to broaden just because selected tests passed.
-- **Actual results and limitations:** Pending. Planning ran no product tests, installer probes or build drivers. Test platform must be stated; Linux or macOS observations do not establish the other or Windows support.
+- **Actual results and limitations:** Final M50, M1–6 and shared checks passed; see [IP4 evidence](../verification/us-41-ip4.md). Linux aarch64 / Python 3.12.16 / uv 0.13.6 only. Three existing timeout skips, archive-history limits and historical milestone obligations remain. No separate standalone artifact/full-suite invocation; Gate 4 Approved; whole-story acceptance pending.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-41-AC-01 documented normal wheel bootstrap outside checkout | IP1-T1/T2; IP3-T3/T4; IP4-T1/T3 | Executed setup instructions and isolated project identity | Pending |
-| US-41-AC-02 installed CLI/API init and compatible files | IP2-T1/T2; IP4-T1/T3 | Both interfaces, both wheels, scaffold/env/stores and reruns | Pending |
-| US-41-AC-03 declared/locked/installed identity with version and integrity | IP1-T1/T2; IP2-T1–T3; IP3-T2; IP4-T2/T3 | Independent digests, genuine origin metadata and journal | Pending |
-| US-41-AC-04 pre-change identity failures and dependency preservation | IP2-T2/T3; IP3-T1/T3; IP4-T2/T3 | Failure matrix snapshots, diagnostics and artifact preservation | Pending |
-| US-41-AC-05 explicit distribution upgrade and no silent upgrade | IP3-T1–T4; IP4-T2/T3 | Native upgrade transitions and stable locked/init controls | Pending |
-| US-41-AC-06 both wheel paths, reruns/failures and preserved Git | IP4-T1–T3 | Genuine rebuild provenance, installed matrix and M1–6 regressions | Pending |
+| US-41-AC-01 documented normal wheel bootstrap outside checkout | IP1-T1/T2; IP3-T3/T4; IP4-T1/T3 | [IP4 report](../verification/us-41-ip4.md): native bootstrap and isolated identity | Passing technical evidence; acceptance pending |
+| US-41-AC-02 installed CLI/API init and compatible files | IP2-T1/T2; IP4-T1/T3 | Both interfaces, both wheels, scaffold/env/stores and reruns | Passing technical evidence; acceptance pending |
+| US-41-AC-03 declared/locked/installed identity with version and integrity | IP1-T1/T2; IP2-T1–T3; IP3-T2; IP4-T2/T3 | Independent digests, genuine origin metadata and journal | Passing technical evidence; acceptance pending |
+| US-41-AC-04 pre-change identity failures and dependency preservation | IP2-T2/T3; IP3-T1/T3; IP4-T2/T3 | Failure matrix snapshots, diagnostics and artifact preservation | Passing technical evidence; acceptance pending |
+| US-41-AC-05 explicit distribution upgrade and no silent upgrade | IP3-T1–T4; IP4-T2/T3 | Native upgrade transitions and stable locked/init controls | Passing technical evidence; acceptance pending |
+| US-41-AC-06 both wheel paths, reruns/failures and preserved Git | IP4-T1–T3 | Genuine rebuild provenance, installed matrix and M1–6 regressions | Passing technical evidence; acceptance pending |
 
-- **Remaining work:** IP1–IP3 technically Complete; Gates 1–3 Approved. IP4 both-artifact/Git/final verification remains. No US-41 criterion is deferred or accepted by this phase alone.
-- **Final verification:** Pending — IP4-T3.
+- **Remaining work:** IP1–IP4 technically Complete; Gates 1–4 Approved. Whole-story acceptance Pending. No US-41 criterion is deferred.
+- **Final verification:** IP4-T3 passed; [final report](../verification/us-41-ip4.md) maps all criteria, commands/counts, artifact manifests and limitations.
 - **Developer acceptance / decision reference and date:** Pending.
 
 ## Milestone acceptance handoff

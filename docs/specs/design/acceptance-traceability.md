@@ -2,7 +2,7 @@
 
 Active design 0.15; criteria are in [user stories](../user-stories.md).
 This index covers all **228** local criteria: **204 original IDs, 18 US-39/40 criteria,
-and six planned M50 US-41 criteria**.
+and six M50 US-41 criteria under final verification**.
 A supporting contract is design coverage, not executable verification/acceptance.
 Scope and supporting design were approved at Gates 1–3.
 
@@ -246,12 +246,12 @@ requirements or claims that their stronger guarantees were verified.
 | [US-40-AC-05](../user-stories.md#us-40-ac-05) | M2; planned | [Contract](execution-and-governance.md#native-dvc-pipeline-and-reproduction) | Committed replay, native cache behavior, assistant and tolerance checks |
 | [US-40-AC-06](../user-stories.md#us-40-ac-06) | M2; planned | [Contract](execution-and-governance.md#native-dvc-pipeline-and-reproduction) | Committed replay, native cache behavior, assistant and tolerance checks |
 | [US-40-AC-07](../user-stories.md#us-40-ac-07) | M2; planned | [Contract](execution-and-governance.md#native-dvc-pipeline-and-reproduction) | Committed replay, native cache behavior, assistant and tolerance checks |
-| [US-41-AC-01](../user-stories.md#us-41-ac-01) | M50; planned, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Planned wheel bootstrap in a separate project; no package-index publication |
-| [US-41-AC-02](../user-stories.md#us-41-ac-02) | M50; planned, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Planned CLI/API distribution-origin initialization and compatible reruns; current initializer requires a Git pin |
-| [US-41-AC-03](../user-stories.md#us-41-ac-03) | M50; planned, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Planned version/locked-artifact identity consistency checks |
-| [US-41-AC-04](../user-stories.md#us-41-ac-04) | M50; planned, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Planned pre-mutation identity failures and distribution dependency preservation |
-| [US-41-AC-05](../user-stories.md#us-41-ac-05) | M50; planned, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Planned explicit distribution upgrades and environment-identity updates |
-| [US-41-AC-06](../user-stories.md#us-41-ac-06) | M50; planned, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Planned direct/rebuilt-wheel initialization and identity-failure evidence; preserve Git installation |
+| [US-41-AC-01](../user-stories.md#us-41-ac-01) | M50; implemented, acceptance pending, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Local wheel bootstrap in a separate project; no package-index publication; [passing final verification](../../verification/us-41-ip4.md); acceptance pending |
+| [US-41-AC-02](../user-stories.md#us-41-ac-02) | M50; implemented, acceptance pending, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Installed CLI/API wheel initialization and compatible reruns; [passing final verification](../../verification/us-41-ip4.md); acceptance pending |
+| [US-41-AC-03](../user-stories.md#us-41-ac-03) | M50; implemented, acceptance pending, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Version/locked-artifact identity consistency checks; [passing final verification](../../verification/us-41-ip4.md); acceptance pending |
+| [US-41-AC-04](../user-stories.md#us-41-ac-04) | M50; implemented, acceptance pending, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Pre-mutation identity failures and distribution dependency preservation; [passing final verification](../../verification/us-41-ip4.md); acceptance pending |
+| [US-41-AC-05](../user-stories.md#us-41-ac-05) | M50; implemented, acceptance pending, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Explicit distribution upgrades and environment-identity updates; [passing final verification](../../verification/us-41-ip4.md); acceptance pending |
+| [US-41-AC-06](../user-stories.md#us-41-ac-06) | M50; implemented, acceptance pending, [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64) | [Contract](interfaces-and-configuration.md#installed-project-boundary) | Direct/rebuilt-wheel initialization and identity failures; preserved Git installation; [passing final verification](../../verification/us-41-ip4.md); acceptance pending |
 
 ## Required scenario families
 

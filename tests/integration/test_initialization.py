@@ -235,12 +235,13 @@ def test_preserves_existing_dvc_default(project: Path, compatible: bool) -> None
         assert not (project / "project.yaml").exists()
 
 
+@pytest.mark.parametrize("legacy", [False, True])
 @pytest.mark.parametrize(
     "stage,change_metadata",
     [("DVC", False), ("MLflow", False), ("state", False), ("DVC", True)],
 )
 def test_storage_failure_retains_stage_and_retries_safely(
-    project: Path, stage: str, change_metadata: bool
+    project: Path, stage: str, change_metadata: bool, legacy: bool
 ) -> None:
     """AC-02/04: tool/filesystem failures retain safe evidence and reusable stores."""
     script = r"""
@@ -280,6 +281,9 @@ with patch("subprocess.run", run), patch("os.replace", replace):
     assert journal["storage_failure"]["exit_code"] == (None if stage == "state" else 73)
     assert stage not in journal["completed_steps"]
     assert not (project / ".agentic-ml/init.lock").exists()
+    if legacy:
+        del journal["environment"]["toolkit_identity"]
+        (project / ".agentic-ml/init.json").write_text(json.dumps(journal))
     if change_metadata:
         metadata = project / "pyproject.toml"
         metadata.write_text(
@@ -1233,3 +1237,64 @@ def test_versioned_planning_inputs_coexist_with_initialization(
     assert conflict.returncode != 0
     assert "conflict" in conflict.stderr.lower()
     assert replaced.read_bytes() == reviewed_bytes
+
+
+def test_legacy_completed_git_journal_refreshes_identity(project: Path) -> None:
+    """US-41 AC-06: compatible legacy Git setup acquires additive identity."""
+    first = initialize(project)
+    assert first.returncode == 0, first.stdout + first.stderr
+    path = project / ".agentic-ml/init.json"
+    journal = json.loads(path.read_text())
+    expected = journal["environment"].pop("toolkit_identity")
+    assert expected["kind"] == "git"
+    path.write_text(json.dumps(journal))
+    backup = (project / ".agentic-ml/backups/pyproject.toml.original").read_bytes()
+    second = initialize(project)
+    assert second.returncode == 0, second.stdout + second.stderr
+    renewed = json.loads(path.read_text())
+    assert renewed["environment"]["toolkit_identity"] == expected
+    assert renewed["status"] == "complete"
+    assert (
+        project / ".agentic-ml/backups/pyproject.toml.original"
+    ).read_bytes() == backup
+
+
+@pytest.mark.parametrize("direction", ["git-to-wheel", "wheel-to-git"])
+def test_installed_source_kind_switch_requires_recovery(
+    project: Path, source_repository: tuple[str, str], tmp_path: Path, direction: str
+) -> None:
+    """US-41 AC-04/06: real native source changes cannot replace saved source kind."""
+    from urllib.parse import unquote, urlparse
+
+    url, revision = source_repository
+    source = Path(unquote(urlparse(url).path))
+    artifacts = tmp_path / "reviewed-artifacts"
+    built = run(["uv", "build", "--wheel", "--out-dir", str(artifacts)], source)
+    assert built.returncode == 0, built.stdout + built.stderr
+    wheel = next(artifacts.glob("*.whl"))
+    if direction == "wheel-to-git":
+        selected = run(["uv", "add", str(wheel)], project)
+        assert selected.returncode == 0, selected.stdout + selected.stderr
+    first = initialize(project)
+    assert first.returncode == 0, first.stdout + first.stderr
+    selected = run(
+        ["uv", "add", str(wheel)]
+        if direction == "git-to-wheel"
+        else ["uv", "add", "git+" + url, "--rev", revision],
+        project,
+    )
+    assert selected.returncode == 0, selected.stdout + selected.stderr
+    before = {
+        path.relative_to(project): path.read_bytes()
+        for path in project.rglob("*")
+        if path.is_file() and ".venv" not in path.relative_to(project).parts
+    }
+    failed = initialize(project)
+    assert failed.returncode == 1, failed.stdout + failed.stderr
+    assert "source-kind" in failed.stderr.lower()
+    after = {
+        path.relative_to(project): path.read_bytes()
+        for path in project.rglob("*")
+        if path.is_file() and ".venv" not in path.relative_to(project).parts
+    }
+    assert after == before

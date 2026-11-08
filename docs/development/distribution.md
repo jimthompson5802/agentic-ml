@@ -90,3 +90,21 @@ See the [usage guide](../configuration-validation.md) and
 [IP3 evidence](../verification/us-05-ip3.md). These checks validate metadata and
 candidates without starting training or a kernel. Future runners must enforce
 the documented submission contract before side effects.
+
+## Installed local-wheel initialization
+
+US-41's M50 matrix in `tests/integration/test_distribution_initialization.py`
+verifies initialization through normal local-wheel dependencies. Its two fixture
+variants build a direct wheel and a wheel genuinely rebuilt from an extracted
+sdist. Each variant runs installed CLI/API initialization, compatible reruns,
+identity failures before project changes, and explicit new-version/same-version
+upgrades. Retained wheel bytes, native lock hashes and installed payload/origin
+must agree. The installed commands run in independent experiment projects,
+without importing from the toolkit checkout.
+
+Per-worker build commands/output and independent artifact digests remain under
+`.dev-records/verification/us-41-ip4-<unique-id>/`; successful fixture workspaces
+follow normal pytest cleanup. The existing initialization driver separately
+retains its full-SHA Git probes and distribution inventory checks. Selected M50
+and M1–6 results are recorded in [US-41 IP4 evidence](../verification/us-41-ip4.md).
+These checks do not claim package-index publication or additional source forms.

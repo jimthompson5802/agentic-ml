@@ -53,19 +53,16 @@ The CLI spelling correction from `agent-ml` to `agentic-ml` stays accepted.
 Python 3.12 remains the minimum; additional verified versions/platforms require
 their own evidence. Archived examples are not current schema alternatives.
 
-US-41 is an unimplemented M50 extension of ADR-007's installation identity contract.
-It proposes accepting distribution-origin dependencies, recording version/locked
-artifact integrity and preserving explicit upgrades alongside existing Git pins.
-It does not change the accepted current initializer or require package-index
-publication. The [local story](../user-stories.md#us-41-initialize-experiments-from-a-package-distribution)
-is synchronized to [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64)
-in Milestone 50. An owning contract review and implementation plan must settle
-supported dependency forms, artifact identity and explicit upgrade behavior before
-dependent implementation. Existing full-SHA Git support remains required.
+US-41 extends ADR-007 with retained local wheel dependencies, locked artifact
+integrity and explicit upgrades alongside existing full-SHA Git pins. IP2/IP3
+implement the approved contract; final verification and developer acceptance
+are tracked in the [M50 plan](../../plans/milestone-50-us-41.md) for
+[issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64).
+Package-index publication remains outside scope.
 
 ## US-41 / ADR-007 extension at Gate 1
 
-**Contract approved at Gate 1 (2026-11-08); unimplemented.** Developer decision:
+**Contract approved at Gate 1 (2026-11-08); implemented in IP2/IP3.** Developer decision:
 “i approve ip1; commit changes”. Use retained local purelib wheels
 with native locked SHA-256, installed origin/version and independent payload
 comparison. Native uv does not record the installed archive hash, even for the
@@ -76,7 +73,8 @@ as recorded in the owning plan. URL support is excluded from the first
 implementation; local wheels already supply locked integrity without hosting.
 Keep the full-SHA Git path, existing public initializer and 0.1 journal. Completed
 wheel setups may refresh after explicit native upgrades; incomplete operations
-retain identity/checksum recovery guards. This decision is not delivered support.
+retain identity/checksum recovery guards. Final verification and developer
+acceptance remain in the owning plan.
 See [IP1 evidence](../../verification/us-41-ip1.md) and
 [owning plan](../../plans/milestone-50-us-41.md).
 

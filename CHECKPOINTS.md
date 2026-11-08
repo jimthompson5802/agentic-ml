@@ -4,37 +4,36 @@ Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-41-distribution-init`; IP2 approved and committed as `404ba53`.
-Developer “start ip3”, 2026-11-08 UTC, authorizes IP3 execution only. Gate 2
-is Approved; Gate 3 Approved on 2026-11-08: developer “i approve ip3; commmit”. Issue #64 complete body/all comment pages and
-final metadata refreshed: zero comments; scope unchanged. Current work adds
-explicit completed-wheel upgrades and incomplete-operation recovery guards,
-installed public CLI/API tests and setup instructions. See the
-[plan](docs/plans/milestone-50-us-41.md) and
-[IP3 evidence](docs/verification/us-41-ip3.md) for progress and attempts.
-Raw logs: `.dev-records/verification/us-41-ip3-20261108/`.
+Checkout: `US-41-distribution-init`; IP3 approved and committed as `a1f0b15`.
+Developer “start ip4”, 2026-11-08 UTC, authorizes IP4 execution only. Gates 1–3
+are Approved; Gate 4 Approved on 2026-11-08 — developer “I approve ip4; commit”.
+Whole-story acceptance remains Pending. Refreshed issue
+#64 complete body/all comment pages and final metadata: zero comments; scope
+unchanged. The [plan](docs/plans/milestone-50-us-41.md) owns IP4 tasks;
+[IP4 evidence](docs/verification/us-41-ip4.md) records passing final verification.
 
-IP3 T1–T4 are technically Complete; **Gate 3 Approved**; IP3 commit authorized.
-M50: 899 collected, 163 selected, 736 deselected; **161 passed, 2 existing skips
-in 397.20s**, exit 0. All 83 US-41 cases passed. Shared sync/lock/lint/format/
-strict typing/smoke, document links and diff checks passed on Linux aarch64 /
-Python 3.12.16 / uv 0.13.6. Retained upgrade replay: 2 passed, 81 deselected;
-new-/same-version digests, installed origins and checksums saved in raw records.
-Its exclusive `/tmp/us41-ip3-upgrade-evidence-20261108-1` is retained for review.
+IP4 T1–T3 are technically Complete; **Gate 4 Approved; whole-story
+acceptance Pending**. Current changes expand all 83 installed US-41 cases to
+both genuine direct and sdist-rebuilt wheels (166 passing cases), add seven
+legacy Git/source-switch regression cases and align design/traceability status.
+No product implementation, dependency, assertion, timeout or skip change.
 
-Current changes: identity/journal upgrade guards, incomplete synchronization
-status, 17 added installed test cases, wheel bootstrap/upgrade instructions,
-plan/evidence/checkpoint. Failed attempts and fixture corrections are preserved
-in [IP3 evidence](docs/verification/us-41-ip3.md); original assertions remain.
-No suppression, scope deviation or lock change. Lock SHA-256:
+Final M50: **244 passed, 2 existing skips in 546.05s**, 246 selected / 743
+deselected. Final M1–6: **720 passed, 1 existing skip in 268.87s**, 721 selected /
+268 deselected; four native NumPy warnings in the existing infinite-target test.
+Final inventory 989. Shared sync/lock/lint/format/strict typing/smoke, relative
+file links and diff checks passed. Raw phase records:
+`.dev-records/verification/us-41-ip4-20261108/`, with eight linked per-worker
+`us-41-ip4-<unique-id>` build/digest manifests. Linux aarch64 /
+Python 3.12.16 / uv 0.13.6. Lock SHA-256 remains
 `6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4`.
-The approved archive-history limitation and platform limits remain. Both-artifact/
-Git/M1–6 renewal remains IP4. No standalone artifact driver or broader local
-suite was run. Developer authorized the IP3 commit, including approval records;
-no push or PR publication is authorized. Approval recording is documentation only;
-existing executable evidence remains applicable. Final document/link checks and
-`git diff --check` passed.
-**Next action:** await direction to execute IP4.
+
+The approved archive-history limitation, existing timeout skips and platform
+limits remain. Historical milestone acceptance obligations remain independent.
+No standalone artifact driver or broader suite was run separately. Developer authorized committing IP4 changes and approval records. No push or
+publication authorized. Approval recording changes documentation only; existing
+executable evidence remains applicable. Final relative-link and diff checks passed.
+**Next action:** await explicit whole-story acceptance after the authorized IP4 commit.
 
 Previous publication context follows; it does not authorize US-41 implementation.
 Developer authorized squash merge and pull on 2026-11-08.

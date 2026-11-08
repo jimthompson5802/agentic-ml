@@ -5,7 +5,9 @@ import json
 import os
 import shutil
 import subprocess
+import tarfile
 import tomllib
+import uuid
 from pathlib import Path
 
 import pytest
@@ -31,18 +33,55 @@ def run(command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
     )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="module", params=["direct-wheel", "rebuilt-wheel"])
 def wheel(
     request: pytest.FixtureRequest, tmp_path_factory: pytest.TempPathFactory
 ) -> Path:
-    """Build current product bytes in an isolated source fixture."""
+    """Build each genuine artifact path independently of the installed project."""
     source = owned_workspace(request, tmp_path_factory, "wheel-source")
     shutil.copytree(ROOT / "src", source / "src")
     for name in ("pyproject.toml", "README.md"):
         shutil.copy(ROOT / name, source)
-    built = run(["uv", "build", "--wheel", "--out-dir", str(source / "dist")], source)
-    assert built.returncode == 0, built.stdout + built.stderr
-    return next((source / "dist").glob("*.whl"))
+    records = ROOT / ".dev-records/verification" / ("us-41-ip4-" + uuid.uuid4().hex)
+    records.mkdir(parents=True)
+    commands = []
+
+    def build(command: list[str], cwd: Path) -> None:
+        result = run(command, cwd)
+        commands.append(
+            {
+                "command": command,
+                "cwd": str(cwd),
+                "exit_code": result.returncode,
+                "stdout": result.stdout,
+                "stderr": result.stderr,
+            }
+        )
+        (records / "commands.json").write_text(json.dumps(commands, indent=2))
+        assert result.returncode == 0, result.stdout + result.stderr
+
+    build(["uv", "build", "--out-dir", str(source / "dist")], source)
+    archive = next((source / "dist").glob("*.tar.gz"))
+    if request.param == "rebuilt-wheel":
+        extracted = source / "extracted"
+        with tarfile.open(archive) as distribution:
+            distribution.extractall(extracted, filter="data")
+        source = next(extracted.iterdir())
+        build(["uv", "build", "--wheel", "--out-dir", str(source / "dist")], source)
+    artifact = next((source / "dist").glob("*.whl"))
+    (records / "artifacts.json").write_text(
+        json.dumps(
+            {
+                "path": request.param,
+                "wheel": str(artifact),
+                "wheel_sha256": hashlib.sha256(artifact.read_bytes()).hexdigest(),
+                "sdist": str(archive),
+                "sdist_sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
+            },
+            indent=2,
+        )
+    )
+    return artifact
 
 
 @pytest.fixture
