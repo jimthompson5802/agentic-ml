@@ -55,8 +55,8 @@ their own evidence. Archived examples are not current schema alternatives.
 
 US-41 extends ADR-007 with retained local wheel dependencies, locked artifact
 integrity and explicit upgrades alongside existing full-SHA Git pins. IP2/IP3
-implement the approved contract; final verification and developer acceptance
-are tracked in the [M50 plan](../../plans/milestone-50-us-41.md) for
+implement the approved contract; passing final verification and developer
+acceptance on 2026-11-08 are tracked in the [M50 plan](../../plans/milestone-50-us-41.md) for
 [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64).
 Package-index publication remains outside scope.
 
@@ -73,8 +73,8 @@ as recorded in the owning plan. URL support is excluded from the first
 implementation; local wheels already supply locked integrity without hosting.
 Keep the full-SHA Git path, existing public initializer and 0.1 journal. Completed
 wheel setups may refresh after explicit native upgrades; incomplete operations
-retain identity/checksum recovery guards. Final verification and developer
-acceptance remain in the owning plan.
+retain identity/checksum recovery guards. Final verification passed and developer
+accepted US-41 on 2026-11-08; see the owning plan.
 See [IP1 evidence](../../verification/us-41-ip1.md) and
 [owning plan](../../plans/milestone-50-us-41.md).
 

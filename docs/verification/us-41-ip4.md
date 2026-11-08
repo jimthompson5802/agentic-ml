@@ -3,7 +3,7 @@
 Issue [#64](https://github.com/jimthompson5802/agentic-ml/issues/64), M50,
 US-41-AC-01–06. Developer “start ip4”, 2026-11-08 UTC, authorizes IP4 only.
 Gate 3 is approved and committed as `a1f0b15`; Gate 4 Approved — developer “I approve ip4; commit”, 2026-11-08 UTC.
-Whole-story acceptance remains pending. Complete issue body and all comment pages refreshed: zero
+Developer accepted US-41 on 2026-11-08 — “i accept the story”. Complete issue body and all comment pages refreshed: zero
 comments, unchanged update timestamp `2026-11-08T18:02:47Z`.
 
 ## Boundaries and changes
@@ -99,7 +99,7 @@ therefore refer to the same product bytes.
 
 No criterion is deferred. Technical evidence satisfies the planned scope;
 Gate 4 Approved on 2026-11-08 — developer “I approve ip4; commit”.
-Whole-story acceptance remains pending.
+Developer accepted US-41 on 2026-11-08 — “i accept the story”.
 All planned IP4 tasks are technically Complete.
 
 M50 skips remain `test_failed_installed_probe_retains_available_environment`
@@ -113,7 +113,7 @@ Historical milestone-wide obligations remain with their existing owners.
 
 ## Limits and approval
 
-Gate 4 is Approved; developer story acceptance remains pending. Historical M1-ACCEPT-VERIFY
+Gate 4 is Approved; developer accepted the story on 2026-11-08. Historical M1-ACCEPT-VERIFY
 and M50-ACCEPT-VERIFY obligations remain open. Existing temporary skips retain
 their owners and do not establish coverage. Linux observations do not verify
 macOS/Windows. The Gate 1 archive-history limitation remains: matching installed
@@ -122,4 +122,6 @@ No standalone artifact invocation or broader local suite is authorized here.
 
 Approval recording is documentation only; existing executable evidence remains
 applicable. Relative-link and `git diff --check` checks passed. Developer
-authorized committing IP4 and approval records; no push/publication authorized.
+authorized committing IP4 and approval records. Subsequent developer story
+acceptance authorizes publication under execute-plan; publication results are
+recorded in the owning plan.

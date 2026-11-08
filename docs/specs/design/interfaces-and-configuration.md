@@ -18,8 +18,7 @@ Distribution-based initialization is implemented under
 in M50, owned by [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64).
 The supported form is a retained local purelib wheel, with native locked SHA-256,
 installed origin/version and independent payload comparison as specified below.
-Full-SHA Git dependencies remain supported. Passing final verification and pending
-developer acceptance are tracked in the [plan](../../plans/milestone-50-us-41.md);
+Full-SHA Git dependencies remain supported. Passing final verification and developer acceptance on 2026-11-08 are tracked in the [plan](../../plans/milestone-50-us-41.md);
 package-index publication is outside US-41.
 
 The project owns extraction/custom transformers/estimators and notebooks. Use
@@ -47,8 +46,8 @@ frame, without providing a saved-file parser or full restoration guarantee. See
 ### US-41 wheel contract proposed at Gate 1
 
 **Status:** Contract approved at Gate 1 on 2026-11-08; implemented in IP2/IP3.
-IP4 verification passed; Gate 4 Approved on 2026-11-08. Developer whole-story
-acceptance remains pending in the owning plan.
+IP4 verification passed; Gates 1–4 Approved. Developer accepted US-41 on
+2026-11-08 (“i accept the story”); see the owning plan.
 Developer decision: “i approve ip1; commit changes”. Native uv 0.13.6
 feasibility evidence and limitations are in [IP1 evidence](../../verification/us-41-ip1.md).
 

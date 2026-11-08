@@ -4,16 +4,15 @@ Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-41-distribution-init`; IP3 approved and committed as `a1f0b15`.
+Checkout: `US-41-distribution-init`; IP4 approved and committed as `776c8ab`.
 Developer “start ip4”, 2026-11-08 UTC, authorizes IP4 execution only. Gates 1–3
 are Approved; Gate 4 Approved on 2026-11-08 — developer “I approve ip4; commit”.
-Whole-story acceptance remains Pending. Refreshed issue
+Developer “i accept the story”, 2026-11-08 UTC, accepts US-41. Refreshed issue
 #64 complete body/all comment pages and final metadata: zero comments; scope
 unchanged. The [plan](docs/plans/milestone-50-us-41.md) owns IP4 tasks;
 [IP4 evidence](docs/verification/us-41-ip4.md) records passing final verification.
 
-IP4 T1–T3 are technically Complete; **Gate 4 Approved; whole-story
-acceptance Pending**. Current changes expand all 83 installed US-41 cases to
+IP4 T1–T3 are technically Complete; **Gates 1–4 Approved; US-41 Accepted**. Current changes expand all 83 installed US-41 cases to
 both genuine direct and sdist-rebuilt wheels (166 passing cases), add seven
 legacy Git/source-switch regression cases and align design/traceability status.
 No product implementation, dependency, assertion, timeout or skip change.
@@ -30,10 +29,10 @@ Python 3.12.16 / uv 0.13.6. Lock SHA-256 remains
 
 The approved archive-history limitation, existing timeout skips and platform
 limits remain. Historical milestone acceptance obligations remain independent.
-No standalone artifact driver or broader suite was run separately. Developer authorized committing IP4 changes and approval records. No push or
-publication authorized. Approval recording changes documentation only; existing
+No standalone artifact driver or broader suite was run separately. Developer story acceptance authorizes acceptance-record commit, ordinary push,
+PR creation and static COMMENT review through execute-plan. Approval recording changes documentation only; existing
 executable evidence remains applicable. Final relative-link and diff checks passed.
-**Next action:** await explicit whole-story acceptance after the authorized IP4 commit.
+**Next action:** finish acceptance records, publish the branch/PR and static review.
 
 Previous publication context follows; it does not authorize US-41 implementation.
 Developer authorized squash merge and pull on 2026-11-08.

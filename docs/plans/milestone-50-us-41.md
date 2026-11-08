@@ -232,7 +232,7 @@ Both interface/artifact success and rerun coverage is mandatory. Partition negat
 - **Remaining limitations:** Historical milestone obligations and unverified platforms remain separate.
 - **Developer decision / reference and date:** Approved — developer “I approve ip4; commit”, 2026-11-08 UTC.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Commit IP4 changes and approval records. Whole-story acceptance remains pending; no push or publication authorized.
+- **Progression authorized:** Commit IP4 changes and approval records. Developer “i accept the story”, 2026-11-08 UTC, accepts US-41 and authorizes the execute-plan publication workflow: commit acceptance records, ordinary push, PR and static COMMENT review.
 
 ## Final verification requirements
 
@@ -242,25 +242,32 @@ Both interface/artifact success and rerun coverage is mandatory. Partition negat
 - **M1–6:** Exact default command above; counts/outcomes and all skips recorded. Neither selected-out tests nor existing skips establish coverage.
 - **Distribution/installation:** Selected M50 tests must verify normal installed wheels outside the checkout with only declared runtime dependencies, CLI/API/resources/import origins, direct and truly rebuilt artifacts. Record build and artifact hashes plus manifests/logs and cleanup results.
 - **Deferred-check reconciliation:** IP2/IP3 M1–6, Git regressions and full artifact matrix owned here. Report failures instead of claiming completion. Standalone/full-suite checks only if explicitly requested; no need to broaden just because selected tests passed.
-- **Actual results and limitations:** Final M50, M1–6 and shared checks passed; see [IP4 evidence](../verification/us-41-ip4.md). Linux aarch64 / Python 3.12.16 / uv 0.13.6 only. Three existing timeout skips, archive-history limits and historical milestone obligations remain. No separate standalone artifact/full-suite invocation; Gate 4 Approved; whole-story acceptance pending.
+- **Actual results and limitations:** Final M50, M1–6 and shared checks passed; see [IP4 evidence](../verification/us-41-ip4.md). Linux aarch64 / Python 3.12.16 / uv 0.13.6 only. Three existing timeout skips, archive-history limits and historical milestone obligations remain. No separate standalone artifact/full-suite invocation; Gates 1–4 Approved; developer accepted US-41 on 2026-11-08 (“i accept the story”).
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-41-AC-01 documented normal wheel bootstrap outside checkout | IP1-T1/T2; IP3-T3/T4; IP4-T1/T3 | [IP4 report](../verification/us-41-ip4.md): native bootstrap and isolated identity | Passing technical evidence; acceptance pending |
-| US-41-AC-02 installed CLI/API init and compatible files | IP2-T1/T2; IP4-T1/T3 | Both interfaces, both wheels, scaffold/env/stores and reruns | Passing technical evidence; acceptance pending |
-| US-41-AC-03 declared/locked/installed identity with version and integrity | IP1-T1/T2; IP2-T1–T3; IP3-T2; IP4-T2/T3 | Independent digests, genuine origin metadata and journal | Passing technical evidence; acceptance pending |
-| US-41-AC-04 pre-change identity failures and dependency preservation | IP2-T2/T3; IP3-T1/T3; IP4-T2/T3 | Failure matrix snapshots, diagnostics and artifact preservation | Passing technical evidence; acceptance pending |
-| US-41-AC-05 explicit distribution upgrade and no silent upgrade | IP3-T1–T4; IP4-T2/T3 | Native upgrade transitions and stable locked/init controls | Passing technical evidence; acceptance pending |
-| US-41-AC-06 both wheel paths, reruns/failures and preserved Git | IP4-T1–T3 | Genuine rebuild provenance, installed matrix and M1–6 regressions | Passing technical evidence; acceptance pending |
+| US-41-AC-01 documented normal wheel bootstrap outside checkout | IP1-T1/T2; IP3-T3/T4; IP4-T1/T3 | [IP4 report](../verification/us-41-ip4.md): native bootstrap and isolated identity | Accepted — 2026-11-08 |
+| US-41-AC-02 installed CLI/API init and compatible files | IP2-T1/T2; IP4-T1/T3 | Both interfaces, both wheels, scaffold/env/stores and reruns | Accepted — 2026-11-08 |
+| US-41-AC-03 declared/locked/installed identity with version and integrity | IP1-T1/T2; IP2-T1–T3; IP3-T2; IP4-T2/T3 | Independent digests, genuine origin metadata and journal | Accepted — 2026-11-08 |
+| US-41-AC-04 pre-change identity failures and dependency preservation | IP2-T2/T3; IP3-T1/T3; IP4-T2/T3 | Failure matrix snapshots, diagnostics and artifact preservation | Accepted — 2026-11-08 |
+| US-41-AC-05 explicit distribution upgrade and no silent upgrade | IP3-T1–T4; IP4-T2/T3 | Native upgrade transitions and stable locked/init controls | Accepted — 2026-11-08 |
+| US-41-AC-06 both wheel paths, reruns/failures and preserved Git | IP4-T1–T3 | Genuine rebuild provenance, installed matrix and M1–6 regressions | Accepted — 2026-11-08 |
 
-- **Remaining work:** IP1–IP4 technically Complete; Gates 1–4 Approved. Whole-story acceptance Pending. No US-41 criterion is deferred.
+- **Remaining work:** IP1–IP4 technically Complete; Gates 1–4 Approved. Whole-story acceptance recorded on 2026-11-08 — developer “i accept the story”. No US-41 criterion is deferred.
 - **Final verification:** IP4-T3 passed; [final report](../verification/us-41-ip4.md) maps all criteria, commands/counts, artifact manifests and limitations.
-- **Developer acceptance / decision reference and date:** Pending.
+- **Developer acceptance / decision reference and date:** Accepted — developer “i accept the story”, 2026-11-08 UTC. All six criteria accepted; historical milestone obligations and platform/archive limits remain.
 
 ## Milestone acceptance handoff
 
 - **Owner:** Existing M50-ACCEPT-VERIFY, preserved in [US-35](milestone-50-us-35.md), [US-36](milestone-50-us-36.md) and [CHECKPOINTS](../../CHECKPOINTS.md).
 - **Deferred checks:** Historical full-suite, unchanged-caller, reserved milestone, standalone distribution/installation and applicable manual/platform obligations remain open; US-41 acceptance does not close them or M1-ACCEPT-VERIFY.
 - **Required evidence:** Reconcile historical/final inputs, actual selected/deselected counts, temporary skips, platform gaps and artifact identities. Full suite `uv run --locked pytest -n 4 --dist=loadgroup -m ""` and standalone artifact drivers require explicit developer commands under current policy. Preserve historical approvals/results, without treating CI as local evidence.
+
+## Publication record
+
+Developer whole-story acceptance authorizes publication under the execute-plan
+workflow. IP4 committed as `776c8ab`. Acceptance records are documentation only;
+existing final executable evidence remains applicable. Push, PR and static review
+are in progress; no merge or branch cleanup authorized.
