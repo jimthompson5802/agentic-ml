@@ -1,0 +1,4 @@
+interface:
+  display_name: "Report Test Progress"
+  short_description: "Monitor an existing pytest run every minute"
+  default_prompt: "Use $report-test-progress to report remaining, total, completed, and failed counts for the pytest run already active in this chat every minute until it ends."

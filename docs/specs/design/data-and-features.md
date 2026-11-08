@@ -38,15 +38,100 @@ partitions retain issue #19 ownership; this proposal does not change that scope.
 Developer-directed US-12-SC-01 also permits explicit empty rules: report
 `not_checked` and allow the operation, without claiming quality validation passed.
 
+## Reuse existing assessment and partition capabilities
+
+Developer-directed refinement, 2026-11-07: use scikit-learn wherever it provides
+the required functionality. Do not implement custom splitting, shuffling,
+stratification, allocation/rounding, preprocessing or model-selection algorithms
+that duplicate scikit-learn. Use its public APIs and document the effective
+parameters and installed version. New toolkit-specific functionality for
+assessment or partitioning must be identified with its requirement, the existing
+library capability considered, and the remaining gap, then discussed with the
+developer before its contract or implementation is approved.
+
+Use pandas' existing descriptive capabilities for assessment of native DataFrames:
+[`describe`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.describe.html)
+for summaries,
+[`isna`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.isna.html)
+with native aggregations for missingness, and
+[`value_counts`](https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html)
+for categorical/target counts and proportions. Reuse native semantics and make
+selected options explicit. Do not create a custom statistics engine or force
+these descriptive operations into an unrelated scikit-learn estimator interface.
+Selecting report fields and handling their serialization are separate integration
+decisions, not authorization for a new assessment API or reporting framework.
+
+<a id="proposed-toolkit-integration-requiring-discussion"></a>
+
+### Approved toolkit integration
+
+Developer selected only `assess_data` and `create_partitions` under
+[US-12-19-SC-03](../../plans/milestone-1-us-12-assessment-splits.md#us-12-19-sc-03--retain-two-helpers-project-owned-persistence-2026-11-07-utc).
+Project code owns JSON save/load. Developer “i approve ip1; commit changes”,
+2026-11-07 UTC, approved detailed contracts/policies and public test boundaries
+at Gate 1. IP2 implemented assessment; IP3 implemented recorded partitions and
+source identity; IP4 verified both installed wheel paths. Gates 1–4 are approved,
+and developer “i accept issue #19”, 2026-11-08 UTC, accepted AC-02/03 and both
+layouts. See the [final IP4 evidence](../../verification/us-12-19-ip4.md).
+The confirmed integration is:
+
+| Requirement | Existing capability reused | Confirmed integration and evidence |
+|---|---|---|
+| Recorded two-way (train/test) or three-way (train/validation/test) partitions | scikit-learn `train_test_split` supplies two subsets; `create_partitions` composes native calls for three-way layout | Settings, split order, sizes and random states confirmed in the IP1 contract. Native rounding/errors remain authoritative. |
+| Record exact membership and source identity (AC-03) | Native split rows, project JSON files and subsequent DVC ownership | `create_partitions` returns the record; project owns save/load, saved-document validation and old/current identity comparison. Version-bound native Parquet stability and sensitivity are verified in [IP3](../../verification/us-12-19-ip3.md) and on both installed paths in [IP4](../../verification/us-12-19-ip4.md). |
+| Validate explicit supplied membership (AC-03) | Native pandas index/set operations for membership, duplicates and intersections | String/integer IDs, complete/nonempty coverage and membership/disjointness policies confirmed in the IP1 contract. |
+| Present assessment results (AC-02) | Native pandas outputs and serialization | `assess_data` fields/scalar conversion confirmed at Gate 1. Project owns persistence. |
+
+No custom statistical or splitting algorithm has been identified as necessary.
+The owning [issue #19 plan](../../plans/milestone-1-us-12-assessment-splits.md)
+owns the approved contract, completed tasks, gate decisions and issue acceptance.
+Existing accepted extraction/quality APIs and their evidence remain intact.
+Project-loaded layout/membership can enter `create_partitions` supplied mode for
+validation/reconstruction. This does not validate the entire saved record or
+automatically detect changed values under valid IDs. Saved-layout JSON round-trip
+remains required project evidence; toolkit file/restoration guarantees are removed.
+
 ## Reproducible partitions
 
-Record seeded train/validation/test membership and source-data identity. Verify
-disjoint rows and target alignment. Accept explicit user-provided partitions for
-time/group-sensitive tasks, with recorded constraints and overlap checks; automatic
-time/group split algorithms are not required by this MVP.
+Support explicitly selected two-way (train/test) and three-way
+(train/validation/test) layouts for both seeded generation and supplied
+memberships. Record the selected layout, exact membership and source-data
+identity. Two-way layouts contain only train and test; no validation partition
+or empty placeholder is required. Validate partition names against the selected
+layout, disjoint rows and target alignment; saved records retain the selected
+layout and reject layout/membership mismatches. Accept explicit user-provided
+partitions for time/group-sensitive tasks, with recorded constraints and overlap
+checks; automatic time/group split algorithms are not required by this MVP.
 
-Training/preprocessing receives training rows; development scores use validation
-rows. Final testing occurs after validation-based selection. The supported path
+Generate ordinary seeded holdouts using
+[`sklearn.model_selection.train_test_split`](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html)
+or the appropriate native scikit-learn splitter. Use explicit integer
+`random_state` values; expose/record native `shuffle` and `stratify` choices
+without silently adding a policy. Two-way layout uses a native split directly.
+For three partitions, a documented composition
+of native splits can reserve test rows and then split the remainder into train
+and validation. Exact composition/ratios are subject to the discussion above;
+do not invent a replacement allocation or rounding algorithm. Record actual
+membership as well as settings, input order/identity and library version; a seed
+alone does not identify the original partitioned data.
+
+Project-owned time/group partition generation may use appropriate native
+scikit-learn capabilities such as `GroupShuffleSplit` or `TimeSeriesSplit`.
+These address different protocols: group-aware holdouts and ordered time-series
+cross-validation respectively. Do not assume successive split outputs form three
+disjoint partitions or silently reinterpret cross-validation folds as final
+train/validation/test sets. See the
+[scikit-learn splitting guide](https://scikit-learn.org/stable/modules/cross_validation.html).
+Toolkit-managed automatic time/group generation remains outside this issue's
+required scope; accept explicit memberships as already specified.
+
+Training/preprocessing receives training rows. Three-way experiments use
+validation rows for development; two-way preparation does not introduce a
+validation set or authorize tuning against final-test rows. Experiments requiring
+selection need an appropriate development evaluation strategy within training
+data or a separate validation partition, defined by the consuming story.
+This component does not add cross-validation execution. Final testing follows
+development/selection where applicable. The supported path
 does not feed final scores back into feature/tuning decisions. Arbitrary project
 Python can still access files; this is not protected evaluator storage.
 

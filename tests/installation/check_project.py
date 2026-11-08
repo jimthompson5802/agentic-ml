@@ -85,6 +85,7 @@ def main() -> None:
         "mlflow<4,>=3",
         "pandas<3.2,>=3.1",
         "pyarrow<26,>=25",
+        "scikit-learn<1.10,>=1.9.1",
     }, "unexpected declared runtime dependencies"
     for package in lock["package"]:
         package["optional_dependencies"] = package.get("optional-dependencies", {})

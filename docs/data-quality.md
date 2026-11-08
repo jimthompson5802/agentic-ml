@@ -12,7 +12,8 @@ Check a native pandas DataFrame against explicit project quality requirements.
 Return actionable measurements and stop a dependent project operation when a
 required check fails. This addresses US-12-AC-01/05 from
 [issue #15](https://github.com/jimthompson5802/agentic-ml/issues/15).
-Assessment/distributions and train/validation/test membership belong to #19;
+Assessment/distributions and two-way (train/test) or three-way
+(train/validation/test) membership belong to #19;
 training, DVC stages and the basic experiment runner belong to other stories.
 
 The [extraction API](extraction.md) returns a DataFrame and extraction provenance.

@@ -1,16 +1,65 @@
 # Development Checkpoints
 
-Last updated: 2026-11-07 (UTC)
+Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
-Checkout: `main`, baseline `8775327`; working tree contains the new
-[MVP project status](docs/project-status.md), its README link and this checkpoint
-update. No implementation phase is pending.
-**Next action:** await developer direction on subsequent work. The requested
-project overview is documentation only; no executable behavior changed, so TDD
-does not apply. `git diff --check` passed. The developer authorized committing
-and pushing these additions; publication proceeds with this record.
+Checkout: `US-12-assessment-splits`, IP4 baseline `ffd5322`, initially clean.
+Developer “start ip4”, 2026-11-08 UTC, authorized final installed verification.
+Developer “i approve ip4; commit”, 2026-11-08 UTC, approves Gate 4 and
+authorizes a local IP4 commit.
+Developer “i accept issue #19”, 2026-11-08 UTC, accepts AC-02/03 and both layouts.
+Developer “resolve this review comment”, 2026-11-08 UTC, authorizes correction
+of discussion r4504392360.
+**Next action:** await PR #62 merge direction. Review correction is complete;
+no subsequent story work is authorized.
+IP1–IP4 technical tasks Complete; Gates 1–4 Approved.
+IP4 adds installed project/probe/driver and M1 regression, README/guide/design
+status updates, plan/evidence/checkpoint. No toolkit runtime behavior changed.
+Both normal direct and sdist-rebuilt wheels pass assessment/partition matrices,
+installed identity/inventory/resource/CLI checks and cleanup. M1 and final M1–6
+each pass 713 tests with one existing skip (714 selected). Shared checks, guide
+demo and local document checks pass. Lock hash is unchanged from IP3 below.
+The [IP4 evidence](docs/verification/us-12-19-ip4.md) owns commands, raw records,
+probe corrections, actual counts and Linux aarch64 limits. macOS/Windows remain
+unverified. Issue #19 accepted and published as
+[PR #62](https://github.com/jimthompson5802/agentic-ml/pull/62) against `main`;
+acceptance commit `a672dca` pushed.
+[Static review](https://github.com/jimthompson5802/agentic-ml/pull/62#pullrequestreview-5815831258)
+published and verified, with one
+[Low finding](https://github.com/jimthompson5802/agentic-ml/pull/62#discussion_r4504392360)
+for stale current status in active data/interface design pages was addressed
+in pushed commit `23b260d`; thread resolution was verified on GitHub. The requested
+correction updates both pages and links completed identity/installed evidence,
+preserving the old heading anchor. Document checks pass: 101 local links/anchors,
+status/acceptance consistency, legacy anchor and whitespace. No executable
+changes or product tests; prior evidence remains applicable.
+Static review was renewed at `6df5c1b` (review 5815835314).
+Issue closure awaits merge; no merge or branch cleanup authorized.
+IP4 is committed as `600f49e`. Acceptance-record edits preserve test evidence;
+no executable changes follow the final verification.
+
+The [approved contract](docs/data-assessment-and-splits.md) retains two optional
+helpers, native pandas assessment/scikit-learn splits and project-owned JSON
+persistence. IP2 implements `assess_data`; IP3 adds `create_partitions` with seeded
+and supplied two-way/three-way layouts, complete disjoint ordered membership,
+source identity and contextual failures. Project-owned JSON reconstruction and
+extraction/quality/preparation composition pass. Time/group protocols remain
+declarations; identity is version-bound native Parquet.
+
+M1 passed 712 tests with one existing skip (713/815 selected, 102 deselected).
+All 124 focused cases pass. Locked synchronization, lint, formatting, strict
+typing, lock consistency and version smoke pass. The intentional lock update adds
+only direct scikit-learn metadata; final SHA-256 is
+`5f99c2da64eb46bc758f798f364e67eab25246253fc75315ebb404461e466a9d`.
+The [IP3 evidence](docs/verification/us-12-19-ip3.md) owns red/green commands,
+attempts, raw records and limits. IP4 subsequently completed both installed matrices and final M1–6; Linux aarch64 is the only platform verified in IP3.
+
+Issue #19 complete body and all comments refreshed with stable final timestamp
+`2026-11-07T21:38:29Z`, one unique comment and open state. Scope is unchanged:
+M1 AC-02/03 active, AC-04 deferred. Configured-token status failed but required
+GET reads succeeded. Accepted suppliers #14/#15 and their historical evidence
+remain intact. [IP1 evidence](docs/verification/us-12-19-ip1.md) owns Gate 1.
 
 US-12 issue [#15](https://github.com/jimthompson5802/agentic-ml/issues/15)
 is accepted and closed. PR #61 squash-merged as `1f9eb86`; local and remote
@@ -29,6 +78,13 @@ committed-project reproduction; M0 accepted, M50 ongoing, M99 deferred.
 govern implementation scope. No subsequent story implementation is authorized.
 
 ## Completed work: authoritative records
+
+Contributor skill added: `.agents/skills/report-test-progress/` monitors an
+existing pytest session in the current chat and reports remaining/total,
+completed and failed counts approximately every minute. It never launches tests;
+unavailable counts remain explicitly unknown. Documentation-only instructions
+and UI metadata add no executable behavior, so TDD does not apply. No pytest run
+was started for this work. Existing US-12 changes and Gate 2 status are unchanged.
 
 | Work | Final status and records |
 |---|---|

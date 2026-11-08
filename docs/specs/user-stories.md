@@ -216,7 +216,13 @@ Acceptance criteria:
 - <a id="us-12-ac-01"></a> **US-12-AC-01:** Validation checks schema, row counts, types, nulls, duplicates, and configured quality rules, reporting mismatches and failures.
 - <a id="us-12-ac-05"></a> **US-12-AC-05:** Report validation results and block supported pipeline steps when configured required checks fail.
 - <a id="us-12-ac-02"></a> **US-12-AC-02:** Provide basic distributions, missingness and classification target balance.
-- <a id="us-12-ac-03"></a> **US-12-AC-03:** Record seeded train/validation/test partitions; accept explicit user-supplied partitions for time/group problems and check row membership/disjointness.
+- <a id="us-12-ac-03"></a> **US-12-AC-03:** Support two-way (train/test) and three-way (train/validation/test) layouts for seeded generation and explicit user-supplied partitions, including time/group problems; record the selected layout and exact row membership, and check row membership/disjointness. Two-way layouts do not require a validation partition.
+
+Developer-directed scope alignment, 2026-11-07: AC-03 now explicitly supports
+both split layouts; its ID and three-way/supplied-partition obligations are
+preserved. [US-12-19-SC-02](../plans/milestone-1-us-12-assessment-splits.md#us-12-19-sc-02--two-way-and-three-way-layouts-2026-11-07-utc)
+records the request and implementation-plan impact. This is a requirements
+revision, not implementation acceptance or approval of a development gate.
 
 Supporting design: [overview](agentic-ml-harness-design.md) and reading map; MVP alignment in design 0.15; Gate 3 approved. Scope history: [approved dispositions](../reviews/mvp-scope-criterion-dispositions.md).
 

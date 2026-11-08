@@ -10,7 +10,8 @@ pipeline reproduction in a separate experiment project.
 **Current implementation:** pinned installation, conflict-safe initialization with
 draft configuration/local stores, strict versioned planning and scoped
 unauthenticated approvals, semantic configuration/candidate validation, and
-local pandas extraction with provenance.
+local pandas extraction with provenance, data-quality checks, descriptive
+assessment and recorded two-way/three-way partitions.
 Training, tuning, integrated run tracking, DVC stages/reproduction and the complete
 assistant walkthrough remain planned. Initialization does not yet create a
 runnable end-to-end experiment.
@@ -25,8 +26,9 @@ design and story scope were published through
 backlog is synchronized. Publication does not deliver unfinished experiment APIs.
 
 Start with the [current installation/setup guide](docs/experiment-setup.md),
-[configuration validation guide](docs/configuration-validation.md), and
-[pandas extraction guide](docs/extraction.md) for implemented
+[configuration validation guide](docs/configuration-validation.md),
+[pandas extraction guide](docs/extraction.md), and
+[assessment and splits guide](docs/data-assessment-and-splits.md) for implemented
 commands and Python APIs. The [assistant-supported walkthrough](docs/specs/example-walkthrough.md)
 describes the required MVP scenario and explicitly marks planned operations.
 
