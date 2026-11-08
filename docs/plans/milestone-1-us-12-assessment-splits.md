@@ -121,7 +121,9 @@ a local commit. Developer “start ip2” authorizes IP2 execution in this conve
 on 2026-11-07 UTC, baseline `37ffe7d` with a clean tree. Gate 2 is now approved by developer “i approve ip2; commit changes”,
 2026-11-07 UTC; a local IP2 commit is authorized. Developer “start ip3”,
 2026-11-07 UTC, authorizes IP3 on clean baseline `43cd770`. Developer “i approve ip3; commit”, 2026-11-07 UTC,
-approves Gate 3 and authorizes a local IP3 commit. Gate 4 remains Pending.
+approves Gate 3 and authorizes a local IP3 commit. Gate 4 is approved by developer “i approve ip4; commit”, 2026-11-08 UTC,
+authorizing a local IP4 commit. Issue-slice acceptance remains pending. Developer “start ip4”, 2026-11-08 UTC, authorizes
+IP4 on clean baseline `ffd5322`; installed and final verification is complete.
 Historical pending statements in scope records below describe their original
 decisions, not the current approval state.
 The earlier all-Not-started counts below are historical planning evidence.
@@ -546,14 +548,17 @@ stories, not deferred #19 tests.
 - **Outcome:** Both installed artifact paths verify all #19 public behavior;
   final guidance/evidence supports explicit issue-slice acceptance.
 - **Entry conditions:** Gate 3 approved and IP4 authorized.
+- **Execution:** Developer “start ip4”, 2026-11-08 UTC. Baseline `ffd5322`;
+  T1–T4 technically complete; M1 and final M1–6 each passed 713 tests
+  with one existing skip. Shared/document checks pass; Gate 4 Approved. [IP4 evidence](../verification/us-12-19-ip4.md).
 - **Acceptance criteria advanced:** AC-02/03 fully within #19 scope.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-12-19-IP4-T1 | Not started | Add proposed `tests/installation/{assessment_splits_project,check_assessment_splits,verify_assessment_splits}.py`; reuse `verification_support.Invocation` and normal distribution verifier | Gate 3 | Separate project uses only installed public interfaces, declared runtime dependencies and its own code; direct and rebuilt installs retain independent origins/identities | AC-02/03 |
-| US-12-19-IP4-T2 | Not started | Add M1 case in `tests/integration/test_distribution_verification.py`; TDD both installed helpers, seeded/supplied two-way/three-way time/group cases, project JSON round-trip/supplied reconstruction and invalid layout/membership cases | T1 | Each wheel exercises both retained helpers and revised positive/negative matrix from unrelated cwd using isolated Python; source identity, import origins, resources, CLI version, runtime inventory and cleanup/evidence checked; no toolkit filesystem/restoration claims | AC-02/03; SC-02/03 |
-| US-12-19-IP4-T3 | Not started | Finish guide and README link with explicit two-way/three-way examples and saved layouts; update active design status/traceability without rewriting history | T2 | Runnable examples show optional validation partition and both native split patterns; record schema/downstream handoff documented; no tuning on final-test data, fitting/DVC/assistant acceptance claim | AC-02/03; SC-02 |
-| US-12-19-IP4-T4 | Not started | Refresh #19, reconcile criteria/deferrals; run M1, final M1–6/shared checks and document validation; record proposed `docs/verification/us-12-19-ip4.md`, final table and checkpoint | T1–T3 | Final identities, actual counts/skips/platforms and all required #19 evidence reconciled before final gate; no executable change after evidence without renewal | AC-02/03 |
+| US-12-19-IP4-T1 | Complete | Add proposed `tests/installation/{assessment_splits_project,check_assessment_splits,verify_assessment_splits}.py`; reuse `verification_support.Invocation` and normal distribution verifier | Gate 3 | Separate project uses only installed public interfaces, declared runtime dependencies and its own code; direct and rebuilt installs retain independent origins/identities | AC-02/03 |
+| US-12-19-IP4-T2 | Complete | Add M1 case in `tests/integration/test_distribution_verification.py`; TDD both installed helpers, seeded/supplied two-way/three-way time/group cases, project JSON round-trip/supplied reconstruction and invalid layout/membership cases | T1 | Each wheel exercises both retained helpers and revised positive/negative matrix from unrelated cwd using isolated Python; source identity, import origins, resources, CLI version, runtime inventory and cleanup/evidence checked; no toolkit filesystem/restoration claims | AC-02/03; SC-02/03 |
+| US-12-19-IP4-T3 | Complete | Finish guide and README link with explicit two-way/three-way examples and saved layouts; update active design status/traceability without rewriting history | T2 | Runnable examples show optional validation partition and both native split patterns; record schema/downstream handoff documented; no tuning on final-test data, fitting/DVC/assistant acceptance claim | AC-02/03; SC-02 |
+| US-12-19-IP4-T4 | Complete | Refresh #19, reconcile criteria/deferrals; run M1, final M1–6/shared checks and document validation; record proposed `docs/verification/us-12-19-ip4.md`, final table and checkpoint | T1–T3 | Final identities, actual counts/skips/platforms and all required #19 evidence reconciled before final gate; no executable change after evidence without renewal | AC-02/03 |
 
 ### Verification and review evidence
 
@@ -567,10 +572,10 @@ probe behavior. Preserve existing driver cleanup/logging and runtime inventory.
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Installed criteria and integrity | New selected M1 distribution integration case invokes both artifact probes | Direct wheel and wheel rebuilt from sdist pass independently; complete outputs and failures retained | Pending |
-| Final phase milestone | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass with counts and skip limits | Pending |
-| Final issue-slice acceptance | `uv run --locked pytest -n 4 --dist=loadgroup` | M1–6 pass against final executable inputs | Pending |
-| Shared checks and documentation | Commands below plus changed links/anchors and guide examples | Pass; no unintended lock changes or false capability claims | Pending |
+| Installed criteria and integrity | New selected M1 distribution integration case invokes both artifact probes | Direct wheel and wheel rebuilt from sdist pass independently; complete outputs and failures retained | Passed; [IP4 evidence](../verification/us-12-19-ip4.md) |
+| Final phase milestone | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1` | Pass with counts and skip limits | Passed; 713 passed, 1 skipped; [IP4 evidence](../verification/us-12-19-ip4.md) |
+| Final issue-slice acceptance | `uv run --locked pytest -n 4 --dist=loadgroup` | M1–6 pass against final executable inputs | Passed; 713 passed, 1 skipped; [IP4 evidence](../verification/us-12-19-ip4.md) |
+| Shared checks and documentation | Commands below plus changed links/anchors and guide examples | Pass; no unintended lock changes or false capability claims | Passed; [IP4 evidence](../verification/us-12-19-ip4.md) |
 
 No broader local selection or standalone artifact command is automatic. Selected
 M1 tests invoke artifact drivers internally. Unverified operating systems and
@@ -580,15 +585,17 @@ historical skips remain explicit limitations; CI cannot substitute local evidenc
 
 - **Approval criteria:** T1–T4 complete, AC-02/03 mapped to actual installed
   evidence, M1/M1–6/shared checks pass and required deferrals reconciled.
-- **Evidence presented:** Pending final report and diff.
+- **Evidence presented:** [IP4 report](../verification/us-12-19-ip4.md), installed
+  project/probe/driver and regression, guide/README/design status updates. Both
+  wheel paths, M1 and final M1–6 pass; shared and document checks pass.
 - **Remaining limitations:** Deferred AC-04; downstream fitting/stage/tracking
   adoption, milestone acceptance and unverified platforms remain separate.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** Developer “i approve ip4; commit”,
+  2026-11-08 UTC.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Stop at final gate. Issue #19 acceptance must be
-  explicit; phase approval serves acceptance only if the developer says so.
-  Publication follows separately authorized execution workflow, not this request.
+- **Progression authorized:** Local IP4 commit. Await explicit issue #19
+  acceptance; no push or PR authorized by this phase approval.
 
 ## Shared checks and execution rules
 
@@ -643,27 +650,28 @@ records. Update `CHECKPOINTS.md` at completions, gates, blockers and handoff.
   IP4-T1/T2; excluded M2–6 regressions resolve in IP4-T4. Existing temporary skips
   and M0/M50/M99/infrastructure exclusions do not establish passing coverage.
   Missing required #19 evidence blocks acceptance.
-- **Actual results and limitations:** Pending. Planning performed no product
-  tests, builds, dependency installation or executable changes. No new platform
-  support or completed AC is claimed.
+- **Actual results and limitations:** [IP4 evidence](../verification/us-12-19-ip4.md)
+  reconciles both installed paths and final M1/M1–6/shared checks. Linux aarch64
+  only; existing skip and deferred milestone owners remain. Acceptance pending.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-12-AC-02 (#19) | IP1-T2/T4; IP2-T1–T3; IP4-T1–T4 | Reviewed literal distribution/missingness/target matrix, both installed paths, final M1–6 | Pending |
-| US-12-AC-03 (#19) | IP1-T3/T4; IP3-T1–T4; IP4-T1–T4 | Fixed seeded oracle; supplied time/group membership; invalid layout/membership, consumed-frame identity and project JSON round-trip/reconstruction, both installed paths | Pending |
-| Developer extension US-12-19-SC-02: two-way and three-way layouts | IP1-T1/T3/T4; IP3-T1–T3; IP4-T1–T4 | Both layouts generated and supplied, no two-way validation placeholder, recorded layout round-trip/mismatch errors, both installed paths | Pending |
-| US-12-AC-01/05 (#15) | Existing supplier plan; IP3-T4/IP4-T2 reuse regressions | Supplier acceptance retained; new composition evidence pending | Accepted supplier scope; no reopening or new acceptance claimed |
+| US-12-AC-02 (#19) | IP1-T2/T4; IP2-T1–T3; IP4-T1–T4 | Reviewed literal distribution/missingness/target matrix, both installed paths, final M1–6 | Verified; developer acceptance pending |
+| US-12-AC-03 (#19) | IP1-T3/T4; IP3-T1–T4; IP4-T1–T4 | Fixed seeded oracle; supplied time/group membership; invalid layout/membership, consumed-frame identity and project JSON round-trip/reconstruction, both installed paths | Verified; developer acceptance pending |
+| Developer extension US-12-19-SC-02: two-way and three-way layouts | IP1-T1/T3/T4; IP3-T1–T3; IP4-T1–T4 | Both layouts generated and supplied, no two-way validation placeholder, recorded layout round-trip/mismatch errors, both installed paths | Verified; developer acceptance pending |
+| US-12-AC-01/05 (#15) | Existing supplier plan; IP3-T4/IP4-T2 reuse regressions | Supplier acceptance retained; new composition passes in IP3/IP4 | Accepted supplier scope; no reopening or new acceptance claimed |
 | US-12-AC-04 | Explicit future activation required | None claimed | Deferred |
 
 - **Remaining work:** IP1/IP2 tasks Complete; Gates 1–2 approved.
-  IP3/IP4 Not started. Await explicit IP3 authorization.
+  IP3 complete and Gate 3 approved. IP4 technically complete; Gate 4 approved; issue-slice acceptance pending.
   No full experiment, DVC reproduction or assistant
   acceptance is implied.
 - **Partial prerequisite delivery:** No new supplier slices; #19 consumes
   accepted #14/#15 and supplies future consumers with reports and split records.
-- **Final verification:** Pending IP4-T4; required before acceptance.
+- **Final verification:** IP4-T4 Complete; M1 and M1–6 each pass 713 tests
+  with one existing skip. Shared/document checks and both installed paths pass.
 - **Developer acceptance:** Pending, explicitly for #19 AC-02/03 slice.
 - **Decision reference and date:** Pending.
 

@@ -1,18 +1,24 @@
 # Development Checkpoints
 
-Last updated: 2026-11-07 (UTC)
+Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-12-assessment-splits`, IP3 baseline `43cd770`, initially clean.
-Developer “start ip3”, 2026-11-07 UTC, authorized IP3. Developer
-“i approve ip3; commit”, 2026-11-07 UTC, approves Gate 3 and a local IP3 commit.
-**Next action:** await explicit IP4 execution authorization.
-IP3-T1–T4 Complete; Gates 1–3 Approved; IP4 Not started. No push or PR authorized.
-The approved changes include the splitting module, 124 public tests, direct
-dependency/lock/inventory updates, contributor typing stubs, guide, plan, evidence
-and checkpoint. The developer-requested [demo](examples/assessment_and_splits.py)
-runs successfully and changes no toolkit behavior.
+Checkout: `US-12-assessment-splits`, IP4 baseline `ffd5322`, initially clean.
+Developer “start ip4”, 2026-11-08 UTC, authorized final installed verification.
+Developer “i approve ip4; commit”, 2026-11-08 UTC, approves Gate 4 and
+authorizes a local IP4 commit.
+**Next action:** await explicit issue #19 acceptance.
+IP1–IP4 technical tasks Complete; Gates 1–4 Approved.
+IP4 adds installed project/probe/driver and M1 regression, README/guide/design
+status updates, plan/evidence/checkpoint. No toolkit runtime behavior changed.
+Both normal direct and sdist-rebuilt wheels pass assessment/partition matrices,
+installed identity/inventory/resource/CLI checks and cleanup. M1 and final M1–6
+each pass 713 tests with one existing skip (714 selected). Shared checks, guide
+demo and local document checks pass. Lock hash is unchanged from IP3 below.
+The [IP4 evidence](docs/verification/us-12-19-ip4.md) owns commands, raw records,
+probe corrections, actual counts and Linux aarch64 limits. macOS/Windows remain
+unverified. IP4 local commit authorized; push, PR and issue acceptance pending.
 
 The [approved contract](docs/data-assessment-and-splits.md) retains two optional
 helpers, native pandas assessment/scikit-learn splits and project-owned JSON
@@ -28,8 +34,7 @@ typing, lock consistency and version smoke pass. The intentional lock update add
 only direct scikit-learn metadata; final SHA-256 is
 `5f99c2da64eb46bc758f798f364e67eab25246253fc75315ebb404461e466a9d`.
 The [IP3 evidence](docs/verification/us-12-19-ip3.md) owns red/green commands,
-attempts, raw records and limits. Both installed matrices and final M1–6 remain
-IP4; Linux aarch64 is the only platform verified in IP3.
+attempts, raw records and limits. IP4 subsequently completed both installed matrices and final M1–6; Linux aarch64 is the only platform verified in IP3.
 
 Issue #19 complete body and all comments refreshed with stable final timestamp
 `2026-11-07T21:38:29Z`, one unique comment and open state. Scope is unchanged:

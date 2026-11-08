@@ -3,7 +3,7 @@
 **Status:** IP1 contract approved for [issue #19](https://github.com/jimthompson5802/agentic-ml/issues/19),
 M1 / US-12-AC-02 and US-12-AC-03. `assess_data` is implemented in IP2;
 `create_partitions` is implemented in IP3; Gate 3 approved on 2026-11-07 UTC.
-Installed verification remains IP4.
+IP4 verifies both installed wheel paths; Gate 4 approved on 2026-11-08 UTC; issue acceptance remains pending.
 Developer selected only `assess_data` and `create_partitions` in this conversation;
 “make the update” authorizes the corresponding documentation revision.
 Developer “i approve ip1; commit changes”, 2026-11-07 UTC, confirms the contracts,
@@ -184,14 +184,14 @@ not accept an entire saved record or verify its old checksum/library versions.
 Comparing saved/current identities belongs to project code and requires matching
 serialization versions for meaningful byte comparisons. Recorded versions are
 provenance, not a toolkit restoration compatibility gate.
-IP3 verifies repeat serialization, supported dtype sensitivity and JSON round-trip;
+IP3 verified repeat serialization, supported dtype sensitivity and JSON round-trip;
 any failure invalidating this proposal reopens IP1 before dependent changes.
 External file/DVC identity remains the project/US-13 responsibility. This local
 record is not authenticated against a writer who changes both data and record.
 
 ## Project-owned persistence and reconstruction
 
-The following is proposed project code; it is not an additional toolkit API.
+The following is project code; it is not an additional toolkit API.
 Here `root` is the project's explicit absolute path and `records/` already exists.
 
 ```python
@@ -332,4 +332,5 @@ separation. Preparation may be a callback to `run_validated_step`; a required
 quality failure prevents assessment/splitting and other callback work. Empty
 quality rules allow preparation with `not_checked`, without claiming quality
 passed. See [IP3 evidence](verification/us-12-19-ip3.md) for public composition,
-identity limits, tests and pending installed coverage.
+identity limits and public tests. Installed coverage is recorded in
+[IP4 evidence](verification/us-12-19-ip4.md); Gate 4 approved on 2026-11-08 UTC; issue acceptance remains pending.
