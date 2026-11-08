@@ -1,6 +1,6 @@
 # MVP project status
 
-Last updated: 2026-11-07.
+Last updated: 2026-11-08 (UTC).
 
 The MVP ends at Milestone 2. This overview includes its required stories and the
 accepted M0 foundation. Repeated stories represent different milestone slices.
@@ -11,6 +11,16 @@ merge. Qualifications identify remaining integration or story work. “Open” m
 the owning GitHub issue remains open; it does not imply implementation is underway.
 Story acceptance does not establish milestone acceptance. M1 milestone acceptance
 verification remains outstanding; the complete MVP has not been delivered.
+
+The latest accepted delivery is US-12 assessment and recorded partitions:
+[PR #62](https://github.com/jimthompson5802/agentic-ml/pull/62) squash-merged as
+`980c97f` on 2026-11-08 UTC, closing issue #19. Both two-way (train/test) and
+three-way (train/validation/test) layouts are delivered. Mandatory experiment
+assessment approval (US-12-AC-04) remains deferred; downstream fitting, tracking,
+DVC and assistant integration remain separately owned. The
+[implementation plan](plans/milestone-1-us-12-assessment-splits.md) and
+[final evidence](verification/us-12-19-ip4.md) record acceptance and limitations.
+No subsequent story implementation is authorized.
 
 | Milestone | User story | Status |
 |---|---|---|
@@ -23,7 +33,7 @@ verification remains outstanding; the complete MVP has not been delivered.
 | M1 | US-05: Reject invalid configurations ([#11](https://github.com/jimthompson5802/agentic-ml/issues/11)) | Validation accepted and merged; training integration pending |
 | M1 | US-10: Run and inspect local experiments ([#13](https://github.com/jimthompson5802/agentic-ml/issues/13)) | Open |
 | M1 | US-11: Extract local experiment data ([#14](https://github.com/jimthompson5802/agentic-ml/issues/14)) | Accepted and merged |
-| M1 | US-12: Validate data and define reproducible splits ([#15](https://github.com/jimthompson5802/agentic-ml/issues/15), [#19](https://github.com/jimthompson5802/agentic-ml/issues/19)) | Validation, assessment and splits accepted and merged; [PR #62](https://github.com/jimthompson5802/agentic-ml/pull/62) squash-merged 2026-11-08 |
+| M1 | US-12: Validate data and define reproducible splits ([#15](https://github.com/jimthompson5802/agentic-ml/issues/15), [#19](https://github.com/jimthompson5802/agentic-ml/issues/19)) | AC-01/02/03/05 accepted and merged; both issues closed; AC-04 deferred |
 | M1 | US-13: Version datasets with DVC ([#16](https://github.com/jimthompson5802/agentic-ml/issues/16)) | Open |
 | M1 | US-14: Build and compare feature pipelines ([#20](https://github.com/jimthompson5802/agentic-ml/issues/20)) | Open |
 | M1 | US-15: Preserve training-only preprocessing ([#21](https://github.com/jimthompson5802/agentic-ml/issues/21)) | Open |

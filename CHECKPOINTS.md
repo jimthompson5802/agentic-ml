@@ -54,6 +54,13 @@ govern implementation scope. No subsequent story implementation is authorized.
 
 ## Completed work: authoritative records
 
+Refreshed [MVP project status](docs/project-status.md) against current GitHub
+issue states, the US-12 #19 plan and final evidence. The overview now uses a UTC
+date and explicitly records delivered criteria, both split layouts, deferred
+AC-04 and separately owned integration. Documentation only: TDD and executable
+tests do not apply; relative links and `git diff --check` verified. This handoff
+changes only the status overview and this checkpoint; no implementation authorized.
+
 Contributor skill added: `.agents/skills/report-test-progress/` monitors an
 existing pytest session in the current chat and reports remaining/total,
 completed and failed counts approximately every minute. It never launches tests;
