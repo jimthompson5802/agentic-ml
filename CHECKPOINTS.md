@@ -4,62 +4,35 @@ Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-12-assessment-splits`, IP4 baseline `ffd5322`, initially clean.
-Developer “start ip4”, 2026-11-08 UTC, authorized final installed verification.
-Developer “i approve ip4; commit”, 2026-11-08 UTC, approves Gate 4 and
-authorizes a local IP4 commit.
-Developer “i accept issue #19”, 2026-11-08 UTC, accepts AC-02/03 and both layouts.
-Developer “resolve this review comment”, 2026-11-08 UTC, authorizes correction
-of discussion r4504392360.
-**Next action:** await PR #62 merge direction. Review correction is complete;
-no subsequent story work is authorized.
-IP1–IP4 technical tasks Complete; Gates 1–4 Approved.
-IP4 adds installed project/probe/driver and M1 regression, README/guide/design
-status updates, plan/evidence/checkpoint. No toolkit runtime behavior changed.
-Both normal direct and sdist-rebuilt wheels pass assessment/partition matrices,
-installed identity/inventory/resource/CLI checks and cleanup. M1 and final M1–6
-each pass 713 tests with one existing skip (714 selected). Shared checks, guide
-demo and local document checks pass. Lock hash is unchanged from IP3 below.
-The [IP4 evidence](docs/verification/us-12-19-ip4.md) owns commands, raw records,
-probe corrections, actual counts and Linux aarch64 limits. macOS/Windows remain
-unverified. Issue #19 accepted and published as
-[PR #62](https://github.com/jimthompson5802/agentic-ml/pull/62) against `main`;
-acceptance commit `a672dca` pushed.
-[Static review](https://github.com/jimthompson5802/agentic-ml/pull/62#pullrequestreview-5815831258)
-published and verified, with one
-[Low finding](https://github.com/jimthompson5802/agentic-ml/pull/62#discussion_r4504392360)
-for stale current status in active data/interface design pages was addressed
-in pushed commit `23b260d`; thread resolution was verified on GitHub. The requested
-correction updates both pages and links completed identity/installed evidence,
-preserving the old heading anchor. Document checks pass: 101 local links/anchors,
-status/acceptance consistency, legacy anchor and whitespace. No executable
-changes or product tests; prior evidence remains applicable.
-Static review was renewed at `6df5c1b` (review 5815835314).
-Issue closure awaits merge; no merge or branch cleanup authorized.
-IP4 is committed as `600f49e`. Acceptance-record edits preserve test evidence;
-no executable changes follow the final verification.
+Checkout: `main`, squash-merge baseline `980c97f`, initially clean after pull.
+Developer “squash merge; switch to main; pull changes; commit and push”,
+2026-11-08 UTC, authorizes this merge and the completion-record commit/push.
+**Next action:** await developer direction on subsequent work.
 
-The [approved contract](docs/data-assessment-and-splits.md) retains two optional
-helpers, native pandas assessment/scikit-learn splits and project-owned JSON
-persistence. IP2 implements `assess_data`; IP3 adds `create_partitions` with seeded
-and supplied two-way/three-way layouts, complete disjoint ordered membership,
-source identity and contextual failures. Project-owned JSON reconstruction and
-extraction/quality/preparation composition pass. Time/group protocols remain
-declarations; identity is version-bound native Parquet.
+US-12 issue [#19](https://github.com/jimthompson5802/agentic-ml/issues/19)
+AC-02/03 and both split layouts are accepted; IP1–IP4 Complete and Gates 1–4
+Approved. [PR #62](https://github.com/jimthompson5802/agentic-ml/pull/62)
+squash-merged as `980c97f34e4dcac3d13086825641b821e13f80d4` at
+2026-11-08T01:12:16Z; issue #19 closed at 01:12:17Z. Local `main` pulled by
+fast-forward. Branches were retained. The owning
+[plan](docs/plans/milestone-1-us-12-assessment-splits.md) and
+[IP4 evidence](docs/verification/us-12-19-ip4.md) preserve acceptance,
+publication/review, resolved documentation finding and verification limits.
+The requested completion records are documentation only; existing executable
+evidence remains applicable. No product tests were rerun for merge records.
 
-M1 passed 712 tests with one existing skip (713/815 selected, 102 deselected).
-All 124 focused cases pass. Locked synchronization, lint, formatting, strict
-typing, lock consistency and version smoke pass. The intentional lock update adds
-only direct scikit-learn metadata; final SHA-256 is
+Assessment and partitions use native pandas/scikit-learn through two optional
+helpers. Project code owns JSON persistence and old/current identity comparisons.
+Time/group protocols remain declarations; source identity is version-bound
+native Parquet. Both installed wheel paths passed. Final M1 and M1–6 each passed
+713 tests with one existing skip (714 selected); shared checks and guide demo
+passed on Linux aarch64 / Python 3.12.16. macOS/Windows remain unverified here.
+Pre-merge hosted Linux/Python 3.12 CI passed at head `a018794`;
+[run 42432054301](https://github.com/jimthompson5802/agentic-ml/actions/runs/42432054301)
+does not close historical milestone verification obligations. Lock SHA-256:
 `5f99c2da64eb46bc758f798f364e67eab25246253fc75315ebb404461e466a9d`.
-The [IP3 evidence](docs/verification/us-12-19-ip3.md) owns red/green commands,
-attempts, raw records and limits. IP4 subsequently completed both installed matrices and final M1–6; Linux aarch64 is the only platform verified in IP3.
-
-Issue #19 complete body and all comments refreshed with stable final timestamp
-`2026-11-07T21:38:29Z`, one unique comment and open state. Scope is unchanged:
-M1 AC-02/03 active, AC-04 deferred. Configured-token status failed but required
-GET reads succeeded. Accepted suppliers #14/#15 and their historical evidence
-remain intact. [IP1 evidence](docs/verification/us-12-19-ip1.md) owns Gate 1.
+AC-04 remains deferred; downstream fitting, tracking, DVC and assistant
+integration remain separately owned. No subsequent story implementation authorized.
 
 US-12 issue [#15](https://github.com/jimthompson5802/agentic-ml/issues/15)
 is accepted and closed. PR #61 squash-merged as `1f9eb86`; local and remote
@@ -90,6 +63,7 @@ was started for this work. Existing US-12 changes and Gate 2 status are unchange
 |---|---|
 | US-01–03 | Accepted and merged; [US-01](docs/plans/milestone-1-us-01.md), [US-02](docs/plans/milestone-1-us-02.md), [US-03](docs/plans/milestone-1-us-03.md). |
 | US-11 | Accepted and merged in PR #60; [plan](docs/plans/milestone-1-us-11.md), [IP3 evidence](docs/verification/us-11-ip3.md). |
+| US-12 #19 | Accepted and squash-merged in PR #62 as `980c97f`; [plan](docs/plans/milestone-1-us-12-assessment-splits.md), [IP4 evidence](docs/verification/us-12-19-ip4.md). AC-04 deferred. |
 | US-12 #15 | Accepted and merged in PR #61; [plan](docs/plans/milestone-1-us-12.md), [IP3 evidence](docs/verification/us-12-ip3.md), correction linked above. |
 | MVP scope revision | Accepted and published; PR #57 merged; US-39 #58 and US-40 #59 created. [Plan](docs/plans/mvp-scope-revision.md), [publication evidence](docs/verification/mvp-scope-revision-ip4.md). This accepts scope documents, not an implemented MVP. |
 | US-35/36 | Accepted and merged in PRs #48/#50; [US-35](docs/plans/milestone-50-us-35.md), [US-36](docs/plans/milestone-50-us-36.md). US-37/38 remain local stories without implementation authorization. |
