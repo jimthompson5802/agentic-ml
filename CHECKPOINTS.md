@@ -40,8 +40,14 @@ static follow-up at the new head. Hosted Linux/Python 3.12 CI
 [run 42517266796](https://github.com/jimthompson5802/agentic-ml/actions/runs/42517266796)
 was pending at last check. Publication records are documentation only; local
 executable evidence remains applicable. No merge or branch cleanup authorized.
-**Next action:** await developer direction; PR publication/review complete after
-publication-record push and final-head review verification.
+Developer requested committing and pushing the pending CI job-timeout change:
+`.github/workflows/ci.yml` increases the development job limit from 20 to 30
+minutes. This changes contributor CI infrastructure only; no new toolkit behavior,
+so TDD/product tests do not apply. The exact one-line workflow diff and
+`git diff --check` passed; hosted success for the new limit is not yet verified.
+The [final-head static review](https://github.com/jimthompson5802/agentic-ml/pull/65#pullrequestreview-5819459201)
+covered `a8f79cd` with no actionable findings; it predates this timeout change.
+**Next action:** await developer direction and hosted CI results; no merge authorized.
 
 Previous publication context follows; it does not authorize US-41 implementation.
 Developer authorized squash merge and pull on 2026-11-08.
