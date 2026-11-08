@@ -10,9 +10,10 @@ documentation reconciliation. Developer “commit changes” subsequently author
 the local documentation commit. Corrections are complete: active
 design topics/walkthrough, three linked usage guides, the
 [reconciliation report](docs/reviews/source-design-reconciliation-2026-11-08-07-19.md)
-and this checkpoint are included in that commit. No product implementation or
-publication is authorized. **Next action:** await developer direction; no push
-requested.
+and this checkpoint are included in that commit. Developer “create pull request”,
+2026-11-08, authorizes branch publication and a PR from `reconcile-design` to
+`main`. No product implementation is authorized. **Next action:** publish and
+verify the documentation PR; await developer review before merge.
 
 The design now records accepted US-11 extraction and US-12 quality/assessment/
 partitions, exact split composition and project-owned persistence/identity checks.
