@@ -122,7 +122,7 @@ on 2026-11-07 UTC, baseline `37ffe7d` with a clean tree. Gate 2 is now approved 
 2026-11-07 UTC; a local IP2 commit is authorized. Developer “start ip3”,
 2026-11-07 UTC, authorizes IP3 on clean baseline `43cd770`. Developer “i approve ip3; commit”, 2026-11-07 UTC,
 approves Gate 3 and authorizes a local IP3 commit. Gate 4 is approved by developer “i approve ip4; commit”, 2026-11-08 UTC,
-authorizing a local IP4 commit. Issue-slice acceptance remains pending. Developer “start ip4”, 2026-11-08 UTC, authorizes
+authorizing a local IP4 commit. Issue #19 accepted by developer “i accept issue #19”, 2026-11-08 UTC. Developer “start ip4”, 2026-11-08 UTC, authorizes
 IP4 on clean baseline `ffd5322`; installed and final verification is complete.
 Historical pending statements in scope records below describe their original
 decisions, not the current approval state.
@@ -594,8 +594,8 @@ historical skips remain explicit limitations; CI cannot substitute local evidenc
 - **Decision reference and date:** Developer “i approve ip4; commit”,
   2026-11-08 UTC.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Local IP4 commit. Await explicit issue #19
-  acceptance; no push or PR authorized by this phase approval.
+- **Progression authorized:** Local IP4 commit under Gate 4. Subsequent explicit
+  issue acceptance authorizes the execute-plan publication/review sequence.
 
 ## Shared checks and execution rules
 
@@ -658,22 +658,22 @@ records. Update `CHECKPOINTS.md` at completions, gates, blockers and handoff.
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-12-AC-02 (#19) | IP1-T2/T4; IP2-T1–T3; IP4-T1–T4 | Reviewed literal distribution/missingness/target matrix, both installed paths, final M1–6 | Verified; developer acceptance pending |
-| US-12-AC-03 (#19) | IP1-T3/T4; IP3-T1–T4; IP4-T1–T4 | Fixed seeded oracle; supplied time/group membership; invalid layout/membership, consumed-frame identity and project JSON round-trip/reconstruction, both installed paths | Verified; developer acceptance pending |
-| Developer extension US-12-19-SC-02: two-way and three-way layouts | IP1-T1/T3/T4; IP3-T1–T3; IP4-T1–T4 | Both layouts generated and supplied, no two-way validation placeholder, recorded layout round-trip/mismatch errors, both installed paths | Verified; developer acceptance pending |
+| US-12-AC-02 (#19) | IP1-T2/T4; IP2-T1–T3; IP4-T1–T4 | Reviewed literal distribution/missingness/target matrix, both installed paths, final M1–6 | Verified; accepted 2026-11-08 |
+| US-12-AC-03 (#19) | IP1-T3/T4; IP3-T1–T4; IP4-T1–T4 | Fixed seeded oracle; supplied time/group membership; invalid layout/membership, consumed-frame identity and project JSON round-trip/reconstruction, both installed paths | Verified; accepted 2026-11-08 |
+| Developer extension US-12-19-SC-02: two-way and three-way layouts | IP1-T1/T3/T4; IP3-T1–T3; IP4-T1–T4 | Both layouts generated and supplied, no two-way validation placeholder, recorded layout round-trip/mismatch errors, both installed paths | Verified; accepted 2026-11-08 |
 | US-12-AC-01/05 (#15) | Existing supplier plan; IP3-T4/IP4-T2 reuse regressions | Supplier acceptance retained; new composition passes in IP3/IP4 | Accepted supplier scope; no reopening or new acceptance claimed |
 | US-12-AC-04 | Explicit future activation required | None claimed | Deferred |
 
 - **Remaining work:** IP1/IP2 tasks Complete; Gates 1–2 approved.
-  IP3 complete and Gate 3 approved. IP4 technically complete; Gate 4 approved; issue-slice acceptance pending.
+  IP3 complete and Gate 3 approved. IP4 technically complete; Gate 4 approved; issue-slice accepted on 2026-11-08 UTC.
   No full experiment, DVC reproduction or assistant
   acceptance is implied.
 - **Partial prerequisite delivery:** No new supplier slices; #19 consumes
   accepted #14/#15 and supplies future consumers with reports and split records.
 - **Final verification:** IP4-T4 Complete; M1 and M1–6 each pass 713 tests
   with one existing skip. Shared/document checks and both installed paths pass.
-- **Developer acceptance:** Pending, explicitly for #19 AC-02/03 slice.
-- **Decision reference and date:** Pending.
+- **Developer acceptance:** Accepted for issue #19 AC-02/03 and both-layout extension.
+- **Decision reference and date:** Developer “i accept issue #19”, 2026-11-08 UTC.
 
 ## Milestone acceptance handoff
 
@@ -688,3 +688,12 @@ milestone acceptance. Complete-suite
 distribution/installation checks and other broader checks require explicit
 developer commands. Preserve their obligations without running them merely
 because a template mentions them. Issue acceptance is not milestone acceptance.
+
+## Acceptance and publication
+
+Developer “i accept issue #19”, 2026-11-08 UTC, accepts AC-02/03 and SC-02's
+both-layout extension after Gates 1–4 and final verification. AC-04 remains
+deferred; milestone acceptance and downstream integration are separate.
+Under the execute-plan workflow, this acceptance authorizes committing remaining
+records, ordinary push, PR creation and a published static COMMENT review.
+Publication is in progress. Merging and branch cleanup are not authorized.

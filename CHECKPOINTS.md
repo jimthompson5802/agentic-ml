@@ -8,7 +8,8 @@ Checkout: `US-12-assessment-splits`, IP4 baseline `ffd5322`, initially clean.
 Developer “start ip4”, 2026-11-08 UTC, authorized final installed verification.
 Developer “i approve ip4; commit”, 2026-11-08 UTC, approves Gate 4 and
 authorizes a local IP4 commit.
-**Next action:** await explicit issue #19 acceptance.
+Developer “i accept issue #19”, 2026-11-08 UTC, accepts AC-02/03 and both layouts.
+**Next action:** publish the accepted branch, create its PR and post static review.
 IP1–IP4 technical tasks Complete; Gates 1–4 Approved.
 IP4 adds installed project/probe/driver and M1 regression, README/guide/design
 status updates, plan/evidence/checkpoint. No toolkit runtime behavior changed.
@@ -18,7 +19,9 @@ each pass 713 tests with one existing skip (714 selected). Shared checks, guide
 demo and local document checks pass. Lock hash is unchanged from IP3 below.
 The [IP4 evidence](docs/verification/us-12-19-ip4.md) owns commands, raw records,
 probe corrections, actual counts and Linux aarch64 limits. macOS/Windows remain
-unverified. IP4 local commit authorized; push, PR and issue acceptance pending.
+unverified. Issue #19 accepted; execute-plan publication/review in progress.
+IP4 is committed as `600f49e`. Acceptance-record edits preserve test evidence;
+no executable changes follow the final verification.
 
 The [approved contract](docs/data-assessment-and-splits.md) retains two optional
 helpers, native pandas assessment/scikit-learn splits and project-owned JSON

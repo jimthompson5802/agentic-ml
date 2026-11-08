@@ -3,7 +3,7 @@
 **Status:** IP1 contract approved for [issue #19](https://github.com/jimthompson5802/agentic-ml/issues/19),
 M1 / US-12-AC-02 and US-12-AC-03. `assess_data` is implemented in IP2;
 `create_partitions` is implemented in IP3; Gate 3 approved on 2026-11-07 UTC.
-IP4 verifies both installed wheel paths; Gate 4 approved on 2026-11-08 UTC; issue acceptance remains pending.
+IP4 verifies both installed wheel paths; Gate 4 approved on 2026-11-08 UTC; issue #19 accepted on 2026-11-08 UTC.
 Developer selected only `assess_data` and `create_partitions` in this conversation;
 “make the update” authorizes the corresponding documentation revision.
 Developer “i approve ip1; commit changes”, 2026-11-07 UTC, confirms the contracts,
@@ -333,4 +333,4 @@ quality failure prevents assessment/splitting and other callback work. Empty
 quality rules allow preparation with `not_checked`, without claiming quality
 passed. See [IP3 evidence](verification/us-12-19-ip3.md) for public composition,
 identity limits and public tests. Installed coverage is recorded in
-[IP4 evidence](verification/us-12-19-ip4.md); Gate 4 approved on 2026-11-08 UTC; issue acceptance remains pending.
+[IP4 evidence](verification/us-12-19-ip4.md); Gate 4 approved on 2026-11-08 UTC; issue #19 accepted on 2026-11-08 UTC.
