@@ -11,8 +11,8 @@ authorizes a local IP4 commit.
 Developer “i accept issue #19”, 2026-11-08 UTC, accepts AC-02/03 and both layouts.
 Developer “resolve this review comment”, 2026-11-08 UTC, authorizes correction
 of discussion r4504392360.
-**Next action:** publish the verified documentation correction and resolve its
-review thread; await separate PR merge direction.
+**Next action:** await PR #62 merge direction. Review correction is complete;
+no subsequent story work is authorized.
 IP1–IP4 technical tasks Complete; Gates 1–4 Approved.
 IP4 adds installed project/probe/driver and M1 regression, README/guide/design
 status updates, plan/evidence/checkpoint. No toolkit runtime behavior changed.
@@ -28,7 +28,8 @@ acceptance commit `a672dca` pushed.
 [Static review](https://github.com/jimthompson5802/agentic-ml/pull/62#pullrequestreview-5815831258)
 published and verified, with one
 [Low finding](https://github.com/jimthompson5802/agentic-ml/pull/62#discussion_r4504392360)
-for stale current status in active data/interface design pages. The requested
+for stale current status in active data/interface design pages was addressed
+in pushed commit `23b260d`; thread resolution was verified on GitHub. The requested
 correction updates both pages and links completed identity/installed evidence,
 preserving the old heading anchor. Document checks pass: 101 local links/anchors,
 status/acceptance consistency, legacy anchor and whitespace. No executable
