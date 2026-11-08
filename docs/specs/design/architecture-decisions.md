@@ -63,6 +63,23 @@ in Milestone 50. An owning contract review and implementation plan must settle
 supported dependency forms, artifact identity and explicit upgrade behavior before
 dependent implementation. Existing full-SHA Git support remains required.
 
+## US-41 / ADR-007 extension at Gate 1
+
+**Contract approved at Gate 1 (2026-11-08); unimplemented.** Developer decision:
+“i approve ip1; commit changes”. Use retained local purelib wheels
+with native locked SHA-256, installed origin/version and independent payload
+comparison. Native uv does not record the installed archive hash, even for the
+probed hashed direct URL. Do not claim that it does. Gate 1 accepted the
+[bounded identity and journal contract](interfaces-and-configuration.md#us-41-wheel-contract-proposed-at-gate-1)
+and its inability to distinguish identical payloads in differently encoded ZIPs,
+as recorded in the owning plan. URL support is excluded from the first
+implementation; local wheels already supply locked integrity without hosting.
+Keep the full-SHA Git path, existing public initializer and 0.1 journal. Completed
+wheel setups may refresh after explicit native upgrades; incomplete operations
+retain identity/checksum recovery guards. This decision is not delivered support.
+See [IP1 evidence](../../verification/us-41-ip1.md) and
+[owning plan](../../plans/milestone-50-us-41.md).
+
 ## Deferred assurance register
 
 All eight former blocker/assurance records retain their histories. They block

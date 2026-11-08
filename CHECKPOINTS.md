@@ -4,20 +4,23 @@ Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-41-distribution-init`; planning changes are uncommitted.
-Developer requested a plan for US-41 on 2026-11-08. The approved
-[US-41 plan](docs/plans/milestone-50-us-41.md) covers issue #64 AC-01–06
-in four implementation phases: contract feasibility/review, wheel initialization
-and identity, explicit upgrades, and installed direct/rebuilt-wheel verification.
-Complete issue retrieval confirmed zero comments and stable metadata.
-Developer accepted the plan on 2026-11-08 (“i accept plan”); phase execution
-has not yet been requested and all implementation gates remain Pending. Exact supported wheel
-forms, locked integrity and upgrade/journal compatibility are assigned to IP1;
-no implementation, installer probe or executable test was performed.
-Verification: plan links/task/criterion/gate review and `git diff --check`.
-TDD/product tests do not apply to this documentation-only approval record.
-**Next action:** await direction to execute IP1; no implementation gate or
-publication is approved by plan acceptance.
+Checkout: `US-41-distribution-init`; working tree contains US-41 IP1 documentation.
+Developer authorized “implement ip1” on 2026-11-08 after accepting the
+[US-41 plan](docs/plans/milestone-50-us-41.md). IP1 T1–T3 are technically Complete;
+Gate 1 approved on 2026-11-08 (“i approve ip1; commit changes”). [IP1 evidence](docs/verification/us-41-ip1.md) records
+refreshed complete issue #64 (zero comments), native uv 0.13.6 metadata probes,
+exact proposed contracts and refined IP2–IP4 cases. No product code changed.
+Local wheels have native locked SHA-256, but uv omits installed archive hashes;
+hashed URL fragments were stripped, including an incorrect supplied digest.
+The proposal uses retained local wheel bytes plus installed payload/origin checks.
+Developer accepted its archive-history limitation and journal/test boundaries.
+Approval recording and commit are authorized; no product acceptance is claimed.
+Verification: document file/anchor checks and `git diff --check`; committed lock
+hash unchanged. Native synthetic-wheel probes are feasibility only; TDD,
+pytest/shared executable checks and standalone artifact drivers do not apply.
+Raw logs/manifests/scripts retained in `.dev-records/verification/us-41-ip1-20261108/`.
+**Next action:** await direction to execute IP2. This request authorizes the IP1
+commit; no push or PR publication authorized.
 
 Previous publication context follows; it does not authorize US-41 implementation.
 Developer authorized squash merge and pull on 2026-11-08.

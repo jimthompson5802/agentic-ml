@@ -18,7 +18,7 @@
 | Accepted US-01/02/33 | Normal installed dependency, initializer and genuine wheel builds available | IP2–IP4 | Existing [US-01](milestone-1-us-01.md), [US-02](milestone-1-us-02.md), [US-33](milestone-0-us-33.md) evidence; acceptance preserved, executable results must be renewed for this change |
 | Supported wheel source and integrity | Demonstrate an installer-supported declaration with locked SHA-256 and installed archive identity | IP2 | Proposed local wheel or direct wheel URL; exact supported syntax and availability of locked hashes remain IP1 decisions |
 | Explicit upgrade and journal compatibility | Define refresh of completed identity without bypassing incomplete-operation checks or file/store conflicts | IP3 | Proposed native uv upgrade followed by ordinary init; settle at Gate 1 |
-| Public test boundaries | Developer confirms the boundaries below and exact IP1 contracts before new tests | IP2 | Pending plan review and Gate 1 |
+| Public test boundaries | Developer confirms the boundaries below and exact IP1 contracts before new tests | IP2 | Confirmed by plan acceptance and Gate 1 approval, 2026-11-08 |
 | Installer/dependency availability | Python 3.12+, Git and uv; dependencies available to independent project environments | Executable verification | Check at execution; planning did not install dependencies |
 
 ### Current repository findings
@@ -44,7 +44,7 @@ Propose explicit upgrade via native `uv add` selecting a different reviewed whee
 ## Plan review
 
 - **Status:** Approved.
-- **Developer decision:** Plan accepted; phase execution not yet requested. All implementation gates remain Pending.
+- **Developer decision:** Plan accepted; developer requested “implement ip1” on 2026-11-08. IP1 execution authorized; Gate 1 approved on 2026-11-08; Gates 2–4 remain Pending.
 - **Decision reference and date:** Developer message “i accept plan”, 2026-11-08 (UTC).
 - **Requested plan changes:** None recorded.
 - Plan approval confirms the proposed public boundaries and authorizes only the explicitly requested execution; it does not approve any implementation gate. Exact dependency/identity/upgrade choices require Gate 1 review before IP2.
@@ -73,22 +73,56 @@ Use real installed distributions and independently computed SHA-256 values; do n
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-41-IP1-T1 | Not started | Inspect native uv declaration/lock/install metadata in disposable external projects; record local wheel and, if needed, hashed direct URL findings in proposed `docs/verification/us-41-ip1.md` | Execution authorization | Exact commands, metadata and independent hashes show a supported form meeting locked integrity; failed options recorded | AC-01/03/04 |
-| US-41-IP1-T2 | Not started | Specify identity checks, pre-mutation order, journal compatibility, explicit upgrade/rerun/recovery behavior in this plan and `docs/specs/design/interfaces-and-configuration.md` / `architecture-decisions.md` | T1 | Exact source forms, schema examples and failure matrix proposed; accepted Git behavior preserved | AC-02–05 |
-| US-41-IP1-T3 | Not started | Refine IP2–IP4 tasks and test matrix using findings; record developer boundary review requirements and report | T2 | No dependent code rests on unresolved syntax, identity or refresh decisions | AC-01–06 |
+| US-41-IP1-T1 | Complete | Inspect native uv declaration/lock/install metadata in disposable external projects; record local wheel and, if needed, hashed direct URL findings in proposed `docs/verification/us-41-ip1.md` | Execution authorization | Exact commands, metadata and independent hashes show a supported form meeting locked integrity; failed options recorded | AC-01/03/04 |
+| US-41-IP1-T2 | Complete | Specify identity checks, pre-mutation order, journal compatibility, explicit upgrade/rerun/recovery behavior in this plan and `docs/specs/design/interfaces-and-configuration.md` / `architecture-decisions.md` | T1 | Exact source forms, schema examples and failure matrix proposed; accepted Git behavior preserved | AC-02–05 |
+| US-41-IP1-T3 | Complete | Refine IP2–IP4 tasks and test matrix using findings; record developer boundary review requirements and report | T2 | No dependent code rests on unresolved syntax, identity or refresh decisions | AC-01–06 |
+
+### Exact contract and downstream refinements
+
+The [proposed Gate 1 contract](../specs/design/interfaces-and-configuration.md#us-41-wheel-contract-proposed-at-gate-1)
+is the exact source/identity/journal/upgrade specification for review. T1 found
+native local lock integrity feasible, but installed archive hashes absent. T2/T3
+propose mandatory retained-wheel payload comparison; developer acceptance of its
+archive-history limitation is required before IP2. This refines choices explicitly
+assigned to IP1; no criterion is removed or source-form breadth added.
+
+- IP2-T1/T2: use only the local path form; compare native lock, independent archive
+  digest, installed payload and canonical origin. Cover normalized names/versions,
+  relative and absolute paths and unrelated cwd. If importing `packaging`, add a
+  direct runtime requirement and intentionally review lock/probe inventories.
+- IP2-T3: include absent archive_info versus valid empty archive_info, contradictory
+  installed hash, payload tampering, retained-wheel absence, duplicate normalized
+  sources/distributions, unsafe wheel members, non-purelib/relocated wheel data,
+  unsupported URL/registry declarations and pre-write rejection snapshots. Give
+  each mismatch a concrete recovery instruction. Empty archive_info succeeds only
+  with independent payload verification; no assertion equates it to an archive hash.
+- IP3-T1/T2: use a different locator for same-version replacement, snapshot native
+  upgrade changes before init, verify updated identity and preserved backups/stores.
+  Cover incomplete status after environment verification as well as interrupted
+  scaffold, lock/sync and storage; source-kind switches remain unsupported.
+- IP4-T1/T2: renew these boundaries with genuine direct and sdist-rebuilt toolkit
+  wheels. Each path covers fresh CLI/API and compatible reruns; distribute failure
+  cases across paths, include at least one identity failure on each. Both paths
+  verify installed payload mapping and resource/entrypoint behavior. Retain Git
+  legacy-complete/incomplete journal and pinned installation regressions.
+- Public boundaries in this plan remain unchanged; their exact hash/payload,
+  journal and negative-case refinements require explicit Gate 1 confirmation.
 
 ### Verification and review evidence
 
+[IP1 report](../verification/us-41-ip1.md) records native probes and command logs;
+T1–T3 technical work is complete. Developer approved the exact contracts,
+archive-history limitation and refined public boundaries on 2026-11-08.
 Document/relative-link checks, manual issue/design reconciliation and `git diff --check`. Native installer inspection is feasibility evidence only; it requires execution authorization and is not a passing product test. No product behavior changes, so TDD/current-milestone/shared executable checks are inapplicable to this documentation phase. No standalone verification driver or broader pytest invocation is authorized here.
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete; exact supported form, hash semantics, backward compatibility, upgrade/recovery rules and public boundaries explicitly accepted. If feasibility fails, refine the plan before dependent work.
-- **Evidence presented:** Pending — `docs/verification/us-41-ip1.md`.
-- **Remaining limitations:** Exact uv forms and journal refresh unverified until T1/T2.
-- **Developer decision / reference and date:** Pending.
+- **Evidence presented:** [IP1 report](../verification/us-41-ip1.md); proposed exact contract and refined matrix above.
+- **Remaining limitations:** No product verification; uv lacks installed archive hashes. Approval must explicitly accept retained-wheel payload consistency and its archive-history limitation. Actual toolkit wheels/journal transitions await IP2–IP4.
+- **Developer decision / reference and date:** Approved — developer “i approve ip1; commit changes”, 2026-11-08 (UTC). Approval includes the presented retained-wheel payload consistency boundary, archive-history limitation, journal rules and refined public test boundaries.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** IP2 only after Gate 1 approval. Stop and await approval.
+- **Progression authorized:** Gate 1 prerequisite satisfied. Current developer request authorizes approval recording and commit only; await direction to execute IP2.
 
 ## US-41 / Implementation Phase 2: Initialize with consistent wheel identity
 

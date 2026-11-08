@@ -41,6 +41,103 @@ Supplied mode validates selected loaded layout/membership against the current
 frame, without providing a saved-file parser or full restoration guarantee. See
 [native capability reuse and approved integration](data-and-features.md#reuse-existing-assessment-and-partition-capabilities).
 
+### US-41 wheel contract proposed at Gate 1
+
+**Status:** Contract approved at Gate 1 on 2026-11-08; not implemented.
+Developer decision: “i approve ip1; commit changes”. Native uv 0.13.6
+feasibility evidence and limitations are in [IP1 evidence](../../verification/us-41-ip1.md).
+
+Support one unconditional, extra-free `agentic-ml` dependency and one
+`tool.uv.sources` entry whose normalized name is `agentic-ml`, with exactly
+`{ path = "../artifacts/agentic_ml-1.0.0-py3-none-any.whl" }`.
+Normalize names by lowercasing and collapsing runs of `-`, `_`, `.` to `-`;
+reject duplicate normalized declarations/source keys, markers, source lists,
+editable/directory/sdist, registry and URL wheel forms in this first contract.
+The existing full-SHA Git branch retains its accepted forms and diagnostics.
+Resolve relative wheel paths against the explicit experiment root, never cwd;
+absolute local paths are allowed. Require a readable regular wheel retained at
+that location. Reject symlink components using existing path checks.
+
+Native uv output for that declaration is:
+
+```toml
+[[package]]
+name = "agentic-ml"
+version = "1.0.0"
+source = { path = "../artifacts/agentic_ml-1.0.0-py3-none-any.whl" }
+wheels = [
+  { filename = "agentic_ml-1.0.0-py3-none-any.whl", hash = "sha256:<64 lowercase hex digits>" },
+]
+```
+
+Require exactly one normalized toolkit lock package and one wheel; resolve its
+source path against root and compare the resolved locator. Match filename,
+wheel METADATA Name/Version, lock name/version and installed Name/Version.
+Compare versions using PEP 440 semantics (reuse runtime `packaging` intentionally;
+if imported by product code, declare it directly and review the lock in IP2).
+Validate SHA-256 syntax and independently hash retained archive bytes against the
+lock. Installed metadata must be in the selected root's `.venv`, with a matching
+canonical `file:` URL in `direct_url.json`, `archive_info` present, no VCS or
+editable/directory metadata, and no duplicate installed toolkit distribution.
+If installed `archive_info.hashes.sha256` or legacy `hash` exists, it must agree;
+malformed or contradictory hash metadata fails. uv 0.13.6 emits an empty
+`archive_info`, so absence alone cannot be treated as evidence of a matching hash.
+
+For uv's empty archive hash, compare installed wheel payload bytes with the
+independently hash-verified retained wheel. Use the wheel's root-purelib layout:
+reject unsafe/duplicate archive paths, links, `.data` relocation and non-purelib
+wheels for this bounded contract. Compare all regular wheel members except its
+`.dist-info/RECORD` (rewritten by installers); installer-generated entrypoints,
+bytecode and added metadata are outside this comparison. Do not use the installed
+RECORD as the expected digest source. Toolkit wheels are purelib; IP4 must verify
+actual direct/rebuilt wheels, not infer this from the synthetic probe.
+This establishes current payload/origin consistency with the locked artifact,
+not proof that the originally installed ZIP had the identical archive digest.
+Two archives with identical payload but different ZIP encoding cannot be
+separated by this check. Developer accepted this limitation at Gate 1 on 2026-11-08. No companion integrity
+file or fabricated installed archive hash is proposed. Missing original wheel
+bytes fail with instructions to restore the locked wheel; no network fallback.
+
+Identity validation runs before writable probes, scaffold/journal/backups/locks
+or store changes. Errors use existing InitializationError/CLI diagnostics naming
+the failed declaration, lock, install or wheel check and recovery: restore the
+reviewed artifact and run native locked synchronization, or deliberately select
+a new artifact. Initialization must not repair inconsistent input automatically.
+Snapshot rejected inputs after fixture damage and invoke installed entrypoints
+directly, so uv cannot repair metadata before the check.
+
+Retain setup journal `schema_version = "0.1"`. Add optional
+`environment.toolkit_identity` with `kind = "wheel"`, normalized `name`, canonical
+`version`, resolved file `locator`, `sha256` (bare lowercase hex), and
+`verification = "locked-archive-and-installed-payload"`. Git identity uses
+`kind = "git"`, `name`, `version`, `url`, `revision`; preserve existing Git journal
+fields/checksum behavior. Legacy complete Git journals without the additive
+identity are validated against current Git inputs before populating it. Reject
+unknown discriminators or malformed existing identity; do not rewrite unrelated
+strict planning records. Initial/incomplete operations must record the selected
+identity before writes and retain it through retries.
+
+A completed journal means `status == "complete"`, empty `pending_steps`, all
+required steps including `finalize` completed, and verified environment; other
+states are incomplete. For incomplete setup, require unchanged recorded identity
+and environment checksums before any retry writes, including the interval after
+environment verification but before storage completion. Preserve legacy
+scaffold-resume checks when environment evidence does not yet exist; never infer
+an upgrade from partial work. Legacy Git incomplete journals retain their existing
+checksum/recovery safeguards and cannot switch source kinds during recovery.
+
+Explicit upgrade is native `uv add /reviewed/new/agentic_ml-V-py3-none-any.whl`,
+then `uv sync --locked`, then installed init. Both new-version and same-version
+new-locator/new-digest transitions are supported. A fully complete prior wheel
+journal may refresh identity after all current identity, project/file/storage
+compatibility checks pass; keep original backups, custom compatible files and
+stores. Do not claim rollback of native installer changes or a failed sync.
+A source-kind switch from a recorded Git identity to wheel (or reverse) is outside
+this upgrade contract and fails with recovery guidance. Ordinary init must retain
+the current declaration/locator/hash through its lock/sync stages; compare identity
+after locking and after installed synchronization, before downstream store writes.
+Ordinary init and `uv sync --locked` select no newer artifact automatically.
+
 ## Existing public interfaces
 
 The currently implemented families are initialization, planning, approvals,
