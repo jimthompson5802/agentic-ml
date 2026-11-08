@@ -14,8 +14,8 @@ import yaml
 from .environment import synchronize
 from .journal import read_journal, write_private
 from .models import InitializationError, InitOptions, InitResult
+from .paths import check_path
 from .preflight import (
-    check_path,
     probe_writable,
     project_identity,
     storage_paths,
@@ -31,7 +31,7 @@ __all__ = ["InitOptions", "InitResult", "InitializationError", "initialize_proje
 
 def _initialize_project(options: InitOptions) -> InitResult:
     """Create draft scaffolding; environment and storage setup remain pending."""
-    root, metadata, package = project_identity(options)
+    root, metadata, package, identity = project_identity(options)
     stores = storage_paths(options, root)
     contents = render(options, package)
     validate_destinations(root, contents)
@@ -158,6 +158,7 @@ def _initialize_project(options: InitOptions) -> InitResult:
                 backups[name] = "backups/" + backup_name
         journal = {
             "schema_version": "0.1",
+            "environment": {"toolkit_identity": identity},
             "experiment": options.experiment,
             "package": package,
             "storage": stores,

@@ -4,15 +4,15 @@ import hashlib
 import json
 import os
 import subprocess
-import tomllib
 from dataclasses import replace
 from typing import Any
 
 import tomlkit
 
+from .identity import current_identity
 from .journal import read_journal, write_private
 from .models import InitializationError, InitResult
-from .preflight import check_path
+from .paths import check_path
 
 REQUIREMENTS = (
     "numpy>=2,<3",
@@ -47,7 +47,11 @@ def _synchronize(result: InitResult) -> InitResult:
     for name in names:
         check_path(root / name)
     previous = journal.get("environment")
-    if previous is not None and not previous.get("verified", False):
+    if (
+        previous is not None
+        and "checksums" in previous
+        and not previous.get("verified", False)
+    ):
         for name in names:
             if (
                 hashlib.sha256((root / name).read_bytes()).hexdigest()
@@ -58,9 +62,7 @@ def _synchronize(result: InitResult) -> InitResult:
                     stage="lock",
                 )
     document = tomlkit.parse((root / "pyproject.toml").read_text())
-    source = tomllib.loads(tomlkit.dumps(document))["tool"]["uv"]["sources"][
-        "agentic-ml"
-    ]
+    identity = current_identity(root)
     dependencies = document["project"]["dependencies"]
     for requirement in REQUIREMENTS:
         if requirement not in dependencies:
@@ -71,10 +73,11 @@ def _synchronize(result: InitResult) -> InitResult:
     if planned != (root / "pyproject.toml").read_bytes():
         write_private(root / "pyproject.toml", planned)
     environment: dict[str, Any] = {
+        "toolkit_identity": identity,
         "checksums": {
             name: hashlib.sha256((root / name).read_bytes()).hexdigest()
             for name in names
-        }
+        },
     }
     journal["environment"] = environment
     write_private(journal_path, json.dumps(journal).encode())
@@ -116,13 +119,7 @@ def _synchronize(result: InitResult) -> InitResult:
                 completed_steps=tuple(journal["completed_steps"]),
                 recovery="Resolve the uv failure; rerun init with the same options and unchanged metadata. Review .agentic-ml/init.json and backups.",
             )
-        metadata = tomllib.loads((root / "pyproject.toml").read_text())
-        locked = tomllib.loads((root / "uv.lock").read_text())
-        expected = source["git"] + "?rev=" + source["rev"] + "#" + source["rev"]
-        pins = [p for p in locked["package"] if p["name"] == "agentic-ml"]
-        if metadata["tool"]["uv"]["sources"]["agentic-ml"] != source or (
-            len(pins) != 1 or pins[0]["source"].get("git") != expected
-        ):
+        if current_identity(root) != identity:
             raise InitializationError(
                 "Harness pin changed; review before retry", stage=stage
             )

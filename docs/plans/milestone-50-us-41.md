@@ -44,7 +44,7 @@ Propose explicit upgrade via native `uv add` selecting a different reviewed whee
 ## Plan review
 
 - **Status:** Approved.
-- **Developer decision:** Plan accepted; developer requested “implement ip1” on 2026-11-08. IP1 execution authorized; Gate 1 approved on 2026-11-08; Gates 2–4 remain Pending.
+- **Developer decision:** Plan accepted; developer requested “implement ip1” on 2026-11-08. IP1 execution authorized; Gate 1 approved on 2026-11-08. Developer subsequently authorized IP2: “yes, I meant implement ip2”. IP2 is Complete; Gate 2 Approved on 2026-11-08 (“I approve ip2; commit changes”). Gates 3–4 remain Pending.
 - **Decision reference and date:** Developer message “i accept plan”, 2026-11-08 (UTC).
 - **Requested plan changes:** None recorded.
 - Plan approval confirms the proposed public boundaries and authorizes only the explicitly requested execution; it does not approve any implementation gate. Exact dependency/identity/upgrade choices require Gate 1 review before IP2.
@@ -122,7 +122,7 @@ Document/relative-link checks, manual issue/design reconciliation and `git diff 
 - **Remaining limitations:** No product verification; uv lacks installed archive hashes. Approval must explicitly accept retained-wheel payload consistency and its archive-history limitation. Actual toolkit wheels/journal transitions await IP2–IP4.
 - **Developer decision / reference and date:** Approved — developer “i approve ip1; commit changes”, 2026-11-08 (UTC). Approval includes the presented retained-wheel payload consistency boundary, archive-history limitation, journal rules and refined public test boundaries.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Gate 1 prerequisite satisfied. Current developer request authorizes approval recording and commit only; await direction to execute IP2.
+- **Progression authorized:** Gate 1 prerequisite satisfied. Developer authorized IP2 execution: “yes, I meant implement ip2”, 2026-11-08 (UTC). Stop at Gate 2.
 
 ## US-41 / Implementation Phase 2: Initialize with consistent wheel identity
 
@@ -132,12 +132,26 @@ Document/relative-link checks, manual issue/design reconciliation and `git diff 
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-41-IP2-T1 | Not started | Add proposed `tests/integration/test_distribution_initialization.py` installed-project fixture; first red–green CLI success slice using `preflight.py` and proposed `identity.py` | Gate 1 | Selected wheel accepted without Git-origin metadata; version/source/digest independently agree | AC-02/03 |
-| US-41-IP2-T2 | Not started | Successive public API, synchronization and compatible-rerun slices in the same test module; adapt `environment.py`, `__init__.py`, journal handling as required | T1 | Full US-02 scaffold, dependency synchronization, imports and stores work; user edits survive; selected artifact stays fixed after locking | AC-02/03/04 |
-| US-41-IP2-T3 | Not started | One red–green failure slice at a time: absent/malformed metadata, ambiguous declaration/lock, wrong version/source/hash, replaced/corrupt wheel, wrong environment and unsupported editable/directory/source forms | T2 | API raises InitializationError and CLI exits nonzero with recovery; project/store snapshots unchanged; no artifact substitution | AC-03/04 |
-| US-41-IP2-T4 | Not started | Run M50 and shared checks below; preserve current Git initialization regression evidence for final renewal; write IP2 report | T3 | Passing selected checks, red/green logs, counts, lock identity and limitations recorded | AC-02/03/04/06 |
+| US-41-IP2-T1 | Complete | Add proposed `tests/integration/test_distribution_initialization.py` installed-project fixture; first red–green CLI success slice using `preflight.py` and proposed `identity.py` | Gate 1 | Selected wheel accepted without Git-origin metadata; version/source/digest independently agree | AC-02/03 |
+| US-41-IP2-T2 | Complete | Successive public API, synchronization and compatible-rerun slices in the same test module; adapt `environment.py`, `__init__.py`, journal handling as required | T1 | Full US-02 scaffold, dependency synchronization, imports and stores work; user edits survive; selected artifact stays fixed after locking | AC-02/03/04 |
+| US-41-IP2-T3 | Complete | One red–green failure slice at a time: absent/malformed metadata, ambiguous declaration/lock, wrong version/source/hash, replaced/corrupt wheel, wrong environment and unsupported editable/directory/source forms | T2 | API raises InitializationError and CLI exits nonzero with recovery; project/store snapshots unchanged; no artifact substitution | AC-03/04 |
+| US-41-IP2-T4 | Complete | Run M50 and shared checks below; preserve current Git initialization regression evidence for final renewal; write IP2 report | T3 | Passing selected checks, red/green logs, counts, lock identity and limitations recorded | AC-02/03/04/06 |
 
 ### Verification and review evidence
+
+IP2 execution authorized on 2026-11-08: developer “yes, I meant implement ip2”.
+[IP2 evidence](../verification/us-41-ip2.md) records T1–T4 completion, public CLI/API
+red–green slices and pre-write failure snapshots. Final M50: 882 collected,
+146 selected, 736 deselected; **144 passed, 2 existing skips, 345.03s, exit 0**.
+All 66 new US-41 cases passed. The same-selection collection-only command confirmed
+counts without executing tests. Locked sync/check, lint, formatting, strict typing,
+CLI version and final diff/link checks passed on Linux aarch64 / Python 3.12.16.
+Intentional packaging runtime declaration/lock review changed only root dependency
+metadata; no resolved package version changed. Updated lock SHA-256:
+`6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4`.
+Raw logs/manifests: `.dev-records/verification/us-41-ip2-20261108/`.
+Existing skip/timeout ownership is preserved; no new suppression or exclusion.
+The approved archive-history limitation remains. No scope deviations.
 
 Use serial focused `uv run --locked pytest tests/integration/test_distribution_initialization.py -m milestone_50 -k <case>` during short TDD slices, recording why serial was chosen. New US-41 behavior tests carry `milestone_50`; contributor-only lifecycle checks use infrastructure. Gate command is `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_50`.
 Public boundaries are those above, confirmed at Gate 1. M1–6/Git regressions and the complete direct/rebuilt matrix are deferred to **US-41-IP4-T3**; focused success does not establish AC-06.
@@ -145,11 +159,11 @@ Public boundaries are those above, confirmed at Gate 1. M1–6/Git regressions a
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete, M50/shared checks pass and no invalid identity causes durable project writes.
-- **Evidence presented:** Pending — `docs/verification/us-41-ip2.md`.
+- **Evidence presented:** [IP2 report](../verification/us-41-ip2.md): T1–T4 technically Complete, M50/shared checks passed, red/green evidence and identity boundaries recorded.
 - **Remaining limitations:** Explicit upgrade and full artifact matrix await IP3/IP4.
-- **Developer decision / reference and date:** Pending.
+- **Developer decision / reference and date:** Approved — developer “I approve ip2; commit changes”, 2026-11-08 (UTC).
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** IP3 only after Gate 2 approval. Stop and await approval.
+- **Progression authorized:** Gate 2 prerequisite satisfied. Current request authorizes approval recording and commit only; await direction to execute IP3.
 
 ## US-41 / Implementation Phase 3: Explicit upgrades and stable ordinary use
 
@@ -225,7 +239,7 @@ Both interface/artifact success and rerun coverage is mandatory. Partition negat
 | US-41-AC-05 explicit distribution upgrade and no silent upgrade | IP3-T1–T4; IP4-T2/T3 | Native upgrade transitions and stable locked/init controls | Pending |
 | US-41-AC-06 both wheel paths, reruns/failures and preserved Git | IP4-T1–T3 | Genuine rebuild provenance, installed matrix and M1–6 regressions | Pending |
 
-- **Remaining work:** All implementation and verification; exact contracts await IP1 and Gate 1. No partial prerequisite story delivery or deferred US-41 criterion.
+- **Remaining work:** IP1/IP2 technically Complete; Gates 1–2 Approved. IP3 explicit upgrades/recovery and IP4 both-artifact/Git/final verification remain. No US-41 criterion is deferred or accepted by this phase alone.
 - **Final verification:** Pending — IP4-T3.
 - **Developer acceptance / decision reference and date:** Pending.
 

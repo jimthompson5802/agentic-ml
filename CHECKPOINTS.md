@@ -4,23 +4,30 @@ Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-41-distribution-init`; working tree contains US-41 IP1 documentation.
-Developer authorized “implement ip1” on 2026-11-08 after accepting the
-[US-41 plan](docs/plans/milestone-50-us-41.md). IP1 T1–T3 are technically Complete;
-Gate 1 approved on 2026-11-08 (“i approve ip1; commit changes”). [IP1 evidence](docs/verification/us-41-ip1.md) records
-refreshed complete issue #64 (zero comments), native uv 0.13.6 metadata probes,
-exact proposed contracts and refined IP2–IP4 cases. No product code changed.
-Local wheels have native locked SHA-256, but uv omits installed archive hashes;
-hashed URL fragments were stripped, including an incorrect supplied digest.
-The proposal uses retained local wheel bytes plus installed payload/origin checks.
-Developer accepted its archive-history limitation and journal/test boundaries.
-Approval recording and commit are authorized; no product acceptance is claimed.
-Verification: document file/anchor checks and `git diff --check`; committed lock
-hash unchanged. Native synthetic-wheel probes are feasibility only; TDD,
-pytest/shared executable checks and standalone artifact drivers do not apply.
-Raw logs/manifests/scripts retained in `.dev-records/verification/us-41-ip1-20261108/`.
-**Next action:** await direction to execute IP2. This request authorizes the IP1
-commit; no push or PR publication authorized.
+Checkout: `US-41-distribution-init`; US-41 IP2 source, tests, dependency/lock,
+plan, evidence and approval records are included in the authorized phase commit. Developer clarified “yes, I meant
+implement ip2”, 2026-11-08 UTC, authorizing IP2 execution only. IP1 T1–T3 and
+Gate 1 remain Complete/Approved in the [plan](docs/plans/milestone-50-us-41.md).
+Issue #64 was refreshed with complete body/all comment pages and matching final
+metadata: zero comments; scope unchanged. IP2 T1–T4 are technically Complete. Final M50: 882 collected, 146 selected,
+736 deselected; **144 passed, 2 existing skips in 345.03s; exit 0**. All 66 new
+US-41 cases passed. Same-selection collection-only verification confirmed counts. Gate 2 approved on 2026-11-08: developer “I approve ip2; commit changes”.
+No whole-story acceptance is recorded.
+
+[IP2 evidence](docs/verification/us-41-ip2.md) owns installed CLI/API wheel setup,
+compatible reruns, identity/payload failures before project writes and TDD records.
+The shared identity module retains full-SHA Git checks. `packaging>=24,<27` is now
+a direct runtime dependency; intentional lock changes only add root dependency
+metadata, with no resolved package changes. Locked sync/check, lint, format, full
+strict typing and CLI version checks passed on Linux aarch64 / Python 3.12.16.
+Raw evidence: `.dev-records/verification/us-41-ip2-20261108/`. The approved
+archive-history limitation remains. Upgrades/recovery transitions belong to IP3;
+both artifact paths and renewed Git/M1–6 evidence belong to IP4. No standalone
+artifact driver or broader local tests were run. Approval recording is
+documentation only; existing executable evidence remains applicable. Final
+`git diff --check` passed.
+**Next action:** await direction to execute IP3. Approval recording and the IP2
+commit are authorized; no push or PR publication is authorized.
 
 Previous publication context follows; it does not authorize US-41 implementation.
 Developer authorized squash merge and pull on 2026-11-08.
