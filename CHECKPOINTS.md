@@ -12,8 +12,11 @@ design topics/walkthrough, three linked usage guides, the
 [reconciliation report](docs/reviews/source-design-reconciliation-2026-11-08-07-19.md)
 and this checkpoint are included in that commit. Developer “create pull request”,
 2026-11-08, authorizes branch publication and a PR from `reconcile-design` to
-`main`. No product implementation is authorized. **Next action:** publish and
-verify the documentation PR; await developer review before merge.
+`main`. [PR #63](https://github.com/jimthompson5802/agentic-ml/pull/63) is open;
+title, body, branch ownership, base/head and non-draft status were verified.
+No product implementation is authorized. **Next action:** await developer PR
+review and merge direction. Publication checks passed `git diff --check`;
+the prior documentation evidence below remains the validation boundary.
 
 The design now records accepted US-11 extraction and US-12 quality/assessment/
 partitions, exact split composition and project-owned persistence/identity checks.
