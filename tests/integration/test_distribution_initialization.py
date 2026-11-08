@@ -172,6 +172,70 @@ def snapshot(project: Path) -> dict[str, str]:
     }
 
 
+def build_upgrade(wheel: Path, destination: Path, version: str) -> Path:
+    """Build a reviewed alternative with distinct source bytes and locator."""
+    source = destination / "source"
+    shutil.copytree(wheel.parents[1] / "src", source / "src")
+    for name in ("pyproject.toml", "README.md"):
+        shutil.copy(wheel.parents[1] / name, source)
+    metadata = source / "pyproject.toml"
+    metadata.write_text(
+        metadata.read_text().replace('version = "0.1.0"', f'version = "{version}"')
+    )
+    package = source / "src/agentic_ml/__init__.py"
+    package.write_text(package.read_text() + "\n# Reviewed upgrade fixture.\n")
+    built = run(
+        ["uv", "build", "--wheel", "--out-dir", str(destination / "dist")], source
+    )
+    assert built.returncode == 0, built.stdout + built.stderr
+    return next((destination / "dist").glob("*.whl"))
+
+
+def test_explicit_new_version_upgrade_preserves_project(
+    project: Path, wheel: Path, tmp_path: Path
+) -> None:
+    """AC-05: native selection upgrades a completed setup without losing work."""
+    command = [str(project / ".venv/bin/agentic-ml"), "init"]
+    first = run(command, project)
+    assert first.returncode == 0, first.stdout + first.stderr
+    backup = snapshot(project / ".agentic-ml/backups")
+    custom = project / "src/experiment/__init__.py"
+    custom.write_text('"""Scientist work."""\nVALUE = 42\n')
+    artifact = project / ".agentic-ml/artifacts/result.txt"
+    artifact.write_bytes(b"scientist result")
+    dvc_content = project / ".agentic-ml/dvc-store/scientist.txt"
+    dvc_content.write_bytes(b"preserved DVC content")
+    database = project / ".agentic-ml/mlflow.db"
+    database_before = database.read_bytes()
+    state = project / ".agentic-ml/state/project.json"
+    state_before = state.read_bytes()
+    dvc_config = (project / ".dvc/config").read_bytes()
+    upgraded = build_upgrade(wheel, tmp_path / "reviewed", "0.1.1")
+    before = (project / "uv.lock").read_bytes()
+    for ordinary in (["uv", "sync", "--locked"], command):
+        stable = run(ordinary, project)
+        assert stable.returncode == 0, stable.stdout + stable.stderr
+        assert (project / "uv.lock").read_bytes() == before
+    for native in (["uv", "add", str(upgraded)], ["uv", "sync", "--locked"]):
+        selected = run(native, project)
+        assert selected.returncode == 0, selected.stdout + selected.stderr
+    result = run(command, project)
+    assert result.returncode == 0, result.stdout + result.stderr
+    journal = json.loads((project / ".agentic-ml/init.json").read_text())
+    identity = journal["environment"]["toolkit_identity"]
+    assert identity["version"] == "0.1.1"
+    assert identity["locator"] == upgraded.as_uri()
+    assert identity["sha256"] == hashlib.sha256(upgraded.read_bytes()).hexdigest()
+    assert journal["status"] == "complete"
+    assert custom.read_text().endswith("VALUE = 42\n")
+    assert artifact.read_bytes() == b"scientist result"
+    assert dvc_content.read_bytes() == b"preserved DVC content"
+    assert database.read_bytes() == database_before
+    assert state.read_bytes() == state_before
+    assert (project / ".dvc/config").read_bytes() == dvc_config
+    assert snapshot(project / ".agentic-ml/backups") == backup
+
+
 def reject_identity(project: Path, expected: str) -> None:
     """Check API and CLI diagnostics and compare damaged inputs before/after."""
     before = snapshot(project)
@@ -206,6 +270,202 @@ else:
     assert expected in cli.stderr.lower(), cli.stderr
     assert "sync --locked" in cli.stderr
     assert snapshot(project) == before
+
+
+def test_same_version_upgrade_uses_artifact_identity(
+    project: Path, wheel: Path, tmp_path: Path
+) -> None:
+    """AC-03/05: API refreshes a completed setup for a distinct same-version wheel."""
+    script = """
+import sys
+from pathlib import Path
+from agentic_ml.initialization import InitOptions, initialize_project
+assert initialize_project(InitOptions(Path(sys.argv[1]))).setup_pending == ()
+"""
+    command = [str(project / ".venv/bin/python"), "-I", "-c", script, str(project)]
+    initialized = run(command, tmp_path)
+    assert initialized.returncode == 0, initialized.stdout + initialized.stderr
+    upgraded = build_upgrade(wheel, tmp_path / "same-version", "0.1.0")
+    assert (
+        hashlib.sha256(upgraded.read_bytes()).digest()
+        != hashlib.sha256(wheel.read_bytes()).digest()
+    )
+    selected = run(["uv", "add", str(upgraded)], project)
+    assert selected.returncode == 0, selected.stdout + selected.stderr
+    synced = run(["uv", "sync", "--locked"], project)
+    assert synced.returncode == 0, synced.stdout + synced.stderr
+    result = run(command, tmp_path)
+    assert result.returncode == 0, result.stdout + result.stderr
+    identity = json.loads((project / ".agentic-ml/init.json").read_text())[
+        "environment"
+    ]["toolkit_identity"]
+    assert identity["version"] == "0.1.0"
+    assert identity["locator"] == upgraded.as_uri()
+    assert identity["sha256"] == hashlib.sha256(upgraded.read_bytes()).hexdigest()
+    before = (project / "uv.lock").read_bytes()
+    rerun = run(command, tmp_path)
+    assert rerun.returncode == 0, rerun.stdout + rerun.stderr
+    assert (project / "uv.lock").read_bytes() == before
+
+
+def test_verified_but_incomplete_setup_rejects_changed_metadata(project: Path) -> None:
+    """AC-04/05: verification alone cannot authorize metadata refresh on retry."""
+    first = run([str(project / ".venv/bin/agentic-ml"), "init"], project)
+    assert first.returncode == 0, first.stdout + first.stderr
+    path = project / ".agentic-ml/init.json"
+    journal = json.loads(path.read_text())
+    journal["status"] = "incomplete"
+    journal["completed_steps"] = [
+        s
+        for s in journal["completed_steps"]
+        if s not in ("DVC", "MLflow", "state", "finalize")
+    ]
+    journal["pending_steps"] = ["DVC", "MLflow", "state", "finalize"]
+    journal.pop("storage_stage")
+    for value in journal["storage"].values():
+        store = project / value
+        if store.is_dir():
+            shutil.rmtree(store)
+        else:
+            store.unlink()
+    path.write_text(json.dumps(journal))
+    metadata = project / "pyproject.toml"
+    metadata.write_text(metadata.read_text() + "\n# Changed after interrupted setup\n")
+    reject_identity(project, "metadata changed")
+
+
+def test_failed_sync_marks_completed_setup_incomplete(
+    project: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """AC-04/05: interrupted native synchronization cannot remain complete."""
+    command = [str(project / ".venv/bin/agentic-ml"), "init"]
+    first = run(command, project)
+    assert first.returncode == 0, first.stdout + first.stderr
+    tools = tmp_path / "tools"
+    tools.mkdir()
+    native = shutil.which("uv")
+    assert native is not None
+    shim = tools / "uv"
+    shim.write_text(
+        '#!/bin/sh\nif [ "$1" = "sync" ]; then exit 73; fi\nexec "'
+        + native
+        + '" "$@"\n'
+    )
+    shim.chmod(0o700)
+    with monkeypatch.context() as context:
+        context.setenv("PATH", str(tools) + os.pathsep + os.environ["PATH"])
+        failed = run(command, project)
+    assert failed.returncode == 1, failed.stdout + failed.stderr
+    assert "sync" in failed.stderr and "73" in failed.stderr
+    journal = json.loads((project / ".agentic-ml/init.json").read_text())
+    assert journal["status"] == "incomplete"
+    assert "finalize" in journal["pending_steps"]
+    resumed = run(command, project)
+    assert resumed.returncode == 0, resumed.stdout + resumed.stderr
+    assert (
+        json.loads((project / ".agentic-ml/init.json").read_text())["status"]
+        == "complete"
+    )
+
+
+def test_upgrade_rejects_malformed_prior_version(project: Path) -> None:
+    """AC-03/04: a different saved locator cannot authorize malformed history."""
+    first = run([str(project / ".venv/bin/agentic-ml"), "init"], project)
+    assert first.returncode == 0, first.stdout + first.stderr
+    path = project / ".agentic-ml/init.json"
+    journal = json.loads(path.read_text())
+    identity = journal["environment"]["toolkit_identity"]
+    identity["locator"] = (project.parent / "prior.whl").as_uri()
+    identity["version"] = "invalid-version"
+    path.write_text(json.dumps(journal))
+    reject_identity(project, "journal")
+
+
+@pytest.fixture(scope="module")
+def replacement_wheel(
+    wheel: Path,
+    request: pytest.FixtureRequest,
+    tmp_path_factory: pytest.TempPathFactory,
+) -> Path:
+    """Share a genuine reviewed same-version replacement for transition cases."""
+    destination = owned_workspace(request, tmp_path_factory, "replacement-wheel")
+    return build_upgrade(wheel, destination, "0.1.0")
+
+
+@pytest.mark.parametrize(
+    "interruption",
+    [
+        "scaffold",
+        "lock",
+        "sync",
+        "environment-check",
+        "DVC",
+        "MLflow",
+        "state",
+        "pending-finalize",
+        "missing-finalize",
+        "unverified",
+    ],
+)
+def test_incomplete_setup_cannot_infer_upgrade(
+    project: Path, replacement_wheel: Path, interruption: str
+) -> None:
+    """AC-04/05: no partial or inconsistent completion record authorizes upgrade."""
+    first = run([str(project / ".venv/bin/agentic-ml"), "init"], project)
+    assert first.returncode == 0, first.stdout + first.stderr
+    path = project / ".agentic-ml/init.json"
+    journal = json.loads(path.read_text())
+    if interruption == "unverified":
+        journal["environment"]["verified"] = False
+    elif interruption == "missing-finalize":
+        journal["completed_steps"].remove("finalize")
+    elif interruption == "pending-finalize":
+        journal["pending_steps"] = ["finalize"]
+    else:
+        journal["status"] = "incomplete"
+        index = journal["completed_steps"].index(interruption)
+        journal["pending_steps"] = journal["completed_steps"][index:]
+        journal["completed_steps"] = journal["completed_steps"][:index]
+        if interruption in ("scaffold", "lock"):
+            journal["environment"] = {
+                "toolkit_identity": journal["environment"]["toolkit_identity"]
+            }
+    path.write_text(json.dumps(journal))
+    selected = run(["uv", "add", str(replacement_wheel)], project)
+    assert selected.returncode == 0, selected.stdout + selected.stderr
+    reject_identity(project, "changed")
+
+
+def test_stale_upgrade_declaration_fails_before_writes(
+    project: Path, replacement_wheel: Path, wheel: Path
+) -> None:
+    """AC-04/05: a declaration edit alone cannot refresh the locked selection."""
+    first = run([str(project / ".venv/bin/agentic-ml"), "init"], project)
+    assert first.returncode == 0, first.stdout + first.stderr
+    metadata = project / "pyproject.toml"
+    metadata.write_text(
+        metadata.read_text().replace(
+            "../artifacts/" + wheel.name, str(replacement_wheel)
+        )
+    )
+    reject_identity(project, "source differs")
+
+
+def test_recorded_git_identity_cannot_switch_to_wheel(project: Path) -> None:
+    """AC-04: a saved Git setup does not authorize switching source kinds."""
+    first = run([str(project / ".venv/bin/agentic-ml"), "init"], project)
+    assert first.returncode == 0, first.stdout + first.stderr
+    path = project / ".agentic-ml/init.json"
+    journal = json.loads(path.read_text())
+    journal["environment"]["toolkit_identity"] = {
+        "kind": "git",
+        "name": "agentic-ml",
+        "version": "0.1.0",
+        "url": "file:///reviewed/prior",
+        "revision": "a" * 40,
+    }
+    path.write_text(json.dumps(journal))
+    reject_identity(project, "source-kind")
 
 
 def test_payload_tampering_fails_before_project_writes(project: Path) -> None:

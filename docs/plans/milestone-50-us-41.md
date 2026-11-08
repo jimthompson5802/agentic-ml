@@ -44,7 +44,7 @@ Propose explicit upgrade via native `uv add` selecting a different reviewed whee
 ## Plan review
 
 - **Status:** Approved.
-- **Developer decision:** Plan accepted; developer requested “implement ip1” on 2026-11-08. IP1 execution authorized; Gate 1 approved on 2026-11-08. Developer subsequently authorized IP2: “yes, I meant implement ip2”. IP2 is Complete; Gate 2 Approved on 2026-11-08 (“I approve ip2; commit changes”). Gates 3–4 remain Pending.
+- **Developer decision:** Plan accepted; developer requested “implement ip1” on 2026-11-08. IP1 execution authorized; Gate 1 approved on 2026-11-08. Developer subsequently authorized IP2: “yes, I meant implement ip2”. IP2 is Complete; Gate 2 Approved on 2026-11-08 (“I approve ip2; commit changes”). Gate 3 Approved on 2026-11-08 (“i approve ip3; commmit”); Gate 4 remains Pending.
 - **Decision reference and date:** Developer message “i accept plan”, 2026-11-08 (UTC).
 - **Requested plan changes:** None recorded.
 - Plan approval confirms the proposed public boundaries and authorizes only the explicitly requested execution; it does not approve any implementation gate. Exact dependency/identity/upgrade choices require Gate 1 review before IP2.
@@ -173,23 +173,39 @@ Public boundaries are those above, confirmed at Gate 1. M1–6/Git regressions a
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-41-IP3-T1 | Not started | Red–green ordinary init and `uv sync --locked` stability cases in distribution initialization tests, with a newer/different wheel available | Gate 2 | Artifact/declaration preserved, no silent upgrade; stale declaration/lock fails | AC-04/05 |
-| US-41-IP3-T2 | Not started | Red–green explicit upgrade slices through native uv and init; adapt `environment.py`, journal/preflight/storage checks only under Gate 1 contract | T1 | New-version and same-version/different-artifact transitions recorded accurately; installed/declared/locked identity consistent; compatible code/stores preserved | AC-03/05 |
-| US-41-IP3-T3 | Not started | Red–green interrupted/failed upgrade and init cases; update `docs/experiment-setup.md` with exact bootstrap and upgrade commands | T2 | Unsupported/inconsistent transitions rejected before init writes, interrupted-operation checks preserved; instructions distinguish native installer changes from initialization | AC-01/04/05 |
-| US-41-IP3-T4 | Not started | Run M50/shared checks; record example execution and IP3 evidence | T3 | Passing results and upgrade identities saved; documentation claims match observed behavior | AC-01/04/05 |
+| US-41-IP3-T1 | Complete | Red–green ordinary init and `uv sync --locked` stability cases in distribution initialization tests, with a newer/different wheel available | Gate 2 | Artifact/declaration preserved, no silent upgrade; stale declaration/lock fails | AC-04/05 |
+| US-41-IP3-T2 | Complete | Red–green explicit upgrade slices through native uv and init; adapt `environment.py`, journal/preflight/storage checks only under Gate 1 contract | T1 | New-version and same-version/different-artifact transitions recorded accurately; installed/declared/locked identity consistent; compatible code/stores preserved | AC-03/05 |
+| US-41-IP3-T3 | Complete | Red–green interrupted/failed upgrade and init cases; update `docs/experiment-setup.md` with exact bootstrap and upgrade commands | T2 | Unsupported/inconsistent transitions rejected before init writes, interrupted-operation checks preserved; instructions distinguish native installer changes from initialization | AC-01/04/05 |
+| US-41-IP3-T4 | Complete | Run M50/shared checks; record example execution and IP3 evidence | T3 | Passing results and upgrade identities saved; documentation claims match observed behavior | AC-01/04/05 |
 
 ### Verification and review evidence
 
 Same focused TDD form and M50 command as IP2; public boundaries add native uv transitions and independently compared before/after artifact/journal identities. Native installer commands intentionally modify metadata during an explicit upgrade; pre-mutation assertions apply to initialization after that preparation. Errors during environment synchronization retain existing stage/retry diagnostics, not a newly claimed transaction rollback. M1–6 and full installed matrix remain owned by IP4-T3.
 
+IP3 execution authorized by developer “start ip3”, 2026-11-08 UTC. T1–T3
+focused verification is recorded in [IP3 evidence](../verification/us-41-ip3.md);
+T4 is Complete: M50 **161 passed, 2 existing skips in 397.20s**, exit 0;
+899 collected, 163 selected, 736 deselected. All 83 US-41 cases passed. Shared
+sync/lock/lint/format/strict typing/smoke and document/diff checks passed.
+Retained replay: 2 passed, 81 deselected; `upgrade-identities.json` saves new-
+and same-version digests/origins/checksums/backups. No dependency/lock changes,
+new suppression or scope deviation. Linux aarch64 / Python 3.12.16 / uv 0.13.6;
+archive-history and unverified-platform limits remain. M1–6/Git/both-artifact
+renewal remains IP4-T3. Complete issue
+#64 body/comments refreshed: zero comments, unchanged update timestamp
+`2026-11-08T18:02:47Z`; M50 and AC-01–06 scope unchanged. Public installed CLI/API
+and native uv boundaries remain those confirmed at Gate 1. Focused serial TDD
+minimizes repeated wheel builds and isolates each transition; the phase gate used
+four workers. Raw logs: `.dev-records/verification/us-41-ip3-20261108/`.
+
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete, stable ordinary use and explicit upgrade/recovery evidence, M50/shared checks passing.
-- **Evidence presented:** Pending — `docs/verification/us-41-ip3.md`.
+- **Evidence presented:** [IP3 evidence](../verification/us-41-ip3.md); T1–T4 technically Complete; M50/shared checks passing, retained upgrade identities and all corrective attempts recorded.
 - **Remaining limitations:** Both artifact paths and final regressions await IP4.
-- **Developer decision / reference and date:** Pending.
+- **Developer decision / reference and date:** Approved — developer “i approve ip3; commmit”, 2026-11-08 (UTC). IP3 commit authorized; no whole-story acceptance.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** IP4 only after Gate 3 approval. Stop and await approval.
+- **Progression authorized:** Gate 3 prerequisite satisfied. Developer authorized committing IP3 only; await direction to execute IP4. No push or PR publication authorized.
 
 ## US-41 / Implementation Phase 4: Verify both installed artifact paths and accept the story
 
@@ -239,7 +255,7 @@ Both interface/artifact success and rerun coverage is mandatory. Partition negat
 | US-41-AC-05 explicit distribution upgrade and no silent upgrade | IP3-T1–T4; IP4-T2/T3 | Native upgrade transitions and stable locked/init controls | Pending |
 | US-41-AC-06 both wheel paths, reruns/failures and preserved Git | IP4-T1–T3 | Genuine rebuild provenance, installed matrix and M1–6 regressions | Pending |
 
-- **Remaining work:** IP1/IP2 technically Complete; Gates 1–2 Approved. IP3 explicit upgrades/recovery and IP4 both-artifact/Git/final verification remain. No US-41 criterion is deferred or accepted by this phase alone.
+- **Remaining work:** IP1–IP3 technically Complete; Gates 1–3 Approved. IP4 both-artifact/Git/final verification remains. No US-41 criterion is deferred or accepted by this phase alone.
 - **Final verification:** Pending — IP4-T3.
 - **Developer acceptance / decision reference and date:** Pending.
 

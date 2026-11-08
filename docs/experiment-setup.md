@@ -119,9 +119,73 @@ uv --version
 
 Use Python 3.12 for the initially verified path. If it is unavailable, `uv python install 3.12` installs it. Installation needs access to GitHub and the configured Python package index for isolated build dependencies. For private repository access, configure Git credentials using your organization's authentication method; keep credentials outside project configuration, URLs, Git history, and diagnostic reports.
 
-The steps below were verified on macOS 15.7.9 arm64, Python 3.12.15, Git 2.54.0 and uv 0.13.1. Windows, other Python versions, and this installation workflow on Linux remain unverified. Existing Linux package CI evidence does not establish this workflow on Linux.
+The full-SHA Git bootstrap steps below were verified on macOS 15.7.9 arm64, Python 3.12.15, Git 2.54.0 and uv 0.13.1. Windows, other Python versions, and this installation workflow on Linux remain unverified. Existing Linux package CI evidence does not establish this workflow on Linux.
 
-## Create a separate project and install an exact revision
+## Create a separate project and select the toolkit
+
+### Install a retained local wheel
+
+For the US-41 development revision, obtain a reviewed purelib toolkit wheel from
+your distributor and keep it at a stable path outside the toolkit checkout. No
+package-index publication is required. From a new separate project:
+
+```sh
+mkdir my-wheel-experiment
+cd my-wheel-experiment
+git init
+uv init --no-package --python 3.12
+uv add /absolute/reviewed/agentic_ml-0.1.0-py3-none-any.whl
+uv sync --locked
+uv lock --check
+.venv/bin/agentic-ml --version
+.venv/bin/agentic-ml init
+```
+
+Use your wheel's actual filename/version. `uv add` records a normal dependency,
+a local path in `[tool.uv.sources]` and the wheel SHA-256 in `uv.lock`. Relative
+paths resolve from the experiment root. The installed CLI/API checks declaration,
+lock, retained wheel digest, installed version/origin and payload before setup
+writes. URL, registry, editable, directory and source-archive dependencies are
+outside this wheel contract. Keep the original wheel available for later init;
+missing bytes fail without downloading a substitute.
+
+uv may record empty `archive_info` in installed `direct_url.json`. The toolkit
+compares installed payload with the retained locked wheel; this proves current
+consistency, not the original ZIP's encoding or historical archive hash.
+The installed-project tests execute this bootstrap and both upgrade forms on
+Linux aarch64 / Python 3.12.16 / uv 0.13.6; macOS and Windows wheel
+initialization remain unverified. See [IP3 evidence](verification/us-41-ip3.md).
+Setup records version, canonical locator, SHA-256 and environment checksums in
+`.agentic-ml/init.json`. It does not fabricate Git-origin metadata.
+
+### Explicitly upgrade a completed wheel setup
+
+Review a new wheel at a **different path**, keeping the old artifact for recovery:
+
+```sh
+uv add /absolute/reviewed/new/agentic_ml-0.1.1-py3-none-any.whl
+uv sync --locked
+uv lock --check
+.venv/bin/agentic-ml init
+```
+
+A different artifact with the same version uses the same commands and a new
+locator. Do not overwrite the selected wheel in place. Review declaration/lock
+changes and the refreshed journal identity. Ordinary `uv sync --locked` and init
+retain the selected artifact even when a newer wheel is available. Compatible
+custom files, original backups and local stores survive initialization.
+
+Native uv selection intentionally changes dependencies before init. A failed
+selection/sync or init does not roll those changes back. Invoke installed
+entrypoints directly when diagnosing identity errors so `uv run` cannot repair
+the environment before inspection. Preserve the journal, backups and available
+logs. Restore reviewed metadata and its wheel, then run `uv sync --locked` for
+inconsistent inputs. An interrupted setup requires unchanged recorded identity
+and checksums, even if environment verification finished; review recovery before
+selecting another wheel. Only a fully completed setup can refresh identity.
+Switching between Git and wheel origins is outside this upgrade workflow.
+
+### Install a full-SHA Git dependency
 
 Run these commands from a directory outside the harness checkout, choosing a new project directory:
 
@@ -228,9 +292,9 @@ The verifier preserves `identity-before-sync.json`, `pyproject-before-sync.toml`
 
 ## Initialize the experiment project (US-02)
 
-After installing a reviewed initialization-capable revision as a full-SHA dependency, run `uv run agentic-ml init` from the experiment Git root, or pass `--project-root /absolute/project`. Use `--experiment NAME` and `--package-name IDENTIFIER` to select names; an existing src package requires explicit selection.
+After installing a reviewed initialization-capable wheel or full-SHA Git dependency, run `.venv/bin/agentic-ml init` from the experiment Git root, or pass `--project-root /absolute/project`. Use `--experiment NAME` and `--package-name IDENTIFIER` to select names; an existing src package requires explicit selection.
 
-Initialization creates draft configuration, a brief, search/execution inputs, four inert notebooks, project-package build scaffolding and ignore rules. It declares NumPy, pandas, scikit-learn, nbclient, ipykernel, nbformat, DVC and MLflow in the experiment project, resolves its lock and synchronizes `.venv`. Existing requirement bounds remain and intersect the required ranges; unrelated installed packages are retained during setup. The harness full-SHA source stays pinned. Review and commit the deliberately updated experiment metadata and lock together.
+Initialization creates draft configuration, a brief, search/execution inputs, four inert notebooks, project-package build scaffolding and ignore rules. It declares NumPy, pandas, scikit-learn, nbclient, ipykernel, nbformat, DVC and MLflow in the experiment project, resolves its lock and synchronizes `.venv`. Existing requirement bounds remain and intersect the required ranges; unrelated installed packages are retained during setup. The selected toolkit wheel or full-SHA source stays pinned. Review and commit the deliberately updated experiment metadata and lock together.
 
 Local storage defaults are:
 

@@ -4,30 +4,37 @@ Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-41-distribution-init`; US-41 IP2 source, tests, dependency/lock,
-plan, evidence and approval records are included in the authorized phase commit. Developer clarified “yes, I meant
-implement ip2”, 2026-11-08 UTC, authorizing IP2 execution only. IP1 T1–T3 and
-Gate 1 remain Complete/Approved in the [plan](docs/plans/milestone-50-us-41.md).
-Issue #64 was refreshed with complete body/all comment pages and matching final
-metadata: zero comments; scope unchanged. IP2 T1–T4 are technically Complete. Final M50: 882 collected, 146 selected,
-736 deselected; **144 passed, 2 existing skips in 345.03s; exit 0**. All 66 new
-US-41 cases passed. Same-selection collection-only verification confirmed counts. Gate 2 approved on 2026-11-08: developer “I approve ip2; commit changes”.
-No whole-story acceptance is recorded.
+Checkout: `US-41-distribution-init`; IP2 approved and committed as `404ba53`.
+Developer “start ip3”, 2026-11-08 UTC, authorizes IP3 execution only. Gate 2
+is Approved; Gate 3 Approved on 2026-11-08: developer “i approve ip3; commmit”. Issue #64 complete body/all comment pages and
+final metadata refreshed: zero comments; scope unchanged. Current work adds
+explicit completed-wheel upgrades and incomplete-operation recovery guards,
+installed public CLI/API tests and setup instructions. See the
+[plan](docs/plans/milestone-50-us-41.md) and
+[IP3 evidence](docs/verification/us-41-ip3.md) for progress and attempts.
+Raw logs: `.dev-records/verification/us-41-ip3-20261108/`.
 
-[IP2 evidence](docs/verification/us-41-ip2.md) owns installed CLI/API wheel setup,
-compatible reruns, identity/payload failures before project writes and TDD records.
-The shared identity module retains full-SHA Git checks. `packaging>=24,<27` is now
-a direct runtime dependency; intentional lock changes only add root dependency
-metadata, with no resolved package changes. Locked sync/check, lint, format, full
-strict typing and CLI version checks passed on Linux aarch64 / Python 3.12.16.
-Raw evidence: `.dev-records/verification/us-41-ip2-20261108/`. The approved
-archive-history limitation remains. Upgrades/recovery transitions belong to IP3;
-both artifact paths and renewed Git/M1–6 evidence belong to IP4. No standalone
-artifact driver or broader local tests were run. Approval recording is
-documentation only; existing executable evidence remains applicable. Final
+IP3 T1–T4 are technically Complete; **Gate 3 Approved**; IP3 commit authorized.
+M50: 899 collected, 163 selected, 736 deselected; **161 passed, 2 existing skips
+in 397.20s**, exit 0. All 83 US-41 cases passed. Shared sync/lock/lint/format/
+strict typing/smoke, document links and diff checks passed on Linux aarch64 /
+Python 3.12.16 / uv 0.13.6. Retained upgrade replay: 2 passed, 81 deselected;
+new-/same-version digests, installed origins and checksums saved in raw records.
+Its exclusive `/tmp/us41-ip3-upgrade-evidence-20261108-1` is retained for review.
+
+Current changes: identity/journal upgrade guards, incomplete synchronization
+status, 17 added installed test cases, wheel bootstrap/upgrade instructions,
+plan/evidence/checkpoint. Failed attempts and fixture corrections are preserved
+in [IP3 evidence](docs/verification/us-41-ip3.md); original assertions remain.
+No suppression, scope deviation or lock change. Lock SHA-256:
+`6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4`.
+The approved archive-history limitation and platform limits remain. Both-artifact/
+Git/M1–6 renewal remains IP4. No standalone artifact driver or broader local
+suite was run. Developer authorized the IP3 commit, including approval records;
+no push or PR publication is authorized. Approval recording is documentation only;
+existing executable evidence remains applicable. Final document/link checks and
 `git diff --check` passed.
-**Next action:** await direction to execute IP3. Approval recording and the IP2
-commit are authorized; no push or PR publication is authorized.
+**Next action:** await direction to execute IP4.
 
 Previous publication context follows; it does not authorize US-41 implementation.
 Developer authorized squash merge and pull on 2026-11-08.

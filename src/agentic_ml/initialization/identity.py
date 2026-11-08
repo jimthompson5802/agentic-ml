@@ -15,7 +15,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from packaging.requirements import Requirement
 from packaging.utils import canonicalize_name, parse_wheel_filename
-from packaging.version import Version
+from packaging.version import InvalidVersion, Version
 
 from .journal import read_journal
 from .models import InitializationError
@@ -297,6 +297,56 @@ def validate_saved_identity(root: Path, identity: dict[str, str]) -> None:
         return
     if not isinstance(previous, dict) or previous.get("kind") not in ("git", "wheel"):
         raise _wheel_error("Missing or malformed setup journal toolkit identity")
+    if previous.get("kind") != identity["kind"]:
+        raise _wheel_error("Setup journal source-kind switch is unsupported")
+    if previous["kind"] == "wheel":
+        try:
+            version = previous.get("version")
+            if not isinstance(version, str) or str(Version(version)) != version:
+                raise _wheel_error("Malformed setup journal wheel version")
+        except InvalidVersion as error:
+            raise _wheel_error("Malformed setup journal wheel version") from error
+    if previous["kind"] == "wheel" and (
+        set(previous) != set(identity)
+        or previous.get("name") != "agentic-ml"
+        or not isinstance(previous.get("version"), str)
+        or not isinstance(previous.get("locator"), str)
+        or not previous["locator"].startswith("file:///")
+        or not isinstance(previous.get("sha256"), str)
+        or re.fullmatch(r"[0-9a-f]{64}", previous["sha256"]) is None
+        or previous.get("verification") != "locked-archive-and-installed-payload"
+    ):
+        raise _wheel_error("Malformed setup journal wheel identity")
+    complete = (
+        saved.get("status") == "complete"
+        and saved.get("pending_steps") == []
+        and environment.get("verified") is True
+        and {
+            "preflight",
+            "scaffold",
+            "lock",
+            "sync",
+            "environment-check",
+            "DVC",
+            "MLflow",
+            "state",
+            "finalize",
+        }.issubset(saved.get("completed_steps", []))
+    )
+    if (
+        previous["kind"] == "wheel"
+        and complete
+        and (previous == identity or previous["locator"] != identity["locator"])
+    ):
+        return
+    if not complete and "checksums" in environment:
+        for name in ("pyproject.toml", "uv.lock"):
+            if hashlib.sha256((root / name).read_bytes()).hexdigest() != environment[
+                "checksums"
+            ].get(name):
+                raise _wheel_error(
+                    "Interrupted setup metadata changed; review before retry"
+                )
     if previous != identity:
         raise _wheel_error(
             "Setup journal toolkit identity changed; review before retry"

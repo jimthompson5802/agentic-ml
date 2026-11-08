@@ -70,6 +70,14 @@ def _synchronize(result: InitResult) -> InitResult:
     original_metadata = (root / "pyproject.toml").read_bytes()
     original_lock = (root / "uv.lock").read_bytes()
     planned = tomlkit.dumps(document).encode()
+    journal["status"] = "incomplete"
+    journal["completed_steps"] = [
+        step
+        for step in journal["completed_steps"]
+        if step not in ("lock", "sync", "environment-check", "finalize")
+    ]
+    journal["pending_steps"] = ["lock", "sync", "DVC", "MLflow", "state", "finalize"]
+    write_private(journal_path, json.dumps(journal).encode())
     if planned != (root / "pyproject.toml").read_bytes():
         write_private(root / "pyproject.toml", planned)
     environment: dict[str, Any] = {
