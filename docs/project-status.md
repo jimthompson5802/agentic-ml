@@ -23,7 +23,7 @@ verification remains outstanding; the complete MVP has not been delivered.
 | M1 | US-05: Reject invalid configurations ([#11](https://github.com/jimthompson5802/agentic-ml/issues/11)) | Validation accepted and merged; training integration pending |
 | M1 | US-10: Run and inspect local experiments ([#13](https://github.com/jimthompson5802/agentic-ml/issues/13)) | Open |
 | M1 | US-11: Extract local experiment data ([#14](https://github.com/jimthompson5802/agentic-ml/issues/14)) | Accepted and merged |
-| M1 | US-12: Validate data and define reproducible splits ([#15](https://github.com/jimthompson5802/agentic-ml/issues/15), [#19](https://github.com/jimthompson5802/agentic-ml/issues/19)) | Validation accepted and merged; assessment and splits accepted 2026-11-08, publication in progress |
+| M1 | US-12: Validate data and define reproducible splits ([#15](https://github.com/jimthompson5802/agentic-ml/issues/15), [#19](https://github.com/jimthompson5802/agentic-ml/issues/19)) | Validation accepted and merged; assessment and splits accepted 2026-11-08; [PR #62](https://github.com/jimthompson5802/agentic-ml/pull/62) open |
 | M1 | US-13: Version datasets with DVC ([#16](https://github.com/jimthompson5802/agentic-ml/issues/16)) | Open |
 | M1 | US-14: Build and compare feature pipelines ([#20](https://github.com/jimthompson5802/agentic-ml/issues/20)) | Open |
 | M1 | US-15: Preserve training-only preprocessing ([#21](https://github.com/jimthompson5802/agentic-ml/issues/21)) | Open |

@@ -9,7 +9,8 @@ Developer “start ip4”, 2026-11-08 UTC, authorized final installed verificati
 Developer “i approve ip4; commit”, 2026-11-08 UTC, approves Gate 4 and
 authorizes a local IP4 commit.
 Developer “i accept issue #19”, 2026-11-08 UTC, accepts AC-02/03 and both layouts.
-**Next action:** publish the accepted branch, create its PR and post static review.
+**Next action:** await developer direction on the Low documentation finding
+and PR merge; no subsequent story or fixes are authorized.
 IP1–IP4 technical tasks Complete; Gates 1–4 Approved.
 IP4 adds installed project/probe/driver and M1 regression, README/guide/design
 status updates, plan/evidence/checkpoint. No toolkit runtime behavior changed.
@@ -19,7 +20,15 @@ each pass 713 tests with one existing skip (714 selected). Shared checks, guide
 demo and local document checks pass. Lock hash is unchanged from IP3 below.
 The [IP4 evidence](docs/verification/us-12-19-ip4.md) owns commands, raw records,
 probe corrections, actual counts and Linux aarch64 limits. macOS/Windows remain
-unverified. Issue #19 accepted; execute-plan publication/review in progress.
+unverified. Issue #19 accepted and published as
+[PR #62](https://github.com/jimthompson5802/agentic-ml/pull/62) against `main`;
+acceptance commit `a672dca` pushed.
+[Static review](https://github.com/jimthompson5802/agentic-ml/pull/62#pullrequestreview-5815831258)
+published and verified, with one
+[Low finding](https://github.com/jimthompson5802/agentic-ml/pull/62#discussion_r4504392360)
+for stale current status in active data/interface design pages. CI pending at
+inspection. Publication-record commit will receive a static review renewal.
+Issue closure awaits merge; no merge or branch cleanup authorized.
 IP4 is committed as `600f49e`. Acceptance-record edits preserve test evidence;
 no executable changes follow the final verification.
 
