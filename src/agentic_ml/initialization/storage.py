@@ -11,7 +11,8 @@ from typing import Any
 
 from .journal import read_journal, write_private
 from .models import InitializationError, InitResult
-from .preflight import check_path, probe_writable
+from .paths import check_path
+from .preflight import probe_writable
 from .validation import validate_document
 
 

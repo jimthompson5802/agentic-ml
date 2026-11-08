@@ -1,24 +1,25 @@
 """Validate project identity before modifying an experiment project."""
 
-import json
 import keyword
 import os
 import re
 import subprocess
-import sys
 import tempfile
 import tomllib
 from fnmatch import fnmatchcase
-from importlib.metadata import distribution
 from pathlib import Path
 from typing import Any
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import urlsplit
 
+from .identity import toolkit_identity, validate_saved_identity
 from .journal import read_journal
 from .models import InitializationError, InitOptions
+from .paths import check_path
 
 
-def project_identity(options: InitOptions) -> tuple[Path, dict[str, Any], str]:
+def project_identity(
+    options: InitOptions,
+) -> tuple[Path, dict[str, Any], str, dict[str, str]]:
     """Require an explicit Git root and the matching installed pinned harness."""
     root = options.project_root.absolute()
     if root.is_symlink() or not root.is_dir():
@@ -41,48 +42,14 @@ def project_identity(options: InitOptions) -> tuple[Path, dict[str, Any], str]:
         metadata = tomllib.loads((root / "pyproject.toml").read_text())
         lock = tomllib.loads((root / "uv.lock").read_text())
         project = metadata["project"]
-        source = metadata["tool"]["uv"]["sources"]["agentic-ml"]
-        dependencies = project["dependencies"]
-        revision = source["rev"]
-        url = source["git"]
     except (OSError, ValueError, KeyError, TypeError) as error:
-        raise InitializationError("Missing or invalid project metadata/lock") from error
+        raise InitializationError(
+            "Missing or invalid project metadata/lock",
+            recovery="Restore reviewed project metadata and the locked wheel or Git source, then run uv sync --locked before retrying init.",
+        ) from error
     reject_credentials(metadata)
-    if (
-        not isinstance(revision, str)
-        or re.fullmatch(r"[0-9a-fA-F]{40}", revision) is None
-    ):
-        raise InitializationError("Harness dependency requires a full commit SHA")
-    if (
-        not isinstance(url, str)
-        or urlsplit(url).scheme not in ("https", "file")
-        or set(source) != {"git", "rev"}
-        or not isinstance(dependencies, list)
-        or not any(
-            isinstance(d, str) and re.match(r"^agentic[-_]ml(?:$|[<>=!~ ;\[])", d)
-            for d in dependencies
-        )
-    ):
-        raise InitializationError("Invalid pinned harness dependency")
-    candidates = [p for p in lock.get("package", []) if p.get("name") == "agentic-ml"]
-    if len(candidates) != 1:
-        raise InitializationError("Lock must contain exactly one pinned harness")
-    locked = urlsplit(candidates[0].get("source", {}).get("git", ""))
-    if (
-        locked.fragment != revision
-        or parse_qs(locked.query).get("rev") != [revision]
-        or locked._replace(query="", fragment="").geturl() != url
-    ):
-        raise InitializationError("Locked harness does not match the declared pin")
-    installed = distribution("agentic-ml")
-    direct = json.loads(installed.read_text("direct_url.json") or "{}")
-    if (
-        Path(sys.prefix).resolve() != (root / ".venv").resolve()
-        or direct.get("url") != url
-        or direct.get("vcs_info", {}).get("commit_id") != revision
-        or direct.get("dir_info", {}).get("editable")
-    ):
-        raise InitializationError("Use the selected project's installed pinned harness")
+    identity = toolkit_identity(root, metadata, lock)
+    validate_saved_identity(root, identity)
     uv = metadata.get("tool", {}).get("uv", {})
     if "workspace" in uv:
         raise InitializationError("Workspace projects are not supported by init")
@@ -120,16 +87,7 @@ def project_identity(options: InitOptions) -> tuple[Path, dict[str, Any], str]:
             )
     elif uv.get("package") is True or "hatch" in metadata.get("tool", {}):
         raise InitializationError("Existing package build settings conflict")
-    return root, metadata, package
-
-
-def check_path(path: Path) -> None:
-    """Reject symlink components and non-directory parents without following them."""
-    for parent in (path, *path.parents):
-        if parent.is_symlink():
-            raise InitializationError("Symlink destination conflict")
-        if parent != path and parent.exists() and not parent.is_dir():
-            raise InitializationError("Destination parent is not a directory")
+    return root, metadata, package, identity
 
 
 def storage_paths(options: InitOptions, root: Path) -> dict[str, str]:

@@ -198,6 +198,7 @@ def main() -> None:
         "jsonschema<5,>=4",
         "pyyaml<7,>=6",
         "tomlkit<1,>=0.13",
+        "packaging<27,>=24",
         "nbclient<1,>=0.10",
         "ipykernel<8,>=6",
         "nbformat<6,>=5",
