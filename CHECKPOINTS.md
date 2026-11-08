@@ -14,7 +14,9 @@ AC-02/03 and both split layouts are accepted; IP1–IP4 Complete and Gates 1–4
 Approved. [PR #62](https://github.com/jimthompson5802/agentic-ml/pull/62)
 squash-merged as `980c97f34e4dcac3d13086825641b821e13f80d4` at
 2026-11-08T01:12:16Z; issue #19 closed at 01:12:17Z. Local `main` pulled by
-fast-forward. Branches were retained. The owning
+fast-forward. Developer subsequently requested deleting the PR branches;
+local and remote `US-12-assessment-splits` were deleted after verifying their
+head `a018794` had the same tree as squash commit `980c97f`. The owning
 [plan](docs/plans/milestone-1-us-12-assessment-splits.md) and
 [IP4 evidence](docs/verification/us-12-19-ip4.md) preserve acceptance,
 publication/review, resolved documentation finding and verification limits.

@@ -757,3 +757,16 @@ fast-forwarded `bce7ccc` to `980c97f`. Branches retained; no cleanup requested.
 Completion-record edits change no executable behavior. Document/whitespace
 checks apply; no TDD or product-test rerun is needed. Historical phase/story
 checks, skips, failures and milestone obligations remain intact.
+
+
+### Merged branch cleanup — 2026-11-08 UTC
+
+Developer “delete local and remote branches the pr” authorizes deleting PR #62's
+`US-12-assessment-splits` branches. PR state MERGED and clean `main` confirmed.
+Local/remote branch heads were `a018794`; its tree and squash commit `980c97f`'s
+tree both equal `57b7562a4cddd867f2a04673ccdbce6351c11931`.
+Remote deletion succeeded with `git push origin --delete US-12-assessment-splits`.
+Local deletion succeeded with `git branch -D US-12-assessment-splits`; force was
+needed for squash ancestry, after the tree-equality check. Other branches and
+retained development evidence are preserved. Documentation-only cleanup record;
+`git diff --check` passed, with no executable changes or tests required.
