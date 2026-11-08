@@ -267,7 +267,25 @@ Both interface/artifact success and rerun coverage is mandatory. Partition negat
 
 ## Publication record
 
-Developer whole-story acceptance authorizes publication under the execute-plan
-workflow. IP4 committed as `776c8ab`. Acceptance records are documentation only;
-existing final executable evidence remains applicable. Push, PR and static review
-are in progress; no merge or branch cleanup authorized.
+Developer “i accept the story”, 2026-11-08 UTC, accepts all six US-41 criteria
+and authorizes publication under execute-plan. IP4 committed as `776c8ab`;
+acceptance records committed as `bddc583` and pushed normally to
+`origin/US-41-distribution-init`.
+
+[PR #65](https://github.com/jimthompson5802/agentic-ml/pull/65),
+“feat(initialization): support verified local wheel dependencies”, targets
+`main` at `b8ce8a80810a48867f010f257b9d0fb21c541361`. The repository template,
+head ownership, body, branch and standard non-draft status were verified.
+
+[Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/65#pullrequestreview-5819419102)
+verified at `bddc5835b11ea7eafd47fb6a384cae99ae58f2b5`: no actionable findings.
+Review inspected source/contracts/tests/evidence only and ran no project code
+or checks. Existing published reviews/comments were empty before submission;
+the returned review commit/body/state and zero inline comments were verified.
+Final publication-record changes receive a static follow-up at the new head.
+
+Hosted Linux / Python 3.12 CI was pending at the last check:
+[run 42517266796](https://github.com/jimthompson5802/agentic-ml/actions/runs/42517266796).
+This is not a passing hosted verification claim. Local final evidence remains
+unchanged. Acceptance/publication records are documentation only; relative-file
+links and `git diff --check` passed. No merge or branch cleanup authorized.
