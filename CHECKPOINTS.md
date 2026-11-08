@@ -4,6 +4,27 @@ Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
+CI split implementation (developer “Implement the plan”, 2026-11-08 UTC):
+CI-SPLIT-T1–T3 Complete; developer Approved — “I approve, commit and push”,
+2026-11-08 UTC. One workflow
+now has independent default and other-test jobs, no cross-job dependencies,
+separate environments/four pytest workers and 30-minute limits. Default owns
+lint/format/typing/smoke; other owns build/distribution verification. Both retain
+setup/diagnostics/lock checks and failure conditions. CI guide updated.
+
+Collection-only verification: default 721, complement 268, all 989; intersection
+empty and union equals complete inventory. YAML structure and job independence
+checks and `git diff --check` passed. Raw records:
+`.dev-records/verification/ci-split-20261108/`. Contributor CI configuration only;
+no product behavior change, so TDD/product suite reruns do not apply. Hosted
+parallelism/outcomes remain unverified. Developer authorized committing and
+pushing the CI split and approval record. This infrastructure task does not
+reopen US-41 acceptance. Approval recording is documentation only; existing
+collection and structure verification remains applicable.
+**Next action:** observe hosted CI after the authorized push; no merge authorized.
+
+Previous accepted-story publication context follows.
+
 Checkout: `US-41-distribution-init`; IP4 approved and committed as `776c8ab`.
 Developer “start ip4”, 2026-11-08 UTC, authorizes IP4 execution only. Gates 1–3
 are Approved; Gate 4 Approved on 2026-11-08 — developer “I approve ip4; commit”.
