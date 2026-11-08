@@ -12,9 +12,10 @@ dependency at a full Git SHA into a separate experiment project. Preserve
 a neighboring toolkit checkout are not experiment interfaces. Load shipped
 templates/runtime resources with installed-package resource APIs.
 
-Distribution-based initialization is deferred under
+Distribution-based initialization is planned under
 [US-41](../user-stories.md#us-41-initialize-experiments-from-a-package-distribution)
-in M99. Current initialization still requires matching Git-origin metadata and a
+in M50, owned by [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64).
+It remains unimplemented. Current initialization still requires matching Git-origin metadata and a
 full-SHA dependency pin. US-33's wheel build/import checks do not establish
 distribution-origin initialization support; package-index publication is outside US-41.
 

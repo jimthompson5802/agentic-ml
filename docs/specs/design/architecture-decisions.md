@@ -53,13 +53,15 @@ The CLI spelling correction from `agent-ml` to `agentic-ml` stays accepted.
 Python 3.12 remains the minimum; additional verified versions/platforms require
 their own evidence. Archived examples are not current schema alternatives.
 
-US-41 is a deferred M99 extension of ADR-007's installation identity contract.
+US-41 is an unimplemented M50 extension of ADR-007's installation identity contract.
 It proposes accepting distribution-origin dependencies, recording version/locked
 artifact integrity and preserving explicit upgrades alongside existing Git pins.
 It does not change the accepted current initializer or require package-index
 publication. The [local story](../user-stories.md#us-41-initialize-experiments-from-a-package-distribution)
-has no published GitHub issue; synchronization and an owning contract review are
-required before implementation.
+is synchronized to [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64)
+in Milestone 50. An owning contract review and implementation plan must settle
+supported dependency forms, artifact identity and explicit upgrade behavior before
+dependent implementation. Existing full-SHA Git support remains required.
 
 ## Deferred assurance register
 

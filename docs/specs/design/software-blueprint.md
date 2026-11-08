@@ -154,7 +154,7 @@ does not remove their accepted contract.
 
 The previous 160-criterion coverage index is historical design evidence. Current
 [traceability](acceptance-traceability.md) covers all 228 local criteria, including
-the six deferred US-41 distribution-initialization criteria, and
+the six planned M50 US-41 distribution-initialization criteria ([issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64)), and
 explicitly labels accepted, planned and roadmap outcomes.
 
 ## Historical link aliases

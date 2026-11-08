@@ -800,7 +800,7 @@ Notes: This story reduces peak usage within one invocation; US-35 reduces retain
 
 As a data scientist, I want to install the toolkit from a Python package distribution and initialize my experiment repository so that setup does not require a Git source dependency.
 
-**Assigned to Milestone 50.** This extends US-01/US-02 installation identity beyond the current full-SHA Git contract; US-33 supplies distribution builds. Package-index publication and registry hosting are outside this story.
+**Assigned to Milestone 50.** Owning issue: [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64). Implementation remains pending. This extends US-01/US-02 installation identity beyond the current full-SHA Git contract; US-33 supplies distribution builds. Package-index publication and registry hosting are outside this story.
 
 Acceptance criteria:
 

@@ -26,7 +26,8 @@ Developer requested moving US-41 from Milestone 99 to Milestone 50 in
 `docs/specs/user-stories.md`. The story placement, milestone assignment and
 delivery table now reflect M50; all six acceptance criteria are unchanged.
 Developer authorized committing and pushing this documentation change.
-No implementation or GitHub issue publication is authorized. Verification: placement/criterion preservation checks and
+Published as `63608f4`. Developer subsequently authorized issue publication and
+active design alignment; see the US-41 record below. Verification: placement/criterion preservation checks and
 `git diff --check` passed. TDD and executable tests do not apply.
 
 The design now records accepted US-11 extraction and US-12 quality/assessment/
@@ -88,11 +89,22 @@ Developer requested US-41, distribution-based experiment initialization, locally
 in `docs/specs/user-stories.md` under Milestone 99, then authorized commit and
 push. Six criteria cover wheel bootstrap, initialization, identity validation,
 failures, explicit upgrades and both wheel verification paths while preserving
-Git installs. No implementation is authorized and no GitHub issue was published.
+Git installs. No implementation is authorized. Developer subsequently authorized
+publication: [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64)
+now owns all six unchanged criteria, labeled `enhancement` and assigned to the
+new GitHub milestone “Milestone 50: Improve the technical environment”.
+The published body and metadata were verified against the prepared template.
+Active interfaces, ADR, delivery, blueprint and traceability documents now assign
+US-41 to M50 and link its owning issue. Story criteria remain unchanged.
+Developer authorized committing and pushing these documentation changes.
+No implementation plan was created. Verification: unchanged story criteria, six
+M50 traceability rows, issue links, relative file targets and `git diff --check`
+passed. No executable behavior changed; TDD and product tests do not apply.
 The developer subsequently moved the local story to Milestone 50 on 2026-11-08.
 The empty GitHub milestone “Milestone 99: Future enhancements” was created before
 the developer limited story publication to the local specification. GitHub issue
-synchronization remains required before implementation. This is documentation
+synchronization for US-41 is complete. Contract review, confirmed public test
+boundaries and an implementation plan remain before dependent code. This is documentation
 only; TDD and executable checks do not apply. Verification: reviewed the story
 placement and criteria; `git diff --check` passed. Next action: await direction.
 
