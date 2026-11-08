@@ -810,6 +810,21 @@ Acceptance criteria:
 - <a id="us-34-ac-02"></a> **US-34-AC-02:** Required CI checks and review expectations are documented, including the conditions for merging a pull request.
 - <a id="us-34-ac-03"></a> **US-34-AC-03:** Branch protection enforces the documented required checks and review expectations on the default branch.
 
+### US-41: Initialize experiments from a package distribution
+
+As a data scientist, I want to install the toolkit from a Python package distribution and initialize my experiment repository so that setup does not require a Git source dependency.
+
+**Deferred to Milestone 99.** This extends US-01/US-02 installation identity beyond the current full-SHA Git contract; US-33 supplies distribution builds. Package-index publication and registry hosting are outside this story.
+
+Acceptance criteria:
+
+- <a id="us-41-ac-01"></a> **US-41-AC-01:** Documented bootstrap instructions install a toolkit wheel distribution as a normal dependency in a separate Git/Python experiment project without requiring a Git source dependency or toolkit checkout.
+- <a id="us-41-ac-02"></a> **US-41-AC-02:** Initialization through the installed CLI and public API accepts the supported distribution installation and provides the US-02 scaffolding, dependency synchronization and local storage behavior while preserving compatible existing files.
+- <a id="us-41-ac-03"></a> **US-41-AC-03:** The project dependency declaration, lockfile and installed distribution are checked for consistent package identity; the recorded identity includes the package version and locked artifact integrity information rather than requiring Git-origin metadata.
+- <a id="us-41-ac-04"></a> **US-41-AC-04:** Missing, inconsistent or unsupported package identity produces an actionable failure before project changes; initialization preserves the selected distribution dependency and does not silently replace it with a Git source or another artifact.
+- <a id="us-41-ac-05"></a> **US-41-AC-05:** A documented explicit distribution upgrade updates the dependency declaration, lockfile and recorded environment identity; ordinary initialization or locked synchronization does not silently upgrade the toolkit.
+- <a id="us-41-ac-06"></a> **US-41-AC-06:** Installed-project verification covers initialization and compatible reruns using both a directly built wheel and a wheel genuinely rebuilt from the source distribution, plus identity failure cases. Existing full-SHA Git installation and initialization remain supported.
+
 ## Historical link aliases
 
 These anchors preserve prior issue/plan/design references as migration context;

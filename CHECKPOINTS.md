@@ -52,6 +52,19 @@ committed-project reproduction; M0 accepted, M50 ongoing, M99 deferred.
 [Stories](docs/specs/user-stories.md) govern milestone context; GitHub issues
 govern implementation scope. No subsequent story implementation is authorized.
 
+## Deferred story addition: US-41
+
+Developer requested US-41, distribution-based experiment initialization, locally
+in `docs/specs/user-stories.md` under Milestone 99, then authorized commit and
+push. Six criteria cover wheel bootstrap, initialization, identity validation,
+failures, explicit upgrades and both wheel verification paths while preserving
+Git installs. No implementation is authorized and no GitHub issue was published.
+The empty GitHub milestone “Milestone 99: Future enhancements” was created before
+the developer limited story publication to the local specification. GitHub issue
+synchronization remains required before implementation. This is documentation
+only; TDD and executable checks do not apply. Verification: reviewed the story
+placement and criteria; `git diff --check` passed. Next action: await direction.
+
 ## Completed work: authoritative records
 
 Refreshed [MVP project status](docs/project-status.md) against current GitHub
