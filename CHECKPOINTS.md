@@ -4,10 +4,25 @@ Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
-Checkout: `main`, squash-merge baseline `980c97f`, initially clean after pull.
-Developer “squash merge; switch to main; pull changes; commit and push”,
-2026-11-08 UTC, authorizes this merge and the completion-record commit/push.
-**Next action:** await developer direction on subsequent work.
+Checkout: `reconcile-design`, baseline `49292df`, initially clean for this review.
+Developer “ok make the changes”, 2026-11-08, authorized the proposed source/design
+documentation reconciliation. Developer “commit changes” subsequently authorized
+the local documentation commit. Corrections are complete: active
+design topics/walkthrough, three linked usage guides, the
+[reconciliation report](docs/reviews/source-design-reconciliation-2026-11-08-07-19.md)
+and this checkpoint are included in that commit. No product implementation or
+publication is authorized. **Next action:** await developer direction; no push
+requested.
+
+The design now records accepted US-11 extraction and US-12 quality/assessment/
+partitions, exact split composition and project-owned persistence/identity checks.
+The criterion index contains all 228 local IDs, with US-05-AC-05 integration pending
+and US-41 deferred to M99. M1/M2 outcomes, strict APIs and historical evidence are
+preserved. Verification is documentation-only: criterion set/uniqueness, 43 public
+exports across eight module surfaces, relative links/anchors, manual diff/source
+review and `git diff --check`. No executable behavior changed; TDD/product tests
+and artifact checks do not apply. Lockfile unchanged. Existing milestone/platform
+limitations below remain open; this review supplies no renewed runtime evidence.
 
 US-12 issue [#19](https://github.com/jimthompson5802/agentic-ml/issues/19)
 AC-02/03 and both split layouts are accepted; IP1–IP4 Complete and Gates 1–4

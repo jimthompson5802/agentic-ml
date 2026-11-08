@@ -1,7 +1,7 @@
 # Agentic ML Development Toolkit — MVP Design
 
 **Version:** 0.15
-**Date:** 2026-11-06
+**Date:** 2026-11-08
 **Status:** MVP scope and design approved at Gates 1–3; implementation remains incomplete.
 No new executable capability is delivered by this document.
 
@@ -81,7 +81,9 @@ and pandas' native descriptive operations. Do not duplicate library algorithms.
 Any proposed toolkit-specific assessment/partition functionality must identify
 the library gap and be discussed with the developer before approval and code.
 The [data design](design/data-and-features.md#reuse-existing-assessment-and-partition-capabilities)
-records the native APIs and open integration decisions for issue #19.
+records the implemented native API integration accepted under issue #19.
+Project code owns JSON persistence and saved-source comparisons; supplied
+time/group protocols are declarations, with membership/disjointness checks.
 
 ## Supported workflow and safeguards
 
@@ -133,12 +135,19 @@ supersession rather than treating previous guarantees as delivered.
 
 Installed packaging, initialization, strict versioned planning/approvals and
 metadata/candidate validation are implemented and accepted in their owning
-stories. Managed experiment execution, real estimator training/tuning, data
-pipelines, result logging, reproduction and the assistant walkthrough remain work.
+stories. Local pandas extraction/provenance (US-11), configured quality checks
+(US-12-AC-01/05), descriptive assessment and recorded seeded/supplied two-way and
+three-way partitions (US-12-AC-02/03) are also implemented and accepted. See the
+[extraction](../extraction.md), [quality](../data-quality.md) and
+[assessment/partition](../data-assessment-and-splits.md) guides.
+Local experiment execution, training-only fitted feature pipelines, real estimator
+training/tuning, integrated DVC data/stages, result logging, reproduction and the
+assistant walkthrough remain work. Mandatory assessment approval (US-12-AC-04)
+remains deferred.
 Local MLflow/DVC storage initialization is not integrated experiment delivery.
 
-After design review and issue synchronization, plan coordinated US-39 M1 slices
-with confirmed installed public test boundaries. Exact new APIs/configuration
+Build on the published MVP scope and accepted components when planning US-39 M1
+slices with confirmed installed public test boundaries. Exact new APIs/configuration
 shapes and supported estimator inventory belong to those story contract reviews.
 Preserve current APIs/resources; do not implement archived 0.14 schemas by default.
 

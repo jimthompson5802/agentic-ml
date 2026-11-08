@@ -2,8 +2,10 @@
 
 Active design 0.15; [authority](../agentic-ml-harness-design.md).
 Owns US-11/12/13/14/15/16 requirements in the revised
-[stories](../user-stories.md). These data/feature operations are planned, not
-implemented by current configuration-validation APIs.
+[stories](../user-stories.md). Extraction, quality checks, descriptive assessment
+and recorded partitions are implemented through their own public APIs. Fitted
+feature pipelines, integrated DVC data handling and experiment execution remain
+planned; metadata validation alone does not provide them.
 
 ## Local extraction and quality
 
@@ -13,13 +15,15 @@ engineering. Project-owned pandas functions use read_csv/read_parquet, column
 selection, boolean masks and merge/join directly. Do not introduce toolkit
 source/request/result classes, predicate/join classes or a separate operation
 language. Toolkit helpers may record provenance and publish output using native
-objects and ordinary dictionaries. The proposed component interface and review
-status are in [the extraction contract](../../extraction.md) and
+objects and ordinary dictionaries. The implemented component interface and
+acceptance are in [the extraction contract](../../extraction.md) and
 [US-11-SC-01](../../plans/milestone-1-us-11.md#scope-change-history).
 
 Read local CSV/Parquet and support configured column selection, filtering and
 joins. Permit ordinary project extraction functions. Record source paths/content
-identities, effective extraction settings/time and output checksum/DVC reference.
+identities, effective extraction settings/time and output checksum. `extract_data`
+publishes the output and provenance together; it does not create a DVC reference.
+Real DVC identity integration remains US-13 work.
 Reject missing/invalid required inputs and report failures without calling partial
 outputs validated data. SQL, object storage, discovery security and source quotas
 are deferred; no universal connector interface is required now.
@@ -33,8 +37,9 @@ US-12 issue #15's [concrete quality contract](../../data-quality.md) was approve
 at Gate 1 on 2026-11-07 UTC by developer “i approve ip1; commit”. It specifies pandas-based checks,
 plain reports and a synchronous helper that blocks a dependent project operation
 on required-check failure. The public `agentic_ml.data_quality` API is implemented with Gate 2 approval;
-IP3 installed checks pass; Gate 3 is approved; issue #15 AC-01/05 accepted on 2026-11-07 UTC. Assessment and
-partitions retain issue #19 ownership; this proposal does not change that scope.
+IP3 installed checks pass; Gate 3 is approved; issue #15 AC-01/05 accepted on
+2026-11-07 UTC. Assessment and partitions were separately accepted under issue #19
+on 2026-11-08 UTC; see the implemented integration below.
 Developer-directed US-12-SC-01 also permits explicit empty rules: report
 `not_checked` and allow the operation, without claiming quality validation passed.
 
@@ -58,8 +63,9 @@ with native aggregations for missingness, and
 for categorical/target counts and proportions. Reuse native semantics and make
 selected options explicit. Do not create a custom statistics engine or force
 these descriptive operations into an unrelated scikit-learn estimator interface.
-Selecting report fields and handling their serialization are separate integration
-decisions, not authorization for a new assessment API or reporting framework.
+The accepted `assess_data` contract selects report fields and JSON scalar
+conversion. Project code owns persistence; a broader reporting framework is not
+required.
 
 <a id="proposed-toolkit-integration-requiring-discussion"></a>
 
@@ -98,22 +104,28 @@ Support explicitly selected two-way (train/test) and three-way
 memberships. Record the selected layout, exact membership and source-data
 identity. Two-way layouts contain only train and test; no validation partition
 or empty placeholder is required. Validate partition names against the selected
-layout, disjoint rows and target alignment; saved records retain the selected
-layout and reject layout/membership mismatches. Accept explicit user-provided
-partitions for time/group-sensitive tasks, with recorded constraints and overlap
-checks; automatic time/group split algorithms are not required by this MVP.
+layout, disjoint rows and target alignment. `create_partitions` checks the selected
+layout/membership against the current frame; project code owns saved-document
+validation and passes selected fields back for reconstruction. Supplied membership
+must cover all source rows exactly once in nonempty partitions, using homogeneous
+string or integer row IDs (excluding booleans). Supplied time/group protocols
+record the declared kind/column/description; the helper does not verify chronology
+or group separation. Automatic time/group split algorithms are outside this MVP.
 
 Generate ordinary seeded holdouts using
 [`sklearn.model_selection.train_test_split`](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html)
-or the appropriate native scikit-learn splitter. Use explicit integer
-`random_state` values; expose/record native `shuffle` and `stratify` choices
-without silently adding a policy. Two-way layout uses a native split directly.
-For three partitions, a documented composition
-of native splits can reserve test rows and then split the remainder into train
-and validation. Exact composition/ratios are subject to the discussion above;
-do not invent a replacement allocation or rounding algorithm. Record actual
-membership as well as settings, input order/identity and library version; a seed
-alone does not identify the original partitioned data.
+in `create_partitions`. Generated mode requires an integer seed and explicit
+fractions; `shuffle=True` and `stratify=False` are the defaults. Two-way layout
+uses one native split with `test_size`. Three-way layout reserves test first,
+then splits the remaining rows with
+`test_size=validation_size / (1 - test_size)`, reusing the same seed and flags.
+Both fractions refer to the original frame; native rounding and split errors
+remain authoritative. The returned record contains each native call's settings,
+actual membership and source identity. Identity hashes index/attrs-free native
+Parquet bytes and records toolkit/pandas/pyarrow/scikit-learn versions; it is not
+a cross-version canonical hash or a DVC ID. Project code compares old/current
+identities when needed; supplied reconstruction alone does not detect changed
+values under valid IDs. See the [implemented contract](../../data-assessment-and-splits.md).
 
 Project-owned time/group partition generation may use appropriate native
 scikit-learn capabilities such as `GroupShuffleSplit` or `TimeSeriesSplit`.
@@ -125,8 +137,8 @@ train/validation/test sets. See the
 Toolkit-managed automatic time/group generation remains outside this issue's
 required scope; accept explicit memberships as already specified.
 
-Training/preprocessing receives training rows. Three-way experiments use
-validation rows for development; two-way preparation does not introduce a
+Future training/preprocessing integration must receive training rows. Three-way
+experiments use validation rows for development; two-way preparation does not introduce a
 validation set or authorize tuning against final-test rows. Experiments requiring
 selection need an appropriate development evaluation strategy within training
 data or a separate validation partition, defined by the consuming story.
@@ -142,6 +154,7 @@ functions for authored tabular features. Native pandas operations retain their
 own semantics; there is no toolkit dataframe or feature wrapper. This design
 foundation does not authorize feature implementation under US-11.
 
+The following fitted-feature behavior remains planned under US-14/15/16.
 Use native scikit-learn pipeline steps and project functions for imputation,
 encoding, scaling and authored domain features as applicable. Record selected
 columns, step order, effective settings, declared feature schema and fitted state.
@@ -160,8 +173,9 @@ prevention are not promised; tests independently verify supported split/fit scop
 
 ## DVC data and fitted artifacts
 
-DVC versions extracted data, split records and derived datasets; Git tracks DVC
-metadata and native stages/lockfiles. Keep content/generated stores out of Git.
+Planned US-13/26/27 integration uses DVC to version extracted data, split records
+and derived datasets; Git tracks DVC metadata and native stages/lockfiles.
+Keep content/generated stores out of Git.
 MLflow saves fitted pipelines/models and results with links to DVC identities,
 committed code/configuration and environment references.
 

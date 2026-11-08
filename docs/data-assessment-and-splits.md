@@ -1,11 +1,12 @@
-# Data assessment and recorded partitions — approved IP1 contract
+# Data assessment and recorded partitions
+
+<a id="data-assessment-and-recorded-partitions--approved-ip1-contract"></a>
 
 **Status:** IP1 contract approved for [issue #19](https://github.com/jimthompson5802/agentic-ml/issues/19),
 M1 / US-12-AC-02 and US-12-AC-03. `assess_data` is implemented in IP2;
 `create_partitions` is implemented in IP3; Gate 3 approved on 2026-11-07 UTC.
-IP4 verifies both installed wheel paths; Gate 4 approved on 2026-11-08 UTC; issue #19 accepted on 2026-11-08 UTC.
-Developer selected only `assess_data` and `create_partitions` in this conversation;
-“make the update” authorizes the corresponding documentation revision.
+IP4 verified both installed wheel paths; Gate 4 approved on 2026-11-08 UTC; issue #19 accepted on 2026-11-08 UTC.
+Developer selected only `assess_data` and `create_partitions` under US-12-19-SC-03.
 Developer “i approve ip1; commit changes”, 2026-11-07 UTC, confirms the contracts,
 policies, dependency scope and public test boundaries below at Gate 1 in the
 [owning plan](plans/milestone-1-us-12-assessment-splits.md).
@@ -17,13 +18,13 @@ policies, dependency scope and public test boundaries below at Gate 1 in the
 | Assessment | Retain `assess_data` to assemble native pandas results into plain JSON values. It computes no replacement statistics. | Report/scalar policies below confirmed at Gate 1. |
 | Seeded layouts | Retain `create_partitions` to compose native calls and record effective settings beside membership. | Signature, composition and settings below confirmed at Gate 1. |
 | Supplied membership | Retain pandas duplicate, membership and intersection checks within `create_partitions`. | ID domain, nonempty/complete coverage and protocol limits below confirmed at Gate 1. |
-| Persistence/identity | Project code saves/loads JSON records; no toolkit read/write helpers. `create_partitions` returns source identity and exact membership. | Native Parquet identity contract confirmed; executable stability evidence remains IP3 work. |
+| Persistence/identity | Project code saves/loads JSON records; no toolkit read/write helpers. `create_partitions` returns source identity and exact membership. | Native Parquet identity stability/sensitivity verified in IP3 and both installed paths in IP4. |
 
 The two-helper surface and project-owned persistence are selected under
 US-12-19-SC-03 in the owning plan. Row-ID, coverage and source-identity policies
 below are confirmed for implementation at Gate 1. Using either helper is optional for project scripts;
-running an experiment does not require saving or loading a record. The issue
-still requires recorded membership/disjointness and installed verification.
+running an experiment does not require saving or loading a record. Recorded
+membership/disjointness and installed verification were accepted for #19.
 No new manifest service,
 custom split/statistics algorithm or runtime approval mechanism is proposed.
 
@@ -185,7 +186,8 @@ Comparing saved/current identities belongs to project code and requires matching
 serialization versions for meaningful byte comparisons. Recorded versions are
 provenance, not a toolkit restoration compatibility gate.
 IP3 verified repeat serialization, supported dtype sensitivity and JSON round-trip;
-any failure invalidating this proposal reopens IP1 before dependent changes.
+any later failure invalidating this accepted contract requires review before
+dependent changes.
 External file/DVC identity remains the project/US-13 responsibility. This local
 record is not authenticated against a writer who changes both data and record.
 

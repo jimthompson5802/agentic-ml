@@ -2,7 +2,8 @@
 
 Design 0.15; scope and document accepted at Gates 1–3.
 **This is the required acceptance scenario, not a currently runnable end-to-end
-tutorial.** Setup/planning/validation exist; experiment execution/training/tracking/
+tutorial.** Setup/planning/validation, extraction, quality checks, assessment and
+recorded partitions exist; experiment execution/training/tracking/
 DVC stages and this full demonstration remain implementation work.
 
 ## Audience, entry conditions and ownership
@@ -35,6 +36,16 @@ current config/candidate APIs need real plan/validation identities. No toolkit
 `run`, `train` or `reproduce` command exists. New basic-path invocation and
 runnable defaults must be reviewed/implemented under US-39-AC-01/02.
 Do not present archival proposed APIs as available commands.
+
+The installed Python APIs also provide
+[pandas extraction/provenance](../extraction.md) via `extract_data`,
+[quality checks](../data-quality.md) via `validate_data`/`run_validated_step`, and
+[assessment/partitions](../data-assessment-and-splits.md) via
+`assess_data`/`create_partitions`. These accepted components support seeded and
+supplied two-way/three-way partitions. Project code owns report/split JSON
+persistence and saved-source comparisons; time/group protocols are declarations.
+Fitted preprocessing, training, MLflow records and DVC pipeline integration in
+ASW-02–06 still need implementation and assistant evidence.
 
 ## M1: classification with scientist-directed assistant help
 

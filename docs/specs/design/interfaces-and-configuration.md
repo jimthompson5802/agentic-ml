@@ -12,6 +12,12 @@ dependency at a full Git SHA into a separate experiment project. Preserve
 a neighboring toolkit checkout are not experiment interfaces. Load shipped
 templates/runtime resources with installed-package resource APIs.
 
+Distribution-based initialization is deferred under
+[US-41](../user-stories.md#us-41-initialize-experiments-from-a-package-distribution)
+in M99. Current initialization still requires matching Git-origin metadata and a
+full-SHA dependency pin. US-33's wheel build/import checks do not establish
+distribution-origin initialization support; package-index publication is outside US-41.
+
 The project owns extraction/custom transformers/estimators and notebooks. Use
 pandas DataFrames and project pandas functions for extraction and authored
 features, with plain dictionaries for extraction settings/metadata. Avoid
@@ -36,10 +42,13 @@ frame, without providing a saved-file parser or full restoration guarantee. See
 
 ## Existing public interfaces
 
-The currently implemented families are initialization, planning, approvals and
-validation, listed with all exports in [the blueprint](software-blueprint.md#existing-public-contracts).
-The existing guides describe actual commands:
-[setup](../../experiment-setup.md) and [configuration validation](../../configuration-validation.md).
+The currently implemented families are initialization, planning, approvals,
+metadata/candidate validation, extraction, data quality, assessment and partitions,
+listed with all exports in [the blueprint](software-blueprint.md#existing-public-contracts).
+The guides describe actual commands and Python interfaces:
+[setup](../../experiment-setup.md), [configuration validation](../../configuration-validation.md),
+[extraction](../../extraction.md), [quality](../../data-quality.md) and
+[assessment/partitions](../../data-assessment-and-splits.md).
 
 Initialization creates 0.1 draft inputs and project/storage scaffolding. Strict
 planning uses separately supplied 1.0 inputs and immutable plan bundles.
@@ -48,12 +57,14 @@ families are `init`, `plan resolve/inspect/verify/approve/revoke-approval`,
 `config validate/inspect`, and `candidate validate`, plus `--version`.
 These are not training or notebook-run commands.
 
-Dataset-content checks are a separate proposed public boundary under
-[US-12 issue #15's quality contract](../../data-quality.md). IP1 has selected
-function/report/rule shapes, approved by developer “i approve ip1; commit” at
-Gate 1 on 2026-11-07 UTC. The API is implemented with Gate 2 approval; IP3 installed checks pass;
-Gate 3 is approved; issue #15 AC-01/05 accepted on 2026-11-07 UTC. Existing plan-bound validation exports are
-unchanged by this proposal.
+Dataset-content checks are implemented separately from plan-bound metadata
+validation under [US-12 issue #15's quality contract](../../data-quality.md).
+Gates 1–3 and AC-01/05 were accepted on 2026-11-07 UTC. The Python APIs accept
+DataFrames and explicit rules without plan IDs. Required failures block the
+operation passed to `run_validated_step`; advisory failures and explicit empty
+rules permit it. Empty rules record `not_checked`. Future experiment entrypoints
+still need their own integration. Existing plan-bound validation exports retain
+their strict contracts.
 
 Preserve their accepted request/result shapes, integrity/currentness checks,
 conflict handling, recorded defaults, revocation/staleness rules and diagnostics.
@@ -80,8 +91,8 @@ Record effective values and library/environment references. Missing/ambiguous
 required settings or invalid candidates must fail before affected training.
 Extraction settings feed ordinary project pandas code; no proprietary
 predicate/join configuration language is required. The
-[US-11 contract revision](../../extraction.md) is proposed component design,
-not a delivered basic-run API or acceptance of downstream feature stories.
+[US-11 extraction contract](../../extraction.md) is implemented and accepted;
+the basic-run API and downstream fitted feature behavior remain future work.
 
 ## Paths, customization and notebooks
 

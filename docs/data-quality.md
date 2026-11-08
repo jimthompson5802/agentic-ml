@@ -379,5 +379,6 @@ Malformed declarations raise `TypeError` or `ValueError` before execution.
 Project operation errors propagate with their original identity and a stage note;
 inspect project outputs before retrying because project code owns side effects.
 Extraction provenance and quality reports describe different outcomes: a completed
-extraction may still fail required checks. Assessment and partitions remain #19
-work; future runners must independently integrate this boundary.
+extraction may still fail required checks. Assessment and partitions are accepted
+under #19; see the [implemented helpers](data-assessment-and-splits.md).
+Future runners must independently integrate this quality boundary.

@@ -328,4 +328,5 @@ IP1 approval confirms this single-function/native-object contract and
 [public test matrix](verification/us-11-ip1.md#public-test-boundaries-and-case-matrix).
 All five US-11 criteria, M1 phase tests, M1–6 story checks, both installed wheel
 paths and existing developer gates are retained. See [IP3 verification](verification/us-11-ip3.md) for installed extraction evidence
-and platform limits. Whole-story acceptance remains a separate developer decision.
+and platform limits. Whole-story acceptance was recorded on 2026-11-07 UTC in the
+[owning plan](plans/milestone-1-us-11.md#story-completion-review).

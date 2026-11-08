@@ -8,8 +8,8 @@ future work. It does not finalize future schemas or deliver executable behavior.
 ## Existing public contracts
 
 The installed package currently implements the following exports. Preserve names,
-request/result fields, schema versions and strict behavior. Complete existing
-field/signature reference remains in the
+request/result fields, schema versions and strict behavior. The original
+initialization/planning/approval/validation contract reference remains in the
 [0.14 blueprint](software-blueprint-v0.14-reference.md#existing-public-contracts)
 and its accepted contract reports; that material describes these existing APIs
 without activating its separate future platform catalogue.
@@ -20,6 +20,10 @@ without activating its separate future platform catalogue.
 | `agentic_ml.planning` | `BoundaryResult`, `SearchSelection`, `SearchSpace`, `validate_boundaries`, `Diagnostic`, `PlanningError`, `PlanResult`, `PlanStatus`, `PlanInspection`, `VerificationResult`, `ResolveRequest`, `resolve_plan`, `inspect_plan`, `verify_plan` |
 | `agentic_ml.approvals` | `ApprovalError`, `ApprovalRecord`, `ApprovalRequest`, `approve_plan`, `RevocationRequest`, `RevocationRecord`, `revoke_approval` |
 | `agentic_ml.validation` | `CandidateRequest`, `CandidateResult`, `ConfigurationRequest`, `ConfigurationResult`, `RegistryDocument`, `RegistryResult`, `ValidationError`, `ValidationInspection`, `validate_candidate`, `validate_configuration`, `validate_registry`, `inspect_validation` |
+| `agentic_ml.extraction` | `extract_data` |
+| `agentic_ml.data_quality` | `validate_data`, `run_validated_step`, `DataQualityError` |
+| `agentic_ml.data_assessment` | `assess_data` |
+| `agentic_ml.splitting` | `create_partitions` |
 
 ### Initialization and paths
 
@@ -58,12 +62,46 @@ Built-in metadata currently covers dummy classifier/regressor profiles plus
 supplied additive metadata. This does not establish useful real-estimator training
 support. See [accepted validation contract](../../verification/us-05-ip1.md).
 
+### Local extraction
+
+`extract_data` accepts a project callback over named pandas DataFrames, explicit
+project root/source/code/output paths and plain settings/reader options. It returns
+the native output frame and a JSON-compatible provenance dictionary, publishing
+`dataset.csv` or `dataset.parquet` together with `extraction.json` to a fresh
+destination. Source/code/output identities and timing are recorded; project
+pandas code owns selection/filter/join semantics. Extraction completion is not a
+quality-passed result. US-11 AC-01–05 were accepted on 2026-11-07 UTC; see the
+[implemented contract](../../extraction.md) and
+[owning plan](../../plans/milestone-1-us-11.md#story-completion-review).
+Actual DVC identity integration remains US-13 work.
+
 ### Dataset quality
 
 `agentic_ml.data_quality` exports `validate_data`, `run_validated_step` and
 `DataQualityError`. The [quality guide](../../data-quality.md) specifies seven
-rule families, JSON reports and required/advisory/no-check semantics. Gate 2
-approved implementation; IP3 installed checks pass; Gate 3 is approved; issue #15 AC-01/05 accepted on 2026-11-07 UTC. Assessment and partitions remain issue #19 work.
+rule families and JSON reports. `validate_data` reports failures;
+`run_validated_step` checks a copied input immediately before a project operation
+and raises `DataQualityError` on required-check failure. Advisory failures permit
+the operation; empty rules report `not_checked` and also permit it. Reports do not
+validate later operations or the callback's output. Gates 1–3 and issue #15
+AC-01/05 were accepted on 2026-11-07 UTC. Future runners must integrate this boundary.
+
+### Assessment and partitions
+
+`assess_data(frame, *, target)` returns native pandas summaries, missingness and
+classification target balance as a versioned plain dictionary without a quality
+judgment. `create_partitions` returns partition DataFrames and a versioned record
+for explicit `train_test` or `train_validation_test` layouts, seeded generation
+or supplied membership. It records exact row IDs, settings and source identity
+using index/attrs-free native Parquet bytes bound to library versions.
+
+Project code owns JSON save/load, saved-document validation and old/current source
+comparison. Supplied time/group protocols are declarations; row membership,
+coverage and disjointness are checked without certifying chronology or group
+separation. Neither helper fits preprocessing or models. Gates 1–4 are approved;
+issue #19 AC-02/03 were accepted on 2026-11-08 UTC. See the
+[implemented contracts](../../data-assessment-and-splits.md) and
+[installed evidence](../../verification/us-12-19-ip4.md).
 
 ### CLI and resources
 
@@ -82,8 +120,7 @@ and test boundaries before code. Use native library interfaces where possible.
 | Capability | Implementation seam | Story owner / observable result |
 |---|---|---|
 | Runnable basic experiment | Setup/defaults and validated explicit settings compatible with existing APIs | US-39-AC-01/02: separate project runs without manual schema conversion or mandatory formal planning |
-| Local data | Native pandas readers/DataFrames and project pandas extraction; small recording/publication helpers use plain dictionaries | US-11/12/13: expected data, checks, membership and DVC identities |
-| Assessment and partitions | SC-03 retains only `assess_data` and `create_partitions`; Gate 1 approved contracts reuse native pandas/scikit-learn; project owns JSON persistence | US-12 #19 AC-02/03: [contract policies](data-and-features.md#proposed-toolkit-integration-requiring-discussion) and public boundaries approved on 2026-11-07; IP2/IP3 implemented both helpers; IP4 installed verification and final gate recorded in the [owning plan](../../plans/milestone-1-us-12-assessment-splits.md), accepted 2026-11-08 |
+| Data integration | Consume accepted extraction, quality, assessment and partition helpers in experiment stages; add real DVC identities | US-13/39: versioned inputs and integrated checks; delivered US-11/12 contracts remain intact |
 | Feature/model pipeline | Pandas DataFrames/project feature functions plus native scikit-learn compatible fit/transform/predict and persistence | US-14/15/16/18: train-only fit, validation comparisons and usable fitted artifacts |
 | Local experiment/search | Supported project script/API path using native estimator/search behavior | US-10/20: logs/status, validated candidates and maximum trial count |
 | Evaluation/reporting | Metric/output checks over recorded pipeline results | US-21/24/26: baseline/validation/final metrics and distinct failure/quality outcomes |
@@ -116,7 +153,8 @@ Existing approval functions remain implemented; deferring a general ApprovalServ
 does not remove their accepted contract.
 
 The previous 160-criterion coverage index is historical design evidence. Current
-[traceability](acceptance-traceability.md) covers all 222 revised criteria and
+[traceability](acceptance-traceability.md) covers all 228 local criteria, including
+the six deferred US-41 distribution-initialization criteria, and
 explicitly labels accepted, planned and roadmap outcomes.
 
 ## Historical link aliases
