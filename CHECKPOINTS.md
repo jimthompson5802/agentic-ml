@@ -4,19 +4,23 @@ Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
-Checkout: `reconcile-design`, baseline `49292df`, initially clean for this review.
-Developer “ok make the changes”, 2026-11-08, authorized the proposed source/design
-documentation reconciliation. Developer “commit changes” subsequently authorized
-the local documentation commit. Corrections are complete: active
-design topics/walkthrough, three linked usage guides, the
-[reconciliation report](docs/reviews/source-design-reconciliation-2026-11-08-07-19.md)
-and this checkpoint are included in that commit. Developer “create pull request”,
-2026-11-08, authorizes branch publication and a PR from `reconcile-design` to
-`main`. [PR #63](https://github.com/jimthompson5802/agentic-ml/pull/63) is open;
-title, body, branch ownership, base/head and non-draft status were verified.
-No product implementation is authorized. **Next action:** await developer PR
-review and merge direction. Publication checks passed `git diff --check`;
-the prior documentation evidence below remains the validation boundary.
+Checkout: `main`; latest published CI change is `0bc0ef7`.
+Developer authorized squash merge and pull on 2026-11-08.
+[PR #63](https://github.com/jimthompson5802/agentic-ml/pull/63) was
+squash-merged as `a3d342337ac5cf72850efc2236b89eaeed7cf4ed` at
+2026-11-08T12:39:49Z; local main pulled by fast-forward. Hosted
+Linux / Python 3.12 CI passed before merge. Developer subsequently authorized
+deleting the PR branches; local and remote `reconcile-design` were deleted after
+verifying tree equality with the squash commit.
+
+Developer authorized committing and pushing the CI documentation filters,
+published as `0bc0ef7`. Both pull-request and main-push triggers ignore changes
+limited to `docs/**` and root Markdown files; workflow changes still trigger CI.
+Main has no required branch protection or applicable branch rules at the time
+checked. Developer then authorized committing and pushing this checkpoint.
+`git diff --check` passed; no executable product behavior changed, so TDD and
+product tests do not apply. Hosted verification of the CI change is not claimed.
+**Next action:** await developer direction.
 
 The design now records accepted US-11 extraction and US-12 quality/assessment/
 partitions, exact split composition and project-owned persistence/identity checks.
