@@ -4,201 +4,51 @@ Last updated: 2026-11-08 (UTC)
 
 ## Current position and next action
 
-Checkout: `main`, fast-forwarded to squash commit `5d5781c649f6f91b4fd8df1b896eed40b9082cd0`.
-Developer “switch main; squash merge; pull changes” authorized publication
-completion on 2026-11-08 UTC. [PR #65](https://github.com/jimthompson5802/agentic-ml/pull/65)
-squash-merged at 20:51:51Z; local main pulled successfully. Both hosted jobs
-passed at head `1532ba2` in
-[run 42520936609](https://github.com/jimthompson5802/agentic-ml/actions/runs/42520936609).
-Both started at 20:35:51Z, confirming parallel execution; default finished
-20:44:38Z and other tests finished 20:50:27Z. Developer subsequently requested
-branch deletion. Local and remote `US-41-distribution-init` were deleted after
-verifying head `1532ba2` had the identical tree as squash commit `5d5781c`.
-Both branch absences were verified.
-Developer authorized committing and pushing this checkpoint record.
-Documentation only; `git diff --check` passed. No runtime changes or renewed tests.
-**Next action:** await developer direction; merge, pull and branch cleanup complete.
+Checkout: `main` at `2b7268a` (`docs: record US-41 merge and branch cleanup`).
+The working tree was clean before this status review; this handoff changes only
+`CHECKPOINTS.md` and `docs/project-status.md`. No implementation or publication
+is authorized by this documentation task.
 
-Previous implementation and publication evidence follows.
+US-41 is accepted and merged. [Issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64)
+is closed in M50; its complete body, all comment pages (zero comments) and stable
+final metadata were verified on 2026-11-08 UTC. All six criteria are accepted in
+the [owning plan](docs/plans/milestone-50-us-41.md); Gates 1–4 are Approved.
+[PR #65](https://github.com/jimthompson5802/agentic-ml/pull/65) squash-merged as
+`5d5781c` at 20:51:51Z. Local main was pulled; local and remote
+`US-41-distribution-init` branches were deleted after tree equality was verified,
+as recorded in `2b7268a`.
 
-CI split implementation (developer “Implement the plan”, 2026-11-08 UTC):
-CI-SPLIT-T1–T3 Complete; developer Approved — “I approve, commit and push”,
-2026-11-08 UTC. One workflow
-now has independent default and other-test jobs, no cross-job dependencies,
-separate environments/four pytest workers and 30-minute limits. Default owns
-lint/format/typing/smoke; other owns build/distribution verification. Both retain
-setup/diagnostics/lock checks and failure conditions. CI guide updated.
+Hosted [run 42520936609](https://github.com/jimthompson5802/agentic-ml/actions/runs/42520936609)
+completed successfully at head `1532ba2`. The independent default and other-test
+jobs both started at 20:35:51Z, finishing at 20:44:38Z and 20:50:27Z respectively.
+This supersedes earlier pending-CI and open-PR snapshots in the publication
+records; those records preserve their historical context. The contributor CI
+split is complete, approved and merged with PR #65. Collection verification
+recorded default 721, complement 268 and all 989, with disjoint complete coverage;
+raw records are in `.dev-records/verification/ci-split-20261108/`.
 
-Collection-only verification: default 721, complement 268, all 989; intersection
-empty and union equals complete inventory. YAML structure and job independence
-checks and `git diff --check` passed. Raw records:
-`.dev-records/verification/ci-split-20261108/`. Contributor CI configuration only;
-no product behavior change, so TDD/product suite reruns do not apply. Hosted
-parallelism/outcomes remain unverified. Developer authorized committing and
-pushing the CI split and approval record. This infrastructure task does not
-reopen US-41 acceptance. Approval recording is documentation only; existing
-collection and structure verification remains applicable.
-**Next action:** observe hosted CI after the authorized push; no merge authorized.
+US-41 [IP4 evidence](docs/verification/us-41-ip4.md) records 166 passing installed
+cases (83 through each wheel path), seven legacy Git/source-switch regressions,
+M50 **244 passed / 2 existing skips**, and M1–6 **720 passed / 1 existing skip**.
+Shared checks passed on Linux aarch64 / Python 3.12.16 / uv 0.13.6. Existing
+archive-history, timeout-skip and platform limitations remain; story acceptance
+and hosted CI do not close historical milestone verification obligations below.
 
-Previous accepted-story publication context follows.
+The MVP issue states in `docs/project-status.md` were checked against GitHub's
+complete current issue inventory. US-12 remains the latest accepted M1 delivery;
+US-41 is the newer M50 delivery outside the MVP table. No subsequent story
+implementation is authorized. Superseded resume instructions and intermediate
+publication snapshots were removed from this checkpoint; Git history and linked
+plans/reports retain them.
 
-Checkout: `US-41-distribution-init`; IP4 approved and committed as `776c8ab`.
-Developer “start ip4”, 2026-11-08 UTC, authorizes IP4 execution only. Gates 1–3
-are Approved; Gate 4 Approved on 2026-11-08 — developer “I approve ip4; commit”.
-Developer “i accept the story”, 2026-11-08 UTC, accepts US-41. Refreshed issue
-#64 complete body/all comment pages and final metadata: zero comments; scope
-unchanged. The [plan](docs/plans/milestone-50-us-41.md) owns IP4 tasks;
-[IP4 evidence](docs/verification/us-41-ip4.md) records passing final verification.
-
-IP4 T1–T3 are technically Complete; **Gates 1–4 Approved; US-41 Accepted**. Current changes expand all 83 installed US-41 cases to
-both genuine direct and sdist-rebuilt wheels (166 passing cases), add seven
-legacy Git/source-switch regression cases and align design/traceability status.
-No product implementation, dependency, assertion, timeout or skip change.
-
-Final M50: **244 passed, 2 existing skips in 546.05s**, 246 selected / 743
-deselected. Final M1–6: **720 passed, 1 existing skip in 268.87s**, 721 selected /
-268 deselected; four native NumPy warnings in the existing infinite-target test.
-Final inventory 989. Shared sync/lock/lint/format/strict typing/smoke, relative
-file links and diff checks passed. Raw phase records:
-`.dev-records/verification/us-41-ip4-20261108/`, with eight linked per-worker
-`us-41-ip4-<unique-id>` build/digest manifests. Linux aarch64 /
-Python 3.12.16 / uv 0.13.6. Lock SHA-256 remains
-`6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4`.
-
-The approved archive-history limitation, existing timeout skips and platform
-limits remain. Historical milestone acceptance obligations remain independent.
-No standalone artifact driver or broader suite was run separately. Developer story acceptance authorizes acceptance-record commit, ordinary push,
-PR creation and static COMMENT review through execute-plan. Approval recording changes documentation only; existing
-executable evidence remains applicable. Final relative-link and diff checks passed.
-Acceptance committed as `bddc583` and pushed. [PR #65](https://github.com/jimthompson5802/agentic-ml/pull/65)
-is open against verified `main` base `b8ce8a8`. The
-[static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/65#pullrequestreview-5819419102)
-reports no actionable findings at `bddc583`; final record changes receive
-static follow-up at the new head. Hosted Linux/Python 3.12 CI
-[run 42517266796](https://github.com/jimthompson5802/agentic-ml/actions/runs/42517266796)
-was pending at last check. Publication records are documentation only; local
-executable evidence remains applicable. No merge or branch cleanup authorized.
-Developer requested committing and pushing the pending CI job-timeout change:
-`.github/workflows/ci.yml` increases the development job limit from 20 to 30
-minutes. This changes contributor CI infrastructure only; no new toolkit behavior,
-so TDD/product tests do not apply. The exact one-line workflow diff and
-`git diff --check` passed; hosted success for the new limit is not yet verified.
-The [final-head static review](https://github.com/jimthompson5802/agentic-ml/pull/65#pullrequestreview-5819459201)
-covered `a8f79cd` with no actionable findings; it predates this timeout change.
-**Next action:** await developer direction and hosted CI results; no merge authorized.
-
-Previous publication context follows; it does not authorize US-41 implementation.
-Developer authorized squash merge and pull on 2026-11-08.
-[PR #63](https://github.com/jimthompson5802/agentic-ml/pull/63) was
-squash-merged as `a3d342337ac5cf72850efc2236b89eaeed7cf4ed` at
-2026-11-08T12:39:49Z; local main pulled by fast-forward. Hosted
-Linux / Python 3.12 CI passed before merge. Developer subsequently authorized
-deleting the PR branches; local and remote `reconcile-design` were deleted after
-verifying tree equality with the squash commit.
-
-Developer authorized committing and pushing the CI documentation filters,
-published as `0bc0ef7`. Both pull-request and main-push triggers ignore changes
-limited to `docs/**` and root Markdown files; workflow changes still trigger CI.
-Main has no required branch protection or applicable branch rules at the time
-checked. Developer then authorized committing and pushing this checkpoint.
-`git diff --check` passed; no executable product behavior changed, so TDD and
-product tests do not apply. Hosted verification of the CI change is not claimed.
-**Next action:** await developer direction.
-
-Developer requested moving US-41 from Milestone 99 to Milestone 50 in
-`docs/specs/user-stories.md`. The story placement, milestone assignment and
-delivery table now reflect M50; all six acceptance criteria are unchanged.
-Developer authorized committing and pushing this documentation change.
-Published as `63608f4`. Developer subsequently authorized issue publication and
-active design alignment; see the US-41 record below. Verification: placement/criterion preservation checks and
-`git diff --check` passed. TDD and executable tests do not apply.
-
-The design now records accepted US-11 extraction and US-12 quality/assessment/
-partitions, exact split composition and project-owned persistence/identity checks.
-The criterion index contains all 228 local IDs, with US-05-AC-05 integration pending
-and US-41 now assigned to M50. M1/M2 outcomes, strict APIs and historical evidence are
-preserved. Verification is documentation-only: criterion set/uniqueness, 43 public
-exports across eight module surfaces, relative links/anchors, manual diff/source
-review and `git diff --check`. No executable behavior changed; TDD/product tests
-and artifact checks do not apply. Lockfile unchanged. Existing milestone/platform
-limitations below remain open; this review supplies no renewed runtime evidence.
-
-US-12 issue [#19](https://github.com/jimthompson5802/agentic-ml/issues/19)
-AC-02/03 and both split layouts are accepted; IP1–IP4 Complete and Gates 1–4
-Approved. [PR #62](https://github.com/jimthompson5802/agentic-ml/pull/62)
-squash-merged as `980c97f34e4dcac3d13086825641b821e13f80d4` at
-2026-11-08T01:12:16Z; issue #19 closed at 01:12:17Z. Local `main` pulled by
-fast-forward. Developer subsequently requested deleting the PR branches;
-local and remote `US-12-assessment-splits` were deleted after verifying their
-head `a018794` had the same tree as squash commit `980c97f`. The owning
-[plan](docs/plans/milestone-1-us-12-assessment-splits.md) and
-[IP4 evidence](docs/verification/us-12-19-ip4.md) preserve acceptance,
-publication/review, resolved documentation finding and verification limits.
-The requested completion records are documentation only; existing executable
-evidence remains applicable. No product tests were rerun for merge records.
-
-Assessment and partitions use native pandas/scikit-learn through two optional
-helpers. Project code owns JSON persistence and old/current identity comparisons.
-Time/group protocols remain declarations; source identity is version-bound
-native Parquet. Both installed wheel paths passed. Final M1 and M1–6 each passed
-713 tests with one existing skip (714 selected); shared checks and guide demo
-passed on Linux aarch64 / Python 3.12.16. macOS/Windows remain unverified here.
-Pre-merge hosted Linux/Python 3.12 CI passed at head `a018794`;
-[run 42432054301](https://github.com/jimthompson5802/agentic-ml/actions/runs/42432054301)
-does not close historical milestone verification obligations. Lock SHA-256:
-`5f99c2da64eb46bc758f798f364e67eab25246253fc75315ebb404461e466a9d`.
-AC-04 remains deferred; downstream fitting, tracking, DVC and assistant
-integration remain separately owned. No subsequent story implementation authorized.
-
-US-12 issue [#15](https://github.com/jimthompson5802/agentic-ml/issues/15)
-is accepted and closed. PR #61 squash-merged as `1f9eb86`; local and remote
-`US-12-data-validation` branches were deleted after tree equality was verified.
-The [plan](docs/plans/milestone-1-us-12.md) and
-[final correction evidence](docs/verification/us-12-pr61-r1.md) own approvals,
-failed attempts and verification. Final M1 and M1–6 selections each passed
-553 tests with one existing skip (554/656 selected); shared checks passed.
-Evidence is Linux aarch64 only; installed regressions passed, with new edge
-cases checked through editable public APIs. Issue #19 separately owns assessment
-and partitions; AC-04 remains deferred. Closing #15 does not complete all US-12.
-
-Current delivery scope: M1 local classification experiment, M2 usability and
-committed-project reproduction; M0 accepted, M50 ongoing, M99 deferred.
-[Stories](docs/specs/user-stories.md) govern milestone context; GitHub issues
-govern implementation scope. No subsequent story implementation is authorized.
-
-## Story addition and reassignment: US-41
-
-Developer requested US-41, distribution-based experiment initialization, locally
-in `docs/specs/user-stories.md` under Milestone 99, then authorized commit and
-push. Six criteria cover wheel bootstrap, initialization, identity validation,
-failures, explicit upgrades and both wheel verification paths while preserving
-Git installs. No implementation is authorized. Developer subsequently authorized
-publication: [issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64)
-now owns all six unchanged criteria, labeled `enhancement` and assigned to the
-new GitHub milestone “Milestone 50: Improve the technical environment”.
-The published body and metadata were verified against the prepared template.
-Active interfaces, ADR, delivery, blueprint and traceability documents now assign
-US-41 to M50 and link its owning issue. Story criteria remain unchanged.
-Developer authorized committing and pushing these documentation changes.
-At publication, no implementation plan had been created; the subsequent draft is linked above. Verification: unchanged story criteria, six
-M50 traceability rows, issue links, relative file targets and `git diff --check`
-passed. No executable behavior changed; TDD and product tests do not apply.
-The developer subsequently moved the local story to Milestone 50 on 2026-11-08.
-The empty GitHub milestone “Milestone 99: Future enhancements” was created before
-the developer limited story publication to the local specification. GitHub issue
-synchronization for US-41 is complete. Contract review, confirmed public test
-boundaries and an implementation plan remain before dependent code. This is documentation
-only; TDD and executable checks do not apply. Verification: reviewed the story
-placement and criteria; `git diff --check` passed. Next action: await direction.
+Documentation only: TDD and executable tests do not apply. Relative file links
+and `git diff --check` passed; no renewed runtime or artifact evidence is claimed.
+**Next action:** await developer direction; US-41 publication and branch cleanup
+are complete. Developer authorized committing and pushing this status refresh.
+The documentation commit includes both status files; `git diff --check` and
+relative-file link checks passed. No executable tests were needed.
 
 ## Completed work: authoritative records
-
-Refreshed [MVP project status](docs/project-status.md) against current GitHub
-issue states, the US-12 #19 plan and final evidence. The overview now uses a UTC
-date and explicitly records delivered criteria, both split layouts, deferred
-AC-04 and separately owned integration. Documentation only: TDD and executable
-tests do not apply; relative links and `git diff --check` verified. This handoff
-changes only the status overview and this checkpoint; no implementation authorized.
 
 Contributor skill added: `.agents/skills/report-test-progress/` monitors an
 existing pytest session in the current chat and reports remaining/total,
@@ -214,6 +64,7 @@ was started for this work. Existing US-12 changes and Gate 2 status are unchange
 | US-12 #19 | Accepted and squash-merged in PR #62 as `980c97f`; [plan](docs/plans/milestone-1-us-12-assessment-splits.md), [IP4 evidence](docs/verification/us-12-19-ip4.md). AC-04 deferred. |
 | US-12 #15 | Accepted and merged in PR #61; [plan](docs/plans/milestone-1-us-12.md), [IP3 evidence](docs/verification/us-12-ip3.md), correction linked above. |
 | MVP scope revision | Accepted and published; PR #57 merged; US-39 #58 and US-40 #59 created. [Plan](docs/plans/mvp-scope-revision.md), [publication evidence](docs/verification/mvp-scope-revision-ip4.md). This accepts scope documents, not an implemented MVP. |
+| US-41 | All six criteria accepted; issue #64 closed; PR #65 squash-merged as `5d5781c`. [Plan](docs/plans/milestone-50-us-41.md), [IP4 evidence](docs/verification/us-41-ip4.md). Historical M50 verification remains open. |
 | US-35/36 | Accepted and merged in PRs #48/#50; [US-35](docs/plans/milestone-50-us-35.md), [US-36](docs/plans/milestone-50-us-36.md). US-37/38 remain local stories without implementation authorization. |
 | Contributor tooling | Development guide reorganization, scheduling, dependency inventory and container work are recorded in [verification reports](docs/verification/) and Git history; container limitations remain below. |
 

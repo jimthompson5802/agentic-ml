@@ -12,7 +12,7 @@ the owning GitHub issue remains open; it does not imply implementation is underw
 Story acceptance does not establish milestone acceptance. M1 milestone acceptance
 verification remains outstanding; the complete MVP has not been delivered.
 
-The latest accepted delivery is US-12 assessment and recorded partitions:
+The latest accepted M1 delivery is US-12 assessment and recorded partitions:
 [PR #62](https://github.com/jimthompson5802/agentic-ml/pull/62) squash-merged as
 `980c97f` on 2026-11-08 UTC, closing issue #19. Both two-way (train/test) and
 three-way (train/validation/test) layouts are delivered. Mandatory experiment
@@ -20,6 +20,13 @@ assessment approval (US-12-AC-04) remains deferred; downstream fitting, tracking
 DVC and assistant integration remain separately owned. The
 [implementation plan](plans/milestone-1-us-12-assessment-splits.md) and
 [final evidence](verification/us-12-19-ip4.md) record acceptance and limitations.
+The newer M50 delivery, US-41 distribution-based initialization
+([issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64)), has all six
+criteria accepted and merged in
+[PR #65](https://github.com/jimthompson5802/agentic-ml/pull/65) as `5d5781c` on
+2026-11-08 UTC. Its [plan](plans/milestone-50-us-41.md) and
+[final evidence](verification/us-41-ip4.md) record both wheel paths, preserved Git
+support and verification limits. M50 acceptance verification remains outstanding.
 No subsequent story implementation is authorized.
 
 | Milestone | User story | Status |
@@ -61,6 +68,9 @@ govern implementation scope; [implementation plans](plans/) and
 [verification reports](verification/) hold approvals and evidence.
 [CHECKPOINTS.md](../CHECKPOINTS.md) records the current development position and
 outstanding verification obligations.
+
+Issue states were rechecked against GitHub on 2026-11-08 UTC; the MVP table
+remains consistent with the current open/closed issue inventory.
 
 Update this summary and its date when story acceptance, merge status or approved
 MVP scope changes. Verify each update against the owning issues, plans and evidence;
