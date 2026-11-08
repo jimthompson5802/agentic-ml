@@ -9,8 +9,10 @@ Developer “start ip4”, 2026-11-08 UTC, authorized final installed verificati
 Developer “i approve ip4; commit”, 2026-11-08 UTC, approves Gate 4 and
 authorizes a local IP4 commit.
 Developer “i accept issue #19”, 2026-11-08 UTC, accepts AC-02/03 and both layouts.
-**Next action:** await developer direction on the Low documentation finding
-and PR merge; no subsequent story or fixes are authorized.
+Developer “resolve this review comment”, 2026-11-08 UTC, authorizes correction
+of discussion r4504392360.
+**Next action:** publish the verified documentation correction and resolve its
+review thread; await separate PR merge direction.
 IP1–IP4 technical tasks Complete; Gates 1–4 Approved.
 IP4 adds installed project/probe/driver and M1 regression, README/guide/design
 status updates, plan/evidence/checkpoint. No toolkit runtime behavior changed.
@@ -26,8 +28,12 @@ acceptance commit `a672dca` pushed.
 [Static review](https://github.com/jimthompson5802/agentic-ml/pull/62#pullrequestreview-5815831258)
 published and verified, with one
 [Low finding](https://github.com/jimthompson5802/agentic-ml/pull/62#discussion_r4504392360)
-for stale current status in active data/interface design pages. CI pending at
-inspection. Publication-record commit will receive a static review renewal.
+for stale current status in active data/interface design pages. The requested
+correction updates both pages and links completed identity/installed evidence,
+preserving the old heading anchor. Document checks pass: 101 local links/anchors,
+status/acceptance consistency, legacy anchor and whitespace. No executable
+changes or product tests; prior evidence remains applicable.
+Static review was renewed at `6df5c1b` (review 5815835314).
 Issue closure awaits merge; no merge or branch cleanup authorized.
 IP4 is committed as `600f49e`. Acceptance-record edits preserve test evidence;
 no executable changes follow the final verification.

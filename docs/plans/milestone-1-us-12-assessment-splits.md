@@ -711,3 +711,23 @@ Publication-record changes are documentation only; the static review will be
 renewed on their resulting head without duplicating the existing finding.
 CI Linux/Python 3.12 was pending when inspected. Merging and branch cleanup
 remain unauthorized; issue #19 stays open until the PR is merged.
+
+
+### PR #62 review correction — 2026-11-08 UTC
+
+Developer “resolve this review comment” with discussion r4504392360 authorizes
+correcting the active data/interface design status, committing/pushing the fix,
+replying to the thread and resolving it. This changes no scope, public contract,
+executable behavior or historical approval. Both pages now record completed
+IP2/IP3 implementations, both installed IP4 paths, approved Gates 1–4 and issue
+acceptance. Native identity evidence links IP3/IP4; the former heading anchor
+remains available for existing links. TDD/product tests do not apply to this
+documentation-only correction. Document links/anchors, literal stale-status
+checks, acceptance-record consistency and `git diff --check` are the verification
+boundary; existing executable evidence remains applicable.
+
+Verification passed: read-only Python document check resolved 101 local
+links/anchors across the four changed Markdown files, rejected the stale status
+phrases, confirmed both pages' approval/acceptance/evidence references and the
+legacy heading anchor. `git diff --check` passed. No product tests or dependency
+commands were run; executable evidence is unchanged.

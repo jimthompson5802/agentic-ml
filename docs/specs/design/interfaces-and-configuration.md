@@ -25,11 +25,14 @@ Assessment and partitioning reuse native pandas descriptive outputs and
 scikit-learn split APIs. Developer selected `assess_data` and `create_partitions`
 as the only new helpers under US-12-19-SC-03. Developer “i approve ip1; commit
 changes”, 2026-11-07 UTC, confirmed exact contracts/test boundaries at Gate 1;
-implementation still requires IP2 authorization. Project code owns JSON save/load and any
+IP2/IP3 implemented both helpers, and IP4 verified both installed wheel paths.
+Gates 1–4 are approved; developer “i accept issue #19”, 2026-11-08 UTC, accepted
+AC-02/03 and both layouts. See the [final IP4 evidence](../../verification/us-12-19-ip4.md).
+Project code owns JSON save/load and any
 saved-source comparison. No toolkit record read/write interface is included.
 Supplied mode validates selected loaded layout/membership against the current
 frame, without providing a saved-file parser or full restoration guarantee. See
-[native capability reuse and open decisions](data-and-features.md#reuse-existing-assessment-and-partition-capabilities).
+[native capability reuse and approved integration](data-and-features.md#reuse-existing-assessment-and-partition-capabilities).
 
 ## Existing public interfaces
 

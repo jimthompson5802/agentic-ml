@@ -61,24 +61,30 @@ these descriptive operations into an unrelated scikit-learn estimator interface.
 Selecting report fields and handling their serialization are separate integration
 decisions, not authorization for a new assessment API or reporting framework.
 
-### Proposed toolkit integration requiring discussion
+<a id="proposed-toolkit-integration-requiring-discussion"></a>
+
+### Approved toolkit integration
 
 Developer selected only `assess_data` and `create_partitions` under
 [US-12-19-SC-03](../../plans/milestone-1-us-12-assessment-splits.md#us-12-19-sc-03--retain-two-helpers-project-owned-persistence-2026-11-07-utc).
 Project code owns JSON save/load. Developer “i approve ip1; commit changes”,
 2026-11-07 UTC, approved detailed contracts/policies and public test boundaries
-at Gate 1; implementation remains unstarted. The confirmed integration is:
+at Gate 1. IP2 implemented assessment; IP3 implemented recorded partitions and
+source identity; IP4 verified both installed wheel paths. Gates 1–4 are approved,
+and developer “i accept issue #19”, 2026-11-08 UTC, accepted AC-02/03 and both
+layouts. See the [final IP4 evidence](../../verification/us-12-19-ip4.md).
+The confirmed integration is:
 
-| Requirement | Existing capability to reuse | Remaining decision for developer discussion |
+| Requirement | Existing capability reused | Confirmed integration and evidence |
 |---|---|---|
 | Recorded two-way (train/test) or three-way (train/validation/test) partitions | scikit-learn `train_test_split` supplies two subsets; `create_partitions` composes native calls for three-way layout | Settings, split order, sizes and random states confirmed in the IP1 contract. Native rounding/errors remain authoritative. |
-| Record exact membership and source identity (AC-03) | Native split rows, project JSON files and subsequent DVC ownership | `create_partitions` returns the record; project owns save/load, saved-document validation and old/current identity comparison. Native Parquet identity confirmed for implementation; stability evidence remains IP3. |
+| Record exact membership and source identity (AC-03) | Native split rows, project JSON files and subsequent DVC ownership | `create_partitions` returns the record; project owns save/load, saved-document validation and old/current identity comparison. Version-bound native Parquet stability and sensitivity are verified in [IP3](../../verification/us-12-19-ip3.md) and on both installed paths in [IP4](../../verification/us-12-19-ip4.md). |
 | Validate explicit supplied membership (AC-03) | Native pandas index/set operations for membership, duplicates and intersections | String/integer IDs, complete/nonempty coverage and membership/disjointness policies confirmed in the IP1 contract. |
 | Present assessment results (AC-02) | Native pandas outputs and serialization | `assess_data` fields/scalar conversion confirmed at Gate 1. Project owns persistence. |
 
 No custom statistical or splitting algorithm has been identified as necessary.
 The owning [issue #19 plan](../../plans/milestone-1-us-12-assessment-splits.md)
-owns the approved contract and separate authorization before executable work.
+owns the approved contract, completed tasks, gate decisions and issue acceptance.
 Existing accepted extraction/quality APIs and their evidence remain intact.
 Project-loaded layout/membership can enter `create_partitions` supplied mode for
 validation/reconstruction. This does not validate the entire saved record or
