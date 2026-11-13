@@ -154,6 +154,18 @@ review package, native-only contract and public boundaries on 2026-11-13, and
 authorized committing IP1 changes. IP2 remains Not started; this request is
 limited to recording approval and committing changes.
 
+### IP2 execution authorization — 2026-11-13
+
+Developer “start ip2” authorizes IP2 only, after approved Gate 1. Issue #16's
+complete body and all comment pages were refreshed; one unique comment matches
+count 1, with unchanged final `updated_at=2026-11-07T00:28:44Z` and null milestone.
+The issue remains open, with no pull-request field or scope conflict. Sandbox
+network reads failed; approved reads outside the sandbox succeeded.
+IP2 uses the Gate 1 native-only boundaries; no new package API or dependency.
+[IP2 evidence](../verification/us-13-ip2.md) records execution and checks.
+Gate 2 was subsequently approved; see the decision below. This execution request
+authorized IP2 only.
+
 ## Scope-change history
 
 ### US-13-PLAN-REV-01 — MVP-focused draft revision, 2026-11-13
@@ -209,10 +221,10 @@ IP2 remains Not started pending execution direction.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-13-IP2-T1 | Not started | Develop the complete runnable recipe in proposed `docs/dataset-versioning.md` and integration checks in proposed `tests/integration/test_dataset_versioning.py`; version explicit local source snapshots and extraction bundles with native DVC. | Gate 1 | Users can copy all required code/commands into a separate installed project without test-file imports. Tests execute the same documented recipe, not a separately maintained workflow. CSV/Parquet bytes and independent hashes agree with native metadata; extraction consumes recorded snapshots. Use red–green slices for new/corrected supported behavior; record results. Existing native capabilities use positive/boundary evidence without artificial red claims. | AC-01/02 |
-| US-13-IP2-T2 | Not started | Extend the documented recipe and checks for one authoritative saved split record, native DVC pointers and deterministic derived data; implement only any package seam justified and approved at Gate 1. | T1 | Both layouts preserve literal supplied membership and JSON round-trip in the single DVC-owned record. Git retains native metadata, project settings and relevant manifests; no duplicate split copy or custom reference schema by default. Native references match actual outputs; changed source, split or derived bytes produce changed corresponding identities; unchanged registration retains identity. No training or stage execution claim. | AC-01/02 |
-| US-13-IP2-T3 | Not started | Add real fixture commits A/B, Git index checks, cache/local-remote retention and native failure cases through the documented recipe. | T2 | Commit A records original content; B records changed content. Inspect both commits’ native metadata/manifests through Git and compare independently expected identities. Both versions remain in cache and configured local storage after their respective transfers. Dataset/cache/remote bytes are absent from `git ls-files`. Missing targets, tracked-data/ownership conflicts and controlled transfer failure preserve native diagnostics and existing configuration; failed push does not imply failed local registration. | AC-01/02 |
-| US-13-IP2-T4 | Not started | Run phase/shared checks, record proposed `docs/verification/us-13-ip2.md`, update this plan and checkpoint. | T3 | M1 and shared checks pass; actual counts, red/green results, identities, attempts and limitations recorded. | AC-01/02 |
+| US-13-IP2-T1 | Complete | Develop the complete runnable recipe in proposed `docs/dataset-versioning.md` and integration checks in proposed `tests/integration/test_dataset_versioning.py`; version explicit local source snapshots and extraction bundles with native DVC. | Gate 1 | Users can copy all required code/commands into a separate installed project without test-file imports. Tests execute the same documented recipe, not a separately maintained workflow. CSV/Parquet bytes and independent hashes agree with native metadata; extraction consumes recorded snapshots. Use red–green slices for new/corrected supported behavior; record results. Existing native capabilities use positive/boundary evidence without artificial red claims. | AC-01/02 |
+| US-13-IP2-T2 | Complete | Extend the documented recipe and checks for one authoritative saved split record, native DVC pointers and deterministic derived data; implement only any package seam justified and approved at Gate 1. | T1 | Both layouts preserve literal supplied membership and JSON round-trip in the single DVC-owned record. Git retains native metadata, project settings and relevant manifests; no duplicate split copy or custom reference schema by default. Native references match actual outputs; changed source, split or derived bytes produce changed corresponding identities; unchanged registration retains identity. No training or stage execution claim. | AC-01/02 |
+| US-13-IP2-T3 | Complete | Add real fixture commits A/B, Git index checks, cache/local-remote retention and native failure cases through the documented recipe. | T2 | Commit A records original content; B records changed content. Inspect both commits’ native metadata/manifests through Git and compare independently expected identities. Both versions remain in cache and configured local storage after their respective transfers. Dataset/cache/remote bytes are absent from `git ls-files`. Missing targets, tracked-data/ownership conflicts and controlled transfer failure preserve native diagnostics and existing configuration; failed push does not imply failed local registration. | AC-01/02 |
+| US-13-IP2-T4 | Complete | Run phase/shared checks, record proposed `docs/verification/us-13-ip2.md`, update this plan and checkpoint. | T3 | M1 and shared checks pass; actual counts, red/green results, identities, attempts and limitations recorded. | AC-01/02 |
 
 ### Public boundaries and independently defined scenarios
 
@@ -249,15 +261,25 @@ file bytes; do not implement a second DVC directory-hash algorithm.
   `uv run --locked mypy src tests`, `uv run --locked agentic-ml --version`,
   `git diff --check`. Record `uv.lock` SHA-256 before/after; no dependency change
   is anticipated. Any intentional change requires review and consistent declarations.
-- Actual results/evidence: Pending. Record collected/selected/deselected/pass/fail/skip
-  counts, environment/tool versions, commands/cwd and failure output. Raw records
-  follow [retention policy](../development/records.md).
+- Actual results: [IP2 evidence](../verification/us-13-ip2.md). Focused recipe
+  2 passed; M1 722 passed / 1 existing skip / 4 native warnings (723 selected of
+  991, 268 deselected). Locked sync, lock consistency, lint, strict typing, CLI
+  smoke and whitespace passed. Initial guide formatting failure corrected by
+  format-only attempt 1; renewed formatting/focused/shared checks passed. Native
+  existing behavior uses positive/boundary evidence, with no artificial red test.
+  Lock unchanged; normal wheel paths and final M1–6 remain IP3.
 - Deferred checks: IP3-T1/T3 own both installed wheel paths and final M1–6 checks.
   Other milestone/infrastructure checks remain with their existing owners.
 
-**Gate 2:** Pending. Stop after T1–T4 and present criterion-mapped evidence,
-changes, deviations and limitations. Await explicit approval before IP3.
-Decision reference/date, requested changes and progression authorization: Pending.
+**Gate 2:** Approved, 2026-11-13. IP2-T1–T4 Complete.
+[Evidence](../verification/us-13-ip2.md) covers AC-01/02 through guide-derived
+CSV/Parquet workflows, both layouts, committed A/B references, retained cache/
+remote bytes, exact Git ownership and native failure boundaries. No package API,
+dependency or scope change. M1 and shared checks passed, with the existing skip
+and formatting correction preserved. Developer “I approve this gate; commit”,
+2026-11-13, approved Gate 2 and authorized committing IP2. Requested changes:
+None. IP3 remains Not started, awaiting execution direction. No story acceptance
+or publication is authorized by this decision.
 
 ## US-13 / Implementation Phase 3: Verify installed workflow and accept M1 slice
 

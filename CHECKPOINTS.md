@@ -4,42 +4,37 @@ Last updated: 2026-11-13 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-13-dataset-versioning`, based on `4a4fb97`
-(`docs: refresh checkpoints and project status`). The tree was clean before this
-planning task. The committed planning changes comprise this checkpoint, the new
-[US-13 M1 implementation plan](docs/plans/milestone-1-us-13.md), and its
-[MVP gap review](docs/reviews/us-13-m1-plan-review.md).
+Checkout: `US-13-dataset-versioning`, HEAD `baa8920` (approved IP1 review
+package committed). Developer “start ip2”, 2026-11-13, authorized IP2 only.
+Gates 1–2 are Approved; IP2-T1–T4 are Complete. Developer
+“I approve this gate; commit”, 2026-11-13, approved Gate 2 and authorized the
+local IP2 commit.
+See the [owning plan](docs/plans/milestone-1-us-13.md) and
+[IP2 evidence](docs/verification/us-13-ip2.md).
 
-The approved [US-13 M1 plan](docs/plans/milestone-1-us-13.md) covers issue #16
-AC-01/02; AC-03/04 restoration remains M2. Planning documents were committed as
-`844106a`; the IP1 review package and approval record are included in this
-authorized commit.
-Developer “I approve ip1” authorized IP1 only; “resume” continued after the
-GitHub authentication blocker. The issue's complete body/all comments were
-refreshed on 2026-11-13: one unique comment matched count 1; final metadata
-retained updated timestamp 2026-11-07T00:28:44Z. No scope/design changes.
+Issue #16's complete body/all comments were refreshed: one unique comment matches
+count 1 and final updated timestamp 2026-11-07T00:28:44Z. No scope conflict.
+M1 covers AC-01/02; AC-03/04 restoration remains M2.
 
-IP1-T1/T2/T3 are Complete. The [review evidence](docs/verification/us-13-ip1.md)
-and [candidate guide](docs/dataset-versioning.md) propose native DVC only,
-project-owned configuration/persistence and one authoritative result split record
-per layout/version. Concrete copyable recipe/configuration and independently
-expected test boundaries were approved at Gate 1. No new toolkit API, resource or
-dependency is needed. Existing installed verification infrastructure can be reused.
+The new integration test executes guide-derived project code/configuration and
+native commands for CSV/Parquet, both split layouts, deterministic derived rows,
+real A/B commits, independent file hashes, cache/remote retention, exact Git
+inventories and native failures. No package API, dependency or resource changed.
+Working tree: guide, plan, checkpoint, new integration test and IP2 report;
+this approval authorizes committing these five files; no push or publication.
 
-DVC 3.67.1 / Python 3.12.16 / Linux aarch64 disposable feasibility probes verified
-native registration, repeated/changed pointers, local storage and error behavior.
-The report preserves sandbox/invocation/unsupported-option failures and successful
-follow-ups, with durable raw logs. These observations do not establish installed
-workflow or acceptance. No product code/tests changed; no pytest, artifact build,
-dependency installation, commit, push or publication occurred during IP1.
-Documentation links and `git diff --check` passed; `uv.lock` hash is unchanged.
+M1: 722 passed, 1 existing skip, 4 native NumPy warnings; 723 selected of 991,
+268 deselected. Final focused recipe: 2 passed. Locked sync/lock, lint, formatting,
+strict typing, CLI smoke and whitespace passed. One guide formatting failure was
+corrected on attempt 1; focused/shared renewal passed. No semantic change after
+M1 verification. Lock hash unchanged. Evidence is Linux aarch64 / Python 3.12.16 /
+DVC 3.67.1; no macOS/Windows or normal-wheel claim. Raw records are linked from
+the report and retained under `.dev-records/verification/`.
 
-**Next action:** await execution direction for IP2. Developer “i approve gate 1;
-commit changes”, 2026-11-13, approved the native-only contract, exact Git/DVC
-ownership and guide-derived execution/test boundaries, and authorized committing
-the four IP1 documentation files. Gate 1 is Approved; IP2/IP3 remain Not started.
-This request records approval and commits the review package. No product or
-story acceptance, push or publication is authorized by this decision.
+**Next action:** await execution direction for IP3. IP3 remains Not started;
+it owns both installed wheel paths, final links/design status and M1–6 checks.
+The [execute-plan skill](.agents/skills/execute-plan/SKILL.md) requires a stop at
+every implementation phase gate. No story/milestone acceptance is claimed.
 
 US-41 publication and branch cleanup remain complete: issue #64 closed,
 PR #65 squash-merged as `5d5781c`; Gates 1–4 Approved. Prior CI/evidence details

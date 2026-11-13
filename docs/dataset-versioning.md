@@ -1,10 +1,10 @@
 # Dataset versioning with native DVC
 
-**Status: IP1 contract approved at Gate 1, 2026-11-13.** This is the candidate
-recipe for US-13 M1 AC-01/02, not installed acceptance evidence. IP2 will execute
-this exact recipe and add independent integration checks; IP3 will verify both
-normal wheel paths. See the [plan](plans/milestone-1-us-13.md) and
-[IP1 observations](verification/us-13-ip1.md).
+**Status: IP2 integration checks complete; Gate 2 approved, 2026-11-13.** The recipe
+covers US-13 M1 AC-01/02 using the existing public APIs and native DVC.
+Normal direct/rebuilt wheel verification remains IP3. See the
+[plan](plans/milestone-1-us-13.md), [IP1 observations](verification/us-13-ip1.md)
+and [IP2 evidence](verification/us-13-ip2.md).
 
 ## Ownership and identities
 
@@ -37,12 +37,12 @@ and algorithm in `.dvc` metadata. Preserve these distinct domains. Inspect nativ
 directory member metadata/content rather than inventing another directory-hash
 algorithm. Commit source/configuration and native pointers together.
 
-## Candidate runnable recipe
+## Runnable recipe
 
 The following files are project code. Paths below are concrete examples to replace
 with your absolute project/environment paths. Run commands from the explicit
-project root; IP2's test adapter will substitute temporary paths and extract these
-same file contents, without maintaining a separate test-only recipe.
+project root. The integration test adapter substitutes temporary paths and extracts
+these same file contents, without maintaining a separate test-only recipe.
 
 Save this as `versioning.json`:
 
@@ -119,9 +119,9 @@ def main():
             json.dumps(record, indent=2, allow_nan=False) + "\n", encoding="utf-8"
         )
     destinations["derived"].mkdir()
-    frame.set_index(config["row_id"], drop=False).loc[
-        config["derived_ids"]
-    ].to_csv(destinations["derived"] / "selected.csv", index=False)
+    frame.set_index(config["row_id"], drop=False).loc[config["derived_ids"]].to_csv(
+        destinations["derived"] / "selected.csv", index=False
+    )
     print(json.dumps({"version": args.version, "output": report["output"]}))
 
 
@@ -129,9 +129,10 @@ if __name__ == "__main__":
     main()
 ```
 
-This candidate code uses the existing public signatures. IP2 will keep the guide
-and executed project code identical. No executable test has yet been written or
-run against these fragments.
+This code uses the existing public signatures. Integration checks extract these
+configuration/script blocks and execute the registration, transfer and project
+invocation commands below, with temporary root/environment paths. IP3 separately
+verifies normal wheel installation.
 
 For a new disposable example project, after normal toolkit dependency setup:
 
@@ -189,7 +190,7 @@ git check-ignore data/source/input.csv .dvc/cache
 These examples use an unshared disposable source snapshot. Inspect/review owned
 files before replacing real project inputs. Native Git commits publish nothing
 to a remote repository. Do not run garbage collection during the retention check.
-IP2 will independently inspect both commits, each directory's member references,
+The integration checks inspect both commits, each directory's member references,
 and retained A/B bytes in both cache and local remote; `status --cloud` alone
 does not prove retention of an earlier version. No checkout/pull is required for
 M1 acceptance.
