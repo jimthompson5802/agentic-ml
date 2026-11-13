@@ -127,13 +127,32 @@ needs integration evidence, not a redundant wrapper or a manufactured failing te
 - **Status:** Approved — M1 slice only.
 - **Developer decision:** Approved plan; commit planning changes.
 - **Decision reference and date:** Developer “i approve plan; commit changes”,
-  2026-11-13. Implementation has not been authorized; all implementation gates
-  remain Pending and all tasks remain Not started.
+  2026-11-13. IP1 execution was subsequently authorized; see the execution record
+  below. Gate 1 is Approved; IP2/IP3 remain Not started.
 - **Requested plan changes:** Developer authorized the four MVP-focused recommendations
   with “ok make the update” on 2026-11-13. Applied below; this authorizes draft
   revision only, not plan approval or implementation.
-- **Public boundaries:** Proposed below. Gate 1 must confirm the detailed contract
-  before executable tests. Plan approval alone leaves all implementation gates pending.
+- **Public boundaries:** Confirmed at Gate 1 on 2026-11-13 by developer
+  “i approve gate 1; commit changes”. Later implementation gates remain Pending.
+
+### IP1 execution authorization — 2026-11-13
+
+Developer “I approve ip1” authorizes execution of IP1 only. Because IP1 tasks
+have not started and no Gate 1 evidence exists, this is not recorded as approval
+of completed work or confirmation of the proposed public boundaries. Gate 1
+remains Pending; IP2 is not authorized.
+
+The initial issue refresh was blocked by missing GitHub authentication
+(`gh auth status`: 1; repository helper: 4). Developer “resume” continued IP1
+on 2026-11-13; authentication is now available. Complete body/all comment pages
+and final metadata were refreshed: one unique comment matched count 1; unchanged
+update timestamp 2026-11-07T00:28:44Z. No issue/design conflict was found.
+IP1-T1/T2/T3 are complete with [evidence](../verification/us-13-ip1.md) and the
+[candidate recipe/contract](../dataset-versioning.md). No new toolkit API is
+needed. Developer “i approve gate 1; commit changes” approved the completed
+review package, native-only contract and public boundaries on 2026-11-13, and
+authorized committing IP1 changes. IP2 remains Not started; this request is
+limited to recording approval and committing changes.
 
 ## Scope-change history
 
@@ -161,9 +180,9 @@ for substantive revisions; record impact, decision, verification renewal and res
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-13-IP1-T1 | Not started | Inspect installed DVC public CLI/help and accepted source/split contracts; write proposed `docs/verification/us-13-ip1.md`. Inspect `src/agentic_ml/initialization/storage.py`, native configuration and existing installed probe infrastructure. | Issue refresh | Record exact DVC version, command/cwd forms, local file/directory support, store ownership and any library gap. Native feasibility commands use disposable projects, not the checkout. No product code or executable tests yet. | AC-01/02 |
-| US-13-IP1-T2 | Not started | Finalize proposed `docs/dataset-versioning.md` contract and this plan: the runnable recipe outline, paths, authoritative split record, Git-owned manifests, native hash domains, version-history/transfer checks and any demonstrated package gap. | T1 | Identify exact recipe commands and copyable project code, native versus new behavior, relevant Git manifests and US-39 handoff. Any new API needs a demonstrated requirement gap, exact signature and reviewed boundaries. Refine IP2 task paths before approval; scope changes use the owning procedure. | AC-01/02 |
-| US-13-IP1-T3 | Not started | Review test scenario matrix and boundaries below; record decisions/evidence and update `CHECKPOINTS.md`. | T2 | Gate 1 review package identifies every planned executable boundary, expected result and limit; no implementation acceptance claimed. | AC-01/02 |
+| US-13-IP1-T1 | Complete | Inspect installed DVC public CLI/help and accepted source/split contracts; write proposed `docs/verification/us-13-ip1.md`. Inspect `src/agentic_ml/initialization/storage.py`, native configuration and existing installed probe infrastructure. | Issue refresh | Record exact DVC version, command/cwd forms, local file/directory support, store ownership and any library gap. Native feasibility commands use disposable projects, not the checkout. No product code or executable tests yet. | AC-01/02 |
+| US-13-IP1-T2 | Complete | Finalize proposed `docs/dataset-versioning.md` contract and this plan: the runnable recipe outline, paths, authoritative split record, Git-owned manifests, native hash domains, version-history/transfer checks and any demonstrated package gap. | T1 | Identify exact recipe commands and copyable project code, native versus new behavior, relevant Git manifests and US-39 handoff. Any new API needs a demonstrated requirement gap, exact signature and reviewed boundaries. Refine IP2 task paths before approval; scope changes use the owning procedure. | AC-01/02 |
+| US-13-IP1-T3 | Complete | Review test scenario matrix and boundaries below; record decisions/evidence and update `CHECKPOINTS.md`. | T2 | Gate 1 review package identifies every planned executable boundary, expected result and limit; no implementation acceptance claimed. | AC-01/02 |
 
 ### Verification and review evidence
 
@@ -172,11 +191,14 @@ TDD and milestone pytest are inapplicable until executable behavior is changed.
 Native feasibility observations are recorded as observations, not acceptance tests.
 No standalone artifact drivers or broader pytest runs are authorized by this plan.
 
-**Gate 1:** Pending. Present T1–T3 evidence and resolve the proposed contract,
-including single-record ownership, the complete recipe and native-versus-helper
-decision. Default to native commands; a helper requires a concrete gap. Stop and await
-explicit approval and public-boundary confirmation before IP2. Evidence: Pending.
-Decision reference/date, requested changes and progression authorization: Pending.
+**Gate 1:** Approved, 2026-11-13. Developer decision:
+“i approve gate 1; commit changes”. T1–T3 are complete. Approval confirms the
+[IP1 evidence](../verification/us-13-ip1.md),
+[recipe contract](../dataset-versioning.md), native-only approach, single-record
+ownership and public test boundaries. Native DVC 3.67.1 feasibility, relative-file
+links and `git diff --check` provide IP1 evidence; no executable acceptance is
+claimed. Requested changes: None. Progression: commit this review package;
+IP2 remains Not started pending execution direction.
 
 ## US-13 / Implementation Phase 2: Version project artifacts and verify Git ownership
 
@@ -194,7 +216,11 @@ Decision reference/date, requested changes and progression authorization: Pendin
 
 ### Public boundaries and independently defined scenarios
 
-Gate 1 must confirm these boundaries before tests are written:
+Gate 1 must confirm these boundaries before tests are written. The
+[IP1 review](../verification/us-13-ip1.md) proposes the concrete files and oracles;
+duplicate native pointers supply the ownership-conflict fixture (adding an
+existing directory member instead updates its owner). The single recipe source
+is the named configuration, project-script and shell fragments in the guide:
 
 | Boundary | Observable check | Coverage limit |
 |---|---|---|
@@ -242,7 +268,7 @@ Decision reference/date, requested changes and progression authorization: Pendin
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-13-IP3-T1 | Not started | Extend the installed project probe in `tests/installation/check_assessment_splits.py` and its existing `verify_assessment_splits.py` driver, with milestone-1 coverage in `tests/integration/test_distribution_verification.py`; reuse their direct/rebuilt environments, scheduling group and retained records. Gate 1 may refine this seam if incompatible; no new independent build/install driver by default. | Gate 2 | Pytest builds/installs both wheel paths and runs project code outside the checkout with declared runtime dependencies. Each path executes the documented recipe and independently verifies success, Git exclusions, both committed versions and retained content, repeated/changed identities and representative failures. Preserve identities, records and import origins for both. | AC-01/02 |
+| US-13-IP3-T1 | Not started | Extend the installed project probe in `tests/installation/check_assessment_splits.py` and its existing `verify_assessment_splits.py` driver, with milestone-1 coverage in `tests/integration/test_distribution_verification.py`; reuse their direct/rebuilt environments, scheduling group and retained records. Copy guide-derived recipe/configuration into both environments, extend the existing assessment/splits probe and its both-artifact test to require US-13 results; preserve current checks/identities. No new independent build/install driver. | Gate 2 | Pytest builds/installs both wheel paths and runs project code outside the checkout with declared runtime dependencies. Each path executes the documented recipe and independently verifies success, Git exclusions, both committed versions and retained content, repeated/changed identities and representative failures. Preserve identities, records and import origins for both. | AC-01/02 |
 | US-13-IP3-T2 | Not started | Finish proposed `docs/dataset-versioning.md`; link from `README.md`, `docs/extraction.md`, `docs/data-assessment-and-splits.md`; update affected active design/traceability status only after evidence. | T1 | The complete copyable recipe matches installed evidence and requires no toolkit checkout/test internals; explicit root/cwd, ownership, add versus push, recovery, two-version history and M2 handoff are documented. Identify the recipe/artifact paths US-39 can reuse without adding training or assistant work here. Existing packaged resources remain unchanged unless separately reviewed. | AC-01/02 |
 | US-13-IP3-T3 | Not started | Complete final verification below, write proposed `docs/verification/us-13-ip3.md`, update owning plan, `docs/project-status.md` and `CHECKPOINTS.md`. | T2 | Final M1, M1–6 and shared checks pass; exclusions/skips reconciled. Present M1-slice acceptance with #16 still open for M2; do not mark unapproved acceptance as complete. | AC-01/02 |
 

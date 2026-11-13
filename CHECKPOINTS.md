@@ -10,41 +10,36 @@ planning task. The committed planning changes comprise this checkpoint, the new
 [US-13 M1 implementation plan](docs/plans/milestone-1-us-13.md), and its
 [MVP gap review](docs/reviews/us-13-m1-plan-review.md).
 
-Developer requested “define plan for us-13”. The draft covers issue #16's M1
-slice, AC-01/02: native DVC versioning and Git/content ownership. AC-03/04
-restoration remains M2. Complete issue body and all comment pages were retrieved
-on 2026-11-13; one unique comment matched the reported count, and final metadata
-confirmed a stable snapshot (updated 2026-11-07T00:28:44Z). The issue has no
-GitHub milestone field, but its body/comment explicitly assign M1/M2 criteria.
-The active design and issue agree. No GitHub changes were made.
+The approved [US-13 M1 plan](docs/plans/milestone-1-us-13.md) covers issue #16
+AC-01/02; AC-03/04 restoration remains M2. Planning documents were committed as
+`844106a`; the IP1 review package and approval record are included in this
+authorized commit.
+Developer “I approve ip1” authorized IP1 only; “resume” continued after the
+GitHub authentication blocker. The issue's complete body/all comments were
+refreshed on 2026-11-13: one unique comment matched count 1; final metadata
+retained updated timestamp 2026-11-07T00:28:44Z. No scope/design changes.
 
-The draft has three implementation phases: settle native DVC contracts and public
-boundaries; implement/verify project artifact versioning and Git ownership;
-verify both installed wheel paths and present M1-slice acceptance. It proposes
-native DVC with project-owned persistence, preserving accepted extraction and
-partition APIs. Developer “ok make the update” authorized the four MVP-focused
-recommendations after review. US-13-PLAN-REV-01 records the draft revision:
-one complete runnable user recipe, one authoritative DVC-owned split record,
-native pointers and Git-owned project configuration/relevant manifests,
-two committed versions with retained content, and reuse of installed verification
-infrastructure. M2 restoration remains deferred. No custom reference document,
-duplicate split record or new package API is required by default; Gate 1 must
-justify any such addition against a concrete gap. Developer “i approve plan;
-commit changes” approved the plan and authorized committing these planning
-documents on 2026-11-13. Public-boundary confirmation and all implementation
-gates remain Pending; all tasks remain Not started.
+IP1-T1/T2/T3 are Complete. The [review evidence](docs/verification/us-13-ip1.md)
+and [candidate guide](docs/dataset-versioning.md) propose native DVC only,
+project-owned configuration/persistence and one authoritative result split record
+per layout/version. Concrete copyable recipe/configuration and independently
+expected test boundaries were approved at Gate 1. No new toolkit API, resource or
+dependency is needed. Existing installed verification infrastructure can be reused.
 
-**Next action:** await explicit implementation authorization, then execute IP1
-only and stop at Gate 1 for detailed contract/test-boundary approval.
-Developer repeated “commit changes” on 2026-11-13. The signed commit succeeded;
-the prior missing-key blocker is resolved. The approved plan, gap review and
-checkpoint are committed together. Public-boundary confirmation and all
-implementation gates remain Pending.
-No implementation, tests, dependency installation, push or
-publication was performed or authorized. Planning is
-documentation-only; TDD and executable checks do not apply. Relative-file links
-in the plan, review and this checkpoint resolve, and `git diff --check` passed.
-No runtime evidence is claimed.
+DVC 3.67.1 / Python 3.12.16 / Linux aarch64 disposable feasibility probes verified
+native registration, repeated/changed pointers, local storage and error behavior.
+The report preserves sandbox/invocation/unsupported-option failures and successful
+follow-ups, with durable raw logs. These observations do not establish installed
+workflow or acceptance. No product code/tests changed; no pytest, artifact build,
+dependency installation, commit, push or publication occurred during IP1.
+Documentation links and `git diff --check` passed; `uv.lock` hash is unchanged.
+
+**Next action:** await execution direction for IP2. Developer “i approve gate 1;
+commit changes”, 2026-11-13, approved the native-only contract, exact Git/DVC
+ownership and guide-derived execution/test boundaries, and authorized committing
+the four IP1 documentation files. Gate 1 is Approved; IP2/IP3 remain Not started.
+This request records approval and commits the review package. No product or
+story acceptance, push or publication is authorized by this decision.
 
 US-41 publication and branch cleanup remain complete: issue #64 closed,
 PR #65 squash-merged as `5d5781c`; Gates 1–4 Approved. Prior CI/evidence details
