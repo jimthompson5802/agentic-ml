@@ -4,7 +4,7 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Checkout: `skill-refactoring`; skill edits committed as `61189b1` and pushed.
+Checkout: `main`, fast-forwarded to squash commit `7d2d657` for PR #67.
 Developer “make the udpates”, 2026-11-14, authorized the two reviewed skill-doctor
 edits. Updated `report-test-progress` to use 30–60 second waits near the next
 report deadline, and `create-implementation-plan` to require a runnable user
@@ -15,7 +15,14 @@ Documentation only: no executable behavior changed, so TDD and pytest do not
 apply. Draft equality and `git diff --check` passed.
 Developer “create pull request” authorized publication as
 [PR #67](https://github.com/jimthompson5802/agentic-ml/pull/67), base `main`,
-head `skill-refactoring`, standard (not draft). Final developer review is pending.
+head `skill-refactoring`, standard (not draft). Developer “switch main; squash
+merge; pull” authorized the completed merge on 2026-11-14. PR #67 was squash-merged
+at verified head `f810ce7`, and local `main` pulled with `--ff-only`. Both CI jobs
+were cancelled; no passing CI result is claimed. Developer “delete pr local and
+remote branch” authorized deleting local and remote `skill-refactoring`; its
+tree matched squash commit `7d2d657` before deletion. Developer “git commit;
+push” authorized committing and pushing this merge and cleanup checkpoint record.
+Documentation only; `git diff --check` passed.
 
 The accepted product work remains as recorded below.
 Developer “start ip3”, 2026-11-14, authorizes IP3 only after approved Gates 1–2.
