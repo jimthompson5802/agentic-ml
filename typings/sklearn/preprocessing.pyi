@@ -1,0 +1,6 @@
+"""Public preprocessing types used by the supported native inventory."""
+
+from .base import BaseEstimator
+
+class StandardScaler(BaseEstimator): ...
+class OneHotEncoder(BaseEstimator): ...

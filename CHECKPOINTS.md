@@ -4,48 +4,47 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-US-26 Phase 2 approved / local commit handoff, 2026-11-14 UTC: issue #17,
-branch US-26-mlflow, worktree .worktrees/US-26-mlflow. Phase 1 baseline is
-3108645; Git HEAD identifies this Phase 2 approval commit after committing.
-Developer in coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a approved
-both Gate 1 decisions and said “commit the changes and start phase 2 in both
-stories”. Reconciled Phase 1 was committed as 3108645. The later developer
-decision on 2026-11-14 UTC in the same coordination thread is:
-“for both us-15 and us-26 i approve the phase 2 gate, commit the changes.”
-Both Gate 2 approvals and local Phase 2 commits are authorized. This approval
-commit includes only US-26 changes; Git history identifies its commit SHA.
+US-26 Phase 3 approved / local commit handoff, 2026-11-14 UTC: issue #17,
+branch US-26-mlflow, worktree .worktrees/US-26-mlflow, starting commit 5f4947f.
+Developer authorized both Phase 3 executions through coordination thread
+01a1db6c-a225-73e0-8796-81a03c4cec7a. Own IP3 only; stop at Gate 3.
+Later developer instruction after both Gate 3 reports: “commit changes in both
+stories”. The same coordination thread explicitly directs US-26 Gate 3 approval
+and local commit only. No Phase 4, source integration, push/publication, cleanup
+or sibling edits. Git HEAD will identify the local approval commit.
 
-[Owning plan](docs/plans/milestone-1-us-26-recording.md) IP2-T1–T4 are Complete;
-**Gate 2 is Approved**. The [IP2 evidence](docs/verification/us-26-recording-ip2.md)
-records the exact approval. Next action after this local approval commit:
-await separate Phase 3 direction. Phase 3, push/publication, source integration,
-cleanup and sibling edits are not authorized.
+[Owning plan](docs/plans/milestone-1-us-26-recording.md) IP3-T1–T4 are Complete;
+Gate 3 is Approved. Next: commit the verified Phase 3 changes and approval
+records, then await separate Phase 4/integration direction.
+[IP3 report](docs/verification/us-26-recording-ip3.md) records public
+log_preprocessing, exact SC-01 native settings, fitted state and metadata/split/
+provenance/reference checks, bounded skops artifacts, FAILED recording outcomes
+and readable local diagnostics. The exact guide scaler script passes in a normal
+installed project, independently of US-15. log_run_results remains implemented.
 
-Implemented public log_run_results records native MLflow values/artifacts,
-strict committed provenance/native DVC integrity, installed normal wheel/Git
-identities and locked versions, required-output/process/validation outcomes,
-notebook bytes and available failure diagnostics. SC-01 schema and future
-preprocessing interface remain unchanged; log_preprocessing is not implemented.
+Initial four-worker final run: 239 passed, one guide-fixture commit mismatch.
+The helper correctly rejected an inconsistent uv.lock inherited in a new fixture
+commit; attempt 1 stages current declared inputs before committing. Original
+failure and corrected three-case sequence are retained. A new red regression
+also showed Python True == 1 hiding conflicting JSON provenance; canonical JSON
+comparison fixes it, with 12 provenance cases passing. No check was weakened.
+Renewed final run: 241 collected/selected/passed; zero failed/skipped/deselected,
+four/loadgroup, 337.62 seconds. Shared sync/lock/lint/format/type/CLI checks,
+90 document links/anchors, whitespace and final source/guide identity checks pass.
+No unresolved blocker; 117 tracking cases (66 existing/51 new) and 124 splitting
+regressions. The native SQLAlchemy deprecation warning is retained unsuppressed.
 
-Final focused tracking/DVC run: 68 passed, zero failed/skipped/deselected,
-4 workers/loadgroup, 168.01 seconds. Shared sync/lock/lint/format/type/CLI and
-document/whitespace checks pass. The first focused run had four evidence-logger
-failures and the second had three incorrect notebook-fixture commit references;
-original XML/logs, hypotheses and corrections remain in the IP2 report. No
-assertion/check was weakened or suppressed. No initializer internals or package
-resources/dependencies changed; lock SHA-256 remains
+Raw lifetime evidence: .dev-records/verification/us26-ip3-20261114/ and inherited
+fixture logs .dev-records/verification/us26-ip2-native-commands/. Retained failed
+staging artifacts are copied under the IP3 raw records. Preserve all Phase 1/2,
+SC-01 evidence and the default-skops failure. Linux aarch64/Python 3.12.16 only.
+No dependency/resources/initializer internals changed; lock SHA-256 remains
 6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4.
 
-Raw evidence: .dev-records/verification/us26-ip2-20261114/ and
-.dev-records/verification/us26-ip2-native-commands/. Preserve all earlier IP1 /
-SC-01 records and default-skops failure. Linux aarch64/Python 3.12.16 only.
-No full suite/M1–6 acceptance, standalone driver, rebuilt-wheel producer
-integration, story/milestone acceptance or publication is claimed.
-
-The authorized commit includes the tracking package, component tests/support,
-guide, shared index, owning plan, checkpoint and IP2 report. No executable file
-changed after the passing Phase 2 verification. Broader installed/preprocessing and
-final acceptance checks remain with IP3/IP4 and named milestone owners.
+Actual producer handoff/direct and sdist-rebuilt wheels and M1–6 final story
+acceptance remain IP4. No full suite, standalone artifact driver, story or
+milestone acceptance, M2 restoration or platform coverage beyond Linux is claimed.
+Gate 3 is Approved; this local approval commit includes all Phase 3 changes.
 
 Historical obligations below remain unchanged. Preserve the contributor worktree
 management plan/report, raw records under

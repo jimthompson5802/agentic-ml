@@ -17,6 +17,432 @@ ROOT = Path(__file__).resolve().parents[2]
 pytestmark = [pytest.mark.milestone_1, pytest.mark.xdist_group("tracking")]
 
 
+def test_records_native_preprocessing_in_existing_run(case: TrackingCase) -> None:
+    """AC-01/02/03: native fitted model and exact records share the selected run."""
+    answer = case.invoke_preprocessing()
+    assert "error" not in answer, answer
+    run = case.client.get_run(case.run_id)
+    assert run.info.status == "RUNNING"
+    assert answer["result"] == {
+        "run_id": case.run_id,
+        "artifacts": {
+            "pipeline": run.info.artifact_uri + "/preprocessing/pipeline",
+            "metadata": run.info.artifact_uri + "/preprocessing/metadata.json",
+            "provenance": run.info.artifact_uri + "/provenance.json",
+        },
+    }
+    metadata = case.client.download_artifacts(
+        case.run_id, "preprocessing/metadata.json"
+    )
+    assert json.loads(Path(metadata).read_text()) == case.preprocessing_record()
+    provenance = case.client.download_artifacts(case.run_id, "provenance.json")
+    assert json.loads(Path(provenance).read_text()) == case.provenance
+    model = case.client.download_artifacts(case.run_id, "preprocessing/pipeline")
+    assert (Path(model) / "MLmodel").is_file()
+    # Native readability and fitted state; no M2 replay or producer-fit claim.
+    command(
+        case.root,
+        str(case.root / ".venv/bin/python"),
+        "-I",
+        "-c",
+        "import mlflow.sklearn; from sklearn.pipeline import Pipeline; "
+        f"p=mlflow.sklearn.load_model({model!r}); assert isinstance(p,Pipeline); "
+        "assert p.named_steps['scale'].mean_.tolist()==[1.0]",
+    )
+
+
+def test_rejects_unknown_preprocessing_record_fields(case: TrackingCase) -> None:
+    """AC-05: reject schema drift before publishing any successful artifacts."""
+    record = case.preprocessing_record()
+    record["unexpected"] = True
+    answer = case.invoke_preprocessing(record=record)
+    assert answer.get("error") == "ValueError", answer
+    assert "record" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_rejects_nontraining_preprocessing_declaration(case: TrackingCase) -> None:
+    """AC-05: only the agreed train declaration is recordable."""
+    record = case.preprocessing_record()
+    record["fit_partition"] = "test"
+    answer = case.invoke_preprocessing(record=record)
+    assert answer.get("error") == "ValueError", answer
+    assert "fit_partition" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_rejects_preprocessing_split_mismatch(case: TrackingCase) -> None:
+    """AC-02: preprocessing must name the exact consumed saved split."""
+    record = case.preprocessing_record()
+    record["partition_record"]["memberships"] = {"train": [1], "test": [0]}
+    answer = case.invoke_preprocessing(record=record)
+    assert answer.get("error") == "ValueError", answer
+    assert "partition_record" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_rejects_incomplete_native_parameter_description(case: TrackingCase) -> None:
+    """AC-02/05: effective settings cannot omit a native default."""
+    record = case.preprocessing_record()
+    del record["pipeline"]["parameters"]["steps"][0][1]["parameters"]["with_mean"]
+    answer = case.invoke_preprocessing(record=record)
+    assert answer.get("error") == "ValueError", answer
+    assert "pipeline" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("output_schema", []),
+        ("schema_version", "2.0"),
+        (
+            "output_schema",
+            [{"name": "x", "dtype": "float64"}, {"name": "x", "dtype": "float64"}],
+        ),
+        ("output_schema", [{"name": "x", "dtype": 42}]),
+        ("output_schema", [{"name": "x", "dtype": "float64", "extra": True}]),
+        ("input_schema", []),
+        ("input_schema", [{"name": "x", "dtype": "str"}]),
+        ("selected_columns", []),
+        ("selected_columns", ["x", "x"]),
+        ("selected_columns", ["missing"]),
+        ("selected_columns", ["label"]),
+        ("versions", {}),
+    ],
+)
+def test_rejects_invalid_preprocessing_schema(
+    case: TrackingCase, field: str, value: Any
+) -> None:
+    """AC-02/05: declared preprocessing fields follow the versioned schema."""
+    record = case.preprocessing_record()
+    record[field] = value
+    answer = case.invoke_preprocessing(record=record)
+    assert answer.get("error") in {"TypeError", "ValueError"}, answer
+    assert field in answer["message"], answer
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_rejects_id_as_preprocessing_feature(case: TrackingCase) -> None:
+    """AC-02/05: selected feature/schema declarations must match saved source."""
+    record = case.preprocessing_record()
+    record["selected_columns"] = ["id"]
+    answer = case.invoke_preprocessing(record=record)
+    assert answer.get("error") == "ValueError", answer
+    assert "selected_columns" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_rejects_unavailable_preprocessing_version(case: TrackingCase) -> None:
+    """AC-03/05: declared preprocessing versions agree with installed packages."""
+    record = case.preprocessing_record()
+    record["versions"]["scikit-learn"] = "0.0.0"
+    answer = case.invoke_preprocessing(record=record)
+    assert answer.get("error") == "ValueError", answer
+    assert "versions" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_preprocessing_preserves_terminal_run(case: TrackingCase) -> None:
+    """AC-01/05: a completed run cannot be reopened by artifact recording."""
+    case.client.set_terminated(case.run_id, status="FINISHED")
+    answer = case.invoke_preprocessing()
+    assert answer.get("error") == "ValueError", answer
+    assert case.client.get_run(case.run_id).info.status == "FINISHED"
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_preprocessing_does_not_overwrite_artifacts(case: TrackingCase) -> None:
+    """AC-01/05: an occupied destination remains byte-for-byte untouched."""
+    prior = case.root / "metadata.json"
+    prior.write_bytes(b"prior metadata\n")
+    case.client.log_artifact(case.run_id, str(prior), "preprocessing")
+    answer = case.invoke_preprocessing()
+    assert answer.get("error") == "FileExistsError", answer
+    downloaded = case.client.download_artifacts(
+        case.run_id, "preprocessing/metadata.json"
+    )
+    assert Path(downloaded).read_bytes() == b"prior metadata\n"
+    assert {
+        x.path for x in case.client.list_artifacts(case.run_id, "preprocessing")
+    } == {"preprocessing/metadata.json"}
+
+
+def test_preprocessing_rejects_conflicting_shared_provenance(
+    case: TrackingCase,
+) -> None:
+    """AC-02/05: the second helper must not overwrite another provenance record."""
+    source = case.root / "provenance.json"
+    source.write_bytes(b'{"previous":true}\n')
+    case.client.log_artifact(case.run_id, str(source))
+    answer = case.invoke_preprocessing()
+    assert answer.get("error") == "FileExistsError", answer
+    downloaded = case.client.download_artifacts(case.run_id, "provenance.json")
+    assert Path(downloaded).read_bytes() == b'{"previous":true}\n'
+    assert case.client.list_artifacts(case.run_id, "preprocessing") == []
+
+
+def composed_record(case: TrackingCase) -> dict[str, Any]:
+    """Independently spell every default of the imputer/scaler/encoder fixture."""
+    record = case.preprocessing_record()
+    inner = copy.deepcopy(record["pipeline"])
+    scaler = inner["parameters"]["steps"][0]
+    inner["parameters"]["steps"] = [
+        [
+            "impute",
+            {
+                "class_name": "sklearn.impute._base.SimpleImputer",
+                "parameters": {
+                    "add_indicator": False,
+                    "copy": True,
+                    "fill_value": None,
+                    "keep_empty_features": False,
+                    "missing_values": {"kind": "missing_value", "value": "nan"},
+                    "strategy": "mean",
+                },
+            },
+        ],
+        scaler,
+        [
+            "encode",
+            {
+                "class_name": "sklearn.preprocessing._encoders.OneHotEncoder",
+                "parameters": {
+                    "categories": "auto",
+                    "drop": None,
+                    "dtype": {"kind": "numpy_dtype", "name": "float64"},
+                    "feature_name_combiner": "concat",
+                    "handle_unknown": "ignore",
+                    "max_categories": None,
+                    "min_frequency": None,
+                    "sparse_output": False,
+                },
+            },
+        ],
+    ]
+    record["pipeline"]["parameters"]["steps"] = [
+        [
+            "features",
+            {
+                "class_name": "sklearn.compose._column_transformer.ColumnTransformer",
+                "parameters": {
+                    "n_jobs": None,
+                    "remainder": "drop",
+                    "sparse_threshold": 0.3,
+                    "transformer_weights": None,
+                    "transformers": [["numeric", inner, ["x"]]],
+                    "verbose": False,
+                    "verbose_feature_names_out": True,
+                },
+            },
+        ]
+    ]
+    record["output_schema"] = [{"name": "encoded", "dtype": "float64"}]
+    return record
+
+
+def test_records_composed_pipeline_with_canonical_tags(case: TrackingCase) -> None:
+    """SC-01/AC-02/03: complete tagged defaults survive native persistence."""
+    record = composed_record(case)
+    json.dumps(record, allow_nan=False)
+    answer = case.invoke_preprocessing(record=record, _pipeline_mode="composed")
+    assert "error" not in answer, answer
+    path = case.client.download_artifacts(case.run_id, "preprocessing/metadata.json")
+    assert json.loads(Path(path).read_text()) == record
+    model = case.client.download_artifacts(case.run_id, "preprocessing/pipeline")
+    command(
+        case.root,
+        str(case.root / ".venv/bin/python"),
+        "-I",
+        "-c",
+        "import mlflow.sklearn; "
+        f"p=mlflow.sklearn.load_model({model!r}); "
+        "assert p.named_steps['features'].named_transformers_['numeric'].named_steps['scale'].mean_.tolist()==[1.0]",
+    )
+
+
+def test_rejects_unfitted_preprocessing_pipeline(case: TrackingCase) -> None:
+    """AC-05: native serialization alone cannot certify fitted state."""
+    answer = case.invoke_preprocessing(_pipeline_mode="unfitted")
+    assert answer.get("error") == "NotFittedError", answer
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_native_serialization_failure_remains_visible(case: TrackingCase) -> None:
+    """AC-05: preserve native failure, partial evidence and FAILED outcome."""
+    answer = case.invoke_preprocessing(_pipeline_mode="unserializable")
+    assert answer.get("error") == "MlflowException", answer
+    assert any(
+        case.run_id in note and "serialization" in note for note in answer["notes"]
+    ), answer
+    assert case.client.get_run(case.run_id).info.status == "FAILED"
+    metadata = case.client.download_artifacts(
+        case.run_id, "preprocessing/metadata.json"
+    )
+    assert json.loads(Path(metadata).read_text()) == case.preprocessing_record()
+    assert case.client.list_artifacts(case.run_id, "preprocessing/pipeline") == []
+
+
+@pytest.mark.parametrize(
+    "path", ["../outside", "", "/absolute", "a//b", "a/./b", "a\\b", "provenance.json"]
+)
+def test_rejects_unsafe_preprocessing_artifact_path(
+    case: TrackingCase, path: str
+) -> None:
+    """AC-05: preprocessing destinations stay within the selected run namespace."""
+    answer = case.invoke_preprocessing(artifact_path=path)
+    assert answer.get("error") == "ValueError", answer
+    assert "artifact_path" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_preprocessing_requires_absolute_project_root(case: TrackingCase) -> None:
+    """AC-02/05: caller cwd cannot silently select project references."""
+    answer = case.invoke_preprocessing(project_root=".")
+    assert answer.get("error") == "ValueError", answer
+    assert "project_root" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_preprocessing_requires_explicit_tracking_store(case: TrackingCase) -> None:
+    """AC-01/05: empty URI cannot select MLflow's ambient/default store."""
+    answer = case.invoke_preprocessing(tracking_uri=" ")
+    assert answer.get("error") == "ValueError", answer
+    assert "tracking_uri" in answer["message"]
+    assert case.client.get_run(case.run_id).info.status == "RUNNING"
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_preprocessing_requires_native_pipeline(case: TrackingCase) -> None:
+    """AC-05: a fitted standalone scaler is outside the agreed object boundary."""
+    record = case.preprocessing_record()
+    record["pipeline"] = record["pipeline"]["parameters"]["steps"][0][1]
+    answer = case.invoke_preprocessing(record=record, _pipeline_mode="nonpipeline")
+    assert answer.get("error") == "TypeError", answer
+    assert "Pipeline" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_preprocessing_rejects_wrong_declared_width(case: TrackingCase) -> None:
+    """AC-02/05: declaration cannot invent additional fitted output columns."""
+    record = case.preprocessing_record()
+    record["output_schema"].append({"name": "extra", "dtype": "float64"})
+    answer = case.invoke_preprocessing(record=record)
+    assert answer.get("error") == "ValueError", answer
+    assert "output_schema" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+@pytest.mark.parametrize(
+    "tag",
+    [
+        {"kind": "numpy_dtype", "name": "object"},
+        {"kind": "numpy_dtype", "name": "float64", "extra": True},
+        {"kind": "missing_value", "value": "nan"},
+        "numpy.float64",
+    ],
+)
+def test_preprocessing_rejects_noncanonical_dtype_tags(
+    case: TrackingCase, tag: Any
+) -> None:
+    """SC-01: received tag shapes/names/context must match native descriptors."""
+    record = composed_record(case)
+    inner = record["pipeline"]["parameters"]["steps"][0][1]["parameters"][
+        "transformers"
+    ][0][1]
+    inner["parameters"]["steps"][2][1]["parameters"]["dtype"] = tag
+    answer = case.invoke_preprocessing(record=record, _pipeline_mode="composed")
+    assert answer.get("error") == "ValueError", answer
+    assert "dtype" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_preprocessing_and_results_reuse_identical_provenance(
+    case: TrackingCase,
+) -> None:
+    """AC-01/02: both public helpers preserve one exact existing reference artifact."""
+    source = case.root / "provenance.json"
+    payload = json.dumps(case.provenance, indent=4).encode() + b"\n"
+    source.write_bytes(payload)
+    case.client.log_artifact(case.run_id, str(source))
+    answer = case.invoke_preprocessing(artifact_path="features/native")
+    assert "error" not in answer, answer
+    assert "features/native/pipeline" in answer["result"]["artifacts"]["pipeline"]
+    answer = case.invoke()
+    assert "error" not in answer, answer
+    saved = case.client.download_artifacts(case.run_id, "provenance.json")
+    assert Path(saved).read_bytes() == payload
+    assert case.client.get_run(case.run_id).info.status == "FINISHED"
+
+
+def test_preprocessing_storage_failure_retains_local_diagnostics(
+    case: TrackingCase, tmp_path: Path
+) -> None:
+    """AC-05: real unavailable storage retains native error and local evidence."""
+    blocked = tmp_path / "blocked"
+    blocked.write_text("file blocks artifact directory")
+    experiment = case.client.create_experiment(
+        "blocked-preprocessing", artifact_location=blocked.as_uri()
+    )
+    case.run_id = case.client.create_run(experiment).info.run_id
+    answer = case.invoke_preprocessing()
+    assert answer.get("error") == "NotADirectoryError", answer
+    assert case.client.get_run(case.run_id).info.status == "FAILED"
+    assert any(
+        "shared provenance" in note and case.run_id in note for note in answer["notes"]
+    )
+    local = next(
+        note.removeprefix("Available local recording diagnostics: ")
+        for note in answer["notes"]
+        if note.startswith("Available local recording diagnostics: ")
+    )
+    assert (
+        json.loads((Path(local) / "metadata.json").read_text())
+        == case.preprocessing_record()
+    )
+    assert json.loads((Path(local) / "provenance.json").read_text()) == case.provenance
+
+
+def test_preprocessing_rejects_components_outside_m1(case: TrackingCase) -> None:
+    """AC-05: do not silently expand the reviewed native component inventory."""
+    record = case.preprocessing_record()
+    record["pipeline"]["parameters"]["steps"] = [
+        [
+            "custom",
+            {
+                "class_name": "sklearn.preprocessing._function_transformer.FunctionTransformer",
+                "parameters": {
+                    "accept_sparse": False,
+                    "check_inverse": True,
+                    "feature_names_out": None,
+                    "func": None,
+                    "inv_kw_args": None,
+                    "inverse_func": None,
+                    "kw_args": None,
+                    "validate": False,
+                },
+            },
+        ]
+    ]
+    answer = case.invoke_preprocessing(record=record, _pipeline_mode="unsupported")
+    assert answer.get("error") == "TypeError", answer
+    assert "supported" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_preprocessing_rejects_native_literal_reserved_map(case: TrackingCase) -> None:
+    """SC-01: a native caller map must not masquerade as an encoded dtype."""
+    record = case.preprocessing_record()
+    record["pipeline"]["parameters"]["memory"] = {
+        "kind": "numpy_dtype",
+        "name": "float64",
+    }
+    answer = case.invoke_preprocessing(record=record, _pipeline_mode="reserved")
+    assert answer.get("error") == "ValueError", answer
+    assert "reserved" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
 @pytest.fixture(scope="module")
 def installed_project(
     request: pytest.FixtureRequest, tmp_path_factory: pytest.TempPathFactory
@@ -666,3 +1092,119 @@ def test_rejects_corrupt_shared_provenance_without_overwrite(
     assert answer.get("error") == "FileExistsError", answer
     downloaded = case.client.download_artifacts(case.run_id, "provenance.json")
     assert Path(downloaded).read_bytes() == b"not valid JSON\n"
+
+
+@pytest.mark.parametrize(
+    "mode,error",
+    [("callable", "TypeError"), ("opaque", "TypeError"), ("cycle", "ValueError")],
+)
+def test_preprocessing_rejects_unrecordable_native_settings(
+    case: TrackingCase, mode: str, error: str
+) -> None:
+    """SC-01: unsupported callables, opaque objects and cycles fail explicitly."""
+    answer = case.invoke_preprocessing(_pipeline_mode=mode)
+    assert answer.get("error") == error, answer
+    assert "record.pipeline" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_preprocessing_rejects_missing_committed_reference(case: TrackingCase) -> None:
+    """AC-04/05: preprocessing recording shares committed reference validation."""
+    (case.root / "experiment.py").unlink()
+    answer = case.invoke_preprocessing()
+    assert answer.get("error") == "FileNotFoundError", answer
+    assert case.client.get_run(case.run_id).info.status == "FAILED"
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_preprocessing_rejects_invalid_saved_memberships(case: TrackingCase) -> None:
+    """AC-02/05: matching saved JSON cannot legitimize overlapping memberships."""
+    import yaml
+    from tracking_support import file_ref
+
+    record = case.preprocessing_record()
+    record["partition_record"]["memberships"]["test"] = [0]
+    (case.root / "data/split.json").write_text(json.dumps(record["partition_record"]))
+    command(case.root, str(case.root / ".venv/bin/python"), "-m", "dvc", "add", "data")
+    command(case.root, "git", "add", "data.dvc")
+    command(case.root, "git", "commit", "-m", "data: invalid split fixture")
+    case.provenance["experiment"]["commit_sha"] = command(
+        case.root, "git", "rev-parse", "HEAD"
+    )
+    case.provenance["split_record"] = file_ref(case.root, "data/split.json")
+    pointer = yaml.safe_load((case.root / "data.dvc").read_text())["outs"][0]
+    for reference in case.provenance["data"]:
+        reference["metadata"] = file_ref(case.root, "data.dvc")
+        reference["hash_value"] = pointer["md5"]
+    answer = case.invoke_preprocessing(record=record)
+    assert answer.get("error") == "ValueError", answer
+    assert "partition_record" in answer["message"]
+    assert case.client.list_artifacts(case.run_id) == []
+
+
+def test_documented_independent_scaler_script(case: TrackingCase) -> None:
+    """AC-01–05: the exact guide script works through normal installed imports."""
+    from tracking_support import file_ref
+
+    guide = (ROOT / "docs/experiment-tracking.md").read_text()
+    script = guide.split("<!-- us26-independent-script -->\n```python\n", 1)[1].split(
+        "\n```", 1
+    )[0]
+    (case.root / "record_demo.py").write_text(script + "\n")
+    # Prior negative cases can commit deliberately inconsistent lock/pointer blobs.
+    # A new example commit must include all currently consumed declared inputs.
+    command(
+        case.root,
+        "git",
+        "add",
+        "record_demo.py",
+        "uv.lock",
+        "data.dvc",
+        "config.json",
+        "experiment.py",
+    )
+    command(
+        case.root, "git", "commit", "-m", "docs: commit independent recording script"
+    )
+    case.provenance["experiment"]["commit_sha"] = command(
+        case.root, "git", "rev-parse", "HEAD"
+    )
+    reference = file_ref(case.root, "record_demo.py")
+    case.provenance["experiment"]["entrypoint"] = reference
+    case.provenance["experiment"]["code"].append(reference)
+    (case.root / "run-provenance.json").write_text(json.dumps(case.provenance))
+    reply = command(
+        case.root.parent,
+        str(case.root / ".venv/bin/python"),
+        "-I",
+        str(case.root / "record_demo.py"),
+        str(case.root),
+        case.uri,
+        case.run_id,
+    )
+    assert json.loads(reply)["run_id"] == case.run_id
+    assert case.client.get_run(case.run_id).info.status == "FINISHED"
+    output = case.client.download_artifacts(
+        case.run_id, "outputs/features/features.csv"
+    )
+    assert Path(output).read_bytes() == b"x\n0.0\n2.0\n"
+    metadata = case.client.download_artifacts(
+        case.run_id, "preprocessing/metadata.json"
+    )
+    assert json.loads(Path(metadata).read_text()) == case.preprocessing_record()
+
+
+def test_preprocessing_distinguishes_json_boolean_from_numeric_provenance(
+    case: TrackingCase,
+) -> None:
+    """AC-02/05: Python's True == 1 must not hide a conflicting JSON record."""
+    previous = copy.deepcopy(case.provenance)
+    previous["configuration"]["effective"]["C"] = True
+    source = case.root / "provenance.json"
+    payload = json.dumps(previous).encode()
+    source.write_bytes(payload)
+    case.client.log_artifact(case.run_id, str(source))
+    answer = case.invoke_preprocessing()
+    assert answer.get("error") == "FileExistsError", answer
+    saved = case.client.download_artifacts(case.run_id, "provenance.json")
+    assert Path(saved).read_bytes() == payload

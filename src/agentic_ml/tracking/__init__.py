@@ -12,7 +12,8 @@ from typing import cast
 from mlflow import MlflowClient
 from mlflow.exceptions import MlflowException
 
-from .artifacts import require_available
+from .artifacts import require_available, shared_provenance
+from .preprocessing import log_preprocessing as log_preprocessing
 from .provenance import (
     committed_references,
     dvc_references,
@@ -112,26 +113,7 @@ def log_run_results(
         )
         artifacts = {}
         stage = "shared provenance"
-        existing = {item.path: item for item in client.list_artifacts(run_id)}
-        if "provenance.json" in existing:
-            if existing["provenance.json"].is_dir:
-                raise FileExistsError("provenance.json is already a directory")
-            previous = Path(client.download_artifacts(run_id, "provenance.json"))
-            try:
-                saved_provenance = json.loads(previous.read_text(encoding="utf-8"))
-            except (json.JSONDecodeError, UnicodeDecodeError) as decode_error:
-                raise FileExistsError(
-                    "Existing provenance.json is corrupt"
-                ) from decode_error
-            if saved_provenance != dict(provenance):
-                raise FileExistsError("Conflicting shared provenance.json")
-        else:
-            with tempfile.TemporaryDirectory(prefix="agentic-ml-tracking-") as local:
-                path = Path(local) / "provenance.json"
-                path.write_text(
-                    json.dumps(dict(provenance), allow_nan=False), encoding="utf-8"
-                )
-                client.log_artifact(run_id, str(path))
+        shared_provenance(client, run_id, provenance)
         artifacts["provenance"] = run.info.artifact_uri + "/provenance.json"
         stage = "parameters and metrics"
         for name, value in parameters.items():

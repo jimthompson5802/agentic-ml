@@ -2,15 +2,13 @@
 
 ## Review status and authority
 
-Draft for developer review, 2026-11-14. The developer authorized US-26 IP1 and
-committing this checkout's planning documents with “i approve phase 1; commit”.
-See the owning US-26 plan for the authorization record. US-26 IP1 tasks are technically Complete; see its
-[native findings](../verification/us-26-recording-ip1.md). Both Gate 1 decisions are Approved by the decision at the end of this index;
-Phase 2 is complete for US-26 and both Gate 2 decisions are Approved by the
-later decision below. Phase 3 requires separate execution authority. US-15
-execution, later phases,
-publication, merge and rebase require their own authorization. The subsequent
-SC-01 handoff authorizes reconciliation only, with no new commit or publication.
+Coordinated execution record, 2026-11-14. Both Gate 1 and Gate 2 decisions
+are Approved. The developer authorized both Phase 3 executions through
+coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a. US-26 IP3 is
+Complete and Gate 3 is Approved; its owning plan/report hold
+the verified task and test records. US-15 retains its independent owning records.
+Historical Phase 1/2 and SC-01 decisions remain below and in the owning plans.
+No Phase 4, source integration, publication, merge/rebase or cleanup is authorized.
 
 Targets: [US-15 M1 plan](../../../US-15-preprocessing/docs/plans/milestone-1-us-15.md)
 and [US-26 #17 plan](milestone-1-us-26-recording.md). US-26 owns this index;
@@ -344,7 +342,8 @@ Each owner records its own gate/tasks; stop at Gate 2 with no push/publication.
 
 US-26's [owning Phase 2 evidence](../verification/us-26-recording-ip2.md) records
 component implementation/verification and the final 68-case tracking/DVC
-regression pass. Gate 2 is Approved by the later decision below; Phase 3 is not authorized. US-15 keeps its
+regression pass. Gate 2 is Approved by the later decision below; subsequent Phase 3 authority
+is recorded at the end of this index. US-15 keeps its
 own task/gate records. Schema 1.0/SC-01, integration ownership and the later
 producer-source availability gate remain unchanged.
 
@@ -355,3 +354,27 @@ producer-source availability gate remain unchanged.
 the phase 2 gate, commit the changes.” Both Gate 2 decisions are Approved.
 Each owner records and commits its own Phase 2 changes; no sibling edits or
 Phase 3 execution, push/publication, integration or cleanup are authorized.
+
+
+## Phase 3 execution authorization — 2026-11-14
+
+Developer direction delivered by coordination thread
+01a1db6c-a225-73e0-8796-81a03c4cec7a: “have both US-15 and US-26 start Phase 3”.
+US-26 starts from approved Gate 2 commit 5f4947f. Its owning plan and
+[IP3 evidence](../verification/us-26-recording-ip3.md) own progress and verification.
+This authorizes only each story's independent Phase 3. Gate 3 review remains
+required. No Phase 4, source integration, push/publication or cleanup is authorized.
+
+US-26 IP3 is technically Complete: 241 tracking/splitting cases pass, with
+shared checks and retained failure/correction evidence. Its Gate 3 is Approved;
+no actual producer-to-consumer integration or US-15 acceptance is inferred.
+
+
+## US-26 Gate 3 approval and local commit — 2026-11-14
+
+After both Gate 3 reports, the developer instructed “commit changes in both
+stories”. Coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a explicitly
+directed the owning US-26 session to record Gate 3 approval and commit Phase 3.
+This authorizes the local US-26 approval commit only; US-15 owns its corresponding
+record/commit. No Phase 4/source integration, push, publication or cleanup is
+authorized. The owning plan/report retain exact approval and verification evidence.

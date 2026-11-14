@@ -1,8 +1,7 @@
 # Experiment tracking contract
 
-Status: Gate 1 approved, 2026-11-14. log_run_results is implemented for
-Phase 2, with Gate 2 approved on 2026-11-14. log_preprocessing remains the
-approved Phase 3 interface and is not implemented yet. [Plan](plans/milestone-1-us-26-recording.md),
+Status: log_run_results and log_preprocessing are implemented. Gates 1–3
+are approved; Phase 3 is complete. [Plan](plans/milestone-1-us-26-recording.md),
 [native findings](verification/us-26-recording-ip1.md) and the
 [shared field/type specification](plans/milestone-1-us-15-us-26-execution-order.md#proposed-handoff-types)
 define the review boundary. Issue #17 owns AC-01–05. Native probes do not verify
@@ -42,15 +41,14 @@ result = log_run_results(
 )
 ```
 
-This combined outline includes the future Phase 3 preprocessing call. For the
-implemented Phase 2 path, import and invoke log_run_results alone; the experiment
-project supplies the existing native run and complete provenance.
+Both calls are implemented. The experiment project supplies the existing native
+run and complete provenance.
 Project execution creates the native MLflow run with an explicitly configured
 MlflowClient, fits preprocessing, computes metrics, writes outputs and prepares
 provenance once. Both calls use the same existing run ID and identical provenance.
 No ambient active run, cwd inference, new run store or implicit run creation.
 The [index's exact signatures and return fields](plans/milestone-1-us-15-us-26-execution-order.md#proposed-public-boundaries)
-are authoritative proposals; returns are ordinary dictionaries.
+define the implemented boundaries; returns are ordinary dictionaries.
 
 Resolve file inputs from an absolute existing project_root. Use project-relative
 FileRef paths and independently verified SHA-256 for source/configuration/lock;
@@ -122,19 +120,19 @@ completed process. Supplied metrics are recorded, not computed or certified.
 A nonzero exit, missing output even with zero exit, or recording failure sets
 FAILED where possible and raises a contextual exception. Preserve available
 stdout/stderr, partial output and notebook bytes before reporting failure.
-Native logging failure alone does not change a run's RUNNING status.
+The native MLflow logger alone does not finalize a failed run; these helpers
+explicitly request FAILED when recording fails.
 
 Use TypeError/ValueError for invalid types/values, FileNotFoundError for missing
 required references and FileExistsError for artifact conflicts. Preserve native
 serialization/storage exception types and chained causes, adding run/stage and
 available artifact context. If artifact storage itself fails, retain local
 available diagnostics and report their location; do not claim remote retention.
-Native MLflow does not enforce all toolkit preconditions: later behavior tests
-must verify rejection of incompatible/finalized runs and output/path conflicts.
+Public tests verify incompatible/finalized runs and output/path conflicts.
 
 An executed notebook is supplied by project code. Validate its nbformat structure,
 retain exact bytes including outputs/error cells and link committed source in
-experiment.code. Future tests create it with native nbclient in a fresh kernel;
+experiment.code. Tests create it with native nbclient in a fresh kernel;
 this helper does not implement a notebook runner.
 
 ## Verification boundary
@@ -181,5 +179,119 @@ No notebook execution service or atomic artifact publication is provided.
 
 The Phase 2 component tests use one direct wheel and a full-SHA Git fixture.
 Actual US-15 preprocessing output and direct/sdist-rebuilt wheel integration
-remain Phase 4 obligations; log_preprocessing is Phase 3 work. Gate 2 is
-approved; Phase 3 execution, whole-story acceptance and milestone acceptance remain pending.
+remain Phase 4 obligations. Gates 2 and 3 are approved; whole-story and
+milestone acceptance remain pending.
+
+
+## Independent scaler script
+
+Save the following as `record_demo.py` in a normally installed experiment project.
+It uses native sklearn directly and needs no US-15 import. Prepare the project's
+committed source/configuration/uv.lock and native DVC references first, following
+the [dataset recipe](dataset-versioning.md). This small example uses
+`data/input.csv` with numeric feature `x`, and its existing `data/split.json`.
+Include this script in the committed entrypoint/code references. Then write
+`run-provenance.json` using the exact [shared schema](plans/milestone-1-us-15-us-26-execution-order.md#shared-experiment-provenance-10),
+with FileRef checksums and native DVC dataset/split references from that project.
+Provenance is supplied project evidence, rather than invented automatically.
+
+Create a native MLflow run using an explicit MlflowClient and retain its run ID.
+From any cwd, invoke the project interpreter with the absolute script/root paths:
+`/project/.venv/bin/python -I /project/record_demo.py /project TRACKING_URI RUN_ID`.
+The example fits only the saved training membership, records preprocessing,
+writes transformed features and finalizes the same existing run. Empty metrics
+and unchecked configured validation make no model-quality claim. This is a
+recording example, not the full classification workflow or restored-project replay.
+
+<!-- us26-independent-script -->
+```python
+"""Record an independent scaler in a prepared, committed experiment project."""
+
+import json
+import sys
+from importlib.metadata import version
+from pathlib import Path
+
+import pandas as pd
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+
+from agentic_ml.tracking import log_preprocessing, log_run_results
+
+root = Path(sys.argv[1])
+tracking_uri, run_id = sys.argv[2:4]
+provenance = json.loads((root / "run-provenance.json").read_text())
+partition = json.loads((root / "data/split.json").read_text())
+frame = pd.read_csv(root / "data/input.csv")
+selected = ["x"]
+train = frame.set_index(partition["row_id"]).loc[
+    partition["memberships"]["train"], selected
+]
+pipeline = Pipeline([("scale", StandardScaler())]).fit(train)
+transformed = pd.DataFrame(pipeline.transform(frame[selected]), columns=selected)
+settings = pipeline.get_params(deep=False)
+settings["steps"] = [
+    [
+        name,
+        {
+            "class_name": f"{type(step).__module__}.{type(step).__qualname__}",
+            "parameters": step.get_params(deep=False),
+        },
+    ]
+    for name, step in pipeline.steps
+]
+record = {
+    "schema_version": "1.0",
+    "fit_partition": "train",
+    "partition_record": partition,
+    "selected_columns": selected,
+    "input_schema": [{"name": n, "dtype": str(frame[n].dtype)} for n in selected],
+    "output_schema": [
+        {"name": n, "dtype": str(transformed[n].dtype)} for n in selected
+    ],
+    "pipeline": {"class_name": "sklearn.pipeline.Pipeline", "parameters": settings},
+    "versions": {
+        n: version(n) for n in ("agentic-ml", "pandas", "pyarrow", "scikit-learn")
+    },
+}
+log_preprocessing(
+    run_id=run_id,
+    pipeline=pipeline,
+    record=record,
+    provenance=provenance,
+    project_root=root,
+    tracking_uri=tracking_uri,
+)
+transformed.to_csv(root / "features.csv", index=False)
+result = log_run_results(
+    run_id=run_id,
+    project_root=root,
+    tracking_uri=tracking_uri,
+    provenance=provenance,
+    parameters={"preprocessing": "StandardScaler"},
+    metrics={},
+    outputs={"features": Path("features.csv")},
+    expected_outputs=["features"],
+    process_exit_code=0,
+    validation_passed=None,
+)
+print(json.dumps(result, allow_nan=False))
+```
+
+Native missing-value/dtype encoding is unnecessary for this scaler's scalar
+settings. For imputer/encoder compositions, use the exact SC-01 tags; arbitrary
+objects/callables, nonfinite values and literal reserved native maps are rejected.
+The consumer compares every effective native setting, validates fitted state,
+saved split equality/disjoint membership, schemas, versions and committed/native
+references. Output names remain project declarations. Output dtypes and training
+scope still need the producer's independent transform tests; metadata alone does
+not prove them. Successful preprocessing leaves RUNNING; log_run_results finishes
+only after required outputs are recorded. On recording failure, inspect exception
+notes for stage/run/root and an available local diagnostics directory. Successful
+local staging directories are removed; failed ones remain for inspection. A
+storage failure cannot guarantee remote retention. No broader skops trust or
+pickle fallback is used.
+
+[Phase 3 evidence](verification/us-26-recording-ip3.md) records 241 passing
+tracking/splitting tests and shared checks. Gate 3 is approved. Actual
+US-15 producer preservation and both installed wheel paths remain Phase 4 work.

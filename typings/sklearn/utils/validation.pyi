@@ -1,0 +1,3 @@
+"""Public fitted-state validation signature used by tracking."""
+
+def check_is_fitted(estimator: object) -> None: ...

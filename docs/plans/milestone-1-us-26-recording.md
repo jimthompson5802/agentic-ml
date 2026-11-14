@@ -145,7 +145,7 @@ that limit. Independent real-store success and installed integration remain requ
 
 ## Plan review
 
-- **Status:** Phases 1 and 2 approved; Phase 3 is not authorized.
+- **Status:** Phases 1–3 approved; local Phase 3 commit authorized on 2026-11-14.
 - **Developer decision:** Gate 1 Approved by the coordination-session instruction recorded below.
 - **Decision reference and date:** 2026-11-14 coordination-session approval of both Gate 1 decisions, recorded in the IP1 gate below.
 - **Requested plan changes:** SC-01 encoding/serialization reconciliation adopted; see scope-change history.
@@ -154,8 +154,13 @@ that limit. Independent real-store success and installed integration remain requ
   prohibition on starting IP1. Commit of the planning documents is authorized.
   IP1 execution was reaffirmed by “start phase 1”. T1–T3 were technically
   Complete before SC-01; T2/T3 were reopened and are Complete again with
-  [renewed evidence](../verification/us26-sc01-concurrence.md). Gate 1 remains Pending.
-  No US-15 execution or later phase is authorized by this decision.
+  [renewed evidence](../verification/us26-sc01-concurrence.md). Subsequent Gate 1 approval is recorded below.
+  No US-15 execution or later phase is authorized by this initial decision.
+  Subsequent developer direction, delivered by coordination thread
+  01a1db6c-a225-73e0-8796-81a03c4cec7a on 2026-11-14: “have both US-15 and
+  US-26 start Phase 3”. Execute only own IP3 and stop at Gate 3; no IP4 or
+  source integration is authorized. Baseline 5f4947f; issue #17 refreshed with
+  two unique comments and unchanged updated_at 2026-11-14T18:07:56Z.
 
 ## Scope-change history
 
@@ -176,7 +181,8 @@ The [renewal/concurrence](../verification/us26-sc01-concurrence.md) now complete
 that verification: US-26 explicitly concurs with the exact producer SC-01
 revision; no unresolved interface differences remain. US-15 retains ownership
 of finalizing its T3/records. Signatures, criteria and verification gates stay
-unchanged; both gates remain Pending and no IP2 authorization is inferred.
+unchanged. At that historical reconciliation both gates were Pending; later
+Gate 1/2 approvals and IP3 authorization below supersede that execution status.
 
 ## Execution and verification rules
 
@@ -332,12 +338,17 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-26-IP3-T1 | Not started | First independently fitted pipeline recording test; minimum log_preprocessing via native MLflow save/log operations in tracking module | Gate 2 | Native run artifact paths pipeline/metadata/provenance exact; same run_id and JSON/effective settings retained | AC-01/02/03 |
-| US-26-IP3-T2 | Not started | Add wrong metadata/fit declaration/schema/split linkage, required-reference and artifact-conflict cases individually through red/green | T1 | Invalid handoff rejected; shared provenance reused identically; conflict cannot overwrite prior artifacts | AC-02/03/04/05 |
-| US-26-IP3-T3 | Not started | Add reviewed deterministic serialization/logging failure and unavailable diagnostics cases individually through red/green | T2 | Native exceptions/context and available partial artifacts preserved; neither helper claims successful recording after failure | AC-01/05 |
-| US-26-IP3-T4 | Not started | Complete docs/experiment-tracking.md runnable public script, focused/shared verification and proposed docs/verification/us-26-recording-ip3.md | T3 | Script uses native existing run and separate provenance, no producer/import dependency; full independent consumer matrix passes | AC-01/02/03/04/05 |
+| US-26-IP3-T1 | Complete | First independently fitted pipeline recording test; minimum log_preprocessing via native MLflow save/log operations in tracking module | Gate 2 | Native run artifact paths pipeline/metadata/provenance exact; same run_id and JSON/effective settings retained | AC-01/02/03 |
+| US-26-IP3-T2 | Complete | Add wrong metadata/fit declaration/schema/split linkage, required-reference and artifact-conflict cases individually through red/green | T1 | Invalid handoff rejected; shared provenance reused identically; conflict cannot overwrite prior artifacts | AC-02/03/04/05 |
+| US-26-IP3-T3 | Complete | Add reviewed deterministic serialization/logging failure and unavailable diagnostics cases individually through red/green | T2 | Native exceptions/context and available partial artifacts preserved; neither helper claims successful recording after failure | AC-01/05 |
+| US-26-IP3-T4 | Complete | Complete docs/experiment-tracking.md runnable public script, focused/shared verification and proposed docs/verification/us-26-recording-ip3.md | T3 | Script uses native existing run and separate provenance, no producer/import dependency; full independent consumer matrix passes | AC-01/02/03/04/05 |
 
 ### Verification and review evidence
+
+- **IP3 evidence:** [Native preprocessing and failures](../verification/us-26-recording-ip3.md),
+  2026-11-14. T1–T4 technically Complete; Gate 3 Approved. 241 passing
+  tracking/splitting cases and shared checks; initial guide-fixture failure and
+  corrected verification retained. No unresolved blocker or unauthorized integration.
 
 - **Selected tests and impact rationale:** Entire public tracking matrix includes
   IP2 regressions because shared provenance/output code is affected. Splitting
@@ -351,21 +362,27 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Independent consumer and failures | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_tracking.py tests/integration/test_splitting.py | Exact artifacts/settings/schema; clear errors and diagnostics; native records inspectable | Pending |
-| Red/green each new case | Same command with appropriate one-case -k selector | Intended failure before minimal fix, then passing unchanged oracle | Pending |
-| Shared development checks | Exact shared command block | Pass; no regression or silent lock change | Pending |
+| Independent consumer and failures | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_tracking.py tests/integration/test_splitting.py | Exact artifacts/settings/schema; clear errors and diagnostics; native records inspectable | 241 passed; 0 failed/skipped/deselected; four/loadgroup; 337.62 seconds. IP3 report and focused-final.xml. |
+| Red/green each new case | Same command with appropriate one-case -k selector | Intended failure before minimal fix, then passing unchanged oracle | Numbered red/green logs and focused regressions pass; see IP3 report. |
+| Shared development checks | Exact shared command block | Pass; no regression or silent lock change | All pass; 333 formatted files, 84 typed files; lock unchanged. |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete; native serialization/path and failure
   evidence retained; required focused/regression/shared results valid.
-- **Evidence presented:** Pending — proposed docs/verification/us-26-recording-ip3.md.
+- **Evidence presented:** [IP3 report](../verification/us-26-recording-ip3.md), final 241-case run,
+  shared checks, 90 links/anchors and unchanged source/guide fingerprints.
+  Raw manifest, both focused XML/logs and failed staging artifacts retained.
 - **Remaining limitations or blocked work:** Actual US-15 installed handoff and acceptance.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** 2026-11-14 UTC, coordination thread
+  01a1db6c-a225-73e0-8796-81a03c4cec7a delivered the developer instruction
+  “commit changes in both stories” after both Gate 3 reports, explicitly directing
+  this session to record US-26 Gate 3 approval and commit the completed Phase 3.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending — IP4 after supplier US-15 Gate 3 and source
-  availability; stop here even if producer is already ready.
+- **Progression authorized:** Local Phase 3 approval records and commit only.
+  No Phase 4, producer source integration, push or publication. Await separate
+  integration/execution direction even if the supplier is already ready.
 
 ## US-26 / Implementation Phase 4: Installed handoff and #17 acceptance
 
@@ -440,10 +457,11 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 - **Evidence renewal:** Renew affected installed-artifact checks when code/build/
   resource/lock inputs change; renew M1–6 after executable edits. Documentation-only
   edits use appropriate link/whitespace checks, not a manufactured TDD failure.
-- **Actual results and limitations:** Final product verification Pending. IP1 and
-  SC-01 record native-library feasibility in the own locked environment; no
-  product behavior tests, build or installed integration ran. Linux aarch64
-  feasibility does not establish macOS/Windows support or AC acceptance.
+- **Actual results and limitations:** IP2 is approved with installed component
+  evidence. IP3 final tracking/splitting verification passes 241 cases; its independent
+  direct-wheel consumer tests do not establish actual producer integration.
+  Final IP4 product acceptance remains Pending. Linux aarch64 evidence does not
+  establish macOS/Windows support.
 
 ## Story completion review
 
@@ -455,7 +473,8 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 | US-26-AC-04 | IP2-T2/T3; IP3-T2; IP4-T1/T2/T3 | Committed source/entrypoint/config references plus executed notebook outputs/errors when used | Pending |
 | US-26-AC-05 | IP2-T1/T3; IP3-T2/T3; IP4-T1/T2/T3 | Missing outputs despite zero exit, nonzero process, invalid refs and serialization/logging failure cases | Pending |
 
-- **Remaining work:** IP2–IP4 and Gate 1 review; #33/#43 remain separately owned.
+- **Remaining work:** Separately authorized
+  IP4 integration/acceptance; #33/#43 remain separately owned.
 - **Partial prerequisite delivery:** IP3 supplies independently verified consumer;
   only IP4 supplies actual US-15 preservation evidence. Neither accepts US-15 by
   proxy or claims full classification/assistant workflow delivery.

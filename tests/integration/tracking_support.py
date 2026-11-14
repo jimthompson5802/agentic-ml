@@ -34,6 +34,52 @@ else:
     print(json.dumps({'result':result}))
 """
 
+PREPROCESSING_PROBE = """
+import json, sys
+from pathlib import Path
+import pandas as pd
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+args=json.load(sys.stdin)
+mode=args.pop('_pipeline_mode','scaler')
+pipeline=Pipeline([('scale', StandardScaler())])
+if mode=='nonpipeline':
+    pipeline=StandardScaler()
+if mode=='unsupported':
+    from sklearn.preprocessing import FunctionTransformer
+    pipeline=Pipeline([('custom', FunctionTransformer())])
+if mode=='composed':
+    from sklearn.compose import ColumnTransformer
+    from sklearn.impute import SimpleImputer
+    from sklearn.preprocessing import OneHotEncoder
+    pipeline=Pipeline([('features', ColumnTransformer([('numeric', Pipeline([
+        ('impute',SimpleImputer()),('scale',StandardScaler()),
+        ('encode',OneHotEncoder(handle_unknown='ignore',sparse_output=False)),
+    ]),['x'])]))])
+if mode!='unfitted':
+    pipeline.fit(pd.DataFrame({'x':[1]}))
+if mode=='unserializable':
+    import threading
+    pipeline.failure_fixture=threading.Lock()
+if mode=='reserved':
+    pipeline.memory={'kind':'numpy_dtype','name':'float64'}
+if mode=='callable':
+    pipeline.memory=lambda value: value
+if mode=='opaque':
+    pipeline.memory=object()
+if mode=='cycle':
+    args['record']['pipeline']['parameters']['memory']=args['record']['pipeline']
+args['pipeline']=pipeline
+args['project_root']=Path(args['project_root'])
+try:
+    from agentic_ml.tracking import log_preprocessing
+    result=log_preprocessing(**args)
+except Exception as error:
+    print(json.dumps({'error':type(error).__name__,'message':str(error),'notes':getattr(error,'__notes__',[])}))
+else:
+    print(json.dumps({'result':result}))
+"""
+
 
 def command(root: Path, *args: str) -> str:
     """Run native fixture commands and expose diagnostic failures."""
@@ -84,6 +130,80 @@ class TrackingCase:
     client: MlflowClient
     run_id: str
     provenance: dict[str, Any]
+
+    def preprocessing_record(self) -> dict[str, Any]:
+        """Declare a simple fitted scaler independently of the consumer."""
+        return {
+            "schema_version": "1.0",
+            "fit_partition": "train",
+            "partition_record": json.loads((self.root / "data/split.json").read_text()),
+            "selected_columns": ["x"],
+            "input_schema": [{"name": "x", "dtype": "int64"}],
+            "output_schema": [{"name": "x", "dtype": "float64"}],
+            "pipeline": {
+                "class_name": "sklearn.pipeline.Pipeline",
+                "parameters": {
+                    "memory": None,
+                    "steps": [
+                        [
+                            "scale",
+                            {
+                                "class_name": "sklearn.preprocessing._data.StandardScaler",
+                                "parameters": {
+                                    "copy": True,
+                                    "with_mean": True,
+                                    "with_std": True,
+                                },
+                            },
+                        ]
+                    ],
+                    "transform_input": None,
+                    "verbose": False,
+                },
+            },
+            "versions": {
+                name: self.provenance["environment"]["libraries"][name]
+                for name in ("agentic-ml", "pandas", "pyarrow", "scikit-learn")
+            },
+        }
+
+    def invoke_preprocessing(self, **changes: Any) -> dict[str, Any]:
+        """Invoke the installed public consumer with an independent native object."""
+        args = {
+            "run_id": self.run_id,
+            "project_root": str(self.root),
+            "tracking_uri": self.uri,
+            "record": self.preprocessing_record(),
+            "provenance": self.provenance,
+        }
+        args.update(changes)
+        result = subprocess.run(
+            [str(self.root / ".venv/bin/python"), "-I", "-c", PREPROCESSING_PROBE],
+            input=json.dumps(args),
+            cwd=self.root.parent,
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        assert result.returncode == 0, result.stdout + result.stderr
+        answer: dict[str, Any] = json.loads(result.stdout)
+        records = (
+            Path(__file__).resolve().parents[2]
+            / ".dev-records/verification/us26-ip3-20261114/invocations"
+        )
+        records.mkdir(parents=True, exist_ok=True)
+        (records / (uuid.uuid4().hex + ".json")).write_text(
+            json.dumps(
+                {
+                    "test": os.environ.get("PYTEST_CURRENT_TEST"),
+                    "arguments_json": json.dumps(args),
+                    "reply": answer,
+                    "stderr": result.stderr,
+                },
+                indent=2,
+            )
+        )
+        return answer
 
     def invoke(self, **changes: Any) -> dict[str, Any]:
         """Call the normally installed public helper from an unrelated cwd."""
