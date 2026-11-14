@@ -5,7 +5,10 @@
 Draft for developer review, 2026-11-14. The developer authorized US-26 IP1 and
 committing this checkout's planning documents with “i approve phase 1; commit”.
 See the owning US-26 plan for the authorization record. US-26 IP1 tasks are technically Complete; see its
-[native findings](../verification/us-26-recording-ip1.md). All completion gates remain Pending. US-15 execution, later phases,
+[native findings](../verification/us-26-recording-ip1.md). Both Gate 1 decisions are Approved by the decision at the end of this index;
+Phase 2 is complete for US-26 and both Gate 2 decisions are Approved by the
+later decision below. Phase 3 requires separate execution authority. US-15
+execution, later phases,
 publication, merge and rebase require their own authorization. The subsequent
 SC-01 handoff authorizes reconciliation only, with no new commit or publication.
 
@@ -169,8 +172,8 @@ fails instead of overwriting. This rule is not general retry/durable recovery.
 
 ## Proposed public boundaries
 
-All names are proposed; the review below must confirm them before executable
-tests. Signature annotations may use Mapping/Sequence internally while outputs
+Gate 1 approved these names, signatures and public test boundaries before
+executable tests. Implementation status belongs to the owning plans. Signature annotations may use Mapping/Sequence internally while outputs
 remain plain dictionaries.
 
 - US-15: agentic_ml.preprocessing.fit_preprocessing(frame, *, partition_record,
@@ -324,8 +327,9 @@ confirm the exact tags, full effective settings and bounded native persistence.
 The [producer revision report](../../../US-15-preprocessing/docs/verification/us15-us26-contract-revision.md)
 and renewed consumer evidence agree. US-26 IP1-T1/T2/T3 are technically Complete.
 US-15's owning session must finalize its own T3/records using this concurrence;
-no sibling approval is inferred. Both Gate 1 reviews remain Pending. No product
-module, behavior test, build, installed integration or story acceptance is claimed.
+no sibling approval is inferred. Both Gate 1 reviews were subsequently Approved and Phase 2 authorized; see
+the decision below. Current component execution/evidence belongs to each owning
+plan. No installed producer integration or story acceptance is claimed.
 
 ## Gate 1 decision and Phase 2 authority
 
@@ -335,3 +339,19 @@ us-26. commit the changes and start phase 2 in both stories”. Both Gate 1
 decisions are Approved and both Phase 2 executions authorized. Earlier pending
 statements describe the historical handoff and are superseded by this decision.
 Each owner records its own gate/tasks; stop at Gate 2 with no push/publication.
+
+## US-26 Phase 2 handoff
+
+US-26's [owning Phase 2 evidence](../verification/us-26-recording-ip2.md) records
+component implementation/verification and the final 68-case tracking/DVC
+regression pass. Gate 2 is Approved by the later decision below; Phase 3 is not authorized. US-15 keeps its
+own task/gate records. Schema 1.0/SC-01, integration ownership and the later
+producer-source availability gate remain unchanged.
+
+## Gate 2 approval and local commit
+
+2026-11-14 UTC, developer in coordination thread
+01a1db6c-a225-73e0-8796-81a03c4cec7a: “for both us-15 and us-26 i approve
+the phase 2 gate, commit the changes.” Both Gate 2 decisions are Approved.
+Each owner records and commits its own Phase 2 changes; no sibling edits or
+Phase 3 execution, push/publication, integration or cleanup are authorized.

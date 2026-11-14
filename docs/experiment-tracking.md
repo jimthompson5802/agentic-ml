@@ -1,7 +1,8 @@
 # Experiment tracking contract
 
-Status: proposed US-26 M1 contract for Gate 1 review; these toolkit helpers are
-not implemented. [Plan](plans/milestone-1-us-26-recording.md),
+Status: Gate 1 approved, 2026-11-14. log_run_results is implemented for
+Phase 2, with Gate 2 approved on 2026-11-14. log_preprocessing remains the
+approved Phase 3 interface and is not implemented yet. [Plan](plans/milestone-1-us-26-recording.md),
 [native findings](verification/us-26-recording-ip1.md) and the
 [shared field/type specification](plans/milestone-1-us-15-us-26-execution-order.md#proposed-handoff-types)
 define the review boundary. Issue #17 owns AC-01–05. Native probes do not verify
@@ -10,7 +11,7 @@ those criteria through toolkit interfaces.
 US-26 explicitly concurs with revision **US-15-US-26-SC-01**;
 [renewed consumer evidence](verification/us26-sc01-concurrence.md) confirms
 full effective-setting parity and native persistence. Both Gate 1 decisions
-remain pending.
+were approved by the developer; later phase gates remain separate.
 
 ## Public calls and ownership
 
@@ -18,21 +19,32 @@ remain pending.
 from agentic_ml.tracking import log_preprocessing, log_run_results
 
 artifacts = log_preprocessing(
-    run_id=run_id, pipeline=fitted_pipeline, record=preprocessing_record,
-    provenance=experiment_provenance, project_root=project_root,
-    tracking_uri=tracking_uri, artifact_path="preprocessing",
+    run_id=run_id,
+    pipeline=fitted_pipeline,
+    record=preprocessing_record,
+    provenance=experiment_provenance,
+    project_root=project_root,
+    tracking_uri=tracking_uri,
+    artifact_path="preprocessing",
 )
 result = log_run_results(
-    run_id=run_id, project_root=project_root, tracking_uri=tracking_uri,
-    provenance=experiment_provenance, parameters={"C": 1},
+    run_id=run_id,
+    project_root=project_root,
+    tracking_uri=tracking_uri,
+    provenance=experiment_provenance,
+    parameters={"C": 1},
     metrics={"validation_accuracy": 0.75},
     outputs={"predictions": predictions_path, "stdout": stdout_path},
-    expected_outputs=["predictions"], process_exit_code=0,
-    validation_passed=True, executed_notebook=None,
+    expected_outputs=["predictions"],
+    process_exit_code=0,
+    validation_passed=True,
+    executed_notebook=None,
 )
 ```
 
-This is a future script outline, not an executable example of existing exports.
+This combined outline includes the future Phase 3 preprocessing call. For the
+implemented Phase 2 path, import and invoke log_run_results alone; the experiment
+project supplies the existing native run and complete provenance.
 Project execution creates the native MLflow run with an explicitly configured
 MlflowClient, fits preprocessing, computes metrics, writes outputs and prepares
 provenance once. Both calls use the same existing run ID and identical provenance.
@@ -94,7 +106,7 @@ required project lock provenance; they do not replace it.
 MLflow 3.17.2 locally defaults to skops. The composed imputer/scaler/encoder
 fixture needs an explicit numpy.dtype trusted type under the locked versions.
 Developer accepted the bounded serialization choice through SC-01; Gate 1
-still reviews the complete feasibility evidence and public boundaries;
+approved the complete feasibility evidence and public boundaries;
 no automatic fallback to pickle/cloudpickle or broad trust discovery is proposed.
 
 Validate supported metadata, provenance, fitted state and artifact destinations
@@ -127,7 +139,7 @@ this helper does not implement a notebook runner.
 
 ## Verification boundary
 
-Before product tests, Gate 1 confirms the plan's public case matrix. Invoke
+Gate 1 confirmed the plan's public case matrix before product tests. Invoke
 public helpers and independently inspect MlflowClient records/downloaded bytes,
 Git blobs, native DVC hashes/members, lock and installed origins. Check explicit
 store/cwd behavior, missing/dirty/mismatched references, invalid metadata,
@@ -139,4 +151,35 @@ remain supported so the failure reaches native serialization.
 IP2/IP3 use an independently fitted fixture. IP4 alone owns actual installed
 US-15-to-US-26 handoff on direct and sdist-rebuilt wheel paths. M2 restored
 transformation/replay, reports/comparisons, reverse lookup and assistant workflow
-acceptance retain their separate owners. No executable acceptance is claimed here.
+acceptance retain their separate owners. No whole-story acceptance is claimed here.
+
+## Implemented results path and verification
+
+[Phase 2 evidence](verification/us-26-recording-ip2.md) covers the public
+log_run_results path through separate normally installed wheel and full-SHA Git
+projects. The helper validates consumed committed FileRefs, native .dvc output
+and member integrity, installed toolkit identity, Python/library versions and
+recorded versions in uv.lock. It does not run a process, fit a model, compute a
+metric or restore missing data.
+
+Expected output names must be nonempty and unique. Output names contain only
+letters, digits, underscores, dots and hyphens, beginning with a letter/digit;
+provenance and notebook are reserved artifact-map keys. Sources must be regular
+files without symlink components. Relative output paths resolve from project_root;
+explicit absolute output paths are accepted. Return artifacts includes provenance,
+the named outputs and notebook when supplied. Lists/dictionaries in parameters
+use canonical JSON with sorted keys; scalar parameters keep native MLflow
+string conversion. Nonfinite parameter/metric values are rejected.
+
+Only active RUNNING runs accept recording. Existing terminal runs remain unchanged;
+unknown/incompatible run/store selections retain native exceptions with context.
+Unavailable storage cannot be claimed as remote diagnostic retention: inspect
+the contextual notes for original local files and failed retention/finalization.
+The caller owns output files and supplies an already-executed notebook; the
+toolkit records its exact bytes and validates its structure/source reference.
+No notebook execution service or atomic artifact publication is provided.
+
+The Phase 2 component tests use one direct wheel and a full-SHA Git fixture.
+Actual US-15 preprocessing output and direct/sdist-rebuilt wheel integration
+remain Phase 4 obligations; log_preprocessing is Phase 3 work. Gate 2 is
+approved; Phase 3 execution, whole-story acceptance and milestone acceptance remain pending.

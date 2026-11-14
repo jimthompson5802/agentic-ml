@@ -4,26 +4,48 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-US-26 Gate 1 approved / Phase 2 authorized, 2026-11-14 UTC.
-Owning checkout: US-26-mlflow, .worktrees/US-26-mlflow, HEAD 131ac82 before
-this authorized Phase 1 commit. Developer in coordination thread
-01a1db6c-a225-73e0-8796-81a03c4cec7a: “i approve Gate 1 in both us-15 and
-us-26. commit the changes and start phase 2 in both stories”.
-Both Gate 1 approvals and US-26 Phase 2 authority are recorded in the
-[owning plan](docs/plans/milestone-1-us-26-recording.md). Commit the reconciled
-Phase 1 records, then execute IP2 T1–T4 through the confirmed public boundary.
-Stop at Gate 2; no push/publication, Phase 3 or sibling edits are authorized.
+US-26 Phase 2 approved / local commit handoff, 2026-11-14 UTC: issue #17,
+branch US-26-mlflow, worktree .worktrees/US-26-mlflow. Phase 1 baseline is
+3108645; Git HEAD identifies this Phase 2 approval commit after committing.
+Developer in coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a approved
+both Gate 1 decisions and said “commit the changes and start phase 2 in both
+stories”. Reconciled Phase 1 was committed as 3108645. The later developer
+decision on 2026-11-14 UTC in the same coordination thread is:
+“for both us-15 and us-26 i approve the phase 2 gate, commit the changes.”
+Both Gate 2 approvals and local Phase 2 commits are authorized. This approval
+commit includes only US-26 changes; Git history identifies its commit SHA.
 
-SC-01 concurrence and complete-metadata/native persistence evidence are in the
-[renewal](docs/verification/us26-sc01-concurrence.md); original default-skops
-failure remains preserved. Phase 1 document checks passed (89 links/anchors and
-whitespace). No product code/tests yet. Existing own locked .venv is ready.
-Raw evidence stays under .dev-records/verification/us26-ip1-20261114/ and
-.dev-records/verification/us26-sc01-20261114/. Lock SHA-256:
+[Owning plan](docs/plans/milestone-1-us-26-recording.md) IP2-T1–T4 are Complete;
+**Gate 2 is Approved**. The [IP2 evidence](docs/verification/us-26-recording-ip2.md)
+records the exact approval. Next action after this local approval commit:
+await separate Phase 3 direction. Phase 3, push/publication, source integration,
+cleanup and sibling edits are not authorized.
+
+Implemented public log_run_results records native MLflow values/artifacts,
+strict committed provenance/native DVC integrity, installed normal wheel/Git
+identities and locked versions, required-output/process/validation outcomes,
+notebook bytes and available failure diagnostics. SC-01 schema and future
+preprocessing interface remain unchanged; log_preprocessing is not implemented.
+
+Final focused tracking/DVC run: 68 passed, zero failed/skipped/deselected,
+4 workers/loadgroup, 168.01 seconds. Shared sync/lock/lint/format/type/CLI and
+document/whitespace checks pass. The first focused run had four evidence-logger
+failures and the second had three incorrect notebook-fixture commit references;
+original XML/logs, hypotheses and corrections remain in the IP2 report. No
+assertion/check was weakened or suppressed. No initializer internals or package
+resources/dependencies changed; lock SHA-256 remains
 6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4.
-Current changes for the commit: checkpoint, owning plan, shared index, tracking
-contract, original IP1 report/renewal notice and concurrence report. Historical
-obligations remain unchanged; no executable acceptance is claimed.
+
+Raw evidence: .dev-records/verification/us26-ip2-20261114/ and
+.dev-records/verification/us26-ip2-native-commands/. Preserve all earlier IP1 /
+SC-01 records and default-skops failure. Linux aarch64/Python 3.12.16 only.
+No full suite/M1–6 acceptance, standalone driver, rebuilt-wheel producer
+integration, story/milestone acceptance or publication is claimed.
+
+The authorized commit includes the tracking package, component tests/support,
+guide, shared index, owning plan, checkpoint and IP2 report. No executable file
+changed after the passing Phase 2 verification. Broader installed/preprocessing and
+final acceptance checks remain with IP3/IP4 and named milestone owners.
 
 Historical obligations below remain unchanged. Preserve the contributor worktree
 management plan/report, raw records under

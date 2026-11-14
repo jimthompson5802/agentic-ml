@@ -81,8 +81,8 @@ and contributor installation drivers. No product test was run during planning.
 
 | Dependency or decision | Required outcome | Work blocked | Status / evidence |
 |---|---|---|---|
-| US-15-US-26-CONTRACT-01 | Native pipeline/plain metadata, separate provenance, MLflow ownership | Dependent implementation | Direction accepted in #17/#21 on 2026-11-14; exact proposed contract and boundaries in index require joint review. |
-| Native MLflow serialization/artifact behavior | Existing-run logging with exact preprocessing/pipeline, metadata and provenance paths under locked MLflow 3.17.2 | IP2/IP3 | [IP1 findings](../verification/us-26-recording-ip1.md) confirm existing-run layout; SC-01 adopts explicit numpy.dtype trust; renewed consumer feasibility passes; both gates pending. |
+| US-15-US-26-CONTRACT-01 | Native pipeline/plain metadata, separate provenance, MLflow ownership | Dependent implementation | Direction accepted in #17/#21 on 2026-11-14; exact SC-01 contract and boundaries in index approved at both Gate 1 decisions. |
+| Native MLflow serialization/artifact behavior | Existing-run logging with exact preprocessing/pipeline, metadata and provenance paths under locked MLflow 3.17.2 | IP2/IP3 | [IP1 findings](../verification/us-26-recording-ip1.md) confirm existing-run layout; SC-01 adopts explicit numpy.dtype trust; renewed consumer feasibility passes; both Gate 1 decisions Approved. |
 | Existing DVC data/splits, US-13 #16 M1 | Real pointer/hash/data links, no fake SHA-as-DVC identity | IP2, IP4 | [US-13 IP2/IP3, Gate 3 and M1 acceptance](milestone-1-us-13.md); do not require M2 restoration. |
 | Git/wheel identity, US-41 #64 | Preserve normal installed origin, lock and artifact identity | IP2/IP4 | [Accepted US-41 plan](milestone-50-us-41.md); Git source SHA required when applicable, unavailable wheel SHA/build remains explicit null. |
 | Real US-15 producer | fit_preprocessing output with final reviewed metadata/schema | IP4 only | [US-15-IP3-T1/T2 and Gate 3](../../../US-15-preprocessing/docs/plans/milestone-1-us-15.md#us-15--implementation-phase-3-produce-metadata-and-verify-installed-use) required. IP2/IP3 use independently fitted fixture and do not wait for US-15 completion. |
@@ -114,7 +114,8 @@ serialization/logging failures and missing outputs remain visible and cannot
 return success. Native metrics are recorded, not computed or scientifically
 certified. Native parameter immutability is retained; no silent conflicting update.
 
-Developer confirmation of these public test boundaries is Pending. Proposed tests
+Developer confirmation of these public test boundaries was given at Gate 1
+on 2026-11-14, including SC-01; the exact decision is recorded below. Proposed tests
 invoke the installed/public helpers then inspect native MlflowClient records and
 downloaded artifacts, compare JSON/bytes with independent inputs and actual
 Git/DVC/lock metadata, and check exceptions/available diagnostics. Do not test
@@ -144,9 +145,9 @@ that limit. Independent real-store success and installed integration remain requ
 
 ## Plan review
 
-- **Status:** Phase 1 contract/boundaries approved; Phase 2 authorized.
+- **Status:** Phases 1 and 2 approved; Phase 3 is not authorized.
 - **Developer decision:** Gate 1 Approved by the coordination-session instruction recorded below.
-- **Decision reference and date:** Pending.
+- **Decision reference and date:** 2026-11-14 coordination-session approval of both Gate 1 decisions, recorded in the IP1 gate below.
 - **Requested plan changes:** SC-01 encoding/serialization reconciliation adopted; see scope-change history.
 - **Implementation authorization:** US-26 IP1 authorized on 2026-11-14 by
   developer message “i approve phase 1; commit”. This supersedes the earlier
@@ -280,12 +281,14 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-26-IP2-T1 | Not started | First native-run/results test in proposed tests/integration/test_tracking.py, then minimum log_run_results in proposed src/agentic_ml/tracking/ through red/green | Gate 1 | Explicit existing run, exact parameters/metrics/files/URI and required zero-exit successful-output case recorded | AC-01/05 |
-| US-26-IP2-T2 | Not started | Add committed Git/config/DVC/split/environment reference cases and validation one behavior at a time; use existing identity implementation internally where appropriate | T1 | Actual committed blobs/pointers and installed origins verified; provenance.json matches separate supplied dictionary; missing/mismatch/dirty declared-reference failures | AC-02/03/04 |
-| US-26-IP2-T3 | Not started | Add process/output/configured-validation, explicit-store/cwd and already-executed notebook success/error cases through red/green | T2 | Missing output despite exit 0 fails; nonzero process preserves diagnostics; configured validation distinct; notebook outputs/error cells and committed reference saved | AC-01/04/05 |
-| US-26-IP2-T4 | Not started | Review module boundaries, run focused/regression/shared checks and save proposed docs/verification/us-26-recording-ip2.md | T3 | Criterion-mapped red/green records and native inspection evidence with counts/lock/platform; no initializer API change | AC-01/02/03/04/05 |
+| US-26-IP2-T1 | Complete | First native-run/results test in proposed tests/integration/test_tracking.py, then minimum log_run_results in proposed src/agentic_ml/tracking/ through red/green | Gate 1 | Explicit existing run, exact parameters/metrics/files/URI and required zero-exit successful-output case recorded | AC-01/05 |
+| US-26-IP2-T2 | Complete | Add committed Git/config/DVC/split/environment reference cases and validation one behavior at a time; use existing identity implementation internally where appropriate | T1 | Actual committed blobs/pointers and installed origins verified; provenance.json matches separate supplied dictionary; missing/mismatch/dirty declared-reference failures | AC-02/03/04 |
+| US-26-IP2-T3 | Complete | Add process/output/configured-validation, explicit-store/cwd and already-executed notebook success/error cases through red/green | T2 | Missing output despite exit 0 fails; nonzero process preserves diagnostics; configured validation distinct; notebook outputs/error cells and committed reference saved | AC-01/04/05 |
+| US-26-IP2-T4 | Complete | Review module boundaries, run focused/regression/shared checks and save proposed docs/verification/us-26-recording-ip2.md | T3 | Criterion-mapped red/green records and native inspection evidence with counts/lock/platform; no initializer API change | AC-01/02/03/04/05 |
 
 ### Verification and review evidence
+
+[Phase 2 evidence](../verification/us-26-recording-ip2.md) records completed T1–T4, vertical red/green evidence and retained failed/corrected verification. Final four-worker tracking/DVC regression: 68 passed, zero failed/skipped/deselected, 168.01 seconds. Shared and document checks pass; Gate 2 was subsequently Approved by the decision recorded below.
 
 - **Selected tests and impact rationale:** New public tracking results tests;
   existing native dataset-versioning tests protect DVC reference assumptions.
@@ -301,21 +304,21 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Red/green selected behavior | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_tracking.py -k <one-case-selector> | Intended red then green, unchanged independent expectations | Pending |
-| Results/provenance/DVC regressions | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_tracking.py tests/integration/test_dataset_versioning.py | Real records and mismatch/failure matrix pass | Pending |
-| Identity impact if internals change | uv run --locked pytest -n 4 --dist=loadgroup -m "milestone_1 or milestone_50" tests/integration/test_initialization.py tests/integration/test_distribution_initialization.py | Git/wheel initialization/upgrades preserved; actual counts/conditional reason recorded | Pending |
-| Shared development checks | Exact shared command block | Pass; unchanged lock or reviewed intentional change | Pending |
+| Red/green selected behavior | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_tracking.py -k <one-case-selector> | Intended red then green, unchanged independent expectations | Numbered raw red/green logs and commands.json; native exception fixture corrections and initial failures retained |
+| Results/provenance/DVC regressions | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_tracking.py tests/integration/test_dataset_versioning.py | Real records and mismatch/failure matrix pass | Pass: final 68/68 with 4 workers/loadgroup, focused-final.log/XML; initial two failed invocations preserved |
+| Identity impact if internals change | uv run --locked pytest -n 4 --dist=loadgroup -m "milestone_1 or milestone_50" tests/integration/test_initialization.py tests/integration/test_distribution_initialization.py | Git/wheel initialization/upgrades preserved; actual counts/conditional reason recorded | Not applicable: no private identity code changed; native normal wheel/Git initialization is exercised in the component fixtures |
+| Shared development checks | Exact shared command block | Pass; unchanged lock or reviewed intentional change | Pass: sync/lock, lint, formatting (324 files), typing (83 files), CLI 0.1.0, whitespace; uv.lock SHA-256 unchanged |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete; run records/links/notebooks and distinct
   failures demonstrated, public regressions/shared checks pass.
-- **Evidence presented:** Pending — proposed docs/verification/us-26-recording-ip2.md.
+- **Evidence presented:** [Phase 2 report](../verification/us-26-recording-ip2.md); final focused XML/log, shared checks and document/source identities under .dev-records/verification/us26-ip2-20261114/.
 - **Remaining limitations or blocked work:** Fitted preprocessing and actual handoff.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** 2026-11-14 UTC, developer in coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a, relayed to this owning session: “for both us-15 and us-26 i approve the phase 2 gate, commit the changes.” Paired US-15 Gate 2 approval is recorded by this same decision; its owning session maintains its records.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending — IP3; stop here for explicit review.
+- **Progression authorized:** Local commit of Phase 2 changes and approval records only. Phase 3, push/publication, integration and cleanup are not authorized; await separate direction.
 
 ## US-26 / Implementation Phase 3: Persist fitted preprocessing and recording failures
 
