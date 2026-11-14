@@ -4,106 +4,48 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Checkout: `main`, baseline `bdb871c`; verification-instruction edits are ready for commit.
-Developer requested removing the full current-milestone test set before each
-executable phase gate on 2026-11-14. Updated `execute-plan`, `AGENTS.md`, the
-verification policy, development command table, planning skill and plan template
-to use valid focused test/regression evidence plus shared checks. TDD, M1–6 at
-story acceptance, CI and approval gates remain required. Existing approved plans
-retain their recorded checks pending explicit scope revision; completed evidence
-is preserved. No product implementation or plan execution is active in this task.
-Documentation only: TDD and executable tests do not apply. Instruction consistency
-and `git diff --check` passed. Developer “commit and push” authorized committing
-these edits and publishing them to `origin/main`.
+Checkout: `main` at `b03afb3`, synchronized with `origin/main` before this
+review. The working tree was clean; this handoff changes only `CHECKPOINTS.md`.
+Verification-instruction updates were committed and pushed as `b03afb3`.
+Executable phase gates use valid focused test/regression evidence plus shared
+checks; M1–6 remains required at story acceptance. See the
+[verification policy](docs/development/verification.md#phase-and-story-verification).
+Existing approved plans retain stronger recorded requirements until explicitly
+revised. No plan execution or product implementation is active.
 
-Previous skill maintenance is complete:
-Developer “make the udpates”, 2026-11-14, authorized the two reviewed skill-doctor
-edits. Updated `report-test-progress` to use 30–60 second waits near the next
-report deadline, and `create-implementation-plan` to require a runnable user
-deliverable and justify added wrappers or metadata copies. Both files match the
-reviewed drafts. Developer “commit and push” authorized committing these skills
-and this checkpoint and publishing `skill-refactoring` to origin.
-Documentation only: no executable behavior changed, so TDD and pytest do not
-apply. Draft equality and `git diff --check` passed.
-Developer “create pull request” authorized publication as
-[PR #67](https://github.com/jimthompson5802/agentic-ml/pull/67), base `main`,
-head `skill-refactoring`, standard (not draft). Developer “switch main; squash
-merge; pull” authorized the completed merge on 2026-11-14. PR #67 was squash-merged
-at verified head `f810ce7`, and local `main` pulled with `--ff-only`. Both CI jobs
-were cancelled; no passing CI result is claimed. Developer “delete pr local and
-remote branch” authorized deleting local and remote `skill-refactoring`; its
-tree matched squash commit `7d2d657` before deletion. Developer “git commit;
-push” authorized committing and pushing this merge and cleanup checkpoint record.
-Documentation only; `git diff --check` passed.
+US-13 M1 AC-01/02 is accepted and merged through
+[PR #66](https://github.com/jimthompson5802/agentic-ml/pull/66), squash `ecd28b1`.
+Gates 1–3 are Approved. Issue #16 remains open for M2 restoration AC-03/04;
+whole-story and milestone acceptance are not claimed. Story branches were deleted.
+The [owning plan](docs/plans/milestone-1-us-13.md) and
+[IP3 evidence](docs/verification/us-13-ip3.md) retain the detailed decisions and
+verification: M1 and M1–6 each recorded 722 passes and one existing skip on Linux
+aarch64. Those are historical results, not a fresh test inventory.
 
-The accepted product work remains as recorded below.
-Developer “start ip3”, 2026-11-14, authorizes IP3 only after approved Gates 1–2.
-The issue body/all comment pages and final metadata were refreshed: one unique
-comment matches count 1 and stable 2026-11-07T00:28:44Z update; no scope conflict.
-M1 covers AC-01/02; AC-03/04 restoration remains M2.
+Skill maintenance is merged through
+[PR #67](https://github.com/jimthompson5802/agentic-ml/pull/67), squash `7d2d657`.
+Local and remote `skill-refactoring` branches were deleted; merge/cleanup records
+were pushed as `bdb871c`. Both PR CI jobs were cancelled, so no passing CI result
+is claimed for that head. The separate policy update followed as `b03afb3`.
 
-IP3-T1/T2 complete: the existing assessment/splits driver runs guide-derived
-CSV/Parquet recipes in direct/rebuilt normal wheel environments outside the
-checkout; focused test 1 passed. A/B commits, native identities, cache/remote
-retention, Git ownership and failure boundaries verified. Guide links and active
-traceability updated. No product API/dependency/resource change. See the
-[owning plan](docs/plans/milestone-1-us-13.md) and
-[IP3 evidence](docs/verification/us-13-ip3.md).
-
-IP3-T3 complete: M1 722 passed, 1 existing skip, 4 native NumPy warnings
-(233.24s); final M1–6 722 passed, 1 existing skip, 4 warnings (222.86s).
-Each selected 723 cases; unchanged 991-case inventory leaves 268 excluded.
-Locked sync/lock, lint, formatting, strict typing, CLI smoke, relative links and
-whitespace pass; lock hash unchanged. Raw records linked from IP3 evidence.
-
-Developer “i approve ip3; commit”, 2026-11-14, approved Gate 3 and authorized
-the local IP3 commit. Gates 1–3 are Approved. This commit contains IP3 probe/test
-extensions, guide/links/design, plan, evidence, status and checkpoint.
-
-Developer “i accept the us-13”, followed by “commit”, 2026-11-14, accepted
-the delivered M1 slice (AC-01/02) and authorized a local acceptance-record commit.
-All three gates are Approved. This acceptance changes no executable behavior;
-IP3 verification remains applicable. Relative links and whitespace rechecked.
-
-Developer “push;” authorized pushing through `1577d7c`; origin was verified.
-Developer “create pull request to main” authorized publication as
-[PR #66](https://github.com/jimthompson5802/agentic-ml/pull/66), base `main`,
-head `US-13-dataset-versioning`, standard (not draft).
-
-Developer “switch main; squash merge; pull”, 2026-11-14, authorized the
-completed transition: switched to `main`, squash-merged PR #66 as `ecd28b1`,
-and pulled with `--ff-only`. Both PR CI checks succeeded before merge.
-
-**Next action:** await further development direction. US-13 M1 AC-01/02 is
-accepted and merged; issue #16 remains open for M2 AC-03/04. Developer
-“commit; delete local and remote branches for the pr just merged” authorized
-this checkpoint commit and completed deletion of local/remote
-`US-13-dataset-versioning`. No milestone acceptance is claimed.
-Linux aarch64 only; macOS/Windows unverified.
-
-US-41 publication and branch cleanup remain complete: issue #64 closed,
-PR #65 squash-merged as `5d5781c`; Gates 1–4 Approved. Prior CI/evidence details
-remain in its owning plan and reports. US-13 M1 is the latest accepted and merged M1 component. Historical M1/M50 and revised MVP milestone acceptance obligations
-below remain open; drafting US-13 does not satisfy them.
+**Next action:** await development direction. Developer “commit and push”
+authorized committing and publishing this checkpoint refresh. Documentation only:
+relative file links and `git diff --check` passed; TDD and executable tests do not
+apply. Historical verification obligations below remain open.
 
 ## Completed work: authoritative records
-
-Contributor skill added: `.agents/skills/report-test-progress/` monitors an
-existing pytest session in the current chat and reports remaining/total,
-completed and failed counts approximately every minute. It never launches tests;
-unavailable counts remain explicitly unknown. Documentation-only instructions
-and UI metadata add no executable behavior, so TDD does not apply. No pytest run
-was started for this work. Existing US-12 changes and Gate 2 status are unchanged.
 
 | Work | Final status and records |
 |---|---|
 | US-01–03 | Accepted and merged; [US-01](docs/plans/milestone-1-us-01.md), [US-02](docs/plans/milestone-1-us-02.md), [US-03](docs/plans/milestone-1-us-03.md). |
 | US-11 | Accepted and merged in PR #60; [plan](docs/plans/milestone-1-us-11.md), [IP3 evidence](docs/verification/us-11-ip3.md). |
 | US-12 #19 | Accepted and squash-merged in PR #62 as `980c97f`; [plan](docs/plans/milestone-1-us-12-assessment-splits.md), [IP4 evidence](docs/verification/us-12-19-ip4.md). AC-04 deferred. |
-| US-12 #15 | Accepted and merged in PR #61; [plan](docs/plans/milestone-1-us-12.md), [IP3 evidence](docs/verification/us-12-ip3.md), correction linked above. |
+| US-12 #15 | Accepted and merged in PR #61; [plan](docs/plans/milestone-1-us-12.md), [IP3 evidence](docs/verification/us-12-ip3.md). |
+| US-13 M1 | AC-01/02 accepted and merged in PR #66 as `ecd28b1`; Gates 1–3 Approved. [Plan](docs/plans/milestone-1-us-13.md), [IP3 evidence](docs/verification/us-13-ip3.md). Issue #16 remains open for M2 AC-03/04. |
 | MVP scope revision | Accepted and published; PR #57 merged; US-39 #58 and US-40 #59 created. [Plan](docs/plans/mvp-scope-revision.md), [publication evidence](docs/verification/mvp-scope-revision-ip4.md). This accepts scope documents, not an implemented MVP. |
 | US-41 | All six criteria accepted; issue #64 closed; PR #65 squash-merged as `5d5781c`. [Plan](docs/plans/milestone-50-us-41.md), [IP4 evidence](docs/verification/us-41-ip4.md). Historical M50 verification remains open. |
 | US-35/36 | Accepted and merged in PRs #48/#50; [US-35](docs/plans/milestone-50-us-35.md), [US-36](docs/plans/milestone-50-us-36.md). US-37/38 remain local stories without implementation authorization. |
+| Skills and verification policy | PR #67 merged the planning-deliverable and polling edits. `b03afb3` removed automatic full-milestone phase-gate runs. [Policy](docs/development/verification.md#phase-and-story-verification); Git history preserves authorizations and checks. |
 | Contributor tooling | Development guide reorganization, scheduling, dependency inventory and container work are recorded in [verification reports](docs/verification/) and Git history; container limitations remain below. |
 
 Plans and reports own granular tasks, approvals, commands, failures and publication
@@ -115,25 +57,32 @@ to proceed past a gate.
 
 - **M1-ACCEPT-VERIFY — Milestone 1 acceptance verification:** Open. The
   [approved ownership record](docs/plans/milestone-1-us-03.md#scope-change-record-local-verification-policy-2026-10-31)
-  owns the full local suite, reserved milestone test, unchanged caller and
-  initialization regressions, upgrade/scheduling and remaining artifact checks.
+  retains reconciliation of excluded suite coverage, reserved milestone tests,
+  unchanged caller/initialization regressions, upgrade/scheduling and artifact
+  checks under its later scope revisions. Broader runs need explicit commands.
   The historical US-03 snapshot deferred 132 of 315 collected cases. The
   [interrupted additional run](docs/verification/us-03-ip4.md#additional-full-suite-run-requested-after-phase-approval)
   is incomplete evidence, not a passing full run. Hosted CI success does not
   close this obligation.
 - **M50-ACCEPT-VERIFY — Milestone 50 acceptance verification:** Not started.
   The [US-35 handoff](docs/plans/milestone-50-us-35.md#milestone-acceptance-handoff)
-  and [US-36 plan](docs/plans/milestone-50-us-36.md) own full-suite, unchanged
-  caller, reserved milestone and applicable platform/manual deferrals. The
+  and [US-36 plan](docs/plans/milestone-50-us-36.md) retain reconciliation of
+  excluded suite coverage, unchanged callers, reserved milestone tests and
+  applicable platform/manual deferrals under their later scope revisions. The
   historical US-36 snapshot deferred 289 of 393 collected cases. This obligation
   remains independent of M1-ACCEPT-VERIFY.
+- **Revised MVP verification owners:** `MVP-M1-ACCEPT-VERIFY` owns final M1
+  integration reconciliation; `MVP-M2-ACCEPT-VERIFY` owns later restoration
+  integration, as recorded in the [US-13 handoff](docs/plans/milestone-1-us-13.md#milestone-acceptance-handoff).
+  These do not close historical M1/M50 obligations.
 - **Milestone evidence reconciliation:** Before milestone acceptance, reconcile
-  all deferrals, selections and actual counts against final milestone inputs;
-  run the full suite, shared checks and applicable distribution, installation,
-  manual and platform checks under the
+  deferrals, known failures, evidence identities, counts and platform/manual
+  limits against final inputs. Milestone acceptance does not automatically
+  launch a local full suite or standalone artifact checks; broader verification
+  requires explicit developer commands under the
   [verification policy](docs/development/verification.md#phase-and-story-verification).
-  Historical counts are not current test inventories. Story acceptance does
-  not imply milestone acceptance.
+  Historical counts are not current inventories. Story acceptance and CI results
+  do not establish milestone acceptance or unperformed local verification.
 - **US-36 evidence qualification:** The final direct run had 103 passes and
   one failure; the unchanged failing case passed on renewal after isolating
   verification resources. All 104 selected cases have passing evidence across
