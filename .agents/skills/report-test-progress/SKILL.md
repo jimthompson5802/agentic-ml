@@ -24,7 +24,7 @@ Read the session using its existing tool: for an exec-command session, poll with
 
 ## Report every minute
 
-Post an initial snapshot, then poll with waits no longer than 60 seconds. Use elapsed wall time to post a chat update approximately every 60 seconds, even when counts have not changed. Do not finish the monitoring turn while the accessible session is still running. Tool and message latency may delay delivery; do not promise exact timing.
+Post an initial snapshot. Schedule the next poll near the next report deadline; use 30–60 second waits when no independent work is ready. Use shorter waits when evidence suggests the run is about to finish or needs prompt attention. Use elapsed wall time to post a chat update approximately every 60 seconds, even when counts have not changed. Do not finish the monitoring turn while the accessible session is still running. Tool and message latency may delay delivery; do not promise exact timing.
 
 Example:
 

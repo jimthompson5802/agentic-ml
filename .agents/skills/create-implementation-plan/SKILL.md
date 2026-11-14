@@ -51,6 +51,8 @@ A feature request can be the source without a formal user story. If it has no ac
 
 Inspect the relevant code, configuration, dependencies, tests, and existing plans. Record what exists, what is proposed, and what remains unknown. Identify checks that exist and checks that implementation must add.
 
+For each user-facing capability, name the runnable deliverable and plan to verify that same workflow through supported interfaces. When existing tools provide the behavior, prefer their native commands and one authoritative artifact; justify each added wrapper or metadata copy against an acceptance criterion.
+
 In a design-only repository, treat documented paths, APIs, schemas, and commands as proposals until implementation evidence confirms them.
 
 Look up facts in the repository before asking the developer. Resolve questions that affect scope, observable outcomes, acceptance criteria, or the implementation approach. Continue independent investigation while waiting for answers. Mark interim plans as drafts and record their blockers.

@@ -4,7 +4,20 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Checkout: `main`, HEAD `ecd28b1` (US-13 M1 squash merge pulled).
+Checkout: `skill-refactoring`; skill edits committed as `61189b1` and pushed.
+Developer “make the udpates”, 2026-11-14, authorized the two reviewed skill-doctor
+edits. Updated `report-test-progress` to use 30–60 second waits near the next
+report deadline, and `create-implementation-plan` to require a runnable user
+deliverable and justify added wrappers or metadata copies. Both files match the
+reviewed drafts. Developer “commit and push” authorized committing these skills
+and this checkpoint and publishing `skill-refactoring` to origin.
+Documentation only: no executable behavior changed, so TDD and pytest do not
+apply. Draft equality and `git diff --check` passed.
+Developer “create pull request” authorized publication as
+[PR #67](https://github.com/jimthompson5802/agentic-ml/pull/67), base `main`,
+head `skill-refactoring`, standard (not draft). Final developer review is pending.
+
+The accepted product work remains as recorded below.
 Developer “start ip3”, 2026-11-14, authorizes IP3 only after approved Gates 1–2.
 The issue body/all comment pages and final metadata were refreshed: one unique
 comment matches count 1 and stable 2026-11-07T00:28:44Z update; no scope conflict.
