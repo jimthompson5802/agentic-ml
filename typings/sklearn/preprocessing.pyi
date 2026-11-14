@@ -1,6 +1,25 @@
-"""Public preprocessing types used by the supported native inventory."""
+"""Native scaling/encoding constructors used by preprocessing tests."""
 
-from .base import BaseEstimator
+from typing import Any
 
-class StandardScaler(BaseEstimator): ...
-class OneHotEncoder(BaseEstimator): ...
+import numpy as np
+from sklearn.base import BaseEstimator
+
+class StandardScaler(BaseEstimator):
+    def __init__(
+        self, *, copy: bool = ..., with_mean: bool = ..., with_std: bool = ...
+    ) -> None: ...
+
+class OneHotEncoder(BaseEstimator):
+    def __init__(
+        self,
+        *,
+        categories: Any = ...,
+        drop: Any = ...,
+        sparse_output: bool = ...,
+        dtype: Any = ...,
+        handle_unknown: str = ...,
+        min_frequency: Any = ...,
+        max_categories: int | np.integer[Any] | None = ...,
+        feature_name_combiner: Any = ...,
+    ) -> None: ...

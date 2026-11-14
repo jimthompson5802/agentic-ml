@@ -1,0 +1,120 @@
+--- a/docs/plans/milestone-1-us-15-us-26-execution-order.md
++++ b/docs/plans/milestone-1-us-15-us-26-execution-order.md
+@@ -61,7 +61,9 @@
+ Use native objects and ordinary dictionaries, without new public dataclasses,
+ TypedDict contracts, a feature DSL, a metadata database or run identifiers.
+ `Json` below means null, bool, str, int, finite float, list[Json] or
+-dict[str, Json]. Reject NaN/infinity and unsupported objects, with field context.
++dict[str, Json]. JSON numeric values must be finite. Encode the narrow native parameter
++sentinels/dtypes below as tagged records; reject other unsupported objects
++with field context.
+ Integers exclude booleans where they represent counts/status codes. Require
+ exact versioned keys except explicitly variable parameter/library dictionaries.
+
+@@ -93,7 +95,22 @@
+ booleans, integers and finite floats become corresponding JSON scalars. A numpy
+ array of supported values becomes a list. Pipeline steps and ColumnTransformer
+ transformer triples therefore retain their original order/names and effective
+-settings. No repr/pickle strings masquerade as reproducible settings. Unsupported
++settings. Native parameter tags (SC-01, developer accepted 2026-11-14):
++
++- SimpleImputer.missing_values NaN becomes exactly
++  {"kind":"missing_value","value":"nan"}; this is the only supported NaN
++  parameter context. Other NaN and all infinity values remain invalid.
++- Supported numpy scalar type/dtype descriptors become exactly
++  {"kind":"numpy_dtype","name":"float64"}, with canonical allowed names
++  bool, int8, int16, int32, int64, uint8, uint16, uint32, uint64, float16,
++  float32, float64. Finite scalar instances remain ordinary JSON values.
++- These two kind values are reserved in parameter maps. Reject caller-supplied
++  literal maps using them, malformed/extra tag keys and unsupported dtype names.
++  The consumer validates/retains tags; no arbitrary import, callable execution
++  or new pipeline reconstruction API is introduced. Metrics/provenance numeric
++  values remain finite.
++
++No repr/pickle strings masquerade as reproducible settings. Unsupported
+ callables, opaque objects and cyclic settings fail clearly. Built-in sklearn
+ imputation/scaling/encoding compose the M1 fixture; custom component compatibility
+ and callable capture belong to M2/US-16. Do not expand support silently.
+@@ -301,5 +318,7 @@
+ tracking contract are available in its owning report. The newly available US-15
+ producer proposal/findings were compared and match the shared metadata schema.
+ Its owning session must reconcile consumer findings in its own records; no
+-producer approval is inferred. Both Gate 1 reviews remain pending. No product
++producer approval is inferred. SC-01 producer full-metadata/native-save evidence is available in the
++[revision report](../../../US-15-preprocessing/docs/verification/us15-us26-contract-revision.md).
++Consumer adoption/verification and both Gate 1 reviews remain pending. No product
+ module, behavior test, build, integration or story acceptance is claimed.
+--- a/docs/experiment-tracking.md
++++ b/docs/experiment-tracking.md
+@@ -46,8 +46,15 @@
+ The preprocessing record has exactly schema_version, fit_partition,
+ partition_record, selected_columns, input_schema, output_schema, pipeline and
+ versions. Retain the producer's effective settings, schema, original memberships,
+-seed/protocol and source identity. Strict finite JSON and field-specific errors
+-apply. Producer ownership and native reuse are described in
++seed/protocol and source identity. Strict finite JSON and field-specific errors apply. Under accepted SC-01,
++validate and preserve exactly {"kind":"missing_value","value":"nan"} only
++at built-in SimpleImputer.missing_values, and exactly
++{"kind":"numpy_dtype","name":"float64"} for supported dtype descriptors.
++The shared index lists allowed canonical dtype names and reserved-map rules.
++Reject malformed/extra tag keys or unsupported contexts; do not execute/import
++class names to validate metadata. NaN metrics/provenance and infinities remain
++invalid. See the producer's
++[complete metadata/native-save evidence](../../US-15-preprocessing/docs/verification/us15-us26-contract-revision.md). Producer ownership and native reuse are described in
+ [US-15's proposed contract](../../US-15-preprocessing/docs/preprocessing.md).
+ Metadata is evidence of a declaration; independent train-only numeric tests
+ remain required to verify fitting scope.
+@@ -79,7 +86,8 @@
+
+ MLflow 3.17.2 locally defaults to skops. The composed imputer/scaler/encoder
+ fixture needs an explicit numpy.dtype trusted type under the locked versions.
+-Gate 1 must review the bounded serialization configuration in the findings;
++Developer accepted the bounded serialization choice through SC-01; Gate 1
++still reviews the complete feasibility evidence and public boundaries;
+ no automatic fallback to pickle/cloudpickle or broad trust discovery is proposed.
+
+ Validate supported metadata, provenance, fitted state and artifact destinations
+--- a/docs/plans/milestone-1-us-26-recording.md
++++ b/docs/plans/milestone-1-us-26-recording.md
+@@ -151,15 +151,24 @@
+ - **Implementation authorization:** US-26 IP1 authorized on 2026-11-14 by
+   developer message “i approve phase 1; commit”. This supersedes the earlier
+   prohibition on starting IP1. Commit of the planning documents is authorized.
+-  IP1 execution was reaffirmed by “start phase 1”. T1–T3 are technically
+-  Complete with the linked report; Gate 1 completion approval remains Pending.
++  IP1 execution was reaffirmed by “start phase 1”. T1–T3 were technically
++  Complete before SC-01; T2/T3 are reopened for the encoding revision; Gate 1 completion approval remains Pending.
+   No US-15 execution or later phase is authorized by this decision.
+
+ ## Scope-change history
+
+-None. Carry accepted CONTRACT-01 without asserting its detailed proposed fields
+-are approved. Use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md)
+-for changed scope/constraints during execution; update affected plan/index together.
++### US-15-US-26-SC-01 — Native parameter encoding reconciliation
++
++Developer accepted the joint revision on 2026-11-14: “I accept your
++recommendation.” Add exact native missing-value/dtype parameter tags and
++complete-metadata feasibility; adopt bounded skops configuration. Signatures,
++criteria, milestone assignments, integration ownership and gates are unchanged.
++Producer [evidence](../../../US-15-preprocessing/docs/verification/us15-us26-contract-revision.md)
++confirms complete JSON and native persistence, not toolkit validator acceptance.
++Earlier native transforms and default skops failure remain valid historical
++observations; broad metadata-feasibility conclusions need renewal. IP1-T2/T3
++are reopened pending this owning session's schema/probe/document verification.
++Both Gate 1 decisions remain Pending; no IP2 authorization is inferred.
+
+ ## Execution and verification rules
+
+@@ -218,8 +227,8 @@
+ | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
+ |---|---|---|---|---|---|
+ | US-26-IP1-T1 | Complete | Reconcile #17/#21 contract, this index, native DVC recipe and accepted installation identity code | Authorization | Exact reference/type/path/error matrix; no extra split/run store or contradictory distribution SHA rule | AC-01/02/03/04/05 |
+-| US-26-IP1-T2 | Complete | Inspect installed locked MLflow/sklearn APIs; native-only save_model/client-log/download/load probes in isolated store; inspect Git/wheel identity access and deterministic failure fixture | T1 | Actual run artifact layout and namespace, native error/context behavior and identity reuse approach recorded in proposed docs/verification/us-26-recording-ip1.md; no product module or behavior tests yet | AC-01/03/05 |
+-| US-26-IP1-T3 | Complete | Finalize proposed docs/experiment-tracking.md contract, this plan/index, paired US-15 schema/test boundaries | T2 and US-15-IP1-T1/T2 findings | Reviewable runnable-script outline, exact schemas/signatures, native failure fixture and integration ownership; resolve feasibility findings before dependent code; neither story waits for the other's T3 | AC-01/02/03/04/05 |
++| US-26-IP1-T2 | Partial | Inspect installed locked MLflow/sklearn APIs; native-only save_model/client-log/download/load probes in isolated store; inspect Git/wheel identity access and deterministic failure fixture | T1 | Actual run artifact layout and namespace, native error/context behavior and identity reuse approach recorded in proposed docs/verification/us-26-recording-ip1.md; no product module or behavior tests yet | AC-01/03/05 |
++| US-26-IP1-T3 | Partial | Finalize proposed docs/experiment-tracking.md contract, this plan/index, paired US-15 schema/test boundaries | T2 and US-15-IP1-T1/T2 findings | Reviewable runnable-script outline, exact schemas/signatures, native failure fixture and integration ownership; resolve feasibility findings before dependent code; neither story waits for the other's T3 | AC-01/02/03/04/05 |
+
+ ### Verification and review evidence
+
+# End of recorded contract patch.

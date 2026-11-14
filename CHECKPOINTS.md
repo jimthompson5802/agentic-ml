@@ -4,47 +4,40 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-US-26 Phase 3 approved / local commit handoff, 2026-11-14 UTC: issue #17,
-branch US-26-mlflow, worktree .worktrees/US-26-mlflow, starting commit 5f4947f.
-Developer authorized both Phase 3 executions through coordination thread
-01a1db6c-a225-73e0-8796-81a03c4cec7a. Own IP3 only; stop at Gate 3.
-Later developer instruction after both Gate 3 reports: “commit changes in both
-stories”. The same coordination thread explicitly directs US-26 Gate 3 approval
-and local commit only. No Phase 4, source integration, push/publication, cleanup
-or sibling edits. Git HEAD will identify the local approval commit.
+US-26 Phase 4 approved / combined local commit handoff, 2026-11-14 UTC: #17, US-26-mlflow.
+Developer explicitly authorized Phase 4 and committed US-15 source integration
+through coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a.
+Consumer baseline c2e3dec87a5782f4bdd7c61a81356feefdcb7030; approved producer
+revision e63ef4b8ff700d44e5c644dd30eed92ebd62104b. Both Gate 3 approvals
+are recorded in their owning plans. Developer authorized the combined local merge commit; Git HEAD identifies it;
+shared contributor sklearn stubs combine both public surfaces. US-26 retains
+this checkout's checkpoint; supplier plan/evidence and all historical obligations
+are preserved. No sibling checkout mutation, push, PR or publication.
 
-[Owning plan](docs/plans/milestone-1-us-26-recording.md) IP3-T1–T4 are Complete;
-Gate 3 is Approved. Next: commit the verified Phase 3 changes and approval
-records, then await separate Phase 4/integration direction.
-[IP3 report](docs/verification/us-26-recording-ip3.md) records public
-log_preprocessing, exact SC-01 native settings, fitted state and metadata/split/
-provenance/reference checks, bounded skops artifacts, FAILED recording outcomes
-and readable local diagnostics. The exact guide scaler script passes in a normal
-installed project, independently of US-15. log_run_results remains implemented.
+Actual producer handoff passes both direct and genuinely sdist-rebuilt normal
+wheels. Final focused: 361 passed, 0 failed/skipped, 346.90 seconds. Final
+M1–6: 924 passed, 1 existing authorized skip, 0 failures/errors, 419.05 seconds;
+925 selected of 1193, 268 deselected. Four workers/loadgroup for both runs.
+Shared sync/lock/lint/format (348 files)/type (91 files)/CLI 0.1.0, whitespace
+and 165 document links/anchors pass. Both approved production implementations
+and supplier tests/probes remain unchanged; wheel matches all 72 package files.
+Final source/build/lock identities and all criteria are recorded in the
+[IP4 report](docs/verification/us-26-recording-ip4.md). Gate 4 is Approved; separate #17 recording
+slice acceptance remains Pending. Local combined commit/handoff only; no push,
+PR/publication, main merge, issue closure or cleanup.
 
-Initial four-worker final run: 239 passed, one guide-fixture commit mismatch.
-The helper correctly rejected an inconsistent uv.lock inherited in a new fixture
-commit; attempt 1 stages current declared inputs before committing. Original
-failure and corrected three-case sequence are retained. A new red regression
-also showed Python True == 1 hiding conflicting JSON provenance; canonical JSON
-comparison fixes it, with 12 provenance cases passing. No check was weakened.
-Renewed final run: 241 collected/selected/passed; zero failed/skipped/deselected,
-four/loadgroup, 337.62 seconds. Shared sync/lock/lint/format/type/CLI checks,
-90 document links/anchors, whitespace and final source/guide identity checks pass.
-No unresolved blocker; 117 tracking cases (66 existing/51 new) and 124 splitting
-regressions. The native SQLAlchemy deprecation warning is retained unsuppressed.
+Developer: “I approve us-26 gate 4 and authorize committing the combined revision so us-15 can complete”.
+Relayed on 2026-11-14 by coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a.
+US-15 may consume the verified combined revision for its authorized dependent
+verification; its Gate 4 and acceptance remain independent.
+[Owning plan](docs/plans/milestone-1-us-26-recording.md) owns granular progress.
+Raw lifetime evidence: .dev-records/verification/us26-ip4-20261114/.
+Preserve earlier IP1/IP2/IP3/SC-01, default-skops failure and supplier records.
 
-Raw lifetime evidence: .dev-records/verification/us26-ip3-20261114/ and inherited
-fixture logs .dev-records/verification/us26-ip2-native-commands/. Retained failed
-staging artifacts are copied under the IP3 raw records. Preserve all Phase 1/2,
-SC-01 evidence and the default-skops failure. Linux aarch64/Python 3.12.16 only.
-No dependency/resources/initializer internals changed; lock SHA-256 remains
-6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4.
-
-Actual producer handoff/direct and sdist-rebuilt wheels and M1–6 final story
-acceptance remain IP4. No full suite, standalone artifact driver, story or
-milestone acceptance, M2 restoration or platform coverage beyond Linux is claimed.
-Gate 3 is Approved; this local approval commit includes all Phase 3 changes.
+Initial merge failed reading tree 4762191c53d0646eded4205fd9f8089c5e1d291e;
+read-only inspection found it available and working tree clean. Identical retry
+reached expected checkpoint/stub conflicts, resolved preserving both APIs.
+No Git configuration, ref repair, object cleanup or assertion changes.
 
 Historical obligations below remain unchanged. Preserve the contributor worktree
 management plan/report, raw records under

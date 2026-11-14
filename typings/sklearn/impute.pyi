@@ -1,5 +1,17 @@
-"""Public SimpleImputer type used by the supported native inventory."""
+"""Native imputer construction used by the public fitting matrix."""
 
-from .base import BaseEstimator
+from typing import Any
 
-class SimpleImputer(BaseEstimator): ...
+from sklearn.base import BaseEstimator
+
+class SimpleImputer(BaseEstimator):
+    def __init__(
+        self,
+        *,
+        missing_values: Any = ...,
+        strategy: str = ...,
+        fill_value: Any = ...,
+        copy: bool = ...,
+        add_indicator: bool = ...,
+        keep_empty_features: bool = ...,
+    ) -> None: ...

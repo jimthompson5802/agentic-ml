@@ -1,5 +1,13 @@
 # M1 / US-15 #21 and US-26 #17: coordinated execution order
 
+Current execution authority: developer explicitly authorized Phase 4 coordination
+and committed US-15 source integration into US-26 on 2026-11-14 via thread
+01a1db6c-a225-73e0-8796-81a03c4cec7a. US-26 IP4 is Complete and Gate 4 is Approved; [evidence](../verification/us-26-recording-ip4.md) records the real
+producer matrix, 361 focused passes, 924 M1–6 passes/1 authorized skip and shared checks. Developer approved Gate 4 and authorized a local combined commit so US-15 can
+complete its separately owned dependent verification. No gate approval, publication,
+push, sibling edits or cleanup is inferred. Earlier Phase 3-only direction below
+is historical and superseded only within this expressly authorized boundary.
+
 ## Review status and authority
 
 Coordinated execution record, 2026-11-14. Both Gate 1 and Gate 2 decisions
@@ -8,18 +16,18 @@ coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a. US-26 IP3 is
 Complete and Gate 3 is Approved; its owning plan/report hold
 the verified task and test records. US-15 retains its independent owning records.
 Historical Phase 1/2 and SC-01 decisions remain below and in the owning plans.
-No Phase 4, source integration, publication, merge/rebase or cleanup is authorized.
+At that historical decision, Phase 4/source integration remained unauthorized;
+the current authority above supersedes that limit for US-26 IP4 only.
 
-Targets: [US-15 M1 plan](../../../US-15-preprocessing/docs/plans/milestone-1-us-15.md)
+Targets: [US-15 M1 plan](milestone-1-us-15.md)
 and [US-26 #17 plan](milestone-1-us-26-recording.md). US-26 owns this index;
 the owning plans retain all task, evidence and approval records. Both plans and
 this proposed contract must be reviewed together. Plan approval confirms proposed
 public test boundaries but does not approve completed implementation or start it.
 
 Both branches start at local `main`, `1a9864a645084af8cfcec580b1db5fa045a67859`.
-No fetch/pull or current remote-main comparison was performed. Workspace links
-here deliberately resolve between the two registered sibling worktrees. During
-separately authorized integration, change them to same-checkout plan links and
+No fetch/pull or current remote-main comparison was performed. Workspace links now resolve within the authorized combined checkout. Preserve
+the independently owned source plans and
 reconcile each checkpoint. Do not copy another session's live edits or assume
 shared Git objects make its code available in the consumer's branch.
 
@@ -322,7 +330,7 @@ of already merged prerequisites, despite old unchecked issue-body criteria.
 Current result: US-26 explicitly concurs with **US-15-US-26-SC-01**;
 [consumer renewal and concurrence](../verification/us26-sc01-concurrence.md)
 confirm the exact tags, full effective settings and bounded native persistence.
-The [producer revision report](../../../US-15-preprocessing/docs/verification/us15-us26-contract-revision.md)
+The [producer revision report](../verification/us15-us26-contract-revision.md)
 and renewed consumer evidence agree. US-26 IP1-T1/T2/T3 are technically Complete.
 US-15's owning session must finalize its own T3/records using this concurrence;
 no sibling approval is inferred. Both Gate 1 reviews were subsequently Approved and Phase 2 authorized; see
@@ -378,3 +386,8 @@ directed the owning US-26 session to record Gate 3 approval and commit Phase 3.
 This authorizes the local US-26 approval commit only; US-15 owns its corresponding
 record/commit. No Phase 4/source integration, push, publication or cleanup is
 authorized. The owning plan/report retain exact approval and verification evidence.
+
+Developer subsequently approved US-26 Gate 4 and local combined commit/handoff:
+“I approve us-26 gate 4 and authorize committing the combined revision so us-15 can complete”.
+Source: coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a, 2026-11-14.
+US-15 retains its own Gate 4; no publication or whole-story acceptance is inferred.

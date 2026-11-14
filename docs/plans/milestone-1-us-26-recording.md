@@ -30,7 +30,7 @@
   [ADR-008 and installation decisions](../specs/design/architecture-decisions.md).
 - **Coordinated execution index:** [Order, overlap and proposed exact contract](milestone-1-us-15-us-26-execution-order.md).
   This plan owns the shared index. Review its exact record/provenance fields and
-  proposed public signatures with [US-15's plan](../../../US-15-preprocessing/docs/plans/milestone-1-us-15.md).
+  proposed public signatures with [US-15's plan](milestone-1-us-15.md).
   Cross-worktree links are intentional for local planning; rewrite during
   separately authorized integration rather than duplicating task ownership.
 
@@ -85,8 +85,8 @@ and contributor installation drivers. No product test was run during planning.
 | Native MLflow serialization/artifact behavior | Existing-run logging with exact preprocessing/pipeline, metadata and provenance paths under locked MLflow 3.17.2 | IP2/IP3 | [IP1 findings](../verification/us-26-recording-ip1.md) confirm existing-run layout; SC-01 adopts explicit numpy.dtype trust; renewed consumer feasibility passes; both Gate 1 decisions Approved. |
 | Existing DVC data/splits, US-13 #16 M1 | Real pointer/hash/data links, no fake SHA-as-DVC identity | IP2, IP4 | [US-13 IP2/IP3, Gate 3 and M1 acceptance](milestone-1-us-13.md); do not require M2 restoration. |
 | Git/wheel identity, US-41 #64 | Preserve normal installed origin, lock and artifact identity | IP2/IP4 | [Accepted US-41 plan](milestone-50-us-41.md); Git source SHA required when applicable, unavailable wheel SHA/build remains explicit null. |
-| Real US-15 producer | fit_preprocessing output with final reviewed metadata/schema | IP4 only | [US-15-IP3-T1/T2 and Gate 3](../../../US-15-preprocessing/docs/plans/milestone-1-us-15.md#us-15--implementation-phase-3-produce-metadata-and-verify-installed-use) required. IP2/IP3 use independently fitted fixture and do not wait for US-15 completion. |
-| Branch availability | Approved producer source integrated into consumer branch | IP4 | Separate integration direction needed. Do not import another worktree, copy live files or silently merge/rebase. |
+| Real US-15 producer | fit_preprocessing output with final reviewed metadata/schema | IP4 only | [US-15-IP3-T1/T2 and Gate 3](milestone-1-us-15.md#us-15--implementation-phase-3-produce-metadata-and-verify-installed-use) required. IP2/IP3 use independently fitted fixture and do not wait for US-15 completion. |
+| Branch availability | Approved producer source integrated into consumer branch | IP4 | Explicit Phase 4 integration authorized on 2026-11-14; committed supplier e63ef4b integrated by uncommitted merge. No neighboring imports or live-file copies. |
 | Notebook artifact | Already executed notebook + committed source reference | IP2/IP4 | Native nbclient fixture creates fresh-kernel outputs/errors; US-09/39 workflow delivery remains separate. |
 | #33/#43, US-14 #20, US-39 #58 | Keep ownership boundaries for reports/comparisons/basic path/assistant | None for component implementation | Complete discussions reviewed; consumers of recording, not whole-story prerequisites. No additional story implementation in this plan. |
 
@@ -145,7 +145,7 @@ that limit. Independent real-store success and installed integration remain requ
 
 ## Plan review
 
-- **Status:** Phases 1–3 approved; local Phase 3 commit authorized on 2026-11-14.
+- **Status:** Phases 1–3 approved; Phase 4 Complete, Gate 4 Approved on 2026-11-14.
 - **Developer decision:** Gate 1 Approved by the coordination-session instruction recorded below.
 - **Decision reference and date:** 2026-11-14 coordination-session approval of both Gate 1 decisions, recorded in the IP1 gate below.
 - **Requested plan changes:** SC-01 encoding/serialization reconciliation adopted; see scope-change history.
@@ -162,6 +162,27 @@ that limit. Independent real-store success and installed integration remain requ
   source integration is authorized. Baseline 5f4947f; issue #17 refreshed with
   two unique comments and unchanged updated_at 2026-11-14T18:07:56Z.
 
+## Phase 4 authorization and integration — 2026-11-14
+
+Developer direction relayed by coordination thread
+01a1db6c-a225-73e0-8796-81a03c4cec7a: “Start Phase 4 coordination. Authorize
+required US-15 source integration into US-26, run US-26 first, then complete
+US-15 dependent verification. Stop both at Gate 4 for approval.”
+Own baseline c2e3dec87a5782f4bdd7c61a81356feefdcb7030; approved US-15 supplier
+e63ef4b8ff700d44e5c644dd30eed92ebd62104b. Both Gate 3 decisions verified.
+The existing dependency still requires developer approval of US-26 Gate 4
+before US-15 dependent execution; this direction does not pre-approve any gate.
+No push, PR, publication or sibling edits. Merge is deliberately uncommitted.
+
+Both complete issue discussions refreshed: #17 and #21 each have two unique
+comments, stable updated_at 2026-11-14T18:07:56Z and 18:07:50Z respectively.
+Issue scope and accepted SC-01 schema/public test boundaries remain unchanged.
+The uncommitted merge preserves supplier source/tests/plan/evidence; conflicting
+contributor stubs combine both public surfaces with strict get_params values.
+Own checkout checkpoint is reconciled; no supplier checkpoint status is adopted.
+Raw authority, issue exports and integration attempt evidence reside under
+.dev-records/verification/us26-ip4-20261114/.
+
 ## Scope-change history
 
 ### US-15-US-26-SC-01 — Native parameter encoding reconciliation
@@ -170,7 +191,7 @@ Developer accepted the joint revision on 2026-11-14: “I accept your
 recommendation.” Add exact native missing-value/dtype parameter tags and
 complete-metadata feasibility; adopt bounded skops configuration. Signatures,
 criteria, milestone assignments, integration ownership and gates are unchanged.
-Producer [evidence](../../../US-15-preprocessing/docs/verification/us15-us26-contract-revision.md)
+Producer [evidence](../verification/us15-us26-contract-revision.md)
 confirms complete JSON and native persistence, not toolkit validator acceptance.
 Earlier native transforms and default skops failure remain valid historical
 observations; broad metadata-feasibility conclusions need renewal. IP1-T2/T3
@@ -398,9 +419,9 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-26-IP4-T1 | Not started | Add proposed tests/integration/test_preprocessing_tracking.py and project-owned tests/installation/tracking_project.py/check_tracking.py; actual fit_preprocessing output goes to both tracking helpers | Own Gate 3, US-15 Gate 3 and source availability | Real independent scaler oracle before logging; exact returned metadata persisted, native artifacts loadable, DVC/code/config/lock/identity links agree; no neighboring checkout imports | AC-01/02/03/04/05; supplies US-15-AC-03 |
-| US-26-IP4-T2 | Not started | Add proposed tests/installation/verify_tracking.py using existing distribution/evidence support, and installed matrix in test_preprocessing_tracking.py; execute same documented script on direct and genuinely sdist-rebuilt wheels | T1 | Each normal install in separate project/environment with runtime-only dependencies, unrelated cwd, separate native stores, notebook/error/reference failures and intact CLI/import/resources | AC-01/02/03/04/05; supplies US-15-AC-03 |
-| US-26-IP4-T3 | Not started | Run final focused handoff, M1–6 and shared checks; reconcile criteria/exclusions and docs/checkpoint in proposed docs/verification/us-26-recording-ip4.md | T2 | Final combined implementation/build/lock identities, platform/counts, supplier revision and deferred ownership ready before Gate 4/#17 acceptance | AC-01/02/03/04/05 |
+| US-26-IP4-T1 | Complete | Add proposed tests/integration/test_preprocessing_tracking.py and project-owned tests/installation/tracking_project.py/check_tracking.py; actual fit_preprocessing output goes to both tracking helpers | Own Gate 3, US-15 Gate 3 and source availability | Real independent scaler oracle before logging; exact returned metadata persisted, native artifacts loadable, DVC/code/config/lock/identity links agree; no neighboring checkout imports | AC-01/02/03/04/05; supplies US-15-AC-03 |
+| US-26-IP4-T2 | Complete | Add proposed tests/installation/verify_tracking.py using existing distribution/evidence support, and installed matrix in test_preprocessing_tracking.py; execute same documented script on direct and genuinely sdist-rebuilt wheels | T1 | Each normal install in separate project/environment with runtime-only dependencies, unrelated cwd, separate native stores, notebook/error/reference failures and intact CLI/import/resources | AC-01/02/03/04/05; supplies US-15-AC-03 |
+| US-26-IP4-T3 | Complete | Run final focused handoff, M1–6 and shared checks; reconcile criteria/exclusions and docs/checkpoint in proposed docs/verification/us-26-recording-ip4.md | T2 | Final combined implementation/build/lock identities, platform/counts, supplier revision and deferred ownership ready before Gate 4/#17 acceptance | AC-01/02/03/04/05 |
 
 ### Verification and review evidence
 
@@ -422,31 +443,28 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Actual installed producer/consumer matrix | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_preprocessing_tracking.py tests/integration/test_tracking.py | Direct/rebuilt paths independently pass; artifacts and metadata/refs match actual producer and independent oracle | Pending |
-| M1–6 story acceptance | uv run --locked pytest -n 4 --dist=loadgroup | Final #17 changes pass; actual collected/selected/deselected/skipped outcomes recorded | Pending |
-| Shared development and document checks | Shared command block; local-link check; review actual documented project script | Pass; lock hash preserved; docs execute the same supported path | Pending |
+| Actual installed producer/consumer matrix | Final focused command includes test_preprocessing_tracking.py, test_tracking.py, test_preprocessing.py, test_splitting.py and test_data_assessment.py; four/loadgroup | Direct/rebuilt paths independently pass; artifacts and metadata/refs match actual producer and independent oracle | 361 passed, 0 failed/skipped/deselected, 346.90s; [IP4 report](../verification/us-26-recording-ip4.md) |
+| M1–6 story acceptance | uv run --locked pytest -n 4 --dist=loadgroup | Final #17 changes pass; actual collected/selected/deselected/skipped outcomes recorded | 1193 collected, 925 selected, 268 deselected; 924 passed, 1 existing authorized skip, 0 failures/errors, 419.05s; [IP4 report](../verification/us-26-recording-ip4.md) |
+| Shared development and document checks | Shared command block; local-link check; review actual documented project script | Pass; lock hash preserved; docs execute the same supported path | All pass; format 348 files, mypy 91 files, CLI 0.1.0, 165 links/anchors; lock unchanged; [IP4 report](../verification/us-26-recording-ip4.md) |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete; all five #17 criteria verified, final
   shared/M1–6 checks and real integration evidence valid; explicitly request
   acceptance of #17's recording slice, not the entire US-26 story.
-- **Evidence presented:** Pending — proposed docs/verification/us-26-recording-ip4.md.
+- **Evidence presented:** [Final IP4 report](../verification/us-26-recording-ip4.md), complete tasks, direct/rebuilt installed matrix, focused 361 passes, M1–6 924 passes/1 authorized skip, shared checks, raw manifest and exact source/build/lock identities.
 - **Remaining limitations or blocked work:** #33/#43 criteria, US-15 M2 restoration,
   full MVP integration and unverified platforms remain outside this acceptance.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved.
+- **Decision reference and date:** 2026-11-14; developer “I approve us-26 gate 4 and authorize committing the combined revision so us-15 can complete”. Relayed by coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending — supply evidence to US-15 IP4; stop here.
-  No other story execution, issue closure, publication, commit/push, merge/rebase
-  or worktree removal is authorized by completing the phase.
+- **Progression authorized:** Local combined merge commit and handoff to US-15 so its authorized dependent verification can proceed. No issue closure, push, PR/publication, main merge or cleanup.
 
 ## Final verification requirements
 
 - **Owning final phase/task:** US-26-IP4-T3, before final Gate 4.
-- **Final implementation identity:** Pending — combined tested revision/dirty files,
-  wheel/sdist/rebuilt identities, source supplier revision, lock SHA before/after.
-- **M1–6 and shared checks:** Exact blocks above; actual counts/results Pending.
+- **Final implementation identity:** Approved combined local merge of consumer c2e3dec and supplier e63ef4b; Git HEAD identifies the resulting commit; exact changed-file and executable fingerprints in raw manifest; direct/rebuilt wheel, both sdist snapshots and unchanged lock identities in [IP4 report](../verification/us-26-recording-ip4.md).
+- **M1–6 and shared checks:** Passed as recorded above; 924 passes/1 existing skip, 268 deselected. No assertion or skip changes.
 - **Distribution/installation:** Direct and genuinely rebuilt normal installs in
   IP4-T2, runtime-only environments outside toolkit checkout; retain Git and wheel
   identity coverage. Selected pytest may call artifact drivers; standalone drivers
@@ -460,25 +478,24 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 - **Actual results and limitations:** IP2 is approved with installed component
   evidence. IP3 final tracking/splitting verification passes 241 cases; its independent
   direct-wheel consumer tests do not establish actual producer integration.
-  Final IP4 product acceptance remains Pending. Linux aarch64 evidence does not
+  Final IP4 technical verification is Complete; Gate 4 is Approved; separate #17 acceptance remains Pending. Linux aarch64 evidence does not
   establish macOS/Windows support.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-26-AC-01 | IP2-T1/T3/T4; IP3-T1/T3; IP4-T1/T2/T3 | Native existing-run parameters/metrics/status/outputs/artifact URIs and stable run ID | Pending |
-| US-26-AC-02 | IP2-T2; IP3-T1/T2; IP4-T1/T2/T3 | Actual DVC data/split IDs, committed revision and effective configuration preserved | Pending |
-| US-26-AC-03 | IP2-T2; IP3-T1/T2; IP4-T1/T2/T3 | Git/full-SHA and supported-wheel identity matrix; installed versions and lock/environment evidence | Pending |
-| US-26-AC-04 | IP2-T2/T3; IP3-T2; IP4-T1/T2/T3 | Committed source/entrypoint/config references plus executed notebook outputs/errors when used | Pending |
-| US-26-AC-05 | IP2-T1/T3; IP3-T2/T3; IP4-T1/T2/T3 | Missing outputs despite zero exit, nonzero process, invalid refs and serialization/logging failure cases | Pending |
+| US-26-AC-01 | IP2-T1/T3/T4; IP3-T1/T3; IP4-T1/T2/T3 | Native existing-run parameters/metrics/status/outputs/artifact URIs and stable run ID | Verified; developer acceptance Pending |
+| US-26-AC-02 | IP2-T2; IP3-T1/T2; IP4-T1/T2/T3 | Actual DVC data/split IDs, committed revision and effective configuration preserved | Verified; developer acceptance Pending |
+| US-26-AC-03 | IP2-T2; IP3-T1/T2; IP4-T1/T2/T3 | Git/full-SHA and supported-wheel identity matrix; installed versions and lock/environment evidence | Verified; developer acceptance Pending |
+| US-26-AC-04 | IP2-T2/T3; IP3-T2; IP4-T1/T2/T3 | Committed source/entrypoint/config references plus executed notebook outputs/errors when used | Verified; developer acceptance Pending |
+| US-26-AC-05 | IP2-T1/T3; IP3-T2/T3; IP4-T1/T2/T3 | Missing outputs despite zero exit, nonzero process, invalid refs and serialization/logging failure cases | Verified; developer acceptance Pending |
 
-- **Remaining work:** Separately authorized
-  IP4 integration/acceptance; #33/#43 remain separately owned.
+- **Remaining work:** Separate #17 AC-01–05 acceptance; #33/#43 remain separately owned.
 - **Partial prerequisite delivery:** IP3 supplies independently verified consumer;
-  only IP4 supplies actual US-15 preservation evidence. Neither accepts US-15 by
+  IP4 now supplies actual US-15 preservation evidence for its dependent review. Neither accepts US-15 by
   proxy or claims full classification/assistant workflow delivery.
-- **Final verification:** Pending — US-26-IP4-T3.
+- **Final verification:** Complete — US-26-IP4-T3; [report](../verification/us-26-recording-ip4.md).
 - **Developer acceptance:** Pending — #17 slice only; whole US-26 not claimed.
 - **Decision reference and date:** Pending.
 
@@ -494,3 +511,20 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
   full-suite `uv run --locked pytest -n 4 --dist=loadgroup -m ""`, shared checks
   and standalone direct/rebuilt artifact/installation verification only under
   explicit developer command or CI. CI evidence is not an unperformed local check.
+
+## Gate 4 approval and combined local commit — 2026-11-14
+
+Developer: “I approve us-26 gate 4 and authorize committing the combined revision so us-15 can complete”.
+Relayed by coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a.
+This approves US-26 Gate 4 and authorizes the local combined merge commit and
+US-15 handoff. It does not accept whole-story publication, close issue #17,
+approve US-15 Gate 4, or authorize push, PR, publication, main merge or cleanup.
+The existing planning-schema skip remains recorded and is not passing coverage.
+All reviewed executable inputs match the passing Phase 4 fingerprints; only
+approval/checkpoint documentation changes follow verification. TDD and test
+renewal do not apply to these documentation-only records. Approval checks and
+commit/parent verification are retained under
+.dev-records/verification/us26-ip4-approval-20261114/.
+Git HEAD identifies the resulting combined commit, with both reviewed parents
+c2e3dec87a5782f4bdd7c61a81356feefdcb7030 and
+e63ef4b8ff700d44e5c644dd30eed92ebd62104b preserved.

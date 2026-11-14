@@ -1,7 +1,8 @@
 # Experiment tracking contract
 
 Status: log_run_results and log_preprocessing are implemented. Gates 1–3
-are approved; Phase 3 is complete. [Plan](plans/milestone-1-us-26-recording.md),
+are approved; Phase 4 installed integration is technically complete, with Gate 4
+approved; separate #17 recording acceptance remains pending. [Plan](plans/milestone-1-us-26-recording.md),
 [native findings](verification/us-26-recording-ip1.md) and the
 [shared field/type specification](plans/milestone-1-us-15-us-26-execution-order.md#proposed-handoff-types)
 define the review boundary. Issue #17 owns AC-01–05. Native probes do not verify
@@ -71,8 +72,8 @@ class names to validate metadata. Rejecting literal reserved maps is a producer
 encoding rule; consumer validation accepts canonical generated tags in supported
 contexts. NaN metrics/provenance and infinities remain
 invalid. See the producer's
-[complete metadata/native-save evidence](../../US-15-preprocessing/docs/verification/us15-us26-contract-revision.md). Producer ownership and native reuse are described in
-[US-15's proposed contract](../../US-15-preprocessing/docs/preprocessing.md).
+[complete metadata/native-save evidence](verification/us15-us26-contract-revision.md). Producer ownership and native reuse are described in
+[US-15's proposed contract](preprocessing.md).
 Metadata is evidence of a declaration; independent train-only numeric tests
 remain required to verify fitting scope.
 
@@ -146,8 +147,8 @@ A supported built-in fitted pipeline with an extra unserializable fitted-state
 attribute is the proposed serialization failure fixture; its effective parameters
 remain supported so the failure reaches native serialization.
 
-IP2/IP3 use an independently fitted fixture. IP4 alone owns actual installed
-US-15-to-US-26 handoff on direct and sdist-rebuilt wheel paths. M2 restored
+IP2/IP3 use an independently fitted fixture. [IP4 evidence](verification/us-26-recording-ip4.md)
+now verifies actual installed US-15-to-US-26 handoff on direct and sdist-rebuilt wheel paths. M2 restored
 transformation/replay, reports/comparisons, reverse lookup and assistant workflow
 acceptance retain their separate owners. No whole-story acceptance is claimed here.
 
@@ -179,7 +180,7 @@ No notebook execution service or atomic artifact publication is provided.
 
 The Phase 2 component tests use one direct wheel and a full-SHA Git fixture.
 Actual US-15 preprocessing output and direct/sdist-rebuilt wheel integration
-remain Phase 4 obligations. Gates 2 and 3 are approved; whole-story and
+now pass [Phase 4 verification](verification/us-26-recording-ip4.md). Gates 2 and 3 are approved; whole-story and
 milestone acceptance remain pending.
 
 
@@ -294,4 +295,132 @@ pickle fallback is used.
 
 [Phase 3 evidence](verification/us-26-recording-ip3.md) records 241 passing
 tracking/splitting tests and shared checks. Gate 3 is approved. Actual
-US-15 producer preservation and both installed wheel paths remain Phase 4 work.
+US-15 producer preservation and both installed wheel paths now pass Phase 4 verification;
+Gate 4 is approved; separate #17 recording acceptance remains pending.
+
+
+## Actual producer script
+
+Save this as `track.py` in a normally installed experiment project. Prepare and
+commit `data/input.csv`, its existing `data/split.json`, configuration, source
+notebook and `uv.lock`; version the consumed data directory with native DVC.
+The five-row example is the same imputer/scaler/encoder fixture in the
+[preprocessing guide](preprocessing.md). Supply `run-provenance.json` using the
+shared schema and an existing native run, then invoke:
+`/project/.venv/bin/python -I /project/track.py /project TRACKING_URI RUN_ID`.
+The literal checks belong to this fixed example. Replace them with independently
+defined checks for a different project. The supplied metric is illustrative;
+the script does not train or evaluate a classifier.
+
+<!-- us26-producer-script -->
+```python
+"""Run a committed experiment's native preprocessing and tracking handoff."""
+
+import json
+import sys
+from pathlib import Path
+from typing import Any
+
+import numpy as np
+import pandas as pd
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+from agentic_ml.preprocessing import fit_preprocessing
+from agentic_ml.tracking import log_preprocessing, log_run_results
+
+
+def run(
+    root: Path,
+    tracking_uri: str,
+    run_id: str,
+    *,
+    process_exit_code: int = 0,
+    expected_output: str = "features",
+    executed_notebook: Path | None = None,
+) -> dict[str, Any]:
+    """Fit training rows, check the fixed example, then record the existing run."""
+    frame = pd.read_csv(root / "data/input.csv")
+    partition = json.loads((root / "data/split.json").read_text())
+    provenance = json.loads((root / "run-provenance.json").read_text())
+    pipeline = Pipeline(
+        [
+            (
+                "features",
+                ColumnTransformer(
+                    [
+                        (
+                            "numeric",
+                            Pipeline(
+                                [
+                                    ("impute", SimpleImputer()),
+                                    ("scale", StandardScaler(with_std=False)),
+                                ]
+                            ),
+                            ["x"],
+                        ),
+                        (
+                            "category",
+                            OneHotEncoder(handle_unknown="ignore", sparse_output=False),
+                            ["category"],
+                        ),
+                    ]
+                ),
+            ),
+        ]
+    )
+    names = ["centered_x", "category_a", "category_b"]
+    fitted, record = fit_preprocessing(
+        frame,
+        partition_record=partition,
+        pipeline=pipeline,
+        selected_columns=["x", "category"],
+        output_schema=[{"name": name, "dtype": "float64"} for name in names],
+    )
+    transformed = fitted.transform(frame[["x", "category"]])
+    # Independent literal oracle BEFORE any logging; held-out rows cannot fit.
+    np.testing.assert_allclose(
+        transformed, [[-1, 1, 0], [0, 0, 1], [1, 1, 0], [98, 0, 0], [198, 1, 0]]
+    )
+    np.testing.assert_allclose(
+        fitted.transform(pd.DataFrame({"x": [5.0], "category": ["b"]})), [[3, 0, 1]]
+    )
+    assert not hasattr(pipeline["features"], "transformers_")
+    json.dumps(record, allow_nan=False)
+    preprocessing = log_preprocessing(
+        run_id=run_id,
+        pipeline=fitted,
+        record=record,
+        provenance=provenance,
+        project_root=root,
+        tracking_uri=tracking_uri,
+    )
+    pd.DataFrame(transformed, columns=names).to_csv(root / "features.csv", index=False)
+    result = log_run_results(
+        run_id=run_id,
+        project_root=root,
+        tracking_uri=tracking_uri,
+        provenance=provenance,
+        parameters={"preprocessing": record["pipeline"]},
+        metrics={"validation_accuracy": 0.75},
+        outputs={"features": Path("features.csv")},
+        expected_outputs=[expected_output],
+        process_exit_code=process_exit_code,
+        validation_passed=False,
+        executed_notebook=executed_notebook,
+    )
+    return {"record": record, "preprocessing": preprocessing, "result": result}
+
+
+if __name__ == "__main__":
+    print(json.dumps(run(Path(sys.argv[1]), sys.argv[2], sys.argv[3]), allow_nan=False))
+```
+
+The installed verification runs this exact script on both direct and genuinely
+sdist-rebuilt wheels. It also supplies fresh-kernel notebooks, checks recorded
+error cells, missing outputs despite process exit zero, and invalid committed
+references. The preprocessing declaration and supplied validation result remain
+separate from process completion. Native artifact loading checks fitted-state
+readability; M2 restored-project transformation/replay remains separately owned.
