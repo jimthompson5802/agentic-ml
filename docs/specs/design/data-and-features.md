@@ -173,8 +173,11 @@ prevention are not promised; tests independently verify supported split/fit scop
 
 ## DVC data and fitted artifacts
 
-Planned US-13/26/27 integration uses DVC to version extracted data, split records
-and derived datasets; Git tracks DVC metadata and native stages/lockfiles.
+US-13 M1 has installed evidence for the [native DVC recipe](../../dataset-versioning.md)
+versioning source snapshots, extraction bundles, split records and derived data.
+Gate 3 is approved; M1-slice acceptance remains pending; see [IP3 evidence](../../verification/us-13-ip3.md).
+Git tracks native pointers and project settings. US-26/27 run links and native
+stages/lockfiles remain planned.
 Keep content/generated stores out of Git.
 MLflow saves fitted pipelines/models and results with links to DVC identities,
 committed code/configuration and environment references.

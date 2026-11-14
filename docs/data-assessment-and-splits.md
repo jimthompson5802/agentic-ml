@@ -336,3 +336,8 @@ quality rules allow preparation with `not_checked`, without claiming quality
 passed. See [IP3 evidence](verification/us-12-19-ip3.md) for public composition,
 identity limits and public tests. Installed coverage is recorded in
 [IP4 evidence](verification/us-12-19-ip4.md); Gate 4 approved on 2026-11-08 UTC; issue #19 accepted on 2026-11-08 UTC.
+
+Use the [native DVC dataset-versioning recipe](dataset-versioning.md) to version
+source snapshots, extraction bundles, saved split records and derived data.
+Its M1 installed evidence covers content ownership and committed versions;
+M2 restoration remains separate.

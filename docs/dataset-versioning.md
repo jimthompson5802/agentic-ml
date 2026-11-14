@@ -1,8 +1,8 @@
 # Dataset versioning with native DVC
 
-**Status: IP2 integration checks complete; Gate 2 approved, 2026-11-13.** The recipe
+**Status: Both installed wheel paths verified; Gate 3 approved, 2026-11-14.** The recipe
 covers US-13 M1 AC-01/02 using the existing public APIs and native DVC.
-Normal direct/rebuilt wheel verification remains IP3. See the
+Direct/rebuilt installed evidence is in [IP3](verification/us-13-ip3.md). See the
 [plan](plans/milestone-1-us-13.md), [IP1 observations](verification/us-13-ip1.md)
 and [IP2 evidence](verification/us-13-ip2.md).
 
@@ -131,8 +131,8 @@ if __name__ == "__main__":
 
 This code uses the existing public signatures. Integration checks extract these
 configuration/script blocks and execute the registration, transfer and project
-invocation commands below, with temporary root/environment paths. IP3 separately
-verifies normal wheel installation.
+invocation commands below, with temporary root/environment paths. Both normal
+wheel paths execute this same recipe without contributor dependencies.
 
 For a new disposable example project, after normal toolkit dependency setup:
 

@@ -68,6 +68,13 @@ def main() -> None:
         shutil.copy(
             Path(__file__).with_name("assessment_splits_project.py"), project_code
         )
+        shutil.copy(
+            ROOT / "docs/dataset-versioning.md", workspace / "dataset-versioning.md"
+        )
+        shutil.copy(
+            Path(__file__).with_name("check_dataset_versioning.py"),
+            workspace / "check_dataset_versioning.py",
+        )
         for label in ("direct-wheel", "rebuilt-wheel"):
             python = artifact_work / label / "bin/python"
             invocation.run(
@@ -87,6 +94,12 @@ def main() -> None:
             invocation.preserve(
                 workspace / label / "identity.json", label + "-assessment_splits.json"
             )
+            for source_format in ("csv", "parquet"):
+                invocation.preserve(
+                    workspace / label / source_format / "versioning-identity.json",
+                    label + "-versioning-" + source_format + ".json",
+                )
+            print(f"PASS dataset_versioning {label}", flush=True)
             print(f"PASS assessment_splits {label}", flush=True)
     except (OSError, RuntimeError, ValueError) as error:
         print(

@@ -166,6 +166,15 @@ IP2 uses the Gate 1 native-only boundaries; no new package API or dependency.
 Gate 2 was subsequently approved; see the decision below. This execution request
 authorized IP2 only.
 
+### IP3 execution authorization — 2026-11-14
+
+Developer “start ip3” authorizes IP3 only after approved Gate 2 and commit
+`658c152`. Complete issue body/all comment pages refreshed: one unique comment,
+unchanged count/update timestamp (2026-11-07T00:28:44Z), null milestone and no
+scope conflict. Reuse Gate 1 public boundaries. Installed verification extends
+existing native behavior; no product behavior change requires a synthetic red.
+Gate 3 and M1-slice acceptance remain pending.
+
 ## Scope-change history
 
 ### US-13-PLAN-REV-01 — MVP-focused draft revision, 2026-11-13
@@ -290,9 +299,9 @@ or publication is authorized by this decision.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-13-IP3-T1 | Not started | Extend the installed project probe in `tests/installation/check_assessment_splits.py` and its existing `verify_assessment_splits.py` driver, with milestone-1 coverage in `tests/integration/test_distribution_verification.py`; reuse their direct/rebuilt environments, scheduling group and retained records. Copy guide-derived recipe/configuration into both environments, extend the existing assessment/splits probe and its both-artifact test to require US-13 results; preserve current checks/identities. No new independent build/install driver. | Gate 2 | Pytest builds/installs both wheel paths and runs project code outside the checkout with declared runtime dependencies. Each path executes the documented recipe and independently verifies success, Git exclusions, both committed versions and retained content, repeated/changed identities and representative failures. Preserve identities, records and import origins for both. | AC-01/02 |
-| US-13-IP3-T2 | Not started | Finish proposed `docs/dataset-versioning.md`; link from `README.md`, `docs/extraction.md`, `docs/data-assessment-and-splits.md`; update affected active design/traceability status only after evidence. | T1 | The complete copyable recipe matches installed evidence and requires no toolkit checkout/test internals; explicit root/cwd, ownership, add versus push, recovery, two-version history and M2 handoff are documented. Identify the recipe/artifact paths US-39 can reuse without adding training or assistant work here. Existing packaged resources remain unchanged unless separately reviewed. | AC-01/02 |
-| US-13-IP3-T3 | Not started | Complete final verification below, write proposed `docs/verification/us-13-ip3.md`, update owning plan, `docs/project-status.md` and `CHECKPOINTS.md`. | T2 | Final M1, M1–6 and shared checks pass; exclusions/skips reconciled. Present M1-slice acceptance with #16 still open for M2; do not mark unapproved acceptance as complete. | AC-01/02 |
+| US-13-IP3-T1 | Complete | Extend the installed project probe in `tests/installation/check_assessment_splits.py` and its existing `verify_assessment_splits.py` driver, with milestone-1 coverage in `tests/integration/test_distribution_verification.py`; reuse their direct/rebuilt environments, scheduling group and retained records. Copy guide-derived recipe/configuration into both environments, extend the existing assessment/splits probe and its both-artifact test to require US-13 results; preserve current checks/identities. No new independent build/install driver. | Gate 2 | Pytest builds/installs both wheel paths and runs project code outside the checkout with declared runtime dependencies. Each path executes the documented recipe and independently verifies success, Git exclusions, both committed versions and retained content, repeated/changed identities and representative failures. Preserve identities, records and import origins for both. | AC-01/02 |
+| US-13-IP3-T2 | Complete | Finish proposed `docs/dataset-versioning.md`; link from `README.md`, `docs/extraction.md`, `docs/data-assessment-and-splits.md`; update affected active design/traceability status only after evidence. | T1 | The complete copyable recipe matches installed evidence and requires no toolkit checkout/test internals; explicit root/cwd, ownership, add versus push, recovery, two-version history and M2 handoff are documented. Identify the recipe/artifact paths US-39 can reuse without adding training or assistant work here. Existing packaged resources remain unchanged unless separately reviewed. | AC-01/02 |
+| US-13-IP3-T3 | Complete | Complete final verification below, write proposed `docs/verification/us-13-ip3.md`, update owning plan, `docs/project-status.md` and `CHECKPOINTS.md`. | T2 | Final M1, M1–6 and shared checks pass; exclusions/skips reconciled. Present M1-slice acceptance with #16 still open for M2; do not mark unapproved acceptance as complete. | AC-01/02 |
 
 ### Verification and review evidence
 
@@ -302,12 +311,25 @@ do not launch standalone drivers or broader local pytest without an explicit
 developer command. Reuse existing ownership/cleanup helpers and isolated bases;
 raw evidence must survive successful temporary-workspace cleanup.
 
-Actual results, platform, command logs, artifact identities and limitations: Pending.
+Installed focused verification: 1 passed in 43.83s on Linux aarch64 / Python
+3.12.16. Both direct/rebuilt paths execute CSV/Parquet guide code and native
+commands through the extended assessment/splits driver. Project/native oracles
+live in `tests/installation/check_dataset_versioning.py`, copied beside the
+existing isolated probe with the guide; no pytest dependency or new driver.
+Identity records preserve A/B native hashes, real commit IDs and runtime versions.
+T1/T2 evidence: [IP3 report](../verification/us-13-ip3.md). T3 complete: M1 722 passed/1 existing skip/4 warnings (233.24s); final M1–6
+722 passed/1 existing skip/4 warnings (222.86s). Each selects 723 cases from the
+unchanged 991-case inventory (268 excluded). Shared checks, relative-file links
+and whitespace pass; lock hash unchanged. Linux aarch64 / Python 3.12.16 /
+DVC 3.67.1. See the report for exact commands, artifact identities and retained
+raw records. No failed product corrective attempts or new suppressions.
 
-**Gate 3:** Pending. Stop after T1–T3. Present both installed paths, final test
-results, user guidance and AC-01/02 mapping. Explicitly request acceptance of the
-M1 slice; whole US-13 remains incomplete. Decision reference/date, requested
-changes, evidence and any publication authorization: Pending.
+**Gate 3:** Approved, 2026-11-14. Developer “i approve ip3; commit”
+approves completed IP3-T1–T3 and authorizes their local commit, including the
+[IP3 evidence](../verification/us-13-ip3.md), installed probes and final guidance.
+Requested changes: None. M1-slice acceptance remains Pending because phase
+approval is distinct from criterion acceptance. Whole US-13 remains incomplete
+until M2 AC-03/04. No push, PR or issue update is authorized by this decision.
 
 ## Final verification requirements
 
@@ -327,14 +349,14 @@ changes, evidence and any publication authorization: Pending.
 - **Renewal:** Executable changes renew applicable focused, M1 and final M1–6
   evidence; document-only corrections use link/whitespace checks. Standalone
   artifact/full-suite commands require explicit developer direction.
-- **Actual results and limitations:** Pending; no tests were run while drafting.
+- **Actual results and limitations:** [IP3 report](../verification/us-13-ip3.md); required checks pass with the existing skip and platform limits. Acceptance pending.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-13-AC-01 | IP1-T1/T2; IP2-T1/T2; IP3-T1/T3 | Documented recipe, native source/extraction/split/derived identities, committed A/B references and retained content, both installed wheels | Pending |
-| US-13-AC-02 | IP1-T2; IP2-T3/T4; IP3-T1/T2/T3 | Actual fixture Git commits/inventory, excluded bytes, single split-record ownership, Git-owned manifests and both versions in local cache/remote | Pending |
+| US-13-AC-01 | IP1-T1/T2; IP2-T1/T2; IP3-T1/T3 | Documented recipe, native source/extraction/split/derived identities, committed A/B references and retained content, both installed wheels | Verified; developer acceptance pending |
+| US-13-AC-02 | IP1-T2; IP2-T3/T4; IP3-T1/T2/T3 | Actual fixture Git commits/inventory, excluded bytes, single split-record ownership, Git-owned manifests and both versions in local cache/remote | Verified; developer acceptance pending |
 | US-13-AC-03 | M2 owning plan to be defined | Restoration from recorded metadata and verified content hashes | Deferred to M2 |
 | US-13-AC-04 | M2 owning plan to be defined | Missing/mismatched restoration fails explicitly | Deferred to M2 |
 

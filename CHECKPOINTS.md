@@ -1,40 +1,36 @@
 # Development Checkpoints
 
-Last updated: 2026-11-13 (UTC)
+Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-13-dataset-versioning`, HEAD `baa8920` (approved IP1 review
-package committed). Developer “start ip2”, 2026-11-13, authorized IP2 only.
-Gates 1–2 are Approved; IP2-T1–T4 are Complete. Developer
-“I approve this gate; commit”, 2026-11-13, approved Gate 2 and authorized the
-local IP2 commit.
-See the [owning plan](docs/plans/milestone-1-us-13.md) and
-[IP2 evidence](docs/verification/us-13-ip2.md).
-
-Issue #16's complete body/all comments were refreshed: one unique comment matches
-count 1 and final updated timestamp 2026-11-07T00:28:44Z. No scope conflict.
+Checkout: `US-13-dataset-versioning`, HEAD `658c152` (approved IP2 committed).
+Developer “start ip3”, 2026-11-14, authorizes IP3 only after approved Gates 1–2.
+The issue body/all comment pages and final metadata were refreshed: one unique
+comment matches count 1 and stable 2026-11-07T00:28:44Z update; no scope conflict.
 M1 covers AC-01/02; AC-03/04 restoration remains M2.
 
-The new integration test executes guide-derived project code/configuration and
-native commands for CSV/Parquet, both split layouts, deterministic derived rows,
-real A/B commits, independent file hashes, cache/remote retention, exact Git
-inventories and native failures. No package API, dependency or resource changed.
-Working tree: guide, plan, checkpoint, new integration test and IP2 report;
-this approval authorizes committing these five files; no push or publication.
+IP3-T1/T2 complete: the existing assessment/splits driver runs guide-derived
+CSV/Parquet recipes in direct/rebuilt normal wheel environments outside the
+checkout; focused test 1 passed. A/B commits, native identities, cache/remote
+retention, Git ownership and failure boundaries verified. Guide links and active
+traceability updated. No product API/dependency/resource change. See the
+[owning plan](docs/plans/milestone-1-us-13.md) and
+[IP3 evidence](docs/verification/us-13-ip3.md).
 
-M1: 722 passed, 1 existing skip, 4 native NumPy warnings; 723 selected of 991,
-268 deselected. Final focused recipe: 2 passed. Locked sync/lock, lint, formatting,
-strict typing, CLI smoke and whitespace passed. One guide formatting failure was
-corrected on attempt 1; focused/shared renewal passed. No semantic change after
-M1 verification. Lock hash unchanged. Evidence is Linux aarch64 / Python 3.12.16 /
-DVC 3.67.1; no macOS/Windows or normal-wheel claim. Raw records are linked from
-the report and retained under `.dev-records/verification/`.
+IP3-T3 complete: M1 722 passed, 1 existing skip, 4 native NumPy warnings
+(233.24s); final M1–6 722 passed, 1 existing skip, 4 warnings (222.86s).
+Each selected 723 cases; unchanged 991-case inventory leaves 268 excluded.
+Locked sync/lock, lint, formatting, strict typing, CLI smoke, relative links and
+whitespace pass; lock hash unchanged. Raw records linked from IP3 evidence.
 
-**Next action:** await execution direction for IP3. IP3 remains Not started;
-it owns both installed wheel paths, final links/design status and M1–6 checks.
-The [execute-plan skill](.agents/skills/execute-plan/SKILL.md) requires a stop at
-every implementation phase gate. No story/milestone acceptance is claimed.
+Developer “i approve ip3; commit”, 2026-11-14, approved Gate 3 and authorized
+the local IP3 commit. Gates 1–3 are Approved. This commit contains IP3 probe/test
+extensions, guide/links/design, plan, evidence, status and checkpoint.
+
+**Next action:** await explicit M1-slice acceptance (AC-01/02). No story/milestone
+acceptance, push or publication is claimed. Linux aarch64 only;
+macOS/Windows unverified.
 
 US-41 publication and branch cleanup remain complete: issue #64 closed,
 PR #65 squash-merged as `5d5781c`; Gates 1–4 Approved. Prior CI/evidence details
