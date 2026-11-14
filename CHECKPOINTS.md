@@ -4,7 +4,7 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-13-dataset-versioning`, HEAD `658c152` (approved IP2 committed).
+Checkout: `US-13-dataset-versioning`, HEAD `557414c` (approved IP3 committed).
 Developer “start ip3”, 2026-11-14, authorizes IP3 only after approved Gates 1–2.
 The issue body/all comment pages and final metadata were refreshed: one unique
 comment matches count 1 and stable 2026-11-07T00:28:44Z update; no scope conflict.
@@ -28,13 +28,19 @@ Developer “i approve ip3; commit”, 2026-11-14, approved Gate 3 and authorize
 the local IP3 commit. Gates 1–3 are Approved. This commit contains IP3 probe/test
 extensions, guide/links/design, plan, evidence, status and checkpoint.
 
-**Next action:** await explicit M1-slice acceptance (AC-01/02). No story/milestone
-acceptance, push or publication is claimed. Linux aarch64 only;
+Developer “i accept the us-13”, followed by “commit”, 2026-11-14, accepted
+the delivered M1 slice (AC-01/02) and authorized a local acceptance-record commit.
+All three gates are Approved. This acceptance changes no executable behavior;
+IP3 verification remains applicable. Relative links and whitespace rechecked.
+
+**Next action:** await publication or further development direction. US-13 M1 is
+accepted locally, not yet merged; issue #16 remains open for M2 AC-03/04.
+No milestone acceptance or push/publication is claimed. Linux aarch64 only;
 macOS/Windows unverified.
 
 US-41 publication and branch cleanup remain complete: issue #64 closed,
 PR #65 squash-merged as `5d5781c`; Gates 1–4 Approved. Prior CI/evidence details
-remain in its owning plan and reports. US-12 remains the latest accepted M1
+remain in its owning plan and reports. US-13 M1 is accepted locally; US-12 remains the latest merged M1
 component. Historical M1/M50 and revised MVP milestone acceptance obligations
 below remain open; drafting US-13 does not satisfy them.
 

@@ -327,8 +327,8 @@ raw records. No failed product corrective attempts or new suppressions.
 **Gate 3:** Approved, 2026-11-14. Developer “i approve ip3; commit”
 approves completed IP3-T1–T3 and authorizes their local commit, including the
 [IP3 evidence](../verification/us-13-ip3.md), installed probes and final guidance.
-Requested changes: None. M1-slice acceptance remains Pending because phase
-approval is distinct from criterion acceptance. Whole US-13 remains incomplete
+Requested changes: None. M1-slice acceptance was separately given below; phase
+approval remains distinct from criterion acceptance. Whole US-13 remains incomplete
 until M2 AC-03/04. No push, PR or issue update is authorized by this decision.
 
 ## Final verification requirements
@@ -349,23 +349,24 @@ until M2 AC-03/04. No push, PR or issue update is authorized by this decision.
 - **Renewal:** Executable changes renew applicable focused, M1 and final M1–6
   evidence; document-only corrections use link/whitespace checks. Standalone
   artifact/full-suite commands require explicit developer direction.
-- **Actual results and limitations:** [IP3 report](../verification/us-13-ip3.md); required checks pass with the existing skip and platform limits. Acceptance pending.
+- **Actual results and limitations:** [IP3 report](../verification/us-13-ip3.md); required checks pass with the existing skip and platform limits. M1 slice accepted, 2026-11-14.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-13-AC-01 | IP1-T1/T2; IP2-T1/T2; IP3-T1/T3 | Documented recipe, native source/extraction/split/derived identities, committed A/B references and retained content, both installed wheels | Verified; developer acceptance pending |
-| US-13-AC-02 | IP1-T2; IP2-T3/T4; IP3-T1/T2/T3 | Actual fixture Git commits/inventory, excluded bytes, single split-record ownership, Git-owned manifests and both versions in local cache/remote | Verified; developer acceptance pending |
+| US-13-AC-01 | IP1-T1/T2; IP2-T1/T2; IP3-T1/T3 | Documented recipe, native source/extraction/split/derived identities, committed A/B references and retained content, both installed wheels | Accepted, 2026-11-14 |
+| US-13-AC-02 | IP1-T2; IP2-T3/T4; IP3-T1/T2/T3 | Actual fixture Git commits/inventory, excluded bytes, single split-record ownership, Git-owned manifests and both versions in local cache/remote | Accepted, 2026-11-14 |
 | US-13-AC-03 | M2 owning plan to be defined | Restoration from recorded metadata and verified content hashes | Deferred to M2 |
 | US-13-AC-04 | M2 owning plan to be defined | Missing/mismatched restoration fails explicitly | Deferred to M2 |
 
-- **M1-slice developer acceptance:** Pending; final Gate 3 can serve only if explicit.
+- **M1-slice developer acceptance:** Accepted, AC-01/02 only.
 - **Whole-story developer acceptance:** Pending until M2 AC-03/04 delivery.
-- **Decision reference and date:** Pending.
-- **Publication:** This planning request authorizes no commit, push, PR or issue
-  update. Later authorized execution follows its selected skill's publication
-  workflow only after the required acceptance decisions.
+- **Decision reference and date:** Developer “i accept the us-13”, followed by
+  “commit”, 2026-11-14. Acceptance applies to the delivered M1 slice;
+  AC-03/04 remain deferred and unverified.
+- **Publication:** Developer “commit” authorizes a local acceptance-record commit.
+  No push, PR or issue update is part of this request.
 
 ## Milestone acceptance handoff
 

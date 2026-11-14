@@ -2,7 +2,7 @@
 
 Date: 2026-11-14 UTC. Owning [plan](../plans/milestone-1-us-13.md),
 [issue #16](https://github.com/jimthompson5802/agentic-ml/issues/16).
-Gate 3 approved, 2026-11-14; M1-slice acceptance pending. AC-01/02 only;
+Gate 3 approved, 2026-11-14; M1 slice accepted, 2026-11-14. AC-01/02 only;
 AC-03/04 remain M2.
 
 ## Boundaries and implementation
@@ -69,13 +69,14 @@ no warning suppression was added.
 
 | Criterion | Independent evidence | Result |
 |---|---|---|
-| US-13-AC-01 | Both installed paths, both input formats/layouts, literal extraction/partition/derived outputs, native identities and real committed A/B history | Verified; developer acceptance pending |
-| US-13-AC-02 | Exact Git inventory/exclusions, project settings and pointers, independent cache/remote bytes for both versions, native failure/configuration boundaries | Verified; developer acceptance pending |
+| US-13-AC-01 | Both installed paths, both input formats/layouts, literal extraction/partition/derived outputs, native identities and real committed A/B history | Accepted, 2026-11-14 |
+| US-13-AC-02 | Exact Git inventory/exclusions, project settings and pointers, independent cache/remote bytes for both versions, native failure/configuration boundaries | Accepted, 2026-11-14 |
 | US-13-AC-03/04 | M2 restoration/hash and missing/corrupt guarantees | Deferred to M2 |
 
 IP3-T1–T3 are technically complete. Developer “i approve ip3; commit”, 2026-11-14, approved Gate 3 and authorized
-committing the IP3 package. Explicit M1-slice acceptance remains pending;
-whole-story acceptance requires M2. Issue #16 stays open. No push/publication
+committing the IP3 package. Developer “i accept the us-13”, followed by “commit”, 2026-11-14,
+accepted the delivered M1 AC-01/02 slice and authorized a local record commit;
+whole-story completion requires M2. Issue #16 stays open. No push/publication
 is authorized. Approval-record edits change no executable behavior; retained
 verification remains applicable, with renewed relative-link/whitespace checks.
 

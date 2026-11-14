@@ -175,7 +175,7 @@ prevention are not promised; tests independently verify supported split/fit scop
 
 US-13 M1 has installed evidence for the [native DVC recipe](../../dataset-versioning.md)
 versioning source snapshots, extraction bundles, split records and derived data.
-Gate 3 is approved; M1-slice acceptance remains pending; see [IP3 evidence](../../verification/us-13-ip3.md).
+Gate 3 is approved; M1 AC-01/02 accepted 2026-11-14; see [IP3 evidence](../../verification/us-13-ip3.md).
 Git tracks native pointers and project settings. US-26/27 run links and native
 stages/lockfiles remain planned.
 Keep content/generated stores out of Git.

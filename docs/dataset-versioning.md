@@ -1,6 +1,6 @@
 # Dataset versioning with native DVC
 
-**Status: Both installed wheel paths verified; Gate 3 approved, 2026-11-14.** The recipe
+**Status: Both installed wheel paths verified; M1 AC-01/02 accepted, 2026-11-14.** The recipe
 covers US-13 M1 AC-01/02 using the existing public APIs and native DVC.
 Direct/rebuilt installed evidence is in [IP3](verification/us-13-ip3.md). See the
 [plan](plans/milestone-1-us-13.md), [IP1 observations](verification/us-13-ip1.md)
