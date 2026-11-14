@@ -17,21 +17,31 @@ Read the applicable agent instructions and relevant repository documents. Follow
 
 Use the repository's plan structure, save location, identifiers, and progress format. Use the defaults below only when the repository has no convention for that item.
 
-## Prepare the planning branch
+## Select the planning worktree
 
-Before analyzing requirements or writing the plan, check the current Git branch.
+Before detailed requirements analysis or plan writing, identify the target story
+and inspect the current branch and registered worktrees. Read enough issue
+metadata to distinguish the story identifier from its GitHub issue number.
 
-If the branch is `main`, identify the target user story from the planning request. Resolve its identifier before creating the branch. Read enough source metadata to identify the story when necessary.
+Use the [manage-story-worktree skill](../manage-story-worktree/SKILL.md) to create
+or reuse its workspace, following the repository's
+[story worktree guidance](../../../docs/development/worktrees.md). A story
+planning request authorizes the local branch/worktree creation needed for that
+story; it does not authorize environment setup or publication. Resolve detached
+HEAD or conflicting associations before writing. Do not continue on an arbitrary
+named branch or switch the caller's checkout.
 
-Create and switch to `US-<story-number>-<short-slug>`, for example `US-34-experiment-init`. Use the target story's number and a short, lowercase, hyphen-separated slug describing its scope. For coordinated planning across prerequisite stories, use the target story's identifier.
+Read instructions and the checkpoint in the selected checkout, then perform
+subsequent reads, edits, and checks there. Record story/issue, branch, base ref and
+starting commit, and primary-checkout-relative worktree location in the plan.
+Report the absolute session path to the developer without committing that path.
+Existing in-progress story checkouts follow the guidance's resumption rules;
+do not relocate their edits automatically.
 
-Verify that the branch switch succeeded before continuing requirements analysis or plan writing.
-
-If already on another named branch, continue there.
-
-If HEAD is detached, the proposed branch already exists, or branch creation fails, report the condition and request developer direction before continuing. Preserve existing working-tree changes.
-
-Creating the local planning branch is part of this workflow. Publishing it requires separate authorization. Report the selected branch when delivering the plan.
+For coordinated prerequisite planning, use the target story's worktree to author
+the approved coordinated planning deliverables. Do not overwrite another active
+story's plan; reconcile its owning session's records first. Creating these plans
+does not authorize implementation of prerequisite stories.
 
 ## Read the source requirements
 

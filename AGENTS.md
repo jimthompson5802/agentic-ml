@@ -20,6 +20,8 @@ If no GitHub issue is supplied or identifiable, request the issue before startin
 
 When starting or resuming development, read [CHECKPOINTS.md](CHECKPOINTS.md) and follow its maintenance rules. Update it at completed work, approval gates, blockers, and before handing work back. Verify its summary against the owning issues, implementation plans, and current working tree before acting.
 
+For story planning or execution, use the [manage-story-worktree skill](.agents/skills/manage-story-worktree/SKILL.md) to select the owning checkout and follow the [story worktree guidance](docs/development/worktrees.md). Use one branch, worktree, agent session, and Python environment per story in the shared devcontainer. Keep approvals and checkpoint summaries specific to that story; workspace creation does not authorize implementation or cleanup.
+
 For GitHub reads and development checks, follow the [repository-local command approval guidance](docs/development.md#repository-local-codex-command-approvals). Command permissions do not approve implementation phases, story acceptance, or publication.
 
 Use Conventional Commits for commit messages: `<type>[optional scope]: <description>` (for example, `docs: update architecture proposal`).

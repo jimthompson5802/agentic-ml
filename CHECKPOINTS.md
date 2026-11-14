@@ -4,14 +4,34 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Checkout: `main` at `b03afb3`, synchronized with `origin/main` before this
-review. The working tree was clean; this handoff changes only `CHECKPOINTS.md`.
-Verification-instruction updates were committed and pushed as `b03afb3`.
-Executable phase gates use valid focused test/regression evidence plus shared
-checks; M1–6 remains required at story acceptance. See the
-[verification policy](docs/development/verification.md#phase-and-story-verification).
-Existing approved plans retain stronger recorded requirements until explicitly
-revised. No plan execution or product implementation is active.
+Checkout: `main`; implementation parent `e0b7471`. Before publication,
+`git ls-remote origin refs/heads/main` confirmed that remote `main` matched that
+parent. Contributor worktree management Gate 1
+was approved by “I approve Gate 1,” Gate 2 by “i approve gate 2,” and Gate 3 by
+“I approve gate 3,” all developer messages on 2026-11-14. All three phases and
+gates are complete in the
+[owning plan](docs/plans/story-worktree-management.md).
+Changes include the new skill/metadata, planning and execution integration,
+worktree ignore rule, agent/development guidance, plan template, saved plan, and
+this checkpoint and the new verification report. The developer's subsequent
+“commit and push” authorizes committing this change set and pushing `main` to
+`origin`; Git history and remote refs establish the resulting commit and
+synchronization status. No PR or cleanup was requested. The real checkout
+retains only its original registered worktree.
+
+Validation passed for all three skills, metadata/file-link and whitespace checks
+across 13 files, `git diff --check`, and the `.worktrees/` ignore rule. The
+[Phase 3 report](docs/verification/story-worktree-management.md) records 28 host
+Git/walkthrough checks, 21 shared-container session checks, and 15 checks after
+container restart. Two synthetic story sessions used separate editable
+environments. Each worktree and the primary fixture collected 723 of 991 cases
+(268 deselected); no product tests were executed. The host `.venv` remains unusable
+outside Linux; container Python and the new isolated environments worked. The
+existing container was returned to its initial stopped state after validation.
+No environment repair or automatic assistant-policy enforcement is claimed.
+See the report for command records and verification limits. Product verification
+obligations and the [verification policy](docs/development/verification.md#phase-and-story-verification)
+remain unchanged. No product implementation is active.
 
 US-13 M1 AC-01/02 is accepted and merged through
 [PR #66](https://github.com/jimthompson5802/agentic-ml/pull/66), squash `ecd28b1`.
@@ -28,10 +48,16 @@ Local and remote `skill-refactoring` branches were deleted; merge/cleanup record
 were pushed as `bdb871c`. Both PR CI jobs were cancelled, so no passing CI result
 is claimed for that head. The separate policy update followed as `b03afb3`.
 
-**Next action:** await development direction. Developer “commit and push”
-authorized committing and publishing this checkpoint refresh. Documentation only:
-relative file links and `git diff --check` passed; TDD and executable tests do not
-apply. Historical verification obligations below remain open.
+**Next action:** complete authorized publication, then await development
+direction. Keep validation fixtures and raw evidence; cleanup remains separate.
+Retain raw evidence under
+`.dev-records/verification/20261114T173007Z-e0b7471-worktrees-d4026fb0/`, the
+1.8 GB container fixture under `.worktrees/worktree-validation-d4026fb0/`, and
+the host fixture linked from the report. TDD and executable product checks do
+not apply to these instruction and ignore-rule changes. Container recreation,
+automatic VS Code startup, independent assistant evaluation, symlink cleanup
+demonstrations, and Windows support remain unverified.
+Historical verification obligations below remain open.
 
 ## Completed work: authoritative records
 
@@ -122,6 +148,11 @@ substitute historical story checks for current or milestone verification.
 
 - Keep one current position and next action. Replace superseded resume instructions;
   use Git history and linked plans/reports for historical detail.
+- In a story worktree, keep that summary specific to its story and checkout.
+  Reconcile inherited base-branch summaries against the owning plan before
+  resuming. During authorized integration to `main`, reconcile incoming checkpoint
+  edits against current `main` and existing obligations; do not replace its
+  summary blindly. Follow the [worktree guidance](docs/development/worktrees.md#checkpoints-integration-and-removal).
 - Issues govern scope; plans own tasks, decisions, approvals and evidence. Resolve
   discrepancies against those sources before resuming. Link verification policy
   rather than duplicating it.

@@ -22,6 +22,18 @@ For new plans, follow the [phase and story verification policy](../development/v
 - **Supporting design:** <relevant sections or accepted architecture decisions>
 - **Coordinated execution index:** <link when cross-story prerequisites are included; otherwise None>
 
+## Workspace association
+
+- **GitHub issue and story:** <issue reference and story ID; these numbers may differ>
+- **Branch:** <US-number-short-slug or verified existing story branch>
+- **Base ref and starting commit:** <selected base and commit at branch creation; for an existing branch, record known provenance or Unknown>
+- **Worktree:** <location relative to the primary checkout, normally .worktrees/US-number-short-slug>
+
+Follow [story worktree guidance](../development/worktrees.md). Keep absolute local
+paths in session output rather than this plan. Verify this association when
+resuming; preserve existing branches and approvals. Adjust relative links for
+the saved plan's location.
+
 ## Dependencies and decisions
 
 | Dependency or decision | Required outcome | Work blocked | Status / evidence |

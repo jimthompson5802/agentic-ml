@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Story Worktree"
+  short_description: "Create, inspect, resume, and remove story worktrees"
+  default_prompt: "Use $manage-story-worktree to manage the Git worktree for my user story and report its workspace state."

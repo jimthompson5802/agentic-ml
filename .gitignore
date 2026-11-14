@@ -64,5 +64,8 @@ Thumbs.db
 # Retained development evidence; preserve during cleanup and back up separately.
 /.dev-records/
 
+# Linked story checkouts; preserve their work and evidence during cleanup.
+/.worktrees/
+
 # agentic work area
 sandbox/

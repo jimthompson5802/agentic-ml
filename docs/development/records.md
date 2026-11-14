@@ -22,6 +22,14 @@ Retain these records for the lifetime of agentic-ml development. Automated envir
 
 Contributors are responsible for backing up `.dev-records/` and preserving or transferring it before deleting or replacing a checkout. Ignoring the directory does not protect it from `git clean -fdx`, which can delete ignored files; preserve these records before any such operation. Records from separate checkouts must be included in the backup. Existing historical evidence must not be deleted or migrated automatically.
 
+For explicitly authorized linked-worktree removal, follow
+[story worktree cleanup](worktrees.md#checkpoints-integration-and-removal).
+Preserve a verified copy in the primary checkout's
+`.dev-records/worktree-archives/` before removing the source worktree. Record the
+source-to-archive mapping so historical report paths remain traceable. This
+archive is separate from the existing verification-record layout and does not
+authorize cleanup of historical evidence.
+
 The four standalone verification drivers implement this layout. Their `RECORDS`
 lines identify each invocation; composed initialization/planning commands report
 parent and child records. Parent summaries link child records, and child summaries

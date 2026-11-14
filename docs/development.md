@@ -9,6 +9,7 @@ Read this core guide before Python changes. Read each applicable reference befor
 | Task | Required reference |
 |---|---|
 | Create or repair a contributor environment | [Setup](development/setup.md) |
+| Plan or execute stories in worktrees; manage concurrent story sessions or cleanup | [Story worktrees](development/worktrees.md) |
 | Plan verification, conduct TDD, run tests, or prepare an approval gate | [Verification](development/verification.md) |
 | Read GitHub or troubleshoot command approvals | [Command approvals](development/command-approvals.md) |
 | Inspect, modify or troubleshoot CI | [CI](development/ci.md) |
