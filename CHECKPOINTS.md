@@ -4,40 +4,26 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Planning handoff, 2026-11-14 UTC: this checkout owns US-26 recording / issue #17,
-branch `US-26-mlflow`, worktree `.worktrees/US-26-mlflow`. It was created from
-local `main` at `1a9864a645084af8cfcec580b1db5fa045a67859`; no fetch/pull or
-current remote-main comparison was performed. The new [M1 plan](docs/plans/milestone-1-us-26-recording.md)
-and [coordinated index](docs/plans/milestone-1-us-15-us-26-execution-order.md) are Draft. All implementation tasks are
-Not started; plan review and eight combined completion gates remain Pending.
-On 2026-11-14 the developer said “i approve phase 1; commit”, authorizing
-US-26 IP1 and committing these planning documents. This supersedes the earlier
-prohibition on starting IP1; it does not approve unfinished phase results.
-No environment, product source/test, build, native feasibility probe, push or
-external issue change was performed.
+US-26 Gate 1 approved / Phase 2 authorized, 2026-11-14 UTC.
+Owning checkout: US-26-mlflow, .worktrees/US-26-mlflow, HEAD 131ac82 before
+this authorized Phase 1 commit. Developer in coordination thread
+01a1db6c-a225-73e0-8796-81a03c4cec7a: “i approve Gate 1 in both us-15 and
+us-26. commit the changes and start phase 2 in both stories”.
+Both Gate 1 approvals and US-26 Phase 2 authority are recorded in the
+[owning plan](docs/plans/milestone-1-us-26-recording.md). Commit the reconciled
+Phase 1 records, then execute IP2 T1–T4 through the confirmed public boundary.
+Stop at Gate 2; no push/publication, Phase 3 or sibling edits are authorized.
 
-Complete #17/#21 bodies and both two-comment discussions were retrieved with
-stable metadata refreshes. CONTRACT-01 governs the direction; exact proposed
-metadata/provenance types and public test boundaries await joint review. Related
-issues #19/#16/#20/#33/#43/#58/#64 were also completely retrieved. Snapshots are
-local under `.dev-records/verification/20261114-us15-us26-planning/issues.json`.
-The shared index records overlap, file ownership and acyclic capability order.
-US-15 AC-04 stays M2; #17 covers recording AC-01–05, not #33/#43's criteria.
-
-Next action after the authorized planning commit: execute US-26 IP1, beginning
-with the current issue refresh and contract reconciliation. Stop at Gate 1 for
-review of completed evidence. US-15 execution remains separately owned.
-IP4 must wait for US-15 component Gate 3 and separately authorized producer-source integration.
-Plan approval does not approve implementation gates. M1 slice/story acceptance,
-publication and worktree cleanup remain separate decisions.
-
-Current tracked change: this checkpoint. New files: owning plan, plus the shared execution index.
-Planning validation: 50 local plan/index Markdown links and anchors resolve;
-26 unique task IDs are Not started across both plans; each plan has four developer
-gates. Final validation passed for 154 local links/anchors across six documents,
-new-document whitespace/final newlines, and `git diff --check` in all checkouts.
-Results are saved with the local issue snapshots in document-validation.json. TDD and executable checks do not apply to planning documents;
-no passing product verification or runtime platform support is claimed.
+SC-01 concurrence and complete-metadata/native persistence evidence are in the
+[renewal](docs/verification/us26-sc01-concurrence.md); original default-skops
+failure remains preserved. Phase 1 document checks passed (89 links/anchors and
+whitespace). No product code/tests yet. Existing own locked .venv is ready.
+Raw evidence stays under .dev-records/verification/us26-ip1-20261114/ and
+.dev-records/verification/us26-sc01-20261114/. Lock SHA-256:
+6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4.
+Current changes for the commit: checkpoint, owning plan, shared index, tracking
+contract, original IP1 report/renewal notice and concurrence report. Historical
+obligations remain unchanged; no executable acceptance is claimed.
 
 Historical obligations below remain unchanged. Preserve the contributor worktree
 management plan/report, raw records under

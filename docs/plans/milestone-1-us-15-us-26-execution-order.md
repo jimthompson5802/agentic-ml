@@ -4,9 +4,10 @@
 
 Draft for developer review, 2026-11-14. The developer authorized US-26 IP1 and
 committing this checkout's planning documents with “i approve phase 1; commit”.
-See the owning US-26 plan for the authorization record. US-26 IP1 tasks remain
-Not started; all completion gates remain Pending. US-15 execution, later phases,
-publication, merge and rebase require their own authorization.
+See the owning US-26 plan for the authorization record. US-26 IP1 tasks are technically Complete; see its
+[native findings](../verification/us-26-recording-ip1.md). All completion gates remain Pending. US-15 execution, later phases,
+publication, merge and rebase require their own authorization. The subsequent
+SC-01 handoff authorizes reconciliation only, with no new commit or publication.
 
 Targets: [US-15 M1 plan](../../../US-15-preprocessing/docs/plans/milestone-1-us-15.md)
 and [US-26 #17 plan](milestone-1-us-26-recording.md). US-26 owns this index;
@@ -61,7 +62,9 @@ under docs/plans/mvp-scope-issues predate CONTRACT-01 and are not current scope.
 Use native objects and ordinary dictionaries, without new public dataclasses,
 TypedDict contracts, a feature DSL, a metadata database or run identifiers.
 `Json` below means null, bool, str, int, finite float, list[Json] or
-dict[str, Json]. Reject NaN/infinity and unsupported objects, with field context.
+dict[str, Json]. JSON numeric values must be finite. Encode the narrow native parameter
+sentinels/dtypes below as tagged records; reject other unsupported objects
+with field context.
 Integers exclude booleans where they represent counts/status codes. Require
 exact versioned keys except explicitly variable parameter/library dictionaries.
 
@@ -93,7 +96,24 @@ lists/tuples become lists; string-keyed maps recurse; ordinary/numpy scalar
 booleans, integers and finite floats become corresponding JSON scalars. A numpy
 array of supported values becomes a list. Pipeline steps and ColumnTransformer
 transformer triples therefore retain their original order/names and effective
-settings. No repr/pickle strings masquerade as reproducible settings. Unsupported
+settings. Native parameter tags (SC-01, developer accepted 2026-11-14):
+
+- SimpleImputer.missing_values NaN becomes exactly
+  {"kind":"missing_value","value":"nan"}; this is the only supported NaN
+  parameter context. Other NaN and all infinity values remain invalid.
+- Supported numpy scalar type/dtype descriptors become exactly
+  {"kind":"numpy_dtype","name":"float64"}, with canonical allowed names
+  bool, int8, int16, int32, int64, uint8, uint16, uint32, uint64, float16,
+  float32, float64. Finite scalar instances remain ordinary JSON values.
+- These two kind values are reserved in parameter maps. Producer encoding rejects caller-supplied
+  literal maps using them. Consumer validation accepts canonical encoded tags
+  in supported contexts and rejects malformed/extra tag keys or unsupported
+  dtype names; it does not reject all received tag maps.
+  The consumer validates/retains tags; no arbitrary import, callable execution
+  or new pipeline reconstruction API is introduced. Metrics/provenance numeric
+  values remain finite.
+
+No repr/pickle strings masquerade as reproducible settings. Unsupported
 callables, opaque objects and cyclic settings fail clearly. Built-in sklearn
 imputation/scaling/encoding compose the M1 fixture; custom component compatibility
 and callable capture belong to M2/US-16. Do not expand support silently.
@@ -209,6 +229,15 @@ do not accidentally replace it with an unrelated logged-model namespace. Record
 MLflow package behavior as feasibility evidence, then refine/review any needed
 contract change before code. No standalone joblib handoff or new result database.
 
+US-26 IP1 confirms this layout with save_model plus explicit-client
+log_artifacts. Proposed locked configuration is serialization_format="skops",
+skops_trusted_types=["numpy.dtype"] for the supported composed M1 fixture.
+The default composed save fails on numpy.dtype; the bounded explicit type
+configuration passes native save/load. See the [preserved failure and alternate
+probe](../verification/us-26-recording-ip1.md). SC-01 adopts this bounded choice; Gate 1 still reviews the renewed evidence
+and public boundaries. No automatic pickle/cloudpickle fallback or arbitrary
+trust list is permitted.
+
 TypeError/ValueError reject invalid values with field context; missing required
 references use FileNotFoundError; existing artifact conflicts use FileExistsError.
 Preserve native serialization/storage exception types and cause/context, including
@@ -289,8 +318,20 @@ retrieval is being used as a complete discussion. Linked pages/timeline/deleted
 comments are outside that export. Historical owning plans establish acceptance
 of already merged prerequisites, despite old unchecked issue-body criteria.
 
-Current result: planning documents only. No environment synchronization, product
-test, native feasibility probe, build or implementation has run. Document checks
-are recorded in branch checkpoints after validation. Next action is developer
-review of both plans and this index. US-26 IP1 is now authorized; US-15 IP1 needs
-separate execution authorization. All completion gates remain pending.
+Current result: US-26 explicitly concurs with **US-15-US-26-SC-01**;
+[consumer renewal and concurrence](../verification/us26-sc01-concurrence.md)
+confirm the exact tags, full effective settings and bounded native persistence.
+The [producer revision report](../../../US-15-preprocessing/docs/verification/us15-us26-contract-revision.md)
+and renewed consumer evidence agree. US-26 IP1-T1/T2/T3 are technically Complete.
+US-15's owning session must finalize its own T3/records using this concurrence;
+no sibling approval is inferred. Both Gate 1 reviews remain Pending. No product
+module, behavior test, build, installed integration or story acceptance is claimed.
+
+## Gate 1 decision and Phase 2 authority
+
+2026-11-14, developer in coordination thread
+01a1db6c-a225-73e0-8796-81a03c4cec7a: “i approve Gate 1 in both us-15 and
+us-26. commit the changes and start phase 2 in both stories”. Both Gate 1
+decisions are Approved and both Phase 2 executions authorized. Earlier pending
+statements describe the historical handoff and are superseded by this decision.
+Each owner records its own gate/tasks; stop at Gate 2 with no push/publication.

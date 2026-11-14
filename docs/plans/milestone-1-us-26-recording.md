@@ -82,7 +82,7 @@ and contributor installation drivers. No product test was run during planning.
 | Dependency or decision | Required outcome | Work blocked | Status / evidence |
 |---|---|---|---|
 | US-15-US-26-CONTRACT-01 | Native pipeline/plain metadata, separate provenance, MLflow ownership | Dependent implementation | Direction accepted in #17/#21 on 2026-11-14; exact proposed contract and boundaries in index require joint review. |
-| Native MLflow serialization/artifact behavior | Existing-run logging with exact preprocessing/pipeline, metadata and provenance paths under locked MLflow 3.17.2 | IP2/IP3 | IP1 native feasibility required; do not infer logged-model namespace behavior from older MLflow APIs. |
+| Native MLflow serialization/artifact behavior | Existing-run logging with exact preprocessing/pipeline, metadata and provenance paths under locked MLflow 3.17.2 | IP2/IP3 | [IP1 findings](../verification/us-26-recording-ip1.md) confirm existing-run layout; SC-01 adopts explicit numpy.dtype trust; renewed consumer feasibility passes; both gates pending. |
 | Existing DVC data/splits, US-13 #16 M1 | Real pointer/hash/data links, no fake SHA-as-DVC identity | IP2, IP4 | [US-13 IP2/IP3, Gate 3 and M1 acceptance](milestone-1-us-13.md); do not require M2 restoration. |
 | Git/wheel identity, US-41 #64 | Preserve normal installed origin, lock and artifact identity | IP2/IP4 | [Accepted US-41 plan](milestone-50-us-41.md); Git source SHA required when applicable, unavailable wheel SHA/build remains explicit null. |
 | Real US-15 producer | fit_preprocessing output with final reviewed metadata/schema | IP4 only | [US-15-IP3-T1/T2 and Gate 3](../../../US-15-preprocessing/docs/plans/milestone-1-us-15.md#us-15--implementation-phase-3-produce-metadata-and-verify-installed-use) required. IP2/IP3 use independently fitted fixture and do not wait for US-15 completion. |
@@ -144,21 +144,38 @@ that limit. Independent real-store success and installed integration remain requ
 
 ## Plan review
 
-- **Status:** Draft.
-- **Developer decision:** Pending — review with US-15 M1 plan and shared index.
+- **Status:** Phase 1 contract/boundaries approved; Phase 2 authorized.
+- **Developer decision:** Gate 1 Approved by the coordination-session instruction recorded below.
 - **Decision reference and date:** Pending.
-- **Requested plan changes:** None recorded.
+- **Requested plan changes:** SC-01 encoding/serialization reconciliation adopted; see scope-change history.
 - **Implementation authorization:** US-26 IP1 authorized on 2026-11-14 by
   developer message “i approve phase 1; commit”. This supersedes the earlier
   prohibition on starting IP1. Commit of the planning documents is authorized.
-  IP1 tasks remain Not started; Gate 1 completion approval remains Pending.
+  IP1 execution was reaffirmed by “start phase 1”. T1–T3 were technically
+  Complete before SC-01; T2/T3 were reopened and are Complete again with
+  [renewed evidence](../verification/us26-sc01-concurrence.md). Gate 1 remains Pending.
   No US-15 execution or later phase is authorized by this decision.
 
 ## Scope-change history
 
-None. Carry accepted CONTRACT-01 without asserting its detailed proposed fields
-are approved. Use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md)
-for changed scope/constraints during execution; update affected plan/index together.
+### US-15-US-26-SC-01 — Native parameter encoding reconciliation
+
+Developer accepted the joint revision on 2026-11-14: “I accept your
+recommendation.” Add exact native missing-value/dtype parameter tags and
+complete-metadata feasibility; adopt bounded skops configuration. Signatures,
+criteria, milestone assignments, integration ownership and gates are unchanged.
+Producer [evidence](../../../US-15-preprocessing/docs/verification/us15-us26-contract-revision.md)
+confirms complete JSON and native persistence, not toolkit validator acceptance.
+Earlier native transforms and default skops failure remain valid historical
+observations; broad metadata-feasibility conclusions need renewal. IP1-T2/T3
+were reopened for this owning session's schema/probe/document verification.
+US-26 adoption was explicitly authorized by the developer-directed SC-01 handoff
+(contract reconciliation only; no gate approval, IP2, commit or publication).
+The [renewal/concurrence](../verification/us26-sc01-concurrence.md) now completes
+that verification: US-26 explicitly concurs with the exact producer SC-01
+revision; no unresolved interface differences remain. US-15 retains ownership
+of finalizing its T3/records. Signatures, criteria and verification gates stay
+unchanged; both gates remain Pending and no IP2 authorization is inferred.
 
 ## Execution and verification rules
 
@@ -216,11 +233,15 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-26-IP1-T1 | Not started | Reconcile #17/#21 contract, this index, native DVC recipe and accepted installation identity code | Authorization | Exact reference/type/path/error matrix; no extra split/run store or contradictory distribution SHA rule | AC-01/02/03/04/05 |
-| US-26-IP1-T2 | Not started | Inspect installed locked MLflow/sklearn APIs; native-only save_model/client-log/download/load probes in isolated store; inspect Git/wheel identity access and deterministic failure fixture | T1 | Actual run artifact layout and namespace, native error/context behavior and identity reuse approach recorded in proposed docs/verification/us-26-recording-ip1.md; no product module or behavior tests yet | AC-01/03/05 |
-| US-26-IP1-T3 | Not started | Finalize proposed docs/experiment-tracking.md contract, this plan/index, paired US-15 schema/test boundaries | T2 and US-15-IP1-T1/T2 findings | Reviewable runnable-script outline, exact schemas/signatures, native failure fixture and integration ownership; resolve feasibility findings before dependent code; neither story waits for the other's T3 | AC-01/02/03/04/05 |
+| US-26-IP1-T1 | Complete | Reconcile #17/#21 contract, this index, native DVC recipe and accepted installation identity code | Authorization | Exact reference/type/path/error matrix; no extra split/run store or contradictory distribution SHA rule | AC-01/02/03/04/05 |
+| US-26-IP1-T2 | Complete | Inspect installed locked MLflow/sklearn APIs; native-only save_model/client-log/download/load probes in isolated store; inspect Git/wheel identity access and deterministic failure fixture | T1 | Actual run artifact layout and namespace, native error/context behavior and identity reuse approach recorded in proposed docs/verification/us-26-recording-ip1.md; no product module or behavior tests yet | AC-01/03/05 |
+| US-26-IP1-T3 | Complete | Finalize proposed docs/experiment-tracking.md contract, this plan/index, paired US-15 schema/test boundaries | T2 and US-15-IP1-T1/T2 findings | Reviewable runnable-script outline, exact schemas/signatures, native failure fixture and integration ownership; resolve feasibility findings before dependent code; neither story waits for the other's T3 | AC-01/02/03/04/05 |
 
 ### Verification and review evidence
+
+- **SC-01 renewal:** [Explicit consumer concurrence](../verification/us26-sc01-concurrence.md) verifies full effective settings, canonical tags and native persistence; T2/T3 re-completed, no product validator acceptance claimed.
+
+- **IP1 evidence:** [Native findings and source reconciliation](../verification/us-26-recording-ip1.md), 2026-11-14. T1–T3 technically complete; both Gate 1 reviews remain pending.
 
 - **Selected tests and impact rationale:** Bounded native library probes only;
   documentation/link/whitespace checks. No executable toolkit behavior changes,
@@ -233,21 +254,20 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Existing-run/native artifacts and failure feasibility | Exact native commands/stdout/stderr retained in proposed IP1 report | Layout feasible; explicit run/store selected; failure fixture deterministic | Pending |
-| Metadata/reference/identity parity | Field-by-field index and accepted source-contract inspection | No drift from CONTRACT-01 or supported Git/wheel identity | Pending |
-| Documentation review | Local-link scan and git diff --check | Links/whitespace pass; pending findings explicitly block code | Pending |
+| Existing-run/native artifacts and failure feasibility | Exact native commands/stdout/stderr retained in proposed IP1 report | Layout feasible; explicit run/store selected; failure fixture deterministic | Pass with SC-01 bounded serialization configuration; renewed complete-metadata probe passes; original default failure retained |
+| Metadata/reference/identity parity | Field-by-field index and accepted source-contract inspection | No drift from CONTRACT-01 or supported Git/wheel identity | Pass: prior issue refresh plus SC-01 full-metadata consumer comparison; both gate reviews pending |
+| Documentation review | Local-link scan and git diff --check | Links/whitespace pass; pending findings explicitly block code | Pass: document validation recorded in IP1 report/raw records |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete; native artifact feasibility and provenance
   semantics confirmed; both story Gate 1 reviews agree on shared contract.
-- **Evidence presented:** Pending — proposed docs/verification/us-26-recording-ip1.md.
+- **Evidence presented:** [IP1 report](../verification/us-26-recording-ip1.md), [SC-01 concurrence](../verification/us26-sc01-concurrence.md) and [tracking contract](../experiment-tracking.md).
 - **Remaining limitations or blocked work:** All product behavior unimplemented/unverified.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
-- **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending — IP2 after both Gate 1 contract approvals
-  and execution direction; stop here.
+- **Developer decision:** Approved.
+- **Decision reference and date:** 2026-11-14, coordination-session developer: “i approve Gate 1 in both us-15 and us-26. commit the changes and start phase 2 in both stories”. Source thread 01a1db6c-a225-73e0-8796-81a03c4cec7a; relayed to this owning session.
+- **Requested changes and resolution:** SC-01 complete; exact tag/schema and bounded serialization concurrence recorded in the renewal report.
+- **Progression authorized:** US-26 IP2 authorized by the same instruction. Paired US-15 Gate 1 Approved by that exact decision; its owner records it separately. Stop at Gate 2; no push/publication.
 
 ## US-26 / Implementation Phase 2: Record results with committed provenance
 
@@ -417,10 +437,10 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 - **Evidence renewal:** Renew affected installed-artifact checks when code/build/
   resource/lock inputs change; renew M1–6 after executable edits. Documentation-only
   edits use appropriate link/whitespace checks, not a manufactured TDD failure.
-- **Actual results and limitations:** Pending. Planning used static repository and
-  complete GitHub reads; no probes/tests/builds/environment setup executed. Only
-  actual observed platform evidence will support runtime claims; macOS/Windows
-  coverage remains unverified for these changes.
+- **Actual results and limitations:** Final product verification Pending. IP1 and
+  SC-01 record native-library feasibility in the own locked environment; no
+  product behavior tests, build or installed integration ran. Linux aarch64
+  feasibility does not establish macOS/Windows support or AC acceptance.
 
 ## Story completion review
 
@@ -432,7 +452,7 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 | US-26-AC-04 | IP2-T2/T3; IP3-T2; IP4-T1/T2/T3 | Committed source/entrypoint/config references plus executed notebook outputs/errors when used | Pending |
 | US-26-AC-05 | IP2-T1/T3; IP3-T2/T3; IP4-T1/T2/T3 | Missing outputs despite zero exit, nonzero process, invalid refs and serialization/logging failure cases | Pending |
 
-- **Remaining work:** Every implementation task; #33/#43 remain separately owned.
+- **Remaining work:** IP2–IP4 and Gate 1 review; #33/#43 remain separately owned.
 - **Partial prerequisite delivery:** IP3 supplies independently verified consumer;
   only IP4 supplies actual US-15 preservation evidence. Neither accepts US-15 by
   proxy or claims full classification/assistant workflow delivery.
