@@ -277,12 +277,16 @@ edits or developer gate approvals are inferred.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-15-IP2-T1 | Not started | Add first numeric train-only test in proposed tests/integration/test_preprocessing.py; add minimum fit_preprocessing in proposed src/agentic_ml/preprocessing/__init__.py through red/green | Gate 1 | Literal scaler values pass, returned native Pipeline works; valid minimum metadata follows approved contract | AC-01 |
-| US-15-IP2-T2 | Not started | Add one invalid-membership/fit-scope case per red/green cycle; reuse create_partitions supplied mode; preserve source/record identity | T1 | Reject overlaps, unknown/duplicate/uncovered IDs, layout/feature/scope/source mismatches before affected fit | AC-02 |
-| US-15-IP2-T3 | Not started | Add two-way, supplied string IDs, reordered/nondefault index, imputation and categorical matrix cases one vertical slice at a time | T2 | Public transform outputs match independent expectations; original input/pipeline/cwd preserved; native errors visible | AC-01/02 |
-| US-15-IP2-T4 | Not started | Review structure, run focused/regression/shared commands, record proposed docs/verification/us-15-ip2.md | T3 | Valid red/green records, counts/platform/lock identity and all required results available | AC-01/02 |
+| US-15-IP2-T1 | Complete | Add first numeric train-only test in proposed tests/integration/test_preprocessing.py; add minimum fit_preprocessing in proposed src/agentic_ml/preprocessing/__init__.py through red/green | Gate 1 | Literal scaler values pass, returned native Pipeline works; valid minimum metadata follows approved contract | AC-01 |
+| US-15-IP2-T2 | Complete | Add one invalid-membership/fit-scope case per red/green cycle; reuse create_partitions supplied mode; preserve source/record identity | T1 | Reject overlaps, unknown/duplicate/uncovered IDs, layout/feature/scope/source mismatches before affected fit | AC-02 |
+| US-15-IP2-T3 | Complete | Add two-way, supplied string IDs, reordered/nondefault index, imputation and categorical matrix cases one vertical slice at a time | T2 | Public transform outputs match independent expectations; original input/pipeline/cwd preserved; native errors visible | AC-01/02 |
+| US-15-IP2-T4 | Complete | Review structure, run focused/regression/shared commands, record proposed docs/verification/us-15-ip2.md | T3 | Valid red/green records, counts/platform/lock identity and all required results available | AC-01/02 |
 
 ### Verification and review evidence
+
+[Phase 2 evidence](../verification/us-15-ip2.md) records all red/green cycles,
+27 public preprocessing cases plus 124 splitting regressions (151 passed),
+shared checks, source/lock/platform identities and remaining IP3/IP4 obligations.
 
 - **Selected tests and impact rationale:** Proposed preprocessing tests exercise
   public clone/fit/transform; existing splitting tests protect reused membership,
@@ -295,19 +299,22 @@ edits or developer gate approvals are inferred.
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Red then green per case | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_preprocessing.py -k <one-case-selector> | Red is missing/incorrect behavior; green matches unchanged oracle | Pending |
-| Preprocessing and partition regressions | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_preprocessing.py tests/integration/test_splitting.py | Pass; no weakened tests; current counts recorded | Pending |
-| Shared development checks | Exact shared command block above | Pass; lock unchanged; correct installed CLI version | Pending |
+| Red then green per case | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_preprocessing.py -k <one-case-selector> | Red is missing/incorrect behavior; green matches unchanged oracle | Passed ten red/green cycles; numbered logs in IP2 report |
+| Preprocessing and partition regressions | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_preprocessing.py tests/integration/test_splitting.py | Pass; no weakened tests; current counts recorded | 151 passed, 0 skipped/deselected, four loadgroup workers |
+| Shared development checks | Exact shared command block above | Pass; lock unchanged; correct installed CLI version | All passed; CLI 0.1.0, mypy 79 files, Ruff format 325 files |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete with AC-01/02 focused/regression/shared evidence.
-- **Evidence presented:** Pending — proposed docs/verification/us-15-ip2.md.
+- **Evidence presented:** [IP2 report](../verification/us-15-ip2.md); all four tasks
+  technically Complete; developer Gate 2 approval recorded below.
 - **Remaining limitations or blocked work:** Metadata completion and persisted handoff.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved for US-15; paired US-26 Gate 2 also approved.
+- **Decision reference and date:** 2026-11-14 coordination-session developer:
+  “for both us-15 and us-26 i approve the phase 2 gate, commit the changes.”
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending — IP3; stop here for explicit gate approval.
+- **Progression authorized:** Local Phase 2 commit only. IP3 execution is not
+  authorized; await separate direction. No push, publication or integration.
 
 ## US-15 / Implementation Phase 3: Produce metadata and verify installed use
 

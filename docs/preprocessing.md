@@ -1,8 +1,11 @@
 # Training-only preprocessing contract
 
-Status: proposed US-15 M1 contract for Gate 1 review. The helper below is not
-implemented. See the [owning plan](plans/milestone-1-us-15.md) and
-[native feasibility evidence](verification/us-15-ip1.md).
+Status: Gate 1 approved; Phase 2 training-only fitting is implemented and
+has Gate 2 approval. Phase 3 remains unstarted. See the
+[owning plan](plans/milestone-1-us-15.md) and
+[Phase 2 evidence/limits](verification/us-15-ip2.md). The full metadata boundary
+matrix and installed-package verification remain Phase 3 work; the complete
+contract below describes the approved target, not completed story acceptance.
 
 ## Public interface
 
@@ -48,7 +51,7 @@ The shared index now incorporates the developer-approved
 [encoding revision](plans/us15-us26-contract-revision.md). US-15 explicitly
 acknowledges [US-26 concurrence](../../US-26-mlflow/docs/verification/us26-sc01-concurrence.md);
 [producer reconciliation](verification/us15-sc01-concurrence.md) confirms no
-remaining interface differences. Both Gate 1 decisions remain pending.
+remaining interface differences. Both Gate 1 decisions are approved.
 
 | Required field | Value |
 |---|---|
@@ -135,7 +138,7 @@ defines independent literal expectations for both layouts, held-out/inference
 values, imputation, unseen categories, reordered/string IDs and invalid records.
 Tests will call the proposed public helper and native transform, check input
 preservation and strict JSON, and avoid private helpers or mocked fit counts.
-Gate 1 must confirm those boundaries before executable toolkit tests.
+Gate 1 confirmed these boundaries before Phase 2 executable toolkit tests.
 
 US-15 returns no Git, DVC or MLflow discoveries and no intermediate joblib file.
 US-26 receives the native fitted object and metadata plus separately supplied
@@ -145,6 +148,7 @@ native findings are now available. The agreed bounded serialization choice is
 locked M1 fixture, without broad trust discovery or pickle fallback. Producer
 and independent consumer feasibility passed the complete-metadata/native-save
 probes. Consumer contract/index adoption and producer acknowledgement are
-complete; both Gate 1 decisions remain pending. Actual
+complete; both Gate 1 decisions are approved. Phase 2 has Gate 2 approval;
+Phase 3 remains unstarted. Actual
 installed integration belongs to US-26 IP4 and is required for US-15 AC-03.
 Restored transformation equivalence (AC-04) remains M2.

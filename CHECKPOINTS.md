@@ -4,36 +4,42 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Joint contract reconciliation handoff, 2026-11-14 UTC: US-15 / issue #21,
-branch `US-15-preprocessing`, HEAD `864a377`. Developer-authorized SC-01
-revision and owning-session reconciliation are technically complete.
-[Plan](docs/plans/milestone-1-us-15.md) IP1-T1/T2/T3 are Complete; Gate 1 Approved; IP2 authorized.
-[Producer acknowledgement](docs/verification/us15-sc01-concurrence.md) explicitly
-acknowledges US-26 concurrence after independently reviewing adopted contracts,
-shared index, raw consumer probe/summary and metadata identities. No unresolved
-interface differences remain in this revision.
+Phase 2 approved commit handoff, 2026-11-14 UTC: US-15 / issue #21,
+branch `US-15-preprocessing`; current HEAD is the approved Phase 2 implementation
+commit, following Phase 1 reconciliation `576bd9f`.
+Developer approved Gate 1 in both stories and authorized Phase 2 with
+“i approve Gate 1 in both us-15 and us-26. commit the changes and start phase 2
+in both stories”. Both Gate 1 approvals and reviewed public test boundaries are
+recorded in the [owning plan](docs/plans/milestone-1-us-15.md).
 
-The producer/consumer agree on exact missing-value/dtype tags, 12-name dtype
-allowlist, reserved-map handling, finite ordinary numbers and explicit bounded
-skops/numpy.dtype configuration. Producer metadata and consumer retained metadata
-are byte-identical; both native feasibility probes passed with independent
-literal transform assertions. Earlier default-serialization failure and original
-observations remain preserved. Native evidence is Linux aarch64/Python 3.12.16;
-no product acceptance, installed integration or new platform claim is made.
+IP2-T1/T2/T3/T4 are Complete; Gate 2 is Approved for both US-15 and US-26. New public
+fit_preprocessing clones a native Pipeline, validates supported selected record
+fields/membership/source/features/fit scope and fits only training rows.
+Native output width/dtype and baseline effective metadata are checked; full
+metadata boundary coverage is explicitly deferred to IP3. No MLflow persistence
+or installed-wheel/integration completion is claimed.
 
-Developer approved Gate 1 in both stories and authorized a local commit plus
-Phase 2 execution on 2026-11-14: “i approve Gate 1 in both us-15 and us-26.
-commit the changes and start phase 2 in both stories”. The owning plan records
-this decision; both Gate 1 approvals confirm public test boundaries. Next action:
-commit reconciled Phase 1 records, then execute US-15 IP2 in this environment
-and stop at Gate 2. No push/publication, IP3, merge or cleanup is authorized.
+[IP2 evidence](docs/verification/us-15-ip2.md): ten small red/green cycles;
+final four-worker/loadgroup regression 151 passed (27 new + 124 splitting),
+0 skipped/deselected. Locked synchronization/lock consistency, full Ruff lint/
+format, strict mypy (79 files), CLI version 0.1.0 and diff whitespace passed.
+Lock hash unchanged; Linux aarch64/Python 3.12.16. New contributor sklearn stubs
+have documented native typing boundaries and no suppressions. No full suite,
+build, standalone artifact check or new platform support is claimed.
+Complete refreshed #21 discussion and stable metadata, failing/passing TDD logs
+and check records remain under `.dev-records/verification/20261114-us15-ip2/`.
 
-Current changes: checkpoint, producer plan/contract, original and revision reports,
-revision handoff and historical consumer patch, plus producer concurrence report;
-all are uncommitted. Document links/anchors/whitespace and git diff --check passed.
-New review identities/checks are retained under
-`.dev-records/verification/20261114-us15-sc01-concurrence/`; original native/issues
-and renewed-probe records remain in their existing directories.
+Developer in the coordination session approved both Gate 2 decisions on
+2026-11-14: “for both us-15 and us-26 i approve the phase 2 gate, commit the
+changes.” The owning plan/report record the exact decision; it authorizes a
+local commit only. Phase 2 and approval records are now committed; next action
+is to await separate Phase 3 execution direction. No Phase 3, push, publication, integration,
+merge or cleanup is authorized. The local Phase 2 commit contains module/tests,
+contributor stubs/rationale and plan/contract/checkpoint/evidence; Phase 1 commit
+`576bd9f` remains local. Verification results above remain valid after these
+approval-only documentation changes.
+Consumer actual handoff remains US-26 IP4; AC-04 remains M2. Both prior
+concurrence/SC-01/native failure records and milestone obligations are preserved.
 
 Historical obligations below remain unchanged. Preserve the contributor worktree
 management plan/report, raw records under
