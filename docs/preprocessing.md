@@ -44,8 +44,11 @@ This helper does not generate a new partition scheme or refit held-out rows.
 
 The proposed exact dictionary is shared with the US-26-owned
 [coordination index](../../US-26-mlflow/docs/plans/milestone-1-us-15-us-26-execution-order.md#proposed-handoff-types).
-That index remains the single proposed field/type definition; this table states
-the producer's matching obligations.
+The shared index now incorporates the developer-approved
+[encoding revision](plans/us15-us26-contract-revision.md). US-15 explicitly
+acknowledges [US-26 concurrence](../../US-26-mlflow/docs/verification/us26-sc01-concurrence.md);
+[producer reconciliation](verification/us15-sc01-concurrence.md) confirms no
+remaining interface differences. Both Gate 1 decisions remain pending.
 
 | Required field | Value |
 |---|---|
@@ -60,14 +63,39 @@ the producer's matching obligations.
 
 Reject unknown keys in versioned structures; variable parameters/version maps
 retain their permitted keys. `Json` is null, bool, string, integer, finite float,
-list of Json or string-keyed dictionary of Json. Reject NaN/infinity, unsupported
-objects and cyclic parameter structures. Counts exclude booleans.
+list of Json or string-keyed dictionary of Json. JSON numbers remain finite.
+Native parameter sentinels and dtype descriptors use the exact tagged records
+below; reject other unsupported objects and cycles. Counts exclude booleans.
 
 Encode each estimator using its fully qualified class name and
 `get_params(deep=False)` recursively. Encode tuples/lists as lists, numpy scalar
 values as ordinary JSON scalars and supported arrays as lists. Ordered native
 Pipeline steps and ColumnTransformer triples retain names, order and effective
-defaults. Do not serialize settings with repr or pickle text. Preserve source
+defaults. The following narrow native settings have explicit representations:
+
+| Native parameter | Exact JSON representation |
+|---|---|
+| NaN at SimpleImputer.missing_values | `{"kind": "missing_value", "value": "nan"}` |
+| Supported numpy scalar type or native dtype object | `{"kind": "numpy_dtype", "name": "float64"}` (name varies within the list below) |
+
+Allowed canonical dtype names: bool, int8, int16, int32, int64, uint8, uint16,
+uint32, uint64, float16, float32, float64. Dtype classes are recognized through
+this explicit native list, not by importing an arbitrary supplied class path.
+Finite numpy scalar instances remain ordinary JSON values. Dtype descriptors
+record the native numeric dtype, not an arbitrary callable.
+
+The missing-value tag is allowed only for NaN in the built-in SimpleImputer's
+missing_values parameter. Infinity remains invalid everywhere; NaN metrics,
+provenance values and ordinary numeric settings remain invalid. Tagged records
+require exactly their displayed keys and values. Reserve these two `kind` values
+within parameter mappings: reject caller-supplied literal mappings using them
+rather than confusing them with native parameter descriptions. These tags are
+metadata descriptions, not a new pipeline reconstruction API. Rejection of
+literal reserved maps applies while encoding caller settings; the consumer
+accepts canonical generated tags in supported contexts and validates them.
+
+US-26 must validate these same representations and retain them unchanged in
+metadata.json. Do not serialize settings with repr or pickle text. Preserve source
 SHA-256 as its existing bare digest and existing source versions; do not convert
 it to a DVC identity or add a new split identifier.
 
@@ -78,7 +106,7 @@ StandardScaler and OneHotEncoder. Use explicit ordered column-name lists for
 ColumnTransformer selections; callable selectors/settings remain outside the
 recordable M1 boundary. Default `memory=None` and `transform_input=None` are
 recordable Pipeline settings. Native passthrough/drop strings and ordinary
-scalar/list/dictionary estimator settings use the same JSON rules. Custom
+scalar/list/dictionary estimator settings use the revised JSON rules. Custom
 components and callable capture remain M2/US-16 work.
 
 Declared names describe the project's output schema. Check width, uniqueness
@@ -111,7 +139,12 @@ Gate 1 must confirm those boundaries before executable toolkit tests.
 
 US-15 returns no Git, DVC or MLflow discoveries and no intermediate joblib file.
 US-26 receives the native fitted object and metadata plus separately supplied
-shared provenance, then preserves them in an existing MLflow run. Its producer
-contract review and native feasibility findings are still pending. Actual
+shared provenance, then preserves them in an existing MLflow run. US-26's
+native findings are now available. The agreed bounded serialization choice is
+`serialization_format="skops", skops_trusted_types=["numpy.dtype"]` for the
+locked M1 fixture, without broad trust discovery or pickle fallback. Producer
+and independent consumer feasibility passed the complete-metadata/native-save
+probes. Consumer contract/index adoption and producer acknowledgement are
+complete; both Gate 1 decisions remain pending. Actual
 installed integration belongs to US-26 IP4 and is required for US-15 AC-03.
 Restored transformation equivalence (AC-04) remains M2.

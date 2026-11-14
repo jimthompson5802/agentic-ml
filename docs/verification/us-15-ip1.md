@@ -89,6 +89,14 @@ this contract-only phase; executable shared checks remain IP2/IP3/IP4 obligation
 No full suite, build or standalone artifact driver ran. No corrective attempts
 were needed for a behavior failure; sandbox retries were permission recovery.
 
+## Subsequent reconciliation
+
+The initial findings below are historical. Developer-approved SC-01 and
+[renewed evidence](us15-us26-contract-revision.md) supersede the incomplete
+metadata-feasibility conclusion. US-26 adopted/verified the revision; US-15
+[acknowledgement](us15-sc01-concurrence.md) now completes T3. The historical
+status below is superseded; both Gate 1 decisions remain Pending.
+
 ## Review status and limits
 
 T1 and T2 complete. [Proposed producer contract](../preprocessing.md) records

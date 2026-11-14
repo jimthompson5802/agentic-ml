@@ -4,29 +4,36 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Phase 1 handoff, 2026-11-14 UTC: this checkout owns US-15 / issue #21,
-branch `US-15-preprocessing`, based on local main `1a9864a`. Developer
-“i approve phase 1; commit;” authorized Phase 1 execution and local commit.
-[Plan](docs/plans/milestone-1-us-15.md) T1/T2 are Complete; T3 is Partial.
-[Evidence](docs/verification/us-15-ip1.md) and
-[producer contract](docs/preprocessing.md) record native feasibility and the
-proposed interface. No product source/tests were changed.
+Joint contract reconciliation handoff, 2026-11-14 UTC: US-15 / issue #21,
+branch `US-15-preprocessing`, HEAD `864a377`. Developer-authorized SC-01
+revision and owning-session reconciliation are technically complete.
+[Plan](docs/plans/milestone-1-us-15.md) IP1-T1/T2/T3 are Complete; Gate 1 Approved; IP2 authorized.
+[Producer acknowledgement](docs/verification/us15-sc01-concurrence.md) explicitly
+acknowledges US-26 concurrence after independently reviewing adopted contracts,
+shared index, raw consumer probe/summary and metadata identities. No unresolved
+interface differences remain in this revision.
 
-Complete #21/#17 discussions were refreshed with two unique comments each and
-stable final metadata. Native clone/scaler/imputer/ColumnTransformer/encoder
-probes passed in this story's newly synchronized locked `.venv` (Linux aarch64,
-Python 3.12.16). Lock hash unchanged. Sandbox cache/DNS permission failures were
-resolved by escalating the same commands. Document/link/whitespace checks passed;
-no pytest, shared executable checks, builds or installed artifact checks ran
-because this phase changes only contracts. No product acceptance is claimed.
-Raw issues/probe evidence: `.dev-records/verification/20261114-us15-ip1/`.
+The producer/consumer agree on exact missing-value/dtype tags, 12-name dtype
+allowlist, reserved-map handling, finite ordinary numbers and explicit bounded
+skops/numpy.dtype configuration. Producer metadata and consumer retained metadata
+are byte-identical; both native feasibility probes passed with independent
+literal transform assertions. Earlier default-serialization failure and original
+observations remain preserved. Native evidence is Linux aarch64/Python 3.12.16;
+no product acceptance, installed integration or new platform claim is made.
 
-Next action: US-26's owning session supplies its IP1-T1/T2 findings; then finalize
-joint schema/index review and present both Gate 1 decisions. Its plan still has
-those tasks Not started; this session did not edit the sibling checkout.
-Gate 1 remains Pending; no Phase 2 progression, story acceptance, push, merge
-or cleanup is authorized. IP4 still requires actual US-26 handoff/Gate 4 evidence.
-The local commit includes the owning plan, producer contract/report and checkpoint.
+Developer approved Gate 1 in both stories and authorized a local commit plus
+Phase 2 execution on 2026-11-14: “i approve Gate 1 in both us-15 and us-26.
+commit the changes and start phase 2 in both stories”. The owning plan records
+this decision; both Gate 1 approvals confirm public test boundaries. Next action:
+commit reconciled Phase 1 records, then execute US-15 IP2 in this environment
+and stop at Gate 2. No push/publication, IP3, merge or cleanup is authorized.
+
+Current changes: checkpoint, producer plan/contract, original and revision reports,
+revision handoff and historical consumer patch, plus producer concurrence report;
+all are uncommitted. Document links/anchors/whitespace and git diff --check passed.
+New review identities/checks are retained under
+`.dev-records/verification/20261114-us15-sc01-concurrence/`; original native/issues
+and renewed-probe records remain in their existing directories.
 
 Historical obligations below remain unchanged. Preserve the contributor worktree
 management plan/report, raw records under

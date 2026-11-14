@@ -138,18 +138,41 @@ final contract before the first executable behavior test.
 ## Plan review
 
 - **Status:** Draft.
-- **Developer decision:** Pending; review this M1 slice with the US-26 plan/index.
-- **Decision reference and date:** Pending.
-- **Requested plan changes:** None recorded.
+- **Developer decision:** Gate 1 Approved; Phase 2 authorized with paired US-26 approval.
+- **Decision reference and date:** 2026-11-14 coordination-session developer message:
+  “i approve Gate 1 in both us-15 and us-26. commit the changes and start phase 2 in both stories”.
+- **Requested plan changes:** SC-01 encoding revision approved; see scope history.
 - **Implementation authorization:** Phase 1 execution and local commit authorized on
   2026-11-14 by “i approve phase 1; commit;”. This supersedes the earlier
   planning-only restriction for Phase 1. Later phases remain unauthorized.
 
 ## Scope-change history
 
-None. This is a new plan carrying accepted CONTRACT-01, not an approval or scope
-revision of an executing story. Use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md)
-for later changes to authorized scope or approach.
+### US-15-US-26-SC-01 — Native parameter encoding reconciliation
+
+- **Date / decision:** 2026-11-14 UTC, Approved revision by developer
+  “I accept your recommendation.” following the five-part contract-revision
+  recommendation in this session. This does not approve either Gate 1.
+- **Reason:** Effective defaults include SimpleImputer NaN and OneHotEncoder's
+  numpy dtype class, contradicting finite-only JSON and callable rejection.
+- **Scope:** Add narrow missing-value/dtype tags, full-metadata feasibility and
+  explicit bounded skops choice; reconcile consumer findings and stale status.
+  No acceptance criterion, public signature, milestone or product behavior is added.
+- **Impact:** T2 native fitting observations remain valid, but its prior broad
+  metadata-feasibility conclusion was incomplete. Renew encoding evidence under
+  [revision report](../verification/us15-us26-contract-revision.md).
+  T3 is now Complete after consumer adoption/renewed evidence and
+  [explicit producer acknowledgement](../verification/us15-sc01-concurrence.md).
+  Consumer T2/T3 were reopened and completed with renewed schema evidence;
+  their earlier default serialization failure remains preserved.
+- **Verification / gates:** Strict JSON on complete effective settings, literal
+  tags, rejection boundaries, native MLflow metadata/model save/log/load, and
+  document checks. No toolkit implementation/tests or installed integration
+  acceptance is claimed. Both Gate 1 approvals and later phase authorization
+  remain mandatory; M1–6, shared executable checks and installed integration
+  retain their existing owners.
+- **Resume point:** Joint technical reconciliation complete; present both
+  Gate 1 results for explicit developer decisions before dependent work.
 
 ## Execution and verification rules
 
@@ -183,8 +206,8 @@ git diff --check
 sha256sum uv.lock
 ```
 
-Check environment overrides before synchronization. No environment setup is
-authorized by this planning request. Retain unique logs under
+Check environment overrides before synchronization. Phase 1 authorization
+covered its own environment setup; later phase execution remains unauthorized. Retain unique logs under
 .dev-records/verification/ per the [records policy](../development/records.md).
 Use four workers/loadgroup for phase checks; short serial TDD selectors may use
 the policy's documented exception with reason recorded. New behavior cases are
@@ -203,14 +226,16 @@ M1 by directly verified criteria. Tests below are proposed unless noted existing
 |---|---|---|---|---|---|
 | US-15-IP1-T1 | Complete | Reconcile this plan/index with current create_partitions contract, docs/data-assessment-and-splits.md and issue decisions | Authorization | Approved-direction/native API reuse table; confirm source/membership validation adds no new split format | AC-01/02 |
 | US-15-IP1-T2 | Complete | Inspect locked sklearn APIs and run bounded native-only Pipeline/ColumnTransformer clone/fit/transform probes for matrix; save proposed docs/verification/us-15-ip1.md | T1 | Literal numeric/category expectations, schema/dtype/JSON encoding feasibility and exact error boundaries; no production helper or behavior tests written | AC-01/02/03 |
-| US-15-IP1-T3 | Partial | Finalize proposed docs/preprocessing.md contract, this plan and shared index with US-26 owner | T2 and US-26-IP1-T1/T2 findings | Matching exact metadata keys/types, signature, supported M1 compositions, test matrix and file ownership ready for both Gate 1 reviews; neither story waits for the other's T3 | AC-01/02/03 |
+| US-15-IP1-T3 | Complete | Finalize proposed docs/preprocessing.md contract, this plan and shared index with US-26 owner | T2 and US-26-IP1-T1/T2 findings | Matching exact metadata keys/types, signature, supported M1 compositions, test matrix and file ownership ready for both Gate 1 reviews; neither story waits for the other's T3 | AC-01/02/03 |
 
 ### Verification and review evidence
 
-Phase 1 execution: [producer evidence](../verification/us-15-ip1.md). T1/T2
-complete; T3 producer proposal prepared in [contract](../preprocessing.md),
-but joint finalization awaits US-26-IP1-T1/T2 findings. No sibling edits or
-consumer approval are inferred. Developer authorization is recorded above.
+Phase 1 execution: [initial evidence](../verification/us-15-ip1.md),
+[SC-01 renewal](../verification/us15-us26-contract-revision.md) and
+[producer acknowledgement of consumer concurrence](../verification/us15-sc01-concurrence.md).
+T1/T2/T3 are Complete. Current producer contract and consumer index/contract
+agree; independent consumer evidence checks the producer metadata. No sibling
+edits or developer gate approvals are inferred.
 
 - **Selected tests and impact rationale:** Native feasibility probes only; no
   toolkit behavior has changed. Check docs/links/whitespace with git diff --check.
@@ -223,7 +248,7 @@ consumer approval are inferred. Developer authorization is recorded above.
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
 | Native feasibility / no duplicate algorithms | Exact standalone native commands and outputs in proposed IP1 report | Fixture oracle/schema/clone behavior feasible; unsupported cases identified | Native probe exit 0; see IP1 evidence; helper remains unimplemented |
-| Contract/links/whitespace | Review fields against accepted issue direction; local-link scan; git diff --check | Matching types/ownership; links resolve | Producer matches index; document checks passed; joint confirmation pending |
+| Contract/links/whitespace | Review fields against accepted issue direction; local-link scan; git diff --check | Matching types/ownership; links resolve | SC-01 adopted by consumer and acknowledged by producer; no interface differences; document checks passed |
 | TDD applicability | Inspect diff | Contract/probes only; no new executable toolkit behavior requiring red | Confirmed: docs and local native probe only; no product/test code changes |
 
 ### Developer approval gate
@@ -231,14 +256,16 @@ consumer approval are inferred. Developer authorization is recorded above.
 - **Approval criteria:** T1–T3 complete; both producers/consumers agree on exact
   contract, tests and schema; unresolved findings block dependent tasks.
 - **Evidence presented:** [Producer Phase 1 evidence](../verification/us-15-ip1.md);
-  T3 remains partial pending consumer feasibility. Gate 1 is not yet ready for
-  joint approval.
+  [SC-01 renewal](../verification/us15-us26-contract-revision.md) and
+  [joint reconciliation acknowledgement](../verification/us15-sc01-concurrence.md).
+  T1–T3 technically Complete; developer approved both Gate 1 decisions.
 - **Remaining limitations or blocked work:** All executable product behavior unverified.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Developer decision:** Approved, including paired US-26 Gate 1.
+- **Decision reference and date:** 2026-11-14 coordination-session developer:
+  “i approve Gate 1 in both us-15 and us-26. commit the changes and start phase 2 in both stories”.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending — IP2 only after both Gate 1 contract approvals
-  and authorization to execute; stop here.
+- **Progression authorized:** IP2 execution and local Phase 1 commit authorized;
+  no push/publication. Stop at Gate 2 for explicit developer approval.
 
 ## US-15 / Implementation Phase 2: Fit only recorded training rows
 
