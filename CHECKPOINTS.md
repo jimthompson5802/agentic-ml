@@ -4,70 +4,37 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Status checked on 2026-11-14: workflow publication is complete as `440ed68`;
-local and remote `main` matched that commit. A subsequent documentation request
-added `docs/multi-story-worktree-instructions.md`, describing how to plan and
-execute two independent stories in separate worktrees and sessions. The developer
-authorized committing and pushing the guide and this checkpoint update.
-`git diff --check` passed; TDD does not apply
-to these documentation-only changes. No story implementation was started.
-Next action: await development direction; the publication-pending wording below
-records the earlier handoff and is superseded by this status.
+Phase 1 handoff, 2026-11-14 UTC: this checkout owns US-15 / issue #21,
+branch `US-15-preprocessing`, based on local main `1a9864a`. Developer
+“i approve phase 1; commit;” authorized Phase 1 execution and local commit.
+[Plan](docs/plans/milestone-1-us-15.md) T1/T2 are Complete; T3 is Partial.
+[Evidence](docs/verification/us-15-ip1.md) and
+[producer contract](docs/preprocessing.md) record native feasibility and the
+proposed interface. No product source/tests were changed.
 
-Checkout: `main`; implementation parent `e0b7471`. Before publication,
-`git ls-remote origin refs/heads/main` confirmed that remote `main` matched that
-parent. Contributor worktree management Gate 1
-was approved by “I approve Gate 1,” Gate 2 by “i approve gate 2,” and Gate 3 by
-“I approve gate 3,” all developer messages on 2026-11-14. All three phases and
-gates are complete in the
-[owning plan](docs/plans/story-worktree-management.md).
-Changes include the new skill/metadata, planning and execution integration,
-worktree ignore rule, agent/development guidance, plan template, saved plan, and
-this checkpoint and the new verification report. The developer's subsequent
-“commit and push” authorizes committing this change set and pushing `main` to
-`origin`; Git history and remote refs establish the resulting commit and
-synchronization status. No PR or cleanup was requested. The real checkout
-retains only its original registered worktree.
+Complete #21/#17 discussions were refreshed with two unique comments each and
+stable final metadata. Native clone/scaler/imputer/ColumnTransformer/encoder
+probes passed in this story's newly synchronized locked `.venv` (Linux aarch64,
+Python 3.12.16). Lock hash unchanged. Sandbox cache/DNS permission failures were
+resolved by escalating the same commands. Document/link/whitespace checks passed;
+no pytest, shared executable checks, builds or installed artifact checks ran
+because this phase changes only contracts. No product acceptance is claimed.
+Raw issues/probe evidence: `.dev-records/verification/20261114-us15-ip1/`.
 
-Validation passed for all three skills, metadata/file-link and whitespace checks
-across 13 files, `git diff --check`, and the `.worktrees/` ignore rule. The
-[Phase 3 report](docs/verification/story-worktree-management.md) records 28 host
-Git/walkthrough checks, 21 shared-container session checks, and 15 checks after
-container restart. Two synthetic story sessions used separate editable
-environments. Each worktree and the primary fixture collected 723 of 991 cases
-(268 deselected); no product tests were executed. The host `.venv` remains unusable
-outside Linux; container Python and the new isolated environments worked. The
-existing container was returned to its initial stopped state after validation.
-No environment repair or automatic assistant-policy enforcement is claimed.
-See the report for command records and verification limits. Product verification
-obligations and the [verification policy](docs/development/verification.md#phase-and-story-verification)
-remain unchanged. No product implementation is active.
+Next action: US-26's owning session supplies its IP1-T1/T2 findings; then finalize
+joint schema/index review and present both Gate 1 decisions. Its plan still has
+those tasks Not started; this session did not edit the sibling checkout.
+Gate 1 remains Pending; no Phase 2 progression, story acceptance, push, merge
+or cleanup is authorized. IP4 still requires actual US-26 handoff/Gate 4 evidence.
+The local commit includes the owning plan, producer contract/report and checkpoint.
 
-US-13 M1 AC-01/02 is accepted and merged through
-[PR #66](https://github.com/jimthompson5802/agentic-ml/pull/66), squash `ecd28b1`.
-Gates 1–3 are Approved. Issue #16 remains open for M2 restoration AC-03/04;
-whole-story and milestone acceptance are not claimed. Story branches were deleted.
-The [owning plan](docs/plans/milestone-1-us-13.md) and
-[IP3 evidence](docs/verification/us-13-ip3.md) retain the detailed decisions and
-verification: M1 and M1–6 each recorded 722 passes and one existing skip on Linux
-aarch64. Those are historical results, not a fresh test inventory.
-
-Skill maintenance is merged through
-[PR #67](https://github.com/jimthompson5802/agentic-ml/pull/67), squash `7d2d657`.
-Local and remote `skill-refactoring` branches were deleted; merge/cleanup records
-were pushed as `bdb871c`. Both PR CI jobs were cancelled, so no passing CI result
-is claimed for that head. The separate policy update followed as `b03afb3`.
-
-**Next action:** complete authorized publication, then await development
-direction. Keep validation fixtures and raw evidence; cleanup remains separate.
-Retain raw evidence under
+Historical obligations below remain unchanged. Preserve the contributor worktree
+management plan/report, raw records under
 `.dev-records/verification/20261114T173007Z-e0b7471-worktrees-d4026fb0/`, the
-1.8 GB container fixture under `.worktrees/worktree-validation-d4026fb0/`, and
-the host fixture linked from the report. TDD and executable product checks do
-not apply to these instruction and ignore-rule changes. Container recreation,
-automatic VS Code startup, independent assistant evaluation, symlink cleanup
-demonstrations, and Windows support remain unverified.
-Historical verification obligations below remain open.
+retained worktree-validation fixture and linked host evidence described in
+[its report](docs/verification/story-worktree-management.md). Their current
+storage availability has not been revalidated. Historical publication/next-action
+wording inherited from main is superseded by this story-specific handoff.
 
 ## Completed work: authoritative records
 
