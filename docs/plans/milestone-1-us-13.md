@@ -365,8 +365,11 @@ until M2 AC-03/04. No push, PR or issue update is authorized by this decision.
 - **Decision reference and date:** Developer “i accept the us-13”, followed by
   “commit”, 2026-11-14. Acceptance applies to the delivered M1 slice;
   AC-03/04 remain deferred and unverified.
-- **Publication:** Developer “commit” authorizes a local acceptance-record commit.
-  No push, PR or issue update is part of this request.
+- **Publication:** Acceptance committed as `1577d7c`; IP3 as `557414c`.
+  Developer “push;” authorized the ordinary push. Developer “create pull request
+  to main” authorized [PR #66](https://github.com/jimthompson5802/agentic-ml/pull/66),
+  base `main`, head `US-13-dataset-versioning`, standard PR. Creation verified.
+  Static review/CI assessment and merge remain subsequent work; issue #16 stays open.
 
 ## Milestone acceptance handoff
 

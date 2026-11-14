@@ -4,7 +4,7 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Checkout: `US-13-dataset-versioning`, HEAD `557414c` (approved IP3 committed).
+Checkout: `US-13-dataset-versioning`, HEAD `1577d7c` (M1 acceptance recorded and pushed).
 Developer “start ip3”, 2026-11-14, authorizes IP3 only after approved Gates 1–2.
 The issue body/all comment pages and final metadata were refreshed: one unique
 comment matches count 1 and stable 2026-11-07T00:28:44Z update; no scope conflict.
@@ -33,10 +33,14 @@ the delivered M1 slice (AC-01/02) and authorized a local acceptance-record commi
 All three gates are Approved. This acceptance changes no executable behavior;
 IP3 verification remains applicable. Relative links and whitespace rechecked.
 
-**Next action:** await publication or further development direction. US-13 M1 is
-accepted locally, not yet merged; issue #16 remains open for M2 AC-03/04.
-No milestone acceptance or push/publication is claimed. Linux aarch64 only;
-macOS/Windows unverified.
+Developer “push;” authorized pushing through `1577d7c`; origin was verified.
+Developer “create pull request to main” authorized publication as
+[PR #66](https://github.com/jimthompson5802/agentic-ml/pull/66), base `main`,
+head `US-13-dataset-versioning`, standard (not draft).
+
+**Next action:** PR review and CI assessment before a separately authorized merge.
+US-13 M1 is accepted and published, not merged; issue #16 stays open for M2.
+No milestone acceptance is claimed. Linux aarch64 only; macOS/Windows unverified.
 
 US-41 publication and branch cleanup remain complete: issue #64 closed,
 PR #65 squash-merged as `5d5781c`; Gates 1–4 Approved. Prior CI/evidence details
