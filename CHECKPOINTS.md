@@ -4,7 +4,19 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Checkout: `main`, fast-forwarded to squash commit `7d2d657` for PR #67.
+Checkout: `main`, baseline `bdb871c`; verification-instruction edits are ready for commit.
+Developer requested removing the full current-milestone test set before each
+executable phase gate on 2026-11-14. Updated `execute-plan`, `AGENTS.md`, the
+verification policy, development command table, planning skill and plan template
+to use valid focused test/regression evidence plus shared checks. TDD, M1–6 at
+story acceptance, CI and approval gates remain required. Existing approved plans
+retain their recorded checks pending explicit scope revision; completed evidence
+is preserved. No product implementation or plan execution is active in this task.
+Documentation only: TDD and executable tests do not apply. Instruction consistency
+and `git diff --check` passed. Developer “commit and push” authorized committing
+these edits and publishing them to `origin/main`.
+
+Previous skill maintenance is complete:
 Developer “make the udpates”, 2026-11-14, authorized the two reviewed skill-doctor
 edits. Updated `report-test-progress` to use 30–60 second waits near the next
 report deadline, and `create-implementation-plan` to require a runnable user

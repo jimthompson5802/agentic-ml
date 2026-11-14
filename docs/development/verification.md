@@ -11,8 +11,8 @@ Collection fails with test IDs when any case lacks classification, even if a
 selector would exclude it. Multiple selected associations execute a case once.
 
 ```sh
-# Implementation phase gate: substitute the current milestone
-uv run --locked pytest -n 4 --dist=loadgroup -m milestone_1
+# Focused phase verification: substitute the plan's paths and selectors
+uv run --locked pytest -n 4 --dist=loadgroup <paths-and-selectors>
 
 # Story acceptance for any milestone, and default local selection: M1–6
 uv run --locked pytest -n 4 --dist=loadgroup
@@ -22,10 +22,12 @@ uv run --locked pytest -n 4 --dist=loadgroup -m ""
 ```
 
 The default expression is `milestone_1 or milestone_2 or milestone_3 or
-milestone_4 or milestone_5 or milestone_6`. A phase gate selects only its current
-milestone; it does not automatically select earlier milestones. Every story
+milestone_4 or milestone_5 or milestone_6`. Phase verification uses focused tests
+and relevant regressions for changed behavior, with no full current-milestone
+test run required. Passing evidence can be reused while it remains valid. Every story
 acceptance selects M1–6, including stories in M0 and M50. Other local pytest
-selections and standalone artifact drivers require an explicit developer command.
+selections beyond focused phase checks and M1–6, and standalone artifact drivers,
+require an explicit developer command.
 Selected tests may invoke artifact drivers internally. CI keeps the complete
 suite and its existing standalone artifact verification. Preserve assertions,
 timeouts, xdist groups and the three documented temporary skips.
@@ -164,9 +166,10 @@ Preserve completed evidence and approvals. CI continues running all tests.
 ### Implementation phase gates
 
 Use TDD for new behavior and bug fixes, with focused public-interface checks for
-red–green cycles. At each executable phase gate, run the entire current milestone
-using `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_N` (substitute N).
-Focused checks do not replace that selection. Preserve developer approval gates.
+red–green cycles. At each executable phase gate, present valid focused test and
+regression evidence for the changed behavior and run shared checks. Full
+current-milestone test runs are not required. Reuse passing focused evidence
+unless subsequent changes invalidate it. Preserve developer approval gates.
 
 Record changed modules, confirmed public boundaries, applicable acceptance
 criteria, exact commands, collected/selected/deselected counts, outcomes and
@@ -202,3 +205,13 @@ The developer's supplied “Stratify tests by milestone” plan explicitly autho
 this replacement of phase/story scheduling and revision of unfinished M1/M50
 verification obligations. Owning plans record the scope changes. Historical
 results, approvals, unresolved failures and the three temporary skips remain.
+
+## Phase verification revision — 2026-11-14
+
+Developer requested removing the full current-milestone test set before each
+executable phase approval gate. Phase gates now use valid focused behavior and
+regression evidence plus shared checks. TDD, M1–6 at story acceptance, CI coverage
+and developer approval gates remain required. This changes the default schedule;
+stronger checks in an existing approved plan require an explicit recorded
+scope revision before reduction. Completed checks and historical evidence remain
+valid records.

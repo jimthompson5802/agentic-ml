@@ -31,7 +31,7 @@ The US-33 CLI slice supplies source, a console entrypoint, and behavior tests. U
 |---|---|
 | Install source package and development dependencies | `uv sync --locked --group dev` |
 | Lock consistency | `uv lock --check` |
-| Current milestone phase gate (substitute N) | `uv run --locked pytest -n 4 --dist=loadgroup -m milestone_N` |
+| Focused phase verification (use the plan's paths and selectors) | `uv run --locked pytest -n 4 --dist=loadgroup <paths-and-selectors>` |
 | Story acceptance / default local M1–6 | `uv run --locked pytest -n 4 --dist=loadgroup` |
 | Complete suite (explicit developer command or CI) | `uv run --locked pytest -n 4 --dist=loadgroup -m ""` |
 | Lint | `uv run --locked ruff check .` |
