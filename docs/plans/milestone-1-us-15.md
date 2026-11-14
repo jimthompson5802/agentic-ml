@@ -71,7 +71,7 @@ code owns saving/loading the record. Do not invent another partition service.
 
 scikit-learn, pandas, pyarrow and MLflow are declared runtime dependencies;
 contributor lock has scikit-learn 1.9.1, MLflow 3.17.2. No new dependency is
-expected. There is no implemented fitted-pipeline helper or tracking export.
+expected. At the base there was no implemented fitted-pipeline helper or tracking export.
 Native DVC M1 versioning and Git/wheel identity support are accepted in their
 owning plans. Historical evidence is not a test run against this branch.
 
@@ -79,10 +79,10 @@ owning plans. Historical evidence is not a test run against this branch.
 
 | Dependency or decision | Required outcome | Work blocked | Status / evidence |
 |---|---|---|---|
-| US-15-US-26-CONTRACT-01 | Native fitted Pipeline + JSON dictionary; separate shared provenance; MLflow ownership | All dependent code | Interface direction accepted in both issue bodies/comments on 2026-11-14; exact proposed fields/types and public boundaries in index await review. |
+| US-15-US-26-CONTRACT-01 | Native fitted Pipeline + JSON dictionary; separate shared provenance; MLflow ownership | All dependent code | Interface direction accepted in both issue bodies/comments on 2026-11-14; exact fields/types and public boundaries approved at Gate 1 after SC-01 reconciliation. |
 | Existing partitions, US-12 #19 | Both layouts, current source identity and memberships | IP2 | Implemented; [US-12 IP3/IP4 and Gates 1–4](milestone-1-us-12-assessment-splits.md), AC-02/03 accepted. No reopening or saved-file parser. |
-| US-26 producer contract review | Same exact dictionary representation and serialization/error rules | IP2/IP3 | Both Gate 1 decisions must approve the shared contract; index coordinates revisions. |
-| Native pipeline composition | clone/fit/transform supported imputer/scaler/encoder Pipeline/ColumnTransformer without replacement algorithms | IP2 | IP1 feasibility and reviewed test matrix required before production code. |
+| US-26 producer contract review | Same exact dictionary representation and serialization/error rules | IP2/IP3 | Both Gate 1 decisions approved the same SC-01 contract; IP3 retains field parity. |
+| Native pipeline composition | clone/fit/transform supported imputer/scaler/encoder Pipeline/ColumnTransformer without replacement algorithms | IP2 | IP1 feasibility and Gate 1-reviewed matrix satisfied; IP2/IP3 native evidence passes. |
 | MLflow preservation and provenance | Actual US-15 output is saved with committed references | IP4 / complete AC-03 | [US-26-IP4-T1/T2](../../../US-26-mlflow/docs/plans/milestone-1-us-26-recording.md#us-26--implementation-phase-4-installed-handoff-and-17-acceptance), consumer Gate 4 and reviewed combined revision required. No whole US-26 #33/#43 dependency. |
 | Shared code available in consumer | Reviewed producer revision in US-26 branch | US-26 IP4 | Separate integration authorization needed; shared Git objects alone do not provide it. Index identifies cross-branch availability gate. |
 | Feature comparisons, US-14 #20 | Fixed validation comparisons | None in this plan | Separate owner; reviewed issue overlap does not transfer its criteria here. |
@@ -91,7 +91,7 @@ owning plans. Historical evidence is not a test run against this branch.
 The current [verification policy](../development/verification.md#phase-and-story-verification)
 supersedes stale current-milestone-at-gates prose in issue/design boilerplate.
 Use focused tests/regressions plus shared checks; M1–6 only at slice acceptance.
-No product scope conflict remains; unresolved contract feasibility is bounded by IP1.
+No product scope conflict remains; IP1 feasibility and SC-01 concurrence resolved the contract questions.
 
 ## Proposed interface and independently defined test boundary
 
@@ -131,20 +131,22 @@ Fixture oracle for developer confirmation at Gate 1:
 | Corrupt membership / wrong fit scope / changed values under same IDs | Supported helper rejects before fit; copied input/pipeline unchanged; no valid fitted return or false completion metadata. |
 | JSON metadata and pipeline handoff | Exact index-defined fields/types and effective defaults, source/membership equality, json.dumps(..., allow_nan=False) succeeds; no fabricated Git/DVC references. |
 
-Developer boundary confirmation: Pending. Approval of this reviewed plan can
-confirm the proposed matrix; IP1 records any refinement and Gate 1 confirms the
-final contract before the first executable behavior test.
+Developer boundary confirmation: Gate 1 approved the refined matrix and final
+SC-01 contract before the first executable behavior test. IP2/IP3 reused these
+confirmed public boundaries.
 
 ## Plan review
 
-- **Status:** Draft.
-- **Developer decision:** Gate 1 Approved; Phase 2 authorized with paired US-26 approval.
+- **Status:** Phase 3 Complete and Gate 3 Approved; awaiting Phase 4 prerequisites/direction.
+- **Developer decision:** Gates 1–3 Approved; local Phase 3 commit authorized.
 - **Decision reference and date:** 2026-11-14 coordination-session developer message:
   “i approve Gate 1 in both us-15 and us-26. commit the changes and start phase 2 in both stories”.
 - **Requested plan changes:** SC-01 encoding revision approved; see scope history.
 - **Implementation authorization:** Phase 1 execution and local commit authorized on
   2026-11-14 by “i approve phase 1; commit;”. This supersedes the earlier
-  planning-only restriction for Phase 1. Later phases remain unauthorized.
+  planning-only restriction for Phase 1. Gates 1/2 and Phase 2/3 authorization
+  are recorded below. Latest direction authorizes Phase 3 only; Phase 4 and
+  source integration remain unauthorized.
 
 ## Scope-change history
 
@@ -313,8 +315,10 @@ shared checks, source/lock/platform identities and remaining IP3/IP4 obligations
 - **Decision reference and date:** 2026-11-14 coordination-session developer:
   “for both us-15 and us-26 i approve the phase 2 gate, commit the changes.”
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Local Phase 2 commit only. IP3 execution is not
-  authorized; await separate direction. No push, publication or integration.
+- **Progression authorized:** Phase 2 committed at `104172a`. On 2026-11-14, the developer
+  separately directed both stories to start Phase 3 (coordination thread
+  `01a1db6c-a225-73e0-8796-81a03c4cec7a`). Only IP3 execution is authorized;
+  stop at Gate 3. No Phase 4, push, publication or source integration.
 
 ## US-15 / Implementation Phase 3: Produce metadata and verify installed use
 
@@ -327,11 +331,16 @@ shared checks, source/lock/platform identities and remaining IP3/IP4 obligations
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-15-IP3-T1 | Not started | Complete recursive effective-settings/schema/version metadata and failure cases in preprocessing module/tests, one red/green behavior at a time | Gate 2 | Exact index fields/types, order/default retention, JSON finite values, declared width/dtype checks and unsupported-setting errors | AC-03; AC-01/02 regressions |
-| US-15-IP3-T2 | Not started | Add proposed tests/installation/check_preprocessing.py, register in existing verify_assessment_splits.py and selected distribution integration test; exercise direct/rebuilt installed projects from unrelated cwd | T1 | Actual normal installs return native fitted object and exact JSON; both wheel paths independently pass; no MLflow store or dev-dependency leakage | AC-01/02/03 component |
-| US-15-IP3-T3 | Not started | Finish runnable docs/preprocessing.md script, inspect baseline compatibility, focused/shared checks and proposed docs/verification/us-15-ip3.md | T2 | User script is the installed tested path; approved producer revision/API/schema and evidence identified for US-26 owner | AC-01/02/03 |
+| US-15-IP3-T1 | Complete | Complete recursive effective-settings/schema/version metadata and failure cases in preprocessing module/tests, one red/green behavior at a time | Gate 2 | Exact index fields/types, order/default retention, JSON finite values, declared width/dtype checks and unsupported-setting errors | AC-03; AC-01/02 regressions |
+| US-15-IP3-T2 | Complete | Add proposed tests/installation/check_preprocessing.py, register in existing verify_assessment_splits.py and selected distribution integration test; exercise direct/rebuilt installed projects from unrelated cwd | T1 | Actual normal installs return native fitted object and exact JSON; both wheel paths independently pass; no MLflow store or dev-dependency leakage | AC-01/02/03 component |
+| US-15-IP3-T3 | Complete | Finish runnable docs/preprocessing.md script, inspect baseline compatibility, focused/shared checks and proposed docs/verification/us-15-ip3.md | T2 | User script is the installed tested path; approved producer revision/API/schema and evidence identified for US-26 owner | AC-01/02/03 |
 
 ### Verification and review evidence
+
+[IP3 evidence](../verification/us-15-ip3.md) records eight red/green slices,
+243 focused passes (84 preprocessing, 124 splitting, 35 assessment), both real
+installed artifact paths, exact metadata/guide identities and all shared checks.
+Only Phase 3 was executed in this turn. Gate 3 approval and local commit direction are recorded below.
 
 - **Selected tests and impact rationale:** Preprocessing + splitting + assessment
   (native handoff regressions), and the existing both-artifact distribution test
@@ -347,22 +356,27 @@ shared checks, source/lock/platform identities and remaining IP3/IP4 obligations
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Metadata + partition regression | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_preprocessing.py tests/integration/test_splitting.py tests/integration/test_data_assessment.py | JSON/native behavior and existing accepted partition contract pass | Pending |
-| Installed direct and rebuilt wheel producer | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_distribution_verification.py -k test_assessment_splits_from_both_artifact_paths | Both independent installed paths pass, actual selected counts/name recorded | Pending |
-| Shared development checks | Shared command block | Pass; no accidental lock/dependency changes | Pending |
+| Metadata + partition regression | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_preprocessing.py tests/integration/test_splitting.py tests/integration/test_data_assessment.py | JSON/native behavior and existing accepted partition contract pass | 243 passed, 0 skipped/deselected, four loadgroup workers |
+| Installed direct and rebuilt wheel producer | uv run --locked pytest -n 4 --dist=loadgroup tests/integration/test_distribution_verification.py -k test_assessment_splits_from_both_artifact_paths | Both independent installed paths pass, actual selected counts/name recorded | 1 passed (direct/rebuilt); 1 of 19 selected, 18 deselected |
+| Shared development checks | Shared command block | Pass; no accidental lock/dependency changes | All passed; lock unchanged, CLI 0.1.0, mypy 80 files, format 328 files |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete; actual installed producer capability ready,
   field parity with consumer confirmed, native and JSON evidence retained.
-- **Evidence presented:** Pending — proposed docs/verification/us-15-ip3.md.
-- **Remaining limitations or blocked work:** AC-03 incomplete until US-26 IP4.
-- **Developer decision:** Pending.
-- **Decision reference and date:** Pending.
+- **Evidence presented:** [IP3 report](../verification/us-15-ip3.md); T1–T3 technically Complete.
+  Public native/JSON/installed evidence and static consumer-contract parity verified.
+- **Remaining limitations or blocked work:** No Phase 3 blocker. AC-03 incomplete
+  until US-26 IP4. Native float16 OneHotEncoder output remains unsupported by
+  SciPy and fails visibly; no fallback or general dtype compatibility claimed.
+- **Developer decision:** Approved; local Phase 3 commit authorized.
+- **Decision reference and date:** 2026-11-14 coordination-session developer:
+  “commit changes in both stories”. The coordination delegation explicitly
+  records this as Gate 3 acceptance and commit authorization for each owning checkout.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending — supply approved capability/evidence to
-  US-26 IP4 through separately authorized integration. US-15 IP4 waits for consumer
-  Gate 4; stop here without claiming M1 slice acceptance.
+- **Progression authorized:** Local Phase 3 commit only. No Phase 4, sibling source
+  integration, push or publication. US-15 IP4 still waits for consumer Gate 4 and
+  separately authorized integration; no M1 slice acceptance is claimed.
 
 ## US-15 / Implementation Phase 4: Review preservation and accept the M1 slice
 
@@ -421,9 +435,9 @@ shared checks, source/lock/platform identities and remaining IP3/IP4 obligations
   remain in their original owning plans.
 - **Evidence renewal:** Renew affected focused/artifact evidence after changed
   inputs, and M1–6 after executable changes. Doc-only edits use document checks.
-- **Actual results and limitations:** Pending; no executable verification performed
-  during planning. Linux container paths were inspected; macOS/Windows unverified
-  for this change. Environment setup and runtime behavior are not demonstrated.
+- **Actual results and limitations:** IP2/IP3 reports contain executable focused,
+  installed and shared evidence on Linux aarch64/Python 3.12.16. IP4 final checks
+  remain pending; macOS/Windows are unverified for this change.
 
 ## Story completion review
 
@@ -434,7 +448,8 @@ shared checks, source/lock/platform identities and remaining IP3/IP4 obligations
 | US-15-AC-03 | IP3-T1/T2/T3; US-26-IP4-T1/T2; US-15-IP4-T1/T2 | Exact metadata/native pipeline plus actual persisted code/dependency handoff | Pending |
 | US-15-AC-04 | Future M2 owning plan | Fresh-project restored transformation equivalence under declared checks | Deferred M2; not accepted |
 
-- **Remaining work:** All implementation tasks; AC-04 is a separate M2 slice.
+- **Remaining work:** Gate 3 approval and IP4 preservation review/final acceptance;
+  AC-04 is a separate M2 slice.
 - **Partial prerequisite delivery:** Gate 3 supplies verified fitting/metadata
   capability but does not complete AC-03 or accept this slice. Final M1 review
   follows US-26's actual integration. Whole #21 remains open for M2.

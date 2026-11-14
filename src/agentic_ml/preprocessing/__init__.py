@@ -1,11 +1,13 @@
 """Training-only fitting of native preprocessing pipelines."""
 
+import json
 import math
 from collections.abc import Mapping, Sequence
 from copy import deepcopy
 from importlib.metadata import version
 from typing import Literal, cast
 
+import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, clone
 from sklearn.impute import SimpleImputer
@@ -48,6 +50,14 @@ def fit_preprocessing(
         raise TypeError("frame must be a pandas DataFrame")
     if not isinstance(partition_record, Mapping):
         raise TypeError("partition_record must be a mapping")
+    try:
+        encoded_record = json.dumps(dict(partition_record), allow_nan=False)
+        if json.loads(encoded_record) != dict(partition_record):
+            raise TypeError("record must use string-keyed dictionaries and JSON lists")
+    except (TypeError, ValueError) as error:
+        raise type(error)(
+            f"partition_record must be finite plain JSON: {error}"
+        ) from error
     record = partition_record
     if (
         set(record)
@@ -65,6 +75,10 @@ def fit_preprocessing(
         or record.get("schema_version") != "1.0"
     ):
         raise ValueError("partition_record must have existing version 1.0 keys")
+    if record["method"] not in ("seeded", "supplied"):
+        raise ValueError("partition_record.method must be seeded or supplied")
+    if record["method"] == "supplied" and record["settings"] != {}:
+        raise ValueError("partition_record.settings must be empty in supplied mode")
     row_id, target, layout = record["row_id"], record["target"], record["layout"]
     if (
         not isinstance(row_id, str)
@@ -97,8 +111,11 @@ def fit_preprocessing(
         memberships=cast(Mapping[str, Sequence[str | int]], record["memberships"]),
         protocol=cast(Mapping[str, object] | None, record["protocol"]),
     )
-    if current["source"] != record["source"]:
+    if json.dumps(current["source"], sort_keys=True) != json.dumps(
+        record["source"], sort_keys=True
+    ):
         raise ValueError("partition_record source does not match current frame")
+    _record_settings(frame, record)
     settings = _settings(pipeline)
     fitted = clone(pipeline)
     if isinstance(output_schema, (str, bytes)) or not isinstance(
@@ -180,12 +197,17 @@ def _settings(
         "float32",
         "float64",
     }
-    if (
-        isinstance(value, type)
-        and value.__module__ == "numpy"
-        and value.__name__ in dtype_names
-    ):
-        return {"kind": "numpy_dtype", "name": value.__name__}
+    if isinstance(value, np.ndarray):
+        return _settings(value.tolist(), path=path, active=active)
+    if isinstance(value, np.generic):
+        return _settings(value.item(), owner, field, path, active)
+    if isinstance(value, (type, np.dtype)):
+        for name in dtype_names:
+            native = np.dtype(name)
+            if value is native.type or (
+                isinstance(value, np.dtype) and value == native
+            ):
+                return {"kind": "numpy_dtype", "name": name}
     if isinstance(value, BaseEstimator):
         return {
             "class_name": f"{type(value).__module__}.{type(value).__qualname__}",
@@ -218,3 +240,38 @@ def _settings(
             for key, item in value.items()
         }
     raise TypeError(f"{path} contains unsupported settings type {type(value).__name__}")
+
+
+def _record_settings(frame: pd.DataFrame, record: Mapping[str, object]) -> None:
+    """Validate retained seeded settings through the native public split API."""
+    if record["method"] == "supplied":
+        if not isinstance(record["protocol"], Mapping):
+            raise ValueError("partition_record.protocol must be a supplied declaration")
+        return
+    settings = record["settings"]
+    keys = {"seed", "test_size", "validation_size", "shuffle", "stratify", "calls"}
+    if not isinstance(settings, dict) or set(settings) != keys:
+        raise ValueError("partition_record.settings must have existing seeded keys")
+    if record["protocol"] is not None:
+        raise ValueError("partition_record.protocol must be null in seeded mode")
+    try:
+        _, regenerated = create_partitions(
+            frame,
+            row_id=cast(str, record["row_id"]),
+            target=cast(str, record["target"]),
+            layout=cast(
+                Literal["train_test", "train_validation_test"], record["layout"]
+            ),
+            seed=cast(int, settings["seed"]),
+            test_size=cast(float, settings["test_size"]),
+            validation_size=cast(float | None, settings["validation_size"]),
+            shuffle=cast(bool, settings["shuffle"]),
+            stratify=cast(bool, settings["stratify"]),
+        )
+        # Strict JSON also rejects NaN, opaque values and bool/int substitutions.
+        if json.dumps(settings, allow_nan=False, sort_keys=True) != json.dumps(
+            regenerated["settings"], allow_nan=False, sort_keys=True
+        ):
+            raise ValueError("recorded calls disagree with native settings")
+    except (TypeError, ValueError) as error:
+        raise type(error)(f"partition_record.settings: {error}") from error

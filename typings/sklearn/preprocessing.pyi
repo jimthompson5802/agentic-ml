@@ -2,6 +2,7 @@
 
 from typing import Any
 
+import numpy as np
 from sklearn.base import BaseEstimator
 
 class StandardScaler(BaseEstimator):
@@ -19,6 +20,6 @@ class OneHotEncoder(BaseEstimator):
         dtype: Any = ...,
         handle_unknown: str = ...,
         min_frequency: Any = ...,
-        max_categories: int | None = ...,
+        max_categories: int | np.integer[Any] | None = ...,
         feature_name_combiner: Any = ...,
     ) -> None: ...

@@ -356,3 +356,345 @@ def test_preserves_original_seeded_record_and_independent_metadata() -> None:
     assert isinstance(returned, dict)
     returned["settings"] = {"changed": True}
     assert json.dumps(record, allow_nan=False) == before
+
+
+def test_numpy_categories_and_scalar_settings_are_plain_json() -> None:
+    """Native explicit categories and scalar limits retain finite JSON values."""
+    frame, record = _source()
+    fitted, metadata = _fit(
+        frame,
+        record,
+        pipeline=Pipeline(
+            [
+                (
+                    "encode",
+                    OneHotEncoder(
+                        categories=[np.array([1.0, 3.0, 100.0, 200.0])],
+                        max_categories=np.int64(10),
+                        sparse_output=False,
+                        handle_unknown="ignore",
+                    ),
+                )
+            ]
+        ),
+        output_schema=[{"name": n, "dtype": "float64"} for n in ["a", "b", "c", "d"]],
+    )
+    encoded: Any = metadata["pipeline"]
+    parameters = encoded["parameters"]["steps"][0][1]["parameters"]
+    assert parameters["categories"] == [[1.0, 3.0, 100.0, 200.0]]
+    assert parameters["max_categories"] == 10
+    assert json.loads(json.dumps(metadata, allow_nan=False)) == metadata
+    np.testing.assert_array_equal(fitted.transform(frame[["x"]]), np.eye(4))
+
+
+def test_rejects_unknown_record_method() -> None:
+    """A valid membership cannot conceal unsupported record semantics."""
+    frame, record = _source()
+    record["method"] = "invented"
+    with pytest.raises(ValueError, match="partition_record.*method"):
+        _fit(frame, record)
+
+
+def test_rejects_nonempty_supplied_settings() -> None:
+    """Supplied records cannot add unvalidated settings to the handoff."""
+    frame, record = _source()
+    record["settings"] = {"seed": 4}
+    with pytest.raises(ValueError, match="partition_record.*settings"):
+        _fit(frame, record)
+
+
+def test_rejects_malformed_seeded_settings() -> None:
+    """Recorded native seeded calls must agree with their effective settings."""
+    frame, _ = _source()
+    _, record = create_partitions(
+        frame, row_id="id", target="label", layout="train_test", seed=42, test_size=0.5
+    )
+    settings: Any = record["settings"]
+    settings["calls"][0]["random_state"] = 43
+    with pytest.raises(ValueError, match="partition_record.*settings"):
+        _fit(frame, record)
+
+
+def test_rejects_non_json_record_memberships() -> None:
+    """Input records must be plain finite JSON before any successful fit."""
+    frame, record = _source()
+    record["memberships"]["train"] = [np.int64(0), np.int64(1)]
+    with pytest.raises(TypeError, match="partition_record"):
+        _fit(frame, record)
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "bool",
+        "int8",
+        "int16",
+        "int32",
+        "int64",
+        "uint8",
+        "uint16",
+        "uint32",
+        "uint64",
+        "float16",
+        "float32",
+        "float64",
+    ],
+)
+@pytest.mark.parametrize("descriptor", [False, True])
+def test_dtype_descriptors_and_sparse_outputs(name: str, descriptor: bool) -> None:
+    """Every allowed native dtype retains its canonical tag and sparse shape."""
+    frame, record = _source()
+    dtype = np.dtype(name)
+    if name == "float16":
+        with pytest.raises(
+            ValueError, match="scipy.sparse does not support dtype float16"
+        ) as error:
+            _fit(
+                frame,
+                record,
+                pipeline=Pipeline(
+                    [
+                        (
+                            "encode",
+                            OneHotEncoder(dtype=dtype if descriptor else dtype.type),
+                        )
+                    ]
+                ),
+            )
+        assert any("training fit/transform" in note for note in error.value.__notes__)
+        return
+    fitted, metadata = _fit(
+        frame,
+        record,
+        pipeline=Pipeline(
+            [
+                (
+                    "encode",
+                    OneHotEncoder(
+                        dtype=dtype if descriptor else dtype.type,
+                        handle_unknown="ignore",
+                    ),
+                )
+            ]
+        ),
+        output_schema=[{"name": n, "dtype": name} for n in ["one", "three"]],
+    )
+    transformed = fitted.transform(frame[["x"]])
+    assert transformed.format == "csr"
+    assert transformed.shape == (4, 2)
+    np.testing.assert_array_equal(
+        transformed.toarray(), [[1, 0], [0, 1], [0, 0], [0, 0]]
+    )
+    encoded: Any = metadata["pipeline"]
+    assert encoded["parameters"]["steps"][0][1]["parameters"]["dtype"] == {
+        "kind": "numpy_dtype",
+        "name": name,
+    }
+    assert json.loads(json.dumps(metadata, allow_nan=False)) == metadata
+
+
+@pytest.mark.parametrize(
+    "setting",
+    [
+        float("nan"),
+        float("inf"),
+        -float("inf"),
+        np.float32("nan"),
+        np.float64("inf"),
+        {"kind": "numpy_dtype", "name": "float64"},
+        {"kind": "missing_value", "value": "nan"},
+        {1: "invalid"},
+    ],
+)
+def test_rejects_nonfinite_and_reserved_literal_settings(setting: object) -> None:
+    """Only the native imputer sentinel may describe a missing NaN parameter."""
+    frame, record = _source()
+    with pytest.raises(ValueError, match="pipeline.*memory"):
+        _fit(
+            frame,
+            record,
+            pipeline=Pipeline([("scale", StandardScaler())], memory=setting),
+        )
+
+
+@pytest.mark.parametrize(
+    "setting", [lambda value: value, np.dtype("complex128"), object()]
+)
+def test_rejects_callable_and_unsupported_native_settings(setting: object) -> None:
+    """No callable, unsupported dtype or opaque object becomes repr metadata."""
+    frame, record = _source()
+    with pytest.raises(TypeError, match="pipeline.*memory"):
+        _fit(
+            frame,
+            record,
+            pipeline=Pipeline([("scale", StandardScaler())], memory=setting),
+        )
+
+
+def test_rejects_cyclic_settings_with_field_context() -> None:
+    """Cyclic native settings fail before sklearn cloning recurses."""
+    frame, record = _source()
+    setting: list[object] = []
+    setting.append(setting)
+    with pytest.raises(ValueError, match="pipeline.*memory.*cyclic"):
+        _fit(
+            frame,
+            record,
+            pipeline=Pipeline([("scale", StandardScaler())], memory=setting),
+        )
+
+
+def test_all_null_native_imputation_rejects_dropped_output_column() -> None:
+    """The helper preserves native all-null dropping instead of changing defaults."""
+    frame, _ = _source()
+    frame["x"] = float("nan")
+    _, record = create_partitions(
+        frame,
+        row_id="id",
+        target="label",
+        layout="train_test",
+        memberships={"train": [0, 1], "test": [2, 3]},
+    )
+    with pytest.warns(UserWarning, match="Skipping features"):
+        with pytest.raises(ValueError, match="output_schema width"):
+            _fit(frame, record, pipeline=Pipeline([("impute", SimpleImputer())]))
+
+
+def test_metadata_retains_effective_defaults_and_ordered_schemas() -> None:
+    """Record defaults and declarations independently of fitted internals."""
+    frame, record = _source()
+    _, metadata = _fit(frame, record)
+    assert metadata["input_schema"] == [{"name": "x", "dtype": "float64"}]
+    assert metadata["output_schema"] == [{"name": "x", "dtype": "float64"}]
+    assert metadata["pipeline"] == {
+        "class_name": "sklearn.pipeline.Pipeline",
+        "parameters": {
+            "memory": None,
+            "transform_input": None,
+            "verbose": False,
+            "steps": [
+                [
+                    "scale",
+                    {
+                        "class_name": "sklearn.preprocessing._data.StandardScaler",
+                        "parameters": {
+                            "copy": True,
+                            "with_mean": True,
+                            "with_std": True,
+                        },
+                    },
+                ]
+            ],
+        },
+    }
+    versions: Any = metadata["versions"]
+    assert set(versions) == {"agentic-ml", "pandas", "pyarrow", "scikit-learn"}
+    assert all(isinstance(v, str) and v for v in versions.values())
+
+
+def test_rejects_source_identity_wrong_count_type() -> None:
+    """Float/int equality cannot disguise an invalid versioned source field."""
+    frame, record = _source()
+    record["source"]["row_count"] = 4.0
+    with pytest.raises(ValueError, match="source"):
+        _fit(frame, record)
+
+
+def test_native_dataframe_output_checks_each_dtype() -> None:
+    """Native pandas output retains ordered per-column dtype validation."""
+    frame, record = _source()
+    fitted, metadata = _fit(
+        frame,
+        record,
+        pipeline=Pipeline([("scale", StandardScaler())]).set_output(transform="pandas"),
+    )
+    result = fitted.transform(frame[["x"]])
+    assert isinstance(result, pd.DataFrame)
+    np.testing.assert_allclose(result["x"], [-1, 1, 98, 198])
+    assert metadata["output_schema"] == [{"name": "x", "dtype": "float64"}]
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("protocol", None),
+        ("settings", []),
+        ("method", []),
+        ("unknown", "extra"),
+        ("schema_version", "2.0"),
+    ],
+)
+def test_rejects_malformed_supplied_record_fields(field: str, value: object) -> None:
+    """Unknown or mistyped record fields cannot become successful metadata."""
+    frame, record = _source()
+    record[field] = value
+    with pytest.raises((TypeError, ValueError), match="partition_record"):
+        _fit(frame, record)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("seed", True),
+        ("test_size", float("nan")),
+        ("shuffle", 1),
+        ("calls", []),
+        ("extra", 1),
+    ],
+)
+def test_rejects_seeded_record_field_boundaries(field: str, value: object) -> None:
+    """Seeded history retains native types and exact versioned settings keys."""
+    frame, _ = _source()
+    _, record = create_partitions(
+        frame, row_id="id", target="label", layout="train_test", seed=42, test_size=0.5
+    )
+    settings: Any = record["settings"]
+    settings[field] = value
+    with pytest.raises((TypeError, ValueError), match="partition_record"):
+        _fit(frame, record)
+
+
+def test_rejects_tuple_membership_in_plain_record() -> None:
+    """A versioned record uses JSON arrays even though split inputs allow sequences."""
+    frame, record = _source()
+    record["memberships"]["train"] = (0, 1)
+    with pytest.raises(TypeError, match="partition_record"):
+        _fit(frame, record)
+
+
+def test_dataframe_output_validates_mixed_column_dtypes() -> None:
+    """Native heterogeneous output is checked column by column in declared order."""
+    frame, _ = _source()
+    frame["category"] = ["a", "b", "held", "a"]
+    _, record = create_partitions(
+        frame,
+        row_id="id",
+        target="label",
+        layout="train_test",
+        memberships={"train": [0, 1], "test": [2, 3]},
+    )
+    pipeline = Pipeline(
+        [
+            (
+                "features",
+                ColumnTransformer(
+                    [("scale", StandardScaler(), ["x"])], remainder="passthrough"
+                ),
+            )
+        ]
+    ).set_output(transform="pandas")
+    fitted, metadata = _fit(
+        frame,
+        record,
+        pipeline=pipeline,
+        selected_columns=["x", "category"],
+        output_schema=[
+            {"name": "numeric", "dtype": "float64"},
+            {"name": "category", "dtype": "str"},
+        ],
+    )
+    result = fitted.transform(frame[["x", "category"]])
+    assert [str(dtype) for dtype in result.dtypes] == ["float64", "str"]
+    np.testing.assert_allclose(result.iloc[:, 0], [-1, 1, 98, 198])
+    assert result.iloc[:, 1].tolist() == ["a", "b", "held", "a"]
+    assert metadata["selected_columns"] == ["x", "category"]

@@ -25,3 +25,7 @@ these third-party return types use Any; toolkit inputs and return records retain
 explicit types and runtime shape/dtype validation. These contributor stubs do not
 claim complete sklearn typing, alter runtime behavior, ship in the wheel or
 disable any checker. Remove/replace them when upstream supplies typing.
+
+Phase 3 preprocessing coverage adds native `Pipeline.set_output` and NumPy integer
+`OneHotEncoder.max_categories` settings. These describe exercised native public
+APIs; they do not add product behavior, a runtime type dependency, or suppressions.

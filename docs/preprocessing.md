@@ -1,26 +1,90 @@
 # Training-only preprocessing contract
 
-Status: Gate 1 approved; Phase 2 training-only fitting is implemented and
-has Gate 2 approval. Phase 3 remains unstarted. See the
-[owning plan](plans/milestone-1-us-15.md) and
-[Phase 2 evidence/limits](verification/us-15-ip2.md). The full metadata boundary
-matrix and installed-package verification remain Phase 3 work; the complete
-contract below describes the approved target, not completed story acceptance.
+Status: Phase 3 fitting/metadata implementation and installed producer checks
+are complete; Gate 3 is approved. See the
+[owning plan](plans/milestone-1-us-15.md), [Phase 3 evidence](verification/us-15-ip3.md)
+and [Phase 2 evidence](verification/us-15-ip2.md). Actual US-26 preservation is
+still required for AC-03; this is component verification, not story acceptance.
 
 ## Public interface
 
-```python
-from agentic_ml.preprocessing import fit_preprocessing
+Save this complete example as `preprocess.py` in an experiment project with the
+toolkit installed, then run it with that project's Python. The returned native
+pipeline can transform new rows without fitting again.
 
+```python
+import pandas as pd
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+from agentic_ml.preprocessing import fit_preprocessing
+from agentic_ml.splitting import create_partitions
+
+frame = pd.DataFrame(
+    {
+        "id": [0, 1, 2, 3, 4],
+        "x": [1.0, None, 3.0, 100.0, 200.0],
+        "category": ["a", "b", "a", "unseen", "a"],
+        "label": ["A", "B", "A", "B", "A"],
+    }
+)
+parts, partition_record = create_partitions(
+    frame,
+    row_id="id",
+    target="label",
+    layout="train_validation_test",
+    memberships={"train": [0, 1, 2], "validation": [3], "test": [4]},
+)
+pipeline = Pipeline(
+    [
+        (
+            "features",
+            ColumnTransformer(
+                [
+                    (
+                        "numeric",
+                        Pipeline(
+                            [
+                                ("impute", SimpleImputer()),
+                                ("scale", StandardScaler(with_std=False)),
+                            ]
+                        ),
+                        ["x"],
+                    ),
+                    (
+                        "category",
+                        OneHotEncoder(handle_unknown="ignore", sparse_output=False),
+                        ["category"],
+                    ),
+                ]
+            ),
+        )
+    ]
+)
 fitted_pipeline, record = fit_preprocessing(
     frame,
     partition_record=partition_record,
     pipeline=pipeline,
-    selected_columns=["x"],
-    output_schema=[{"name": "x", "dtype": "float64"}],
-    fit_partition="train",
+    selected_columns=["x", "category"],
+    output_schema=[
+        {"name": name, "dtype": "float64"}
+        for name in ["centered_x", "category_a", "category_b"]
+    ],
 )
+validation = fitted_pipeline.transform(parts["validation"][["x", "category"]])
+test = fitted_pipeline.transform(parts["test"][["x", "category"]])
+inference = fitted_pipeline.transform(pd.DataFrame({"x": [5.0], "category": ["b"]}))
 ```
+
+Training imputation learns 2 and centering learns 2. Validation is
+`[[98, 0, 0]]`, test is `[[198, 1, 0]]`, and inference is `[[3, 0, 1]]`.
+`record` is plain finite JSON; project code may persist it using
+`json.dumps(record, allow_nan=False)`. Supply the same fitted pipeline and record
+to US-26 with separately prepared shared experiment provenance when that
+integration is available.
+
 
 `frame` is a native pandas DataFrame; `pipeline` is a native sklearn Pipeline.
 The result is `(Pipeline, dict[str, object])`. Selected columns are ordered,
@@ -34,6 +98,9 @@ the record's row_id, target, layout, memberships and protocol. Compare its curre
 source identity with the consumed record. Do not pass original seed/fractions
 into supplied mode; preserve the original record, including seed/settings, in
 the metadata rather than replacing it with the reconstruction record.
+Seeded settings and their recorded calls are checked against the existing native
+partition API; training still uses the supplied, validated memberships. Records
+must already contain finite plain JSON, with arrays represented as lists.
 Seeded records have protocol null; supplied mode may normalize that to a supplied
 protocol internally. That normalization must not rewrite the consumed record.
 
@@ -45,7 +112,7 @@ This helper does not generate a new partition scheme or refit held-out rows.
 
 ## Metadata 1.0
 
-The proposed exact dictionary is shared with the US-26-owned
+The exact dictionary is shared with the US-26-owned
 [coordination index](../../US-26-mlflow/docs/plans/milestone-1-us-15-us-26-execution-order.md#proposed-handoff-types).
 The shared index now incorporates the developer-approved
 [encoding revision](plans/us15-us26-contract-revision.md). US-15 explicitly
@@ -116,8 +183,10 @@ Declared names describe the project's output schema. Check width, uniqueness
 and per-column dtype against the training transform; native generated feature
 names may help the project declare names but do not silently replace its schema.
 For sparse output, use native shape/dtype inspection without densifying merely
-to validate schema. Native composition feasibility was probed with dense output;
-sparse behavior still needs a public regression case before support is claimed.
+to validate schema. Dense, sparse and native pandas output have public regression evidence.
+SciPy rejects float16 OneHotEncoder output; that native error remains visible
+with training-stage context. A recordable dtype descriptor does not guarantee
+that every native transformer/container combination supports it.
 All-null default mean imputation can drop a column. An incompatible declaration
 fails; do not silently change the imputer's native defaults.
 
@@ -149,6 +218,6 @@ locked M1 fixture, without broad trust discovery or pickle fallback. Producer
 and independent consumer feasibility passed the complete-metadata/native-save
 probes. Consumer contract/index adoption and producer acknowledgement are
 complete; both Gate 1 decisions are approved. Phase 2 has Gate 2 approval;
-Phase 3 remains unstarted. Actual
+Phase 3 has Gate 3 approval. Actual
 installed integration belongs to US-26 IP4 and is required for US-15 AC-03.
 Restored transformation equivalence (AC-04) remains M2.

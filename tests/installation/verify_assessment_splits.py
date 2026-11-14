@@ -75,6 +75,11 @@ def main() -> None:
             Path(__file__).with_name("check_dataset_versioning.py"),
             workspace / "check_dataset_versioning.py",
         )
+        shutil.copy(
+            Path(__file__).with_name("check_preprocessing.py"),
+            workspace / "check_preprocessing.py",
+        )
+        shutil.copy(ROOT / "docs/preprocessing.md", workspace / "preprocessing.md")
         for label in ("direct-wheel", "rebuilt-wheel"):
             python = artifact_work / label / "bin/python"
             invocation.run(
@@ -99,6 +104,28 @@ def main() -> None:
                     workspace / label / source_format / "versioning-identity.json",
                     label + "-versioning-" + source_format + ".json",
                 )
+            preprocessing = workspace / (label + "-preprocessing")
+            invocation.run(
+                label + " preprocessing",
+                [
+                    str(python),
+                    "-I",
+                    str(workspace / "check_preprocessing.py"),
+                    "--workspace",
+                    str(preprocessing),
+                    "--guide",
+                    str(workspace / "preprocessing.md"),
+                ],
+                workspace,
+                env,
+            )
+            invocation.preserve(
+                preprocessing / "identity.json", label + "-preprocessing.json"
+            )
+            invocation.preserve(
+                preprocessing / "metadata.json", label + "-preprocessing-metadata.json"
+            )
+            print(f"PASS preprocessing {label}", flush=True)
             print(f"PASS dataset_versioning {label}", flush=True)
             print(f"PASS assessment_splits {label}", flush=True)
     except (OSError, RuntimeError, ValueError) as error:

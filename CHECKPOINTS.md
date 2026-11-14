@@ -4,42 +4,44 @@ Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Phase 2 approved commit handoff, 2026-11-14 UTC: US-15 / issue #21,
-branch `US-15-preprocessing`; current HEAD is the approved Phase 2 implementation
-commit, following Phase 1 reconciliation `576bd9f`.
-Developer approved Gate 1 in both stories and authorized Phase 2 with
-“i approve Gate 1 in both us-15 and us-26. commit the changes and start phase 2
-in both stories”. Both Gate 1 approvals and reviewed public test boundaries are
-recorded in the [owning plan](docs/plans/milestone-1-us-15.md).
+Phase 3 approved commit handoff, 2026-11-14 UTC: US-15 #21,
+branch `US-15-preprocessing`; current HEAD is the approved Phase 3 commit,
+following approved Phase 2 `104172afe9c5445e9407ffb91d56b13defd098c0`.
 
-IP2-T1/T2/T3/T4 are Complete; Gate 2 is Approved for both US-15 and US-26. New public
-fit_preprocessing clones a native Pipeline, validates supported selected record
-fields/membership/source/features/fit scope and fits only training rows.
-Native output width/dtype and baseline effective metadata are checked; full
-metadata boundary coverage is explicitly deferred to IP3. No MLflow persistence
-or installed-wheel/integration completion is claimed.
+The developer explicitly authorized both stories to start Phase 3 through
+coordination thread `01a1db6c-a225-73e0-8796-81a03c4cec7a`. Gate 1 and Gate 2
+approvals remain recorded in the [plan](docs/plans/milestone-1-us-15.md).
+US-15-IP3-T1/T2/T3 are Complete. **Gate 3 is Approved**. On 2026-11-14 the
+developer directed “commit changes in both stories”; the coordination delegation
+explicitly recorded Gate 3 acceptance and local commit authorization. Phase 3
+and its approval records are committed. No Phase 4, source integration, push,
+publication, merge or cleanup is authorized.
 
-[IP2 evidence](docs/verification/us-15-ip2.md): ten small red/green cycles;
-final four-worker/loadgroup regression 151 passed (27 new + 124 splitting),
-0 skipped/deselected. Locked synchronization/lock consistency, full Ruff lint/
-format, strict mypy (79 files), CLI version 0.1.0 and diff whitespace passed.
-Lock hash unchanged; Linux aarch64/Python 3.12.16. New contributor sklearn stubs
-have documented native typing boundaries and no suppressions. No full suite,
-build, standalone artifact check or new platform support is claimed.
-Complete refreshed #21 discussion and stable metadata, failing/passing TDD logs
-and check records remain under `.dev-records/verification/20261114-us15-ip2/`.
+[IP3 evidence](docs/verification/us-15-ip3.md): complete native/NumPy settings,
+SC-01 tags/defaults, strict existing-record checks, sparse/pandas output coverage,
+a runnable guide and an independent installed probe registered in the existing
+assessment/splits driver. Shared contract unchanged; no sibling checkout edits.
+Refreshed #21 body/all comments, stable metadata and two-comment count retained.
 
-Developer in the coordination session approved both Gate 2 decisions on
-2026-11-14: “for both us-15 and us-26 i approve the phase 2 gate, commit the
-changes.” The owning plan/report record the exact decision; it authorizes a
-local commit only. Phase 2 and approval records are now committed; next action
-is to await separate Phase 3 execution direction. No Phase 3, push, publication, integration,
-merge or cleanup is authorized. The local Phase 2 commit contains module/tests,
-contributor stubs/rationale and plan/contract/checkpoint/evidence; Phase 1 commit
-`576bd9f` remains local. Verification results above remain valid after these
-approval-only documentation changes.
-Consumer actual handoff remains US-26 IP4; AC-04 remains M2. Both prior
-concurrence/SC-01/native failure records and milestone obligations are preserved.
+Final four-worker/loadgroup focused selection: 243 passed (84 preprocessing,
+124 splitting, 35 assessment), 0 skipped/deselected; four known assessment NumPy
+warnings. Both actual installed wheel paths passed one selected distribution
+case (19 collected, 18 deselected); final formatted guide script renewed.
+Locked sync/lock check, lint/format (328 files), strict mypy (80 files), CLI 0.1.0,
+local document links and diff whitespace passed. No dependency/lock changes;
+lock SHA-256 `6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4`.
+Linux aarch64/Python 3.12.16; development pandas 3.1.0, both normal wheel installs
+pandas 3.1.1. SciPy rejects float16 OneHotEncoder output; native error/context
+preserved, no workaround. No suppressions, skip changes or assertion weakening.
+Raw TDD/check evidence is under `.dev-records/verification/20261114-us15-ip3/`;
+report links durable installed driver/artifact identities. No full suite,
+M1–6 acceptance run or standalone artifact driver was launched.
+
+Next action: await separate progression direction and prerequisites. Actual
+producer/consumer preservation remains US-26 IP4; US-15 IP4 waits for its Gate 4
+and authorized integration. AC-03 is not complete, AC-04 remains M2, and no story
+acceptance or new platform support is claimed. Preserve all earlier phase,
+SC-01 concurrence, failure and milestone records.
 
 Historical obligations below remain unchanged. Preserve the contributor worktree
 management plan/report, raw records under
