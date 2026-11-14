@@ -330,3 +330,8 @@ All five US-11 criteria, M1 phase tests, M1–6 story checks, both installed whe
 paths and existing developer gates are retained. See [IP3 verification](verification/us-11-ip3.md) for installed extraction evidence
 and platform limits. Whole-story acceptance was recorded on 2026-11-07 UTC in the
 [owning plan](plans/milestone-1-us-11.md#story-completion-review).
+
+Use the [native DVC dataset-versioning recipe](dataset-versioning.md) to version
+source snapshots, extraction bundles, saved split records and derived data.
+Its M1 installed evidence covers content ownership and committed versions;
+M2 restoration remains separate.

@@ -28,7 +28,8 @@ backlog is synchronized. Publication does not deliver unfinished experiment APIs
 Start with the [current installation/setup guide](docs/experiment-setup.md),
 [configuration validation guide](docs/configuration-validation.md),
 [pandas extraction guide](docs/extraction.md), and
-[assessment and splits guide](docs/data-assessment-and-splits.md) for implemented
+[assessment and splits guide](docs/data-assessment-and-splits.md), and
+[native DVC dataset-versioning recipe](docs/dataset-versioning.md) for implemented
 commands and Python APIs. The [assistant-supported walkthrough](docs/specs/example-walkthrough.md)
 describes the required MVP scenario and explicitly marks planned operations.
 

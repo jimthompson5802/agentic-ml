@@ -1,52 +1,52 @@
 # Development Checkpoints
 
-Last updated: 2026-11-08 (UTC)
+Last updated: 2026-11-14 (UTC)
 
 ## Current position and next action
 
-Checkout: `main` at `2b7268a` (`docs: record US-41 merge and branch cleanup`).
-The working tree was clean before this status review; this handoff changes only
-`CHECKPOINTS.md` and `docs/project-status.md`. No implementation or publication
-is authorized by this documentation task.
+Checkout: `US-13-dataset-versioning`, HEAD `1577d7c` (M1 acceptance recorded and pushed).
+Developer “start ip3”, 2026-11-14, authorizes IP3 only after approved Gates 1–2.
+The issue body/all comment pages and final metadata were refreshed: one unique
+comment matches count 1 and stable 2026-11-07T00:28:44Z update; no scope conflict.
+M1 covers AC-01/02; AC-03/04 restoration remains M2.
 
-US-41 is accepted and merged. [Issue #64](https://github.com/jimthompson5802/agentic-ml/issues/64)
-is closed in M50; its complete body, all comment pages (zero comments) and stable
-final metadata were verified on 2026-11-08 UTC. All six criteria are accepted in
-the [owning plan](docs/plans/milestone-50-us-41.md); Gates 1–4 are Approved.
-[PR #65](https://github.com/jimthompson5802/agentic-ml/pull/65) squash-merged as
-`5d5781c` at 20:51:51Z. Local main was pulled; local and remote
-`US-41-distribution-init` branches were deleted after tree equality was verified,
-as recorded in `2b7268a`.
+IP3-T1/T2 complete: the existing assessment/splits driver runs guide-derived
+CSV/Parquet recipes in direct/rebuilt normal wheel environments outside the
+checkout; focused test 1 passed. A/B commits, native identities, cache/remote
+retention, Git ownership and failure boundaries verified. Guide links and active
+traceability updated. No product API/dependency/resource change. See the
+[owning plan](docs/plans/milestone-1-us-13.md) and
+[IP3 evidence](docs/verification/us-13-ip3.md).
 
-Hosted [run 42520936609](https://github.com/jimthompson5802/agentic-ml/actions/runs/42520936609)
-completed successfully at head `1532ba2`. The independent default and other-test
-jobs both started at 20:35:51Z, finishing at 20:44:38Z and 20:50:27Z respectively.
-This supersedes earlier pending-CI and open-PR snapshots in the publication
-records; those records preserve their historical context. The contributor CI
-split is complete, approved and merged with PR #65. Collection verification
-recorded default 721, complement 268 and all 989, with disjoint complete coverage;
-raw records are in `.dev-records/verification/ci-split-20261108/`.
+IP3-T3 complete: M1 722 passed, 1 existing skip, 4 native NumPy warnings
+(233.24s); final M1–6 722 passed, 1 existing skip, 4 warnings (222.86s).
+Each selected 723 cases; unchanged 991-case inventory leaves 268 excluded.
+Locked sync/lock, lint, formatting, strict typing, CLI smoke, relative links and
+whitespace pass; lock hash unchanged. Raw records linked from IP3 evidence.
 
-US-41 [IP4 evidence](docs/verification/us-41-ip4.md) records 166 passing installed
-cases (83 through each wheel path), seven legacy Git/source-switch regressions,
-M50 **244 passed / 2 existing skips**, and M1–6 **720 passed / 1 existing skip**.
-Shared checks passed on Linux aarch64 / Python 3.12.16 / uv 0.13.6. Existing
-archive-history, timeout-skip and platform limitations remain; story acceptance
-and hosted CI do not close historical milestone verification obligations below.
+Developer “i approve ip3; commit”, 2026-11-14, approved Gate 3 and authorized
+the local IP3 commit. Gates 1–3 are Approved. This commit contains IP3 probe/test
+extensions, guide/links/design, plan, evidence, status and checkpoint.
 
-The MVP issue states in `docs/project-status.md` were checked against GitHub's
-complete current issue inventory. US-12 remains the latest accepted M1 delivery;
-US-41 is the newer M50 delivery outside the MVP table. No subsequent story
-implementation is authorized. Superseded resume instructions and intermediate
-publication snapshots were removed from this checkpoint; Git history and linked
-plans/reports retain them.
+Developer “i accept the us-13”, followed by “commit”, 2026-11-14, accepted
+the delivered M1 slice (AC-01/02) and authorized a local acceptance-record commit.
+All three gates are Approved. This acceptance changes no executable behavior;
+IP3 verification remains applicable. Relative links and whitespace rechecked.
 
-Documentation only: TDD and executable tests do not apply. Relative file links
-and `git diff --check` passed; no renewed runtime or artifact evidence is claimed.
-**Next action:** await developer direction; US-41 publication and branch cleanup
-are complete. Developer authorized committing and pushing this status refresh.
-The documentation commit includes both status files; `git diff --check` and
-relative-file link checks passed. No executable tests were needed.
+Developer “push;” authorized pushing through `1577d7c`; origin was verified.
+Developer “create pull request to main” authorized publication as
+[PR #66](https://github.com/jimthompson5802/agentic-ml/pull/66), base `main`,
+head `US-13-dataset-versioning`, standard (not draft).
+
+**Next action:** PR review and CI assessment before a separately authorized merge.
+US-13 M1 is accepted and published, not merged; issue #16 stays open for M2.
+No milestone acceptance is claimed. Linux aarch64 only; macOS/Windows unverified.
+
+US-41 publication and branch cleanup remain complete: issue #64 closed,
+PR #65 squash-merged as `5d5781c`; Gates 1–4 Approved. Prior CI/evidence details
+remain in its owning plan and reports. US-13 M1 is accepted locally; US-12 remains the latest merged M1
+component. Historical M1/M50 and revised MVP milestone acceptance obligations
+below remain open; drafting US-13 does not satisfy them.
 
 ## Completed work: authoritative records
 

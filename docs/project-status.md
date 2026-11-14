@@ -1,6 +1,6 @@
 # MVP project status
 
-Last updated: 2026-11-08 (UTC).
+Last updated: 2026-11-14 (UTC).
 
 The MVP ends at Milestone 2. This overview includes its required stories and the
 accepted M0 foundation. Repeated stories represent different milestone slices.
@@ -27,7 +27,11 @@ criteria accepted and merged in
 2026-11-08 UTC. Its [plan](plans/milestone-50-us-41.md) and
 [final evidence](verification/us-41-ip4.md) record both wheel paths, preserved Git
 support and verification limits. M50 acceptance verification remains outstanding.
-No subsequent story implementation is authorized.
+US-13 M1 IP3 is authorized by developer “start ip3” (2026-11-14).
+Gates 1–2 are approved; the direct/rebuilt installed recipe check passes.
+IP3 verification passes; Gate 3 is approved (2026-11-14). M1 AC-01/02 were accepted on 2026-11-14; see the
+[owning plan](plans/milestone-1-us-13.md) and [evidence](verification/us-13-ip3.md).
+Issue #16 remains open for M2 restoration AC-03/04.
 
 | Milestone | User story | Status |
 |---|---|---|
@@ -41,7 +45,7 @@ No subsequent story implementation is authorized.
 | M1 | US-10: Run and inspect local experiments ([#13](https://github.com/jimthompson5802/agentic-ml/issues/13)) | Open |
 | M1 | US-11: Extract local experiment data ([#14](https://github.com/jimthompson5802/agentic-ml/issues/14)) | Accepted and merged |
 | M1 | US-12: Validate data and define reproducible splits ([#15](https://github.com/jimthompson5802/agentic-ml/issues/15), [#19](https://github.com/jimthompson5802/agentic-ml/issues/19)) | AC-01/02/03/05 accepted and merged; both issues closed; AC-04 deferred |
-| M1 | US-13: Version datasets with DVC ([#16](https://github.com/jimthompson5802/agentic-ml/issues/16)) | Open |
+| M1 | US-13: Version datasets with DVC ([#16](https://github.com/jimthompson5802/agentic-ml/issues/16)) | M1 AC-01/02 accepted; not yet merged; M2 remains open |
 | M1 | US-14: Build and compare feature pipelines ([#20](https://github.com/jimthompson5802/agentic-ml/issues/20)) | Open |
 | M1 | US-15: Preserve training-only preprocessing ([#21](https://github.com/jimthompson5802/agentic-ml/issues/21)) | Open |
 | M1 | US-18: Train scikit-learn classification models ([#28](https://github.com/jimthompson5802/agentic-ml/issues/28)) | Open |

@@ -432,6 +432,15 @@ def main() -> None:
         assert output["assessment"]["row_count"] == 5
         assert output["record"]["memberships"] == {"train": [2, 0, 3], "test": [1, 4]}
         sentinel.unlink()
+    versioning_spec = importlib.util.spec_from_file_location(
+        "check_dataset_versioning",
+        Path(__file__).with_name("check_dataset_versioning.py"),
+    )
+    assert versioning_spec is not None and versioning_spec.loader is not None
+    versioning = importlib.util.module_from_spec(versioning_spec)
+    versioning_spec.loader.exec_module(versioning)
+    for source_format in ("csv", "parquet"):
+        versioning.versioning_cases(root / source_format, source_format)
     identity = {
         "package": str(package),
         "python": sys.version,
@@ -440,11 +449,11 @@ def main() -> None:
         "project_code": str(code),
         "versions": {
             name: version(name)
-            for name in ("agentic-ml", "pandas", "pyarrow", "scikit-learn")
+            for name in ("agentic-ml", "pandas", "pyarrow", "scikit-learn", "dvc")
         },
         "records": records,
         "extraction": extraction,
-        "criteria": ["US-12-AC-02", "US-12-AC-03"],
+        "criteria": ["US-12-AC-02", "US-12-AC-03", "US-13-AC-01", "US-13-AC-02"],
         "sentinels": ["required_blocked", "passed", "advisory", "not_checked"],
     }
     (root / "identity.json").write_text(json.dumps(identity, indent=2, allow_nan=False))

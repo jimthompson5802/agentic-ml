@@ -588,6 +588,7 @@ def test_assessment_splits_from_both_artifact_paths(
     assert result.returncode == 0, result.stdout + result.stderr
     for label in ("direct-wheel", "rebuilt-wheel"):
         assert f"PASS assessment_splits {label}" in result.stdout, result.stdout
+        assert f"PASS dataset_versioning {label}" in result.stdout, result.stdout
     records = Path(
         next(
             line.removeprefix("RECORDS ")
