@@ -1,8 +1,8 @@
 # US-18 Implementation Phase 4 verification
 
-Status: **Complete; Gate 4 Approved; M1-slice acceptance pending**. Developer “start phase 4” authorized execution on
+Status: **Complete; Gate 4 Approved; M1 classification slice accepted**. Developer “start phase 4” authorized execution on
 2026-11-15 UTC after Gate 3 approval and commit `f5605d0`. Developer “i approve gate 4; commit” approved Gate 4 and authorized its local
-commit on 2026-11-15 UTC. M1-slice acceptance remains pending. Issue #28
+commit on 2026-11-15 UTC. Developer “i accept us-18 m1 classification slice” accepted M1 on 2026-11-15 UTC. Issue #28
 remains open for M2 regression.
 
 ## Scope and boundaries

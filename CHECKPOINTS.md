@@ -10,12 +10,14 @@ Story checkout: `.worktrees/US-18-classification`, branch
 `main`; remote freshness was not checked by fetching.
 
 US-18 #28 M1 classification implementation is technically complete through IP4.
-Gates 1–4 are Approved; **explicit M1-slice acceptance remains pending**.
+Gates 1–4 are Approved; **M1 classification slice is accepted**.
 Developer “start phase 4” authorized IP4 on 2026-11-15 UTC after Phase 3 commit
 `f5605d0`. IP4-T1/T2/T3 are Complete. Developer “i approve gate 4; commit”
 approved Gate 4 and authorized its local commit on 2026-11-15 UTC. This
-checkpoint accompanies that commit. Next action: await explicit M1-slice
-acceptance. Push/publication is not authorized. Issue #28 remains open for M2 regression (AC-01 spans
+checkpoint accompanied commit `b0cea15`. Developer “i accept us-18 m1
+classification slice” accepted M1 on 2026-11-15 UTC. Next action: commit
+acceptance, push, create PR and publish static COMMENT review through execute-plan.
+Merge and cleanup are not authorized. Issue #28 remains open for M2 regression (AC-01 spans
 M1/M2). The complete issue body and one comment were refreshed with a consistent
 final snapshot. See [owning plan](docs/plans/milestone-1-us-18.md) and
 [IP4 evidence](docs/verification/us-18-ip4.md).
@@ -49,8 +51,9 @@ artifact identities, installed/native outputs and resolved verification-tooling
 failures. No unresolved corrective problem, suppression or added skip.
 Earlier phase evidence remains under the IP1/IP2/IP3 paths in their reports.
 
-No complete-suite, standalone artifact-driver, user-story acceptance, milestone
-acceptance or publication is claimed. Artifact drivers ran inside selected tests.
+No complete-suite, standalone artifact-driver, whole-issue acceptance or milestone
+acceptance is claimed. M1-slice publication progress is recorded in
+[publication evidence](docs/verification/us-18-publication.md). Artifact drivers ran inside selected tests.
 US-18's installed/final regression deferrals are resolved; M2 regression,
 other-story integration, final testing, native DVC stages/reproduction and assistant
 walkthroughs remain with their existing owners. PR #68's accepted US-15 M1

@@ -88,7 +88,7 @@ confirmation does not confirm the new training boundary automatically.
 
 ## Plan review
 
-- **Status:** Approved plan; IP1/Gate 1 Approved; IP2 Complete; Gate 2 Approved; IP3 Complete; Gate 3 Approved; IP4 Complete; Gate 4 Approved; explicit M1-slice acceptance pending.
+- **Status:** Approved plan; IP1/Gate 1 Approved; IP2 Complete; Gate 2 Approved; IP3 Complete; Gate 3 Approved; IP4 Complete; Gate 4 Approved; M1 classification slice accepted.
 - **Developer decision:** Approved.
 - **Decision reference and date:** Developer message “i approve the plan”, 2026-11-15 UTC. Approval includes the extensible estimator design and RandomForestClassifier project-only proof; it does not approve implementation gates or authorize IP1.
 - **Requested plan changes:** US-18-SC-01 requires extensible native estimator support; user direction recorded below. Included in the plan approval recorded above.
@@ -287,7 +287,7 @@ for the other. Actual results: **59 focused/regression cases passed**, zero fail
 - **Evidence presented:** [IP4 report](../verification/us-18-ip4.md), both installed artifact paths, 59-case focused pass and final 982 passed / 1 existing skip M1–6 run, shared checks and retained identity/failure/skip reconciliation. IP4-T1/T2/T3 technically Complete, 2026-11-15 UTC; Gate 4 Approved on the same date.
 - **Remaining limitations:** AC-01 regression remains M2; no US-39 end-to-end/assistant or milestone acceptance claim.
 - **Developer decision / reference and date / requested changes:** Approved — developer “i approve gate 4; commit”, 2026-11-15 UTC. Local Phase 4 commit authorized; no requested changes.
-- **Progression authorized:** Gate 4 satisfied. Await explicit M1-slice acceptance; push/publication is not authorized.
+- **Progression authorized:** Gate 4 satisfied. Subsequent developer M1-slice acceptance authorizes publication as recorded below.
 
 ## Shared checks and execution rules
 
@@ -351,18 +351,22 @@ Scope changes use the linked manage-plan-scope procedure before dependent work.
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-18-AC-01 classification | IP1-T1/T2/T3; IP2-T1/T2/T3/T4; IP3-T1/T4; IP4-T1/T2/T3 | Native baseline/real classifier, binary oracle and multiclass case, installed matrix | M1 verified; developer acceptance pending; regression deferred to M2 |
-| US-18-AC-02 | IP1-T3; IP2-T1; IP3-T1/T3/T4; IP4-T1/T2/T3 | Reproducible baseline recorded before candidate comparison; failed baseline prevents comparison | Verified M1; developer acceptance pending |
-| US-18-AC-03 | IP1-T2/T3; IP2-T1/T2/T3/T4; IP3-T2/T3; IP4-T1/T2/T3 | Native pipeline fit/predict/save/load, independent predictions, train-only oracle, project-only third-estimator extension on both wheel paths and failure cases | Verified M1; developer acceptance pending |
-| US-18-AC-04 | IP1-T1/T2/T3; IP2-T2/T3/T4; IP3-T1/T2/T3/T4; IP4-T1/T2/T3 | Native MLflow parameters/metrics/models, effective defaults/library versions and committed feature/data/environment references | Verified M1; developer acceptance pending |
+| US-18-AC-01 classification | IP1-T1/T2/T3; IP2-T1/T2/T3/T4; IP3-T1/T4; IP4-T1/T2/T3 | Native baseline/real classifier, binary oracle and multiclass case, installed matrix | M1 accepted; regression deferred to M2 |
+| US-18-AC-02 | IP1-T3; IP2-T1; IP3-T1/T3/T4; IP4-T1/T2/T3 | Reproducible baseline recorded before candidate comparison; failed baseline prevents comparison | Accepted M1 |
+| US-18-AC-03 | IP1-T2/T3; IP2-T1/T2/T3/T4; IP3-T2/T3; IP4-T1/T2/T3 | Native pipeline fit/predict/save/load, independent predictions, train-only oracle, project-only third-estimator extension on both wheel paths and failure cases | Accepted M1 |
+| US-18-AC-04 | IP1-T1/T2/T3; IP2-T2/T3/T4; IP3-T1/T2/T3/T4; IP4-T1/T2/T3 | Native MLflow parameters/metrics/models, effective defaults/library versions and committed feature/data/environment references | Accepted M1 |
 
 - **Remaining work:** M2 regression AC-01; other stories retain their own integration, tuning, final testing and reproduction obligations.
 - **Partial prerequisite delivery:** This provides classification training to later feature/search/basic-path work; it does not accept US-05 training integration generally, US-14, US-20, US-21, US-24, US-27 or US-39.
-- **Final verification:** Complete US-18-IP4-T3; [IP4 report](../verification/us-18-ip4.md). Gate 4 Approved; M1-slice acceptance pending.
-- **Developer M1-slice acceptance / decision reference and date:** Pending. Keep issue #28 open for regression.
+- **Final verification:** Complete US-18-IP4-T3; [IP4 report](../verification/us-18-ip4.md). Gate 4 Approved; M1 classification slice accepted.
+- **Developer M1-slice acceptance / decision reference and date:** Accepted — developer “i accept us-18 m1 classification slice”, 2026-11-15 UTC. All four gates approved. Authorizes accepted-slice commit, push, PR and static COMMENT review through execute-plan; merge and cleanup are not authorized. Keep issue #28 open for M2 regression.
 
 ## Milestone acceptance handoff
 
 - **Owner:** `MVP-M1-ACCEPT-VERIFY`; later regression to `MVP-M2-ACCEPT-VERIFY`.
 - **Deferred checks:** Full revised-MVP integration and assistant/native-stage demonstrations; platform/manual and historical M1/M50 reconciliation remain with their owners in [CHECKPOINTS](../../CHECKPOINTS.md). This plan closes none of them automatically.
 - **Required evidence:** Reconcile final story evidence and every remaining milestone deferral. Complete-suite `uv run --locked pytest -n 4 --dist=loadgroup -m ""`, standalone direct/rebuilt distribution and installation checks run only on explicit developer command, with shared checks and final identity/platform qualifications. A milestone approval does not silently launch broader checks.
+
+## Accepted-slice publication
+
+M1 classification accepted on 2026-11-15 UTC; see [publication record](../verification/us-18-publication.md). Issue #28 stays open for M2 regression.

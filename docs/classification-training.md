@@ -8,7 +8,7 @@ tree-storage persistence choice. `fit_classifier` has focused local evidence in
 the [IP2 report](verification/us-18-ip2.md). Project recording and native persistence passed IP3 verification. Both normal
 installed wheel paths pass the [IP4 focused checks](verification/us-18-ip4.md);
 final M1–6 and shared checks pass. Gate 4 is approved, 2026-11-15 UTC; explicit
-M1-slice acceptance remains pending.
+M1 classification slice accepted on the same date.
 The [owning plan](plans/milestone-1-us-18.md) defines the M1 slice, development
 gates and acceptance criteria. [Native feasibility evidence](verification/us-18-ip1.md)
 does not establish installed workflow acceptance.
