@@ -88,7 +88,7 @@ confirmation does not confirm the new training boundary automatically.
 
 ## Plan review
 
-- **Status:** Approved plan; IP1 Complete; Gate 1 Approved; IP2 authorization pending.
+- **Status:** Approved plan; IP1/Gate 1 Approved; IP2 Complete; Gate 2 Approved; IP3 authorization pending.
 - **Developer decision:** Approved.
 - **Decision reference and date:** Developer message “i approve the plan”, 2026-11-15 UTC. Approval includes the extensible estimator design and RandomForestClassifier project-only proof; it does not approve implementation gates or authorize IP1.
 - **Requested plan changes:** US-18-SC-01 requires extensible native estimator support; user direction recorded below. Included in the plan approval recorded above.
@@ -173,16 +173,22 @@ all remaining story regressions to IP4-T3. Actual results: **Complete for IP1** 
 
 ## US-18 / Implementation Phase 2: Fit validated classifiers on training rows
 
+Technical completion: **Complete**, 2026-11-15 UTC; Gate 2 **Approved**, 2026-11-15 UTC.
+Developer “use the suggested prompt” authorized the previously supplied
+start-IP2/stop-at-Gate-2 instruction. [IP2 evidence](../verification/us-18-ip2.md)
+records the vertical TDD cycles, final 310-case focused/regression pass and
+shared checks. No commit or later implementation phase is authorized.
+
 - **Outcome:** Native fitted prediction pipelines and effective training metadata through the reviewed public helper.
-- **Entry conditions:** Gate 1 approved, boundaries explicitly confirmed and IP2 authorized.
+- **Entry conditions:** Met: Gate 1 approved with revised SC-02 boundaries; IP2 authorized by developer “use the suggested prompt”, 2026-11-15 UTC.
 - **Acceptance criteria advanced:** US-18-AC-01 M1, AC-02 baseline fitting, AC-03, AC-04 metadata.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-18-IP2-T1 | Not started | First baseline behavior test in proposed `tests/integration/test_training.py`; minimum helper in proposed `src/agentic_ml/training/` | Gate 1 | Recorded red fails for missing behavior; green gives independently expected baseline predictions and leaves caller inputs unchanged, with no caller estimator instance required | AC-01/02/03 |
-| US-18-IP2-T2 | Not started | Add one behavior at a time for native classifiers and project-only RandomForestClassifier extension, explicit class bindings, validate-then-construct order, fresh-instance isolation, constructor errors and complete effective/default settings, fixed seeds, fit scope and prediction compatibility | T1 | Toolkit-owned construction/native fitting and preprocessing composition pass independent oracle; invalid/stale candidates fail before construction, constructor/binding/parameter-coverage errors fail before fit; binary/multiclass cases and third estimator supplied without toolkit edits | AC-01/03/04 |
-| US-18-IP2-T3 | Not started | Add source/membership/feature/target/type, absent/non-class/incompatible bindings, metadata omissions/native default drift, unsupported parameter encoding and two-way-layout boundary cases; refactor only while green | T2 | Bad inputs fail clearly; two-way training does not use test rows; valid three-way predictions and metadata agree with declared source/splits | AC-01/03/04 |
-| US-18-IP2-T4 | Not started | Focused/regression/shared checks; proposed `docs/verification/us-18-ip2.md`, contract and checkpoint updates | T3 | Red/green history, exact coverage/counts, lock identity, changed modules and limitations ready for review | AC-01–04 |
+| US-18-IP2-T1 | Complete | First baseline behavior test in proposed `tests/integration/test_training.py`; minimum helper in proposed `src/agentic_ml/training/` | Gate 1 | Recorded red fails for missing behavior; green gives independently expected baseline predictions and leaves caller inputs unchanged, with no caller estimator instance required | AC-01/02/03 |
+| US-18-IP2-T2 | Complete | Add one behavior at a time for native classifiers and project-only RandomForestClassifier extension, explicit class bindings, validate-then-construct order, fresh-instance isolation, constructor errors and complete effective/default settings, fixed seeds, fit scope and prediction compatibility | T1 | Toolkit-owned construction/native fitting and preprocessing composition pass independent oracle; invalid/stale candidates fail before construction, constructor/binding/parameter-coverage errors fail before fit; binary/multiclass cases and third estimator supplied without toolkit edits | AC-01/03/04 |
+| US-18-IP2-T3 | Complete | Add source/membership/feature/target/type, absent/non-class/incompatible bindings, metadata omissions/native default drift, unsupported parameter encoding and two-way-layout boundary cases; refactor only while green | T2 | Bad inputs fail clearly; two-way training does not use test rows; valid three-way predictions and metadata agree with declared source/splits | AC-01/03/04 |
+| US-18-IP2-T4 | Complete | Focused/regression/shared checks; proposed `docs/verification/us-18-ip2.md`, contract and checkpoint updates | T3 | Red/green history, exact coverage/counts, lock identity, changed modules and limitations ready for review | AC-01–04 |
 
 ### Verification and review evidence
 
@@ -191,15 +197,15 @@ These cover new fitting plus the reused partition/preprocessing/strict validatio
 boundaries. Short individual red–green cases may run serially with a recorded
 TDD rationale. Shared checks below apply. Public boundaries are those confirmed
 at Gate 1. Tracking/persistence is deferred to IP3, installed use to IP4-T1/T2,
-unselected M1–6 regressions to IP4-T3. Actual results: **Pending**.
+unselected M1–6 regressions to IP4-T3. Actual results: **310 passed, zero failures/skips/deselections** in 9.02 seconds; 45 training and 265 existing relevant regression cases, four workers/loadgroup. Shared checks pass, unchanged lock, full red/green and limitations in [IP2 evidence](../verification/us-18-ip2.md).
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete; supported fits and pre-fit rejections verified; focused/regression/shared checks pass.
-- **Evidence presented:** Pending `docs/verification/us-18-ip2.md`.
+- **Evidence presented:** [IP2 report](../verification/us-18-ip2.md), [public contract](../classification-training.md), new `agentic_ml.training.fit_classifier`, 45 new public-interface cases and contributor typing declarations. No suppressions/dependency changes.
 - **Remaining limitations:** Full classifier recording and installed verification pending.
-- **Developer decision / reference and date / requested changes:** Pending.
-- **Progression authorized:** Pending — stop for approval and IP3 authorization.
+- **Developer decision / reference and date / requested changes:** Approved — developer “i approve gate 2; commit”, 2026-11-15 UTC. Local Phase 2 commit authorized; no requested changes.
+- **Progression authorized:** Gate 2 satisfied; await explicit IP3 authorization. Commit authorized; push/publication not authorized.
 
 ## US-18 / Implementation Phase 3: Record baseline and candidate model runs
 

@@ -1,0 +1,3 @@
+"""Public classification target compatibility check."""
+
+def type_of_target(y: object) -> str: ...

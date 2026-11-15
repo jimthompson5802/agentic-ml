@@ -21,29 +21,37 @@ the approved plan records this revision.
 Developer-directed US-18-SC-02 removes the caller estimator instance: the toolkit
 validates candidate parameters and constructs the bound class before fitting.
 Contract, task boundaries and native constructor feasibility were renewed;
-Gate 1 is Approved; IP2 start authorization remains pending. Custom/third-party estimator certification remains M2.
+Gate 1 is Approved; IP2 is Complete and Gate 2 is Approved. Custom/third-party estimator certification remains M2.
 
-Developer approved the plan on 2026-11-15 UTC; planning commit is `52dcc27`.
-Developer “you can use the recommended prompt” authorized IP1 only and its
-stop at Gate 1. IP1-T1/T2/T3 are Complete. Developer “i approve phase 1”
-approved Gate 1 on 2026-11-15 UTC, including the revised
-[contract](docs/classification-training.md), public test boundaries and bounded
-tree-serialization trust choice; see [IP1 evidence](docs/verification/us-18-ip1.md).
-Next action: explicit IP2 start authorization. IP2 is not started.
+Plan approval was committed as `52dcc27`; Gate 1 and its revised constructor
+contract were approved and committed as `4a4f2e7`. Developer “use the suggested
+prompt” authorized IP2 and its stop at Gate 2 on 2026-11-15 UTC.
+IP2-T1/T2/T3/T4 are Complete. Developer “i approve gate 2; commit” approved
+Gate 2 and authorized its local commit on 2026-11-15 UTC; the developer renewed
+the commit instruction with “commit the changes.” Phase 2 changes are included
+in the local commit containing this checkpoint; see
+[IP2 evidence](docs/verification/us-18-ip2.md).
+Next action: explicit Phase 3 authorization. IP3 and push/publication are not authorized.
 
-Native dummy/tree/project-only random forest fit/save/upload/download/load/predict
-probes passed under proposed explicit numpy.dtype/tree-storage trust. The original
-preprocessing-only trust configuration fails for tree storage; both sandboxed
-and escalated original failures are retained. No automatic trust expansion or
-serializer fallback was implemented. Complete toolkit/installed verification
-remains in IP2–4. The worktree's own locked .venv was created; lock unchanged.
+Implemented `agentic_ml.training.fit_classifier`: live strict candidate checks,
+project class bindings, toolkit-owned fresh construction, complete typed scalar
+parameters, train-only preprocessing/classifier fit and native prediction Pipeline
+plus finite metadata. Project-only random forest is covered without toolkit
+algorithm wiring. Earlier native serialization evidence is preserved under
+`.dev-records/verification/us18-ip1-20261115-52dcc27/`; persistence integration
+remains IP3 and both normal installed wheel paths remain IP4.
 
-Working-tree changes: contract, IP1 report, plan progress and this checkpoint.
-No source or behavior-test changes. Document/link/whitespace checks pass; no
-pytest runs or story acceptance claimed. Raw evidence and original probe failures
-are retained under `.dev-records/verification/us18-ip1-20261115-52dcc27/`.
-Developer “commit the changes” authorized this Phase 1 documentation and
-approval commit on 2026-11-15 UTC. Push/publication and IP2 remain unauthorized.
+Final focused/regression run: 310 passed, zero failures/skips/deselections, four
+workers/loadgroup, Linux aarch64 / Python 3.12.16. Shared checks pass; the existing
+contract code fence was formatted after the first formatting check. Lock unchanged.
+Twelve expected red/green behavior cycles and intermediate verification are retained
+under `.dev-records/verification/us18-ip2-20261115-4a4f2e7/`.
+
+Working-tree changes: new training module and tests, contributor sklearn typing
+support, usage-contract status, IP2 report, plan progress and this checkpoint.
+No M1–6 acceptance/full suite/standalone artifact run or story acceptance is
+claimed. Remaining story checks belong to IP3/IP4 and final IP4-T3 acceptance;
+all milestone/historical obligations below remain unchanged.
 
 PR #68's US-15 M1 preprocessing and US-26 #17 recording are accepted and merged
 prerequisites; their M2/remaining slices and all historical milestone obligations

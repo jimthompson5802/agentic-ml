@@ -1,17 +1,19 @@
 # Classification training contract
 
-Status: **Contract approved at US-18 Gate 1, 2026-11-15 UTC; not implemented.**
+Status: **Contract approved at US-18 Gate 1; fitting implemented with local IP2
+verification, 2026-11-15 UTC. Gate 2 approved, 2026-11-15 UTC.**
 Developer decision: “i approve phase 1”. This confirms the revised
 validate-then-construct interface, public test boundaries and explicit bounded
-tree-storage persistence choice. Remaining proposal language below describes
-the approved contract awaiting implementation; it does not claim working code.
+tree-storage persistence choice. `fit_classifier` has focused local evidence in
+the [IP2 report](verification/us-18-ip2.md). Project recording, persistence
+integration and normal installed wheel verification remain IP3/IP4 work.
 The [owning plan](plans/milestone-1-us-18.md) defines the M1 slice, development
 gates and acceptance criteria. [Native feasibility evidence](verification/us-18-ip1.md)
-does not establish that the toolkit helper or installed workflow passes.
+does not establish installed workflow acceptance.
 
 ## Public fitting interface
 
-Proposed export from `agentic_ml.training`:
+Implemented fitting export from `agentic_ml.training`:
 
 ```python
 def fit_classifier(
@@ -25,8 +27,7 @@ def fit_classifier(
     selected_columns: Sequence[str],
     output_schema: Sequence[Mapping[str, str]],
     fit_partition: str = "train",
-) -> tuple[Pipeline, dict[str, object]]:
-    ...
+) -> tuple[Pipeline, dict[str, object]]: ...
 ```
 
 The interface uses existing pandas/sklearn objects and existing
@@ -59,7 +60,6 @@ estimator_bindings = {
     "decision_tree": DecisionTreeClassifier,
     "random_forest": RandomForestClassifier,
 }
-
 ```
 
 Project additive registry metadata describes `decision_tree` and `random_forest`
@@ -295,8 +295,8 @@ forest without relying on chance bootstrap membership. They do not certify
 stochastic bootstrap configurations generally. Use exact class predictions and
 `rtol=1e-12, atol=1e-12` for controlled floating outputs.
 
-Two normal installed wheel paths, multiclass behavior, metadata/native parameter
-coverage/drift and stale-evidence rejection, invalid class bindings, constructor
-failure before fitting, fresh-instance isolation, failed-baseline order, persistence and
-configured/operational failures remain future required tests. No executable
-training helper, user-story acceptance or new platform certification exists yet.
+Local IP2 tests cover fitting, multiclass behavior, strict candidate rejection,
+class bindings, constructor errors, fresh instances and source/partition/feature
+guards. Normal installed wheel paths, baseline-order recording, persistence
+integration and configured/operational tracking failures remain IP3/IP4 work.
+No user-story acceptance or additional platform certification is claimed.
