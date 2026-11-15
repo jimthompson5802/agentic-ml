@@ -127,6 +127,8 @@ Map every acceptance criterion within scope to task IDs and verification evidenc
 
 The saved plan must include these instructions for the implementing agent.
 
+Include an execution authorization record under the [command and autonomy policy](../../../docs/development/command-approvals.md): current phase and checkout, authorization reference, verification scope, authorized external actions and next gate. Keep pending authorizations explicit; drafting or approving the plan does not record permission to execute it.
+
 ### Record task progress
 
 Mark a task complete only after its work and required verification pass. Record actual results and evidence. Keep partial, blocked, failed, and unverified tasks incomplete.

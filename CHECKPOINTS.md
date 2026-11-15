@@ -4,6 +4,22 @@ Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
+Permission policy: applied the developer-approved five-file patch for phase
+execution autonomy, direct command forms, complete evidence capture and durable
+execution authorization records. The user approved the proposed patch in this
+session. Phase gates and publication boundaries are preserved. The developer
+authorized committing these changes and pushing them to origin/main.
+
+Validation: `git diff --check` passed; modified skill frontmatter is unchanged
+and all five new relative documentation links resolve. Both modified skills passed
+`quick_validate.py` using `uv run --no-project --with 'pyyaml>=6,<7' python`
+with PyYAML 6.0.3, as authorized by the developer. PyYAML was already declared
+and locked; dependency files are unchanged. The project virtualenv interpreter
+remains unavailable; validation used an isolated uv environment. No Python
+behavior changed, so TDD and Python tests do not apply.
+Runtime permission behavior in the devcontainer remains unverified. Next action
+for this policy change: pilot one already-authorized phase in the active runtime.
+
 Primary checkout: `main`; only the primary worktree remains.
 US-18 M1 classification is accepted and merged in PR #69. Its worktree and
 local/remote branches have been removed; verified evidence is archived below.

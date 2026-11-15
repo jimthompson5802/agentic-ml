@@ -49,6 +49,20 @@ For cross-story prerequisites, link the supplying story plan and implementation 
 - **Decision reference and date:** <record when given>
 - **Requested plan changes:** <record if applicable>
 
+## Execution authorization
+
+Follow the [command and autonomy policy](../development/command-approvals.md).
+This record summarizes explicit decisions; it does not grant runtime permissions.
+
+- **Authorized phase and workspace:** <phase ID and workspace association, or Pending>
+- **Execution authorization reference and date:** <explicit decision, or Pending>
+- **Verification scope:** <reference the phase selections and applicable policy>
+- **Authorized external actions:** <action and explicit decision reference, or None>
+- **Next required gate:** <owning gate and pending decision>
+
+Reference this record from CHECKPOINTS.md. Preserve valid authorization on resumption
+and update it when the developer changes the execution boundary.
+
 ## Scope-change history
 
 Follow the [manage-plan-scope procedure](../../.agents/skills/manage-plan-scope/SKILL.md) when scope changes during execution. Initially record "None"; repeat the record below for each meaningful change. Link requested changes in the affected implementation phase to their scope-change record.

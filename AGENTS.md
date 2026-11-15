@@ -22,7 +22,7 @@ When starting or resuming development, read [CHECKPOINTS.md](CHECKPOINTS.md) and
 
 For story planning or execution, use the [manage-story-worktree skill](.agents/skills/manage-story-worktree/SKILL.md) to select the owning checkout and follow the [story worktree guidance](docs/development/worktrees.md). Use one branch, worktree, agent session, and Python environment per story in the shared devcontainer. Keep approvals and checkpoint summaries specific to that story; workspace creation does not authorize implementation or cleanup.
 
-For GitHub reads and development checks, follow the [repository-local command approval guidance](docs/development.md#repository-local-codex-command-approvals). Command permissions do not approve implementation phases, story acceptance, or publication.
+Before GitHub reads, development checks, or resuming authorized execution, follow the [command and autonomy policy](docs/development/command-approvals.md). Use its command forms and recover the recorded authorization before asking for another development decision. Command permissions do not approve implementation phases, story acceptance, or publication.
 
 Use Conventional Commits for commit messages: `<type>[optional scope]: <description>` (for example, `docs: update architecture proposal`).
 
