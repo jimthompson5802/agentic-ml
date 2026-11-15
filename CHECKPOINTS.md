@@ -78,6 +78,23 @@ retained worktree-validation fixture and linked host evidence described in
 storage availability has not been revalidated. Historical publication/next-action
 wording inherited from main is superseded by this story-specific handoff.
 
+
+Worktree removal authorized on 2026-11-15 UTC. Before removal, both detached
+worktrees were clean, with no active processes in their directories. Their tips
+were verified against merged PR #68 (US-26 is an ancestor of its published head).
+All retained evidence was copied and file checksums, directory inventories and
+link targets verified in these primary-checkout archives:
+
+- `US-15-preprocessing` → `.dev-records/worktree-archives/20261115T025402Z-US-15-preprocessing-459e8ba1`
+- `US-26-mlflow` → `.dev-records/worktree-archives/20261115T025408Z-US-26-mlflow-9f100e11`
+
+Each archive contains `archive-manifest.json` with original paths, commit and
+verified inventories. Other ignored entries are disposable `.venv`, tool caches
+and Python bytecode. Prior retained-worktree wording above is historical.
+Removal status: both worktrees removed with ordinary `git worktree remove`;
+only the primary checkout remains registered. Archive manifests remain available.
+No forced removal, pruning or historical evidence deletion was used.
+
 ## Completed work: authoritative records
 
 | Work | Final status and records |
