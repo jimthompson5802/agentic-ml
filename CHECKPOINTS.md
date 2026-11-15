@@ -4,24 +4,36 @@ Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
-Primary checkout: `main`. PR #68 merged US-15 M1 preprocessing and US-26
-MLflow recording as `a2c6262`; both hosted Linux CI jobs passed. The project
-status update was committed and pushed as `2caf93c`.
+Story checkout: `.worktrees/US-18-classification`, branch
+`US-18-classification`, created from local `main` at
+`94e74ba38922a80b368860d53545a18f22d555e2`. The primary checkout remains on
+`main`; remote freshness was not checked by fetching.
 
-US-15 M1 AC-01–03 and US-26 #17 AC-01–05 are accepted. US-15 M2
-restoration (#21 AC-04) and US-26 comparison/provenance (#33/#43) remain open.
-The [project status](docs/project-status.md) lists the remaining MVP story slices.
-Next action: await developer direction on the next story; no implementation phase
-is currently authorized by this checkpoint.
+US-18 #28 M1 classification plan is approved in
+[the owning plan](docs/plans/milestone-1-us-18.md). The complete issue body and
+one comment were retrieved and snapshot-checked. The plan proposes four
+implementation phases: contract/native feasibility review, validated fitting,
+baseline/candidate recording, and installed/final acceptance verification.
+Regression remains M2; M1 delivery must not close #28 or claim all of AC-01.
+Developer direction US-18-SC-01 now requires project-extensible native estimator
+bindings and a project-only RandomForestClassifier proof without toolkit changes;
+the approved plan records this revision. Custom/third-party estimator certification remains M2.
 
-Only the primary worktree remains registered. The US-15/US-26 story branches and
-worktrees were removed after authorized cleanup; retained evidence locations are
-listed below. Historical publication, queued-CI and pending-merge instructions
-are superseded by the merged delivery.
+Developer approved the plan with “i approve the plan” on 2026-11-15 UTC.
+Next action: explicit IP1 authorization. All tasks and
+implementation gates are pending. Gate 1 must confirm exact new training test
+boundaries before executable behavior tests. Planning did not create an
+environment, change product code, run tests, or publish anything.
 
-This documentation cleanup removes stale handoffs and duplicate verification
-summaries. Only `CHECKPOINTS.md` is changed; no executable behavior changed.
-Verification: `git diff --check`; no tests required for this documentation edit.
+This planning delivery contains the story-specific checkpoint and new plan only.
+Developer authorized committing the plan and approval on 2026-11-15 UTC.
+Documentation verification: whitespace and local link checks; detailed drafting
+validation is recorded in the plan. TDD does not apply to this documentation-only
+planning change. All executable checks remain pending.
+
+PR #68's US-15 M1 preprocessing and US-26 #17 recording are accepted and merged
+prerequisites; their M2/remaining slices and all historical milestone obligations
+below remain open. Other stories' retained evidence locations remain unchanged.
 
 ## Completed work: authoritative records
 
