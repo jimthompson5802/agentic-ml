@@ -7,3 +7,10 @@ def accuracy_score(
     normalize: bool = ...,
     sample_weight: object | None = ...,
 ) -> float: ...
+def zero_one_loss(
+    y_true: object,
+    y_pred: object,
+    *,
+    normalize: bool = ...,
+    sample_weight: object | None = ...,
+) -> float: ...

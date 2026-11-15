@@ -1,21 +1,21 @@
 # Authored feature comparison
 
-Status: **US-14-IP1 contract proposal v2. Factory decisions approved; remaining
-contract and public test boundaries await approval.** This describes
-the recipe to implement in IP2. It is not an available command yet. The
+Status: **US-14-IP1 contract v2 Approved**, 2026-11-15 UTC, by developer
+“yes i approve contract v2”, including public test boundaries. The project-owned recipe is implemented and its Phase 2 checks pass.
+Final installed-story verification remains in IP3. The
 [plan](plans/milestone-1-us-14.md) owns execution and approval; the
 [IP1 evidence](verification/us-14-ip1.md) records bounded native feasibility.
 
 ## Project boundary and preparation
 
-Copy the future `examples/feature-comparison/` files into a separate initialized
+Copy the `examples/feature-comparison/` files into a separate initialized
 experiment project with a normal installed toolkit dependency and its own locked
 environment. Use the [installed setup](experiment-setup.md) and the accepted
 [classification preparation pattern](classification-training.md#runnable-project-example).
 Project source imports only installed public toolkit interfaces and native
 libraries. No new toolkit API or CLI command is proposed.
 
-The example will contain these authoritative source files:
+The example contains these authoritative source files:
 
 | File | Responsibility |
 |---|---|
@@ -116,8 +116,8 @@ fit failure can be detected before fitting.
 ## Factory contract: approved decisions
 
 Developer “let's stay with predeclared” and “i accept these recommendations”
-settled these decisions on 2026-11-15 UTC. They approve this factory boundary,
-not the entire comparison contract or Phase 2 execution.
+settled these decisions on 2026-11-15 UTC. Those messages approved this factory boundary; subsequent full contract v2
+approval is recorded above.
 
 The comparison script imports `get_variants` from the fixed project file
 `feature_variants.py` and calls it once, without arguments. It returns a Python
@@ -258,7 +258,7 @@ required output, DVC or publication failure prevents a successful summary result
 There is no atomic rollback, hard-kill guarantee or automatic resume. A partial
 summary upload is evidence to inspect, not proof of comparison completion.
 
-## Proposed public verification boundaries
+## Approved public verification boundaries
 
 IP2 invokes the exact copied entrypoint in a separate committed experiment,
 through installed public fit/validation/tracking interfaces. Inspect native

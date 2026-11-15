@@ -4,37 +4,33 @@ Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
-US-14 / issue #20 IP1 technical work is complete in branch
-`US-14-feature-pipelines`, worktree `.worktrees/US-14-feature-pipelines`,
-HEAD `74cb1ca6884218471370dd68bf7c228f20448c40`, original base
-`9a030cfe5d6523531e386b0195f40a16599180fc`.
-The [approved plan](docs/plans/milestone-1-us-14.md) records developer
-“start phase 1”, 2026-11-15 UTC, authorizing IP1 only. Its three tasks are
-complete; [contract v2](docs/feature-pipelines.md) and
-[feasibility evidence](docs/verification/us-14-ip1.md) are ready for review.
-Next action: explicit IP1 contract/public-boundary approval and IP2 execution
-authorization. No dependent production implementation or behavior tests started.
-Developer accepted the factory recommendations and predeclared categories on
-2026-11-15; US-14-SC-01 records that limited contract approval. The remaining
-contract/public test boundaries still await approval. Renewed link and whitespace
-checks pass; revision evidence is linked from the IP1 report.
+US-14 / issue #20 IP2 is complete in branch `US-14-feature-pipelines`,
+worktree `.worktrees/US-14-feature-pipelines`, based on `a86f36f`.
+Phase 2 implementation and approval records are included in this local commit. Developer “start phase 2” and “yes i approve contract v2” authorized
+execution and approved its public boundaries on 2026-11-15 UTC.
+The [plan](docs/plans/milestone-1-us-14.md) records IP2-T1–T5 Complete and
+`Automatic — verification passed`; [IP2 evidence](docs/verification/us-14-ip2.md)
+owns checks and corrections. Developer “i approve phase 2 gate”, 2026-11-15
+UTC, explicitly approved the phase; “commit changes” authorized its local commit.
+Next: separate IP3 execution authorization for
+installed recipe/story verification. Story acceptance and publication remain pending.
 
-Verified issue #20's full body/all comments and stable final metadata: one unique
-comment, updated_at 2026-11-15T20:05:03Z; all five criteria remain M1. Supplier
-accepted contracts/code/evidence are present on this branch. No GitHub writes.
-Cleared inherited primary-checkout VIRTUAL_ENV for locked setup of this story's
-own `.venv`; lock SHA-256 unchanged. Native numerical, mixed-transform and MLflow
-lifecycle probes passed. These are feasibility, not toolkit acceptance evidence.
-Document-only phase needs no manufactured TDD red or executable shared checks.
-Final local-link/whitespace results are in the plan/evidence records.
+Implemented the project-owned factory, preparation/comparison scripts and guide,
+with real MLflow/DVC evidence. The full planned focused selection passed 183
+cases; after two final recipe corrections the renewed module passed all 43
+comparison cases, reusing 142 valid unchanged supplier/tracking regressions.
+No single 185-case run is claimed. Shared checks, lock consistency, CLI smoke,
+local links and whitespace checks pass; lock unchanged. All failures/corrections
+are retained. Linux aarch64/Python 3.12.16; other platforms remain unverified.
 
-Developer “i approve the plan; commit”, 2026-11-15 UTC, approved the revised
-plan and authorized committing the plan/checkpoint and contract/evidence documents.
-Remaining contract/public-boundary approval and IP2 execution stay pending.
-Push and PR publication are not authorized. Preserve raw records under
-`.dev-records/verification/20261115T201435Z-74cb1ca-us14-ip1/` and historical
-planning snapshots under `.dev-records/planning/us-14/`.
-Historical verification obligations below remain unchanged.
+Developer directed tests to run as direct `uv run --locked pytest ...` commands;
+complete tool output is saved separately. Do not use the old check runner.
+Use this worktree's `.venv`; uv explicitly ignores inherited primary VIRTUAL_ENV.
+Raw records: `.dev-records/verification/20261115T204632Z-a86f36f-us14-ip2/`.
+Preserve earlier IP1/planning records and historical obligations below.
+Committed scope: plan/checkpoint/guide/evidence, example files, comparison tests
+and contributor metric typing, with Phase 2 approval records. Push and PR
+publication are not authorized.
 
 ## Completed work: authoritative records
 

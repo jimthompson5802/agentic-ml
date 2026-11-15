@@ -38,3 +38,8 @@ US-18 IP3 adds the native `accuracy_score` signature used by the project-owned
 training example. Its array-like inputs are declared as object because this
 bounded stub does not duplicate sklearn's input validator. It introduces no
 runtime behavior or checker suppression and does not ship in the toolkit wheel.
+
+US-14 IP2 adds `zero_one_loss` with the reviewed installed sklearn 1.9.1 signature
+(`normalize=True`, `sample_weight=None`). Native accuracy/loss direction tests
+exercise this public function. The same array-like typing rationale applies;
+this is a contributor declaration, not a runtime wrapper or suppression.
