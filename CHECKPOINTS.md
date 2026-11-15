@@ -4,24 +4,63 @@ Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
-Primary checkout: `main`. PR #68 merged US-15 M1 preprocessing and US-26
-MLflow recording as `a2c6262`; both hosted Linux CI jobs passed. The project
-status update was committed and pushed as `2caf93c`.
+Story checkout: `.worktrees/US-18-classification`, branch
+`US-18-classification`, created from local `main` at
+`94e74ba38922a80b368860d53545a18f22d555e2`. The primary checkout remains on
+`main`; remote freshness was not checked by fetching.
 
-US-15 M1 AC-01–03 and US-26 #17 AC-01–05 are accepted. US-15 M2
-restoration (#21 AC-04) and US-26 comparison/provenance (#33/#43) remain open.
-The [project status](docs/project-status.md) lists the remaining MVP story slices.
-Next action: await developer direction on the next story; no implementation phase
-is currently authorized by this checkpoint.
+US-18 #28 M1 classification implementation is technically complete through IP4.
+Gates 1–4 are Approved; **M1 classification slice is accepted**.
+Developer “start phase 4” authorized IP4 on 2026-11-15 UTC after Phase 3 commit
+`f5605d0`. IP4-T1/T2/T3 are Complete. Developer “i approve gate 4; commit”
+approved Gate 4 and authorized its local commit on 2026-11-15 UTC. This
+checkpoint accompanied commit `b0cea15`. Developer “i accept us-18 m1
+classification slice” accepted M1 on 2026-11-15 UTC. Acceptance commit `13134b7` is pushed;
+[PR #69](https://github.com/jimthompson5802/agentic-ml/pull/69) is open against
+`main`. Static COMMENT review reports no actionable findings; publication-record
+commit receives renewed coverage of the final head. Next action: developer PR
+review; merge and cleanup require separate authorization. Issue #28 remains open for M2 regression (AC-01 spans
+M1/M2). The complete issue body and one comment were refreshed with a consistent
+final snapshot. See [owning plan](docs/plans/milestone-1-us-18.md) and
+[IP4 evidence](docs/verification/us-18-ip4.md).
 
-Only the primary worktree remains registered. The US-15/US-26 story branches and
-worktrees were removed after authorized cleanup; retained evidence locations are
-listed below. Historical publication, queued-CI and pending-merge instructions
-are superseded by the merged delivery.
+Earlier local commits: approved plan `52dcc27`, Gate 1 contract `4a4f2e7`,
+Phase 2 fitting `c74d76b`, Phase 3 recording `f5605d0`. Project-extensible native
+class bindings and toolkit-owned fresh construction implement approved
+US-18-SC-01/02. Custom/third-party certification remains M2. Phase 4 changes only
+contributor verification and documents; no package/resource/dependency/lock edits.
 
-This documentation cleanup removes stale handoffs and duplicate verification
-summaries. Only `CHECKPOINTS.md` is changed; no executable behavior changed.
-Verification: `git diff --check`; no tests required for this documentation edit.
+Both normal installed artifact paths pass: direct wheel and a wheel actually
+rebuilt from extracted sdist, in separate initialized experiment environments.
+The literal guide records baseline before tree/forest candidates; native restored
+predictions, train-only preprocessing, effective parameters/versions, committed
+code/configuration/lock and DVC lineage pass. Constructor, incomplete native
+parameter-profile, fresh-instance and missing/invalid-input boundaries pass.
+
+Verification: **59 focused/regression passed**, no failures/errors/skips, in
+138.35 seconds. Final M1–6: **982 passed, 1 existing skip**, zero failures/errors,
+533.52 seconds; 1251 collected, 983 selected, 268 deselected. The selected skip is
+`test_missing_planning_schema_fails_installed_inventory`; the other two existing
+temporary skips are M50 and deselected. Their historical verification owners
+remain unchanged. Six native warnings were not suppressed. Shared locked sync,
+lock check, Ruff lint/format, strict mypy, CLI version and whitespace checks pass;
+lock SHA-256 unchanged. Linux aarch64 / Python 3.12.16; no new macOS/Windows claim.
+
+Phase 4 was committed as `b0cea15`; acceptance as `13134b7`. Current changes
+record publication in this checkpoint, the owning plan and publication report. Raw phase evidence:
+`.dev-records/verification/us18-ip4-20261115-f5605d0/`; linked driver records retain
+artifact identities, installed/native outputs and resolved verification-tooling
+failures. No unresolved corrective problem, suppression or added skip.
+Earlier phase evidence remains under the IP1/IP2/IP3 paths in their reports.
+
+No complete-suite, standalone artifact-driver, whole-issue acceptance or milestone
+acceptance is claimed. M1-slice publication progress is recorded in
+[publication evidence](docs/verification/us-18-publication.md). Artifact drivers ran inside selected tests.
+US-18's installed/final regression deferrals are resolved; M2 regression,
+other-story integration, final testing, native DVC stages/reproduction and assistant
+walkthroughs remain with their existing owners. PR #68's accepted US-15 M1
+preprocessing and US-26 #17 recording remain merged prerequisites. Historical
+M1/M50 obligations and revised MVP milestone reconciliation remain open below.
 
 ## Completed work: authoritative records
 
