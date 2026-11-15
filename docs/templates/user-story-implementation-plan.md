@@ -4,9 +4,9 @@ Use this template when creating or revising a detailed implementation plan. Foll
 
 Replace placeholders with concrete work. Repeat the implementation phase block as needed and use story-qualified identifiers. For a story delivered across milestones, scope this plan to the identified milestone and acceptance criteria. Preserve existing story and criterion IDs. Record unresolved decisions and the work they block rather than silently settling product requirements.
 
-During execution, complete the current implementation phase's tasks and verification, present review evidence, and pause for explicit developer approval before progressing. Record requested changes within that implementation phase. Plan approval and implementation gate decisions are separate; an approved plan leaves its implementation gates awaiting review. Record approvals only when explicitly given by the developer, with a reference to the decision.
+During execution, follow the [phase approval policy](../development/phase-approvals.md). Public contract decisions require developer approval before dependent implementation. Phases implementing approved contracts progress automatically when required checks pass. Keep plan review, execution authorization, contract approval and whole-story acceptance distinct. Record developer approval only when explicitly given; automatic progression is verification-based.
 
-For new plans, follow the [phase and story verification policy](../development/verification.md#phase-and-story-verification). Present valid focused test and regression evidence and run shared checks at executable phase gates; full current-milestone test runs are not required. Run M1–6 at every story acceptance. Broader local pytest runs and standalone artifact verification require an explicit developer command. Assign excluded coverage to the story acceptance task; preserve separate milestone obligations and revise unfinished approved plans explicitly. Adjust relative links for the saved plan.
+For new plans, follow the [phase and story verification policy](../development/verification.md#phase-and-story-verification). Present valid focused test and regression evidence and run shared checks at executable phase completion; full current-milestone test runs are not required. Run M1–6 at every story acceptance. Broader local pytest runs and standalone artifact verification require an explicit developer command. Assign excluded coverage to the story acceptance task; preserve separate milestone obligations and revise unfinished approved plans explicitly. Adjust relative links for the saved plan.
 
 ---
 
@@ -54,7 +54,7 @@ For cross-story prerequisites, link the supplying story plan and implementation 
 Follow the [command and autonomy policy](../development/command-approvals.md).
 This record summarizes explicit decisions; it does not grant runtime permissions.
 
-- **Authorized phase and workspace:** <phase ID and workspace association, or Pending>
+- **Authorized phase sequence and workspace:** <ordered phases within story/coordinated scope and workspace association, or Pending>
 - **Execution authorization reference and date:** <explicit decision, or Pending>
 - **Verification scope:** <reference the phase selections and applicable policy>
 - **Authorized external actions:** <action and explicit decision reference, or None>
@@ -81,12 +81,14 @@ Follow the [manage-plan-scope procedure](../../.agents/skills/manage-plan-scope/
 - **Outcome:** <reviewable result of this implementation phase>
 - **Entry conditions:** <prerequisites and dependencies>
 - **Acceptance criteria advanced:** <existing criterion IDs>
+- **Approval mode:** <Contract review or Automatic; classify actual public contract impact>
+- **Contract reference and decision:** <exact contract and approval reference, or pending decisions>
 
 ### Granular tasks
 
 Order tasks by dependency. Each task should identify an action and a checkable result; mark completion only after producing that result.
 
-Use `Not started` initially and `Complete` only after the work and required verification pass and actual evidence is recorded. Partial, blocked, failed, and unverified tasks remain incomplete. Reopen affected tasks and repeat verification when requested changes invalidate results. Task completion is separate from developer approval of the implementation phase.
+Use `Not started` initially and `Complete` only after the work and required verification pass and actual evidence is recorded. Partial, blocked, failed, and unverified tasks remain incomplete. Reopen affected tasks and repeat verification when requested changes invalidate results. Task completion is separate from contract approval and whole-story acceptance.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
@@ -104,23 +106,22 @@ Use `Not started` initially and `Complete` only after the work and required veri
 | <behavior or requirement to verify> | <appropriate test, demonstration, or inspection> | <checkable success condition> | Pending |
 | Shared development checks (executable phases) | <locked sync/lock, lint/format/types/version and whitespace commands from development guide> | Pass; lock identity preserved or intentional change explained | Pending |
 
-Record actual selected/deselected test counts and limitations. Tests required by this phase are not deferred because they are slow. Present valid focused test and regression evidence plus shared checks at phase gates; run the M1–6 selection at story acceptance. For documentation/design-only phases, name the appropriate document checks and explain why executable checks are inapplicable.
+Record actual selected/deselected test counts and limitations. Tests required by this phase are not deferred because they are slow. Present valid focused test and regression evidence plus shared checks at phase completion; run the M1–6 selection at story acceptance. For documentation/design-only phases, name the appropriate document checks and explain why executable checks are inapplicable.
 
-### Developer approval gate
+### Phase progression
 
-- **Approval criteria:** <required task results, verification outcomes, and review evidence>
-- **Evidence presented:** <links to changes, artifacts, and verification results>
-- **Remaining limitations or blocked work:** <state explicitly>
-- **Developer decision:** Pending — record Approved, Changes requested, or Rejected when explicitly given.
-- **Decision reference and date:** <record the developer's decision>
-- **Requested changes and resolution:** <record if applicable>
-- **Progression authorized:** <link to the next implementation phase in the coordinated order, possibly in another story plan, or final acceptance; pending until approved>
+- **Required verification:** <tasks/checks that must pass and applicable prerequisite evidence>
+- **Evidence presented:** <changes, artifacts, commands, results and limitations>
+- **Contract decision:** <Pending/Approved/Changes requested/Rejected with decision reference and date; for Automatic, cite existing contract approval>
+- **Requested changes and resolution:** <if applicable>
+- **Progression result:** <Pending/Blocked; record Automatic — verification passed only after all automatic progression conditions pass; contract phases cite explicit approval>
+- **Next phase or story acceptance:** <next authorized phase; final completion awaits whole-story acceptance>
 
 ## Final verification requirements
 
 Assign this work to a named task in the last implementation phase above; this section defines its completion evidence rather than an extra approval gate.
 
-- **Owning final phase/task:** <identifier; required before presenting the final phase gate>
+- **Owning final phase/task:** <identifier; required before presenting whole-story acceptance>
 - **Final implementation identity:** <tested revision, working-tree changes and lock hash>
 - **M1–6 and shared checks:** <run M1–6 against final story changes; record counts and outcomes; for a documentation-only story, explain inapplicability and list document checks>
 - **Distribution/installation and other required checks:** <standalone artifacts or broader local tests only on explicit developer command; identify selected tests that invoke artifact drivers and manual/platform limits>
@@ -138,7 +139,7 @@ Assign this work to a named task in the last implementation phase above; this se
 - **Partial prerequisite delivery:** <criteria advanced versus fully verified; identify remaining work in this milestone without implying full story completion>
 - **Final verification:** Pending — <evidence reference; all required checks must pass before whole-story acceptance>
 - **Developer acceptance:** Pending
-- **Decision reference and date:** <record when given; the final implementation gate may also serve as story acceptance if explicitly stated>
+- **Decision reference and date:** <record when given; a final contract decision may also serve as story acceptance if explicitly stated and verification is complete>
 
 ## Milestone acceptance handoff
 

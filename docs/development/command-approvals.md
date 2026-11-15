@@ -21,7 +21,8 @@ These are command-prefix permissions, not restrictions on every trailing argumen
 
 ## Autonomy within an authorized implementation phase
 
-Once execution of a phase is authorized, carry out its scoped edits, selected tests,
+Once execution is authorized, follow the [phase approval policy](phase-approvals.md)
+for contract review and automatic progression. Carry out scoped edits, selected tests,
 relevant regressions, shared checks, formatting, diagnostics and corrective retries
 without another development confirmation. Follow the existing verification policy
 and three-attempt limit. Locked environment synchronization needed for that work
@@ -36,8 +37,8 @@ missing or the scope, risk or required gate materially changes.
 
 Use the runtime approval mechanism whenever execution permissions require it.
 An operational prompt does not revoke the recorded development authorization.
-Keep every phase gate, whole-story acceptance, publication boundary and cleanup
-boundary defined by repository instructions and the invoked workflow.
+Keep public contract review, whole-story acceptance, publication and cleanup
+boundaries defined by repository instructions and the invoked workflow.
 
 ## Command forms and evidence capture
 

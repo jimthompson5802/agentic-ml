@@ -163,13 +163,16 @@ This policy governs local verification, including unfinished work in approved pl
 Record revisions to those plans through [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md).
 Preserve completed evidence and approvals. CI continues running all tests.
 
-### Implementation phase gates
+### Implementation phase completion
 
 Use TDD for new behavior and bug fixes, with focused public-interface checks for
-red–green cycles. At each executable phase gate, present valid focused test and
-regression evidence for the changed behavior and run shared checks. Full
+red–green cycles. At each executable phase completion, record valid focused test
+and regression evidence for changed behavior and run shared checks. Full
 current-milestone test runs are not required. Reuse passing focused evidence
-unless subsequent changes invalidate it. Preserve developer approval gates.
+unless subsequent changes invalidate it. Follow the [phase approval policy](phase-approvals.md):
+public contract decisions need developer approval; automatic progression requires
+passing required checks and approved contract prerequisites. Failed or incomplete
+required checks block progression. This changes approval scheduling, not checks.
 
 Record changed modules, confirmed public boundaries, applicable acceptance
 criteria, exact commands, collected/selected/deselected counts, outcomes and

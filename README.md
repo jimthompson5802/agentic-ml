@@ -48,13 +48,13 @@ Start with the [development guide](docs/development.md) for Python 3.12, uv, loc
 ## Planning terminology
 
 - **Milestone:** A group of user stories. A target date is optional. M0 records the accepted development foundation; M1–2 define the revised MVP delivery order. Historical M3–6 remain migration context for the uncommitted roadmap. Milestone 50 collects ongoing technical environment improvements as they are identified, outside the product delivery sequence. Milestone 99 groups deferred enhancements without committing their order.
-- **Implementation phase:** A group of granular tasks within a user story's implementation plan, ending with an explicit developer approval gate.
+- **Implementation phase:** A group of granular tasks within a user story's implementation plan, ending with recorded verification and either public contract review or automatic progression.
 - **Workflow phase:** An activity within an ML experiment, such as feature engineering or final evaluation. The basic MVP does not require toolkit approval between these activities.
 - **Approval gate:** A developer decision permitting progression after reviewing the required evidence.
 
 Implementation plans follow **milestone → user story → implementation phase → tasks**. Identify each implementation phase by story and local phase number, for example, **US-11 / Implementation Phase 2: Build extraction**. For stories delivered across milestones, also identify the milestone and acceptance criteria covered by the plan.
 
-Each implementation phase specifies its tasks, required review evidence, and approval criteria. Complete the tasks and present the evidence, then pause until the developer explicitly approves progression. Requested changes remain within the current implementation phase. These development approvals remain required; the basic MVP experiment workflow does not impose runtime phase approvals. Existing explicit approval APIs retain their strict contracts. Always qualify “phase” as “implementation phase” or “workflow phase” in prose.
+Each implementation phase specifies its tasks, verification and approval mode under the [phase approval policy](docs/development/phase-approvals.md). Public contract decisions require developer approval before dependent implementation; phases implementing approved contracts progress automatically after required checks pass. Whole-story acceptance remains explicit. The basic MVP experiment workflow does not impose runtime phase approvals. Existing explicit approval APIs retain their strict contracts. Always qualify “phase” as “implementation phase” or “workflow phase” in prose.
 
 ## MVP direction
 

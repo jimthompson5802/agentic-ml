@@ -26,7 +26,7 @@ Before GitHub reads, development checks, or resuming authorized execution, follo
 
 Use Conventional Commits for commit messages: `<type>[optional scope]: <description>` (for example, `docs: update architecture proposal`).
 
-When creating, revising, or executing detailed user-story implementation plans, follow the [planning terminology](README.md#planning-terminology) and [implementation-plan template](docs/templates/user-story-implementation-plan.md). Organize work as milestone → user story → implementation phases → granular tasks. Each implementation phase ends with an explicit developer approval gate; await approval before progressing. Approval of a written plan does not approve its implementation gates.
+When creating, revising, or executing detailed user-story implementation plans, follow the [planning terminology](README.md#planning-terminology) and [implementation-plan template](docs/templates/user-story-implementation-plan.md). Organize work as milestone → user story → implementation phases → granular tasks. Follow the [phase approval policy](docs/development/phase-approvals.md): obtain developer approval for public contract decisions; automatically progress through phases implementing approved contracts only after required preceding-phase checks pass. Plan approval alone does not authorize execution. Whole-story acceptance remains explicit.
 
 When scope changes during implementation-plan execution, or discovered constraints require replanning, use the [manage-plan-scope skill](.agents/skills/manage-plan-scope/SKILL.md). Record the change and decision in the affected plan's scope-change history.
 
@@ -60,7 +60,7 @@ For documentation-only changes or refactoring that preserves behavior, use appro
 
 ## Verification during implementation
 
-Before planning verification, conducting TDD, running tests, or preparing an approval gate, read and follow the [phase and story verification policy](docs/development/verification.md#phase-and-story-verification). Present valid focused test and regression evidence and run shared checks at executable phase gates; full current-milestone test runs are not required. Run M1–6 at every user-story acceptance. Classify tests by directly verified milestone requirements; classify other contributor tooling as infrastructure. Broader local pytest runs and standalone artifact verification require an explicit developer command. CI retains the complete suite and artifact checks. Preserve historical approvals and evidence; record revisions to unfinished verification obligations in their owning plans.
+Before planning verification, conducting TDD, running tests, or preparing an approval gate, read and follow the [phase and story verification policy](docs/development/verification.md#phase-and-story-verification). Present valid focused test and regression evidence and run shared checks at executable phase completion; full current-milestone test runs are not required. Run M1–6 at every user-story acceptance. Classify tests by directly verified milestone requirements; classify other contributor tooling as infrastructure. Broader local pytest runs and standalone artifact verification require an explicit developer command. CI retains the complete suite and artifact checks. Preserve historical approvals and evidence; record revisions to unfinished verification obligations in their owning plans.
 
 ## Problem-solving attempt limit
 

@@ -1,6 +1,6 @@
 ---
 name: create-implementation-plan
-description: Create or revise an implementation plan from a local file, GitHub feature request issue, or supplied requirements. Save concrete tasks, verification methods, and developer approval gates. Use separate workflows to implement the plan or change its scope during execution.
+description: Create or revise an implementation plan from a local file, GitHub feature request issue, or supplied requirements. Save concrete tasks, verification methods, contract review gates and automatic progression criteria. Use separate workflows to implement the plan or change its scope during execution.
 ---
 
 # Create an implementation plan
@@ -79,7 +79,7 @@ Keep a separate plan for each story and milestone slice. Each implementation pha
 
 Save a coordinated execution index alongside the story plans, using the repository's convention or `docs/plans/milestone-<number>-execution-order.md`. Record the target story, included prerequisite scope, plan-review decision, and ordered links to story implementation phases. For each entry, name prerequisite capabilities, supplying story/phase/task IDs, verification evidence, and required gate approvals. Link every participating plan to the index. The index coordinates order; owning story plans remain authoritative for tasks, evidence, and gate decisions.
 
-Order implementation phases so required capabilities are available before dependent work. If the order contains a cycle, refine the capability slices or record a blocker. Identify shared integration checks and each story's contribution. Include applicable controls in every enabled operation. Plan review must cover the coordinated scope and all participating plans; approval leaves every implementation gate pending.
+Order implementation phases so required capabilities are available before dependent work. If the order contains a cycle, refine the capability slices or record a blocker. Identify shared integration checks and each story's contribution. Include applicable controls in every enabled operation. Plan review must cover the coordinated scope and all participating plans; approval leaves unresolved contract decisions pending.
 
 ## Define implementation phases
 
@@ -87,7 +87,7 @@ Use the repository's planning hierarchy and terms. Preserve existing milestone b
 
 Use one implementation phase for small work. Add implementation phases when risk, dependencies, complexity, or developer feedback require separate results that can be verified.
 
-If the approach is unproven, start with a feasibility implementation phase. Define its question, scope, required evidence, completion criteria, and developer checkpoint. Make later work depend on its findings. Require refinement and review before dependent implementation starts.
+If the approach is unproven, start with a feasibility implementation phase. Define its question, scope, required evidence, completion criteria, and developer checkpoint. Make later work depend on its findings. Require contract refinement and developer review before dependent implementation when feasibility changes or leaves unresolved public contract decisions; otherwise use the phase approval policy.
 
 For each implementation phase, define:
 
@@ -95,13 +95,13 @@ For each implementation phase, define:
 - Dependencies and acceptance criteria covered.
 - Ordered granular tasks, as described below.
 - Completion criteria and required review evidence.
-- A separate developer approval field, initially pending.
+- An approval mode, contract references, verification prerequisites and progression record.
 
-Every implementation phase must end with a developer approval gate, including the final one. Track technical completion separately from developer approval.
+Follow the [phase approval policy](../../../docs/development/phase-approvals.md). Classify phases by whether they define/refine public contracts or implement approved ones. Contract decisions require explicit developer approval before dependent work. Automatic phases retain all checks and advance after their required verification passes. Keep whole-story acceptance separate from automatic completion.
 
 ### Plan verification by impact
 
-Read the working repository's verification policy before choosing phase checks. For this repository, use [phase and story verification](../../../docs/development/verification.md#phase-and-story-verification). New plans must specify focused tests and relevant regressions for changed behavior plus shared checks at phase gates, the M1–6 command at story acceptance, changed modules and public behavior, acceptance-criterion coverage, confirmed public boundaries, and excluded checks deferred to a named story acceptance task. Full current-milestone test runs are not required at phase gates. Preserve separate milestone verification obligations. Preserve stronger requirements in an existing approved plan unless an explicit revision is authorized and recorded through the scope-change procedure.
+Read the working repository's verification policy before choosing phase checks. For this repository, use [phase and story verification](../../../docs/development/verification.md#phase-and-story-verification). New plans must specify focused tests and relevant regressions for changed behavior plus shared checks at phase completion, the M1–6 command at story acceptance, changed modules and public behavior, acceptance-criterion coverage, confirmed public boundaries, and excluded checks deferred to a named story acceptance task. Full current-milestone test runs are not required at phase completion. Preserve separate milestone verification obligations. Preserve stronger requirements in an existing approved plan unless an explicit revision is authorized and recorded through the scope-change procedure.
 
 Before selecting verification, read and follow the repository [phase and story verification policy](../../../docs/development/verification.md#phase-and-story-verification). Record exact commands, group selections, acceptance criteria, results and deferred-check owners in the plan. Preserve historical evidence, known failures and explicit approval gates.
 
@@ -127,7 +127,7 @@ Map every acceptance criterion within scope to task IDs and verification evidenc
 
 The saved plan must include these instructions for the implementing agent.
 
-Include an execution authorization record under the [command and autonomy policy](../../../docs/development/command-approvals.md): current phase and checkout, authorization reference, verification scope, authorized external actions and next gate. Keep pending authorizations explicit; drafting or approving the plan does not record permission to execute it.
+Include an execution authorization record under the [command and autonomy policy](../../../docs/development/command-approvals.md): authorized phase sequence and checkout, authorization reference, verification scope, authorized external actions and next gate. Keep pending authorizations explicit; drafting or approving the plan does not record permission to execute it.
 
 ### Record task progress
 
@@ -135,11 +135,9 @@ Mark a task complete only after its work and required verification pass. Record 
 
 Follow the coordinated execution index when present and check the supplying story's evidence and gate decisions before starting dependent work. Reopen affected tasks and renew verification when changes invalidate their results.
 
-### Stop at developer gates
+### Apply phase progression rules
 
-Stop at the end of every implementation phase, including the final one. Present completed tasks, checks performed, actual results, evidence paths, deviations, and limitations.
-
-Wait for explicit developer approval before progression. Record the decision and its reference. Plan approval does not approve implementation gates. Silence is not approval. Apply a prior decision only when it explicitly covers the current gate.
+At every phase completion, record tasks, verification, evidence, deviations and limitations. Follow the [phase approval policy](../../../docs/development/phase-approvals.md): request approval for unresolved public contract decisions and automatically progress through phases implementing approved contracts when required checks pass. Record automatic progression as verification-based, never as developer approval. After final verification, request whole-story acceptance. Preserve explicit developer holds and authorization boundaries.
 
 ### Handle scope changes
 
@@ -181,8 +179,8 @@ Before delivery, check that:
 - Cross-story prerequisites identify their owning tasks, required capabilities, evidence, and approval gates; the execution index and story plans agree.
 - Every task identifies files, progress, completion conditions, and expected behavior where applicable.
 - Work that depends on unresolved findings is marked as conditional.
-- Every implementation phase has a stop instruction and a pending developer gate.
-- Phase test selections have impact rationales and explicit deferrals; a named final task resolves them and requires complete verification before final gate approval and story acceptance.
+- Every implementation phase has an approval mode, contract reference and verification-based progression criteria; unresolved contract decisions have a developer review gate.
+- Phase test selections have impact rationales and explicit deferrals; a named final task resolves them and requires complete verification before whole-story acceptance and any applicable final contract review.
 - Local links resolve, and the plan follows the source requirements and repository template.
 
 Record only validation actually performed. Keep planned checks distinct from passing results.

@@ -1,18 +1,18 @@
 ---
 name: execute-plan
-description: Execute or resume a supplied Markdown implementation plan, record verified task progress in its existing format, and stop at each implementation phase boundary for developer approval. After whole-story acceptance, commit remaining story changes, push, create a PR, and publish a static review. Use for execution rather than plan drafting.
+description: Execute or resume a supplied Markdown implementation plan, record verified task progress in its existing format, obtain approval for public contract decisions, and automatically progress through implementation-only phases after required checks pass. After whole-story acceptance, commit remaining story changes, push, create a PR, and publish a static review. Use for execution rather than plan drafting.
 ---
 
 # Execute a plan
 
-Accept a Markdown plan path supplied by the user. Execute the authorized implementation phase and maintain that file as the progress record. A request to create or edit this skill does not authorize execution of a plan.
+Accept a Markdown plan path supplied by the user. Execute the authorized phase sequence under the working repository's phase approval policy and maintain that file as the progress record. A request to create or edit this skill does not authorize execution of a plan.
 
 ## Establish the execution boundary
 
 1. Resolve the working checkout from the user's working directory, independently of where this skill is installed. Read applicable repository instructions, the supplied plan, and relevant repository documentation. Follow pointers to planning terminology, templates, authoritative requirements, dependencies, verification, and gates. If no plan is identified by the request or active session, ask for its path rather than choosing a story to implement.
 2. Inspect implementation, task status, recorded evidence, and developer decisions. Read the linked coordinated execution index and affected story plans when present. Identify the next eligible implementation phase in that order, its incomplete tasks, prerequisite capabilities, and any pending gate. Verify supplying tasks' evidence and required developer approvals rather than requiring whole-story completion. Preserve earlier results and distinguish observed behavior from design targets. Keep development checkpoints distinct from any workflow phases in the product being built.
-3. Treat an instruction to execute the plan as authorization for its next eligible implementation phase, subject to existing gates and scope. Plan approval alone is not execution authorization. Honor explicit prior authorization and gate decisions without asking again. If an earlier implementation phase awaits approval, stop at that gate before starting the next implementation phase.
-4. Use the repository's implementation phase boundaries and identifiers. If none exist, treat the plan's executable tasks as one implementation phase with a final developer checkpoint. Resolve material conflicts or missing verification criteria before dependent work; continue independent investigation within scope where useful.
+3. Treat an instruction to execute the approved plan as authorization for its ordered phases within scope, subject to the [phase approval policy](../../../docs/development/phase-approvals.md) and explicit developer limits. Plan approval alone is not execution authorization. Recover contract approvals and valid prerequisite evidence; automatically progress through phases implementing approved contracts when required checks pass. Resolve pending public contract decisions before dependent work.
+4. Use the repository's implementation phase boundaries and identifiers. If none exist, treat the plan's executable tasks as one implementation phase, classify its contract impact under the phase approval policy, and retain whole-story acceptance. Resolve material conflicts or missing verification criteria before dependent work; continue independent investigation within scope where useful.
 5. Read the working repository's phase/story verification policy and the plan's selected checks, impact rationale, deferred checks and final-verification task. In this repository, follow [phase and story verification](../../../docs/development/verification.md#phase-and-story-verification). Preserve existing approved requirements; adopting narrower checks requires an explicitly authorized plan revision through the scope-change procedure.
 
 ## Execute and record verified progress
@@ -25,24 +25,36 @@ Accept a Markdown plan path supplied by the user. Execute the authorized impleme
 - Keep progress in the supplied plan's existing format. For checkbox tasks, use `- [ ]` until completion and required verification, then `- [x]`. For task tables, update the status column using the plan's conventions; preserve its columns and structure. Add a minimal status field only when the plan lacks one, keeping reference material separate from executable tasks.
 - In this repository's task tables, Status is the second column. Tasks start as `Not started` and become `Complete` only after work and required verification pass and evidence is recorded. Update tasks, evidence, and gate decisions in their owning story plan; reference those records from the execution index rather than duplicating them. Update index links and execution order when an approved revision requires it.
 - Verify observable outcomes using the plan's checks, applicable acceptance criteria, and repository tooling. Record actual commands or manual checks, results, and relevant evidence beside tasks or in the plan's verification section. Sanitize evidence and preserve unrelated content.
-- During TDD, run the new behavior test and relevant regressions. At phase gates, present valid focused test and regression evidence for the changed behavior and run shared checks; a full current-milestone test run is not required. Reuse passing focused evidence unless later changes invalidate it. Run M1–6 at every story acceptance. Broader local pytest runs and standalone artifact verification require an explicit developer command; milestone acceptance does not trigger them automatically. Record collected/selected/deselected counts, coverage limits and deferred-check ownership. Keep known failures visible and required phase behavior verified; test selection does not disable tests or weaken assertions.
+- During TDD, run the new behavior test and relevant regressions. At phase completion, record valid focused test and regression evidence for the changed behavior and run shared checks; a full current-milestone test run is not required. Reuse passing focused evidence unless later changes invalidate it. Run M1–6 at every story acceptance. Broader local pytest runs and standalone artifact verification require an explicit developer command; milestone acceptance does not trigger them automatically. Record collected/selected/deselected counts, coverage limits and deferred-check ownership. Keep known failures visible and required phase behavior verified; test selection does not disable tests or weaken assertions.
 - Leave partial, failed, blocked, and unverified tasks incomplete, recording the reason and remaining verification. A code edit or unrelated passing tests do not establish completion. If developer verification is part of a task's completion condition, keep that task incomplete until received. Track technical task completion separately from implementation phase gate approval when the plan separates them.
 - Update the plan after each verified task. On resumption, inspect relevant changes and reuse valid evidence. Rerun checks when subsequent changes could invalidate it; reopen affected tasks and explain why when evidence becomes invalid.
 - Follow retry or escalation limits actually defined by the repository or plan. If repeated failures or evidence invalidate the approach, stop affected work and report attempts, findings, and the decision needed. This skill supplies no repository-specific fixed retry count.
-- When outcomes, acceptance criteria, or scope must change, pause affected work and follow the repository's scope-change procedure. Use `manage-plan-scope` when available, discovering it through the environment or repository instructions rather than a fixed installation path. If none exists, record the proposed change and impact in the plan and obtain any missing authorization before affected implementation continues. Preserve existing gate boundaries.
+- When outcomes, acceptance criteria, or scope must change, pause affected work and follow the repository's scope-change procedure. Use `manage-plan-scope` when available, discovering it through the environment or repository instructions rather than a fixed installation path. If none exists, record the proposed change and impact in the plan and obtain any missing authorization before affected implementation continues. Apply the phase approval policy while preserving explicit developer holds and contract review boundaries.
 - Treat newly discovered prerequisite work outside the approved coordinated scope as a scope change. Document its impact on affected story plans and the execution index and obtain developer approval before implementing it. Routine choices within approved scope can proceed.
 
-## Stop for developer approval
+## Complete phases and obtain contract approval
 
-At the end of **every implementation phase, including the final one**, save progress and stop. Complete authorized tasks and verification before requesting approval; report incomplete work as blocked or partial rather than declaring the implementation phase complete.
+Follow the [phase approval policy](../../../docs/development/phase-approvals.md).
+At every phase completion, save task status, exact checks/results and evidence,
+update the owning plan and checkpoint, and verify prerequisite evidence remains
+valid. Preserve focused tests, regressions, shared checks and story verification.
 
-Before selecting verification, read and follow the repository [phase and story verification policy](../../../docs/development/verification.md#phase-and-story-verification). Record exact commands, group selections, acceptance criteria, results and deferred-check owners in the plan. Preserve historical evidence, known failures and explicit approval gates.
+For a phase defining/refining public contracts, present the concrete contracts,
+public test boundaries, changed decisions, feasibility evidence and limitations.
+Obtain and record explicit approval before dependent implementation. Reuse valid
+prior approval of the same exact contract. If coding exposes a needed contract
+change, pause affected implementation and dependent test changes for review.
 
-Present the plan link, completed tasks, checks and results, evidence, deviations, blockers, and remaining limitations. Use the plan's existing gate fields and statuses. Record technical completion separately from `developer approval pending`, leaving developer acceptance unchecked or pending until explicitly given.
+For an automatic phase, check all progression conditions in the policy, record
+`Automatic — verification passed`, notify the developer and continue to the next
+eligible phase within authorization. Failed or incomplete required checks block
+progression; diagnose/fix within scope and retry limits. Never label this outcome
+developer approval. Explicit developer holds remain binding.
 
-Request explicit developer approval, citing and linking the applicable plan or repository gate rule. If neither defines the checkpoint, cite this skill's requirement: “At the end of every implementation phase, including the final one, save progress and stop.” Explain that this is a checkpoint imposed by the invoked execution skill. Await approval before beginning the next implementation phase; silence and elapsed time are not decisions. A general execution instruction does not satisfy an implementation phase gate.
-
-Record the developer's decision, date, and decision reference in the owning story plan. For changes requested, keep work within the current implementation phase, reopen affected tasks, and repeat their required verification before renewed review. For rejection, record it and stop progression. For approval, mark the gate accordingly and continue only if its progression decision or existing authorization covers the next implementation phase in the coordinated order, including when it belongs to another story. Stop again at that implementation phase's gate. A story's final gate does not approve another story's work. Record story acceptance only when explicitly given; partial prerequisite delivery is not full story acceptance. After final phase approval, await explicit whole-story acceptance unless already given. Once acceptance, required gates, and verification are complete, continue with publication below. Keep other stories outside this authorization.
+After final verification, request explicit whole-story acceptance unless already
+given. An automatic final phase needs no separate manual phase approval. Partial
+prerequisite delivery is not whole-story acceptance. Once acceptance, required
+contract decisions and verification are complete, continue with publication below.
 
 ## Publish and review an accepted story
 
