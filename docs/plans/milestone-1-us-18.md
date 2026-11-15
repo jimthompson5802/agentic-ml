@@ -369,4 +369,11 @@ Scope changes use the linked manage-plan-scope procedure before dependent work.
 
 ## Accepted-slice publication
 
-M1 classification accepted on 2026-11-15 UTC; see [publication record](../verification/us-18-publication.md). Issue #28 stays open for M2 regression.
+M1 classification accepted on 2026-11-15 UTC; acceptance commit `13134b7`
+pushed to `origin/US-18-classification`.
+[PR #69](https://github.com/jimthompson5802/agentic-ml/pull/69) targets `main`.
+[Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/69#pullrequestreview-5911929091)
+found no actionable defects at head `13134b7`; final documentation-only head
+coverage is renewed after publication-record push. See
+[publication record](../verification/us-18-publication.md) and retained final
+review metadata. Issue #28 stays open for M2 regression. No merge/cleanup authorized.

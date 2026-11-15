@@ -22,6 +22,26 @@ authorized. This record does not accept other stories or milestone obligations.
 
 ## Publication outcome
 
-Acceptance commit, push, PR URL and static review: in progress. The PR uses the
-repository template and a non-closing reference to #28. Review will inspect the
-published base/head and full diff without running project code or checks.
+Acceptance commit `13134b7` is pushed to `origin/US-18-classification`.
+[PR #69](https://github.com/jimthompson5802/agentic-ml/pull/69) is a standard
+(non-draft) PR targeting `main`, with the repository template and a non-closing
+reference to #28. Body, repository ownership, head/base and draft status were
+verified after creation.
+
+[Static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/69#pullrequestreview-5911929091)
+inspected base `94e74ba` through head `13134b7`: **no actionable findings**.
+Review body, author, commit and empty inline-comment collection were verified.
+No project code, tests, builds or checks ran during review; reported execution
+results come from the existing implementation evidence.
+
+This publication-record commit changes only documentation. Static coverage will
+be renewed for that final published head after push; its verified review response,
+head identity, full PR diff and final outcome are retained in
+`.dev-records/verification/us18-publication-20261115/`. No merge, issue closure,
+cleanup or other-story work was performed.
+
+Git initially wrote acceptance commit objects but could not immediately resolve
+one while advancing HEAD. Read-only inspection verified commit `13134b7`, parent
+`b0cea15` and tree equality with the staged files. An expected-old-value
+`git update-ref` completed that same authorized commit; clean status and ordinary
+push confirmed the result. No branch history was reset or force-pushed.

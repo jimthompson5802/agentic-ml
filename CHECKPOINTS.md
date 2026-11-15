@@ -15,9 +15,11 @@ Developer “start phase 4” authorized IP4 on 2026-11-15 UTC after Phase 3 com
 `f5605d0`. IP4-T1/T2/T3 are Complete. Developer “i approve gate 4; commit”
 approved Gate 4 and authorized its local commit on 2026-11-15 UTC. This
 checkpoint accompanied commit `b0cea15`. Developer “i accept us-18 m1
-classification slice” accepted M1 on 2026-11-15 UTC. Next action: commit
-acceptance, push, create PR and publish static COMMENT review through execute-plan.
-Merge and cleanup are not authorized. Issue #28 remains open for M2 regression (AC-01 spans
+classification slice” accepted M1 on 2026-11-15 UTC. Acceptance commit `13134b7` is pushed;
+[PR #69](https://github.com/jimthompson5802/agentic-ml/pull/69) is open against
+`main`. Static COMMENT review reports no actionable findings; publication-record
+commit receives renewed coverage of the final head. Next action: developer PR
+review; merge and cleanup require separate authorization. Issue #28 remains open for M2 regression (AC-01 spans
 M1/M2). The complete issue body and one comment were refreshed with a consistent
 final snapshot. See [owning plan](docs/plans/milestone-1-us-18.md) and
 [IP4 evidence](docs/verification/us-18-ip4.md).
@@ -44,8 +46,8 @@ remain unchanged. Six native warnings were not suppressed. Shared locked sync,
 lock check, Ruff lint/format, strict mypy, CLI version and whitespace checks pass;
 lock SHA-256 unchanged. Linux aarch64 / Python 3.12.16; no new macOS/Windows claim.
 
-Approved Phase 4 work in the local commit accompanying this checkpoint: installed training test/probe/driver, classification
-guide status, owning plan, IP4 report and this checkpoint. Raw phase evidence:
+Phase 4 was committed as `b0cea15`; acceptance as `13134b7`. Current changes
+record publication in this checkpoint, the owning plan and publication report. Raw phase evidence:
 `.dev-records/verification/us18-ip4-20261115-f5605d0/`; linked driver records retain
 artifact identities, installed/native outputs and resolved verification-tooling
 failures. No unresolved corrective problem, suppression or added skip.
