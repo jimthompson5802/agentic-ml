@@ -56,8 +56,22 @@ matching PR and confirmed remote main
 outside the network-restricted sandbox; the initial sandbox DNS failure was
 not an invalid-credential result.
 
-Ordinary push, PR URL, final published head, CI and static-review outcome are
-recorded as they become available. Static review uses the repository
+Ordinary push succeeded and standard [PR #68](https://github.com/jimthompson5802/agentic-ml/pull/68)
+is Open, base `main`, head `US-15-preprocessing`, owner `jimthompson5802`.
+Initial published acceptance merge is
+`638eb35f9ab00315e13261fa26e581ae65f45781`, with both accepted record tips as
+parents. PR body matches the selected repository template and prepared text.
+Subsequent publication-record edits are documentation only. The final published
+head, verified review URL/outcome and CI snapshot are retained in
+`publication/final-outcome.json` under the raw phase directory after submission.
+
+Initial hosted CI is queued for both Linux/Python 3.12 jobs; queued is not a
+passing CI result. Earlier local evidence remains valid and separate. The
+first merge-commit command also encountered a transient unreadable tree
+`e3d9da84aeae625c7676f8c4838ed7858dcd04d8`; read-only inspection found it readable,
+then an identical ordinary commit retry succeeded. No repairs or assertions changed.
+Final reconciliation checked 153 document links/anchors, all 83 executable
+fingerprints and the unchanged lock before initial publication. Static review uses the repository
 [review skill](../../.agents/skills/review-pull-request/SKILL.md); it inspects
 source/diff/requirements and existing CI without executing project checks.
 The PR must remain open and unmerged. Issue references use no automatic closing

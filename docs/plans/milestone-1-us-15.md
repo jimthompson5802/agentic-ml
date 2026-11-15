@@ -509,3 +509,11 @@ and all verification evidence; no PR merge, force push, history rewrite, issue
 closure, main merge or cleanup. #21 remains open for M2 AC-04; #33/#43 remain
 separately owned. Publication/review outcome is recorded in
 [the publication report](../verification/us15-us26-publication.md).
+
+
+Publication progress: standard [PR #68](https://github.com/jimthompson5802/agentic-ml/pull/68)
+is Open from `US-15-preprocessing` to `main`, initially at acceptance-record merge
+`638eb35f9ab00315e13261fa26e581ae65f45781`. Both accepted scopes and input hashes
+are preserved. Final published head, static COMMENT review URL/outcome and CI
+snapshot are retained in the linked publication report/raw records. Initial
+hosted CI is queued; no PR merge or issue closure is authorized.

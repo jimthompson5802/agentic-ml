@@ -35,8 +35,13 @@ AC-01–05 and US-15 #21 M1 AC-01/02/03 are Accepted; M2 AC-04 remains open.
 Developer authorized the [PR structure](docs/reviews/us15-us26-pr-structure.md),
 ordinary push, one PR to main and a static COMMENT review through coordination
 thread `01a1db6c-a225-73e0-8796-81a03c4cec7a`. Publication owner: this US-15
-checkout. Next action: finish documentation/hash checks, commit reconciliation,
-push the existing branch and create/review one PR. Record outcome in
+checkout. [PR #68](https://github.com/jimthompson5802/agentic-ml/pull/68) is Open
+against main after ordinary push; both accepted record tips are preserved in
+merge `638eb35`. The final-head static COMMENT review and verification are
+recorded in the publication raw outcome. Next action after this handoff: await
+developer direction on the open PR; no merge is authorized. Initial hosted Linux CI jobs
+are queued, not passing evidence. Final head/review/CI snapshot is retained
+in the publication raw records, linked from
 [publication evidence](docs/verification/us15-us26-publication.md).
 No force push, history rewrite, PR merge, main merge, issue closure or cleanup.
 All executable inputs and lock remain unchanged; no tests need renewal for
