@@ -417,3 +417,23 @@ Local record commits and a [PR-structure proposal](../reviews/us15-us26-pr-struc
 are authorized; push, PR/publication, main merge, issue closure and cleanup
 remain prohibited. No history rewrite, new PR branch or integration of the
 forthcoming divergent acceptance-record tips is performed by this proposal.
+
+On 2026-11-15 the developer explicitly accepted US-26 #17 AC-01–05 and
+approved US-15 Gate 4/M1 acceptance; each owning session records its decision.
+The shared combined implementation is 3ffc7b4. Only local acceptance commits
+and a PR-structure proposal are authorized; publication/history changes wait.
+Two independent main-based PRs would duplicate the combined implementation.
+The proposal must include both acceptance records without repeating that diff.
+
+
+## Combined publication authorization — 2026-11-15
+
+The developer accepted the single-PR recommendation and authorized merging the
+acceptance records, reconciling/verifying the combined branch, ordinary push,
+one combined PR to main and a published static COMMENT review. Coordination
+thread `01a1db6c-a225-73e0-8796-81a03c4cec7a` delegated publication to US-15.
+This supersedes the earlier publication hold only. Preserve both accepted slices
+and all verification evidence; no PR merge, force push, history rewrite, issue
+closure, main merge or cleanup. #21 remains open for M2 AC-04; #33/#43 remain
+separately owned. Publication/review outcome is recorded in
+[the publication report](../verification/us15-us26-publication.md).

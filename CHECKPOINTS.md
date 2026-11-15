@@ -30,13 +30,17 @@ recorded in the gate manifest. Lock unchanged at
 No assertion/timeout/skip/suppression changes or new product defect. Linux aarch64 /
 Python 3.12.16 only; native float16 limitation and all earlier failures preserved.
 
-Developer authorized local remaining-record commitment and a reviewable PR
-structure after accepting US-15 M1 and US-26 #17. Next action: present the
-[PR proposal](docs/reviews/us15-us26-pr-structure.md) and stop before publication.
-No blocker. Final changes are plan/checkpoint/index/report/proposal documents
-only. No push, PR/publication, main merge, issue closure, history rewrite, new
-PR branches, cleanup or M2 execution. #21 remains open for AC-04; historical and MVP milestone owners
-retain all obligations and existing excluded/skipped coverage.
+Both stories' acceptance records are integrated for one combined PR. US-26 #17
+AC-01–05 and US-15 #21 M1 AC-01/02/03 are Accepted; M2 AC-04 remains open.
+Developer authorized the [PR structure](docs/reviews/us15-us26-pr-structure.md),
+ordinary push, one PR to main and a static COMMENT review through coordination
+thread `01a1db6c-a225-73e0-8796-81a03c4cec7a`. Publication owner: this US-15
+checkout. Next action: finish documentation/hash checks, commit reconciliation,
+push the existing branch and create/review one PR. Record outcome in
+[publication evidence](docs/verification/us15-us26-publication.md).
+No force push, history rewrite, PR merge, main merge, issue closure or cleanup.
+All executable inputs and lock remain unchanged; no tests need renewal for
+acceptance/documentation integration. Preserve both owners' raw evidence.
 
 Historical obligations below remain unchanged. Preserve the contributor worktree
 management plan/report, raw records under

@@ -1,7 +1,9 @@
 # Proposed PR structure for US-15 and US-26
 
-Status: proposal only, 2026-11-15. No push, PR, new branch, history rewrite,
-main merge, issue closure or cleanup is authorized or performed.
+Status: recommendation accepted, 2026-11-15. Developer subsequently authorized
+acceptance-record integration, ordinary push, one combined PR and static COMMENT
+review. The PR must remain unmerged; no history rewrite, issue closure or cleanup.
+[Publication outcome](../verification/us15-us26-publication.md) records execution.
 
 The developer accepted US-15's M1 AC-01/02/03 slice and US-26's #17 scope,
 authorized local record commits, and requested this explanation before
@@ -77,4 +79,5 @@ review the final complete diff and reconcile the checkpoint. Renew affected
 verification if executable or build inputs change; documentation-only record
 integration needs document/whitespace checks and preserved input hashes.
 Then use the repository PR template and its required publication/review workflow.
-No remote write or issue-state change follows from acceptance in this session.
+The subsequent explicit publication decision authorizes remote branch/PR/review
+writes; issue-state changes and merging remain prohibited.

@@ -17,8 +17,7 @@ supplier e63ef4b8ff700d44e5c644dd30eed92ebd62104b have both Gate 3 approvals.
 An ordinary `git merge --no-commit --no-ff` integrates the supplier into this
 consumer checkout. The developer subsequently approved Gate 4 and authorized a local combined
 merge commit and handoff, as recorded below. No push, PR, publication or sibling
-mutation. US-15 retains its own verification, Gate 4 and acceptance. Separate
-#17 acceptance is not inferred.
+mutation. US-15 retains its own verification, Gate 4 and acceptance. The subsequent explicit #17 acceptance is recorded below.
 
 Both issue bodies and every comment page were refreshed. Two unique comments
 each match reported counts, with stable metadata: #17 updated_at
@@ -177,18 +176,17 @@ No unresolved product defect or Phase 4 blocker remains.
 
 | Criterion | Final evidence | Technical result |
 |---|---|---|
-| US-26-AC-01 | Native same-run parameters/metrics/status and exact outputs/artifact URIs; both installed wheel paths | Verified; acceptance Pending |
-| US-26-AC-02 | Real DVC directory/member identity, saved split, committed experiment and effective settings; dirty/missing/corrupt reference regressions | Verified; acceptance Pending |
-| US-26-AC-03 | Normal wheel archive/payload/lock identity, full-SHA Git regression, installed versions, explicit unavailable source/build fields | Verified; acceptance Pending |
-| US-26-AC-04 | Exact committed source/configuration/lock/notebook references; fresh-kernel output/error notebook preservation | Verified; acceptance Pending |
-| US-26-AC-05 | Missing outputs despite exit zero, nonzero notebook execution, invalid references and native serialization/storage regressions | Verified; acceptance Pending |
+| US-26-AC-01 | Native same-run parameters/metrics/status and exact outputs/artifact URIs; both installed wheel paths | Verified; Accepted 2026-11-15 |
+| US-26-AC-02 | Real DVC directory/member identity, saved split, committed experiment and effective settings; dirty/missing/corrupt reference regressions | Verified; Accepted 2026-11-15 |
+| US-26-AC-03 | Normal wheel archive/payload/lock identity, full-SHA Git regression, installed versions, explicit unavailable source/build fields | Verified; Accepted 2026-11-15 |
+| US-26-AC-04 | Exact committed source/configuration/lock/notebook references; fresh-kernel output/error notebook preservation | Verified; Accepted 2026-11-15 |
+| US-26-AC-05 | Missing outputs despite exit zero, nonzero notebook execution, invalid references and native serialization/storage regressions | Verified; Accepted 2026-11-15 |
 | US-15-AC-03 preservation | Actual producer's fitted native composition, exact complete metadata/schema and shared committed/dependency links retained | Supplied for independent US-15 review; acceptance Pending |
 
 Gate 4 is Approved. The
 [execute-plan skill](../../.agents/skills/execute-plan/SKILL.md) requires:
 “At the end of every implementation phase, including the final one, save progress
-and stop.” The explicit decision below satisfies Gate 4. Separate acceptance of #17's
-AC-01–05 slice remains pending. No whole US-26 acceptance,
+and stop.” The explicit decision below satisfies Gate 4. The subsequent explicit acceptance of #17's AC-01–05 slice is recorded below. No whole US-26 acceptance,
 US-15 acceptance, milestone acceptance or publication is claimed.
 
 M2 US-15 AC-04 transformation restoration, #33/#43 reporting/lookup, actual
@@ -213,3 +211,26 @@ commit/parent verification are retained under
 Git HEAD identifies the resulting combined commit, with both reviewed parents
 c2e3dec87a5782f4bdd7c61a81356feefdcb7030 and
 e63ef4b8ff700d44e5c644dd30eed92ebd62104b preserved.
+
+## Issue #17 recording acceptance — 2026-11-15
+
+Developer: “Accept US-26’s #17 scope.” This is part of the explicit instruction
+“Approve US-15 Gate 4 and accept its M1 slice; commit its remaining changes.
+Accept US-26’s #17 scope. Prepare and explain the PR structure before pushing
+or publishing.” Relayed by coordination thread
+01a1db6c-a225-73e0-8796-81a03c4cec7a.
+
+US-26 #17 AC-01–05 are accepted. Gates 1–4 remain Approved. The accepted
+combined implementation is 3ffc7b4df557f9fa8fe873fc68e012b48e9b26e1; this
+local acceptance commit changes documentation only. All executable fingerprints
+remain equal to the passing final evidence: 361 focused passes; 924 M1–6
+passes, one existing planning-schema timeout skip, zero failures/errors,
+268 deselected. Shared checks, direct/rebuilt installed preservation and Linux
+aarch64 limits remain as recorded. The skip is not passing coverage.
+
+This accepts issue #17's recording scope; #33/#43 and milestone/M2 obligations
+remain separate. US-15 owns its M1 acceptance record and remains open for M2.
+The developer limits this handoff to local commits and a reviewable PR proposal.
+No push, PR/publication, main merge, issue closure, cleanup, history rewrite
+or new PR branch is authorized. These explicit limits override the execution
+skill's automatic publication sequence after acceptance.
