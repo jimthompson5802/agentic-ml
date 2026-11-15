@@ -95,6 +95,11 @@ Removal status: both worktrees removed with ordinary `git worktree remove`;
 only the primary checkout remains registered. Archive manifests remain available.
 No forced removal, pruning or historical evidence deletion was used.
 
+Project status overview refreshed on 2026-11-15 UTC in
+[docs/project-status.md](docs/project-status.md): PR #66/#68 deliveries and
+remaining MVP slices reconciled with accepted plans and GitHub inventory.
+Documentation only; no executable behavior changed. No tests required.
+
 ## Completed work: authoritative records
 
 | Work | Final status and records |
