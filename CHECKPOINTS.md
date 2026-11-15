@@ -4,41 +4,32 @@ Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
-Phase approval policy: the developer approved replacing default manual approval
-at every implementation phase with public contract review and verification-based
-automatic progression. See [phase approvals](docs/development/phase-approvals.md).
-Plan review and execution authorization remain distinct. Whole-story acceptance,
-publication/merge/cleanup boundaries and verification obligations are preserved.
-The policy covers new plans and classification of unfinished phases on resumption;
-completed approvals and historical evidence are retained. No story is executing.
+US-14 / GitHub issue #20 planning is complete in branch
+`US-14-feature-pipelines`, worktree `.worktrees/US-14-feature-pipelines`, based on
+local main `9a030cfe5d6523531e386b0195f40a16599180fc`.
+The [approved plan](docs/plans/milestone-1-us-14.md) covers all five M1 criteria in
+three implementation phases: contract review, controlled feature comparisons,
+and installed-project/story verification. No implementation or environment setup
+is authorized; see its execution authorization record.
 
-Updated repository instructions, planning/execution/scope skills, verification
-policy and plan template together. The developer authorized committing and
-pushing these changes to origin/main. All three changed skills pass
-`quick_validate.py` in the isolated uv/PyYAML environment; 108 relative links
-resolve and `git diff --check` passes. Next action: pilot an authorized phase
-sequence.
-Runtime sandbox permissions are unchanged and devcontainer behavior is unverified.
-No Python behavior changed; TDD and Python tests are inapplicable.
+Developer “I approve the plan” approved the plan on 2026-11-15 UTC.
+Next action: separate execution authorization; no implementation has started.
+Developer “commit changes” on 2026-11-15 authorized committing this plan and
+checkpoint. Push and PR publication remain unauthorized.
+Issue #20 policy synchronization was explicitly authorized, published and
+verified on 2026-11-15; acceptance criteria and existing comments were preserved. IP1 will settle the exact comparison artifact and public test
+boundaries; dependent tests/implementation require contract approval. Reuse
+accepted split, DVC, preprocessing, classification and MLflow capabilities;
+no other story execution or new toolkit wrapper is currently proposed.
 
-Primary checkout: `main`; only the primary worktree remains.
-US-18 M1 classification is accepted and merged in PR #69. Its worktree and
-local/remote branches have been removed; verified evidence is archived below.
-Issue #28 retains M2 regression scope.
-
-CI maintenance: added workflow-level concurrency to `.github/workflows/ci.yml`
-so a newer run cancels an earlier run for the same branch or pull request,
-covering both jobs. Independent pull requests keep separate concurrency groups.
-Static YAML validation and `git diff --check` passed. Hosted cancellation remains
-unverified until successive qualifying pushes trigger CI. No Python behavior
-changed, so TDD and Python tests do not apply to this configuration change.
-
-CI maintenance is ready for the requested commit and push to `main`.
-Next action: verify hosted cancellation when successive CI runs occur or select the next story.
-No story implementation is in progress.
-Checkpoint cleanup and evidence archive references are included in this update.
-No tests were run for this documentation change; `git diff --check` passed. Historical M1/M50 verification and revised MVP acceptance obligations
-remain open below.
+Retrieved the full body and every comment for #20 and supplier issues
+#19/#16/#21/#28/#17; unique counts and final metadata snapshots were stable.
+Full local snapshots are retained under `.dev-records/planning/us-14/`.
+The tracked changes are this checkpoint and the new plan. Planning changes no
+executable behavior, so TDD, pytest and shared Python checks are inapplicable.
+All 25 plan links/fragments resolve; tracked diff and new-plan whitespace checks
+pass. Historical
+verification obligations and evidence below remain unchanged.
 
 ## Completed work: authoritative records
 
