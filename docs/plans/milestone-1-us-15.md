@@ -84,7 +84,7 @@ owning plans. Historical evidence is not a test run against this branch.
 | US-26 producer contract review | Same exact dictionary representation and serialization/error rules | IP2/IP3 | Both Gate 1 decisions approved the same SC-01 contract; IP3 retains field parity. |
 | Native pipeline composition | clone/fit/transform supported imputer/scaler/encoder Pipeline/ColumnTransformer without replacement algorithms | IP2 | IP1 feasibility and Gate 1-reviewed matrix satisfied; IP2/IP3 native evidence passes. |
 | MLflow preservation and provenance | Actual US-15 output is saved with committed references | IP4 / complete AC-03 | [US-26-IP4-T1/T2](milestone-1-us-26-recording.md#us-26--implementation-phase-4-installed-handoff-and-17-acceptance), consumer Gate 4 and reviewed combined revision required. No whole US-26 #33/#43 dependency. |
-| Shared code available in consumer | Reviewed producer revision in US-26 branch | US-26 IP4 | Separate integration authorization needed; shared Git objects alone do not provide it. Index identifies cross-branch availability gate. |
+| Shared code available in consumer | Reviewed producer revision in US-26 branch | US-26 IP4 | Fulfilled: explicit developer integration authority and approved combined commit `3ffc7b4` are verified in IP4; no neighboring source imports. |
 | Feature comparisons, US-14 #20 | Fixed validation comparisons | None in this plan | Separate owner; reviewed issue overlap does not transfer its criteria here. |
 | AC-04 restoration | Fresh-project restored transformation checks/tolerances | Future M2 | Explicitly deferred by #21; MVP-M2-ACCEPT-VERIFY retains integration reconciliation. |
 
@@ -145,8 +145,8 @@ confirmed public boundaries.
 - **Implementation authorization:** Phase 1 execution and local commit authorized on
   2026-11-14 by “i approve phase 1; commit;”. This supersedes the earlier
   planning-only restriction for Phase 1. Gates 1/2 and Phase 2/3 authorization
-  are recorded below. Latest direction authorizes Phase 3 only; Phase 4 and
-  source integration remain unauthorized.
+  are recorded below. Subsequent developer direction authorizes Phase 4 and integration of the
+  approved combined revision, as recorded below. US-15 Gate 4 and M1 AC-01/02/03 slice are Approved/Accepted; publication remains withheld.
 
 ## Scope-change history
 
@@ -380,6 +380,17 @@ Only Phase 3 was executed in this turn. Gate 3 approval and local commit directi
 
 ## US-15 / Implementation Phase 4: Review preservation and accept the M1 slice
 
+- **Authorization and fulfilled dependencies:** Developer authorized US-26-first
+  Phase 4 coordination, then explicitly directed “I approve us-26 gate 4 and
+  authorize committing the combined revision so us-15 can complete”. Coordination
+  thread `01a1db6c-a225-73e0-8796-81a03c4cec7a` authorized US-15 integration and
+  dependent final checks. Verified committed consumer Gate 4 approval and combined
+  revision `3ffc7b4df557f9fa8fe873fc68e012b48e9b26e1`; fast-forwarded this branch
+  without conflicts or executable edits. Own preparation preserved in raw records.
+  This supersedes earlier Phase 3-only progression restrictions. Subsequent
+  Gate 4 approval/M1 slice acceptance and local commit authority are recorded
+  below; publication and M2 remain unapproved.
+
 - **Outcome:** M1 AC-01–03 reconciled with real producer/consumer preservation evidence.
 - **Entry conditions:** US-15 Gate 3; US-26-IP4-T1/T2 evidence and Gate 4 approved;
   authorized relevant integration available in this branch for final checks.
@@ -389,10 +400,16 @@ Only Phase 3 was executed in this turn. Gate 3 approval and local commit directi
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-15-IP4-T1 | Not started | Inspect US-26-owned installed handoff evidence against this producer revision and AC-03; link it in proposed docs/verification/us-15-ip4.md, this plan and checkpoint | US-26 IP4 and Gate 4 | Actual pipeline, exact metadata and committed code/dependency links persisted in run; no fixture-only substitute | AC-03 |
-| US-15-IP4-T2 | Not started | Reconcile all M1 criteria/deferred checks, run final M1–6 and shared commands, finish docs/checkpoint and report | T1 | Final identity/lock/dirty files/counts/platform recorded, excluded/failed/skipped checks accounted for before Gate 4 | AC-01/02/03 |
+| US-15-IP4-T1 | Complete | Inspect US-26-owned installed handoff evidence against this producer revision and AC-03; link it in proposed docs/verification/us-15-ip4.md, this plan and checkpoint | US-26 IP4 and Gate 4 | Actual pipeline, exact metadata and committed code/dependency links persisted in run; no fixture-only substitute | AC-03 |
+| US-15-IP4-T2 | Complete | Reconcile all M1 criteria/deferred checks, run final M1–6 and shared commands, finish docs/checkpoint and report | T1 | Final identity/lock/dirty files/counts/platform recorded, excluded/failed/skipped checks accounted for before Gate 4 | AC-01/02/03 |
 
 ### Verification and review evidence
+
+[IP4 report](../verification/us-15-ip4.md) records independent consumer-artifact
+review, approved combined-source integration, renewed actual installed handoff,
+924 passes/one existing skip in final M1–6, shared checks and criterion mapping.
+T1/T2 are Complete; US-15 Gate 4 is Approved and its M1 slice Accepted by the
+subsequent explicit developer decision below.
 
 - **Selected tests and impact rationale:** Reuse valid US-26 combined-revision
   handoff evidence; if producer code or build inputs changed, renew the US-26-owned
@@ -405,28 +422,36 @@ Only Phase 3 was executed in this turn. Gate 3 approval and local commit directi
 
 | Check | Method or command | Expected result | Actual result / evidence reference |
 |---|---|---|---|
-| Preservation evidence | US-26-IP4-T1/T2 report, tested combined revision and Gate 4 | Exact pipeline/metadata/provenance artifacts and native run references | Pending |
-| M1–6 story selection | uv run --locked pytest -n 4 --dist=loadgroup | Pass; record current selected/deselected/skipped counts | Pending |
-| Shared development / final docs | Shared command block and local-link checks | Pass; final lock hash unchanged; all required evidence reconciled | Pending |
+| Preservation evidence | US-26-IP4-T1/T2 report, tested combined revision and Gate 4 | Exact pipeline/metadata/provenance artifacts and native run references | Verified consumer Gate 4 approval; all 28 retained artifact/identity hashes and exact JSON/reference checks pass; renewed in own M1–6 |
+| M1–6 story selection | uv run --locked pytest -n 4 --dist=loadgroup | Pass; record current selected/deselected/skipped counts | 924 passed, 1 existing skip, 0 failures/errors; 925 selected/268 deselected of 1193, four/loadgroup, 427.02 seconds |
+| Shared development / final docs | Shared command block and local-link checks | Pass; final lock hash unchanged; all required evidence reconciled | All shared checks pass; final document checks in raw gate manifest; no lock changes |
 
 ### Developer approval gate
 
 - **Approval criteria:** T1/T2 complete; all M1 criterion evidence valid and required
   checks pass; explicitly distinguish M1 slice from whole #21 acceptance.
-- **Evidence presented:** Pending — proposed docs/verification/us-15-ip4.md.
-- **Remaining limitations or blocked work:** M2 AC-04; platform and milestone limits.
-- **Developer decision:** Pending — request M1 slice acceptance explicitly.
-- **Decision reference and date:** Pending.
+- **Evidence presented:** [Completed IP4 report](../verification/us-15-ip4.md);
+  T1/T2 technically Complete with final tests, installed preservation and shared checks.
+- **Remaining limitations or blocked work:** No Phase 4 blocker; M2 AC-04,
+  existing planning-schema skip, Linux-only coverage and named milestone limits remain.
+- **Developer decision:** Approved; M1 AC-01/02/03 slice explicitly Accepted.
+- **Decision reference and date:** 2026-11-15, developer adopted: “Approve US-15 Gate 4 and accept its M1 slice; commit its remaining changes. Accept US-26’s #17 scope. Prepare and explain the PR structure before pushing or publishing.”
+  Relayed by coordination thread `01a1db6c-a225-73e0-8796-81a03c4cec7a`.
 - **Requested changes and resolution:** None recorded.
-- **Progression authorized:** Pending — handoff only; do not close #21, start M2,
-  commit/push/publish or remove worktrees without separate direction. Stop here.
+- **Progression authorized:** Commit remaining owning records locally and prepare
+  a reviewable PR structure. Explicitly stop before push, PR/publication, main
+  merge, issue closure, history rewrite/new PR branches or cleanup. #21 remains
+  open for M2 AC-04; no whole #21 or milestone acceptance is implied.
 
 ## Final verification requirements
 
 - **Owning final phase/task:** US-15-IP4-T2, required before final Gate 4 review.
-- **Final implementation identity:** Pending — tested revision, dirty files,
-  dependency/lock checksum and actual supplier revision.
-- **M1–6 and shared checks:** Commands above, final results/counts Pending.
+- **Final implementation identity:** Combined `3ffc7b4df557f9fa8fe873fc68e012b48e9b26e1`,
+  approved supplier `e63ef4b8ff700d44e5c644dd30eed92ebd62104b`; all 83 tested
+  executable fingerprints preserved. Final edits are this plan, checkpoint,
+  coordination index, IP4 report and PR-structure proposal only. Lock hash unchanged; see IP4 report/manifest.
+- **M1–6 and shared checks:** All passed; 924 passes, one existing authorized skip,
+  zero failures/errors, 925 selected/268 deselected. Full results in IP4 report.
 - **Distribution/installation:** Both real wheel paths in IP3 and combined
   US-26 integration. Standalone artifact drivers and broader pytest require an
   explicit developer command; they are not automatically launched.
@@ -437,25 +462,27 @@ Only Phase 3 was executed in this turn. Gate 3 approval and local commit directi
   inputs, and M1–6 after executable changes. Doc-only edits use document checks.
 - **Actual results and limitations:** IP2/IP3 reports contain executable focused,
   installed and shared evidence on Linux aarch64/Python 3.12.16. IP4 final checks
-  remain pending; macOS/Windows are unverified for this change.
+  pass as recorded in the IP4 report; macOS/Windows are unverified for this change.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-15-AC-01 | IP2-T1/T3/T4; IP3-T2; IP4-T2 | Independent train/held-out/inference oracle; both installed wheel paths | Pending |
-| US-15-AC-02 | IP2-T2/T3/T4; IP3-T2; IP4-T2 | Scope/overlap/identity rejection before fitting, existing splitting regression | Pending |
-| US-15-AC-03 | IP3-T1/T2/T3; US-26-IP4-T1/T2; US-15-IP4-T1/T2 | Exact metadata/native pipeline plus actual persisted code/dependency handoff | Pending |
+| US-15-AC-01 | IP2-T1/T3/T4; IP3-T2; IP4-T2 | Independent train/held-out/inference oracle; both installed wheel paths | Accepted M1 slice, 2026-11-15 |
+| US-15-AC-02 | IP2-T2/T3/T4; IP3-T2; IP4-T2 | Scope/overlap/identity rejection before fitting, existing splitting regression | Accepted M1 slice, 2026-11-15 |
+| US-15-AC-03 | IP3-T1/T2/T3; US-26-IP4-T1/T2; US-15-IP4-T1/T2 | Exact metadata/native pipeline plus actual persisted code/dependency handoff | Accepted M1 slice, 2026-11-15 |
 | US-15-AC-04 | Future M2 owning plan | Fresh-project restored transformation equivalence under declared checks | Deferred M2; not accepted |
 
-- **Remaining work:** Gate 3 approval and IP4 preservation review/final acceptance;
-  AC-04 is a separate M2 slice.
-- **Partial prerequisite delivery:** Gate 3 supplies verified fitting/metadata
-  capability but does not complete AC-03 or accept this slice. Final M1 review
-  follows US-26's actual integration. Whole #21 remains open for M2.
-- **Final verification:** Pending — IP4-T2 report.
-- **Developer acceptance:** Pending, M1 slice only.
-- **Decision reference and date:** Pending.
+- **Remaining work:** Review the [PR-structure proposal](../reviews/us15-us26-pr-structure.md)
+  before any publication; AC-04 remains a separate M2 slice.
+- **Partial prerequisite delivery:** Actual US-26 integration and final US-15
+  review now verify AC-03. M1 AC-01/02/03 are explicitly accepted;
+  whole #21 remains open for M2.
+- **Final verification:** Complete — [IP4-T2 report](../verification/us-15-ip4.md);
+  924 passes, one existing skip, all shared checks and final evidence reconciled.
+- **Developer acceptance:** Accepted M1 AC-01/02/03 slice only, 2026-11-15.
+- **Decision reference and date:** Same explicit Gate 4/M1 slice decision above;
+  no issue closure or publication authority.
 
 ## Milestone acceptance handoff
 

@@ -1,43 +1,42 @@
 # Development Checkpoints
 
-Last updated: 2026-11-14 (UTC)
+Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
-US-26 Phase 4 approved / combined local commit handoff, 2026-11-14 UTC: #17, US-26-mlflow.
-Developer explicitly authorized Phase 4 and committed US-15 source integration
-through coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a.
-Consumer baseline c2e3dec87a5782f4bdd7c61a81356feefdcb7030; approved producer
-revision e63ef4b8ff700d44e5c644dd30eed92ebd62104b. Both Gate 3 approvals
-are recorded in their owning plans. Developer authorized the combined local merge commit; Git HEAD identifies it;
-shared contributor sklearn stubs combine both public surfaces. US-26 retains
-this checkout's checkpoint; supplier plan/evidence and all historical obligations
-are preserved. No sibling checkout mutation, push, PR or publication.
+US-15 Phase 4 approved / M1 slice accepted, #21, branch `US-15-preprocessing`.
+The approved implementation baseline is combined
+`3ffc7b4df557f9fa8fe873fc68e012b48e9b26e1`, integrated by authorized fast-forward.
+Current HEAD after local commitment identifies the final acceptance-record commit.
+Both approved parents remain in history. Consumer
+Gate 4 approval and explicit combined integration/execution authority are recorded
+in the owning plans. US-15-IP4-T1/T2 are Complete; US-15 Gate 4 is Approved and
+M1 AC-01/02/03 explicitly Accepted on 2026-11-15. No M2 or whole-story acceptance.
 
-Actual producer handoff passes both direct and genuinely sdist-rebuilt normal
-wheels. Final focused: 361 passed, 0 failed/skipped, 346.90 seconds. Final
-M1–6: 924 passed, 1 existing authorized skip, 0 failures/errors, 419.05 seconds;
-925 selected of 1193, 268 deselected. Four workers/loadgroup for both runs.
-Shared sync/lock/lint/format (348 files)/type (91 files)/CLI 0.1.0, whitespace
-and 165 document links/anchors pass. Both approved production implementations
-and supplier tests/probes remain unchanged; wheel matches all 72 package files.
-Final source/build/lock identities and all criteria are recorded in the
-[IP4 report](docs/verification/us-26-recording-ip4.md). Gate 4 is Approved; separate #17 recording
-slice acceptance remains Pending. Local combined commit/handoff only; no push,
-PR/publication, main merge, issue closure or cleanup.
+[IP4 report](docs/verification/us-15-ip4.md) records independent preservation
+review and renewed actual producer handoff through direct and genuinely rebuilt
+installed wheels. All 28 retained artifact/identity hashes pass in supplier and
+own final matrix; metadata/provenance/split and feature bytes match exactly.
+All 83 consumer-tested executable fingerprints and producer implementation/tests
+remain unchanged. Own preparation and reviewed supplier evidence are preserved
+under `.dev-records/verification/20261114-us15-ip4/`, spanning the UTC boundary.
 
-Developer: “I approve us-26 gate 4 and authorize committing the combined revision so us-15 can complete”.
-Relayed on 2026-11-14 by coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a.
-US-15 may consume the verified combined revision for its authorized dependent
-verification; its Gate 4 and acceptance remain independent.
-[Owning plan](docs/plans/milestone-1-us-26-recording.md) owns granular progress.
-Raw lifetime evidence: .dev-records/verification/us26-ip4-20261114/.
-Preserve earlier IP1/IP2/IP3/SC-01, default-skops failure and supplier records.
+Own final M1–6: 924 passed, one existing authorized planning-schema skip, zero
+failures/errors, 427.02 seconds, four workers/loadgroup. Collection: 1193 total,
+925 selected, 268 deselected. Shared locked sync/lock/lint/format (350 files)/
+strict typing (91 files)/CLI 0.1.0 pass. Final document/whitespace checks are
+recorded in the gate manifest. Lock unchanged at
+`6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4`.
+No assertion/timeout/skip/suppression changes or new product defect. Linux aarch64 /
+Python 3.12.16 only; native float16 limitation and all earlier failures preserved.
 
-Initial merge failed reading tree 4762191c53d0646eded4205fd9f8089c5e1d291e;
-read-only inspection found it available and working tree clean. Identical retry
-reached expected checkpoint/stub conflicts, resolved preserving both APIs.
-No Git configuration, ref repair, object cleanup or assertion changes.
+Developer authorized local remaining-record commitment and a reviewable PR
+structure after accepting US-15 M1 and US-26 #17. Next action: present the
+[PR proposal](docs/reviews/us15-us26-pr-structure.md) and stop before publication.
+No blocker. Final changes are plan/checkpoint/index/report/proposal documents
+only. No push, PR/publication, main merge, issue closure, history rewrite, new
+PR branches, cleanup or M2 execution. #21 remains open for AC-04; historical and MVP milestone owners
+retain all obligations and existing excluded/skipped coverage.
 
 Historical obligations below remain unchanged. Preserve the contributor worktree
 management plan/report, raw records under

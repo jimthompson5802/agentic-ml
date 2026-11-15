@@ -391,3 +391,29 @@ Developer subsequently approved US-26 Gate 4 and local combined commit/handoff:
 “I approve us-26 gate 4 and authorize committing the combined revision so us-15 can complete”.
 Source: coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a, 2026-11-14.
 US-15 retains its own Gate 4; no publication or whole-story acceptance is inferred.
+
+
+## US-15 dependent Phase 4 handoff — 2026-11-15
+
+Under the explicit consumer Gate 4 approval/integration authorization above,
+US-15 fast-forwarded its owning branch to reviewed combined
+`3ffc7b4df557f9fa8fe873fc68e012b48e9b26e1`. Its
+[owning plan](milestone-1-us-15.md) and [IP4 report](../verification/us-15-ip4.md)
+record independent preservation review and final M1–6/shared checks: 924 passed,
+one existing authorized skip, no failures/errors, 925 selected/268 deselected.
+All 83 consumer-tested executable fingerprints remain unchanged; actual producer
+handoff is renewed in both installed wheel paths. US-15-IP4-T1/T2 are Complete;
+US-15 Gate 4 and M1 slice acceptance remain Pending. This does not accept M2
+AC-04, whole #21, other US-26 issues, milestone obligations or publication.
+
+
+## Accepted M1 slices and publication boundary — 2026-11-15
+
+Developer adopted: “Approve US-15 Gate 4 and accept its M1 slice; commit its remaining changes. Accept US-26’s #17 scope. Prepare and explain the PR structure before pushing or publishing.”
+Coordination thread `01a1db6c-a225-73e0-8796-81a03c4cec7a`.
+US-15 Gate 4 is Approved and M1 AC-01/02/03 are Accepted; AC-04 remains M2 and
+#21 remains open. US-26 records its accepted #17 scope in its owning checkout.
+Local record commits and a [PR-structure proposal](../reviews/us15-us26-pr-structure.md)
+are authorized; push, PR/publication, main merge, issue closure and cleanup
+remain prohibited. No history rewrite, new PR branch or integration of the
+forthcoming divergent acceptance-record tips is performed by this proposal.
