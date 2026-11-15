@@ -391,3 +391,10 @@ Developer subsequently approved US-26 Gate 4 and local combined commit/handoff:
 “I approve us-26 gate 4 and authorize committing the combined revision so us-15 can complete”.
 Source: coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a, 2026-11-14.
 US-15 retains its own Gate 4; no publication or whole-story acceptance is inferred.
+
+On 2026-11-15 the developer explicitly accepted US-26 #17 AC-01–05 and
+approved US-15 Gate 4/M1 acceptance; each owning session records its decision.
+The shared combined implementation is 3ffc7b4. Only local acceptance commits
+and a PR-structure proposal are authorized; publication/history changes wait.
+Two independent main-based PRs would duplicate the combined implementation.
+The proposal must include both acceptance records without repeating that diff.

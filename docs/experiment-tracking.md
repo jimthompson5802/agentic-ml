@@ -2,7 +2,7 @@
 
 Status: log_run_results and log_preprocessing are implemented. Gates 1–3
 are approved; Phase 4 installed integration is technically complete, with Gate 4
-approved; separate #17 recording acceptance remains pending. [Plan](plans/milestone-1-us-26-recording.md),
+approved; #17 AC-01–05 recording scope was explicitly accepted on 2026-11-15. [Plan](plans/milestone-1-us-26-recording.md),
 [native findings](verification/us-26-recording-ip1.md) and the
 [shared field/type specification](plans/milestone-1-us-15-us-26-execution-order.md#proposed-handoff-types)
 define the review boundary. Issue #17 owns AC-01–05. Native probes do not verify
@@ -296,7 +296,7 @@ pickle fallback is used.
 [Phase 3 evidence](verification/us-26-recording-ip3.md) records 241 passing
 tracking/splitting tests and shared checks. Gate 3 is approved. Actual
 US-15 producer preservation and both installed wheel paths now pass Phase 4 verification;
-Gate 4 is approved; separate #17 recording acceptance remains pending.
+Gate 4 is approved; #17 AC-01–05 recording scope was explicitly accepted on 2026-11-15.
 
 
 ## Actual producer script

@@ -478,26 +478,26 @@ infrastructure. No standalone driver or broader suite runs without explicit comm
 - **Actual results and limitations:** IP2 is approved with installed component
   evidence. IP3 final tracking/splitting verification passes 241 cases; its independent
   direct-wheel consumer tests do not establish actual producer integration.
-  Final IP4 technical verification is Complete; Gate 4 is Approved; separate #17 acceptance remains Pending. Linux aarch64 evidence does not
+  Final IP4 technical verification is Complete; Gate 4 is Approved; #17 AC-01–05 accepted on 2026-11-15. Linux aarch64 evidence does not
   establish macOS/Windows support.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-26-AC-01 | IP2-T1/T3/T4; IP3-T1/T3; IP4-T1/T2/T3 | Native existing-run parameters/metrics/status/outputs/artifact URIs and stable run ID | Verified; developer acceptance Pending |
-| US-26-AC-02 | IP2-T2; IP3-T1/T2; IP4-T1/T2/T3 | Actual DVC data/split IDs, committed revision and effective configuration preserved | Verified; developer acceptance Pending |
-| US-26-AC-03 | IP2-T2; IP3-T1/T2; IP4-T1/T2/T3 | Git/full-SHA and supported-wheel identity matrix; installed versions and lock/environment evidence | Verified; developer acceptance Pending |
-| US-26-AC-04 | IP2-T2/T3; IP3-T2; IP4-T1/T2/T3 | Committed source/entrypoint/config references plus executed notebook outputs/errors when used | Verified; developer acceptance Pending |
-| US-26-AC-05 | IP2-T1/T3; IP3-T2/T3; IP4-T1/T2/T3 | Missing outputs despite zero exit, nonzero process, invalid refs and serialization/logging failure cases | Verified; developer acceptance Pending |
+| US-26-AC-01 | IP2-T1/T3/T4; IP3-T1/T3; IP4-T1/T2/T3 | Native existing-run parameters/metrics/status/outputs/artifact URIs and stable run ID | Verified; Accepted 2026-11-15 |
+| US-26-AC-02 | IP2-T2; IP3-T1/T2; IP4-T1/T2/T3 | Actual DVC data/split IDs, committed revision and effective configuration preserved | Verified; Accepted 2026-11-15 |
+| US-26-AC-03 | IP2-T2; IP3-T1/T2; IP4-T1/T2/T3 | Git/full-SHA and supported-wheel identity matrix; installed versions and lock/environment evidence | Verified; Accepted 2026-11-15 |
+| US-26-AC-04 | IP2-T2/T3; IP3-T2; IP4-T1/T2/T3 | Committed source/entrypoint/config references plus executed notebook outputs/errors when used | Verified; Accepted 2026-11-15 |
+| US-26-AC-05 | IP2-T1/T3; IP3-T2/T3; IP4-T1/T2/T3 | Missing outputs despite zero exit, nonzero process, invalid refs and serialization/logging failure cases | Verified; Accepted 2026-11-15 |
 
-- **Remaining work:** Separate #17 AC-01–05 acceptance; #33/#43 remain separately owned.
+- **Remaining work:** Review the proposed PR structure before any authorized publication; #33/#43 remain separately owned.
 - **Partial prerequisite delivery:** IP3 supplies independently verified consumer;
   IP4 now supplies actual US-15 preservation evidence for its dependent review. Neither accepts US-15 by
   proxy or claims full classification/assistant workflow delivery.
 - **Final verification:** Complete — US-26-IP4-T3; [report](../verification/us-26-recording-ip4.md).
-- **Developer acceptance:** Pending — #17 slice only; whole US-26 not claimed.
-- **Decision reference and date:** Pending.
+- **Developer acceptance:** Accepted — #17 AC-01–05 only; #33/#43 not claimed.
+- **Decision reference and date:** 2026-11-15, developer “Accept US-26’s #17 scope”, relayed by coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a.
 
 ## Milestone acceptance handoff
 
@@ -528,3 +528,26 @@ commit/parent verification are retained under
 Git HEAD identifies the resulting combined commit, with both reviewed parents
 c2e3dec87a5782f4bdd7c61a81356feefdcb7030 and
 e63ef4b8ff700d44e5c644dd30eed92ebd62104b preserved.
+
+## Issue #17 recording acceptance — 2026-11-15
+
+Developer: “Accept US-26’s #17 scope.” This is part of the explicit instruction
+“Approve US-15 Gate 4 and accept its M1 slice; commit its remaining changes.
+Accept US-26’s #17 scope. Prepare and explain the PR structure before pushing
+or publishing.” Relayed by coordination thread
+01a1db6c-a225-73e0-8796-81a03c4cec7a.
+
+US-26 #17 AC-01–05 are accepted. Gates 1–4 remain Approved. The accepted
+combined implementation is 3ffc7b4df557f9fa8fe873fc68e012b48e9b26e1; this
+local acceptance commit changes documentation only. All executable fingerprints
+remain equal to the passing final evidence: 361 focused passes; 924 M1–6
+passes, one existing planning-schema timeout skip, zero failures/errors,
+268 deselected. Shared checks, direct/rebuilt installed preservation and Linux
+aarch64 limits remain as recorded. The skip is not passing coverage.
+
+This accepts issue #17's recording scope; #33/#43 and milestone/M2 obligations
+remain separate. US-15 owns its M1 acceptance record and remains open for M2.
+The developer limits this handoff to local commits and a reviewable PR proposal.
+No push, PR/publication, main merge, issue closure, cleanup, history rewrite
+or new PR branch is authorized. These explicit limits override the execution
+skill's automatic publication sequence after acceptance.

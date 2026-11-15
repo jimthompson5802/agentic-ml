@@ -1,43 +1,34 @@
 # Development Checkpoints
 
-Last updated: 2026-11-14 (UTC)
+Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
-US-26 Phase 4 approved / combined local commit handoff, 2026-11-14 UTC: #17, US-26-mlflow.
-Developer explicitly authorized Phase 4 and committed US-15 source integration
-through coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a.
-Consumer baseline c2e3dec87a5782f4bdd7c61a81356feefdcb7030; approved producer
-revision e63ef4b8ff700d44e5c644dd30eed92ebd62104b. Both Gate 3 approvals
-are recorded in their owning plans. Developer authorized the combined local merge commit; Git HEAD identifies it;
-shared contributor sklearn stubs combine both public surfaces. US-26 retains
-this checkout's checkpoint; supplier plan/evidence and all historical obligations
-are preserved. No sibling checkout mutation, push, PR or publication.
+US-26 #17 accepted / local acceptance commit, 2026-11-15 UTC: US-26-mlflow.
+Developer explicitly accepted “US-26’s #17 scope” through coordination thread
+01a1db6c-a225-73e0-8796-81a03c4cec7a. AC-01–05 accepted; Gates 1–4 Approved.
+Combined implementation: 3ffc7b4df557f9fa8fe873fc68e012b48e9b26e1. Git HEAD
+identifies the following local acceptance-record commit. Executable inputs are
+unchanged and verified against final passing fingerprints.
 
-Actual producer handoff passes both direct and genuinely sdist-rebuilt normal
-wheels. Final focused: 361 passed, 0 failed/skipped, 346.90 seconds. Final
-M1–6: 924 passed, 1 existing authorized skip, 0 failures/errors, 419.05 seconds;
-925 selected of 1193, 268 deselected. Four workers/loadgroup for both runs.
-Shared sync/lock/lint/format (348 files)/type (91 files)/CLI 0.1.0, whitespace
-and 165 document links/anchors pass. Both approved production implementations
-and supplier tests/probes remain unchanged; wheel matches all 72 package files.
-Final source/build/lock identities and all criteria are recorded in the
-[IP4 report](docs/verification/us-26-recording-ip4.md). Gate 4 is Approved; separate #17 recording
-slice acceptance remains Pending. Local combined commit/handoff only; no push,
-PR/publication, main merge, issue closure or cleanup.
+[Plan](docs/plans/milestone-1-us-26-recording.md) and
+[IP4 report](docs/verification/us-26-recording-ip4.md) retain full evidence:
+361 focused passes; M1–6 924 passed, 1 existing authorized planning-schema skip,
+0 failures/errors, 925 selected/268 deselected. Shared checks, actual direct/
+rebuilt wheels and 165 document links passed. Linux aarch64 only; no skipped,
+excluded, M2 or milestone coverage is newly claimed. No dependency/lock change.
 
-Developer: “I approve us-26 gate 4 and authorize committing the combined revision so us-15 can complete”.
-Relayed on 2026-11-14 by coordination thread 01a1db6c-a225-73e0-8796-81a03c4cec7a.
-US-15 may consume the verified combined revision for its authorized dependent
-verification; its Gate 4 and acceptance remain independent.
-[Owning plan](docs/plans/milestone-1-us-26-recording.md) owns granular progress.
-Raw lifetime evidence: .dev-records/verification/us26-ip4-20261114/.
-Preserve earlier IP1/IP2/IP3/SC-01, default-skops failure and supplier records.
+Next: explain and obtain approval for a concrete PR structure. US-15's owning
+session records its Gate 4/M1 acceptance and commits its final docs. Both branches
+already contain the combined implementation; independent main-based PRs would
+duplicate the code diff. Reconcile both local acceptance tips before any later
+publication. No push, PR/publication, main merge, issue closure, cleanup, history
+rewrite or new PR branch authorized. #33/#43 remain separate; #21 stays open
+for M2. The user limit overrides automatic publication after story acceptance.
 
-Initial merge failed reading tree 4762191c53d0646eded4205fd9f8089c5e1d291e;
-read-only inspection found it available and working tree clean. Identical retry
-reached expected checkpoint/stub conflicts, resolved preserving both APIs.
-No Git configuration, ref repair, object cleanup or assertion changes.
+Raw lifetime records: .dev-records/verification/us26-acceptance-20261115/,
+preceded by us26-ip4-approval-20261114/ and us26-ip4-20261114/. Preserve all
+IP1–IP3/SC-01/default-skops failure, native staging and supplier evidence.
 
 Historical obligations below remain unchanged. Preserve the contributor worktree
 management plan/report, raw records under
