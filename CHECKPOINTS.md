@@ -9,7 +9,16 @@ US-18 M1 classification is accepted and merged in PR #69. Its worktree and
 local/remote branches have been removed; verified evidence is archived below.
 Issue #28 retains M2 regression scope.
 
-Next action: select the next story. No implementation is in progress.
+CI maintenance: added workflow-level concurrency to `.github/workflows/ci.yml`
+so a newer run cancels an earlier run for the same branch or pull request,
+covering both jobs. Independent pull requests keep separate concurrency groups.
+Static YAML validation and `git diff --check` passed. Hosted cancellation remains
+unverified until successive qualifying pushes trigger CI. No Python behavior
+changed, so TDD and Python tests do not apply to this configuration change.
+
+CI maintenance is ready for the requested commit and push to `main`.
+Next action: verify hosted cancellation when successive CI runs occur or select the next story.
+No story implementation is in progress.
 Checkpoint cleanup and evidence archive references are included in this update.
 No tests were run for this documentation change; `git diff --check` passed. Historical M1/M50 verification and revised MVP acceptance obligations
 remain open below.
