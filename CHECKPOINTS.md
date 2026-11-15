@@ -4,32 +4,37 @@ Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
-US-14 / GitHub issue #20 planning is complete in branch
-`US-14-feature-pipelines`, worktree `.worktrees/US-14-feature-pipelines`, based on
-local main `9a030cfe5d6523531e386b0195f40a16599180fc`.
-The [approved plan](docs/plans/milestone-1-us-14.md) covers all five M1 criteria in
-three implementation phases: contract review, controlled feature comparisons,
-and installed-project/story verification. No implementation or environment setup
-is authorized; see its execution authorization record.
+US-14 / issue #20 IP1 technical work is complete in branch
+`US-14-feature-pipelines`, worktree `.worktrees/US-14-feature-pipelines`,
+HEAD `74cb1ca6884218471370dd68bf7c228f20448c40`, original base
+`9a030cfe5d6523531e386b0195f40a16599180fc`.
+The [approved plan](docs/plans/milestone-1-us-14.md) records developer
+“start phase 1”, 2026-11-15 UTC, authorizing IP1 only. Its three tasks are
+complete; [contract v2](docs/feature-pipelines.md) and
+[feasibility evidence](docs/verification/us-14-ip1.md) are ready for review.
+Next action: explicit IP1 contract/public-boundary approval and IP2 execution
+authorization. No dependent production implementation or behavior tests started.
+Developer accepted the factory recommendations and predeclared categories on
+2026-11-15; US-14-SC-01 records that limited contract approval. The remaining
+contract/public test boundaries still await approval. Renewed link and whitespace
+checks pass; revision evidence is linked from the IP1 report.
 
-Developer “I approve the plan” approved the plan on 2026-11-15 UTC.
-Next action: separate execution authorization; no implementation has started.
-Developer “commit changes” on 2026-11-15 authorized committing this plan and
-checkpoint. Push and PR publication remain unauthorized.
-Issue #20 policy synchronization was explicitly authorized, published and
-verified on 2026-11-15; acceptance criteria and existing comments were preserved. IP1 will settle the exact comparison artifact and public test
-boundaries; dependent tests/implementation require contract approval. Reuse
-accepted split, DVC, preprocessing, classification and MLflow capabilities;
-no other story execution or new toolkit wrapper is currently proposed.
+Verified issue #20's full body/all comments and stable final metadata: one unique
+comment, updated_at 2026-11-15T20:05:03Z; all five criteria remain M1. Supplier
+accepted contracts/code/evidence are present on this branch. No GitHub writes.
+Cleared inherited primary-checkout VIRTUAL_ENV for locked setup of this story's
+own `.venv`; lock SHA-256 unchanged. Native numerical, mixed-transform and MLflow
+lifecycle probes passed. These are feasibility, not toolkit acceptance evidence.
+Document-only phase needs no manufactured TDD red or executable shared checks.
+Final local-link/whitespace results are in the plan/evidence records.
 
-Retrieved the full body and every comment for #20 and supplier issues
-#19/#16/#21/#28/#17; unique counts and final metadata snapshots were stable.
-Full local snapshots are retained under `.dev-records/planning/us-14/`.
-The tracked changes are this checkpoint and the new plan. Planning changes no
-executable behavior, so TDD, pytest and shared Python checks are inapplicable.
-All 25 plan links/fragments resolve; tracked diff and new-plan whitespace checks
-pass. Historical
-verification obligations and evidence below remain unchanged.
+Developer “i approve the plan; commit”, 2026-11-15 UTC, approved the revised
+plan and authorized committing the plan/checkpoint and contract/evidence documents.
+Remaining contract/public-boundary approval and IP2 execution stay pending.
+Push and PR publication are not authorized. Preserve raw records under
+`.dev-records/verification/20261115T201435Z-74cb1ca-us14-ip1/` and historical
+planning snapshots under `.dev-records/planning/us-14/`.
+Historical verification obligations below remain unchanged.
 
 ## Completed work: authoritative records
 

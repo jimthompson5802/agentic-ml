@@ -188,7 +188,7 @@ training and tracking contracts remain unchanged.
 - **Status:** Approved.
 - **Developer decision:** Plan approved; execution authorization and IP1 contract approval remain separate and pending.
 - **Decision reference and date:** Developer “I approve the plan”, 2026-11-15 UTC.
-- **Requested plan changes:** None recorded.
+- **Requested plan changes:** Factory revision US-14-SC-01 incorporated. Developer “i approve the plan; commit”, 2026-11-15 UTC, approved the revised plan and authorized committing the four IP1 documents. This records plan approval; remaining contract/public-boundary approval and IP2 execution remain separate.
 
 Planning validation on 2026-11-15: all 25 local document links, including
 fragments, resolve; three phase blocks and five criterion mappings are present.
@@ -200,15 +200,28 @@ pytest run or executable shared checks were needed for this planning task.
 
 Follow [command/autonomy policy](../development/command-approvals.md).
 
-- **Authorized phase sequence and workspace:** Planning only in the associated worktree. IP1–IP3 execution pending.
-- **Execution authorization reference and date:** User “create plan for us-14 (github issue #20)”, 2026-11-15; authorizes this planning deliverable and local workspace only.
-- **Verification scope:** Document/link/whitespace checks now; proposed executable selections below require execution authorization.
-- **Authorized external actions:** Issue #20 policy-wording update explicitly authorized on 2026-11-15 by “can you update the issue for consistency”; published and verified. Developer “commit changes” on 2026-11-15 authorizes committing the plan and checkpoint. Push and PR publication remain unauthorized.
-- **Next required gate:** Separate execution authorization. Plan approval is recorded above; issue workflow synchronization is complete. IP1 contract approval remains required before IP2.
+- **Authorized phase sequence and workspace:** IP1 only in the associated worktree. IP2–IP3 execution pending.
+- **Execution authorization reference and date:** Developer “start phase 1”, 2026-11-15 UTC. Earlier planning authorization and plan approval remain recorded above.
+- **Verification scope:** IP1 source/dependency review, isolated locked environment setup, bounded feasibility probes and document/link/whitespace checks. No dependent production implementation or behavior tests before contract approval.
+- **Authorized external actions:** Issue #20 policy-wording update explicitly authorized on 2026-11-15 by “can you update the issue for consistency”; published and verified. Developer “commit changes” authorized the earlier planning commit; developer “i approve the plan; commit”, 2026-11-15 UTC, authorizes committing the revised plan, checkpoint, contract document and IP1 evidence. Push and PR publication remain unauthorized.
+- **Next required gate:** IP1 contract approval and IP2 execution authorization. Issue workflow synchronization is complete.
 
 ## Scope-change history
 
-None. Initial draft; no earlier US-14 execution or approval is claimed.
+IP1 refined the proposed recipe into [contract v1](../feature-pipelines.md),
+including exact settings/artifacts, explicit variant budget checks and separate
+derived DVC pointers. This is the planned IP1 contract refinement, with no AC,
+phase verification or milestone change. Approval remains pending.
+
+### US-14-SC-01: Settle project factory declaration boundary
+
+- **Request and decision:** Developer preferred the factory, chose “let's stay with predeclared”, then stated “i accept these recommendations”, 2026-11-15 UTC. Approved the no-argument factory, project-assigned positional output labels, global names/selected-only full validation and project-owned helpers/types.
+- **Scope difference:** Contract proposal v2 specifies `feature_variants.py:get_variants()` returning fresh unfitted pipeline declarations. Explicit category lists retain the predeclared schema approach. Unselected fields are not fully validated; eager factory construction errors still propagate before selection.
+- **Impact:** Refines IP1-T3 and IP2-T2 for AC-01/02/05. No issue acceptance criteria, toolkit API, milestones or verification commands change. No dependent behavior tests or production implementation are authorized.
+- **Verification:** Add factory/selection/fresh-object/positional-schema/predeclared-category cases to IP2-T2; retain all existing focused, regression, installed and final checks. Renew document validation. Native feasibility remains valid and is not evidence of implemented factory behavior.
+- **Decision:** These factory decisions are Approved; the complete contract/public-boundary gate remains pending. Original v1 proposal and evidence remain historical records.
+- **Resume point:** Review remaining contract/public test boundaries; IP2 execution requires separate authorization.
+
 During execution use [manage-plan-scope](../../.agents/skills/manage-plan-scope/SKILL.md).
 
 ## Execution and verification rules
@@ -250,13 +263,13 @@ acceptance remains explicit. Refresh CHECKPOINTS at each boundary and handoff.
 - **Entry conditions:** Execution authorization; supplier code/evidence checked against base; issue policy discrepancy resolved before affected implementation.
 - **Acceptance criteria advanced:** US-14-AC-01–05; no executable acceptance yet.
 - **Approval mode:** Contract review.
-- **Contract reference and decision:** Proposed approach above and proposed `docs/feature-pipelines.md`; Pending.
+- **Contract reference and decision:** [Comparison recipe contract v2](../feature-pipelines.md); explicit approval pending.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-14-IP1-T1 | Not started | Refresh #20/all comments; reconcile issue policy wording and concrete supplier records; inspect accepted APIs, training recipe and provenance output rules | Execution authorization | Scope/policy reconciliation recorded; authorized external synchronization completed and reread before code; no altered ACs or supplier reopening | AC-01–05 |
-| US-14-IP1-T2 | Not started | Bounded native-only probes of fixed-tree feature matrix, both metric directions, native transforms/schema and MLflow reference-run finalization ordering; retain proposed `docs/verification/us-14-ip1.md` | T1 | Literal oracle confirmed, dependency versions recorded, no novel wrapper/encoding needed; original native errors preserved | AC-01–04 |
-| US-14-IP1-T3 | Not started | Finalize proposed `docs/feature-pipelines.md`, example file/input inventory, exact comparison artifact schema and preflight/failure behavior; refine this plan's tests/tasks | T2 | Full root/cwd/settings/metric/tie/output/persistence matrix; independent fixture and public boundaries explicitly presented for developer approval | AC-01–05 |
+| US-14-IP1-T1 | Complete | Refresh #20/all comments; reconcile issue policy wording and concrete supplier records; inspect accepted APIs, training recipe and provenance output rules | Execution authorization | Scope/policy reconciliation recorded; authorized external synchronization completed and reread before code; no altered ACs or supplier reopening | AC-01–05 |
+| US-14-IP1-T2 | Complete | Bounded native-only probes of fixed-tree feature matrix, both metric directions, native transforms/schema and MLflow reference-run finalization ordering; retain proposed `docs/verification/us-14-ip1.md` | T1 | Literal oracle confirmed, dependency versions recorded, no novel wrapper/encoding needed; original native errors preserved | AC-01–04 |
+| US-14-IP1-T3 | Complete | Finalize proposed `docs/feature-pipelines.md`, example file/input inventory, exact comparison artifact schema and preflight/failure behavior; refine this plan's tests/tasks | T2 | Full root/cwd/settings/metric/tie/output/persistence matrix; independent fixture and public boundaries explicitly presented for developer approval | AC-01–05 |
 
 ### Verification and review evidence
 
@@ -264,16 +277,23 @@ No production code or dependent behavior tests in this phase. Review every AC
 against inputs/outputs; inspect local links and `git diff --check`. Native probes
 are feasibility evidence, not green toolkit tests or installed acceptance.
 IP2 owns executable behavior; IP3 owns both-wheel/M1–6 verification. Shared
-executable checks are inapplicable to document-only edits; record actual probe
-commands/results separately. Actual results: Pending.
+executable checks are inapplicable to document-only edits.
+Actual results: [IP1 evidence](../verification/us-14-ip1.md): native numeric, mixed
+transform/schema and MLflow lifecycle probes passed (exit 0). Issue snapshot
+complete/stable with one comment. Lock unchanged. Final document checks recorded
+below; no product behavior tests or production implementation were performed.
+Final validation: all 77 local links/fragments across the four changed documents
+resolve; tracked diff and all four files pass whitespace checks. The link checker
+initially rejected a valid historical directory link; corrected the checker to
+accept existing directory targets and retained both results.
 
 ### Phase progression
 
 - **Required verification:** T1–T3 complete; issue alignment confirmed; feasibility and document checks pass.
-- **Evidence presented:** Pending — exact contract, oracle, paths and native probe records.
-- **Contract decision:** Pending explicit developer approval, including public test boundaries.
+- **Evidence presented:** [Contract v2](../feature-pipelines.md) and [IP1 evidence](../verification/us-14-ip1.md), 2026-11-15 UTC. T1–T3 technically complete; contract approval is separate.
+- **Contract decision:** Factory decisions approved on 2026-11-15 by “let's stay with predeclared” and “i accept these recommendations”; remaining contract and full public test boundaries await explicit approval.
 - **Requested changes and resolution:** None recorded.
-- **Progression result:** Blocked pending execution authorization and contract review.
+- **Progression result:** IP1 technical work complete; awaiting explicit contract approval and IP2 execution authorization.
 - **Next phase:** IP2 only after the contract decision and within authorized sequence.
 
 ## US-14 / Implementation Phase 2: Execute and record controlled feature comparisons
@@ -287,7 +307,7 @@ commands/results separately. Actual results: Pending.
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
 | US-14-IP2-T1 | Not started | Add proposed `tests/integration/test_feature_comparison.py`; copy proposed `examples/feature-comparison/compare_features.py` and `feature_variants.py` to an isolated committed experiment; implement first reference/signal slice | IP1 approval | Intended red failure captured, then literal train transform, prediction, accuracy and gain pass using identical strict candidate/class/settings/source/splits and unchanged caller inputs | AC-01/02/03/05 |
-| US-14-IP2-T2 | Not started | Add equivalent/tie and misleading/regression variants, then minimize metric and invalid declarations through separate red–green slices; implement native metric/table logic in recipe | T1 | Literal score/delta/outcome matrix passes for both directions; missing validation and malformed/duplicate/unrecordable candidate/settings fail; no final-test predictions or feedback | AC-01/03/05 |
+| US-14-IP2-T2 | Not started | Verify approved no-argument factory, global name checks, selected-only full validation, fresh declarations, positional schema labels and predeclared categories through public outcomes; add equivalent/tie and misleading/regression variants, then minimize metric and invalid declarations through separate red–green slices; implement native metric/table logic in recipe | T1 | Literal score/delta/outcome matrix passes for both directions; missing validation and malformed/duplicate/unrecordable candidate/settings fail; no final-test predictions or feedback | AC-01/03/05 |
 | US-14-IP2-T3 | Not started | Add independent transformed-output/schema and train-only oracle slices, mixed categorical case, stale-source/overlap/schema failures; persist feature outputs with row IDs using native project IO | T2 | Literal values, schemas and membership agree; held-out sentinels do not alter fitted statistics; valid output references and source identities survive persistence | AC-01/02/04 |
 | US-14-IP2-T4 | Not started | Add MLflow/DVC publication slices and reference/candidate/summary inspection, using accepted tracking APIs; add missing-output/reference, collision and native failure cases individually | T3 | Same fixed protocol in actual native runs; code/config/lock/dependency/DVC links inspectable; comparison JSON uploaded before reference finalization; failures retain available evidence and never claim a complete successful comparison | AC-02/03/04 |
 | US-14-IP2-T5 | Not started | Complete example README and guide; run focused/regression/shared checks; record proposed `docs/verification/us-14-ip2.md` and checkpoint | T4 | Exact copied example works without test-internal imports, focused evidence valid and all required checks pass | AC-01–05 |
