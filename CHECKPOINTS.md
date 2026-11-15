@@ -17,19 +17,33 @@ baseline/candidate recording, and installed/final acceptance verification.
 Regression remains M2; M1 delivery must not close #28 or claim all of AC-01.
 Developer direction US-18-SC-01 now requires project-extensible native estimator
 bindings and a project-only RandomForestClassifier proof without toolkit changes;
-the approved plan records this revision. Custom/third-party estimator certification remains M2.
+the approved plan records this revision.
+Developer-directed US-18-SC-02 removes the caller estimator instance: the toolkit
+validates candidate parameters and constructs the bound class before fitting.
+Contract, task boundaries and native constructor feasibility were renewed;
+Gate 1 is Approved; IP2 start authorization remains pending. Custom/third-party estimator certification remains M2.
 
-Developer approved the plan with “i approve the plan” on 2026-11-15 UTC.
-Next action: explicit IP1 authorization. All tasks and
-implementation gates are pending. Gate 1 must confirm exact new training test
-boundaries before executable behavior tests. Planning did not create an
-environment, change product code, run tests, or publish anything.
+Developer approved the plan on 2026-11-15 UTC; planning commit is `52dcc27`.
+Developer “you can use the recommended prompt” authorized IP1 only and its
+stop at Gate 1. IP1-T1/T2/T3 are Complete. Developer “i approve phase 1”
+approved Gate 1 on 2026-11-15 UTC, including the revised
+[contract](docs/classification-training.md), public test boundaries and bounded
+tree-serialization trust choice; see [IP1 evidence](docs/verification/us-18-ip1.md).
+Next action: explicit IP2 start authorization. IP2 is not started.
 
-This planning delivery contains the story-specific checkpoint and new plan only.
-Developer authorized committing the plan and approval on 2026-11-15 UTC.
-Documentation verification: whitespace and local link checks; detailed drafting
-validation is recorded in the plan. TDD does not apply to this documentation-only
-planning change. All executable checks remain pending.
+Native dummy/tree/project-only random forest fit/save/upload/download/load/predict
+probes passed under proposed explicit numpy.dtype/tree-storage trust. The original
+preprocessing-only trust configuration fails for tree storage; both sandboxed
+and escalated original failures are retained. No automatic trust expansion or
+serializer fallback was implemented. Complete toolkit/installed verification
+remains in IP2–4. The worktree's own locked .venv was created; lock unchanged.
+
+Working-tree changes: contract, IP1 report, plan progress and this checkpoint.
+No source or behavior-test changes. Document/link/whitespace checks pass; no
+pytest runs or story acceptance claimed. Raw evidence and original probe failures
+are retained under `.dev-records/verification/us18-ip1-20261115-52dcc27/`.
+Developer “commit the changes” authorized this Phase 1 documentation and
+approval commit on 2026-11-15 UTC. Push/publication and IP2 remain unauthorized.
 
 PR #68's US-15 M1 preprocessing and US-26 #17 recording are accepted and merged
 prerequisites; their M2/remaining slices and all historical milestone obligations
