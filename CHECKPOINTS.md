@@ -9,71 +9,53 @@ Story checkout: `.worktrees/US-18-classification`, branch
 `94e74ba38922a80b368860d53545a18f22d555e2`. The primary checkout remains on
 `main`; remote freshness was not checked by fetching.
 
-US-18 #28 M1 classification plan is approved in
-[the owning plan](docs/plans/milestone-1-us-18.md). The complete issue body and
-one comment were retrieved and snapshot-checked. The plan proposes four
-implementation phases: contract/native feasibility review, validated fitting,
-baseline/candidate recording, and installed/final acceptance verification.
-Regression remains M2; M1 delivery must not close #28 or claim all of AC-01.
-Developer direction US-18-SC-01 now requires project-extensible native estimator
-bindings and a project-only RandomForestClassifier proof without toolkit changes;
-the approved plan records this revision.
-Developer-directed US-18-SC-02 removes the caller estimator instance: the toolkit
-validates candidate parameters and constructs the bound class before fitting.
-Contract, task boundaries and native constructor feasibility were renewed;
-Gate 1 is Approved; IP2 is Complete and Gate 2 is Approved. IP3 is technically
-Complete and Gate 3 is Approved, 2026-11-15 UTC. Custom/third-party certification remains M2.
+US-18 #28 M1 classification implementation is technically complete through IP4.
+Gates 1–4 are Approved; **explicit M1-slice acceptance remains pending**.
+Developer “start phase 4” authorized IP4 on 2026-11-15 UTC after Phase 3 commit
+`f5605d0`. IP4-T1/T2/T3 are Complete. Developer “i approve gate 4; commit”
+approved Gate 4 and authorized its local commit on 2026-11-15 UTC. This
+checkpoint accompanies that commit. Next action: await explicit M1-slice
+acceptance. Push/publication is not authorized. Issue #28 remains open for M2 regression (AC-01 spans
+M1/M2). The complete issue body and one comment were refreshed with a consistent
+final snapshot. See [owning plan](docs/plans/milestone-1-us-18.md) and
+[IP4 evidence](docs/verification/us-18-ip4.md).
 
-Plan approval was committed as `52dcc27`; Gate 1 and its revised constructor
-contract were approved and committed as `4a4f2e7`. Developer “use the suggested
-prompt” authorized IP2 and its stop at Gate 2 on 2026-11-15 UTC.
-IP2-T1/T2/T3/T4 are Complete. Developer “i approve gate 2; commit” approved
-Gate 2 and authorized its local commit on 2026-11-15 UTC; the developer renewed
-the commit instruction with “commit the changes.” Phase 2 changes were
-committed as `c74d76b`; see
-[IP2 evidence](docs/verification/us-18-ip2.md).
-Phase 2 was committed as `c74d76b`; developer “start phase 3” authorized IP3
-through Gate 3 on 2026-11-15 UTC. Initial GitHub authentication failure was
-resolved on developer “try again”; complete issue #28 body and its one comment
-were retrieved with a consistent final snapshot. IP3-T1/T2/T3/T4 are technically
-Complete: baseline-first recording, native
-dummy/tree/forest persistence, lineage, operational/configured failure handling
-and the literal runnable guide pass local verification. See
-[IP3 evidence](docs/verification/us-18-ip3.md). Developer “i approve gate 3;
-commit changes” approved Gate 3 and authorized the local Phase 3 commit on
-2026-11-15 UTC. This checkpoint accompanies that commit. Next action: await
-explicit Phase 4 authorization. IP4, push and publication are not authorized.
+Earlier local commits: approved plan `52dcc27`, Gate 1 contract `4a4f2e7`,
+Phase 2 fitting `c74d76b`, Phase 3 recording `f5605d0`. Project-extensible native
+class bindings and toolkit-owned fresh construction implement approved
+US-18-SC-01/02. Custom/third-party certification remains M2. Phase 4 changes only
+contributor verification and documents; no package/resource/dependency/lock edits.
 
-Implemented `agentic_ml.training.fit_classifier`: live strict candidate checks,
-project class bindings, toolkit-owned fresh construction, complete typed scalar
-parameters, train-only preprocessing/classifier fit and native prediction Pipeline
-plus finite metadata. Project-only random forest is covered without toolkit
-algorithm wiring. Earlier native serialization evidence is preserved under
-`.dev-records/verification/us18-ip1-20261115-52dcc27/`; persistence integration
-now passes IP3 and both final normal installed wheel paths remain IP4.
+Both normal installed artifact paths pass: direct wheel and a wheel actually
+rebuilt from extracted sdist, in separate initialized experiment environments.
+The literal guide records baseline before tree/forest candidates; native restored
+predictions, train-only preprocessing, effective parameters/versions, committed
+code/configuration/lock and DVC lineage pass. Constructor, incomplete native
+parameter-profile, fresh-instance and missing/invalid-input boundaries pass.
 
-IP2 retained 310 passing focused/regression cases and its red/green evidence
-under `.dev-records/verification/us18-ip2-20261115-4a4f2e7/`. IP3 gate evidence
-covers 260 distinct passing tests across a 259-case focused/regression run and
-the added one-case executable-guide run, both with four workers/loadgroup. Zero
-failures/skips/deselections; no single 260-case run claimed. Shared checks pass
-after formatting the guide; lock unchanged. Linux aarch64 / Python 3.12.16.
-IP3 raw records: `.dev-records/verification/us18-ip3-20261115-c74d76b/`.
-Initial authentication, fixture identity/store/version issues and assertion
-wording corrections are resolved and preserved in the report; no open problem
-or check suppression. Final installed wheel matrix and M1–6 remain IP4.
+Verification: **59 focused/regression passed**, no failures/errors/skips, in
+138.35 seconds. Final M1–6: **982 passed, 1 existing skip**, zero failures/errors,
+533.52 seconds; 1251 collected, 983 selected, 268 deselected. The selected skip is
+`test_missing_planning_schema_fails_installed_inventory`; the other two existing
+temporary skips are M50 and deselected. Their historical verification owners
+remain unchanged. Six native warnings were not suppressed. Shared locked sync,
+lock check, Ruff lint/format, strict mypy, CLI version and whitespace checks pass;
+lock SHA-256 unchanged. Linux aarch64 / Python 3.12.16; no new macOS/Windows claim.
 
-Working-tree changes: project training/binding scripts, 12 public integration
-cases, native metric typing and register, runnable guide, IP3 report, owning plan
-and this checkpoint. Phase 2 is committed in `c74d76b`; the approved IP3 changes are included in the
-local commit containing this checkpoint. No package or lock changes.
-No M1–6 acceptance/full suite/standalone artifact run or story acceptance is
-claimed. Remaining story checks belong to IP4 and final IP4-T3 acceptance;
-all milestone/historical obligations below remain unchanged.
+Approved Phase 4 work in the local commit accompanying this checkpoint: installed training test/probe/driver, classification
+guide status, owning plan, IP4 report and this checkpoint. Raw phase evidence:
+`.dev-records/verification/us18-ip4-20261115-f5605d0/`; linked driver records retain
+artifact identities, installed/native outputs and resolved verification-tooling
+failures. No unresolved corrective problem, suppression or added skip.
+Earlier phase evidence remains under the IP1/IP2/IP3 paths in their reports.
 
-PR #68's US-15 M1 preprocessing and US-26 #17 recording are accepted and merged
-prerequisites; their M2/remaining slices and all historical milestone obligations
-below remain open. Other stories' retained evidence locations remain unchanged.
+No complete-suite, standalone artifact-driver, user-story acceptance, milestone
+acceptance or publication is claimed. Artifact drivers ran inside selected tests.
+US-18's installed/final regression deferrals are resolved; M2 regression,
+other-story integration, final testing, native DVC stages/reproduction and assistant
+walkthroughs remain with their existing owners. PR #68's accepted US-15 M1
+preprocessing and US-26 #17 recording remain merged prerequisites. Historical
+M1/M50 obligations and revised MVP milestone reconciliation remain open below.
 
 ## Completed work: authoritative records
 

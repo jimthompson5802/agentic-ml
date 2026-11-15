@@ -5,8 +5,10 @@ persistence pass local IP3 checks; Gate 3 approved, 2026-11-15 UTC.**
 Developer decision: “i approve phase 1”. This confirms the revised
 validate-then-construct interface, public test boundaries and explicit bounded
 tree-storage persistence choice. `fit_classifier` has focused local evidence in
-the [IP2 report](verification/us-18-ip2.md). Project recording and native persistence are under IP3 verification; normal
-installed direct/rebuilt-wheel acceptance remains IP4 work.
+the [IP2 report](verification/us-18-ip2.md). Project recording and native persistence passed IP3 verification. Both normal
+installed wheel paths pass the [IP4 focused checks](verification/us-18-ip4.md);
+final M1–6 and shared checks pass. Gate 4 is approved, 2026-11-15 UTC; explicit
+M1-slice acceptance remains pending.
 The [owning plan](plans/milestone-1-us-18.md) defines the M1 slice, development
 gates and acceptance criteria. [Native feasibility evidence](verification/us-18-ip1.md)
 does not establish installed workflow acceptance.
@@ -298,7 +300,8 @@ stochastic bootstrap configurations generally. Use exact class predictions and
 Local IP2 tests cover fitting, multiclass behavior, strict candidate rejection,
 class bindings, constructor errors, fresh instances and source/partition/feature
 guards. IP3 adds baseline-order recording, native persistence and configured/operational
-tracking failure checks. Both final installed wheel paths remain IP4 work.
+tracking failure checks. IP4 verifies both normal installed wheel paths, including
+the literal guide, constructor/parameter boundaries, native inference and lineage.
 No user-story acceptance or additional platform certification is claimed.
 
 

@@ -88,7 +88,7 @@ confirmation does not confirm the new training boundary automatically.
 
 ## Plan review
 
-- **Status:** Approved plan; IP1/Gate 1 Approved; IP2 Complete; Gate 2 Approved; IP3 Complete; Gate 3 Approved; IP4 authorization pending.
+- **Status:** Approved plan; IP1/Gate 1 Approved; IP2 Complete; Gate 2 Approved; IP3 Complete; Gate 3 Approved; IP4 Complete; Gate 4 Approved; explicit M1-slice acceptance pending.
 - **Developer decision:** Approved.
 - **Decision reference and date:** Developer message “i approve the plan”, 2026-11-15 UTC. Approval includes the extensible estimator design and RandomForestClassifier project-only proof; it does not approve implementation gates or authorize IP1.
 - **Requested plan changes:** US-18-SC-01 requires extensible native estimator support; user direction recorded below. Included in the plan approval recorded above.
@@ -253,15 +253,23 @@ Actual results: **Complete** — 259 focused/regression cases passed in 342.66 s
 
 ## US-18 / Implementation Phase 4: Verify installed classification and accept M1 slice
 
+Execution authorized by developer “start phase 4”, 2026-11-15 UTC, after
+Phase 3 commit `f5605d0`. Gate 3 is approved; owning worktree and clean HEAD
+verified. Complete issue #28 body and its one unique comment were refreshed;
+comment count and updated_at match the final metadata refresh. Public boundaries
+remain those confirmed at Gate 1: installed project execution, native artifact/run
+inspection and public fitting/validation APIs. No new product behavior is planned;
+this phase adds verification of existing behavior on both distribution paths.
+
 - **Outcome:** Same documented script verified outside the source tree on both distribution paths; criterion-mapped final evidence ready for M1-slice acceptance.
 - **Entry conditions:** Gate 3 approved and IP4 authorized; final contract and selected serializers unchanged or re-reviewed.
 - **Acceptance criteria covered:** US-18-AC-01 classification portion; AC-02/03/04 M1.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-18-IP4-T1 | Not started | Proposed `tests/installation/check_training.py`, `training_project.py`, `verify_training.py` and `tests/integration/test_installed_training.py`, reusing existing installation/distribution/evidence support | Gate 3 | Isolated normally installed direct-wheel project runs documented class-binding-only script from unrelated cwd; constructor/parameter-coverage/fresh-instance boundaries verified; native model predictions/metrics/lineage, unchanged-package third-estimator extension and missing/invalid input failure inspected independently | AC-01–04 |
-| US-18-IP4-T2 | Not started | Run same assertions against a wheel actually rebuilt from extracted sdist in a separate fresh project/environment | T1 | Project-only third-estimator extension also passes on rebuilt wheel; both artifact identities, runtime dependencies, import locations, CLI version and packaged resource inventories verified; no direct-wheel substitution or source checkout imports | AC-01–04 |
-| US-18-IP4-T3 | Not started | Final focused/M1–6/shared checks; reconcile all phase exclusions, failure/skip records, docs, this plan and `CHECKPOINTS.md` in proposed `docs/verification/us-18-ip4.md` | T2 | Final revision/dirty-file/lock/build identities and counts recorded; all required story checks resolved before final gate; regression remains explicitly M2 | AC-01–04 |
+| US-18-IP4-T1 | Complete | Proposed `tests/installation/check_training.py`, `training_project.py`, `verify_training.py` and `tests/integration/test_installed_training.py`, reusing existing installation/distribution/evidence support | Gate 3 | Isolated normally installed direct-wheel project runs documented class-binding-only script from unrelated cwd; constructor/parameter-coverage/fresh-instance boundaries verified; native model predictions/metrics/lineage, unchanged-package third-estimator extension and missing/invalid input failure inspected independently | AC-01–04 |
+| US-18-IP4-T2 | Complete | Run same assertions against a wheel actually rebuilt from extracted sdist in a separate fresh project/environment | T1 | Project-only third-estimator extension also passes on rebuilt wheel; both artifact identities, runtime dependencies, import locations, CLI version and packaged resource inventories verified; no direct-wheel substitution or source checkout imports | AC-01–04 |
+| US-18-IP4-T3 | Complete | Final focused/M1–6/shared checks; reconcile all phase exclusions, failure/skip records, docs, this plan and `CHECKPOINTS.md` in proposed `docs/verification/us-18-ip4.md` | T2 | Final revision/dirty-file/lock/build identities and counts recorded; all required story checks resolved before final gate; regression remains explicitly M2 | AC-01–04 |
 
 ### Verification and review evidence
 
@@ -271,15 +279,15 @@ internally, using the documented pytest-owned workspace/retention rules. Do not
 run standalone drivers or broader suite selections without an explicit developer
 command. Run final M1–6 and shared commands below before presenting Gate 4.
 Record direct/rebuilt installed outputs separately; neither path can substitute
-for the other. Actual results: **Pending**.
+for the other. Actual results: **59 focused/regression cases passed**, zero failures/skips/deselections, in 138.35 seconds. Both installed paths pass all native model, lineage, constructor/fresh-instance/parameter-coverage and failure assertions. Final M1–6: **982 passed, 1 existing skip, zero failures/errors**, 533.52 seconds; 1251 collected, 983 selected, 268 deselected. Shared checks pass; unchanged lock. See [IP4 evidence](../verification/us-18-ip4.md).
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T3 complete; both installed paths, final M1–6 and shared checks pass; AC mapping and every exclusion/failure/skip reconciled.
-- **Evidence presented:** Pending `docs/verification/us-18-ip4.md`.
+- **Evidence presented:** [IP4 report](../verification/us-18-ip4.md), both installed artifact paths, 59-case focused pass and final 982 passed / 1 existing skip M1–6 run, shared checks and retained identity/failure/skip reconciliation. IP4-T1/T2/T3 technically Complete, 2026-11-15 UTC; Gate 4 Approved on the same date.
 - **Remaining limitations:** AC-01 regression remains M2; no US-39 end-to-end/assistant or milestone acceptance claim.
-- **Developer decision / reference and date / requested changes:** Pending.
-- **Progression authorized:** Pending — stop at final gate. Request explicit M1-slice acceptance separately or in the same explicit decision. Publication is outside this planning request.
+- **Developer decision / reference and date / requested changes:** Approved — developer “i approve gate 4; commit”, 2026-11-15 UTC. Local Phase 4 commit authorized; no requested changes.
+- **Progression authorized:** Gate 4 satisfied. Await explicit M1-slice acceptance; push/publication is not authorized.
 
 ## Shared checks and execution rules
 
@@ -300,7 +308,7 @@ sha256sum uv.lock
 
 Expected: all pass, CLI version matches installed metadata and lock SHA-256
 unchanged unless an intentional dependency change has been reviewed. Actual:
-**Pending**. Runtime dependency changes are not currently proposed. Read the
+**Pass** at IP4: locked sync/lock check, Ruff lint/format, strict mypy (99 files), CLI `0.1.0`, whitespace; unchanged lock SHA-256 recorded in [IP4 evidence](../verification/us-18-ip4.md). Runtime dependency changes are not currently proposed. Read the
 [distribution guide](../development/distribution.md) before any such change.
 No suppression/check exclusion is planned; justify and obtain required direction
 for any workaround to an existing failure.
@@ -332,25 +340,25 @@ Scope changes use the linked manage-plan-scope procedure before dependent work.
 ## Final verification requirements
 
 - **Owning final phase/task:** US-18-IP4-T3, before Gate 4 and M1-slice acceptance.
-- **Final implementation identity:** Pending revision, exact dirty files, lock hash and direct/sdist/rebuilt artifact hashes; identify installed project/environment and committed fixture references separately.
+- **Final implementation identity:** `f5605d0` plus the seven IP4 verification/document files recorded in [IP4 evidence](../verification/us-18-ip4.md); retained manifests give exact file, lock, direct/sdist/rebuilt hashes and separate project/environment/committed fixture identities.
 - **M1–6:** `uv run --locked pytest -n 4 --dist=loadgroup` against final story inputs; renew after executable changes. Record collected/selected/deselected/passed/failed/skipped counts and the three existing temporary skip qualifications. Passing CI is not local verification evidence.
 - **Shared checks:** Commands above; all required before final gate.
 - **Distribution/installation:** IP4-T1/T2 selected tests cover both normal installed artifact paths, public training/persistence, CLI/import/resources and runtime-only dependencies. Standalone artifact verification and broader local pytest require explicit developer commands.
 - **Deferred-check reconciliation:** IP4-T3 owns every earlier phase's excluded story regression and installed check. Required US-18 coverage cannot remain deferred at its acceptance gate. Preserve unrelated historical milestone obligations.
-- **Actual results and limitations:** Pending. No tests or native feasibility probes were run during plan drafting; no Linux/macOS/Windows runtime support is newly verified.
+- **Actual results and limitations:** IP4 final M1–6 982 passed / 1 existing skip, zero failures/errors; 59 focused passed; shared checks pass, unchanged lock. Linux aarch64 / Python 3.12.16 observed; macOS/Windows not verified. The unchanged missing-planning-schema M1 skip and two deselected M50 skips retain their existing owners; historical milestone obligations remain open.
 
 ## Story completion review
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-18-AC-01 classification | IP1-T1/T2/T3; IP2-T1/T2/T3/T4; IP3-T1/T4; IP4-T1/T2/T3 | Native baseline/real classifier, binary oracle and multiclass case, installed matrix | Pending M1 portion; regression deferred to M2 |
-| US-18-AC-02 | IP1-T3; IP2-T1; IP3-T1/T3/T4; IP4-T1/T2/T3 | Reproducible baseline recorded before candidate comparison; failed baseline prevents comparison | Pending |
-| US-18-AC-03 | IP1-T2/T3; IP2-T1/T2/T3/T4; IP3-T2/T3; IP4-T1/T2/T3 | Native pipeline fit/predict/save/load, independent predictions, train-only oracle, project-only third-estimator extension on both wheel paths and failure cases | Pending |
-| US-18-AC-04 | IP1-T1/T2/T3; IP2-T2/T3/T4; IP3-T1/T2/T3/T4; IP4-T1/T2/T3 | Native MLflow parameters/metrics/models, effective defaults/library versions and committed feature/data/environment references | Pending |
+| US-18-AC-01 classification | IP1-T1/T2/T3; IP2-T1/T2/T3/T4; IP3-T1/T4; IP4-T1/T2/T3 | Native baseline/real classifier, binary oracle and multiclass case, installed matrix | M1 verified; developer acceptance pending; regression deferred to M2 |
+| US-18-AC-02 | IP1-T3; IP2-T1; IP3-T1/T3/T4; IP4-T1/T2/T3 | Reproducible baseline recorded before candidate comparison; failed baseline prevents comparison | Verified M1; developer acceptance pending |
+| US-18-AC-03 | IP1-T2/T3; IP2-T1/T2/T3/T4; IP3-T2/T3; IP4-T1/T2/T3 | Native pipeline fit/predict/save/load, independent predictions, train-only oracle, project-only third-estimator extension on both wheel paths and failure cases | Verified M1; developer acceptance pending |
+| US-18-AC-04 | IP1-T1/T2/T3; IP2-T2/T3/T4; IP3-T1/T2/T3/T4; IP4-T1/T2/T3 | Native MLflow parameters/metrics/models, effective defaults/library versions and committed feature/data/environment references | Verified M1; developer acceptance pending |
 
 - **Remaining work:** M2 regression AC-01; other stories retain their own integration, tuning, final testing and reproduction obligations.
 - **Partial prerequisite delivery:** This provides classification training to later feature/search/basic-path work; it does not accept US-05 training integration generally, US-14, US-20, US-21, US-24, US-27 or US-39.
-- **Final verification:** Pending US-18-IP4-T3.
+- **Final verification:** Complete US-18-IP4-T3; [IP4 report](../verification/us-18-ip4.md). Gate 4 Approved; M1-slice acceptance pending.
 - **Developer M1-slice acceptance / decision reference and date:** Pending. Keep issue #28 open for regression.
 
 ## Milestone acceptance handoff
