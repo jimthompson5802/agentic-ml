@@ -4,63 +4,15 @@ Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
-Story checkout: `.worktrees/US-18-classification`, branch
-`US-18-classification`, created from local `main` at
-`94e74ba38922a80b368860d53545a18f22d555e2`. The primary checkout remains on
-`main`; remote freshness was not checked by fetching.
+Primary checkout: `main`; only the primary worktree remains.
+US-18 M1 classification is accepted and merged in PR #69. Its worktree and
+local/remote branches have been removed; verified evidence is archived below.
+Issue #28 retains M2 regression scope.
 
-US-18 #28 M1 classification implementation is technically complete through IP4.
-Gates 1–4 are Approved; **M1 classification slice is accepted**.
-Developer “start phase 4” authorized IP4 on 2026-11-15 UTC after Phase 3 commit
-`f5605d0`. IP4-T1/T2/T3 are Complete. Developer “i approve gate 4; commit”
-approved Gate 4 and authorized its local commit on 2026-11-15 UTC. This
-checkpoint accompanied commit `b0cea15`. Developer “i accept us-18 m1
-classification slice” accepted M1 on 2026-11-15 UTC. Acceptance commit `13134b7` is pushed;
-[PR #69](https://github.com/jimthompson5802/agentic-ml/pull/69) is open against
-`main`. Static COMMENT review reports no actionable findings; publication-record
-commit receives renewed coverage of the final head. Next action: developer PR
-review; merge and cleanup require separate authorization. Issue #28 remains open for M2 regression (AC-01 spans
-M1/M2). The complete issue body and one comment were refreshed with a consistent
-final snapshot. See [owning plan](docs/plans/milestone-1-us-18.md) and
-[IP4 evidence](docs/verification/us-18-ip4.md).
-
-Earlier local commits: approved plan `52dcc27`, Gate 1 contract `4a4f2e7`,
-Phase 2 fitting `c74d76b`, Phase 3 recording `f5605d0`. Project-extensible native
-class bindings and toolkit-owned fresh construction implement approved
-US-18-SC-01/02. Custom/third-party certification remains M2. Phase 4 changes only
-contributor verification and documents; no package/resource/dependency/lock edits.
-
-Both normal installed artifact paths pass: direct wheel and a wheel actually
-rebuilt from extracted sdist, in separate initialized experiment environments.
-The literal guide records baseline before tree/forest candidates; native restored
-predictions, train-only preprocessing, effective parameters/versions, committed
-code/configuration/lock and DVC lineage pass. Constructor, incomplete native
-parameter-profile, fresh-instance and missing/invalid-input boundaries pass.
-
-Verification: **59 focused/regression passed**, no failures/errors/skips, in
-138.35 seconds. Final M1–6: **982 passed, 1 existing skip**, zero failures/errors,
-533.52 seconds; 1251 collected, 983 selected, 268 deselected. The selected skip is
-`test_missing_planning_schema_fails_installed_inventory`; the other two existing
-temporary skips are M50 and deselected. Their historical verification owners
-remain unchanged. Six native warnings were not suppressed. Shared locked sync,
-lock check, Ruff lint/format, strict mypy, CLI version and whitespace checks pass;
-lock SHA-256 unchanged. Linux aarch64 / Python 3.12.16; no new macOS/Windows claim.
-
-Phase 4 was committed as `b0cea15`; acceptance as `13134b7`. Current changes
-record publication in this checkpoint, the owning plan and publication report. Raw phase evidence:
-`.dev-records/verification/us18-ip4-20261115-f5605d0/`; linked driver records retain
-artifact identities, installed/native outputs and resolved verification-tooling
-failures. No unresolved corrective problem, suppression or added skip.
-Earlier phase evidence remains under the IP1/IP2/IP3 paths in their reports.
-
-No complete-suite, standalone artifact-driver, whole-issue acceptance or milestone
-acceptance is claimed. M1-slice publication progress is recorded in
-[publication evidence](docs/verification/us-18-publication.md). Artifact drivers ran inside selected tests.
-US-18's installed/final regression deferrals are resolved; M2 regression,
-other-story integration, final testing, native DVC stages/reproduction and assistant
-walkthroughs remain with their existing owners. PR #68's accepted US-15 M1
-preprocessing and US-26 #17 recording remain merged prerequisites. Historical
-M1/M50 obligations and revised MVP milestone reconciliation remain open below.
+Next action: select the next story. No implementation is in progress.
+Checkpoint cleanup and evidence archive references are included in this update.
+No tests were run for this documentation change; `git diff --check` passed. Historical M1/M50 verification and revised MVP acceptance obligations
+remain open below.
 
 ## Completed work: authoritative records
 
@@ -72,6 +24,7 @@ M1/M50 obligations and revised MVP milestone reconciliation remain open below.
 | US-12 #15 | Accepted and merged in PR #61; [plan](docs/plans/milestone-1-us-12.md), [IP3 evidence](docs/verification/us-12-ip3.md). |
 | US-13 M1 | AC-01/02 accepted and merged in PR #66 as `ecd28b1`; Gates 1–3 Approved. [Plan](docs/plans/milestone-1-us-13.md), [IP3 evidence](docs/verification/us-13-ip3.md). Issue #16 remains open for M2 AC-03/04. |
 | US-15 M1 | AC-01–03 accepted and merged in PR #68; [plan](docs/plans/milestone-1-us-15.md), [IP4 evidence](docs/verification/us-15-ip4.md). M2 AC-04 remains open under #21. |
+| US-18 M1 | Classification slice accepted and merged in PR #69; Gates 1–4 Approved. [Plan](docs/plans/milestone-1-us-18.md), [IP4 evidence](docs/verification/us-18-ip4.md), [publication evidence](docs/verification/us-18-publication.md). M2 regression remains under #28. |
 | US-26 recording #17 | AC-01–05 accepted and merged in PR #68; [plan](docs/plans/milestone-1-us-26-recording.md), [publication evidence](docs/verification/us15-us26-publication.md). #33/#43 remain open; #17 still appeared open at the last GitHub check. |
 | MVP scope revision | Accepted and published; PR #57 merged; US-39 #58 and US-40 #59 created. [Plan](docs/plans/mvp-scope-revision.md), [publication evidence](docs/verification/mvp-scope-revision-ip4.md). This accepts scope documents, not an implemented MVP. |
 | US-41 | All six criteria accepted; issue #64 closed; PR #65 squash-merged as `5d5781c`. [Plan](docs/plans/milestone-50-us-41.md), [IP4 evidence](docs/verification/us-41-ip4.md). Historical M50 verification remains open. |
@@ -147,6 +100,7 @@ backup responsibility and cleanup protection.
 The removed story worktrees' retained evidence was archived with verified
 checksums, inventories and link targets during cleanup:
 
+- US-18: `.dev-records/worktree-archives/20261115T181243Z-US-18-classification-d7916d0`.
 - US-15: `.dev-records/worktree-archives/20261115T025402Z-US-15-preprocessing-459e8ba1`.
 - US-26: `.dev-records/worktree-archives/20261115T025408Z-US-26-mlflow-9f100e11`.
 
@@ -158,9 +112,9 @@ retained validation fixture and host evidence linked from the
 Earlier local planning edits remain in autostash `5db8c8c`.
 
 Raw evidence paths and detailed measurements belong in verification reports.
-Their storage availability has not been revalidated by this cleanup; check it
-before reuse. Preserve failed verification evidence and attempt counts. Do not
-substitute historical story checks for current or milestone verification.
+US-18 archive contents were verified during removal. Other historical storage
+availability was not revalidated; check it before reuse. Preserve failed
+verification evidence and attempt counts. Do not substitute historical story checks for current or milestone verification.
 
 ## Maintenance rules
 
