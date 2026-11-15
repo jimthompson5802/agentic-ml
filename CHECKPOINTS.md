@@ -4,6 +4,29 @@ Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
+Primary checkout update (2026-11-15 UTC): PR #68 was squash-merged as
+`a2c6262701a34773d1b9ab50cfb1d958a82768b7`; both hosted Linux CI jobs passed.
+Primary `main` was fast-forwarded to that revision. Issue #21 remains open for M2.
+Publication/merge-pending wording below is historical. Earlier local planning
+checkpoint edits are preserved in autostash `5db8c8c`; the newer accepted-story
+checkpoint takes precedence.
+
+The developer explicitly authorized deleting the related local/remote branches
+and committing/pushing this checkpoint. Local `US-15-preprocessing` and
+`US-26-mlflow` and remote `US-15-preprocessing` were deleted; the remote branch
+list confirms neither story branch remains. No remote US-26 branch existed.
+Both owning sessions verified clean worktrees with no active tests and detached
+their own checkouts before deletion. Worktrees and all raw verification evidence
+remain in place:
+
+- `.worktrees/US-15-preprocessing`: detached at
+  `b4a02216f1e7962d2a5bb44992264b18844b88dd`.
+- `.worktrees/US-26-mlflow`: detached at
+  `ecbceb2aa213da8f3e3f1d902eb9f730eca6bbb7`.
+
+No worktree, evidence, stash, or unrelated branch was removed. Next action:
+await development direction; #21 M2 restoration work remains open.
+
 US-15 Phase 4 approved / M1 slice accepted, #21, branch `US-15-preprocessing`.
 The approved implementation baseline is combined
 `3ffc7b4df557f9fa8fe873fc68e012b48e9b26e1`, integrated by authorized fast-forward.
