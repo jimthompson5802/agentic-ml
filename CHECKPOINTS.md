@@ -1,73 +1,59 @@
 # Development Checkpoints
 
-Last updated: 2026-11-14 (UTC)
+Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
-Status checked on 2026-11-14: workflow publication is complete as `440ed68`;
-local and remote `main` matched that commit. A subsequent documentation request
-added `docs/multi-story-worktree-instructions.md`, describing how to plan and
-execute two independent stories in separate worktrees and sessions. The developer
-authorized committing and pushing the guide and this checkpoint update.
-`git diff --check` passed; TDD does not apply
-to these documentation-only changes. No story implementation was started.
-Next action: await development direction; the publication-pending wording below
-records the earlier handoff and is superseded by this status.
+US-15 Phase 4 approved / M1 slice accepted, #21, branch `US-15-preprocessing`.
+The approved implementation baseline is combined
+`3ffc7b4df557f9fa8fe873fc68e012b48e9b26e1`, integrated by authorized fast-forward.
+Current HEAD after local commitment identifies the final acceptance-record commit.
+Both approved parents remain in history. Consumer
+Gate 4 approval and explicit combined integration/execution authority are recorded
+in the owning plans. US-15-IP4-T1/T2 are Complete; US-15 Gate 4 is Approved and
+M1 AC-01/02/03 explicitly Accepted on 2026-11-15. No M2 or whole-story acceptance.
 
-Checkout: `main`; implementation parent `e0b7471`. Before publication,
-`git ls-remote origin refs/heads/main` confirmed that remote `main` matched that
-parent. Contributor worktree management Gate 1
-was approved by “I approve Gate 1,” Gate 2 by “i approve gate 2,” and Gate 3 by
-“I approve gate 3,” all developer messages on 2026-11-14. All three phases and
-gates are complete in the
-[owning plan](docs/plans/story-worktree-management.md).
-Changes include the new skill/metadata, planning and execution integration,
-worktree ignore rule, agent/development guidance, plan template, saved plan, and
-this checkpoint and the new verification report. The developer's subsequent
-“commit and push” authorizes committing this change set and pushing `main` to
-`origin`; Git history and remote refs establish the resulting commit and
-synchronization status. No PR or cleanup was requested. The real checkout
-retains only its original registered worktree.
+[IP4 report](docs/verification/us-15-ip4.md) records independent preservation
+review and renewed actual producer handoff through direct and genuinely rebuilt
+installed wheels. All 28 retained artifact/identity hashes pass in supplier and
+own final matrix; metadata/provenance/split and feature bytes match exactly.
+All 83 consumer-tested executable fingerprints and producer implementation/tests
+remain unchanged. Own preparation and reviewed supplier evidence are preserved
+under `.dev-records/verification/20261114-us15-ip4/`, spanning the UTC boundary.
 
-Validation passed for all three skills, metadata/file-link and whitespace checks
-across 13 files, `git diff --check`, and the `.worktrees/` ignore rule. The
-[Phase 3 report](docs/verification/story-worktree-management.md) records 28 host
-Git/walkthrough checks, 21 shared-container session checks, and 15 checks after
-container restart. Two synthetic story sessions used separate editable
-environments. Each worktree and the primary fixture collected 723 of 991 cases
-(268 deselected); no product tests were executed. The host `.venv` remains unusable
-outside Linux; container Python and the new isolated environments worked. The
-existing container was returned to its initial stopped state after validation.
-No environment repair or automatic assistant-policy enforcement is claimed.
-See the report for command records and verification limits. Product verification
-obligations and the [verification policy](docs/development/verification.md#phase-and-story-verification)
-remain unchanged. No product implementation is active.
+Own final M1–6: 924 passed, one existing authorized planning-schema skip, zero
+failures/errors, 427.02 seconds, four workers/loadgroup. Collection: 1193 total,
+925 selected, 268 deselected. Shared locked sync/lock/lint/format (350 files)/
+strict typing (91 files)/CLI 0.1.0 pass. Final document/whitespace checks are
+recorded in the gate manifest. Lock unchanged at
+`6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4`.
+No assertion/timeout/skip/suppression changes or new product defect. Linux aarch64 /
+Python 3.12.16 only; native float16 limitation and all earlier failures preserved.
 
-US-13 M1 AC-01/02 is accepted and merged through
-[PR #66](https://github.com/jimthompson5802/agentic-ml/pull/66), squash `ecd28b1`.
-Gates 1–3 are Approved. Issue #16 remains open for M2 restoration AC-03/04;
-whole-story and milestone acceptance are not claimed. Story branches were deleted.
-The [owning plan](docs/plans/milestone-1-us-13.md) and
-[IP3 evidence](docs/verification/us-13-ip3.md) retain the detailed decisions and
-verification: M1 and M1–6 each recorded 722 passes and one existing skip on Linux
-aarch64. Those are historical results, not a fresh test inventory.
+Both stories' acceptance records are integrated for one combined PR. US-26 #17
+AC-01–05 and US-15 #21 M1 AC-01/02/03 are Accepted; M2 AC-04 remains open.
+Developer authorized the [PR structure](docs/reviews/us15-us26-pr-structure.md),
+ordinary push, one PR to main and a static COMMENT review through coordination
+thread `01a1db6c-a225-73e0-8796-81a03c4cec7a`. Publication owner: this US-15
+checkout. [PR #68](https://github.com/jimthompson5802/agentic-ml/pull/68) is Open
+against main after ordinary push; both accepted record tips are preserved in
+merge `638eb35`. The final-head static COMMENT review and verification are
+recorded in the publication raw outcome. Next action after this handoff: await
+developer direction on the open PR; no merge is authorized. Initial hosted Linux CI jobs
+are queued, not passing evidence. Final head/review/CI snapshot is retained
+in the publication raw records, linked from
+[publication evidence](docs/verification/us15-us26-publication.md).
+No force push, history rewrite, PR merge, main merge, issue closure or cleanup.
+All executable inputs and lock remain unchanged; no tests need renewal for
+acceptance/documentation integration. Preserve both owners' raw evidence.
 
-Skill maintenance is merged through
-[PR #67](https://github.com/jimthompson5802/agentic-ml/pull/67), squash `7d2d657`.
-Local and remote `skill-refactoring` branches were deleted; merge/cleanup records
-were pushed as `bdb871c`. Both PR CI jobs were cancelled, so no passing CI result
-is claimed for that head. The separate policy update followed as `b03afb3`.
-
-**Next action:** complete authorized publication, then await development
-direction. Keep validation fixtures and raw evidence; cleanup remains separate.
-Retain raw evidence under
+Historical obligations below remain unchanged. Preserve the contributor worktree
+management plan/report, raw records under
 `.dev-records/verification/20261114T173007Z-e0b7471-worktrees-d4026fb0/`, the
-1.8 GB container fixture under `.worktrees/worktree-validation-d4026fb0/`, and
-the host fixture linked from the report. TDD and executable product checks do
-not apply to these instruction and ignore-rule changes. Container recreation,
-automatic VS Code startup, independent assistant evaluation, symlink cleanup
-demonstrations, and Windows support remain unverified.
-Historical verification obligations below remain open.
+retained worktree-validation fixture and linked host evidence described in
+[its report](docs/verification/story-worktree-management.md). Their current
+storage availability has not been revalidated. Historical publication/next-action
+wording inherited from main is superseded by this story-specific handoff.
 
 ## Completed work: authoritative records
 
