@@ -4,101 +4,24 @@ Last updated: 2026-11-15 (UTC)
 
 ## Current position and next action
 
-Primary checkout update (2026-11-15 UTC): PR #68 was squash-merged as
-`a2c6262701a34773d1b9ab50cfb1d958a82768b7`; both hosted Linux CI jobs passed.
-Primary `main` was fast-forwarded to that revision. Issue #21 remains open for M2.
-Publication/merge-pending wording below is historical. Earlier local planning
-checkpoint edits are preserved in autostash `5db8c8c`; the newer accepted-story
-checkpoint takes precedence.
+Primary checkout: `main`. PR #68 merged US-15 M1 preprocessing and US-26
+MLflow recording as `a2c6262`; both hosted Linux CI jobs passed. The project
+status update was committed and pushed as `2caf93c`.
 
-The developer explicitly authorized deleting the related local/remote branches
-and committing/pushing this checkpoint. Local `US-15-preprocessing` and
-`US-26-mlflow` and remote `US-15-preprocessing` were deleted; the remote branch
-list confirms neither story branch remains. No remote US-26 branch existed.
-Both owning sessions verified clean worktrees with no active tests and detached
-their own checkouts before deletion. Worktrees and all raw verification evidence
-remain in place:
+US-15 M1 AC-01–03 and US-26 #17 AC-01–05 are accepted. US-15 M2
+restoration (#21 AC-04) and US-26 comparison/provenance (#33/#43) remain open.
+The [project status](docs/project-status.md) lists the remaining MVP story slices.
+Next action: await developer direction on the next story; no implementation phase
+is currently authorized by this checkpoint.
 
-- `.worktrees/US-15-preprocessing`: detached at
-  `b4a02216f1e7962d2a5bb44992264b18844b88dd`.
-- `.worktrees/US-26-mlflow`: detached at
-  `ecbceb2aa213da8f3e3f1d902eb9f730eca6bbb7`.
+Only the primary worktree remains registered. The US-15/US-26 story branches and
+worktrees were removed after authorized cleanup; retained evidence locations are
+listed below. Historical publication, queued-CI and pending-merge instructions
+are superseded by the merged delivery.
 
-No worktree, evidence, stash, or unrelated branch was removed. Next action:
-await development direction; #21 M2 restoration work remains open.
-
-US-15 Phase 4 approved / M1 slice accepted, #21, branch `US-15-preprocessing`.
-The approved implementation baseline is combined
-`3ffc7b4df557f9fa8fe873fc68e012b48e9b26e1`, integrated by authorized fast-forward.
-Current HEAD after local commitment identifies the final acceptance-record commit.
-Both approved parents remain in history. Consumer
-Gate 4 approval and explicit combined integration/execution authority are recorded
-in the owning plans. US-15-IP4-T1/T2 are Complete; US-15 Gate 4 is Approved and
-M1 AC-01/02/03 explicitly Accepted on 2026-11-15. No M2 or whole-story acceptance.
-
-[IP4 report](docs/verification/us-15-ip4.md) records independent preservation
-review and renewed actual producer handoff through direct and genuinely rebuilt
-installed wheels. All 28 retained artifact/identity hashes pass in supplier and
-own final matrix; metadata/provenance/split and feature bytes match exactly.
-All 83 consumer-tested executable fingerprints and producer implementation/tests
-remain unchanged. Own preparation and reviewed supplier evidence are preserved
-under `.dev-records/verification/20261114-us15-ip4/`, spanning the UTC boundary.
-
-Own final M1–6: 924 passed, one existing authorized planning-schema skip, zero
-failures/errors, 427.02 seconds, four workers/loadgroup. Collection: 1193 total,
-925 selected, 268 deselected. Shared locked sync/lock/lint/format (350 files)/
-strict typing (91 files)/CLI 0.1.0 pass. Final document/whitespace checks are
-recorded in the gate manifest. Lock unchanged at
-`6b2a32ce733dcb9b5bacc0fb1169d4e49494a9073871a6173e022e5fa9c33dc4`.
-No assertion/timeout/skip/suppression changes or new product defect. Linux aarch64 /
-Python 3.12.16 only; native float16 limitation and all earlier failures preserved.
-
-Both stories' acceptance records are integrated for one combined PR. US-26 #17
-AC-01–05 and US-15 #21 M1 AC-01/02/03 are Accepted; M2 AC-04 remains open.
-Developer authorized the [PR structure](docs/reviews/us15-us26-pr-structure.md),
-ordinary push, one PR to main and a static COMMENT review through coordination
-thread `01a1db6c-a225-73e0-8796-81a03c4cec7a`. Publication owner: this US-15
-checkout. [PR #68](https://github.com/jimthompson5802/agentic-ml/pull/68) is Open
-against main after ordinary push; both accepted record tips are preserved in
-merge `638eb35`. The final-head static COMMENT review and verification are
-recorded in the publication raw outcome. Next action after this handoff: await
-developer direction on the open PR; no merge is authorized. Initial hosted Linux CI jobs
-are queued, not passing evidence. Final head/review/CI snapshot is retained
-in the publication raw records, linked from
-[publication evidence](docs/verification/us15-us26-publication.md).
-No force push, history rewrite, PR merge, main merge, issue closure or cleanup.
-All executable inputs and lock remain unchanged; no tests need renewal for
-acceptance/documentation integration. Preserve both owners' raw evidence.
-
-Historical obligations below remain unchanged. Preserve the contributor worktree
-management plan/report, raw records under
-`.dev-records/verification/20261114T173007Z-e0b7471-worktrees-d4026fb0/`, the
-retained worktree-validation fixture and linked host evidence described in
-[its report](docs/verification/story-worktree-management.md). Their current
-storage availability has not been revalidated. Historical publication/next-action
-wording inherited from main is superseded by this story-specific handoff.
-
-
-Worktree removal authorized on 2026-11-15 UTC. Before removal, both detached
-worktrees were clean, with no active processes in their directories. Their tips
-were verified against merged PR #68 (US-26 is an ancestor of its published head).
-All retained evidence was copied and file checksums, directory inventories and
-link targets verified in these primary-checkout archives:
-
-- `US-15-preprocessing` → `.dev-records/worktree-archives/20261115T025402Z-US-15-preprocessing-459e8ba1`
-- `US-26-mlflow` → `.dev-records/worktree-archives/20261115T025408Z-US-26-mlflow-9f100e11`
-
-Each archive contains `archive-manifest.json` with original paths, commit and
-verified inventories. Other ignored entries are disposable `.venv`, tool caches
-and Python bytecode. Prior retained-worktree wording above is historical.
-Removal status: both worktrees removed with ordinary `git worktree remove`;
-only the primary checkout remains registered. Archive manifests remain available.
-No forced removal, pruning or historical evidence deletion was used.
-
-Project status overview refreshed on 2026-11-15 UTC in
-[docs/project-status.md](docs/project-status.md): PR #66/#68 deliveries and
-remaining MVP slices reconciled with accepted plans and GitHub inventory.
-Documentation only; no executable behavior changed. No tests required.
+This documentation cleanup removes stale handoffs and duplicate verification
+summaries. Only `CHECKPOINTS.md` is changed; no executable behavior changed.
+Verification: `git diff --check`; no tests required for this documentation edit.
 
 ## Completed work: authoritative records
 
@@ -109,6 +32,8 @@ Documentation only; no executable behavior changed. No tests required.
 | US-12 #19 | Accepted and squash-merged in PR #62 as `980c97f`; [plan](docs/plans/milestone-1-us-12-assessment-splits.md), [IP4 evidence](docs/verification/us-12-19-ip4.md). AC-04 deferred. |
 | US-12 #15 | Accepted and merged in PR #61; [plan](docs/plans/milestone-1-us-12.md), [IP3 evidence](docs/verification/us-12-ip3.md). |
 | US-13 M1 | AC-01/02 accepted and merged in PR #66 as `ecd28b1`; Gates 1–3 Approved. [Plan](docs/plans/milestone-1-us-13.md), [IP3 evidence](docs/verification/us-13-ip3.md). Issue #16 remains open for M2 AC-03/04. |
+| US-15 M1 | AC-01–03 accepted and merged in PR #68; [plan](docs/plans/milestone-1-us-15.md), [IP4 evidence](docs/verification/us-15-ip4.md). M2 AC-04 remains open under #21. |
+| US-26 recording #17 | AC-01–05 accepted and merged in PR #68; [plan](docs/plans/milestone-1-us-26-recording.md), [publication evidence](docs/verification/us15-us26-publication.md). #33/#43 remain open; #17 still appeared open at the last GitHub check. |
 | MVP scope revision | Accepted and published; PR #57 merged; US-39 #58 and US-40 #59 created. [Plan](docs/plans/mvp-scope-revision.md), [publication evidence](docs/verification/mvp-scope-revision-ip4.md). This accepts scope documents, not an implemented MVP. |
 | US-41 | All six criteria accepted; issue #64 closed; PR #65 squash-merged as `5d5781c`. [Plan](docs/plans/milestone-50-us-41.md), [IP4 evidence](docs/verification/us-41-ip4.md). Historical M50 verification remains open. |
 | US-35/36 | Accepted and merged in PRs #48/#50; [US-35](docs/plans/milestone-50-us-35.md), [US-36](docs/plans/milestone-50-us-36.md). US-37/38 remain local stories without implementation authorization. |
@@ -179,6 +104,19 @@ Do not delete them as part of checkpoint cleanup. US-35 requires raw evidence
 under `.dev-records/verification/` to be retained for the lifetime of agentic-ml
 development; follow the [records guide](docs/development/records.md) for layout,
 backup responsibility and cleanup protection.
+
+The removed story worktrees' retained evidence was archived with verified
+checksums, inventories and link targets during cleanup:
+
+- US-15: `.dev-records/worktree-archives/20261115T025402Z-US-15-preprocessing-459e8ba1`.
+- US-26: `.dev-records/worktree-archives/20261115T025408Z-US-26-mlflow-9f100e11`.
+
+Each archive contains `archive-manifest.json`. Preserve the contributor worktree
+management evidence under
+`.dev-records/verification/20261114T173007Z-e0b7471-worktrees-d4026fb0/`, its
+retained validation fixture and host evidence linked from the
+[worktree management report](docs/verification/story-worktree-management.md).
+Earlier local planning edits remain in autostash `5db8c8c`.
 
 Raw evidence paths and detailed measurements belong in verification reports.
 Their storage availability has not been revalidated by this cleanup; check it
