@@ -1,12 +1,12 @@
 # Classification training contract
 
-Status: **Contract approved at US-18 Gate 1; fitting implemented with local IP2
-verification, 2026-11-15 UTC. Gate 2 approved, 2026-11-15 UTC.**
+Status: **Fitting implemented; Gates 1–2 approved. Project recording and native
+persistence pass local IP3 checks; Gate 3 approved, 2026-11-15 UTC.**
 Developer decision: “i approve phase 1”. This confirms the revised
 validate-then-construct interface, public test boundaries and explicit bounded
 tree-storage persistence choice. `fit_classifier` has focused local evidence in
-the [IP2 report](verification/us-18-ip2.md). Project recording, persistence
-integration and normal installed wheel verification remain IP3/IP4 work.
+the [IP2 report](verification/us-18-ip2.md). Project recording and native persistence are under IP3 verification; normal
+installed direct/rebuilt-wheel acceptance remains IP4 work.
 The [owning plan](plans/milestone-1-us-18.md) defines the M1 slice, development
 gates and acceptance criteria. [Native feasibility evidence](verification/us-18-ip1.md)
 does not establish installed workflow acceptance.
@@ -193,21 +193,20 @@ verified independently by behavioral tests, not certified by metadata alone.
 
 ## Project execution and MLflow ownership
 
-Phase 3 will deliver the complete copyable `train.py`. The following is its
-required execution outline, not a runnable initializer output today:
+The copyable project below implements this execution outline. It consumes
+reviewed strict 1.0 inputs; the initializer does not create them today:
 
 1. Load explicit project paths, reviewed strict inputs, additive metadata,
    extraction data and the saved partition record. Use current public strict
    planning/configuration APIs to obtain genuine validation identities.
 2. Apply configured quality checks with `run_validated_step` around dependent
    training. Required failure blocks training; empty rules mean `not_checked`.
-3. Create the baseline's native run in an explicit store. Invoke the proposed
-   helper with the baseline class binding and candidate request. The toolkit
+3. Create the baseline's native run in an explicit store. Invoke `fit_classifier` with the baseline class binding and candidate request. The toolkit
    validates, constructs and fits the baseline from its effective parameters. Predict only
    validation features; compute native `accuracy_score`.
 4. Save the complete model under a fresh project-local staging directory with
    `mlflow.sklearn.save_model`. Use explicit `serialization_format="skops"` and
-   the proposed bounded trust list below, with explicitly pinned model dependency
+   the approved bounded trust list below, with explicitly pinned model dependency
    requirements from the observed environment. Native model environment files
    supplement the project lock; they do not replace it or prove a restored
    environment. No automatic dependency-inference fallback is relied upon.
@@ -245,7 +244,7 @@ Invoke the script with its installed project interpreter and explicit absolute
 project root, including from an unrelated cwd. Native DVC stage scheduling,
 automatic final-test evaluation and the basic experiment CLI remain other stories.
 
-### Proposed persistence decision requiring Gate 1 approval
+### Persistence choice approved at Gate 1
 
 Use explicit skops trust entries `numpy.dtype` and
 `sklearn.tree._tree.Tree` for these locally fitted native models. Existing
@@ -260,7 +259,8 @@ derive trust automatically from `get_untrusted_types`, trust entire modules,
 switch to pickle, or retry with a broader list after failure. A different native
 estimator requiring more types needs an explicit project persistence choice and
 verified compatibility; no toolkit source edit is required for its binding.
-This is a proposed bounded serialization decision, not an implemented workaround.
+Gate 1 approved this bounded choice. The project explicitly supplies the trust
+list to native persistence; no automatic fallback is implemented.
 
 ## Errors and verification boundary
 
@@ -297,6 +297,538 @@ stochastic bootstrap configurations generally. Use exact class predictions and
 
 Local IP2 tests cover fitting, multiclass behavior, strict candidate rejection,
 class bindings, constructor errors, fresh instances and source/partition/feature
-guards. Normal installed wheel paths, baseline-order recording, persistence
-integration and configured/operational tracking failures remain IP3/IP4 work.
+guards. IP3 adds baseline-order recording, native persistence and configured/operational
+tracking failure checks. Both final installed wheel paths remain IP4 work.
 No user-story acceptance or additional platform certification is claimed.
+
+
+## Runnable project example
+
+Use a fresh, separate project initialized through the [installed setup guide](experiment-setup.md).
+Keep its retained toolkit wheel or full-SHA Git dependency, native `uv.lock`,
+`.venv`, `project.yaml`, `.dvc` and setup journal. Configure Git author identity
+before preparing the example. Save the following three files in that project.
+The preparation script writes this example's strict inputs and tiny dataset,
+versions the data with native DVC, and commits the project files. It is intended
+for an empty example project. It does not migrate initializer drafts or accept
+uncommitted code as reproducible provenance.
+
+This is a concrete one-feature classification example, with fixed authored
+profiles and validation accuracy. Adapt its reviewed inputs and project code
+together for another dataset. The native estimator binding and scalar metadata
+are project files; forest support requires no toolkit source/resource edits.
+Empty quality rules explicitly record `not_checked`. Required quality failures
+stop fitting; advisory failures can finish while recording failed validation.
+The test rows are recorded for disjointness and remain unused for comparison.
+
+Run both scripts with the project's own interpreter and absolute paths, including
+from an unrelated directory:
+
+```sh
+/absolute/project/.venv/bin/python /absolute/project/prepare_training.py /absolute/project
+```
+
+Preparation prints a JSON object with `tracking_uri` and `experiment_id`. Pass
+those exact values as the last two arguments (quote the URI and paths):
+
+```sh
+/absolute/project/.venv/bin/python /absolute/project/train.py /absolute/project 'sqlite:////absolute/project/.agentic-ml/classification.db' 'EXPERIMENT_ID_FROM_PREPARATION'
+```
+
+Training prints baseline and candidate native run IDs. The baseline validation
+accuracy is 0.5; tree and forest accuracies are 1.0 on this controlled fixture.
+Native fitted models are under `model/pipeline`, preprocessing under
+`preprocessing`, the complete training record under
+`outputs/training/training.json`, and shared lineage under `provenance.json`.
+Use the same explicit MLflow store when inspecting these IDs. Repeating training
+creates new runs and staging directories; it does not overwrite an earlier run.
+On a process error, the original exception and run/stage notes remain visible;
+available local `.training/<run_id>/` files are preserved. Diagnostics and FAILED
+status are attempted independently where the selected backend remains available.
+A hard kill or unavailable backend cannot guarantee finalization.
+
+The preparation script declares all native scalar defaults for the tree and
+forest, using static reviewed values rather than introspecting an estimator.
+The bounded native versions are still checked against the actual project lock
+and installation when recording results. Model requirements pin observed
+serializer/library versions and supplement that lock; loading these locally
+created artifacts does not establish M2 project reproduction.
+
+### training_bindings.py
+
+<!-- project-file: training_bindings.py -->
+
+```python
+"""Project-owned native bindings; adding a forest needs no toolkit change."""
+
+from sklearn.dummy import DummyClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+
+ESTIMATOR_BINDINGS = {
+    "dummy_classifier": DummyClassifier,
+    "decision_tree": DecisionTreeClassifier,
+    "random_forest": RandomForestClassifier,
+}
+```
+
+### prepare_training.py
+
+<!-- project-file: prepare_training.py -->
+
+```python
+"""Prepare a tiny, committed classification example in an initialized project."""
+
+import hashlib
+import json
+import subprocess
+import sys
+from importlib.metadata import version
+from pathlib import Path
+
+import pandas as pd
+import yaml
+from mlflow import MlflowClient
+
+from agentic_ml.splitting import create_partitions
+
+root = Path(sys.argv[1])
+if not root.is_absolute() or not root.is_dir():
+    raise ValueError("Supply an existing absolute initialized project root")
+
+
+def command(*args):
+    result = subprocess.run(args, cwd=root, capture_output=True, text=True, check=True)
+    return result.stdout.strip()
+
+
+def ref(name):
+    return {
+        "path": name,
+        "sha256": "sha256:" + hashlib.sha256((root / name).read_bytes()).hexdigest(),
+    }
+
+
+tree = {
+    "ccp_alpha": 0.0,
+    "class_weight": None,
+    "criterion": "gini",
+    "max_depth": 1,
+    "max_features": None,
+    "max_leaf_nodes": None,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 1,
+    "min_samples_split": 2,
+    "min_weight_fraction_leaf": 0.0,
+    "monotonic_cst": None,
+    "random_state": 17,
+    "splitter": "best",
+}
+forest = {key: value for key, value in tree.items() if key != "splitter"} | {
+    "bootstrap": False,
+    "max_samples": None,
+    "n_estimators": 3,
+    "n_jobs": 1,
+    "oob_score": False,
+    "verbose": 0,
+    "warm_start": False,
+}
+# Authored scalar declarations, never inferred from a constructed estimator.
+parameters = {
+    "dummy_classifier": {"strategy": "most_frequent"},
+    "decision_tree": tree,
+    "random_forest": forest,
+}
+kinds = {
+    type(None): "null",
+    bool: "boolean",
+    int: "integer",
+    float: "float",
+    str: "string",
+}
+registry = {
+    "schema_version": "1.0",
+    "algorithms": [
+        {
+            "id": name,
+            "interface_version": "1.0",
+            "tasks": ["classification"],
+            "adapter": {"id": "project_classifier", "version": "1.0"},
+            "library": {"distribution": "scikit-learn", "reference_version": "1.9.1"},
+            "parameters": {
+                key: {"types": [kinds[type(value)]], "default": value}
+                for key, value in values.items()
+            },
+            "requires_non_null": [],
+        }
+        for name, values in parameters.items()
+        if name != "dummy_classifier"
+    ],
+}
+(root / "registry.yaml").write_text(yaml.safe_dump(registry))
+(root / "search.yaml").write_text(
+    yaml.safe_dump(
+        {
+            "schema_version": "1.0",
+            "algorithms": {
+                name: {"fixed": values, "search": {}}
+                for name, values in parameters.items()
+            },
+        }
+    )
+)
+sections = {
+    "Objective": {"schema_version": "1.0", "objective": "Compare CPU classifiers."},
+    "Data": {
+        "sources": ["data/input.csv"],
+        "target": "label",
+        "task_type": "classification",
+    },
+    "Features": {
+        "include": ["x"],
+        "exclude": ["id"],
+        "guidance": "Use x.",
+        "availability": "At prediction.",
+    },
+    "Evaluation": {
+        "metric": "accuracy",
+        "direction": "maximize",
+        "split": {
+            "strategy": "random",
+            "time_column": None,
+            "group_column": None,
+            "validation_fraction": 0.25,
+            "test_fraction": 0.25,
+            "seed": 17,
+            "constraints": "Fixed disjoint memberships recorded in data/split.json.",
+        },
+    },
+    "Algorithms": {"mode": "compare", "allowed": list(parameters)},
+    "Budget": {
+        "max_trials_per_algorithm": 1,
+        "max_total_trials": 3,
+        "max_runtime_seconds": 60,
+        "max_memory_mb": None,
+        "max_cost": None,
+        "currency": None,
+    },
+}
+(root / "brief.md").write_text(
+    "# Experiment: Classification\n\n"
+    + "\n".join(
+        f"## {name}\n```yaml\n{yaml.safe_dump(value, sort_keys=False)}```\n"
+        for name, value in sections.items()
+    )
+)
+(root / "notebook.ipynb").write_text(
+    json.dumps({"nbformat": 4, "nbformat_minor": 5, "metadata": {}, "cells": []})
+)
+(root / "experiment.yaml").write_text(
+    yaml.safe_dump(
+        {
+            "schema_version": "1.0",
+            "id": "classification",
+            "brief": "brief.md",
+            "search_space": "search.yaml",
+            "notebooks": ["notebook.ipynb"],
+            "working_directory": ".",
+            "data": ["data/input.csv"],
+            "execution": {"status": "configured"},
+        }
+    )
+)
+settings = {"candidates": ["decision_tree", "random_forest"], "quality_rules": []}
+(root / "training.json").write_text(json.dumps(settings))
+(root / "data").mkdir(exist_ok=True)
+(root / "data/input.csv").write_text(
+    "id,x,label\n0,-3.0,0\n1,-1.0,0\n2,1.0,1\n3,3.0,1\n4,-2.0,0\n5,2.0,1\n6,-100.0,1\n7,100.0,0\n"
+)
+_, partition = create_partitions(
+    pd.read_csv(root / "data/input.csv"),
+    row_id="id",
+    target="label",
+    layout="train_validation_test",
+    memberships={"train": [0, 1, 2, 3], "validation": [4, 5], "test": [6, 7]},
+)
+(root / "data/split.json").write_text(json.dumps(partition, allow_nan=False))
+ignore = root / ".gitignore"
+ignore.write_text(
+    ignore.read_text() + "\n.training/\nrun-provenance.json\n__pycache__/\n"
+)
+command(sys.executable, "-m", "dvc", "add", "data")
+command("git", "add", ".")
+command("git", "commit", "-m", "feat: prepare classification example")
+identity = json.loads((root / ".agentic-ml/init.json").read_text())["environment"][
+    "toolkit_identity"
+]
+pointer = yaml.safe_load((root / "data.dvc").read_text())["outs"][0]
+provenance = {
+    "schema_version": "1.0",
+    "experiment": {
+        "commit_sha": command("git", "rev-parse", "HEAD"),
+        "entrypoint": ref("train.py"),
+        "code": [ref("train.py"), ref("training_bindings.py")],
+    },
+    "configuration": {
+        "files": [
+            ref(name)
+            for name in (
+                "brief.md",
+                "search.yaml",
+                "experiment.yaml",
+                "registry.yaml",
+                "training.json",
+            )
+        ],
+        "effective": settings,
+    },
+    "data": [
+        {
+            "metadata": ref("data.dvc"),
+            "output_path": "data",
+            "hash_name": "md5",
+            "hash_value": pointer["md5"],
+            "member_path": name,
+        }
+        for name in ("input.csv", "split.json")
+    ],
+    "split_record": ref("data/split.json"),
+    "environment": {
+        "lockfile": ref("uv.lock"),
+        "python_version": sys.version.split()[0],
+        "libraries": {
+            name: version(name)
+            for name in (
+                "agentic-ml",
+                "mlflow",
+                "dvc",
+                "pandas",
+                "pyarrow",
+                "scikit-learn",
+                "numpy",
+                "skops",
+            )
+        },
+    },
+    "toolkit": {
+        "installation": identity,
+        "repository_url": identity.get("url"),
+        "commit_sha": identity.get("revision"),
+        "build_identity": None,
+    },
+}
+(root / "run-provenance.json").write_text(json.dumps(provenance, allow_nan=False))
+uri = f"sqlite:///{root}/.agentic-ml/classification.db"
+client = MlflowClient(tracking_uri=uri)
+experiment = client.create_experiment(
+    "classification-" + provenance["experiment"]["commit_sha"],
+    artifact_location=(root / ".agentic-ml/classification-artifacts").as_uri(),
+)
+print(json.dumps({"tracking_uri": uri, "experiment_id": experiment}))
+```
+
+### train.py
+
+<!-- project-file: train.py -->
+
+```python
+"""Train and record a baseline before authored classification candidates."""
+
+import json
+import sys
+import traceback
+from collections.abc import Mapping
+from importlib.metadata import version
+from pathlib import Path
+from typing import cast
+
+import mlflow.sklearn
+import pandas as pd
+from mlflow import MlflowClient
+from mlflow.exceptions import MlflowException
+from sklearn.metrics import accuracy_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from training_bindings import ESTIMATOR_BINDINGS
+
+from agentic_ml.data_quality import run_validated_step
+from agentic_ml.planning import ResolveRequest, resolve_plan
+from agentic_ml.splitting import create_partitions
+from agentic_ml.tracking import log_preprocessing, log_run_results
+from agentic_ml.training import fit_classifier
+from agentic_ml.validation import (
+    CandidateRequest,
+    ConfigurationRequest,
+    validate_configuration,
+)
+
+
+def record_model(
+    root: Path,
+    uri: str,
+    run_id: str,
+    candidate: CandidateRequest,
+    *,
+    baseline_run_id: str | None = None,
+) -> None:
+    """Fit, score and persist one model in the explicitly selected native run."""
+    client = MlflowClient(tracking_uri=uri)
+    native = client.get_run(run_id)
+    if native.info.status != "RUNNING" or native.info.lifecycle_stage != "active":
+        raise ValueError("Selected run must be active and RUNNING")
+    stage = "inputs"
+    try:
+        settings = json.loads((root / "training.json").read_text())
+        provenance = json.loads((root / "run-provenance.json").read_text())
+        frame = pd.read_csv(root / "data/input.csv")
+        partition = json.loads((root / "data/split.json").read_text())
+        if partition["layout"] != "train_validation_test":
+            raise ValueError(
+                "Project comparison requires a separate validation partition"
+            )
+
+        def fit(
+            checked: pd.DataFrame, _: dict[str, object]
+        ) -> tuple[Pipeline, dict[str, object]]:
+            return fit_classifier(
+                checked,
+                project_root=root,
+                candidate=candidate,
+                estimator_bindings=ESTIMATOR_BINDINGS,
+                preprocessing=Pipeline([("scale", StandardScaler())]),
+                partition_record=partition,
+                selected_columns=["x"],
+                output_schema=[{"name": "x", "dtype": "float64"}],
+            )
+
+        stage = "fit"
+        (pipeline, record), quality = run_validated_step(
+            frame, fit, rules=settings["quality_rules"]
+        )
+        partitions, _ = create_partitions(
+            frame,
+            row_id=partition["row_id"],
+            target=partition["target"],
+            layout=partition["layout"],
+            memberships=partition["memberships"],
+        )
+        validation = partitions["validation"]
+        predictions = pipeline.predict(validation[["x"]])
+        score = float(accuracy_score(validation[partition["target"]], predictions))
+        staging = root / ".training" / run_id
+        staging.mkdir(parents=True, exist_ok=False)
+        output = staging / "training.json"
+        output.write_text(json.dumps(record, indent=2, allow_nan=False))
+        model = staging / "pipeline"
+        stage = "model serialization"
+        mlflow.sklearn.save_model(
+            pipeline,
+            str(model),
+            serialization_format="skops",
+            skops_trusted_types=["numpy.dtype", "sklearn.tree._tree.Tree"],
+            pip_requirements=[
+                f"{name}=={version(name)}"
+                for name in ("scikit-learn", "numpy", "pandas", "skops", "mlflow")
+            ],
+        )
+        stage = "model publication"
+        if client.list_artifacts(run_id, "model/pipeline"):
+            raise FileExistsError("model/pipeline already contains artifacts")
+        client.log_artifacts(run_id, str(model), "model/pipeline")
+        stage = "preprocessing publication"
+        log_preprocessing(
+            run_id=run_id,
+            pipeline=pipeline["preprocessing"],
+            record=cast(Mapping[str, object], record["preprocessing"]),
+            provenance=provenance,
+            project_root=root,
+            tracking_uri=uri,
+        )
+        parameters = {
+            key: record[key]
+            for key in (
+                "algorithm",
+                "estimator_class",
+                "parameters",
+                "parameter_origins",
+                "versions",
+                "fit_partition",
+            )
+        }
+        if baseline_run_id is not None:
+            parameters["baseline_run_id"] = baseline_run_id
+        stage = "result publication"
+        log_run_results(
+            run_id=run_id,
+            project_root=root,
+            tracking_uri=uri,
+            provenance=provenance,
+            parameters=parameters,
+            metrics={"validation_accuracy": score},
+            outputs={"training": output.relative_to(root)},
+            expected_outputs=["training"],
+            process_exit_code=0,
+            validation_passed=None
+            if quality["status"] == "not_checked"
+            else quality["status"] == "passed",
+        )
+    finally:
+        error = sys.exception()
+        if isinstance(error, Exception):
+            error.add_note(
+                f"classification run_id={run_id}; stage={stage}; project_root={root}"
+            )
+            diagnostic = root / ".training" / run_id / "failure.txt"
+            try:
+                diagnostic.parent.mkdir(parents=True, exist_ok=True)
+                diagnostic.write_text("".join(traceback.format_exception(error)))
+                error.add_note(f"Available local diagnostic: {diagnostic}")
+                if not client.list_artifacts(run_id, "diagnostics"):
+                    client.log_artifact(run_id, str(diagnostic), "diagnostics")
+            except (OSError, ValueError, MlflowException) as secondary:
+                error.add_note(f"Diagnostic retention failed: {secondary}")
+            try:
+                client.set_tag(run_id, "process_exit_code", "1")
+                client.set_terminated(run_id, status="FAILED")
+            except (OSError, ValueError, MlflowException) as secondary:
+                error.add_note(f"Failed to record native FAILED status: {secondary}")
+
+
+def run(root: Path, uri: str, experiment: str) -> dict[str, str | list[str]]:
+    """Resolve genuine strict inputs, then finish baseline before candidates."""
+    if not root.is_absolute() or not root.is_dir():
+        raise ValueError("root must be an existing absolute project directory")
+    plan = resolve_plan(ResolveRequest(root, Path("experiment.yaml")))
+    if plan.plan_id is None:
+        raise ValueError(f"Plan resolution blocked: {plan.diagnostics}")
+    configuration = validate_configuration(
+        ConfigurationRequest(root, plan.plan_id, Path("registry.yaml"))
+    )
+    if configuration.validation_id is None:
+        raise ValueError(f"Configuration blocked: {configuration.diagnostics}")
+    client = MlflowClient(tracking_uri=uri)
+    settings = json.loads((root / "training.json").read_text())
+    baseline = client.create_run(experiment).info.run_id
+    record_model(
+        root,
+        uri,
+        baseline,
+        CandidateRequest(root, configuration.validation_id, "dummy_classifier", {}),
+    )
+    candidates = []
+    for algorithm in settings["candidates"]:
+        run_id = client.create_run(experiment).info.run_id
+        record_model(
+            root,
+            uri,
+            run_id,
+            CandidateRequest(root, configuration.validation_id, algorithm, {}),
+            baseline_run_id=baseline,
+        )
+        candidates.append(run_id)
+    return {"baseline": baseline, "candidates": candidates}
+
+
+if __name__ == "__main__":
+    print(json.dumps(run(Path(sys.argv[1]), sys.argv[2], sys.argv[3]), allow_nan=False))
+```

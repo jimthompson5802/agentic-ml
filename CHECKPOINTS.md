@@ -21,17 +21,28 @@ the approved plan records this revision.
 Developer-directed US-18-SC-02 removes the caller estimator instance: the toolkit
 validates candidate parameters and constructs the bound class before fitting.
 Contract, task boundaries and native constructor feasibility were renewed;
-Gate 1 is Approved; IP2 is Complete and Gate 2 is Approved. Custom/third-party estimator certification remains M2.
+Gate 1 is Approved; IP2 is Complete and Gate 2 is Approved. IP3 is technically
+Complete and Gate 3 is Approved, 2026-11-15 UTC. Custom/third-party certification remains M2.
 
 Plan approval was committed as `52dcc27`; Gate 1 and its revised constructor
 contract were approved and committed as `4a4f2e7`. Developer “use the suggested
 prompt” authorized IP2 and its stop at Gate 2 on 2026-11-15 UTC.
 IP2-T1/T2/T3/T4 are Complete. Developer “i approve gate 2; commit” approved
 Gate 2 and authorized its local commit on 2026-11-15 UTC; the developer renewed
-the commit instruction with “commit the changes.” Phase 2 changes are included
-in the local commit containing this checkpoint; see
+the commit instruction with “commit the changes.” Phase 2 changes were
+committed as `c74d76b`; see
 [IP2 evidence](docs/verification/us-18-ip2.md).
-Next action: explicit Phase 3 authorization. IP3 and push/publication are not authorized.
+Phase 2 was committed as `c74d76b`; developer “start phase 3” authorized IP3
+through Gate 3 on 2026-11-15 UTC. Initial GitHub authentication failure was
+resolved on developer “try again”; complete issue #28 body and its one comment
+were retrieved with a consistent final snapshot. IP3-T1/T2/T3/T4 are technically
+Complete: baseline-first recording, native
+dummy/tree/forest persistence, lineage, operational/configured failure handling
+and the literal runnable guide pass local verification. See
+[IP3 evidence](docs/verification/us-18-ip3.md). Developer “i approve gate 3;
+commit changes” approved Gate 3 and authorized the local Phase 3 commit on
+2026-11-15 UTC. This checkpoint accompanies that commit. Next action: await
+explicit Phase 4 authorization. IP4, push and publication are not authorized.
 
 Implemented `agentic_ml.training.fit_classifier`: live strict candidate checks,
 project class bindings, toolkit-owned fresh construction, complete typed scalar
@@ -39,18 +50,25 @@ parameters, train-only preprocessing/classifier fit and native prediction Pipeli
 plus finite metadata. Project-only random forest is covered without toolkit
 algorithm wiring. Earlier native serialization evidence is preserved under
 `.dev-records/verification/us18-ip1-20261115-52dcc27/`; persistence integration
-remains IP3 and both normal installed wheel paths remain IP4.
+now passes IP3 and both final normal installed wheel paths remain IP4.
 
-Final focused/regression run: 310 passed, zero failures/skips/deselections, four
-workers/loadgroup, Linux aarch64 / Python 3.12.16. Shared checks pass; the existing
-contract code fence was formatted after the first formatting check. Lock unchanged.
-Twelve expected red/green behavior cycles and intermediate verification are retained
-under `.dev-records/verification/us18-ip2-20261115-4a4f2e7/`.
+IP2 retained 310 passing focused/regression cases and its red/green evidence
+under `.dev-records/verification/us18-ip2-20261115-4a4f2e7/`. IP3 gate evidence
+covers 260 distinct passing tests across a 259-case focused/regression run and
+the added one-case executable-guide run, both with four workers/loadgroup. Zero
+failures/skips/deselections; no single 260-case run claimed. Shared checks pass
+after formatting the guide; lock unchanged. Linux aarch64 / Python 3.12.16.
+IP3 raw records: `.dev-records/verification/us18-ip3-20261115-c74d76b/`.
+Initial authentication, fixture identity/store/version issues and assertion
+wording corrections are resolved and preserved in the report; no open problem
+or check suppression. Final installed wheel matrix and M1–6 remain IP4.
 
-Working-tree changes: new training module and tests, contributor sklearn typing
-support, usage-contract status, IP2 report, plan progress and this checkpoint.
+Working-tree changes: project training/binding scripts, 12 public integration
+cases, native metric typing and register, runnable guide, IP3 report, owning plan
+and this checkpoint. Phase 2 is committed in `c74d76b`; the approved IP3 changes are included in the
+local commit containing this checkpoint. No package or lock changes.
 No M1–6 acceptance/full suite/standalone artifact run or story acceptance is
-claimed. Remaining story checks belong to IP3/IP4 and final IP4-T3 acceptance;
+claimed. Remaining story checks belong to IP4 and final IP4-T3 acceptance;
 all milestone/historical obligations below remain unchanged.
 
 PR #68's US-15 M1 preprocessing and US-26 #17 recording are accepted and merged

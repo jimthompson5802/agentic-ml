@@ -33,3 +33,8 @@ APIs; they do not add product behavior, a runtime type dependency, or suppressio
 US-26 integration adds public Pipeline.get_feature_names_out and check_is_fitted.
 BaseEstimator.get_params returns dict[str, object], preserving strict inspection
 for both producer and consumer. See docs/verification/us-26-recording-ip3.md.
+
+US-18 IP3 adds the native `accuracy_score` signature used by the project-owned
+training example. Its array-like inputs are declared as object because this
+bounded stub does not duplicate sklearn's input validator. It introduces no
+runtime behavior or checker suppression and does not ship in the toolkit wheel.

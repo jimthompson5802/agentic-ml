@@ -88,7 +88,7 @@ confirmation does not confirm the new training boundary automatically.
 
 ## Plan review
 
-- **Status:** Approved plan; IP1/Gate 1 Approved; IP2 Complete; Gate 2 Approved; IP3 authorization pending.
+- **Status:** Approved plan; IP1/Gate 1 Approved; IP2 Complete; Gate 2 Approved; IP3 Complete; Gate 3 Approved; IP4 authorization pending.
 - **Developer decision:** Approved.
 - **Decision reference and date:** Developer message “i approve the plan”, 2026-11-15 UTC. Approval includes the extensible estimator design and RandomForestClassifier project-only proof; it does not approve implementation gates or authorize IP1.
 - **Requested plan changes:** US-18-SC-01 requires extensible native estimator support; user direction recorded below. Included in the plan approval recorded above.
@@ -177,7 +177,8 @@ Technical completion: **Complete**, 2026-11-15 UTC; Gate 2 **Approved**, 2026-11
 Developer “use the suggested prompt” authorized the previously supplied
 start-IP2/stop-at-Gate-2 instruction. [IP2 evidence](../verification/us-18-ip2.md)
 records the vertical TDD cycles, final 310-case focused/regression pass and
-shared checks. No commit or later implementation phase is authorized.
+shared checks. Gate 2 subsequently authorized the local commit, completed as
+`c74d76b`; IP3 authorization is recorded in its own section below.
 
 - **Outcome:** Native fitted prediction pipelines and effective training metadata through the reviewed public helper.
 - **Entry conditions:** Met: Gate 1 approved with revised SC-02 boundaries; IP2 authorized by developer “use the suggested prompt”, 2026-11-15 UTC.
@@ -209,16 +210,28 @@ unselected M1–6 regressions to IP4-T3. Actual results: **310 passed, zero fail
 
 ## US-18 / Implementation Phase 3: Record baseline and candidate model runs
 
+Execution authorized by developer “start phase 3”, 2026-11-15 UTC, after
+Phase 2 commit `c74d76b`. Initial preflight failed because GitHub CLI had no
+authenticated host. Developer “try again” resumed the authorized work; the
+complete issue #28 body and one unique comment were successfully retrieved,
+with unchanged comment count and updated_at on final metadata refresh. The
+authentication blocker is resolved. IP3 is technically Complete; Gate 3 is Approved, 2026-11-15 UTC.
+Use the Gate 1-confirmed public boundaries: project execution, native MLflow
+run/artifact inspection, fresh native model inference and existing public
+quality/validation/fitting/tracking APIs. Normal installed direct/rebuilt final
+artifact verification remains IP4; serial individual TDD checks keep each
+red–green slice small, with four-worker focused/regression verification at gate.
+
 - **Outcome:** Runnable project script records baseline before candidate, validation scores, complete native models and shared lineage, with truthful failure outcomes.
-- **Entry conditions:** Gate 2 approved and IP3 authorized; accepted supplier APIs remain available.
+- **Entry conditions:** Met: Gate 2 approved; developer “start phase 3” authorized IP3; accepted supplier APIs remain available.
 - **Acceptance criteria advanced:** US-18-AC-02/03/04 and AC-01 M1.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-18-IP3-T1 | Not started | One public integration test at a time in proposed `tests/integration/test_training_tracking.py`; project script fixture; minimal training artifact code in `src/agentic_ml/training/` only if Gate 1 justified a reusable helper | Gate 2 | Real baseline FINISHED before candidate comparison; candidate references baseline run; same rows/features/accuracy; scalar oracle scores 0.5/1.0 and both models inspectable | AC-01/02/03/04 |
-| US-18-IP3-T2 | Not started | Native model save/load for primary classifiers and project-only RandomForestClassifier extension, effective parameter/version/class records and accepted tracking helper composition; project fixture uses real committed configuration/code, lock identity and DVC pointers | T1 | Downloaded model predicts declared labels; preprocessing record and source/split lineage match; one authoritative native run per fit | AC-03/04 |
-| US-18-IP3-T3 | Not started | Incremental failure tests for native fit/serialization/logging failure, output conflicts, invalid refs and missing output; demonstrate no candidate comparison after failed baseline | T2 | FAILED/context/available diagnostics preserved where possible; poor validation score stays a valid completed experiment; no silent trust or serializer fallback | AC-02/03/04 |
-| US-18-IP3-T4 | Not started | Complete runnable `docs/classification-training.md`; focused/shared checks and proposed `docs/verification/us-18-ip3.md`; reconcile API/status references | T3 | Script and product contract agree; no final-test feedback or new basic-path claims | AC-01–04 |
+| US-18-IP3-T1 | Complete | One public integration test at a time in proposed `tests/integration/test_training_tracking.py`; project script fixture; minimal training artifact code in `src/agentic_ml/training/` only if Gate 1 justified a reusable helper | Gate 2 | Real baseline FINISHED before candidate comparison; candidate references baseline run; same rows/features/accuracy; scalar oracle scores 0.5/1.0 and both models inspectable | AC-01/02/03/04 |
+| US-18-IP3-T2 | Complete | Native model save/load for primary classifiers and project-only RandomForestClassifier extension, effective parameter/version/class records and accepted tracking helper composition; project fixture uses real committed configuration/code, lock identity and DVC pointers | T1 | Downloaded model predicts declared labels; preprocessing record and source/split lineage match; one authoritative native run per fit | AC-03/04 |
+| US-18-IP3-T3 | Complete | Incremental failure tests for native fit/serialization/logging failure, output conflicts, invalid refs and missing output; demonstrate no candidate comparison after failed baseline | T2 | FAILED/context/available diagnostics preserved where possible; poor validation score stays a valid completed experiment; no silent trust or serializer fallback | AC-02/03/04 |
+| US-18-IP3-T4 | Complete | Complete runnable `docs/classification-training.md`; focused/shared checks and proposed `docs/verification/us-18-ip3.md`; reconcile API/status references | T3 | Script and product contract agree; no final-test feedback or new basic-path claims | AC-01–04 |
 
 ### Verification and review evidence
 
@@ -228,15 +241,15 @@ the validation integration since IP2. Inspect real native artifacts and fresh
 load/predict outputs, not returned toolkit dictionaries alone. Gate 1 confirms
 serialization failure fixtures and numerical tolerances. Shared checks apply.
 Installed checks deferred to IP4-T1/T2 and unselected regressions to IP4-T3.
-Actual results: **Pending**.
+Actual results: **Complete** — 259 focused/regression cases passed in 342.66 seconds, followed by the added literal-guide case passing with four workers in 26.18 seconds. Combined valid evidence covers 260 distinct tests, zero failures/skips/deselections; no single 260-case run is claimed. Shared checks pass after formatting the guide; lock unchanged. Native artifacts, failure/context checks, fixture corrections and exact commands are recorded in [IP3 evidence](../verification/us-18-ip3.md).
 
 ### Developer approval gate
 
 - **Approval criteria:** T1–T4 complete; baseline order, metrics, complete artifacts and lineage/failure semantics verified; focused/regression/shared checks pass.
-- **Evidence presented:** Pending `docs/verification/us-18-ip3.md`.
+- **Evidence presented:** [IP3 report](../verification/us-18-ip3.md), complete [executable guide](../classification-training.md), project training/binding scripts, 12 public integration cases, native run snapshots and original red/green/failure logs. No package/dependency changes or suppressions.
 - **Remaining limitations:** Both installed artifact paths and final M1–6 reconciliation pending.
-- **Developer decision / reference and date / requested changes:** Pending.
-- **Progression authorized:** Pending — stop for approval and IP4 authorization.
+- **Developer decision / reference and date / requested changes:** Approved — developer “i approve gate 3; commit changes”, 2026-11-15 UTC. Local Phase 3 commit authorized; no requested changes.
+- **Progression authorized:** Gate 3 satisfied; await explicit IP4 authorization. Local commit authorized; push/publication not authorized.
 
 ## US-18 / Implementation Phase 4: Verify installed classification and accept M1 slice
 
