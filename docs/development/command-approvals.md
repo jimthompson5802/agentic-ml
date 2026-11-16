@@ -58,17 +58,24 @@ worker policy and any justified serial invocation. Run formatting edits separate
 with the documented Ruff command.
 
 Retain stdout/stderr and command outcomes under the [evidence policy](records.md).
-Use complete tool-provided output when it is accessible and can be saved literally.
-For long output, use a supported tool log artifact or an approved verification
-driver that retains complete output and the original exit code. A truncated tool
-response or JUnit report alone does not replace required stdout/stderr. If no
-complete capture method is available, retain the existing logging method and
-request its required runtime approval; report that remaining limitation.
+Record the command, exit code, and available output separately from execution,
+using file-writing tools to save accessible tool output literally. For long
+output, use a supported tool log artifact or an existing reviewed verification
+driver that retains complete output and the original exit code. Do not introduce
+ad hoc Python or shell logging wrappers, or add pipes or output redirection to
+otherwise allowed commands for evidence capture.
+
+If the execution tool cannot provide complete required output, report the
+limitation before choosing a capture method. Record missing or truncated output
+explicitly; a truncated response or JUnit report alone does not satisfy complete
+stdout/stderr retention. Use an existing reviewed verification driver when
+available. If no supported capture method meets the requirement, request direction
+on evidence capture rather than automatically retaining or creating a logging
+wrapper. Runtime approval remains required whenever the selected method needs it.
 
 Shell redirection and heredoc scripts can prevent a direct command allowance from
-matching. Prefer the direct forms when evidence capture permits. Keep allowances
-specific to reviewed commands or constrained drivers; an arbitrary-command shell
-or Python runner is not an equivalent replacement.
+matching. Keep allowances specific to reviewed commands or constrained drivers;
+an arbitrary-command shell or Python runner is not an equivalent replacement.
 
 ## Validate permissions in the active runtime
 

@@ -1,8 +1,17 @@
 # Development Checkpoints
 
-Last updated: 2026-11-15 (UTC)
+Last updated: 2026-11-16 (UTC)
 
 ## Current position and next action
+
+Verification command policy: added direct invocation and evidence-capture
+instructions to AGENTS.md and aligned the command approval and records guides.
+Ad hoc logging wrappers are prohibited; incomplete tool output must be reported
+before choosing a capture method. Complete-output retention remains required.
+Documentation-only change; TDD and Python tests do not apply. Static validation
+includes relative-link target inspection and `git diff --check`. The developer
+authorized committing and pushing these documentation changes to `origin/main`.
+Next action: complete the authorized commit and push; no story is executing.
 
 Phase approval policy: the developer approved replacing default manual approval
 at every implementation phase with public contract review and verification-based
