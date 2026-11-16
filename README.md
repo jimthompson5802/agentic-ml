@@ -14,8 +14,9 @@ local pandas extraction with provenance, data-quality checks, descriptive
 assessment and recorded two-way/three-way partitions.
 Native training-only preprocessing, classification and MLflow recording are
 implemented in their component interfaces. The US-14 authored-feature recipe
-combines them for controlled validation comparisons; final story verification
-and acceptance are tracked in its plan. Tuning, DVC stages/reproduction and the
+combines them for controlled validation comparisons; US-14 is verified and
+accepted, with [PR #70](https://github.com/jimthompson5802/agentic-ml/pull/70) open.
+Tuning, DVC stages/reproduction and the
 complete assistant walkthrough remain planned. Initialization does not yet create a
 runnable end-to-end experiment.
 

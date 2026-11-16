@@ -6,14 +6,18 @@ Last updated: 2026-11-16 (UTC)
 
 US-14 / issue #20 is accepted; IP3 is complete in branch
 `US-14-feature-pipelines`, worktree `.worktrees/US-14-feature-pipelines`,
-Based on `762aa23`; accepted-story changes and records are included in this commit.
+Accepted-story implementation and verification commit: `b02a218`.
 Developer “i approve phase 3”, 2026-11-15 UTC, authorized execution only.
 The [plan](docs/plans/milestone-1-us-14.md) records IP3-T1–T3 Complete,
 `Automatic — verification passed`, 2026-11-16 UTC. Developer “I approve phase 3”,
 2026-11-16 UTC, subsequently approved the completed phase. Contract v2 remains approved.
 Developer “I accept the user story; commit the changes”, 2026-11-16 UTC,
 accepted all five criteria and authorized accepted-story publication through
-execute-plan. Next: push, create the PR and publish its static COMMENT review.
+execute-plan. Published [PR #70](https://github.com/jimthompson5802/agentic-ml/pull/70)
+against main. The [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/70#pullrequestreview-5913922925)
+covers `b02a218` with no actionable findings. The publication-record commit
+receives a final static head review; its URL/identity are retained in the PR
+timeline and raw publication record. Next: developer PR review/merge decision.
 
 [IP3 evidence](docs/verification/us-14-ip3.md): direct and genuinely sdist-rebuilt
 wheel recipes pass in separate runtime-only projects; final focused selection
@@ -27,8 +31,9 @@ Linux aarch64 / Python 3.12.16; unverified platforms and M2 remain outside claim
 Run pytest directly; save full tool output separately. Do not use the old runner.
 Raw records: `.dev-records/verification/20261115T233328Z-762aa23-us14-ip3/`,
 with nested driver records linked from the report. Preserve all earlier evidence.
-Pending changes are three contributor verification files plus plan/checkpoint,
-README, project-status, guide and active design/traceability updates.
+Implementation, tests and acceptance records are committed and pushed;
+this final update records publication outcomes only. See
+[publication evidence](docs/verification/us-14-publication.md).
 Whole-story acceptance is recorded in the plan; publication is authorized by
 that explicit acceptance. Merge and cleanup remain separate.
 

@@ -204,7 +204,7 @@ Follow [command/autonomy policy](../development/command-approvals.md).
 - **Execution authorization reference and date:** Developer “start phase 1”, 2026-11-15 UTC. Earlier planning authorization and plan approval remain recorded above.
 - **Verification scope:** IP1 source/dependency review and bounded probes; approved IP2 red–green slices, focused regressions and shared checks below. Developer initially authorized the retained-check runner, then explicitly directed “Stop using run-us14-check.py for test execution.” All subsequent tests use direct `uv run --locked pytest ...` commands with complete tool output saved separately. No broader suite or standalone artifact run is granted.
 - **Authorized external actions:** Issue #20 policy-wording update explicitly authorized on 2026-11-15 by “can you update the issue for consistency”; published and verified. Developer “commit changes” authorized the earlier planning commit; developer “i approve the plan; commit”, 2026-11-15 UTC, authorizes committing the revised plan, checkpoint, contract document and IP1 evidence. Developer “commit changes” after Phase 2 gate approval, 2026-11-15 UTC, also authorizes committing Phase 2 implementation, tests, docs and approval records. Developer “I accept the user story; commit the changes”, 2026-11-16 UTC, accepts the whole story and authorizes the accepted-story publication sequence through execute-plan.
-- **Next required gate:** Accepted-story publication and static review under execute-plan; explicit whole-story acceptance is recorded below. IP2 required verification passed; contract v2/public boundaries remain approved by “yes i approve contract v2”, 2026-11-15 UTC. Whole-story acceptance remains pending.
+- **Next required gate:** Developer PR review/merge decision after accepted-story publication; explicit whole-story acceptance is recorded below. IP2 required verification passed; contract v2/public boundaries remain approved by “yes i approve contract v2”, 2026-11-15 UTC. Whole-story acceptance is complete.
 
 ## Scope-change history
 
@@ -397,8 +397,8 @@ under M1-ACCEPT-VERIFY and is not counted as passing US-14 evidence.
 - **Contract decision:** IP1 approval reused; no separate final contract gate unless behavior changes.
 - **Requested changes and resolution:** None recorded.
 - **Progression result:** Automatic — verification passed, 2026-11-16 UTC. IP3-T1–T3 Complete; no developer story acceptance is implied.
-- **Developer phase decision:** Approved — “I approve phase 3”, 2026-11-16 UTC, after reviewing the completed results. This approves Phase 3; whole-story acceptance and publication remain separate and pending.
-- **Next action:** Request explicit whole-story acceptance. Publication/merge/cleanup retain separate authorization.
+- **Developer phase decision:** Approved — “I approve phase 3”, 2026-11-16 UTC, after reviewing the completed results. Whole-story acceptance followed separately as recorded below.
+- **Next action:** Developer PR review/merge decision; publication is recorded below. Merge and cleanup retain separate authorization.
 
 ## Final verification requirements
 
@@ -421,13 +421,22 @@ All abbreviated AC labels in task tables mean the corresponding `US-14-AC-XX`.
 | US-14-AC-04: Link artifacts to source datasets and verify expected outputs through supported paths | IP2-T3/T4; IP3-T1–T3 | Persisted values/schema/row IDs, artifact availability and lineage, missing/corrupt-reference/output failures | Verified and accepted, 2026-11-16 |
 | US-14-AC-05: Use explicitly authored or supplied candidates | IP1-T3; IP2-T1/T2/T5; IP3-T1–T3 | Explicit project source/declarations, no generated candidates, duplicate/missing/unsupported declaration failures | Verified and accepted, 2026-11-16 |
 
-- **Remaining work:** Publication and static review under execute-plan. IP1–IP3 and all five US-14 criteria are verified and accepted. Historical milestone obligations and the existing US-03 skip remain with their named owners.
+- **Remaining work:** Developer PR review/merge decision. [PR #70](https://github.com/jimthompson5802/agentic-ml/pull/70) and its static COMMENT review are published; [publication evidence](../verification/us-14-publication.md). IP1–IP3 and all five US-14 criteria are verified and accepted. Historical milestone obligations and the existing US-03 skip remain with their named owners.
 - **Partial prerequisite delivery:** None proposed; supplier capabilities reused without accepting their remaining M2 scope.
 - **Final verification:** Complete US-14-IP3-T3, 2026-11-16 UTC; [IP3 report](../verification/us-14-ip3.md).
 - **Developer acceptance:** Accepted — all five M1 criteria, 2026-11-16 UTC.
 - **Decision reference and date:** Developer “I accept the user story; commit the changes”, 2026-11-16 UTC. Authorizes accepted-story commit/push, PR creation and static COMMENT review through execute-plan; merge and worktree cleanup remain separate.
 
 ## Milestone acceptance handoff
+
+Publication on 2026-11-16 UTC: accepted-story commit `b02a2188755ebf4bd40ba8142ef89ea865d79f12`
+was pushed to the owning branch; [PR #70](https://github.com/jimthompson5802/agentic-ml/pull/70)
+targets main `9a030cfe5d6523531e386b0195f40a16599180fc` and closes #20 on merge.
+The [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/70#pullrequestreview-5913922925)
+reports no actionable findings at that head. This documentation-only publication
+record receives a final static head review retained in the PR timeline and raw
+publication metadata. No project checks ran during review; existing verification
+remains applicable. No merge or worktree cleanup was performed.
 
 - **Owner:** `MVP-M1-ACCEPT-VERIFY`; `MVP-M2-ACCEPT-VERIFY` retains later restored-state/replay integration.
 - **Deferred checks:** Native stage execution/cache invalidation (US-27), basic-path and scientist/assistant integration (US-39), M2 compatible components/notebooks/restoration/replay, unverified platforms. These are exclusions from US-14 delivery, not waived milestone obligations. Preserve historical `M1-ACCEPT-VERIFY` and independent `M50-ACCEPT-VERIFY` records.

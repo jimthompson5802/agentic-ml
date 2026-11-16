@@ -12,8 +12,9 @@ the owning GitHub issue remains open; it does not imply implementation is underw
 Story acceptance does not establish milestone acceptance. M1 milestone acceptance
 verification remains outstanding; the complete MVP has not been delivered.
 
-US-14 AC-01–05 were accepted locally on 2026-11-16 UTC; publication/merge
-remain pending. See the [plan](plans/milestone-1-us-14.md) and
+US-14 AC-01–05 were accepted on 2026-11-16 UTC and published in
+[PR #70](https://github.com/jimthompson5802/agentic-ml/pull/70); merge remains
+pending. See the [plan](plans/milestone-1-us-14.md) and
 [final verification](verification/us-14-ip3.md).
 
 The accepted M1 preprocessing/recording delivery is US-15 training-only preprocessing (AC-01–03)
@@ -61,7 +62,7 @@ Historical M1/M50 verification obligations remain separately recorded in
 | M1 | US-11: Extract local experiment data ([#14](https://github.com/jimthompson5802/agentic-ml/issues/14)) | Accepted and merged |
 | M1 | US-12: Validate data and define reproducible splits ([#15](https://github.com/jimthompson5802/agentic-ml/issues/15), [#19](https://github.com/jimthompson5802/agentic-ml/issues/19)) | AC-01/02/03/05 accepted and merged; both issues closed; AC-04 deferred |
 | M1 | US-13: Version datasets with DVC ([#16](https://github.com/jimthompson5802/agentic-ml/issues/16)) | M1 AC-01/02 accepted and merged; M2 remains open |
-| M1 | US-14: Build and compare feature pipelines ([#20](https://github.com/jimthompson5802/agentic-ml/issues/20)) | Accepted locally; [verification](verification/us-14-ip3.md) complete; publication/merge pending |
+| M1 | US-14: Build and compare feature pipelines ([#20](https://github.com/jimthompson5802/agentic-ml/issues/20)) | Accepted; [verification](verification/us-14-ip3.md) complete; [PR #70](https://github.com/jimthompson5802/agentic-ml/pull/70) open; merge pending |
 | M1 | US-15: Preserve training-only preprocessing ([#21](https://github.com/jimthompson5802/agentic-ml/issues/21)) | M1 AC-01–03 accepted and merged; M2 AC-04 remains open |
 | M1 | US-18: Train scikit-learn classification models ([#28](https://github.com/jimthompson5802/agentic-ml/issues/28)) | Open |
 | M1 | US-20: Tune within declared search limits ([#30](https://github.com/jimthompson5802/agentic-ml/issues/30)) | Open |

@@ -57,8 +57,9 @@ or checker exclusion. Final verification passed as recorded below.
 ## Results and acceptance
 
 The results below retain incremental history. Installed matrix, focused checks,
-M1–6/shared checks and final document reconciliation are now complete.
-Whole-story acceptance remains explicitly pending.
+M1–6/shared checks and final document reconciliation are complete. Whole-story
+acceptance is recorded at the end; intermediate pending/running statements below
+describe the state when those results were first recorded.
 
 Initial installed verification: `installed-matrix-red` failed only because the
 new driver was absent; `installed-matrix-green-attempt1` passed the complete
@@ -161,12 +162,12 @@ scientist/external-assistant integration retain their existing story owners.
 No public contract or toolkit runtime implementation changed in IP3. No failing
 assertion, threshold, timeout or skip was weakened. There were no failed runtime
 corrective attempts beyond the expected missing-verifier red; the single typing
-issue was corrected and verified. Explicit whole-story acceptance is requested;
-no acceptance, commit, push, PR, merge or cleanup authorization is manufactured.
+issue was corrected and verified. At phase completion, explicit whole-story
+acceptance was requested; the later acceptance is recorded below.
 
 Developer “I approve phase 3”, 2026-11-16 UTC, explicitly approved the completed
 Phase 3 results. This is distinct from the earlier execution authorization.
-Whole-story acceptance and commit/publication remain pending. These approval
+Whole-story acceptance and commit/publication were still pending at that gate. These approval
 record edits change no executable input and do not invalidate test evidence.
 
 ## Whole-story acceptance
