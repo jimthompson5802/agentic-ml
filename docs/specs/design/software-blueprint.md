@@ -24,6 +24,9 @@ without activating its separate future platform catalogue.
 | `agentic_ml.data_quality` | `validate_data`, `run_validated_step`, `DataQualityError` |
 | `agentic_ml.data_assessment` | `assess_data` |
 | `agentic_ml.splitting` | `create_partitions` |
+| `agentic_ml.preprocessing` | `fit_preprocessing` |
+| `agentic_ml.training` | `fit_classifier` |
+| `agentic_ml.tracking` | `log_preprocessing`, `log_run_results` |
 
 ### Initialization and paths
 
@@ -110,6 +113,12 @@ The actual CLI implements `--version`, `init`,
 and `candidate validate`. No experiment `run`, `train` or `reproduce` command
 is implemented. Preserve packaged schemas/registry/template/runtime-resource paths
 under `src/agentic_ml/`; no relocation is authorized here.
+
+US-14's [project-owned feature comparison](../../feature-pipelines.md) composes
+these existing fitting/tracking APIs and native pandas/sklearn/MLflow/DVC.
+`feature_variants.py:get_variants()` is project code, not a package export.
+The [Phase 3 evidence](../../verification/us-14-ip3.md) owns installed checks;
+the developer accepted the whole story on 2026-11-16 UTC.
 
 ## Planned MVP responsibilities
 

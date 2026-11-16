@@ -4,50 +4,47 @@ Last updated: 2026-11-16 (UTC)
 
 ## Current position and next action
 
-Verification command policy: added direct invocation and evidence-capture
-instructions to AGENTS.md and aligned the command approval and records guides.
-Ad hoc logging wrappers are prohibited; incomplete tool output must be reported
-before choosing a capture method. Complete-output retention remains required.
-Documentation-only change; TDD and Python tests do not apply. Static validation
-includes relative-link target inspection and `git diff --check`. The developer
-authorized committing and pushing these documentation changes to `origin/main`.
-Next action: complete the authorized commit and push; no story is executing.
+US-14 / issue #20 is accepted; IP3 is complete in branch
+`US-14-feature-pipelines`, worktree `.worktrees/US-14-feature-pipelines`,
+Accepted-story implementation and verification commit: `b02a218`.
+Developer “i approve phase 3”, 2026-11-15 UTC, authorized execution only.
+The [plan](docs/plans/milestone-1-us-14.md) records IP3-T1–T3 Complete,
+`Automatic — verification passed`, 2026-11-16 UTC. Developer “I approve phase 3”,
+2026-11-16 UTC, subsequently approved the completed phase. Contract v2 remains approved.
+Developer “I accept the user story; commit the changes”, 2026-11-16 UTC,
+accepted all five criteria and authorized accepted-story publication through
+execute-plan. Published [PR #70](https://github.com/jimthompson5802/agentic-ml/pull/70)
+against main. The [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/70#pullrequestreview-5913922925)
+covers `b02a218` with no actionable findings. The publication-record commit
+receives a final static head review; its URL/identity are retained in the PR
+timeline and raw publication record. Next: developer PR review/merge decision.
 
-Phase approval policy: the developer approved replacing default manual approval
-at every implementation phase with public contract review and verification-based
-automatic progression. See [phase approvals](docs/development/phase-approvals.md).
-Plan review and execution authorization remain distinct. Whole-story acceptance,
-publication/merge/cleanup boundaries and verification obligations are preserved.
-The policy covers new plans and classification of unfinished phases on resumption;
-completed approvals and historical evidence are retained. No story is executing.
+[IP3 evidence](docs/verification/us-14-ip3.md): direct and genuinely sdist-rebuilt
+wheel recipes pass in separate runtime-only projects; final focused selection
+45 passed; M1–6 completed 1,026 passed / 1 existing developer-authorized US-03
+skip / 0 failures or errors. The skipped damaged-planning-schema check remains
+with M1-ACCEPT-VERIFY and is not passing US-14 evidence. Other historical
+obligations below remain unchanged. Shared checks, lock identity, CLI smoke,
+local links and whitespace pass. No new suppression, skip or contract change.
+Linux aarch64 / Python 3.12.16; unverified platforms and M2 remain outside claims.
 
-Updated repository instructions, planning/execution/scope skills, verification
-policy and plan template together. The developer authorized committing and
-pushing these changes to origin/main. All three changed skills pass
-`quick_validate.py` in the isolated uv/PyYAML environment; 108 relative links
-resolve and `git diff --check` passes. Next action: pilot an authorized phase
-sequence.
-Runtime sandbox permissions are unchanged and devcontainer behavior is unverified.
-No Python behavior changed; TDD and Python tests are inapplicable.
+Run pytest directly; save full tool output separately. Do not use the old runner.
+Raw records: `.dev-records/verification/20261115T233328Z-762aa23-us14-ip3/`,
+with nested driver records linked from the report. Preserve all earlier evidence.
+Implementation, tests and acceptance records are committed and pushed;
+this final update records publication outcomes only. See
+[publication evidence](docs/verification/us-14-publication.md).
+Whole-story acceptance is recorded in the plan; publication is authorized by
+that explicit acceptance. Merge and cleanup remain separate.
 
-Primary checkout: `main`; only the primary worktree remains.
-US-18 M1 classification is accepted and merged in PR #69. Its worktree and
-local/remote branches have been removed; verified evidence is archived below.
-Issue #28 retains M2 regression scope.
-
-CI maintenance: added workflow-level concurrency to `.github/workflows/ci.yml`
-so a newer run cancels an earlier run for the same branch or pull request,
-covering both jobs. Independent pull requests keep separate concurrency groups.
-Static YAML validation and `git diff --check` passed. Hosted cancellation remains
-unverified until successive qualifying pushes trigger CI. No Python behavior
-changed, so TDD and Python tests do not apply to this configuration change.
-
-CI maintenance is ready for the requested commit and push to `main`.
-Next action: verify hosted cancellation when successive CI runs occur or select the next story.
-No story implementation is in progress.
-Checkpoint cleanup and evidence archive references are included in this update.
-No tests were run for this documentation change; `git diff --check` passed. Historical M1/M50 verification and revised MVP acceptance obligations
-remain open below.
+Local integration, 2026-11-16 UTC: developer requested merging `main` into
+`US-14-feature-pipelines`. Merged local `main` at `03914ed`; resolved the
+checkpoint conflict by retaining this story's status and historical obligations.
+Incoming documentation clarifies direct command execution and complete evidence
+capture in AGENTS.md, the command policy and records guide. No executable
+behavior changed, so TDD and Python tests do not apply. Merge validation:
+`git diff --check` and staged whitespace/conflict-marker checks pass.
+The integration is committed locally; pushing this merge remains pending.
 
 ## Completed work: authoritative records
 

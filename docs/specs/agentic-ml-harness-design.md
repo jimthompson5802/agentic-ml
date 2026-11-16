@@ -140,9 +140,12 @@ stories. Local pandas extraction/provenance (US-11), configured quality checks
 three-way partitions (US-12-AC-02/03) are also implemented and accepted. See the
 [extraction](../extraction.md), [quality](../data-quality.md) and
 [assessment/partition](../data-assessment-and-splits.md) guides.
-Local experiment execution, training-only fitted feature pipelines, real estimator
-training/tuning, integrated DVC data/stages, result logging, reproduction and the
-assistant walkthrough remain work. Mandatory assessment approval (US-12-AC-04)
+The [US-14 authored feature recipe](../feature-pipelines.md) composes accepted
+native preprocessing, classification and MLflow recording interfaces for fixed
+validation comparisons with DVC data pointers. Its
+[installed verification](../verification/us-14-ip3.md) and explicit story acceptance
+remain separately recorded. General local experiment execution, tuning, DVC
+stages/reproduction and the assistant walkthrough remain work. Mandatory assessment approval (US-12-AC-04)
 remains deferred.
 Local MLflow/DVC storage initialization is not integrated experiment delivery.
 
