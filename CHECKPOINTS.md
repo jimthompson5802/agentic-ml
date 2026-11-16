@@ -37,6 +37,15 @@ this final update records publication outcomes only. See
 Whole-story acceptance is recorded in the plan; publication is authorized by
 that explicit acceptance. Merge and cleanup remain separate.
 
+Local integration, 2026-11-16 UTC: developer requested merging `main` into
+`US-14-feature-pipelines`. Merged local `main` at `03914ed`; resolved the
+checkpoint conflict by retaining this story's status and historical obligations.
+Incoming documentation clarifies direct command execution and complete evidence
+capture in AGENTS.md, the command policy and records guide. No executable
+behavior changed, so TDD and Python tests do not apply. Merge validation:
+`git diff --check` and staged whitespace/conflict-marker checks pass.
+The integration is committed locally; pushing this merge remains pending.
+
 ## Completed work: authoritative records
 
 | Work | Final status and records |

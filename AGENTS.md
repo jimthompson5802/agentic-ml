@@ -42,6 +42,8 @@ Record a specific justification for each rule suppression or check exclusion.
 
 Use documented repository commands for tests, linting, formatting checks, type checks, and the development smoke check. Report commands, outcomes, and any checks that could not run. Distinguish macOS verification from unverified platform support.
 
+Run verification commands directly using the documented allowed prefixes. Do not introduce ad hoc Python or shell logging wrappers. Record the command, exit code, and available output separately. If the execution tool cannot provide the complete output required by the evidence policy, report that limitation before choosing a capture method. Use an existing reviewed verification driver when available. Follow the [command and evidence-capture policy](docs/development/command-approvals.md#command-forms-and-evidence-capture) and [evidence policy](docs/development/records.md).
+
 ## Test-driven development
 
 Use TDD for new toolkit behavior and bug fixes. Derive test cases from the GitHub issue's acceptance criteria. Before writing tests, record the public interfaces under test and what each test boundary covers or misses; confirm these boundaries with the developer through the implementation plan or an explicit review. Reuse confirmed boundaries while they remain applicable.
