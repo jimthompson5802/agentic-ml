@@ -4,47 +4,28 @@ Last updated: 2026-11-16 (UTC)
 
 ## Current position and next action
 
-US-14 / issue #20 is accepted; IP3 is complete in branch
-`US-14-feature-pipelines`, worktree `.worktrees/US-14-feature-pipelines`,
-Accepted-story implementation and verification commit: `b02a218`.
-Developer “i approve phase 3”, 2026-11-15 UTC, authorized execution only.
-The [plan](docs/plans/milestone-1-us-14.md) records IP3-T1–T3 Complete,
-`Automatic — verification passed`, 2026-11-16 UTC. Developer “I approve phase 3”,
-2026-11-16 UTC, subsequently approved the completed phase. Contract v2 remains approved.
-Developer “I accept the user story; commit the changes”, 2026-11-16 UTC,
-accepted all five criteria and authorized accepted-story publication through
-execute-plan. Published [PR #70](https://github.com/jimthompson5802/agentic-ml/pull/70)
-against main. The [static COMMENT review](https://github.com/jimthompson5802/agentic-ml/pull/70#pullrequestreview-5913922925)
-covers `b02a218` with no actionable findings. The publication-record commit
-receives a final static head review; its URL/identity are retained in the PR
-timeline and raw publication record. Next: developer PR review/merge decision.
-
-[IP3 evidence](docs/verification/us-14-ip3.md): direct and genuinely sdist-rebuilt
-wheel recipes pass in separate runtime-only projects; final focused selection
-45 passed; M1–6 completed 1,026 passed / 1 existing developer-authorized US-03
-skip / 0 failures or errors. The skipped damaged-planning-schema check remains
-with M1-ACCEPT-VERIFY and is not passing US-14 evidence. Other historical
-obligations below remain unchanged. Shared checks, lock identity, CLI smoke,
-local links and whitespace pass. No new suppression, skip or contract change.
-Linux aarch64 / Python 3.12.16; unverified platforms and M2 remain outside claims.
-
-Run pytest directly; save full tool output separately. Do not use the old runner.
-Raw records: `.dev-records/verification/20261115T233328Z-762aa23-us14-ip3/`,
-with nested driver records linked from the report. Preserve all earlier evidence.
-Implementation, tests and acceptance records are committed and pushed;
-this final update records publication outcomes only. See
+US-14 / issue #20 is accepted and squash-merged in
+[PR #70](https://github.com/jimthompson5802/agentic-ml/pull/70) as `080b445`.
+The developer authorized squash merge, pull, worktree removal and deletion of
+local and remote `US-14-feature-pipelines` branches on 2026-11-16 UTC.
+Primary checkout `main` was fast-forwarded to the squash commit. Both PR CI jobs
+passed before merge. See the [plan](docs/plans/milestone-1-us-14.md),
+[IP3 evidence](docs/verification/us-14-ip3.md) and
 [publication evidence](docs/verification/us-14-publication.md).
-Whole-story acceptance is recorded in the plan; publication is authorized by
-that explicit acceptance. Merge and cleanup remain separate.
 
-Local integration, 2026-11-16 UTC: developer requested merging `main` into
-`US-14-feature-pipelines`. Merged local `main` at `03914ed`; resolved the
-checkpoint conflict by retaining this story's status and historical obligations.
-Incoming documentation clarifies direct command execution and complete evidence
-capture in AGENTS.md, the command policy and records guide. No executable
-behavior changed, so TDD and Python tests do not apply. Merge validation:
-`git diff --check` and staged whitespace/conflict-marker checks pass.
-The integration is committed locally; pushing this merge remains pending.
+Cleanup completed: the story worktree and both local and remote
+`US-14-feature-pipelines` branches were removed. Before removal, its clean HEAD
+matched the live remote branch at `1dc9ee1`; no active worktree process was found.
+All 4,095 development-record entries were copied and independently verified by
+file checksum, directory inventory and link target before removal. Durable archive:
+`.dev-records/worktree-archives/20261116T015725Z-US-14-feature-pipelines-1dc9ee1`.
+Other ignored entries are disposable `.venv`, mypy/pytest/Ruff caches and Python
+bytecode caches, removed with the worktree. Only the primary checkout remains.
+The developer authorized committing and pushing this checkpoint reconciliation.
+Next: select the next story. No story implementation is executing. Historical
+verification obligations below remain open; US-14 acceptance does not close
+milestone acceptance.
+No executable behavior changed during cleanup; TDD and Python tests do not apply.
 
 ## Completed work: authoritative records
 
@@ -55,6 +36,7 @@ The integration is committed locally; pushing this merge remains pending.
 | US-12 #19 | Accepted and squash-merged in PR #62 as `980c97f`; [plan](docs/plans/milestone-1-us-12-assessment-splits.md), [IP4 evidence](docs/verification/us-12-19-ip4.md). AC-04 deferred. |
 | US-12 #15 | Accepted and merged in PR #61; [plan](docs/plans/milestone-1-us-12.md), [IP3 evidence](docs/verification/us-12-ip3.md). |
 | US-13 M1 | AC-01/02 accepted and merged in PR #66 as `ecd28b1`; Gates 1–3 Approved. [Plan](docs/plans/milestone-1-us-13.md), [IP3 evidence](docs/verification/us-13-ip3.md). Issue #16 remains open for M2 AC-03/04. |
+| US-14 M1 | All five criteria accepted; PR #70 squash-merged as `080b445`. [Plan](docs/plans/milestone-1-us-14.md), [IP3 evidence](docs/verification/us-14-ip3.md), [publication evidence](docs/verification/us-14-publication.md). |
 | US-15 M1 | AC-01–03 accepted and merged in PR #68; [plan](docs/plans/milestone-1-us-15.md), [IP4 evidence](docs/verification/us-15-ip4.md). M2 AC-04 remains open under #21. |
 | US-18 M1 | Classification slice accepted and merged in PR #69; Gates 1–4 Approved. [Plan](docs/plans/milestone-1-us-18.md), [IP4 evidence](docs/verification/us-18-ip4.md), [publication evidence](docs/verification/us-18-publication.md). M2 regression remains under #28. |
 | US-26 recording #17 | AC-01–05 accepted and merged in PR #68; [plan](docs/plans/milestone-1-us-26-recording.md), [publication evidence](docs/verification/us15-us26-publication.md). #33/#43 remain open; #17 still appeared open at the last GitHub check. |
@@ -132,6 +114,7 @@ backup responsibility and cleanup protection.
 The removed story worktrees' retained evidence was archived with verified
 checksums, inventories and link targets during cleanup:
 
+- US-14: `.dev-records/worktree-archives/20261116T015725Z-US-14-feature-pipelines-1dc9ee1`.
 - US-18: `.dev-records/worktree-archives/20261115T181243Z-US-18-classification-d7916d0`.
 - US-15: `.dev-records/worktree-archives/20261115T025402Z-US-15-preprocessing-459e8ba1`.
 - US-26: `.dev-records/worktree-archives/20261115T025408Z-US-26-mlflow-9f100e11`.
