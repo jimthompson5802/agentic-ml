@@ -12,8 +12,11 @@ draft configuration/local stores, strict versioned planning and scoped
 unauthenticated approvals, semantic configuration/candidate validation, and
 local pandas extraction with provenance, data-quality checks, descriptive
 assessment and recorded two-way/three-way partitions.
-Training, tuning, integrated run tracking, DVC stages/reproduction and the complete
-assistant walkthrough remain planned. Initialization does not yet create a
+Native training-only preprocessing, classification and MLflow recording are
+implemented in their component interfaces. The US-14 authored-feature recipe
+combines them for controlled validation comparisons; final story verification
+and acceptance are tracked in its plan. Tuning, DVC stages/reproduction and the
+complete assistant walkthrough remain planned. Initialization does not yet create a
 runnable end-to-end experiment.
 
 **Revised delivery:** M1 completes a classification experiment with assistant help;
@@ -29,7 +32,8 @@ Start with the [current installation/setup guide](docs/experiment-setup.md),
 [configuration validation guide](docs/configuration-validation.md),
 [pandas extraction guide](docs/extraction.md), and
 [assessment and splits guide](docs/data-assessment-and-splits.md), and
-[native DVC dataset-versioning recipe](docs/dataset-versioning.md) for implemented
+[native DVC dataset-versioning recipe](docs/dataset-versioning.md), and
+[authored feature comparisons](docs/feature-pipelines.md) for implemented
 commands and Python APIs. The [assistant-supported walkthrough](docs/specs/example-walkthrough.md)
 describes the required MVP scenario and explicitly marks planned operations.
 

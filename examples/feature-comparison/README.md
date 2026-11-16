@@ -1,7 +1,7 @@
 # Compare authored feature pipelines
 
-The recipe passes US-14 Phase 2 checks; installed story-acceptance verification
-remains pending. See the
+The recipe passes US-14 checks on direct and sdist-rebuilt wheels.
+The developer accepted US-14 on 2026-11-16 UTC. See the
 [contract](../../docs/feature-pipelines.md) and
 [phase evidence](../../docs/verification/us-14-ip2.md) for current verification.
 

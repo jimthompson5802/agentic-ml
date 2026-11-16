@@ -154,7 +154,11 @@ functions for authored tabular features. Native pandas operations retain their
 own semantics; there is no toolkit dataframe or feature wrapper. This design
 foundation does not authorize feature implementation under US-11.
 
-The following fitted-feature behavior remains planned under US-14/15/16.
+US-14 implements the [authored comparison recipe](../../feature-pipelines.md),
+using accepted preprocessing/classification/tracking interfaces. It introduces
+no package wrapper or FeaturePlan language. [Installed verification](../../verification/us-14-ip3.md)
+tracks both normal wheel paths and whole-story acceptance on 2026-11-16 UTC. M2
+custom components/restoration remain under their existing owners.
 Use native scikit-learn pipeline steps and project functions for imputation,
 encoding, scaling and authored domain features as applicable. Record selected
 columns, step order, effective settings, declared feature schema and fitted state.

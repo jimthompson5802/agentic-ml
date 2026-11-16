@@ -60,7 +60,7 @@ verified; do not rewrite historical decisions.
 | MLflow recording, #17 | Preserve preprocessing, supplied metrics/outputs and committed data/code/config/lock/toolkit references | IP2 publication | Available: [US-26-IP4-T1–T3](milestone-1-us-26-recording.md), Gate 4 and #17 acceptance; [evidence](../verification/us-26-recording-ip4.md). No #33/#43 work required. |
 | Issue workflow wording conflicts with newer policy | Reconcile #20's old per-phase manual gates/current-milestone runs with the 2026-11-15 contract-review policy and current focused verification policy | Product implementation | Resolved on 2026-11-15 by developer request “can you update the issue for consistency”; issue body updated and reread successfully. This draft follows [phase approvals](../development/phase-approvals.md) and [verification](../development/verification.md#phase-and-story-verification). The issue now matches these policies. Acceptance criteria and existing comments were preserved. This resolves only policy synchronization, not plan approval or execution authorization. |
 | Recipe versus new toolkit helper | Demonstrate native/accepted APIs suffice; identify a concrete gap before proposing another wrapper | IP2 | Proposed native project recipe below. IP1 settles contract; any new toolkit API requires revised plan and contract review before code/tests. |
-| Public comparison boundary | Exact invocation, candidate declaration, artifact fields, tie/error semantics and independent fixture expectations | IP2 | Pending IP1 contract approval. Plan review alone does not confirm a later refined contract. |
+| Public comparison boundary | Exact invocation, candidate declaration, artifact fields, tie/error semantics and independent fixture expectations | IP2 | Approved contract v2 and public boundaries, developer “yes i approve contract v2”, 2026-11-15 UTC; installed verification is complete in IP3. |
 
 ## Proposed technical approach and public boundaries
 
@@ -180,7 +180,7 @@ an unrelated cwd and inspect native MLflow/DVC/public artifacts. No private
 toolkit helpers, internal fit-call mocks or source-path injection. These checks
 cover the documented workflow and supported outputs, not arbitrary project code,
 OS holdout isolation, all sklearn estimators, assistant usability or M2 replay.
-Public boundary confirmation: **Pending IP1 review**; accepted preprocessing,
+Public boundary confirmation: **Approved contract v2**, developer “yes i approve contract v2”, 2026-11-15 UTC; accepted preprocessing,
 training and tracking contracts remain unchanged.
 
 ## Plan review
@@ -200,11 +200,11 @@ pytest run or executable shared checks were needed for this planning task.
 
 Follow [command/autonomy policy](../development/command-approvals.md).
 
-- **Authorized phase sequence and workspace:** IP1 and IP2 in the associated worktree. Developer “start phase 2”, 2026-11-15 UTC, authorizes IP2 execution once its contract-approval entry condition is satisfied. IP3 execution remains pending.
+- **Authorized phase sequence and workspace:** IP1–IP3 in the associated worktree. Developer “start phase 2”, 2026-11-15 UTC, authorizes IP2 execution once its contract-approval entry condition is satisfied. Developer “i approve phase 3”, 2026-11-15 UTC, authorizes IP3 execution; this does not claim phase completion or story acceptance.
 - **Execution authorization reference and date:** Developer “start phase 1”, 2026-11-15 UTC. Earlier planning authorization and plan approval remain recorded above.
 - **Verification scope:** IP1 source/dependency review and bounded probes; approved IP2 red–green slices, focused regressions and shared checks below. Developer initially authorized the retained-check runner, then explicitly directed “Stop using run-us14-check.py for test execution.” All subsequent tests use direct `uv run --locked pytest ...` commands with complete tool output saved separately. No broader suite or standalone artifact run is granted.
-- **Authorized external actions:** Issue #20 policy-wording update explicitly authorized on 2026-11-15 by “can you update the issue for consistency”; published and verified. Developer “commit changes” authorized the earlier planning commit; developer “i approve the plan; commit”, 2026-11-15 UTC, authorizes committing the revised plan, checkpoint, contract document and IP1 evidence. Developer “commit changes” after Phase 2 gate approval, 2026-11-15 UTC, also authorizes committing Phase 2 implementation, tests, docs and approval records. Push and PR publication remain unauthorized.
-- **Next required gate:** IP3 execution authorization. IP2 required verification passed; contract v2/public boundaries remain approved by “yes i approve contract v2”, 2026-11-15 UTC. Whole-story acceptance remains pending.
+- **Authorized external actions:** Issue #20 policy-wording update explicitly authorized on 2026-11-15 by “can you update the issue for consistency”; published and verified. Developer “commit changes” authorized the earlier planning commit; developer “i approve the plan; commit”, 2026-11-15 UTC, authorizes committing the revised plan, checkpoint, contract document and IP1 evidence. Developer “commit changes” after Phase 2 gate approval, 2026-11-15 UTC, also authorizes committing Phase 2 implementation, tests, docs and approval records. Developer “I accept the user story; commit the changes”, 2026-11-16 UTC, accepts the whole story and authorizes the accepted-story publication sequence through execute-plan.
+- **Next required gate:** Accepted-story publication and static review under execute-plan; explicit whole-story acceptance is recorded below. IP2 required verification passed; contract v2/public boundaries remain approved by “yes i approve contract v2”, 2026-11-15 UTC. Whole-story acceptance remains pending.
 
 ## Scope-change history
 
@@ -219,7 +219,7 @@ phase verification or milestone change. V1 approval was pending at that point; v
 - **Scope difference:** Contract proposal v2 specifies `feature_variants.py:get_variants()` returning fresh unfitted pipeline declarations. Explicit category lists retain the predeclared schema approach. Unselected fields are not fully validated; eager factory construction errors still propagate before selection.
 - **Impact:** Refines IP1-T3 and IP2-T2 for AC-01/02/05. No issue acceptance criteria, toolkit API, milestones or verification commands change. No dependent behavior tests or production implementation are authorized.
 - **Verification:** Add factory/selection/fresh-object/positional-schema/predeclared-category cases to IP2-T2; retain all existing focused, regression, installed and final checks. Renew document validation. Native feasibility remains valid and is not evidence of implemented factory behavior.
-- **Decision:** These factory decisions are Approved; the complete contract/public-boundary gate remains pending. Original v1 proposal and evidence remain historical records.
+- **Decision:** These factory decisions are Approved; the complete contract/public-boundary gate was pending at that decision, then approved as contract v2. Original v1 proposal and evidence remain historical records.
 - **Resume point:** Review remaining contract/public test boundaries; IP2 execution requires separate authorization.
 
 IP2 verification command refinement: check examples together with `src` using
@@ -354,7 +354,7 @@ pass; lock unchanged. No new suppressions, skips or check exclusions.
 - **Requested changes and resolution:** None recorded.
 - **Progression result:** Automatic — verification passed, 2026-11-15 UTC. IP2-T1–T5 Complete. This is technical completion, not developer story acceptance.
 - **Developer phase decision:** Approved — “i approve phase 2 gate”, 2026-11-15 UTC. This records the explicit phase decision alongside automatic technical completion, without granting story acceptance or IP3 execution. Developer “commit changes” authorizes committing Phase 2 work and its approval records.
-- **Next phase:** IP3 is technically eligible; obtain its separate execution authorization. Current authorization covered IP2 only.
+- **Next phase:** IP3 execution authorized by “i approve phase 3”, 2026-11-15 UTC; IP2 prerequisites and contract v2 remain valid.
 
 ## US-14 / Implementation Phase 3: Verify installed delivery and story acceptance
 
@@ -362,13 +362,13 @@ pass; lock unchanged. No new suppressions, skips or check exclusions.
 - **Entry conditions:** IP2 complete and required checks pass, IP1 approval remains applicable, IP3 authorized.
 - **Acceptance criteria advanced:** US-14-AC-01–05 in full.
 - **Approval mode:** Automatic; tests/docs verify the approved contract.
-- **Contract reference and decision:** Approved contract v2, “yes i approve contract v2”, 2026-11-15 UTC; reuse for IP3. Execution remains pending.
+- **Contract reference and decision:** Approved contract v2, “yes i approve contract v2”, 2026-11-15 UTC; reuse for IP3. Execution authorized by “i approve phase 3”, 2026-11-15 UTC.
 
 | Task ID | Status | Action and relevant files or components | Depends on | Expected output / completion condition | Acceptance criteria |
 |---|---|---|---|---|---|
-| US-14-IP3-T1 | Not started | Add proposed `tests/installation/check_feature_comparison.py` and `verify_feature_comparison.py`, reusing existing distribution/Invocation/owned-workspace support and US-18 installation pattern; add proposed `tests/integration/test_installed_feature_comparison.py` | IP2 complete | Normal direct wheel in separate project/runtime-only environment executes exact copied example from unrelated cwd; independent oracle, run/feature/artifact references, representative failures, import origins, CLI version/resources/dependency inventory verified | AC-01–05 |
-| US-14-IP3-T2 | Not started | Run same public workflow and checks on a wheel genuinely rebuilt from extracted sdist, separate fresh environment; no direct-wheel substitution | T1 | Both artifact identities recorded with complete stdout/stderr, consistent outputs/direction tables and source lineage; default successful cleanup and failure retention follow existing policy | AC-01–05 |
-| US-14-IP3-T3 | Not started | Run final focused tests, M1–6/shared checks, reconcile phase exclusions and AC evidence; finish guide/README links, affected active design/traceability/project status, plan and CHECKPOINTS; write proposed `docs/verification/us-14-ip3.md` | T2 | Final evidence tied to implementation/lock/artifacts/platform; all required US-14 checks pass, no hidden exclusions, explicit whole-story acceptance requested | AC-01–05 |
+| US-14-IP3-T1 | Complete | Add proposed `tests/installation/check_feature_comparison.py` and `verify_feature_comparison.py`, reusing existing distribution/Invocation/owned-workspace support and US-18 installation pattern; add proposed `tests/integration/test_installed_feature_comparison.py` | IP2 complete | Normal direct wheel in separate project/runtime-only environment executes exact copied example from unrelated cwd; independent oracle, run/feature/artifact references, representative failures, import origins, CLI version/resources/dependency inventory verified | AC-01–05 |
+| US-14-IP3-T2 | Complete | Run same public workflow and checks on a wheel genuinely rebuilt from extracted sdist, separate fresh environment; no direct-wheel substitution | T1 | Both artifact identities recorded with complete stdout/stderr, consistent outputs/direction tables and source lineage; default successful cleanup and failure retention follow existing policy | AC-01–05 |
+| US-14-IP3-T3 | Complete | Run final focused tests, M1–6/shared checks, reconcile phase exclusions and AC evidence; finish guide/README links, affected active design/traceability/project status, plan and CHECKPOINTS; write proposed `docs/verification/us-14-ip3.md` | T2 | Final evidence tied to implementation/lock/artifacts/platform; all required US-14 checks pass, no hidden exclusions, explicit whole-story acceptance requested | AC-01–05 |
 
 ### Verification and review evidence
 
@@ -383,15 +383,21 @@ may invoke its verification driver internally. Do not launch standalone artifact
 drivers or broader pytest selections without an explicit developer command.
 Second command resolves deferred M1–6 regressions for story acceptance. Repeat
 shared checks and example typing from execution rules. Validate all new links
-and exact recipe/document agreement. Actual results: Pending.
+and exact recipe/document agreement. Actual results: [IP3 evidence](../verification/us-14-ip3.md).
+The focused selection passed 45 tests. M1–6 selected 1,027 cases and finished
+with 1,026 passed, one existing developer-authorized US-03 skip and no failures
+or errors. Shared checks, lock consistency, document targets and whitespace pass.
+No new exclusion or suppression; the skipped historical requirement is retained
+under M1-ACCEPT-VERIFY and is not counted as passing US-14 evidence.
 
 ### Phase progression
 
 - **Required verification:** T1–T3 and final requirements below pass with current evidence.
-- **Evidence presented:** Pending — both artifact manifests, independent outputs and AC reconciliation.
+- **Evidence presented:** [IP3 evidence](../verification/us-14-ip3.md), both normal wheel identities and independent native outputs, 45 focused passes and M1–6 result (1,026 passed / 1 existing skip).
 - **Contract decision:** IP1 approval reused; no separate final contract gate unless behavior changes.
 - **Requested changes and resolution:** None recorded.
-- **Progression result:** Pending; automatic completion is not acceptance.
+- **Progression result:** Automatic — verification passed, 2026-11-16 UTC. IP3-T1–T3 Complete; no developer story acceptance is implied.
+- **Developer phase decision:** Approved — “I approve phase 3”, 2026-11-16 UTC, after reviewing the completed results. This approves Phase 3; whole-story acceptance and publication remain separate and pending.
 - **Next action:** Request explicit whole-story acceptance. Publication/merge/cleanup retain separate authorization.
 
 ## Final verification requirements
@@ -401,7 +407,7 @@ and exact recipe/document agreement. Actual results: Pending.
 - **M1–6 and shared checks:** Run final M1–6 command above, phase regressions as needed, all shared checks and example typing; report collected/selected/deselected/pass/fail/skip counts and every nonpassing result. Renew after executable input changes.
 - **Distribution/installation:** Both-wheel recipe checks in T1/T2 are required selected tests. No standalone/broader run is implicitly authorized. Preserve runtime dependency/CLI/resource/import checks and genuine rebuilt path.
 - **Deferred-check reconciliation:** T3 owns both-wheel checks deferred by IP2, final unchanged-caller M1–6 coverage and all phase exclusions. Historical skips and unrelated milestone omissions remain visible, not passing evidence. An uncovered in-scope AC blocks acceptance.
-- **Actual results and limitations:** Pending. Record actual OS/architecture/Python/native-library versions; no macOS, Windows, fresh notebook, assistant or M2 reproduction claim without evidence.
+- **Actual results and limitations:** [IP3 evidence](../verification/us-14-ip3.md): Linux aarch64 / Python 3.12.16; exact native versions, artifact/source/lock identities and one existing US-03 skip retained. No macOS, Windows, fresh notebook, assistant or M2 reproduction claim.
 
 ## Story completion review
 
@@ -409,17 +415,17 @@ All abbreviated AC labels in task tables mean the corresponding `US-14-AC-XX`.
 
 | Acceptance criterion | Implementation phases / tasks | Verification evidence | Result |
 |---|---|---|---|
-| US-14-AC-01: Describe authored scikit-learn pipeline steps, parameters, selected columns and training-only fit scope | IP1-T3; IP2-T1/T3/T5; IP3-T1–T3 | Independent scaler/schema oracle, exact existing metadata and authored settings on both installs | IP2 verified; final IP3 pending |
-| US-14-AC-02: Execute transformations and record settings, dependencies, output references and source-data identity | IP2-T1/T3/T4; IP3-T1–T3 | Actual feature outputs and MLflow artifacts, code/lock/library/source/split/DVC links | IP2 verified; final IP3 pending |
-| US-14-AC-03: Compare authored variants on the same split, estimator/settings and metric; report direction-aware gains/ties/regressions | IP2-T1/T2/T4; IP3-T1–T3 | Literal 0.5/1.0/0.5/0.0 accuracy and corresponding loss, actual records/table and failure matrix | IP2 verified; final IP3 pending |
-| US-14-AC-04: Link artifacts to source datasets and verify expected outputs through supported paths | IP2-T3/T4; IP3-T1–T3 | Persisted values/schema/row IDs, artifact availability and lineage, missing/corrupt-reference/output failures | IP2 verified; final IP3 pending |
-| US-14-AC-05: Use explicitly authored or supplied candidates | IP1-T3; IP2-T1/T2/T5; IP3-T1–T3 | Explicit project source/declarations, no generated candidates, duplicate/missing/unsupported declaration failures | IP2 verified; final IP3 pending |
+| US-14-AC-01: Describe authored scikit-learn pipeline steps, parameters, selected columns and training-only fit scope | IP1-T3; IP2-T1/T3/T5; IP3-T1–T3 | Independent scaler/schema oracle, exact existing metadata and authored settings on both installs | Verified and accepted, 2026-11-16 |
+| US-14-AC-02: Execute transformations and record settings, dependencies, output references and source-data identity | IP2-T1/T3/T4; IP3-T1–T3 | Actual feature outputs and MLflow artifacts, code/lock/library/source/split/DVC links | Verified and accepted, 2026-11-16 |
+| US-14-AC-03: Compare authored variants on the same split, estimator/settings and metric; report direction-aware gains/ties/regressions | IP2-T1/T2/T4; IP3-T1–T3 | Literal 0.5/1.0/0.5/0.0 accuracy and corresponding loss, actual records/table and failure matrix | Verified and accepted, 2026-11-16 |
+| US-14-AC-04: Link artifacts to source datasets and verify expected outputs through supported paths | IP2-T3/T4; IP3-T1–T3 | Persisted values/schema/row IDs, artifact availability and lineage, missing/corrupt-reference/output failures | Verified and accepted, 2026-11-16 |
+| US-14-AC-05: Use explicitly authored or supplied candidates | IP1-T3; IP2-T1/T2/T5; IP3-T1–T3 | Explicit project source/declarations, no generated candidates, duplicate/missing/unsupported declaration failures | Verified and accepted, 2026-11-16 |
 
-- **Remaining work:** IP3 installed recipe verification on direct/rebuilt wheels, final M1–6/shared checks and AC reconciliation, then explicit whole-story acceptance. Contract/boundaries are approved; IP2 implementation is complete.
+- **Remaining work:** Publication and static review under execute-plan. IP1–IP3 and all five US-14 criteria are verified and accepted. Historical milestone obligations and the existing US-03 skip remain with their named owners.
 - **Partial prerequisite delivery:** None proposed; supplier capabilities reused without accepting their remaining M2 scope.
-- **Final verification:** Pending US-14-IP3-T3.
-- **Developer acceptance:** Pending.
-- **Decision reference and date:** Pending.
+- **Final verification:** Complete US-14-IP3-T3, 2026-11-16 UTC; [IP3 report](../verification/us-14-ip3.md).
+- **Developer acceptance:** Accepted — all five M1 criteria, 2026-11-16 UTC.
+- **Decision reference and date:** Developer “I accept the user story; commit the changes”, 2026-11-16 UTC. Authorizes accepted-story commit/push, PR creation and static COMMENT review through execute-plan; merge and worktree cleanup remain separate.
 
 ## Milestone acceptance handoff
 

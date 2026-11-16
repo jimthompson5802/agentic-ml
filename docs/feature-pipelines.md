@@ -2,7 +2,8 @@
 
 Status: **US-14-IP1 contract v2 Approved**, 2026-11-15 UTC, by developer
 “yes i approve contract v2”, including public test boundaries. The project-owned recipe is implemented and its Phase 2 checks pass.
-Final installed-story verification remains in IP3. The
+Both normal wheel paths and final story checks are verified in IP3;
+the developer accepted all five US-14 criteria on 2026-11-16 UTC. The
 [plan](plans/milestone-1-us-14.md) owns execution and approval; the
 [IP1 evidence](verification/us-14-ip1.md) records bounded native feasibility.
 

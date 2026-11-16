@@ -1,6 +1,6 @@
 # MVP project status
 
-Last updated: 2026-11-15 (UTC).
+Last updated: 2026-11-16 (UTC).
 
 The MVP ends at Milestone 2. This overview includes its required stories and the
 accepted M0 foundation. Repeated stories represent different milestone slices.
@@ -12,7 +12,11 @@ the owning GitHub issue remains open; it does not imply implementation is underw
 Story acceptance does not establish milestone acceptance. M1 milestone acceptance
 verification remains outstanding; the complete MVP has not been delivered.
 
-The latest accepted M1 delivery is US-15 training-only preprocessing (AC-01–03)
+US-14 AC-01–05 were accepted locally on 2026-11-16 UTC; publication/merge
+remain pending. See the [plan](plans/milestone-1-us-14.md) and
+[final verification](verification/us-14-ip3.md).
+
+The accepted M1 preprocessing/recording delivery is US-15 training-only preprocessing (AC-01–03)
 and US-26 MLflow recording (#17 AC-01–05), merged together in
 [PR #68](https://github.com/jimthompson5802/agentic-ml/pull/68) as `a2c6262`
 on 2026-11-15 UTC. Both hosted Linux CI jobs passed. See the
@@ -29,9 +33,9 @@ remains open for M2 restoration AC-03/04. See its
 US-41 distribution-based initialization is also accepted and merged in PR #65;
 M50 tooling remains outside the MVP story count.
 
-There are **14 distinct user stories with MVP work remaining**:
+There are **13 distinct user stories with MVP implementation/acceptance work remaining**:
 
-- **M1: 9 stories** — US-10, US-14, US-18, US-20, US-21, US-24,
+- **M1: 8 stories** — US-10, US-18, US-20, US-21, US-24,
   US-26 (remaining slices), US-27 and US-39.
 - **M2: 9 stories/slices** — US-09, US-13, US-15, US-16, US-18,
   US-21, US-27, US-39 and US-40. Five are additional stories; four
@@ -57,7 +61,7 @@ Historical M1/M50 verification obligations remain separately recorded in
 | M1 | US-11: Extract local experiment data ([#14](https://github.com/jimthompson5802/agentic-ml/issues/14)) | Accepted and merged |
 | M1 | US-12: Validate data and define reproducible splits ([#15](https://github.com/jimthompson5802/agentic-ml/issues/15), [#19](https://github.com/jimthompson5802/agentic-ml/issues/19)) | AC-01/02/03/05 accepted and merged; both issues closed; AC-04 deferred |
 | M1 | US-13: Version datasets with DVC ([#16](https://github.com/jimthompson5802/agentic-ml/issues/16)) | M1 AC-01/02 accepted and merged; M2 remains open |
-| M1 | US-14: Build and compare feature pipelines ([#20](https://github.com/jimthompson5802/agentic-ml/issues/20)) | Open |
+| M1 | US-14: Build and compare feature pipelines ([#20](https://github.com/jimthompson5802/agentic-ml/issues/20)) | Accepted locally; [verification](verification/us-14-ip3.md) complete; publication/merge pending |
 | M1 | US-15: Preserve training-only preprocessing ([#21](https://github.com/jimthompson5802/agentic-ml/issues/21)) | M1 AC-01–03 accepted and merged; M2 AC-04 remains open |
 | M1 | US-18: Train scikit-learn classification models ([#28](https://github.com/jimthompson5802/agentic-ml/issues/28)) | Open |
 | M1 | US-20: Tune within declared search limits ([#30](https://github.com/jimthompson5802/agentic-ml/issues/30)) | Open |

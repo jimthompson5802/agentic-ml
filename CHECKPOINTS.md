@@ -1,36 +1,36 @@
 # Development Checkpoints
 
-Last updated: 2026-11-15 (UTC)
+Last updated: 2026-11-16 (UTC)
 
 ## Current position and next action
 
-US-14 / issue #20 IP2 is complete in branch `US-14-feature-pipelines`,
-worktree `.worktrees/US-14-feature-pipelines`, based on `a86f36f`.
-Phase 2 implementation and approval records are included in this local commit. Developer “start phase 2” and “yes i approve contract v2” authorized
-execution and approved its public boundaries on 2026-11-15 UTC.
-The [plan](docs/plans/milestone-1-us-14.md) records IP2-T1–T5 Complete and
-`Automatic — verification passed`; [IP2 evidence](docs/verification/us-14-ip2.md)
-owns checks and corrections. Developer “i approve phase 2 gate”, 2026-11-15
-UTC, explicitly approved the phase; “commit changes” authorized its local commit.
-Next: separate IP3 execution authorization for
-installed recipe/story verification. Story acceptance and publication remain pending.
+US-14 / issue #20 is accepted; IP3 is complete in branch
+`US-14-feature-pipelines`, worktree `.worktrees/US-14-feature-pipelines`,
+Based on `762aa23`; accepted-story changes and records are included in this commit.
+Developer “i approve phase 3”, 2026-11-15 UTC, authorized execution only.
+The [plan](docs/plans/milestone-1-us-14.md) records IP3-T1–T3 Complete,
+`Automatic — verification passed`, 2026-11-16 UTC. Developer “I approve phase 3”,
+2026-11-16 UTC, subsequently approved the completed phase. Contract v2 remains approved.
+Developer “I accept the user story; commit the changes”, 2026-11-16 UTC,
+accepted all five criteria and authorized accepted-story publication through
+execute-plan. Next: push, create the PR and publish its static COMMENT review.
 
-Implemented the project-owned factory, preparation/comparison scripts and guide,
-with real MLflow/DVC evidence. The full planned focused selection passed 183
-cases; after two final recipe corrections the renewed module passed all 43
-comparison cases, reusing 142 valid unchanged supplier/tracking regressions.
-No single 185-case run is claimed. Shared checks, lock consistency, CLI smoke,
-local links and whitespace checks pass; lock unchanged. All failures/corrections
-are retained. Linux aarch64/Python 3.12.16; other platforms remain unverified.
+[IP3 evidence](docs/verification/us-14-ip3.md): direct and genuinely sdist-rebuilt
+wheel recipes pass in separate runtime-only projects; final focused selection
+45 passed; M1–6 completed 1,026 passed / 1 existing developer-authorized US-03
+skip / 0 failures or errors. The skipped damaged-planning-schema check remains
+with M1-ACCEPT-VERIFY and is not passing US-14 evidence. Other historical
+obligations below remain unchanged. Shared checks, lock identity, CLI smoke,
+local links and whitespace pass. No new suppression, skip or contract change.
+Linux aarch64 / Python 3.12.16; unverified platforms and M2 remain outside claims.
 
-Developer directed tests to run as direct `uv run --locked pytest ...` commands;
-complete tool output is saved separately. Do not use the old check runner.
-Use this worktree's `.venv`; uv explicitly ignores inherited primary VIRTUAL_ENV.
-Raw records: `.dev-records/verification/20261115T204632Z-a86f36f-us14-ip2/`.
-Preserve earlier IP1/planning records and historical obligations below.
-Committed scope: plan/checkpoint/guide/evidence, example files, comparison tests
-and contributor metric typing, with Phase 2 approval records. Push and PR
-publication are not authorized.
+Run pytest directly; save full tool output separately. Do not use the old runner.
+Raw records: `.dev-records/verification/20261115T233328Z-762aa23-us14-ip3/`,
+with nested driver records linked from the report. Preserve all earlier evidence.
+Pending changes are three contributor verification files plus plan/checkpoint,
+README, project-status, guide and active design/traceability updates.
+Whole-story acceptance is recorded in the plan; publication is authorized by
+that explicit acceptance. Merge and cleanup remain separate.
 
 ## Completed work: authoritative records
 
