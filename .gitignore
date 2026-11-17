@@ -69,3 +69,6 @@ Thumbs.db
 
 # agentic work area
 sandbox/
+
+# code health checker
+.repowise/
